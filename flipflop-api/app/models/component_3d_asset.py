@@ -68,6 +68,7 @@ class Component3DAsset(Base):
     dimensions_mm = Column(JSON, nullable=True)     # {"w":..,"h":..,"d":..} from spec sheet
     scale_validated = Column(Boolean, default=False, nullable=False)
     anchor_manifest_json = Column(JSON, nullable=True)  # cases/motherboards only
+    fan_layout_json = Column(JSON, nullable=True)  # detected/edited case fan geometry and RGB mode
 
     notes = Column(String(2000), nullable=True)
     created_by = Column(String(100), nullable=True)

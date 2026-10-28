@@ -1,0 +1,21 @@
+{
+  "url": "https://www.ebay.co.uk/itm/178262455384",
+  "observed_date": "2026-10-22",
+  "transaction_date": "2026-10-02",
+  "status": "adjacent_context_only",
+  "seller_type": "private",
+  "displayed_buyer_total_gbp": "1587.39",
+  "displayed_buyer_protection_gbp": "37.39",
+  "arithmetic_price_excluding_displayed_fee_gbp": "1550.00",
+  "price_basis_warning": "Search card showed 1587.70 and GBP15 postage. Detail localises to Germany with postage unknown. Historical UK delivered transaction total is unverified; do not merge amounts or approve market cap.",
+  "parts_summary": "7600X3D; ASUS TUF B650M WiFi; Patriot 32GB DDR5-6000 CL30; Gainward 5060 Ti 16GB; Samsung 990 Pro 1TB; Thermalright Aqua Elite V6; Corsair TX750; MSI PANO case; Windows 11 Pro claimed.",
+  "description_url": "https://itm.ebaydesc.com/itmdesc/178262455384",
+  "blockers": [
+    "Different CPU to 7600 query; adjacency not approved",
+    "Component-level new condition not established by listing New label",
+    "No equivalent business warranty/returns evidence",
+    "Exact historical delivered price basis unresolved",
+    "Windows activation claim is not procurement/licence provenance"
+  ],
+  "approved": false
+}

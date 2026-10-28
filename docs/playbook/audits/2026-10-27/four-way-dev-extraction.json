@@ -1,0 +1,140 @@
+{
+  "at": "2026-10-27T00:21:44.228561+00:00",
+  "health": {
+    "status": "ok",
+    "queue_depth": 0,
+    "priority": "dev",
+    "generation_concurrency": 4,
+    "ollama_num_parallel": 4,
+    "gpu_only": true
+  },
+  "resident_models": {
+    "models": [
+      {
+        "name": "qwen3:4b",
+        "model": "qwen3:4b",
+        "size": 3719466844,
+        "digest": "359d7dd4bcdab3d86b87d73ac27966f4dbb9f5efdfcc75d34a8764a09474fae7",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen3",
+          "families": [
+            "qwen3"
+          ],
+          "parameter_size": "4.0B",
+          "quantization_level": "Q4_K_M"
+        },
+        "expires_at": "2319-02-06T00:08:36.859401207Z",
+        "size_vram": 3719466844,
+        "context_length": 2048
+      },
+      {
+        "name": "qwen3.5:4b",
+        "model": "qwen3.5:4b",
+        "size": 3130009844,
+        "digest": "d8b0f5e9760cd1682034f292d7ef72ec46f432149be0df7574bf2d6e92e38c04",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen35",
+          "families": [
+            "qwen35"
+          ],
+          "parameter_size": "4.2B",
+          "quantization_level": "Q4_K_M"
+        },
+        "expires_at": "2319-02-06T00:08:01.379245707Z",
+        "size_vram": 3130009844,
+        "context_length": 4096
+      }
+    ]
+  },
+  "runner_evidence": [
+    "llama_context: n_seq_max     = 4",
+    "llama_context: n_seq_max     = 4",
+    "srv    load_model: initializing, n_slots = 4, n_ctx_slot = 2048, kv_unified = 'false'"
+  ],
+  "queue": {
+    "pending": 443,
+    "processing": 4,
+    "completed": 3982,
+    "failed": 0
+  },
+  "canary": {
+    "model": "qwen3:4b",
+    "elapsed_seconds": 69.58,
+    "passed": 4,
+    "total": 4,
+    "results": [
+      {
+        "title": "AMD Ryzen 5 5600 6-Core 12-Thread AM4 Desktop Processor",
+        "seconds": 56.94,
+        "passed": true,
+        "result": {
+          "category": "cpu",
+          "brand": "amd",
+          "model": "ryzen-5-5600",
+          "specs": {
+            "cores": 6,
+            "threads": 12,
+            "socket": "am4"
+          },
+          "confidence": 0.95,
+          "cpk": "e8f0301e6a59b906"
+        }
+      },
+      {
+        "title": "Intel Core i5-12400F 6-Core LGA1700 Desktop Processor",
+        "seconds": 56.66,
+        "passed": true,
+        "result": {
+          "category": "cpu",
+          "brand": "intel",
+          "model": "i5-12400f",
+          "specs": {
+            "cores": 6,
+            "socket": "lga1700"
+          },
+          "confidence": 0.95,
+          "cpk": "ebb3a39ee7edf012"
+        }
+      },
+      {
+        "title": "Corsair Vengeance LPX 32GB (2x16GB) DDR4 3200MHz CL16 RAM Kit",
+        "seconds": 69.21,
+        "passed": true,
+        "result": {
+          "category": "ram",
+          "brand": "corsair",
+          "model": "vengeance-lpx-32gb",
+          "specs": {
+            "capacity_gb": 32,
+            "speed_mhz": 3200,
+            "type": "ddr4",
+            "cl": 16
+          },
+          "confidence": 0.95,
+          "cpk": "9bf92e72c4e5feca"
+        }
+      },
+      {
+        "title": "Samsung 970 EVO Plus 1TB M.2 NVMe SSD",
+        "seconds": 68.68,
+        "passed": true,
+        "result": {
+          "category": "ssd",
+          "brand": "samsung",
+          "model": "970-evo-plus-1tb",
+          "specs": {
+            "capacity_gb": 1024,
+            "form_factor": "m.2",
+            "interface": "nvme"
+          },
+          "confidence": 0.95,
+          "cpk": "90449b965c26b9ae"
+        }
+      }
+    ]
+  }
+}

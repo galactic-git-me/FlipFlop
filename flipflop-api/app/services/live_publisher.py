@@ -67,6 +67,10 @@ class LivePublisher:
                     )
 
             # Validate listing first
+            from app.services.channel_images import prepare_channel_urls
+            build = await db.get(ManualBuild, build_id)
+            originals = [photo["url"] for photo in (build.photos or []) if isinstance(photo, dict) and photo.get("kind", "photo") == "photo" and photo.get("url")] if build else []
+            channel_images = await prepare_channel_urls(originals, channel)
             validation = await DryRunValidator.validate_listing(db, build_id, channel)
             if not validation.valid:
                 log.warning(
@@ -160,6 +164,7 @@ class LivePublisher:
                     "channel": channel,
                     "external_id": external_id,
                     "published_at": datetime.utcnow().isoformat(),
+                    "image_urls": channel_images,
                 },
             )
             db.add(event)

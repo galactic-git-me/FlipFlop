@@ -1,7 +1,7 @@
 """Pydantic schemas for payment requests and responses."""
 
 from pydantic import BaseModel, Field, model_validator
-from typing import Optional
+from typing import Literal, Optional
 from datetime import datetime
 
 
@@ -17,6 +17,16 @@ class PlaybookBuildConfig(BaseModel):
     slot_selections: dict[int, int] = Field(default_factory=dict)
     case_id: Optional[int] = None
     chosen_week: Optional[str] = None
+    validation_mode: Optional[Literal["curated", "custom", "studio"]] = None
+    # The configured Playbook cell IDs (for example FF-GVG-01) are stable
+    # string keys from curated_build_definitions.json, not database row IDs.
+    curated_build_id: Optional[str] = Field(default=None, min_length=1, max_length=120)
+    # Legacy candidate indexes remain accepted. New storefronts submit the
+    # reviewed component variant directly in slot_selections.
+    upgrade_candidate_indexes: list[int] = Field(default_factory=list, max_length=30)
+    # Made-by-you asks the customer to declare their matrix tier; never infer
+    # this from a final price after component choices and upgrades.
+    budget_tier: Optional[Literal["Budget", "Mid-range", "High-end"]] = None
 
     class Config:
         json_schema_extra = {
@@ -27,6 +37,20 @@ class PlaybookBuildConfig(BaseModel):
                 "chosen_week": "2026-W30",
             }
         }
+
+
+class CheckoutAddress(BaseModel):
+    full_name: str = Field(..., min_length=2, max_length=160)
+    line1: str = Field(..., min_length=2, max_length=200)
+    line2: Optional[str] = Field(None, max_length=200)
+    city: str = Field(..., min_length=2, max_length=100)
+    postcode: str = Field(..., min_length=3, max_length=20)
+    country: str = Field(default="GB", min_length=2, max_length=2)
+
+
+class CheckoutAddresses(BaseModel):
+    delivery: CheckoutAddress
+    billing: CheckoutAddress
 
 
 class CreatePaymentIntentRequest(BaseModel):
@@ -41,11 +65,20 @@ class CreatePaymentIntentRequest(BaseModel):
     budget: Optional[float] = Field(None, gt=0, description="Total quote price in GBP")
     customer_id: int = Field(..., gt=0, description="Customer ID")
     build_config: Optional[PlaybookBuildConfig] = None
+    software_package_ids: Optional[list[str]] = Field(None, max_length=14)
+    speedy_delivery: bool = False
+    delivery_option: Optional[str] = Field(None, pattern="^(standard|fast_track|flexible)$")
+    checkout_addresses: Optional[CheckoutAddresses] = None
+    commercial_quote_id: Optional[int] = Field(default=None, gt=0)
 
     @model_validator(mode="after")
     def _require_budget_or_build_config(self) -> "CreatePaymentIntentRequest":
         if self.budget is None and self.build_config is None:
             raise ValueError("Either budget or build_config must be provided")
+        if self.build_config is not None and self.checkout_addresses is None:
+            raise ValueError("Delivery and billing addresses are required for build checkout")
+        if self.commercial_quote_id is not None and self.build_config is None:
+            raise ValueError("A commercial quote requires its selected build configuration")
         return self
 
     class Config:
@@ -65,6 +98,10 @@ class PaymentIntentResponse(BaseModel):
     amount: float = Field(..., description="Payment amount in GBP")
     currency: str = Field(default="gbp", description="Currency code")
     intent_id: str = Field(..., description="Stripe PaymentIntent ID")
+    delivery_option: Optional[str] = None
+    delivery_days: Optional[int] = None
+    delivery_promise: Optional[str] = None
+    delivery_estimate_source: Optional[str] = None
 
     class Config:
         json_schema_extra = {
@@ -95,10 +132,12 @@ class ConfirmPaymentRequest(BaseModel):
 
 
 class PaymentConfirmation(BaseModel):
-    """Response confirming successful payment and order creation."""
+    """Response separating confirmed payment from the fulfilment workflow."""
 
     order_id: int = Field(..., description="Created Order ID")
     status: str = Field(..., description="Order status")
+    fulfilment_status: str = Field(..., description="Current order fulfilment status")
+    payment_status: str = Field(..., description="Current payment/refund status")
     amount: float = Field(..., description="Payment amount in GBP")
     currency: str = Field(..., description="Currency code")
     payment_intent_id: str = Field(..., description="Stripe PaymentIntent ID")
@@ -109,6 +148,8 @@ class PaymentConfirmation(BaseModel):
             "example": {
                 "order_id": 42,
                 "status": "awaiting_sourcing",
+                "fulfilment_status": "awaiting_sourcing",
+                "payment_status": "paid",
                 "amount": 1200.00,
                 "currency": "gbp",
                 "payment_intent_id": "pi_1234567890",

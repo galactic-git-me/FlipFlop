@@ -166,6 +166,9 @@ async def _send_ntfy(topic: str, title: str, body: str, click_url: str, tags: st
 
 async def run_ram_watcher() -> dict:
     settings = get_settings()
+    if not settings.reddit_client_id or not settings.reddit_client_secret:
+        log.info("ram_watcher.skipped", reason="reddit_oauth_not_configured")
+        return {"ok": True, "checked": 0, "deals_found": 0, "deals": [], "note": "Reddit OAuth is not configured."}
     ntfy_topic: str = settings.ntfy_topic
     rules = _build_rules(settings)
 

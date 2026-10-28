@@ -4,7 +4,7 @@
       "id": "FF-GVG-01",
       "segment": "Great-value Gaming",
       "tier": "Budget",
-      "name": "Atlas Essential",
+      "name": "Galileo",
       "description": "1080p performance without cutting corners.",
       "use": "1080p gaming, esports and first gaming PC",
       "components": {
@@ -23,7 +23,7 @@
       "id": "FF-GVG-02",
       "segment": "Great-value Gaming",
       "tier": "Mid-range",
-      "name": "Atlas Pulse",
+      "name": "Cerritos",
       "description": "High-refresh 1440p, built around real value.",
       "use": "1440p gaming, streaming and longevity",
       "components": {
@@ -42,7 +42,7 @@
       "id": "FF-GVG-03",
       "segment": "Great-value Gaming",
       "tier": "High-end",
-      "name": "Atlas Apex",
+      "name": "Voyager",
       "description": "Premium 1440p and confident 4K value.",
       "use": "High-refresh 1440p and entry 4K",
       "components": {
@@ -61,7 +61,7 @@
       "id": "FF-HPG-01",
       "segment": "High-performance Gaming",
       "tier": "Budget",
-      "name": "Vortex Start",
+      "name": "Columbus",
       "description": "Serious frame rates with a productivity-capable CPU.",
       "use": "1440p gaming, DLSS 4 and creator side-projects",
       "components": {
@@ -80,7 +80,7 @@
       "id": "FF-HPG-02",
       "segment": "High-performance Gaming",
       "tier": "Mid-range",
-      "name": "Prometheus ChromaFlair",
+      "name": "Defiant",
       "description": "Beautiful machines, built to be admired.",
       "use": "Premium 1440p/4K gaming and showcase build",
       "components": {
@@ -99,7 +99,7 @@
       "id": "FF-HPG-03",
       "segment": "High-performance Gaming",
       "tier": "High-end",
-      "name": "Vortex Titan",
+      "name": "Titan",
       "description": "No-compromise 4K performance.",
       "use": "4K high-refresh gaming, VR and heavy creation",
       "components": {
@@ -118,18 +118,18 @@
       "id": "FF-STU-01",
       "segment": "Student Hybrid",
       "tier": "Budget",
-      "name": "Campus AI Mini",
-      "description": "Small, quiet and genuinely useful every day.",
-      "use": "Study, office, media, coding and NPU-assisted apps",
+      "name": "Copernicus",
+      "description": "A serviceable everyday study desktop.",
+      "use": "Study, office, media and coding",
       "components": {
-        "cpu": "AMD Ryzen AI 5 340 (integrated)",
-        "motherboard": "OEM compact APU mainboard (included)",
-        "ram": "32GB LPDDR5X",
-        "gpu": "AMD Radeon 840M integrated",
+        "cpu": "AMD Ryzen 5 9600X",
+        "motherboard": "MSI B850 GAMING PLUS WIFI6E",
+        "ram": "32GB (2x16GB) DDR5-6000",
+        "gpu": "AMD Radeon integrated graphics",
         "storage": "1TB PCIe 4.0 NVMe SSD",
-        "case": "ASUS NUC 14 Pro-style compact chassis",
-        "psu": "External 120W power adapter",
-        "cooling": "Integrated low-noise cooling",
+        "case": "ATX desktop case",
+        "psu": "650W ATX 80+ Gold",
+        "cooling": "ARCTIC Freezer 36",
         "os": "Windows 11 Home"
       }
     },
@@ -137,7 +137,7 @@
       "id": "FF-STU-02",
       "segment": "Student Hybrid",
       "tier": "Mid-range",
-      "name": "Campus Studio",
+      "name": "Equinox",
       "description": "Study by day, 1440p play by night.",
       "use": "University work, coding, media and value gaming",
       "components": {
@@ -156,7 +156,7 @@
       "id": "FF-STU-03",
       "segment": "Student Hybrid",
       "tier": "High-end",
-      "name": "Campus Pro",
+      "name": "Discovery",
       "description": "For design courses, code and serious downtime.",
       "use": "Design, engineering coursework, Adobe and 1440p gaming",
       "components": {
@@ -175,7 +175,7 @@
       "id": "FF-BOF-01",
       "segment": "Business & Office",
       "tier": "Budget",
-      "name": "Deskwise Essential",
+      "name": "Hawking",
       "description": "Fast, tidy and ready for work.",
       "use": "Office, bookkeeping, browsers and multi-monitor work",
       "components": {
@@ -194,7 +194,7 @@
       "id": "FF-BOF-02",
       "segment": "Business & Office",
       "tier": "Mid-range",
-      "name": "Deskwise Pro",
+      "name": "Reliant",
       "description": "A quiet professional desktop with modern AI capability.",
       "use": "Teams, Excel, operational systems and dual displays",
       "components": {
@@ -213,18 +213,18 @@
       "id": "FF-BOF-03",
       "segment": "Business & Office",
       "tier": "High-end",
-      "name": "Deskwise Executive",
-      "description": "Power for demanding local workloads without gaming aesthetics.",
-      "use": "Executive office, local NPU features and travel-friendly workspace",
+      "name": "Excelsior",
+      "description": "A serviceable office workstation for demanding multitasking.",
+      "use": "Large spreadsheets, office multitasking and local business applications",
       "components": {
-        "cpu": "AMD Ryzen AI 7 350 (integrated)",
-        "motherboard": "OEM compact APU mainboard (included)",
-        "ram": "64GB LPDDR5X",
-        "gpu": "AMD Radeon 860M integrated",
+        "cpu": "AMD Ryzen 7 9700X",
+        "motherboard": "MSI B850 GAMING PLUS WIFI6E",
+        "ram": "64GB (2x32GB) DDR5-6000",
+        "gpu": "AMD Radeon integrated graphics",
         "storage": "2TB PCIe 4.0 NVMe SSD",
-        "case": "Premium compact aluminium mini-PC chassis",
-        "psu": "External 180W power adapter",
-        "cooling": "Integrated low-noise cooling",
+        "case": "Quiet ATX desktop case",
+        "psu": "650W ATX 80+ Gold",
+        "cooling": "ARCTIC Freezer 36",
         "os": "Windows 11 Pro"
       }
     },
@@ -232,7 +232,7 @@
       "id": "FF-CCR-01",
       "segment": "Content Creation",
       "tier": "Budget",
-      "name": "Creator Forge",
+      "name": "Goddard",
       "description": "A practical production desk in one box.",
       "use": "Photoshop, Premiere, 4K editing and streaming",
       "components": {
@@ -251,7 +251,7 @@
       "id": "FF-CCR-02",
       "segment": "Content Creation",
       "tier": "Mid-range",
-      "name": "Creator Signal",
+      "name": "Stargazer",
       "description": "Fast timelines, fast renders, no compromises on storage.",
       "use": "4K/6K editing, After Effects, Blender and client work",
       "components": {
@@ -270,7 +270,7 @@
       "id": "FF-CCR-03",
       "segment": "Content Creation",
       "tier": "High-end",
-      "name": "Creator Nova",
+      "name": "Odyssey",
       "description": "Your own post-production workstation.",
       "use": "8K editing, 3D, VFX, rendering and AI-assisted production",
       "components": {
@@ -289,7 +289,7 @@
       "id": "FF-AIW-01",
       "segment": "AI Workstation",
       "tier": "Budget",
-      "name": "Localhost 16",
+      "name": "Chaffee",
       "description": "Your first genuinely useful private AI machine.",
       "use": "Ollama, coding assistants and small/quantised local LLMs",
       "components": {
@@ -308,7 +308,7 @@
       "id": "FF-AIW-02",
       "segment": "AI Workstation",
       "tier": "Mid-range",
-      "name": "Localhost 32",
+      "name": "Rhode Island",
       "description": "High-VRAM local AI without workstation-server excess.",
       "use": "High-VRAM inference, ROCm-compatible workloads and data work",
       "components": {
@@ -327,7 +327,7 @@
       "id": "FF-AIW-03",
       "segment": "AI Workstation",
       "tier": "High-end",
-      "name": "Localhost 48",
+      "name": "Enterprise",
       "description": "A serious private AI server for continuous work.",
       "use": "48GB local models, continuous inference and multi-GPU expansion",
       "components": {
@@ -336,7 +336,7 @@
         "ram": "256GB (8x32GB) DDR5 ECC RDIMM",
         "gpu": "NVIDIA RTX 6000 Ada 48GB",
         "storage": "4TB PCIe 4.0 NVMe SSD + 8TB data SSD",
-        "case": "Corsair 9000D Airflow",
+        "case": "Fractal Design Define 7 XL",
         "psu": "Corsair AX1600i 1600W 80+ Titanium",
         "cooling": "Noctua NH-U14S TR5-SP6",
         "os": "Ubuntu 24.04 LTS + Windows 11 Pro"
@@ -346,7 +346,7 @@
       "id": "FF-SWD-01",
       "segment": "Software Development",
       "tier": "Budget",
-      "name": "Codebase",
+      "name": "Sakharov",
       "description": "Fast builds, containers and plenty of RAM.",
       "use": "VS Code, Docker, local databases and occasional GPU work",
       "components": {
@@ -365,7 +365,7 @@
       "id": "FF-SWD-02",
       "segment": "Software Development",
       "tier": "Mid-range",
-      "name": "Compiler",
+      "name": "Protostar",
       "description": "A local development lab that still looks sharp.",
       "use": "Large codebases, containers, local AI assistants and virtual machines",
       "components": {
@@ -384,7 +384,7 @@
       "id": "FF-SWD-03",
       "segment": "Software Development",
       "tier": "High-end",
-      "name": "Shipyard",
+      "name": "Prometheus",
       "description": "Build, test and run locally at scale.",
       "use": "Compiling, multiple VMs, AI-assisted development and GPU compute",
       "components": {
@@ -403,7 +403,7 @@
       "id": "FF-FAM-01",
       "segment": "Family & Home",
       "tier": "Budget",
-      "name": "Hearth",
+      "name": "Cochrane",
       "description": "The reliable household computer.",
       "use": "Homework, video calls, browsing, photos and light games",
       "components": {
@@ -422,7 +422,7 @@
       "id": "FF-FAM-02",
       "segment": "Family & Home",
       "tier": "Mid-range",
-      "name": "Haven",
+      "name": "Grissom",
       "description": "The home computer that also plays properly.",
       "use": "Family media, school work, photo storage and 1440p gaming",
       "components": {
@@ -441,7 +441,7 @@
       "id": "FF-FAM-03",
       "segment": "Family & Home",
       "tier": "High-end",
-      "name": "Horizon",
+      "name": "Galaxy",
       "description": "A beautiful shared home hub with proper power.",
       "use": "Family photo/video hub, 4K media, home office and gaming",
       "components": {
@@ -489,7 +489,7 @@
       "model": "y60"
     },
     {
-      "name": "CORSAIR 3000D RGB AIRFLOW Mid-Tower PC Case \u2013 3x AR120 RGB Fans \u2013 Three-Slot GPU Support \u2013 Fits up to 8x 120mm Fans \u2013 High-Airflow Design \u2013 Black",
+      "name": "CORSAIR 3000D RGB AIRFLOW Mid-Tower PC Case â€“ 3x AR120 RGB Fans â€“ Three-Slot GPU Support â€“ Fits up to 8x 120mm Fans â€“ High-Airflow Design â€“ Black",
       "brand": "corsair",
       "model": "3000d"
     },
@@ -589,7 +589,7 @@
       "model": "c8"
     },
     {
-      "name": "Lian Li V100 Mid Tower Case \u2013 Black, ATX Support, Mesh Front Panel, Tempered Glass, USB-C, Tool-Free Side Panel",
+      "name": "Lian Li V100 Mid Tower Case â€“ Black, ATX Support, Mesh Front Panel, Tempered Glass, USB-C, Tool-Free Side Panel",
       "brand": "lian",
       "model": "v100"
     },
@@ -599,7 +599,7 @@
       "model": "jet"
     },
     {
-      "name": "CORSAIR AIR 5400 RS-R ARGB Triple-Chamber Mid-Tower Panoramic PC Case \u2013 3x Pre-Installed Reverse-Rotor RS120-R ARGB Fans, Low-Noise, High Airflow Ducts, Reverse Motherboard Support \u2013 Black | 3 pre-ins",
+      "name": "CORSAIR AIR 5400 RS-R ARGB Triple-Chamber Mid-Tower Panoramic PC Case â€“ 3x Pre-Installed Reverse-Rotor RS120-R ARGB Fans, Low-Noise, High Airflow Ducts, Reverse Motherboard Support â€“ Black | 3 pre-ins",
       "brand": "corsair",
       "model": "5400"
     },
@@ -609,7 +609,7 @@
       "model": "600"
     },
     {
-      "name": "Lian Li LANCOOL 217 Infinity Mid-Tower PC Case \u2013 Tempered Glass Infinity Mirror Front Panel, Dual 170mm ARGB Fans, Modular PSU Mount, 380mm GPU Clearance, SSI-EEB Support, Adjustable I/O Black",
+      "name": "Lian Li LANCOOL 217 Infinity Mid-Tower PC Case â€“ Tempered Glass Infinity Mirror Front Panel, Dual 170mm ARGB Fans, Modular PSU Mount, 380mm GPU Clearance, SSI-EEB Support, Adjustable I/O Black",
       "brand": "lian",
       "model": "217"
     },
@@ -629,7 +629,7 @@
       "model": "207"
     },
     {
-      "name": "FOIFKIN F1 ATX PC Case - Pre-installed 6 PWM ARGB Fans, Mid-Tower Computer Case, Gaming PC Case full tower, 270\u00b0 Panorama Tempered Glass, with Type-C, ATX Case Black(Black, F1)",
+      "name": "FOIFKIN F1 ATX PC Case - Pre-installed 6 PWM ARGB Fans, Mid-Tower Computer Case, Gaming PC Case full tower, 270Â° Panorama Tempered Glass, with Type-C, ATX Case Black(Black, F1)",
       "brand": "foifkin",
       "model": "f1"
     },
@@ -659,12 +659,12 @@
       "model": "kz08"
     },
     {
-      "name": "CORSAIR 2500X Small-Tower mATX Dual Chamber PC Case \u2013 Panoramic Tempered Glass \u2013 Reverse Connection Motherboard Compatible \u2013 No Fans Included \u2013 Black",
+      "name": "CORSAIR 2500X Small-Tower mATX Dual Chamber PC Case â€“ Panoramic Tempered Glass â€“ Reverse Connection Motherboard Compatible â€“ No Fans Included â€“ Black",
       "brand": "corsair",
       "model": "2500x"
     },
     {
-      "name": "CORSAIR FRAME 4500X RS-R ARGB Panoramic Glass Mid-Tower PC Case \u2013 InfiniRail Mounting System, Fits Dual 360mm Radiators, GPU Anti-Sag, 3x RS120R Fans Included \u2013 Black",
+      "name": "CORSAIR FRAME 4500X RS-R ARGB Panoramic Glass Mid-Tower PC Case â€“ InfiniRail Mounting System, Fits Dual 360mm Radiators, GPU Anti-Sag, 3x RS120R Fans Included â€“ Black",
       "brand": "corsair",
       "model": "4500x"
     },
@@ -684,7 +684,7 @@
       "model": "li"
     },
     {
-      "name": "ANSAITE PC Case Pre-Installed 6 \u00d7 120mm PWM ARGB Fan, ATX Mid Tower PC Gaming Case, Computer case with Panoramic View Tempered Glass Front & Side Panel, Type C Port, Black",
+      "name": "ANSAITE PC Case Pre-Installed 6 Ã— 120mm PWM ARGB Fan, ATX Mid Tower PC Gaming Case, Computer case with Panoramic View Tempered Glass Front & Side Panel, Type C Port, Black",
       "brand": "ansaite",
       "model": "6"
     },
@@ -704,12 +704,12 @@
       "model": "mid"
     },
     {
-      "name": "PC CASE ATX 5 Fans Pre-Installed, Type-C Mid Tower Computer Case with Full-View Dual Tempered Glass, Gaming PC Case,Black,K4\uff082026 Update Version\uff09",
+      "name": "PC CASE ATX 5 Fans Pre-Installed, Type-C Mid Tower Computer Case with Full-View Dual Tempered Glass, Gaming PC Case,Black,K4ï¼ˆ2026 Update Versionï¼‰",
       "brand": "pc",
       "model": "5"
     },
     {
-      "name": "ARGB Panoramic Mid-Tower PC Case \u2013 7x Pre-Installed Fans, Mid Tower Computer Case with Full-View Dual Tempered Glass, ATX Gaming PC Case,Black,P4",
+      "name": "ARGB Panoramic Mid-Tower PC Case â€“ 7x Pre-Installed Fans, Mid Tower Computer Case with Full-View Dual Tempered Glass, ATX Gaming PC Case,Black,P4",
       "brand": "argb",
       "model": "panoramic"
     },
@@ -729,7 +729,7 @@
       "model": "vsk-4000b-u3/u2"
     },
     {
-      "name": "CORSAIR 2500D AIRFLOW Small-Tower mATX Dual Chamber PC Case \u2013 Tempered Glass \u2013 Reverse Connection Motherboard Compatible \u2013 No Fans Included \u2013 Black",
+      "name": "CORSAIR 2500D AIRFLOW Small-Tower mATX Dual Chamber PC Case â€“ Tempered Glass â€“ Reverse Connection Motherboard Compatible â€“ No Fans Included â€“ Black",
       "brand": "corsair",
       "model": "2500d"
     },
@@ -744,7 +744,7 @@
       "model": "100l"
     },
     {
-      "name": "ASUS A31 White ATX Mid-Tower Gaming Case, Dual-Sided Tempered Glass, Frameless Design, BTF Hidden Connectors, 360 AIO Support, 8\u00b0 Angled Base, ARGB Ready, Optimized Airflow, Seamless Cable Management",
+      "name": "ASUS A31 White ATX Mid-Tower Gaming Case, Dual-Sided Tempered Glass, Frameless Design, BTF Hidden Connectors, 360 AIO Support, 8Â° Angled Base, ARGB Ready, Optimized Airflow, Seamless Cable Management",
       "brand": "asus",
       "model": "a31"
     },
@@ -799,12 +799,12 @@
       "model": "atx"
     },
     {
-      "name": "ANSAITE ATX PC Case Pre-Installed 9 \u00d7 120mm PWM ARGB Fan,Mid Tower Computer Case with Full-View Dual Tempered Glass, Gaming PC Case With Type-C,420mm Radiator Support,Black,K9",
+      "name": "ANSAITE ATX PC Case Pre-Installed 9 Ã— 120mm PWM ARGB Fan,Mid Tower Computer Case with Full-View Dual Tempered Glass, Gaming PC Case With Type-C,420mm Radiator Support,Black,K9",
       "brand": "ansaite",
       "model": "9"
     },
     {
-      "name": "ANSAITE Mid-Tower PC Case - 7 \u00d7 Pre-Installed 120mm PWM ARGB Fans,Panoramic Tempered Glass Computer Case with Type-C,360mm Radiator Support,Fits up to 10x 120mm Fans,Black",
+      "name": "ANSAITE Mid-Tower PC Case - 7 Ã— Pre-Installed 120mm PWM ARGB Fans,Panoramic Tempered Glass Computer Case with Type-C,360mm Radiator Support,Fits up to 10x 120mm Fans,Black",
       "brand": "ansaite",
       "model": "7"
     },
@@ -864,7 +864,7 @@
       "model": "atx"
     },
     {
-      "name": "Phanteks XT V3 Micro-ATX PC Case with Dual Tempered Glass Panels, Front PSU Mount, 360mm Radiator Support, Reverse Airflow Fans Included, 430mm GPU Clearance \u2013 Black",
+      "name": "Phanteks XT V3 Micro-ATX PC Case with Dual Tempered Glass Panels, Front PSU Mount, 360mm Radiator Support, Reverse Airflow Fans Included, 430mm GPU Clearance â€“ Black",
       "brand": "phanteks",
       "model": "v3"
     },
@@ -899,7 +899,7 @@
       "model": "p1"
     },
     {
-      "name": "Mars Gaming MC-VIEW Pink, Micro-ATX Mini Gaming Tower Case, Frameless 90\u00b0 Tempered Glass, Modular Dual-Chamber Frame, Full Liquid Cooling Support",
+      "name": "Mars Gaming MC-VIEW Pink, Micro-ATX Mini Gaming Tower Case, Frameless 90Â° Tempered Glass, Modular Dual-Chamber Frame, Full Liquid Cooling Support",
       "brand": "mars",
       "model": "gaming"
     },
@@ -934,7 +934,7 @@
       "model": "magnetic"
     },
     {
-      "name": "FOIFKIN F100 Micro-ATX PC Case with 3 ARGB Fans, Black MicroATX Case, Gaming PC Case, Mini-Tower Computer Case, 240mm Radiator Support, 270\u00b0 Panoramic Tempered Glass",
+      "name": "FOIFKIN F100 Micro-ATX PC Case with 3 ARGB Fans, Black MicroATX Case, Gaming PC Case, Mini-Tower Computer Case, 240mm Radiator Support, 270Â° Panoramic Tempered Glass",
       "brand": "foifkin",
       "model": "f100"
     },
@@ -959,12 +959,12 @@
       "model": "2"
     },
     {
-      "name": "Phanteks Evolv Series S2 Mid-Tower PC Case \u2013 Silver & Black, Tempered Glass Showcase Design, Integrated D-RGB Lighting, E-ATX/ATX Support",
+      "name": "Phanteks Evolv Series S2 Mid-Tower PC Case â€“ Silver & Black, Tempered Glass Showcase Design, Integrated D-RGB Lighting, E-ATX/ATX Support",
       "brand": "phanteks",
       "model": "s2"
     },
     {
-      "name": "DIY Open Frame PC Case \u2013 Test Bench Chassis for ATX/M-ATX/ITX Motherboards, Stackable Mining Rig & Desktop Open Air Computer",
+      "name": "DIY Open Frame PC Case â€“ Test Bench Chassis for ATX/M-ATX/ITX Motherboards, Stackable Mining Rig & Desktop Open Air Computer",
       "brand": "diy",
       "model": "open"
     },
@@ -979,7 +979,7 @@
       "model": "destroyer"
     },
     {
-      "name": "CiT Eclipse Mini mATX Gaming PC Case \u2013 Dual Chamber Design - Panoramic Tempered Glass - including 3 x 120mm ARGB Fans, 6-Port PWM Hub, AIO Support, USB 3.0, USB 2.0, HD Audio | White",
+      "name": "CiT Eclipse Mini mATX Gaming PC Case â€“ Dual Chamber Design - Panoramic Tempered Glass - including 3 x 120mm ARGB Fans, 6-Port PWM Hub, AIO Support, USB 3.0, USB 2.0, HD Audio | White",
       "brand": "cit",
       "model": "eclipse"
     },
@@ -1024,7 +1024,7 @@
       "model": "is3"
     },
     {
-      "name": "Jonsbo D41 Standard ATX PC Case \u2013 White, Tempered Glass",
+      "name": "Jonsbo D41 Standard ATX PC Case â€“ White, Tempered Glass",
       "brand": "jonsbo",
       "model": "d41"
     },
@@ -1049,7 +1049,7 @@
       "model": "tk-1"
     },
     {
-      "name": "Jonsbo D31 Standard Micro-ATX PC Case \u2013 White, Tempered Glass",
+      "name": "Jonsbo D31 Standard Micro-ATX PC Case â€“ White, Tempered Glass",
       "brand": "jonsbo",
       "model": "d31"
     },
@@ -1169,7 +1169,7 @@
       "model": "kz02"
     },
     {
-      "name": "Corsair 6500D AIRFLOW Mid-Tower Dual Chamber PC Case \u2013 White CC-9011260-WW",
+      "name": "Corsair 6500D AIRFLOW Mid-Tower Dual Chamber PC Case â€“ White CC-9011260-WW",
       "brand": "corsair",
       "model": "6500d"
     },
@@ -1189,7 +1189,7 @@
       "model": "500"
     },
     {
-      "name": "Jonsbo MOD-3 Mini Micro-ATX PC Showcase \u2013 White Tempered Glass",
+      "name": "Jonsbo MOD-3 Mini Micro-ATX PC Showcase â€“ White Tempered Glass",
       "brand": "jonsbo",
       "model": "mod-3"
     },
@@ -1354,7 +1354,7 @@
       "model": "420mm"
     },
     {
-      "name": "ANSAITE ARGB Mid-Tower ATX PC Case \u2013 Panoramic Tempered Glass \u2013 7 x 120mm Fans Included, 360mm Radiator Support \u2013 Reverse Connection Motherboard Compatible \u2013 White Gaming desktop Computer",
+      "name": "ANSAITE ARGB Mid-Tower ATX PC Case â€“ Panoramic Tempered Glass â€“ 7 x 120mm Fans Included, 360mm Radiator Support â€“ Reverse Connection Motherboard Compatible â€“ White Gaming desktop Computer",
       "brand": "ansaite",
       "model": "argb"
     },

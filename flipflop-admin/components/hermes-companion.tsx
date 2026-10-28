@@ -1,17 +1,19 @@
 "use client";
 
 import { useRef, useEffect, useState, useCallback } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { X, Send, Loader2, ExternalLink, Repeat2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useHermes, HermesMessage, ListingCard, QuickReply } from "@/components/hermes-context";
 import { streamCompanion } from "@/lib/api";
+import dynamic from "next/dynamic";
+
+const HermesBotAvatar = dynamic(() => import("@/components/hermes-bot-avatar"), { ssr: false });
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 const GREETING: Omit<HermesMessage, "role"> = {
-  content: "Hey! 👋 I'm Hermes — your FlipFlop co-pilot. What do you want to look at?",
+  content: "Hey! 👋 I'm Flip — your FlipFlop co-pilot. What do you want to look at?",
   quickReplies: [
     { label: "⚡ Super Gems",           action: "show_super_gems" },
     { label: "💎 Gems",                 action: "show_gems" },
@@ -35,25 +37,25 @@ function InlineListingCard({
   flipping: number | null;
 }) {
   const profit = card.estimated_profit ?? 0;
-  const profitColour = profit > 150 ? "text-emerald-400" : profit > 80 ? "text-amber-400" : "text-red-400";
+  const profitColour = profit > 150 ? "text-emerald-700" : profit > 80 ? "text-amber-700" : "text-red-700";
 
   return (
-    <div className="bg-[#0d1120] border border-[#2a2d3e] rounded-xl p-3 flex flex-col gap-2">
+    <div className="bg-white border border-slate-200 rounded-xl p-3 flex flex-col gap-2">
       {card.image_url && (
          
-        <img src={card.image_url} alt="" className="w-full h-28 object-contain rounded-lg bg-[#080f1a]" />
+        <img src={card.image_url} alt="" className="w-full h-28 object-contain rounded-lg bg-slate-50" />
       )}
-      <p className="text-xs font-semibold text-slate-200 line-clamp-2 leading-snug">{card.title}</p>
+      <p className="text-xs font-semibold text-slate-800 line-clamp-2 leading-snug">{card.title}</p>
       <div className="flex flex-wrap gap-1 text-[10px] text-slate-500">
         {card.cpu && <span>🖥 {card.cpu.slice(0, 22)}</span>}
         {card.gpu
-          ? <span className="text-emerald-400">✓ {card.gpu.slice(0, 18)}</span>
-          : <span className="text-red-400/70">✗ No GPU</span>}
+          ? <span className="text-emerald-700">✓ {card.gpu.slice(0, 18)}</span>
+          : <span className="text-red-700/70">✗ No GPU</span>}
       </div>
       <div className="flex items-center justify-between">
         <div>
           <p className="text-[10px] text-slate-500">Buy price</p>
-          <p className="text-sm font-bold text-slate-200">£{card.price.toFixed(0)}</p>
+          <p className="text-sm font-bold text-slate-800">£{card.price.toFixed(0)}</p>
         </div>
         <div className="text-right">
           <p className="text-[10px] text-slate-500">Est. profit</p>
@@ -66,7 +68,7 @@ function InlineListingCard({
             href={card.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 px-2 py-1.5 text-[11px] border border-slate-700 text-slate-400 rounded-lg hover:border-slate-500 transition-colors"
+            className="flex items-center gap-1 px-2 py-1.5 text-[11px] border border-slate-700 text-slate-600 rounded-lg hover:border-slate-500 transition-colors"
           >
             <ExternalLink className="w-3 h-3" /> View
           </a>
@@ -117,8 +119,8 @@ function MessageBubble({
         <div className={cn(
           "max-w-[88%] rounded-2xl px-4 py-3 text-sm leading-relaxed",
           isUser
-            ? "bg-[#7c85ff]/20 border border-[#7c85ff]/30 text-slate-200 rounded-tr-sm"
-            : "bg-[#1a1d2e] text-slate-200 rounded-tl-sm"
+            ? "bg-indigo-50 border border-[#7c85ff]/30 text-slate-800 rounded-tr-sm"
+            : "bg-slate-100 text-slate-800 rounded-tl-sm"
         )}>
           {msg.content}
           {msg.isStreaming && !msg.content && (
@@ -138,7 +140,7 @@ function MessageBubble({
             <button
               key={i}
               onClick={() => onQuickReply(qr)}
-              className="px-3 py-1.5 text-xs font-semibold rounded-full border border-[#7c85ff]/40 text-[#a0aaff] hover:bg-[#7c85ff]/15 hover:border-[#7c85ff]/70 transition-all"
+              className="px-3 py-1.5 text-xs font-semibold rounded-full border border-[#7c85ff]/40 text-indigo-700 hover:bg-[#7c85ff]/15 hover:border-[#7c85ff]/70 transition-all"
             >
               {qr.label}
             </button>
@@ -629,21 +631,21 @@ export function HermesCompanion() {
     <>
       {/* ── Chat panel ─────────────────────────────────────────────────────── */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col bg-[#12151f] border border-[#2a2d3e] rounded-2xl shadow-2xl shadow-black/70 overflow-hidden"
+        <div className="fixed bottom-6 right-6 z-50 flex flex-col bg-white text-slate-900 border border-slate-200 rounded-2xl shadow-2xl shadow-black/70 overflow-hidden"
           style={{ width: "min(430px, calc(100vw - 3rem))", height: "calc(50vh - 2.5rem)" }}>
 
           {/* Header */}
-          <div className="flex items-center gap-3 px-4 py-3 bg-[#1a1d2e] border-b border-[#2a2d3e] flex-shrink-0">
-            <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-[#7c85ff]/50 flex-shrink-0">
-              <Image src="/pics/hermes.gif" alt="Hermes" fill sizes="48px" className="object-cover" unoptimized />
+          <div className="flex items-center gap-3 px-4 py-3 bg-slate-100 border-b border-slate-200 flex-shrink-0">
+            <div className="relative w-12 h-12 bg-white rounded-full overflow-hidden border-2 border-[#7c85ff]/50 flex-shrink-0">
+              <HermesBotAvatar />
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-bold text-slate-100">Hermes</p>
-              <p className="text-[11px] text-emerald-400">● online · your FlipFlop co-pilot</p>
+              <p className="text-sm font-bold text-slate-900">Flip</p>
+              <p className="text-[11px] text-emerald-700">● online · your FlipFlop co-pilot</p>
             </div>
             <button
               onClick={() => setOpen(false)}
-              className="ml-auto text-slate-500 hover:text-slate-300 transition-colors p-1"
+              className="ml-auto text-slate-500 hover:text-slate-900 transition-colors p-1"
             >
               <X className="w-5 h-5" />
             </button>
@@ -661,7 +663,7 @@ export function HermesCompanion() {
               />
             ))}
             {isSending && messages[messages.length - 1]?.role !== "assistant" && (
-              <div className="flex gap-1.5 px-4 py-3 bg-[#1a1d2e] rounded-2xl rounded-tl-sm w-fit">
+              <div className="flex gap-1.5 px-4 py-3 bg-slate-100 rounded-2xl rounded-tl-sm w-fit">
                 <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
                 <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
                 <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
@@ -671,14 +673,14 @@ export function HermesCompanion() {
           </div>
 
           {/* Input */}
-          <div className="flex items-center gap-2.5 p-3 border-t border-[#2a2d3e] flex-shrink-0">
+          <div className="flex items-center gap-2.5 p-3 border-t border-slate-200 flex-shrink-0">
             <input
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); void send(); } }}
               placeholder="Ask anything…"
               disabled={isSending}
-              className="flex-1 bg-[#1a1d2e] border border-[#2a2d3e] rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-[#7c85ff]/50 disabled:opacity-50"
+              className="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder-slate-600 focus:outline-none focus:border-[#7c85ff]/50 disabled:opacity-50"
             />
             <button
               onClick={() => void send()}
@@ -697,14 +699,15 @@ export function HermesCompanion() {
       <button
         onClick={() => setOpen(!isOpen)}
         className={cn(
-          "fixed bottom-6 right-6 z-50 w-24 h-24 rounded-full overflow-hidden",
+          "fixed bottom-6 right-6 z-50 w-24 h-24 bg-white rounded-full overflow-hidden",
           "border-4 shadow-xl shadow-[#7c85ff]/30 transition-all duration-200",
-          "hover:scale-110 hover:shadow-[#7c85ff]/50",
+          "shadow-[0_0_18px_6px_rgba(124,133,255,0.45),0_0_42px_16px_rgba(59,130,246,0.22),0_10px_24px_rgba(0,0,0,0.4)]",
+          "hover:scale-110 hover:shadow-[0_0_24px_8px_rgba(124,133,255,0.55),0_0_54px_20px_rgba(59,130,246,0.3),0_10px_24px_rgba(0,0,0,0.4)]",
           isOpen ? "opacity-0 pointer-events-none" : "border-[#7c85ff]/60 scale-100",
         )}
-        title="Chat with Hermes"
+        title="Chat with Flip"
       >
-        <Image src="/pics/hermes.gif" alt="Hermes" fill sizes="96px" className="object-cover" unoptimized />
+        <HermesBotAvatar />
       </button>
     </>
   );

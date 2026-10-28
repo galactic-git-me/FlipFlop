@@ -38,7 +38,10 @@ class Listing(Base):
     # Raw listing data
     title: Mapped[str] = mapped_column(String(500))
     description: Mapped[str | None] = mapped_column(Text)
-    price: Mapped[float] = mapped_column(Float)
+    # A source candidate can be known by exact product identity before its
+    # retailer offer is captured. Keep the price unknown until that capture;
+    # catalogue variants and Playbook costs remain gated on a positive value.
+    price: Mapped[float | None] = mapped_column(Float, nullable=True)
     url: Mapped[str] = mapped_column(String(1000))
     image_urls: Mapped[list] = mapped_column(JSON, default=list)
     location: Mapped[str | None] = mapped_column(String(200))
@@ -140,6 +143,15 @@ class Listing(Base):
     claude_reasoning:          Mapped[Optional[str]]      = mapped_column(Text)
     claude_main_risk:          Mapped[Optional[str]]      = mapped_column(Text)
     claude_judged_at:          Mapped[Optional[datetime]] = mapped_column(DateTime)
+
+    @property
+    def has_psu(self) -> bool:
+        """Compatibility alias for the persisted PSU inclusion field."""
+        return bool(self.psu_included)
+
+    @has_psu.setter
+    def has_psu(self, value: bool) -> None:
+        self.psu_included = bool(value)
 
     def __repr__(self):
         return f"<Listing {self.id} {self.title[:40]!r} £{self.price}>"

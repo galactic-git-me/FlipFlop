@@ -17,6 +17,7 @@ it to be entered once per build.
 """
 from __future__ import annotations
 
+import math
 import time
 from dataclasses import dataclass
 from datetime import datetime
@@ -72,9 +73,73 @@ class CourierQuote:
     # by Parcel2Go's order-creation endpoint (Items[].Service) to book this
     # specific quoted service. See app/services/parcel2go_booking.py.
     service_slug: str
+    signature_tracking: bool
     protection_scope: str
     full_value_damage_cover: bool
     protection_warning: str
+
+
+def _parse_tracked_quotes(data: dict, *, require_collection: bool = False) -> list[CourierQuote]:
+    """Keep malformed or unbookable provider rows out of operator choices."""
+    if not isinstance(data, dict):
+        return []
+    raw_quotes = data.get("Quotes", data.get("quotes", []))
+    if not isinstance(raw_quotes, list):
+        return []
+
+    parsed_quotes: list[CourierQuote] = []
+    for quote in raw_quotes:
+        if not isinstance(quote, dict):
+            continue
+        service = quote.get("Service")
+        if not isinstance(service, dict):
+            continue
+        if require_collection and service.get("CollectionType") != "Collection":
+            continue
+        slug = service.get("Slug")
+        selected_extras = quote.get("Extras", quote.get("extras", []))
+        signature_included = isinstance(selected_extras, list) and any(
+            isinstance(extra, dict)
+            and str(extra.get("Type") or extra.get("type") or "").casefold() == "signature"
+            for extra in selected_extras
+        )
+        try:
+            price = float(quote.get("TotalPrice"))
+        except (TypeError, ValueError, OverflowError):
+            continue
+        if not isinstance(slug, str) or not slug.strip() or len(slug) > 200:
+            continue
+        if not math.isfinite(price) or price <= 0:
+            continue
+        if not signature_included:
+            continue
+
+        estimated_days = _estimate_delivery_days(
+            quote.get("Collection"), quote.get("EstimatedDeliveryDate")
+        )
+        parsed_quotes.append(CourierQuote(
+            courier_name=str(service.get("CourierName") or "Unknown courier")[:160],
+            service_name=str(service.get("Name") or "Tracked")[:200],
+            price_gbp=price,
+            tracked=True,
+            estimated_days=estimated_days,
+            service_slug=slug.strip(),
+            signature_tracking=True,
+            protection_scope="loss_only",
+            full_value_damage_cover=False,
+            protection_warning=(
+                "Parcel2Go treats computers/electricals as loss-only items. "
+                "This quote does not demonstrate cover for transit damage; "
+                "arrange separate goods-in-transit cover before dispatch."
+            ),
+        ))
+    return sorted(
+        parsed_quotes,
+        key=lambda quote: (
+            quote.price_gbp,
+            quote.estimated_days if quote.estimated_days is not None else 999,
+        ),
+    )
 
 
 async def _get_access_token(environment: str) -> str:
@@ -105,8 +170,11 @@ async def _get_access_token(environment: str) -> str:
         )
 
     if resp.status_code != 200:
-        log.error("parcel2go.auth_failed", status=resp.status_code, body=resp.text[:500])
-        raise Parcel2GoError(f"Parcel2Go auth failed ({resp.status_code}): {resp.text[:300]}", resp.status_code)
+        log.error("parcel2go.auth_failed", status=resp.status_code)
+        raise Parcel2GoError(
+            f"Parcel2Go authentication failed ({resp.status_code}).",
+            resp.status_code,
+        )
 
     data = resp.json()
     token = data["access_token"]
@@ -123,6 +191,9 @@ async def get_tracked_quotes(
     value_gbp: float,
     delivery_country: str = "GBR",
     environment: str | None = None,
+    collection_postcode: str | None = None,
+    delivery_postcode: str | None = None,
+    require_collection: bool = False,
 ) -> list[CourierQuote]:
     """Returns all TRACKED service quotes, cheapest first. An empty list if no tracked
     service is available for these dimensions/destination. Untracked
@@ -131,6 +202,8 @@ async def get_tracked_quotes(
     is always well above the threshold where untracked is a bad idea),
     tracked is the only option worth quoting."""
     settings = get_settings()
+    if require_collection and (not collection_postcode or not delivery_postcode):
+        raise Parcel2GoError("Collection and destination postcodes are required for a home-collection quote")
     env = environment or settings.parcel2go_environment
     token = await _get_access_token(env)
     base_url = _BASE_URLS[env]
@@ -147,7 +220,15 @@ async def get_tracked_quotes(
                 "Height": height_cm,
             }
         ],
+        # Parcel2Go signature delivery is an optional extra. Ask for it in
+        # the quote so the shown total includes it, and reject services that
+        # cannot provide the requested extra.
+        "Extras": [{"Type": "Signature"}],
     }
+    if collection_postcode:
+        payload["CollectionAddress"]["Postcode"] = collection_postcode
+    if delivery_postcode:
+        payload["DeliveryAddress"]["Postcode"] = delivery_postcode
 
     async with httpx.AsyncClient(timeout=30.0) as client:
         resp = await client.post(
@@ -161,60 +242,20 @@ async def get_tracked_quotes(
         )
 
     if resp.status_code != 200:
-        error_body = resp.text[:500]
-        log.error("parcel2go.quote_failed", status=resp.status_code, body=error_body,
-                  payload=payload)
-        # Try to extract detailed error from response
-        try:
-            error_data = resp.json()
-            error_msg = error_data.get("Message") or error_data.get("message") or error_data.get("error")
-            if error_msg:
-                error_body = error_msg
-        except:
-            pass
-        raise Parcel2GoError(f"Parcel2Go quote failed ({resp.status_code}): {error_body}", resp.status_code)
-
-    data = resp.json()
-    quotes = data.get("Quotes", data.get("quotes", []))
-
-    # Parcel2Go's quote response has no explicit tracked/untracked flag —
-    # every service this account's quote endpoint returns (Parcelforce, UPS,
-    # DPD, TNT, Yodel, etc.) is a standard tracked UK courier, so all
-    # returned quotes are treated as tracked. Courier/service name live
-    # under the nested "Service" object, not at the quote's top level.
-    parsed_quotes: list[CourierQuote] = []
-    for q in quotes:
-        service = q.get("Service", {})
-        price = q.get("TotalPrice")
-        if price is None:
-            continue
-        estimated_days = _estimate_delivery_days(q.get("Collection"), q.get("EstimatedDeliveryDate"))
-        parsed_quotes.append(
-            CourierQuote(
-                courier_name=service.get("CourierName", "Unknown courier"),
-                service_name=service.get("Name", "Tracked"),
-                price_gbp=float(price),
-                tracked=True,
-                estimated_days=estimated_days,
-                service_slug=service.get("Slug", ""),
-                # Parcel2Go's restricted-items terms classify computers and
-                # related electricals as protected for loss only, not transit
-                # damage. A quote price must never be presented as full-value
-                # damage insurance without a separate eligible policy.
-                protection_scope="loss_only",
-                full_value_damage_cover=False,
-                protection_warning=(
-                    "Parcel2Go treats computers/electricals as loss-only items. "
-                    "This quote does not demonstrate cover for transit damage; "
-                    "arrange separate goods-in-transit cover before dispatch."
-                ),
-            )
+        log.error(
+            "parcel2go.quote_failed",
+            status=resp.status_code,
+            environment=env,
+        )
+        raise Parcel2GoError(
+            f"Parcel2Go quote failed ({resp.status_code}).",
+            resp.status_code,
         )
 
-    return sorted(
-        parsed_quotes,
-        key=lambda q: (q.price_gbp, q.estimated_days if q.estimated_days is not None else 999),
-    )
+    data = resp.json()
+    if not isinstance(data, dict):
+        return []
+    return _parse_tracked_quotes(data, require_collection=require_collection)
 
 
 async def get_cheapest_tracked_quote(**kwargs) -> CourierQuote | None:

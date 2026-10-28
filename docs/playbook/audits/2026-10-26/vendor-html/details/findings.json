@@ -1,0 +1,77 @@
+[
+  {
+    "vendor": "overclockers",
+    "url": "https://www.overclockers.co.uk/kingston-nv3-1tb-pci-e-4.0-nvme-m.2-solid-state-drive-snv3s-1000g/STO-KNG-02942.html",
+    "status": 200,
+    "title": "Kingston NV3 1TB PCI-e 4.0 NVMe M.2 Solid State Drive (SNV3S/1000G) | OcUK",
+    "jsonld": [
+      {
+        "@type": "Product",
+        "name": "Kingston NV3 1TB PCI-e 4.0 NVMe M.2 Solid State Drive (SNV3S/1000G)",
+        "sku": "STO-KNG-02942",
+        "mpn": "STO-KNG-02942",
+        "gtin": "0740617344790",
+        "brand": {
+          "@type": "Brand",
+          "name": "Kingston"
+        }
+      }
+    ],
+    "fields": [],
+    "identifier_contexts": [
+      "/s read, 4000MB/s write, 320TBW endurance, 5-year warranty\",\"mpn\":\"STO-KNG-02942\",\"sku\":\"STO-KNG-02942\",\"brand\":{\"@type\":\"Brand\",\"name\":\"Kingston\"},\"gtin\":\"0740617344790\",\"imag",
+      "\"STO-KNG-02942\",\"brand\":{\"@type\":\"Brand\",\"name\":\"Kingston\"},\"gtin\":\"0740617344790\",\"image\":[\"https://www.overclockers.co.uk/dw/image/v2/BLRM_PRD/on/demandware.static/-/Sites-mas",
+      "l\"> <span class=\"product-attributes-label me-1\">EAN</span> <span class=\"product-attributes-value me-3\">0740617344790</span> <span class=\""
+    ]
+  },
+  {
+    "vendor": "computer_orbit",
+    "url": "https://computerorbit.com/products/1tb-kingston-nv3-pcie-4-0-nvme-m-2-ssd",
+    "status": 200,
+    "title": "1TB Kingston NV3 PCIe 4.0 NVMe M.2 SSD \u2014 Computer Orbit",
+    "jsonld": [
+      {
+        "@type": "Product",
+        "name": "1TB Kingston NV3 PCIe 4.0 NVMe M.2 SSD",
+        "sku": "SNV3S/1000G",
+        "mpn": "740617344790",
+        "brand": {
+          "@type": "Brand",
+          "name": "KINGSTON"
+        }
+      }
+    ],
+    "fields": [],
+    "identifier_contexts": [
+      "0,\"compare_at_price\":13900,\"inventory_management\":\"shopify\",\"barcode\":\"740617344790\",\"requires_selling_plan\":false,\"selling_plan_allocations\":[],\"quantity_rule\":{\"min\":1,\"max\":null",
+      " }, \"sku\": \"SNV3S\\/1000G\", \"mpn\": \"740617344790\", \"offers\": { \"@type\": \"Offer\", \"priceCurrency\": \"GBP\", \"price\""
+    ]
+  },
+  {
+    "vendor": "scan",
+    "url": "https://www.scan.co.uk/products/1tb-kingston-nv3-ssd-m2-2280-pcie-40-x4-nvme-ssd-3d-nand-6000mb-s-read-4000mb-s-write-oem",
+    "status": 200,
+    "title": "Kingston NV3 1TB M.2 NVMe PCIe 4.0 SSD/Solid State Drive LN151058 - SNV3S/1000G | SCAN UK",
+    "jsonld": [],
+    "fields": [
+      "GTIN 740617344790"
+    ],
+    "identifier_contexts": [
+      " <span class=\"manufacturerCode\"> Manufacturer code: <strong>SNV3S/1000G</strong> </span> </div> </div> <div class=\"price",
+      "span class=\"manufacturerCode\"> Manufacturer code: <strong itemprop=\"mpn\"> SNV3S/1000G "
+    ]
+  },
+  {
+    "vendor": "awd_it",
+    "url": "https://www.awd-it.co.uk/kingston-nv3-pcie-4-0-nvme-ssd-1tb-m-2-2280-snv3s-1000g-read-6000mb-s-write-4000mb-s.html",
+    "status": 200,
+    "title": "Kingston NV3 PCIe 4.0 NVMe SSD 1TB M.2 2280 - SNV3S/1000G - Read 6000MB/s, Write 4000MB/s",
+    "jsonld": [],
+    "fields": [
+      "SKU 44F-DB7-526"
+    ],
+    "identifier_contexts": [
+      "de\"> <div class=\"product-barcode\"> <strong class=\"type\">EAN</strong> <span class=\"value\">740617344790</span> </div> </div></div></div></div> <div class=\"product-add"
+    ]
+  }
+]

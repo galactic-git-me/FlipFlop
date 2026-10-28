@@ -1,14 +1,17 @@
 # FlipFlop Platform - Start All Servers
 
-This directory contains scripts to start all FlipFlop platform servers (backend, admin, and frontend).
+This launcher starts only the local FlipFlop development servers on
+`prometheus-ts`. It never deploys, starts, or modifies production on
+`andromeda-ts`.
 
 ## Servers
 
 | Server | Type | Port | Technology |
 |--------|------|------|------------|
-| Backend | API | 4314 | FastAPI (Python) |
+| Backend | API | 4311 | FastAPI (Python) |
 | Admin | Web | 4312 | Next.js (Node.js) |
 | Frontend | Web | 4313 | Next.js (Node.js) |
+| Gem Radar standalone (optional) | API/worker | 18000 | FastAPI (Python) |
 
 ## Quick Start
 
@@ -17,13 +20,19 @@ This directory contains scripts to start all FlipFlop platform servers (backend,
 # From project root
 .\scripts\start-all-servers.ps1
 
-# Or with verbose output
-.\scripts\start-all-servers.ps1 -Verbose
-
 # Or skip specific servers
 .\scripts\start-all-servers.ps1 -NoBackend
 .\scripts\start-all-servers.ps1 -NoAdmin
 .\scripts\start-all-servers.ps1 -NoFrontend
+
+# Optional: also start the standalone DEV Gem Radar worker
+.\scripts\start-all-servers.ps1 -GemRadarStandalone
+
+# Optional: rebuild the unpacked DEV browser extension first
+.\scripts\start-all-servers.ps1 -BuildExtension
+
+# Validate prerequisites without starting or stopping anything
+.\scripts\start-all-servers.ps1 -CheckOnly
 ```
 
 ### Windows (Command Prompt)
@@ -51,23 +60,43 @@ chmod +x scripts/start-all-servers.sh
 
 Once all servers are running, access them at:
 
-- **Backend API**: http://localhost:4314
+- **Backend API**: http://localhost:4311
 - **Admin Dashboard**: http://localhost:4312
 - **Frontend Shop**: http://localhost:4313
 
 ## Features
 
-✅ Starts all three servers in parallel  
+✅ Starts all three development servers in parallel
 ✅ Displays status and port information  
 ✅ Shows colorized output for easy identification  
 ✅ Supports selective server startup  
-✅ Verbose mode for debugging  
-✅ Cross-platform support (Windows, macOS, Linux)
+✅ Uses hot reload for API and frontend development
+
+Python source reloads produce one completion notice, for example:
+`File change C:\...\app\example.py detected. Restarted API; ready in 3.2s.`
+The notice appears only when the replacement server reports that it is
+listening. Routine reload startup/worker-ready messages are suppressed;
+warnings, errors, tracebacks and subsequent request logs remain visible.
+Initial startup retains its full log. Unexpected process exits have a separate
+warning rather than being described as a successful file-change reload.
+Launcher logging changes take effect when the launcher itself is restarted.
+
+✅ Routes DEV AI requests through Ollama priority port 11435
+✅ Loads the configured Ollama model at startup and keeps it resident until Ollama stops
+✅ Enables the hourly catalogue-owned Playbook and commercial evidence refresh in normal DEV mode; `-CustomerTesting` keeps it disabled
+
+The warm-up uses a one-token request with Ollama's `keep_alive: -1`. This avoids
+first-request model-load delays and keeps the model's memory allocated while
+the Ollama service is running. If warm-up fails, startup continues and the API
+can use its configured cloud fallback.
 
 ## Logs
 
 ### Windows (PowerShell)
-Logs are displayed in the console window. Servers run in foreground.
+Logs are written to the repository's `logs` directory with a unique timestamp
+and launcher PID in each filename. This avoids collisions with logs still held
+open by an abandoned DEV process. The launcher remains in the foreground so
+`Ctrl+C` can stop every development process it started.
 
 ### macOS/Linux (Bash)
 Logs are written to:
@@ -109,7 +138,7 @@ Ensure you're running the script from the project root or adjust the working dir
 
 ### "Port already in use"
 If a port is already in use:
-1. Find the process: `lsof -i :4314` (macOS/Linux) or `netstat -ano | findstr :4314` (Windows)
+1. Find the process: `lsof -i :4311` (macOS/Linux) or `netstat -ano | findstr :4311` (Windows)
 2. Kill the process: `kill <PID>` (macOS/Linux) or `taskkill /PID <PID> /F` (Windows)
 3. Run the script again
 
@@ -138,10 +167,32 @@ The scripts automatically set required environment variables:
 
 | Variable | Value |
 |----------|-------|
-| `NEXT_PUBLIC_API_URL` | `http://localhost:4314` |
-| `BACKEND_URL` | `http://localhost:4314` |
+| `NEXT_PUBLIC_API_URL` | `http://127.0.0.1:4311` |
+| `BACKEND_URL` | `http://127.0.0.1:4311` |
+| `FLIPFLOP_RUNTIME_ENV` | `development` |
+| `OLLAMA_BASE_URL` | `http://127.0.0.1:11435` |
+| `OLLAMA_MODEL` | `qwen3:4b` (default) |
+| `LLM_PRIMARY_MODEL` | `qwen3:4b` (development primary) |
+| `EBAY_ENVIRONMENT` | `production` (read/sourcing) |
+| `EBAY_LISTING_ENVIRONMENT` | `sandbox` (writes/listing) |
 
-These can be overridden by setting them before running the script.
+All backend LLM workflows use `app/services/model_selection_service.py`.
+Development uses `LLM_PRIMARY_PROVIDER=ollama` with
+`LLM_PRIMARY_MODEL=qwen3:4b`, then the configured OpenRouter free
+model (`LLM_SECONDARY_PROVIDER=openrouter-free` and
+`LLM_SECONDARY_MODEL=google/gemma-4-31b-it:free`), then
+`LLM_TERTIARY_PROVIDER=openrouter` with `LLM_TERTIARY_MODEL=auto:cheapest`.
+OpenRouter tiers require `OPENROUTER_API_KEY`. Set those `LLM_*` variables in
+the API runtime environment to change the provider/model order. Keep
+`OLLAMA_BASE_URL` environment-specific: development uses the local gateway on
+port `11435` (second priority); production worker traffic uses the
+`ollama-tunnel` service on container port `11434`, which forwards to the
+production-priority listener on Prometheus port `11436`. Other local apps use
+Prometheus port `11434` (third priority). Vision requests skip text-only local models and select a
+vision-capable configured/cloud tier.
+
+The launcher sets these explicitly so a stale shell environment cannot point
+development at production accidentally.
 
 ## Advanced Usage
 
@@ -175,19 +226,19 @@ If you prefer to start servers individually:
 #### Backend (FastAPI)
 ```bash
 cd flipflop-api
-python run_dev.py --host 0.0.0.0 --port 4314
+python run_dev.py --host 0.0.0.0 --port 4311
 ```
 
 #### Admin (Next.js)
 ```bash
 cd flipflop-admin
-NEXT_PUBLIC_API_URL=http://localhost:4314 npm run dev -- -p 4312 -H 0.0.0.0
+NEXT_PUBLIC_API_URL=http://localhost:4311 npm run dev -- -p 4312 -H 0.0.0.0
 ```
 
 #### Frontend (Next.js)
 ```bash
 cd ../FlipFlop.shop
-BACKEND_URL=http://localhost:4314 NEXT_PUBLIC_API_URL=http://localhost:4314 npm run dev -- -p 4313 -H 0.0.0.0
+BACKEND_URL=http://localhost:4311 NEXT_PUBLIC_API_URL=http://localhost:4311 npm run dev -- -p 4313 -H 0.0.0.0
 ```
 
 ## Notes

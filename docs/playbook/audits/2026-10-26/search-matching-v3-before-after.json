@@ -1,0 +1,2381 @@
+{
+  "snapshot_at": "2026-10-26T23:03:01.430891+00:00",
+  "total_listings": 51011,
+  "after_is_database_verified": true,
+  "mpn_products": 1075,
+  "before": {
+    "products_with_cross_source_links": 165,
+    "products_with_all_observed_sources_linked": 162,
+    "listings_in_cross_source_groups": 570,
+    "cross_source_listing_pairs": 685,
+    "amazon_products_linked_to_another_source": 56
+  },
+  "after": {
+    "products_with_cross_source_links": 183,
+    "products_with_all_observed_sources_linked": 183,
+    "listings_in_cross_source_groups": 638,
+    "cross_source_listing_pairs": 760,
+    "amazon_products_linked_to_another_source": 68
+  },
+  "direct_before": {
+    "products_with_cross_source_links": 53,
+    "products_with_all_observed_sources_linked": 51,
+    "listings_in_cross_source_groups": 118,
+    "cross_source_listing_pairs": 77,
+    "amazon_products_linked_to_another_source": 31
+  },
+  "direct_after": {
+    "products_with_cross_source_links": 58,
+    "products_with_all_observed_sources_linked": 58,
+    "listings_in_cross_source_groups": 133,
+    "cross_source_listing_pairs": 91,
+    "amazon_products_linked_to_another_source": 35
+  },
+  "bestsellers_before": {
+    "summary": {
+      "products": 90,
+      "with_another_captured_retailer": 38,
+      "with_two_explicitly_available_retailers": 0,
+      "with_an_explicitly_available_non_amazon_retailer": 16,
+      "with_two_available_retailers_under_owner_policy": 32,
+      "with_available_non_amazon_retailer_under_owner_policy": 32
+    },
+    "products": [
+      {
+        "asin": "B07RW6Z692",
+        "category": "ram",
+        "title": "CORSAIR VENGEANCE LPX DDR4 RAM 32GB (2x16GB) Up to 3200MHz CL16-20-20-38 1.35V Intel XMP AMD EXPO Computer Memory \u2013 Black (CM",
+        "other_captured_retailers": [
+          "awd_it"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it"
+        ]
+      },
+      {
+        "asin": "B0CTHXMYL8",
+        "category": "ram",
+        "title": "Crucial Pro DDR5 RAM 32GB Kit (2x16GB) 6000MHz CL36, Overclocking Gaming, Intel XMP 3.0 / AMD EXPO, Computer Memory (PC), Bla",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0D4NLSP87",
+        "category": "ram",
+        "title": "Patriot Viper Venom DDR5 32GB (2 x 16GB) 6000MT/s UDIMM Desktop Gaming Memory KIT - PVV532G600C30K",
+        "other_captured_retailers": [
+          "awd_it",
+          "computer_orbit",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it",
+          "computer_orbit",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B081XWLQKS",
+        "category": "ram",
+        "title": "CORSAIR VENGEANCE RGB PRO DDR4 RAM 32GB (2x16GB) Up to 3200MHz CL16 Intel XMP AMD EXPO Computer Memory \u2013 Black (CMW32GX4M2E32",
+        "other_captured_retailers": [
+          "newegg_uk"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0GQC6MV6C",
+        "category": "ram",
+        "title": "CORSAIR VENGEANCE RGB RS DDR5 16GB (2 x 8GB) Up To 6000MHz AMD INTEL RAM | Desktop Gaming Memory, AMD EXPO & Intel XMP 3.0 Co",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0FQMLKVLS",
+        "category": "ram",
+        "title": "Crucial Pro DDR5 RAM 32GB Kit (2x16GB) 6400MHz CL32, Overclocking Deskop Computer Gaming Memory, Intel XMP 3.0 / AMD EXPO, Bl",
+        "other_captured_retailers": [
+          "computer_orbit"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0BPTKD797",
+        "category": "ram",
+        "title": "CORSAIR VENGEANCE RGB DDR5 32GB (2x16GB) DDR5 Up to 6000MHz CL30 AMD EXPO Intel XMP iCUE Compatible Computer Memory \u2013 Grey (C",
+        "other_captured_retailers": [
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0D1Y5PCFZ",
+        "category": "ram",
+        "title": "Netac DDR4 3200MHz 32GB (2 X 16GB) 2-in-1 RAM Computer Desktop Memory DRAM Kit C16 XPM2.0 Gaming Memory 32GB with Heat Sink,",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0143UM4TC",
+        "category": "ram",
+        "title": "CORSAIR VENGEANCE LPX DDR4 RAM 16GB (2x8GB) Up to 3200MHz CL16 Intel XMP AMD EXPO Computer Memory \u2013 Black (CMK16GX4M2B3200C16",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0GDJT14BQ",
+        "category": "ram",
+        "title": "Lexar THOR Z Series OC DDR5 RAM 32GB Kit (2x16GB) 6000 MHz CL36, DRAM 288-Pin UDIMM Desktop Memory, PC Memory High-Performanc",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DMTL43VR",
+        "category": "psu",
+        "title": "CORSAIR RM850e (2025) Fully Modular Low-Noise ATX Power Supply \u2013 Black | 12V-2x6 Cable Included, ATX 3.1 & PCIe 5.1 Compliant",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0CJRXX5WT",
+        "category": "psu",
+        "title": "CORSAIR CX650 80 PLUS Bronze ATX 650 Watt Power Supply \u2013 UK \u2013 Black | Non Modular, Low-Noise",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0D9C1HG19",
+        "category": "psu",
+        "title": "CORSAIR RM1000x Fully Modular Low-Noise ATX Power Supply \u2013 ATX 3.1 Compliant \u2013 PCIe 5.1 Support \u2013 Cybenetics Gold Efficiency",
+        "other_captured_retailers": [
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0FNDGQ7CK",
+        "category": "psu",
+        "title": "be quiet! Pure Power 13 M 1000W Power Supply, 80+ Gold, Cybenetics Platinum | PCIe 5.1 Ready, ATX 3.1, Fully Modular, PSU wit",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0D5HTTCSB",
+        "category": "psu",
+        "title": "Corsair SF750 (2024) Fully Modular SFX Low Noise 80 Plus Platinum Power Supply \u2013 ATX 3.1 Compliant \u2013 PCIe 5.1 Ready \u2013 Small F",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0FNDFHLQX",
+        "category": "psu",
+        "title": "be quiet! System Power 11 750W Power Supply, ATX 3.1 PSU, 80 PLUS\u00ae Bronze | With Support For PCIe 5.1 GPUs, Temperature-Contr",
+        "other_captured_retailers": [
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0FZCPSC4D",
+        "category": "psu",
+        "title": "be quiet! Pure Power 12 850W Gaming PSU, 80 Plus Gold, ATX 3.1, 12V-Rail | PCIe 5.1 GPU Support Power Supply, Silent 120mm Fa",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0FMYJ24Z8",
+        "category": "psu",
+        "title": "CORSAIR RM1000x SHIFT (2025) Fully Modular ATX Power Supply \u2013 Black | Modular Side Interface, Native 12V-2x6 Cable, ATX 3.1 &",
+        "other_captured_retailers": [
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0F3JF1YY3",
+        "category": "psu",
+        "title": "CORSAIR HX1500i (2025) Fully Modular Ultra-Low Noise ATX Power Supply with 12V-2x6 Cable \u2013 ATX 3.1 & PCIe 5.1 Compliant, Cybe",
+        "other_captured_retailers": [
+          "computer_orbit",
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "computer_orbit",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B09T9P4MSL",
+        "category": "psu",
+        "title": "ASUS ROG Strix 1200W Platinum Power Supply | 80 PLUS & Cybenetics Platinum, Fully modular, ATX 3.1, PCIe 5.1, GaN MOSFET, GPU",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DKFMSMYK",
+        "category": "cpu",
+        "title": "AMD RYZEN \u2122 7 9800X 3D Desktop Processor (8-core/16-thread, 104MB cache, up to 5.2 GHz max boost)",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0H41D4KFT",
+        "category": "cpu",
+        "title": "AMD Ryzen 7 5800X3D Processeur 10TH ANNIVERSARY (8 Cores/16 Threads, Socket AM4, 105W TDP, 100 Mo Cache, up to 4.5 GHz Freque",
+        "other_captured_retailers": [
+          "computer_orbit",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "computer_orbit",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0BBJDS62N",
+        "category": "cpu",
+        "title": "AMD Ryzensets 5 7600X Processor (integrated radeon graphics, 6 cores/12 threads, 105W TDP, AM5 socket, 38MB cache, up to 5.3",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0G8JMLXNQ",
+        "category": "cpu",
+        "title": "AMD RYZEN\u2122 7 9850X3D",
+        "other_captured_retailers": [
+          "computer_orbit",
+          "newegg_uk",
+          "overclockers",
+          "scan"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "computer_orbit",
+          "overclockers",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0DVZSG8D5",
+        "category": "cpu",
+        "title": "AMD Ryzen\u2122 9 9950X3D Processor With 3D V-Cache\u2122 Technology, 16 Cores/32 Threads, 144MB Cache, 170W TDP, AM5 Socket, Up To 5.7",
+        "other_captured_retailers": [
+          "computer_orbit",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "computer_orbit",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0D6NMDNNX",
+        "category": "cpu",
+        "title": "AMD Ryzensets 7 9700X Processor (8 Cores/16 Threads) 65W DTP, AM5 socket, 40MB Cache, Up to 5.5 GHz max boost frequency, no c",
+        "other_captured_retailers": [
+          "computer_orbit",
+          "ebuyer",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "computer_orbit",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B08166SLDF",
+        "category": "cpu",
+        "title": "AMD Ryzensets 5 5600X Processor (6 Cores/12Threads, 65W TDP, AM4 Socket, 35MB Cache, up to 4.6 GHz Max Boost, Wraith Stealth",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0CGJC178L",
+        "category": "cpu",
+        "title": "Intel\u00ae Core\u2122 i7-14700KF Desktop Processor 20 cores (8 P-core + 12 E-core) up to 5.6 GHz",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0D6NN6TM7",
+        "category": "cpu",
+        "title": "AMD Ryzensets 5 9600X Processor (radeon graphics included, 6 Cores/12 Threads, 65W TDP, Socket AM5, Cache 38MB, up to 5.4 GHz",
+        "other_captured_retailers": [
+          "awd_it",
+          "computer_orbit",
+          "ebuyer",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it",
+          "computer_orbit",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0GMLJCBBM",
+        "category": "cpu",
+        "title": "Intel Core Ultra 7 Processor 270K Plus, up to 5.5 GHz, LGA1851 Socket, PCIe 5.0, DDR5 Support, 125W TDP",
+        "other_captured_retailers": [
+          "newegg_uk",
+          "overclockers",
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0D2MK6NML",
+        "category": "case",
+        "title": "NZXT H5 Flow - Compact ATX Mid-Tower PC Case - Black | Compact mid-tower with 2 included 120mm fans, 360mm front radiator sup",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0FJ2QMQYC",
+        "category": "case",
+        "title": "CORSAIR FRAME 4500X RS-R ARGB Panoramic Glass Mid-Tower PC Case \u2013 InfiniRail Mounting System, Fits Dual 360mm Radiators, GPU",
+        "other_captured_retailers": [
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0CJCJ3ZZB",
+        "category": "case",
+        "title": "Fractal Design North XL Charcoal Black TG- three 140mm Aspect PWM fans included- Type C USB- EATX airflow full tower PC gamin",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DQPMJ6MJ",
+        "category": "case",
+        "title": "NZXT H3 Flow - Micro-ATX Airflow PC Case - Black | Space-efficient Micro-ATX case with optimized airflow, full-size GPU suppo",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B07YQ7HXBD",
+        "category": "case",
+        "title": "MSI MAG FORGE 100R Mid Tower Gaming Computer Case (Black, 2x 120mm ARGB PWM Fan, 1x 120mm Fan, 1-6 ARGB Hub, Tempered Glass,",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0FCM65FKM",
+        "category": "case",
+        "title": "HYXN H1 ATX PC Case-Pre-Installed 7 PWM ARGB Fans, Dual Chamber Mid-Tower Gaming PC Case, with Type-C, Simultaneous Installat",
+        "other_captured_retailers": [
+          "awd_it",
+          "newegg_uk",
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0DFHNV7TK",
+        "category": "case",
+        "title": "CORSAIR Frame 4000D RS ARGB Modular Mid-Tower ATX PC Case \u2013 Black | High Airflow, 3x Pre-Installed RS ARGB Fans, InfiniRail F",
+        "other_captured_retailers": [
+          "awd_it",
+          "newegg_uk",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B08HQNF5VT",
+        "category": "case",
+        "title": "iONZ KZ10 PC Gaming Case Mid Tower ATX Tempered Glass With 4 x 120mm ARGB Fans - Black",
+        "other_captured_retailers": [
+          "newegg_uk",
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0CFYKNHW7",
+        "category": "case",
+        "title": "MSI MAG FORGE 320R AIRFLOW Mid-Tower PC Case - ATX Capacity, up to 390mm RTX 40 GPU Support, 4 x 120mm ARGB Fans, Magnetic Du",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0C89FCDFP",
+        "category": "case",
+        "title": "NZXT H6 Flow | CC-H61FB-01 | Compact Dual-Chamber Mid-Tower Airflow Case | Panoramic Glass Panels | High-Performance Airflow",
+        "other_captured_retailers": [
+          "awd_it",
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0DC8RVRBZ",
+        "category": "nvme",
+        "title": "Crucial P310 2TB SSD M.2 2280 NVMe PCIe Gen4, Up to 7,100MB/s, Laptop & Desktop (PC) Compatible, Internal Solid State Drive -",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0B9C4DKKG",
+        "category": "nvme",
+        "title": "Samsung 990 PRO NVMe M.2 SSD, 2 TB, PCIe 4.0, 7,450 MB/s read, 6,900 MB/s write, Internal SSD, For gaming and video editing,",
+        "other_captured_retailers": [
+          "awd_it"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it"
+        ]
+      },
+      {
+        "asin": "B0DBR3DZWG",
+        "category": "nvme",
+        "title": "Kingston NV3 NVMe PCIe 4.0 Internal SSD 1TB M.2 2280-SNV3S/1000G",
+        "other_captured_retailers": [
+          "awd_it",
+          "newegg_uk",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "awd_it",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0DM1R7KHZ",
+        "category": "nvme",
+        "title": "BIWIN Black Opal NV7400 1TB SSD, up to 7450MB/s Read Speed Gen4x4 NVMe M.2 2280, Internal PCIe 4.0 Solid State Drive for Gami",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0C3ZJ8T6F",
+        "category": "nvme",
+        "title": "Acer Predator GM7 1TB SSD, M.2 2280 PCIe Gen 4 x4 NVMe 2.0, Read Speed Up to 7200 MB/s, Internal PC Solid State Drive for Lap",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0D4YN1K8G",
+        "category": "nvme",
+        "title": "Fikwot FX991 1TB SSD, M.2 2280 NVMe 1.4 SSD, PCIe Gen4x4, Up to 7100MB/s, HMB+SLC, High Performance Gaming Internal Solid Sta",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0B7CKVCCV",
+        "category": "nvme",
+        "title": "WD_BLACK SN850X NVMe SSD 1TB (up to 7,300MB/s read speed, up to 6,300MB/s write speed, M.2 2280, PCIe Gen4, Gaming Expansion",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0CNSV1M47",
+        "category": "nvme",
+        "title": "fanxiang 512GB NVMe M.2 2280 SSD, Up to 3000MB/s, PCIe Gen3 x4 | Graphite Cooling Sticker, Internal Solid State Drives, Deskt",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B09P58BJ2L",
+        "category": "nvme",
+        "title": "Integral SSD 256GB NVME M.2 2280 PCIe Gen3x4 R-3350MB/s W-1350MB/s M2 Solid State Drive",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DZ5ZK225",
+        "category": "nvme",
+        "title": "Crucial P510 1TB SSD NVMe M.2 PCIe 5.0 x4 Gen5, Read/Write Speeds up to 11,000/9,500 MB/s, Laptop & Desktop (PC) Compatible,",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0DPKV94MX",
+        "category": "motherboard",
+        "title": "MSI B850 GAMING PLUS WIFI Motherboard, ATX, AM5 | AMD Ryzen 9000 / 8000 / 7000 CPU, DDR5 Memory Boost 8200+ MT/s (OC), PCIe 5",
+        "other_captured_retailers": [
+          "awd_it",
+          "newegg_uk"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0BW66YHB5",
+        "category": "motherboard",
+        "title": "Gigabyte B550M K Motherboard - Supports AMD Ryzen 5000 Series AM4 CPUs, up to 4733MHz DDR4 (OC), 2xPCIe 3.0 M.2, GbE LAN, USB",
+        "other_captured_retailers": [
+          "awd_it",
+          "ebuyer",
+          "newegg_uk"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it"
+        ]
+      },
+      {
+        "asin": "B0DQM8GPR7",
+        "category": "motherboard",
+        "title": "Gigabyte B850 AORUS ELITE WIFI7 Motherboard - AMD Ryzen 9000 Series CPUs, 14+2+2 Phases Digital VRM, up to 8200MHz DDR5 (OC),",
+        "other_captured_retailers": [
+          "computer_orbit",
+          "newegg_uk",
+          "overclockers"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B08B4V6H3N",
+        "category": "motherboard",
+        "title": "MSI MPG B550 GAMING PLUS Motherboard, ATX, AM4 | AMD Ryzen 3rd Gen CPU, DDR4 Boost (4400MHz/OC), PCIe 4.0/3.0 x16, PCIe 3.0 x",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0BXFBN121",
+        "category": "motherboard",
+        "title": "Gigabyte A520M K V2 Motherboard - Supports AMD Ryzen 5000 Series AM4 CPUs, up to 5100MHz DDR4 (OC), PCIe Gen3 x4 M.2, GbE LAN",
+        "other_captured_retailers": [
+          "awd_it",
+          "computer_orbit",
+          "ebuyer",
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it",
+          "computer_orbit",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0FXHHTDW3",
+        "category": "motherboard",
+        "title": "MSI MAG B850 TOMAHAWK WIFI Motherboard, ATX, AM5 | AMD Ryzen 9000 / 8000 / 7000 CPU, 80A SPS VRM, DDR5 Memory Boost 8200+ MT/",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DP5FBV4P",
+        "category": "motherboard",
+        "title": "ASUS ROG Strix B850-A Gaming WiFi AMD ATX motherboard, 14+2+2 power stages, DDR5 slots, four M.2 slots, PCIe 5.0, WiFi 7, USB",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0BSLMNGM9",
+        "category": "motherboard",
+        "title": "MSI B760 GAMING PLUS WIFI DDR4 Motherboard, ATX | Intel 14th, 13th & 12th Gen Core CPU, LGA 1700 - DDR4 (5333+MHz/OC), 1x PCI",
+        "other_captured_retailers": [
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0DP5DQPRC",
+        "category": "motherboard",
+        "title": "ASUS TUF GAMING B850-PLUS WIFI AMD ATX motherboard, 14+2+1 80A DrMOS power stages, DDR5, PCIe 5.0 Ready, 3xM.2 slots, Wi-Fi 7",
+        "other_captured_retailers": [
+          "awd_it",
+          "ebuyer",
+          "newegg_uk",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B09LVQYGXH",
+        "category": "motherboard",
+        "title": "ASUS TUF Gaming B550-PLUS (WI-FI), AMD B550 (Ryzen AM4) ATX motherboard (PCIe 4.0, dual M.2, 10 DrMOS, DDR4 4400, Intel\u00ae WiFi",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0F7HZ9QSZ",
+        "category": "gpu",
+        "title": "ASUS Dual GeForce RTX 5060 8GB GDDR7 OC Edition (PCIe 5.0, 8GB GDDR7, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2.5 slot design, A",
+        "other_captured_retailers": [
+          "newegg_uk"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DT6NZ9V9",
+        "category": "gpu",
+        "title": "MSI GeForce RTX 5080 16G VENTUS 3X OC Graphics Card - RTX 5080 GPU | 16GB GDDR7 (30Gbps/256-bit), PCIe 5.0 - Triple Fan Desig",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DYPFY7JG",
+        "category": "gpu",
+        "title": "ASUS Prime GeForce RTX\u2122 5070 GDDR7 12GB OC Edition \u2013 Graphics Card (PCIe 5.0, HDMI, Display 2.1, 2.5 Slot, Axial Fans, SFF-Re",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DS65KD1C",
+        "category": "gpu",
+        "title": "ASUS TUF Gaming GeForce RTX 5080 16GB GDDR7 OC Edition Gaming Graphics Card (PCIe 5.0, HDMI/DP 2.1, 3.6-slot, military-grade",
+        "other_captured_retailers": [
+          "newegg_uk"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B096Z886F8",
+        "category": "gpu",
+        "title": "MSI GeForce RTX 5060 Ti 8G GAMING TRIO OC Graphics Card - RTX 5060 Ti GPU | 8GB GDDR7 (28Gbps/128-bit), PCIe 5.0 - TRI FROZR",
+        "other_captured_retailers": [
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B09BD59F4T",
+        "category": "gpu",
+        "title": "ASUS Prime GeForce RTX 5080 EVO 16GB GDDR7 OC Edition Gaming Graphics Card (Nvidia GeForce RTX5080, SFF-Ready, Dual BIOS Swit",
+        "other_captured_retailers": [
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0DSQ1RCZV",
+        "category": "gpu",
+        "title": "Gigabyte GeForce RTX 5080 GAMING OC 16G Graphics Card - 16GB GDDR7, 256bit, PCI-E 5.0, 2730MHz Core Clock, 3 x DisplayPort, 1",
+        "other_captured_retailers": [
+          "computer_orbit",
+          "ebuyer",
+          "newegg_uk",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "computer_orbit",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0F7HTR8DQ",
+        "category": "gpu",
+        "title": "Gigabyte Radeon RX 9060 XT GAMING OC 16G Graphics Card - 16GB GDDR6, 128bit, PCI-E 5.0, 3320 MHz Core Clock, 2 x DisplayPort,",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DT7B79K9",
+        "category": "gpu",
+        "title": "Gigabyte Radeon RX 9070 XT GAMING OC 16G Graphics Card - 16GB GDDR6, 256bit, PCI-E 5.0, 3060 MHz Core Clock, 2 x DisplayPort,",
+        "other_captured_retailers": [
+          "awd_it",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B096658ZWP",
+        "category": "gpu",
+        "title": "ASUS GeForce RTX 3060 12G DUAL V2 OC Gaming Graphics Card - 1867MHz Boost Clock, GDDR6, PCIe Gen 4, DLSS 2, 1x DP v1.4a, 1 x",
+        "other_captured_retailers": [
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0B2K51BHH",
+        "category": "sata",
+        "title": "KingSpec 1TB 2.5\" SATA III 6Gb/s SSD, Read Speed up to 550MB/s, 3D NAND Flash Internal Solid State Drive for Desktop & Laptop",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0CCN9NHTC",
+        "category": "sata",
+        "title": "Crucial BX500 SATA SSD 1TB, 2.5\", Up to 540MB/s, Laptop and Desktop (PC) Compatible, 3D NAND, Dynamic Write Acceleration, Int",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0CW9SCZWK",
+        "category": "sata",
+        "title": "Integral V Series S 1TB Internal Solid State Drive (SSD) - 2.5\" SATA III (6Gb/s), Up to 540MB/s Read and 500MB/s Write Speeds",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0CM63ZP2Y",
+        "category": "sata",
+        "title": "fanxiang 512GB 2.5\" SATA III SSD, Up to 550MB/s, SATA 6Gb/s | 2.5-Inch Form Factor, SATA 6Gb/s Interface, Internal Solid Stat",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0CX8P2N9S",
+        "category": "sata",
+        "title": "Fikwot FX815 256GB SSD, 2.5\" SATA III SSD, Internal Solid State Drive, Up to 560MB/s, 3D NAND SLC Cashe, Compatible with Lapt",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B09XDJWWG7",
+        "category": "sata",
+        "title": "fanxiang SATA SSD 256GB Internal SSD 2.5\" SATA III, Up to 520MB/s | 3D NAND TLC with SLC Cache, Internal SSD for laptops and",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B09M7KC46Q",
+        "category": "sata",
+        "title": "Integral V Series 250GB SATA III 2.5 Inch Internal Solid State Drive (SSD) up to 450MB/s Read and 400MB/s Write",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B01N0TQPQB",
+        "category": "sata",
+        "title": "Kingston A400 SSD Internal Solid State Drive 2.5\" SATA Rev 3.0, 480GB - SA400S37/480G",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B087K9L3R5",
+        "category": "sata",
+        "title": "Patriot P210 SATA 3 256GB SSD 2.5 Inch Internal Solid State Drive - P210S256G25",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B07Y5VDNT9",
+        "category": "sata",
+        "title": "PNY CS900 1TB Internal SSD SATA III 2.5\"",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0B8Z19XNM",
+        "category": "cooling",
+        "title": "Thermalright Peerless Assassin 120 SE CPU Air Cooler, 6 Heat Pipes CPU Cooler, Dual 12cm PWM Fan, Double Tower Double Fan Coo",
+        "other_captured_retailers": [
+          "computer_orbit",
+          "overclockers"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0DWSQ9VX2",
+        "category": "cooling",
+        "title": "TR-Assassin X 120R SE V2 CPU Air Cooler, 4 Heat Pipes,148MM High, TL-C12C-L V2 PWM Fan CPU Cooler, for AMD AM4 AM5/Intel LGA1",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0FGDJ3QP1",
+        "category": "cooling",
+        "title": "CORSAIR Nautilus 360 RS LCD Liquid CPU Cooler \u2013 Black | 2.1\" IPS LCD Screen, 360mm AIO, Low-Noise, Daisy-Chain, Intel LGA 185",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0B4G8QKZP",
+        "category": "cooling",
+        "title": "Thermalright Peerless Assassin 120 SE CPU Air Cooler,PA120 SE,6 Heat Pipes Cpu cooler,Dual 120mm TL-C12C PWM Fan,Aluminium He",
+        "other_captured_retailers": [
+          "computer_orbit",
+          "overclockers"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0DLWFCVSD",
+        "category": "cooling",
+        "title": "ARCTIC Liquid Freezer III Pro 360 A-RGB - AIO CPU Cooler, 3 x 120 mm Water Cooling, 38 mm Radiator, PWM Pump, VRM Fan, AMD AM",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0D97JHQ6H",
+        "category": "cooling",
+        "title": "Thermalright Phantom Spirit 120 SE BLACK CPU Cooler,Dual TL-C12B V2 PWM Fans and Double Towers,7 Heat pipes Heatsink Cooler,f",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DF7G8JFP",
+        "category": "cooling",
+        "title": "Corsair NAUTILUS 360 RS ARGB Liquid CPU Cooler \u2013 360mm AIO \u2013 Low-Noise \u2013 Direct Motherboard Connection \u2013 Daisy-Chain \u2013 Intel",
+        "other_captured_retailers": [
+          "awd_it"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DLWGG85P",
+        "category": "cooling",
+        "title": "ARCTIC Liquid Freezer III Pro 360 - AIO CPU Cooler, 3 x 120 mm Water Cooling, 38 mm Radiator, PWM Pump, VRM Fan, AMD AM5/AM4,",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DWW3RQC1",
+        "category": "cooling",
+        "title": "TR-AQUA ELITE 360 V3 CPU Liquid Cooler, AIO Pump Head Speed Up to 3300RPM, TL-C12B-S V2*3 PWM Fans, For AMD/AM4/AM5, Intel LG",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B09VH14935",
+        "category": "cooling",
+        "title": "ARCTIC Freezer 36 (Black)- Single-tower CPU cooler with push-pull, two pressure-optimised 120 mm P fans, fluid dynamic bearin",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      }
+    ]
+  },
+  "bestsellers_after": {
+    "summary": {
+      "products": 90,
+      "with_another_captured_retailer": 39,
+      "with_two_explicitly_available_retailers": 0,
+      "with_an_explicitly_available_non_amazon_retailer": 18,
+      "with_two_available_retailers_under_owner_policy": 33,
+      "with_available_non_amazon_retailer_under_owner_policy": 33
+    },
+    "products": [
+      {
+        "asin": "B07RW6Z692",
+        "category": "ram",
+        "title": "CORSAIR VENGEANCE LPX DDR4 RAM 32GB (2x16GB) Up to 3200MHz CL16-20-20-38 1.35V Intel XMP AMD EXPO Computer Memory \u2013 Black (CM",
+        "other_captured_retailers": [
+          "awd_it"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it"
+        ]
+      },
+      {
+        "asin": "B0CTHXMYL8",
+        "category": "ram",
+        "title": "Crucial Pro DDR5 RAM 32GB Kit (2x16GB) 6000MHz CL36, Overclocking Gaming, Intel XMP 3.0 / AMD EXPO, Computer Memory (PC), Bla",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0D4NLSP87",
+        "category": "ram",
+        "title": "Patriot Viper Venom DDR5 32GB (2 x 16GB) 6000MT/s UDIMM Desktop Gaming Memory KIT - PVV532G600C30K",
+        "other_captured_retailers": [
+          "awd_it",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B081XWLQKS",
+        "category": "ram",
+        "title": "CORSAIR VENGEANCE RGB PRO DDR4 RAM 32GB (2x16GB) Up to 3200MHz CL16 Intel XMP AMD EXPO Computer Memory \u2013 Black (CMW32GX4M2E32",
+        "other_captured_retailers": [
+          "newegg_uk"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0GQC6MV6C",
+        "category": "ram",
+        "title": "CORSAIR VENGEANCE RGB RS DDR5 16GB (2 x 8GB) Up To 6000MHz AMD INTEL RAM | Desktop Gaming Memory, AMD EXPO & Intel XMP 3.0 Co",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0FQMLKVLS",
+        "category": "ram",
+        "title": "Crucial Pro DDR5 RAM 32GB Kit (2x16GB) 6400MHz CL32, Overclocking Deskop Computer Gaming Memory, Intel XMP 3.0 / AMD EXPO, Bl",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0BPTKD797",
+        "category": "ram",
+        "title": "CORSAIR VENGEANCE RGB DDR5 32GB (2x16GB) DDR5 Up to 6000MHz CL30 AMD EXPO Intel XMP iCUE Compatible Computer Memory \u2013 Grey (C",
+        "other_captured_retailers": [
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0D1Y5PCFZ",
+        "category": "ram",
+        "title": "Netac DDR4 3200MHz 32GB (2 X 16GB) 2-in-1 RAM Computer Desktop Memory DRAM Kit C16 XPM2.0 Gaming Memory 32GB with Heat Sink,",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0143UM4TC",
+        "category": "ram",
+        "title": "CORSAIR VENGEANCE LPX DDR4 RAM 16GB (2x8GB) Up to 3200MHz CL16 Intel XMP AMD EXPO Computer Memory \u2013 Black (CMK16GX4M2B3200C16",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0GDJT14BQ",
+        "category": "ram",
+        "title": "Lexar THOR Z Series OC DDR5 RAM 32GB Kit (2x16GB) 6000 MHz CL36, DRAM 288-Pin UDIMM Desktop Memory, PC Memory High-Performanc",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DMTL43VR",
+        "category": "psu",
+        "title": "CORSAIR RM850e (2025) Fully Modular Low-Noise ATX Power Supply \u2013 Black | 12V-2x6 Cable Included, ATX 3.1 & PCIe 5.1 Compliant",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0CJRXX5WT",
+        "category": "psu",
+        "title": "CORSAIR CX650 80 PLUS Bronze ATX 650 Watt Power Supply \u2013 UK \u2013 Black | Non Modular, Low-Noise",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0D9C1HG19",
+        "category": "psu",
+        "title": "CORSAIR RM1000x Fully Modular Low-Noise ATX Power Supply \u2013 ATX 3.1 Compliant \u2013 PCIe 5.1 Support \u2013 Cybenetics Gold Efficiency",
+        "other_captured_retailers": [
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0FNDGQ7CK",
+        "category": "psu",
+        "title": "be quiet! Pure Power 13 M 1000W Power Supply, 80+ Gold, Cybenetics Platinum | PCIe 5.1 Ready, ATX 3.1, Fully Modular, PSU wit",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0D5HTTCSB",
+        "category": "psu",
+        "title": "Corsair SF750 (2024) Fully Modular SFX Low Noise 80 Plus Platinum Power Supply \u2013 ATX 3.1 Compliant \u2013 PCIe 5.1 Ready \u2013 Small F",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0FNDFHLQX",
+        "category": "psu",
+        "title": "be quiet! System Power 11 750W Power Supply, ATX 3.1 PSU, 80 PLUS\u00ae Bronze | With Support For PCIe 5.1 GPUs, Temperature-Contr",
+        "other_captured_retailers": [
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0FZCPSC4D",
+        "category": "psu",
+        "title": "be quiet! Pure Power 12 850W Gaming PSU, 80 Plus Gold, ATX 3.1, 12V-Rail | PCIe 5.1 GPU Support Power Supply, Silent 120mm Fa",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0FMYJ24Z8",
+        "category": "psu",
+        "title": "CORSAIR RM1000x SHIFT (2025) Fully Modular ATX Power Supply \u2013 Black | Modular Side Interface, Native 12V-2x6 Cable, ATX 3.1 &",
+        "other_captured_retailers": [
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0F3JF1YY3",
+        "category": "psu",
+        "title": "CORSAIR HX1500i (2025) Fully Modular Ultra-Low Noise ATX Power Supply with 12V-2x6 Cable \u2013 ATX 3.1 & PCIe 5.1 Compliant, Cybe",
+        "other_captured_retailers": [
+          "computer_orbit",
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "computer_orbit",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B09T9P4MSL",
+        "category": "psu",
+        "title": "ASUS ROG Strix 1200W Platinum Power Supply | 80 PLUS & Cybenetics Platinum, Fully modular, ATX 3.1, PCIe 5.1, GaN MOSFET, GPU",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DKFMSMYK",
+        "category": "cpu",
+        "title": "AMD RYZEN \u2122 7 9800X 3D Desktop Processor (8-core/16-thread, 104MB cache, up to 5.2 GHz max boost)",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0H41D4KFT",
+        "category": "cpu",
+        "title": "AMD Ryzen 7 5800X3D Processeur 10TH ANNIVERSARY (8 Cores/16 Threads, Socket AM4, 105W TDP, 100 Mo Cache, up to 4.5 GHz Freque",
+        "other_captured_retailers": [
+          "computer_orbit",
+          "newegg_uk",
+          "overclockers",
+          "scan"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "computer_orbit",
+          "overclockers",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0BBJDS62N",
+        "category": "cpu",
+        "title": "AMD Ryzensets 5 7600X Processor (integrated radeon graphics, 6 cores/12 threads, 105W TDP, AM5 socket, 38MB cache, up to 5.3",
+        "other_captured_retailers": [
+          "awd_it",
+          "computer_orbit",
+          "newegg_uk",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it",
+          "computer_orbit",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0G8JMLXNQ",
+        "category": "cpu",
+        "title": "AMD RYZEN\u2122 7 9850X3D",
+        "other_captured_retailers": [
+          "awd_it",
+          "computer_orbit",
+          "newegg_uk",
+          "overclockers",
+          "scan"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it",
+          "computer_orbit",
+          "overclockers",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0DVZSG8D5",
+        "category": "cpu",
+        "title": "AMD Ryzen\u2122 9 9950X3D Processor With 3D V-Cache\u2122 Technology, 16 Cores/32 Threads, 144MB Cache, 170W TDP, AM5 Socket, Up To 5.7",
+        "other_captured_retailers": [
+          "computer_orbit",
+          "newegg_uk",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "computer_orbit",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0D6NMDNNX",
+        "category": "cpu",
+        "title": "AMD Ryzensets 7 9700X Processor (8 Cores/16 Threads) 65W DTP, AM5 socket, 40MB Cache, Up to 5.5 GHz max boost frequency, no c",
+        "other_captured_retailers": [
+          "awd_it",
+          "computer_orbit",
+          "ebuyer",
+          "newegg_uk",
+          "overclockers",
+          "scan"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it",
+          "computer_orbit",
+          "ebuyer",
+          "overclockers",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B08166SLDF",
+        "category": "cpu",
+        "title": "AMD Ryzensets 5 5600X Processor (6 Cores/12Threads, 65W TDP, AM4 Socket, 35MB Cache, up to 4.6 GHz Max Boost, Wraith Stealth",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0CGJC178L",
+        "category": "cpu",
+        "title": "Intel\u00ae Core\u2122 i7-14700KF Desktop Processor 20 cores (8 P-core + 12 E-core) up to 5.6 GHz",
+        "other_captured_retailers": [
+          "newegg_uk",
+          "overclockers",
+          "scan"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0D6NN6TM7",
+        "category": "cpu",
+        "title": "AMD Ryzensets 5 9600X Processor (radeon graphics included, 6 Cores/12 Threads, 65W TDP, Socket AM5, Cache 38MB, up to 5.4 GHz",
+        "other_captured_retailers": [
+          "awd_it",
+          "computer_orbit",
+          "ebuyer",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it",
+          "computer_orbit",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0GMLJCBBM",
+        "category": "cpu",
+        "title": "Intel Core Ultra 7 Processor 270K Plus, up to 5.5 GHz, LGA1851 Socket, PCIe 5.0, DDR5 Support, 125W TDP",
+        "other_captured_retailers": [
+          "awd_it",
+          "computer_orbit",
+          "newegg_uk",
+          "overclockers",
+          "scan"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it",
+          "computer_orbit",
+          "overclockers",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0D2MK6NML",
+        "category": "case",
+        "title": "NZXT H5 Flow - Compact ATX Mid-Tower PC Case - Black | Compact mid-tower with 2 included 120mm fans, 360mm front radiator sup",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0FJ2QMQYC",
+        "category": "case",
+        "title": "CORSAIR FRAME 4500X RS-R ARGB Panoramic Glass Mid-Tower PC Case \u2013 InfiniRail Mounting System, Fits Dual 360mm Radiators, GPU",
+        "other_captured_retailers": [
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0CJCJ3ZZB",
+        "category": "case",
+        "title": "Fractal Design North XL Charcoal Black TG- three 140mm Aspect PWM fans included- Type C USB- EATX airflow full tower PC gamin",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DQPMJ6MJ",
+        "category": "case",
+        "title": "NZXT H3 Flow - Micro-ATX Airflow PC Case - Black | Space-efficient Micro-ATX case with optimized airflow, full-size GPU suppo",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B07YQ7HXBD",
+        "category": "case",
+        "title": "MSI MAG FORGE 100R Mid Tower Gaming Computer Case (Black, 2x 120mm ARGB PWM Fan, 1x 120mm Fan, 1-6 ARGB Hub, Tempered Glass,",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0FCM65FKM",
+        "category": "case",
+        "title": "HYXN H1 ATX PC Case-Pre-Installed 7 PWM ARGB Fans, Dual Chamber Mid-Tower Gaming PC Case, with Type-C, Simultaneous Installat",
+        "other_captured_retailers": [
+          "awd_it",
+          "newegg_uk",
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0DFHNV7TK",
+        "category": "case",
+        "title": "CORSAIR Frame 4000D RS ARGB Modular Mid-Tower ATX PC Case \u2013 Black | High Airflow, 3x Pre-Installed RS ARGB Fans, InfiniRail F",
+        "other_captured_retailers": [
+          "awd_it",
+          "newegg_uk",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B08HQNF5VT",
+        "category": "case",
+        "title": "iONZ KZ10 PC Gaming Case Mid Tower ATX Tempered Glass With 4 x 120mm ARGB Fans - Black",
+        "other_captured_retailers": [
+          "newegg_uk",
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0CFYKNHW7",
+        "category": "case",
+        "title": "MSI MAG FORGE 320R AIRFLOW Mid-Tower PC Case - ATX Capacity, up to 390mm RTX 40 GPU Support, 4 x 120mm ARGB Fans, Magnetic Du",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0C89FCDFP",
+        "category": "case",
+        "title": "NZXT H6 Flow | CC-H61FB-01 | Compact Dual-Chamber Mid-Tower Airflow Case | Panoramic Glass Panels | High-Performance Airflow",
+        "other_captured_retailers": [
+          "awd_it",
+          "newegg_uk",
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0DC8RVRBZ",
+        "category": "nvme",
+        "title": "Crucial P310 2TB SSD M.2 2280 NVMe PCIe Gen4, Up to 7,100MB/s, Laptop & Desktop (PC) Compatible, Internal Solid State Drive -",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0B9C4DKKG",
+        "category": "nvme",
+        "title": "Samsung 990 PRO NVMe M.2 SSD, 2 TB, PCIe 4.0, 7,450 MB/s read, 6,900 MB/s write, Internal SSD, For gaming and video editing,",
+        "other_captured_retailers": [
+          "awd_it"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it"
+        ]
+      },
+      {
+        "asin": "B0DBR3DZWG",
+        "category": "nvme",
+        "title": "Kingston NV3 NVMe PCIe 4.0 Internal SSD 1TB M.2 2280-SNV3S/1000G",
+        "other_captured_retailers": [
+          "awd_it",
+          "newegg_uk",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "awd_it",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0DM1R7KHZ",
+        "category": "nvme",
+        "title": "BIWIN Black Opal NV7400 1TB SSD, up to 7450MB/s Read Speed Gen4x4 NVMe M.2 2280, Internal PCIe 4.0 Solid State Drive for Gami",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0C3ZJ8T6F",
+        "category": "nvme",
+        "title": "Acer Predator GM7 1TB SSD, M.2 2280 PCIe Gen 4 x4 NVMe 2.0, Read Speed Up to 7200 MB/s, Internal PC Solid State Drive for Lap",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0D4YN1K8G",
+        "category": "nvme",
+        "title": "Fikwot FX991 1TB SSD, M.2 2280 NVMe 1.4 SSD, PCIe Gen4x4, Up to 7100MB/s, HMB+SLC, High Performance Gaming Internal Solid Sta",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0B7CKVCCV",
+        "category": "nvme",
+        "title": "WD_BLACK SN850X NVMe SSD 1TB (up to 7,300MB/s read speed, up to 6,300MB/s write speed, M.2 2280, PCIe Gen4, Gaming Expansion",
+        "other_captured_retailers": [
+          "newegg_uk"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0CNSV1M47",
+        "category": "nvme",
+        "title": "fanxiang 512GB NVMe M.2 2280 SSD, Up to 3000MB/s, PCIe Gen3 x4 | Graphite Cooling Sticker, Internal Solid State Drives, Deskt",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B09P58BJ2L",
+        "category": "nvme",
+        "title": "Integral SSD 256GB NVME M.2 2280 PCIe Gen3x4 R-3350MB/s W-1350MB/s M2 Solid State Drive",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DZ5ZK225",
+        "category": "nvme",
+        "title": "Crucial P510 1TB SSD NVMe M.2 PCIe 5.0 x4 Gen5, Read/Write Speeds up to 11,000/9,500 MB/s, Laptop & Desktop (PC) Compatible,",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0DPKV94MX",
+        "category": "motherboard",
+        "title": "MSI B850 GAMING PLUS WIFI Motherboard, ATX, AM5 | AMD Ryzen 9000 / 8000 / 7000 CPU, DDR5 Memory Boost 8200+ MT/s (OC), PCIe 5",
+        "other_captured_retailers": [
+          "awd_it",
+          "newegg_uk"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0BW66YHB5",
+        "category": "motherboard",
+        "title": "Gigabyte B550M K Motherboard - Supports AMD Ryzen 5000 Series AM4 CPUs, up to 4733MHz DDR4 (OC), 2xPCIe 3.0 M.2, GbE LAN, USB",
+        "other_captured_retailers": [
+          "awd_it",
+          "ebuyer",
+          "newegg_uk"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it"
+        ]
+      },
+      {
+        "asin": "B0DQM8GPR7",
+        "category": "motherboard",
+        "title": "Gigabyte B850 AORUS ELITE WIFI7 Motherboard - AMD Ryzen 9000 Series CPUs, 14+2+2 Phases Digital VRM, up to 8200MHz DDR5 (OC),",
+        "other_captured_retailers": [
+          "computer_orbit",
+          "newegg_uk",
+          "overclockers"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B08B4V6H3N",
+        "category": "motherboard",
+        "title": "MSI MPG B550 GAMING PLUS Motherboard, ATX, AM4 | AMD Ryzen 3rd Gen CPU, DDR4 Boost (4400MHz/OC), PCIe 4.0/3.0 x16, PCIe 3.0 x",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0BXFBN121",
+        "category": "motherboard",
+        "title": "Gigabyte A520M K V2 Motherboard - Supports AMD Ryzen 5000 Series AM4 CPUs, up to 5100MHz DDR4 (OC), PCIe Gen3 x4 M.2, GbE LAN",
+        "other_captured_retailers": [
+          "awd_it",
+          "computer_orbit",
+          "ebuyer",
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it",
+          "computer_orbit",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0FXHHTDW3",
+        "category": "motherboard",
+        "title": "MSI MAG B850 TOMAHAWK WIFI Motherboard, ATX, AM5 | AMD Ryzen 9000 / 8000 / 7000 CPU, 80A SPS VRM, DDR5 Memory Boost 8200+ MT/",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DP5FBV4P",
+        "category": "motherboard",
+        "title": "ASUS ROG Strix B850-A Gaming WiFi AMD ATX motherboard, 14+2+2 power stages, DDR5 slots, four M.2 slots, PCIe 5.0, WiFi 7, USB",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0BSLMNGM9",
+        "category": "motherboard",
+        "title": "MSI B760 GAMING PLUS WIFI DDR4 Motherboard, ATX | Intel 14th, 13th & 12th Gen Core CPU, LGA 1700 - DDR4 (5333+MHz/OC), 1x PCI",
+        "other_captured_retailers": [
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B0DP5DQPRC",
+        "category": "motherboard",
+        "title": "ASUS TUF GAMING B850-PLUS WIFI AMD ATX motherboard, 14+2+1 80A DrMOS power stages, DDR5, PCIe 5.0 Ready, 3xM.2 slots, Wi-Fi 7",
+        "other_captured_retailers": [
+          "awd_it",
+          "ebuyer",
+          "newegg_uk",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B09LVQYGXH",
+        "category": "motherboard",
+        "title": "ASUS TUF Gaming B550-PLUS (WI-FI), AMD B550 (Ryzen AM4) ATX motherboard (PCIe 4.0, dual M.2, 10 DrMOS, DDR4 4400, Intel\u00ae WiFi",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0F7HZ9QSZ",
+        "category": "gpu",
+        "title": "ASUS Dual GeForce RTX 5060 8GB GDDR7 OC Edition (PCIe 5.0, 8GB GDDR7, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2.5 slot design, A",
+        "other_captured_retailers": [
+          "newegg_uk"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DT6NZ9V9",
+        "category": "gpu",
+        "title": "MSI GeForce RTX 5080 16G VENTUS 3X OC Graphics Card - RTX 5080 GPU | 16GB GDDR7 (30Gbps/256-bit), PCIe 5.0 - Triple Fan Desig",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DYPFY7JG",
+        "category": "gpu",
+        "title": "ASUS Prime GeForce RTX\u2122 5070 GDDR7 12GB OC Edition \u2013 Graphics Card (PCIe 5.0, HDMI, Display 2.1, 2.5 Slot, Axial Fans, SFF-Re",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DS65KD1C",
+        "category": "gpu",
+        "title": "ASUS TUF Gaming GeForce RTX 5080 16GB GDDR7 OC Edition Gaming Graphics Card (PCIe 5.0, HDMI/DP 2.1, 3.6-slot, military-grade",
+        "other_captured_retailers": [
+          "newegg_uk"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B096Z886F8",
+        "category": "gpu",
+        "title": "MSI GeForce RTX 5060 Ti 8G GAMING TRIO OC Graphics Card - RTX 5060 Ti GPU | 8GB GDDR7 (28Gbps/128-bit), PCIe 5.0 - TRI FROZR",
+        "other_captured_retailers": [
+          "scan"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "scan"
+        ]
+      },
+      {
+        "asin": "B09BD59F4T",
+        "category": "gpu",
+        "title": "ASUS Prime GeForce RTX 5080 EVO 16GB GDDR7 OC Edition Gaming Graphics Card (Nvidia GeForce RTX5080, SFF-Ready, Dual BIOS Swit",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DSQ1RCZV",
+        "category": "gpu",
+        "title": "Gigabyte GeForce RTX 5080 GAMING OC 16G Graphics Card - 16GB GDDR7, 256bit, PCI-E 5.0, 2730MHz Core Clock, 3 x DisplayPort, 1",
+        "other_captured_retailers": [
+          "computer_orbit",
+          "ebuyer",
+          "newegg_uk",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "computer_orbit",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0F7HTR8DQ",
+        "category": "gpu",
+        "title": "Gigabyte Radeon RX 9060 XT GAMING OC 16G Graphics Card - 16GB GDDR6, 128bit, PCI-E 5.0, 3320 MHz Core Clock, 2 x DisplayPort,",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DT7B79K9",
+        "category": "gpu",
+        "title": "Gigabyte Radeon RX 9070 XT GAMING OC 16G Graphics Card - 16GB GDDR6, 256bit, PCI-E 5.0, 3060 MHz Core Clock, 2 x DisplayPort,",
+        "other_captured_retailers": [
+          "awd_it",
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "awd_it",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B096658ZWP",
+        "category": "gpu",
+        "title": "ASUS GeForce RTX 3060 12G DUAL V2 OC Gaming Graphics Card - 1867MHz Boost Clock, GDDR6, PCIe Gen 4, DLSS 2, 1x DP v1.4a, 1 x",
+        "other_captured_retailers": [
+          "overclockers"
+        ],
+        "verified_available_retailers": [
+          "overclockers"
+        ],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0B2K51BHH",
+        "category": "sata",
+        "title": "KingSpec 1TB 2.5\" SATA III 6Gb/s SSD, Read Speed up to 550MB/s, 3D NAND Flash Internal Solid State Drive for Desktop & Laptop",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0CCN9NHTC",
+        "category": "sata",
+        "title": "Crucial BX500 SATA SSD 1TB, 2.5\", Up to 540MB/s, Laptop and Desktop (PC) Compatible, 3D NAND, Dynamic Write Acceleration, Int",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0CW9SCZWK",
+        "category": "sata",
+        "title": "Integral V Series S 1TB Internal Solid State Drive (SSD) - 2.5\" SATA III (6Gb/s), Up to 540MB/s Read and 500MB/s Write Speeds",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0CM63ZP2Y",
+        "category": "sata",
+        "title": "fanxiang 512GB 2.5\" SATA III SSD, Up to 550MB/s, SATA 6Gb/s | 2.5-Inch Form Factor, SATA 6Gb/s Interface, Internal Solid Stat",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0CX8P2N9S",
+        "category": "sata",
+        "title": "Fikwot FX815 256GB SSD, 2.5\" SATA III SSD, Internal Solid State Drive, Up to 560MB/s, 3D NAND SLC Cashe, Compatible with Lapt",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B09XDJWWG7",
+        "category": "sata",
+        "title": "fanxiang SATA SSD 256GB Internal SSD 2.5\" SATA III, Up to 520MB/s | 3D NAND TLC with SLC Cache, Internal SSD for laptops and",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B09M7KC46Q",
+        "category": "sata",
+        "title": "Integral V Series 250GB SATA III 2.5 Inch Internal Solid State Drive (SSD) up to 450MB/s Read and 400MB/s Write",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B01N0TQPQB",
+        "category": "sata",
+        "title": "Kingston A400 SSD Internal Solid State Drive 2.5\" SATA Rev 3.0, 480GB - SA400S37/480G",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B087K9L3R5",
+        "category": "sata",
+        "title": "Patriot P210 SATA 3 256GB SSD 2.5 Inch Internal Solid State Drive - P210S256G25",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B07Y5VDNT9",
+        "category": "sata",
+        "title": "PNY CS900 1TB Internal SSD SATA III 2.5\"",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0B8Z19XNM",
+        "category": "cooling",
+        "title": "Thermalright Peerless Assassin 120 SE CPU Air Cooler, 6 Heat Pipes CPU Cooler, Dual 12cm PWM Fan, Double Tower Double Fan Coo",
+        "other_captured_retailers": [
+          "computer_orbit",
+          "overclockers"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0DWSQ9VX2",
+        "category": "cooling",
+        "title": "TR-Assassin X 120R SE V2 CPU Air Cooler, 4 Heat Pipes,148MM High, TL-C12C-L V2 PWM Fan CPU Cooler, for AMD AM4 AM5/Intel LGA1",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0FGDJ3QP1",
+        "category": "cooling",
+        "title": "CORSAIR Nautilus 360 RS LCD Liquid CPU Cooler \u2013 Black | 2.1\" IPS LCD Screen, 360mm AIO, Low-Noise, Daisy-Chain, Intel LGA 185",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0B4G8QKZP",
+        "category": "cooling",
+        "title": "Thermalright Peerless Assassin 120 SE CPU Air Cooler,PA120 SE,6 Heat Pipes Cpu cooler,Dual 120mm TL-C12C PWM Fan,Aluminium He",
+        "other_captured_retailers": [
+          "computer_orbit",
+          "overclockers"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon",
+          "overclockers"
+        ]
+      },
+      {
+        "asin": "B0DLWFCVSD",
+        "category": "cooling",
+        "title": "ARCTIC Liquid Freezer III Pro 360 A-RGB - AIO CPU Cooler, 3 x 120 mm Water Cooling, 38 mm Radiator, PWM Pump, VRM Fan, AMD AM",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": []
+      },
+      {
+        "asin": "B0D97JHQ6H",
+        "category": "cooling",
+        "title": "Thermalright Phantom Spirit 120 SE BLACK CPU Cooler,Dual TL-C12B V2 PWM Fans and Double Towers,7 Heat pipes Heatsink Cooler,f",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DF7G8JFP",
+        "category": "cooling",
+        "title": "Corsair NAUTILUS 360 RS ARGB Liquid CPU Cooler \u2013 360mm AIO \u2013 Low-Noise \u2013 Direct Motherboard Connection \u2013 Daisy-Chain \u2013 Intel",
+        "other_captured_retailers": [
+          "awd_it"
+        ],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DLWGG85P",
+        "category": "cooling",
+        "title": "ARCTIC Liquid Freezer III Pro 360 - AIO CPU Cooler, 3 x 120 mm Water Cooling, 38 mm Radiator, PWM Pump, VRM Fan, AMD AM5/AM4,",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B0DWW3RQC1",
+        "category": "cooling",
+        "title": "TR-AQUA ELITE 360 V3 CPU Liquid Cooler, AIO Pump Head Speed Up to 3300RPM, TL-C12B-S V2*3 PWM Fans, For AMD/AM4/AM5, Intel LG",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      },
+      {
+        "asin": "B09VH14935",
+        "category": "cooling",
+        "title": "ARCTIC Freezer 36 (Black)- Single-tower CPU cooler with push-pull, two pressure-optimised 120 mm P fans, fluid dynamic bearin",
+        "other_captured_retailers": [],
+        "verified_available_retailers": [],
+        "available_under_owner_policy": [
+          "amazon"
+        ]
+      }
+    ]
+  },
+  "title_fallback_planned": 1676,
+  "mpn_planned": 1810,
+  "individual_conflicts": 50,
+  "conflicting_groups": [
+    {
+      "cpk": "d4856f807bffdef4b73d2ea432489c8d",
+      "mpn": "01KR360",
+      "fields": {
+        "speed": [
+          2666,
+          3200
+        ]
+      },
+      "listings": [
+        "bargain_hardware:lenovo-01kr360-16gb-pc4-21300v-e-2rx8-ddr4-2666mhz-ram",
+        "bargain_hardware:lenovo-01kr360-16gb-pc4-25600aa-e-2rx8-ddr4-3200mhz-ecc-unbuffered-ram"
+      ]
+    },
+    {
+      "cpk": "c378a574b77e4454ca0f380d5ac044da",
+      "mpn": "HMA41GU7AFR8N-TF",
+      "fields": {
+        "capacity_gb": [
+          16,
+          8
+        ]
+      },
+      "listings": [
+        "115804528528",
+        "137859155457",
+        "168169328446",
+        "327418052454"
+      ]
+    },
+    {
+      "cpk": "b982472ef123f893c5643059cde26a2b",
+      "mpn": "MZ-NLN256C",
+      "fields": {
+        "capacity_gb": [
+          250,
+          256
+        ]
+      },
+      "listings": [
+        "117462589832",
+        "google-shopping:Samsung%20Hp%20Pm871b%20256gb%20Ssd%20Sata%20Iii%206gb%2Fs%20M.2%20(mz-nln256c%20936240-002):31.9:eBay"
+      ]
+    },
+    {
+      "cpk": "50d297d52703b07805c97db5a2753d00",
+      "mpn": "M378A5143EB1-CPB",
+      "fields": {
+        "capacity_gb": [
+          16,
+          4
+        ]
+      },
+      "listings": [
+        "128039387669",
+        "198725302794",
+        "327186494418"
+      ]
+    },
+    {
+      "cpk": "533e5b78f838b3d4c131ea2cbf69ade3",
+      "mpn": "M378A4G43AB2-CWE",
+      "fields": {
+        "capacity_gb": [
+          32,
+          64
+        ]
+      },
+      "listings": [
+        "128085083085",
+        "840002951036"
+      ]
+    },
+    {
+      "cpk": "e46199137511425147110ca650240466",
+      "mpn": "HMA451U6AFR8N-TF",
+      "fields": {
+        "capacity_gb": [
+          4,
+          8
+        ]
+      },
+      "listings": [
+        "128127206632",
+        "168688560969",
+        "188924664027",
+        "227497813922",
+        "307171021470",
+        "407093637717",
+        "800748965651"
+      ]
+    },
+    {
+      "cpk": "0497233fa77824fa9c28ba5399c2e71c",
+      "mpn": "CT16G4DFD824A",
+      "fields": {
+        "cl": [
+          17,
+          19
+        ]
+      },
+      "listings": [
+        "147650174577",
+        "206564883216",
+        "227247334554",
+        "318921949315",
+        "900037879743"
+      ]
+    },
+    {
+      "cpk": "7243f7dca10d9ee7e4c2e713eabf624f",
+      "mpn": "M378A1K43CB2-CTD",
+      "fields": {
+        "capacity_gb": [
+          16,
+          8
+        ]
+      },
+      "listings": [
+        "188518764429",
+        "318938993354",
+        "880041754849"
+      ]
+    },
+    {
+      "cpk": "c80a8ba7e54d9f135fc412de75fc0ffa",
+      "mpn": "MTA4ATF51264AZ-2G6E1",
+      "fields": {
+        "capacity_gb": [
+          4,
+          8
+        ]
+      },
+      "listings": [
+        "406727610943",
+        "840055572844",
+        "880047116922"
+      ]
+    }
+  ],
+  "apply": {
+    "at": "2026-10-26T23:31:54.832327+00:00",
+    "database_target": {
+      "database": "pcflipper",
+      "schema": "public"
+    },
+    "backup": "C:\\Users\\mclar\\CODING\\FlipFlop\\docs\\playbook\\audits\\2026-10-26\\search-matching-v3-backup-233154.json",
+    "selected": 3486,
+    "skipped_concurrent_changes": [],
+    "aggregates_pending": 0,
+    "aggregates_recomputed": 1267
+  }
+}

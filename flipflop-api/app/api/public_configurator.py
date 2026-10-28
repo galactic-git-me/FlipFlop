@@ -18,14 +18,82 @@ from app.models.component_3d_asset import (
     AssetSubjectType,
 )
 from app.models.catalogue import CatalogueVariant
+from app.models.catalogue import PlaybookSlot
+from app.models.curated_build_segment import CuratedBuildSegment
 from app.models.listing import Listing
 from app.services.configurator_compatibility import evaluate_configuration
 from app.services.component_family_classifier import classify_family
 
 router = APIRouter(prefix="/public", tags=["public-configurator"])
 
+
+@router.get("/curated-builds")
+async def public_curated_builds(db: AsyncSession = Depends(get_db)):
+    """Only serve published build segments with a complete, currently active component set."""
+    segments = (await db.execute(
+        select(CuratedBuildSegment).where(CuratedBuildSegment.is_live.is_(True)).order_by(
+            CuratedBuildSegment.customer_type, CuratedBuildSegment.budget_min,
+        )
+    )).scalars().all()
+    output = []
+    required = {"cpu", "gpu", "motherboard", "ram", "storage", "psu", "case"}
+    for segment in segments:
+        selected = segment.components or {}
+        if not required.issubset(selected):
+            continue
+        ids = {int(value) for value in selected.values() if str(value).isdigit()}
+        rows = (await db.execute(
+            select(CatalogueVariant, Listing, PlaybookSlot)
+            .join(Listing, Listing.id == CatalogueVariant.listing_id)
+            .join(PlaybookSlot, PlaybookSlot.id == CatalogueVariant.slot_id)
+            .where(CatalogueVariant.id.in_(ids), CatalogueVariant.curated_for_builds.is_(True))
+        )).all()
+        details = {
+            slot.slot_type: {"variant_id": variant.id, "title": listing.title, "price": listing.price,
+                             "image_url": (variant.asset_media_review or {}).get("main_photo_approved_url") or (listing.image_urls[0] if listing.image_urls else None)}
+            for variant, listing, slot in rows
+            if listing.status.value == "active"
+        }
+        if len(details) != len(ids) or not required.issubset(details):
+            continue
+        output.append({
+            "id": segment.id,
+            "customer_type": segment.customer_type,
+            "budget_level": segment.budget_level,
+            "budget_min": segment.budget_min,
+            "budget_max": segment.budget_max,
+            "selling_price": segment.selling_price,
+            "components": details,
+            # Only the reviewed, cell-level pair is customer-visible; raw
+            # Playbook candidates never leak into the catalogue.
+            "upgrade_options": segment.approved_upgrades or [],
+        })
+    return output
+
 # Only these lifecycle states are ever served to customers.
 _SERVABLE = (Component3DAssetStatus.VALIDATED, Component3DAssetStatus.FINAL)
+
+
+def _variant_asset_is_publishable(variant: CatalogueVariant | None, asset: Component3DAsset | None) -> bool:
+    if variant and variant.status == "active" and asset and asset.category != "case":
+        return bool(asset.is_active and asset.status == Component3DAssetStatus.FINAL and asset.glb_ref)
+    """A component model is public only for its exact owner-selected model photo set."""
+    approval = (variant.asset_media_review or {}) if variant else {}
+    model_image_urls = approval.get("model_image_urls") or (
+        approval.get("image_urls") if len(approval.get("image_urls") or []) <= 4 else []
+    )
+    return bool(
+        variant
+        and variant.status == "active"
+        and approval.get("status") in {"approved", "auto_included"}
+        and approval.get("image_urls")
+        and model_image_urls
+        and asset
+        and asset.is_active
+        and asset.status == Component3DAssetStatus.FINAL
+        and asset.glb_ref
+        and asset.source_image_refs == model_image_urls
+    )
 
 
 def _asset_payload(asset: Component3DAsset, fallback_level: str) -> dict:
@@ -64,13 +132,21 @@ async def resolve_assets(body: AssetResolveRequest, db: AsyncSession = Depends(g
     then renders its own last-resort placeholder. A different product's model
     is never substituted (honest-fallback rule)."""
     results = []
+    variant_ids = list({subject.subject_id for subject in body.subjects if subject.subject_type != "case"})
+    variants = (await db.execute(select(CatalogueVariant).where(
+        CatalogueVariant.id.in_(variant_ids) if variant_ids else False,
+        CatalogueVariant.status == "active",
+    ))).scalars().all()
+    variants_by_id = {variant.id: variant for variant in variants}
+    from app.services.shared_variant_assets import final_assets_by_variant
+    shared_assets = await final_assets_by_variant(db, variants)
     for subject in body.subjects:
         stype = (
             AssetSubjectType.CASE
             if subject.subject_type == "case"
             else AssetSubjectType.VARIANT
         )
-        exact = (
+        exact = shared_assets.get(subject.subject_id) if stype == AssetSubjectType.VARIANT else (
             await db.execute(
                 select(Component3DAsset).where(
                     Component3DAsset.subject_type == stype,
@@ -81,9 +157,15 @@ async def resolve_assets(body: AssetResolveRequest, db: AsyncSession = Depends(g
             )
         ).scalar_one_or_none()
 
+        if stype == AssetSubjectType.VARIANT:
+            variant = variants_by_id.get(subject.subject_id)
+            if not _variant_asset_is_publishable(variant, exact):
+                results.append({"query": subject.model_dump(), "asset": None})
+                continue
+
         if exact and exact.glb_ref:
             results.append(
-                {"query": subject.model_dump(), "asset": _asset_payload(exact, "exact")}
+                {"query": subject.model_dump(), "asset": _asset_payload(exact, "exact" if exact.category == "case" else "family")}
             )
             continue
 

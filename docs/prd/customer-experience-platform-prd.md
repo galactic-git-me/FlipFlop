@@ -1,6 +1,8 @@
 # FlipFlopOS — Customer Experience Platform
 ## Product Requirements Document (Implementation-Grade)
 
+> **Documentation status (2026-09-29): Superseded design reference.** This remains a useful source for packaging, document, USB, photography, and quality ideas. The current bounded requirements are in [`getting-ready-service-prd.md`](./getting-ready-service-prd.md), with actual delivery status in [`../product/implementation-status.md`](../product/implementation-status.md). Do not treat unchecked designs in this document as shipped behaviour or customer policy.
+
 **Document status:** Draft v1.0 — Source of Truth
 **Module owner:** Product / Engineering (FlipFlopOS)
 **Depends on:** Build Playbooks, Inventory, MES, Build Tracking, Benchmark Recording, Customer Portal, Profit Calculator, Reporting & Analytics

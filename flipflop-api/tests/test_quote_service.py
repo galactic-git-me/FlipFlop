@@ -46,11 +46,11 @@ class TestQuoteService:
 
     def test_find_closest_budget_tier_fuzzy_match(self):
         """Test finding closest budget tier with fuzzy matching."""
-        # 1000 is closer to 800 than 1200
-        assert QuoteService.find_closest_budget_tier(1000) == 1200
+        # An exact tie resolves to the earlier, lower tier.
+        assert QuoteService.find_closest_budget_tier(1000) == 800
 
-        # 1350 is closer to 1500 than 1200
-        assert QuoteService.find_closest_budget_tier(1350) == 1500
+        # 1350 is an exact tie; ties resolve to the earlier, lower tier.
+        assert QuoteService.find_closest_budget_tier(1350) == 1200
 
     def test_find_closest_budget_tier_below_minimum(self):
         """Test budget below minimum range returns None."""

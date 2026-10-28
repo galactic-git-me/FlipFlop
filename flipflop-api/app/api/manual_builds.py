@@ -5,30 +5,44 @@ import uuid
 import os
 import io
 import html
+import hashlib
+from copy import deepcopy
 from zipfile import ZipFile, ZIP_DEFLATED
 from pathlib import Path
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from urllib.parse import quote
 from urllib.parse import urlparse
 import shutil
 import httpx
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
+from typing import Literal
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, UploadFile, File, Form, Query
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.responses import FileResponse, Response, StreamingResponse
+from starlette.background import BackgroundTask
 from jose import jwt
-from pydantic import BaseModel, Field
+from pydantic import AnyHttpUrl, BaseModel, Field, field_validator
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, text
+from sqlalchemy import select, text, or_
 from app.database import AsyncSessionLocal, get_db
 from app.models.manual_build import ManualBuild
+from app.models.getting_started_job import GettingStartedJob
+from app.models.ai_setup_purchase import AISetupPurchase
+from app.models.component_manual import ComponentManual
 from app.models.app_settings import AppSettings
 from app.models.gem_radar_intelligence import ComponentRatingEvent, PreferredComponent
 from app.models.build import Build, BuildType, BuildStatus
 from app.models.product import Product, ProductType, ProductStatus
+from app.models.order import Order, OrderStatus
+from app.models.playbook import Playbook
+from app.models.gem_radar_scored_listing import GemRadarScoredListing
 from app.models.inventory import InventoryItem
 from app.models.inventory_allocation import InventoryAllocation
 from app.models.price_alert import PriceAlert
 from app.models.admin_user import AdminUser
 from app.models.customer import Customer
+from app.models.os_component import OSComponent
+from app.models.shipment_tracking_event import ShipmentTrackingEvent
+from app.models.portal_access_grant import PortalAccessGrant
 from app.schemas.manual_build import (
     ManualBuildCreate, ManualBuildPatch, ManualBuildOut, ManualBuildSummary,
     EvaluationResult, EvaluationSuggestion, GenerateListingResult,
@@ -36,9 +50,46 @@ from app.schemas.manual_build import (
     ListOnStorefrontRequest, ListOnStorefrontResult, ReorderPhotosRequest,
     UpdateAspectsRequest, UpdateEbayListingConfigRequest, FulfillmentPolicyOut,
     CourierQuoteOut, InsuranceQuoteOut, SyncEbayOrderResult, BuyerAddressOut, BookShipmentRequest,
-    BookShipmentResult, UpdateEvidenceDataRequest, UpdateListingTitleRequest,
+    BookShipmentResult, ShipmentBookingReconciliationRequest, UpdateEvidenceDataRequest, UpdateListingTitleRequest,
 )
 from app.services import ai_service
+from app.services.glb_optimizer import GlbOptimizationError, persist_optimized_glb, validate_glb
+from app.services.model_selection_service import model_selection_service, ModelSelectionError
+from app.services.getting_started_service import (
+    invalidate_ready_to_ship_reviewed_package,
+    generate_getting_ready_manifest,
+    GettingReadyGenerationError,
+    GettingReadyPromptSizeError,
+    missing_component_manual_models,
+    validate_component_driver_outcomes,
+)
+from app.services.getting_ready_package import (
+    assemble_getting_ready_package,
+    package_path,
+    render_dispatch_checklist,
+    GettingReadyPackageError,
+)
+from app.services.getting_started_guide import guide_snapshot
+from app.services.getting_started_jobs import (
+    CHECKLIST_STATUSES,
+    COURIER_BOOKING_BLOCKING_ACTIONS,
+    DISPATCH_BLOCKING_ACTIONS,
+    INSURANCE_REQUIRED_PHOTO_CATEGORIES,
+    OPTIONAL_CHECKLIST_ACTIONS,
+    OPERATOR_CHECKLIST_ACTIONS,
+    checklist_dispatch_ready,
+    checklist_with_defaults,
+    incomplete_checklist_actions,
+    lock_manual_build_then_getting_started_job,
+    validate_ai_setup_checklist_update,
+)
+from app.services.software_catalogue import (
+    validate_package_ids,
+    estimate_saved_minutes,
+    create_software_install_script,
+    SOFTWARE_BY_ID,
+)
+from app.services.product_software import software_profile_for_curated_cell_from_db
 from app.services.ebay_listing_poster import EbayListingPoster, post_flip_to_ebay, prepare_ebay_listing_description
 from app.services.ebay_specifics_generator import (
     generate_item_specifics,
@@ -50,11 +101,12 @@ from app.services.ebay_fulfillment_policies import (
     EbayFulfillmentPoliciesError,
 )
 from app.services.parcel2go_courier import get_tracked_quotes, Parcel2GoError
-from app.services.figural_insurance import get_insurance_quote, FiguralError
+from app.services.figural_insurance import get_insurance_quote, create_insurance_policy, FiguralError
 from app.services.ebay_order_sync import find_order_for_listing, EbayOrderSyncError, BuyerAddress
 from app.services.parcel2go_booking import (
     create_order as create_parcel2go_order,
     pay_order_with_prepay,
+    _safe_provider_tracking_url,
     Parcel2GoBookingError,
 )
 from app.services.ebay_shipping_fulfillment import mark_order_shipped, EbayShippingFulfillmentError
@@ -63,7 +115,15 @@ from app.services.cross_channel_guard import withdraw_storefront_for_sold_build
 from app.services.meshy_generation import generate_multi_image_asset
 from app.services.product_faqs import FAQ_BANK, FAQ_BY_ID, selected_faqs, render_ebay_faq_html
 from app.services import pricing_engine
-from app.services.email_service import send_shipment_update_email
+from app.services.email_service import (
+    send_dispatched_guest_portal_email,
+    send_shipment_update_email,
+)
+from app.services.portal_access import (
+    find_printable_portal_claim,
+    issue_direct_order_portal_claim,
+    record_portal_claim_email_result,
+)
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -73,16 +133,223 @@ from app.routes.admin_auth import get_current_admin
 router = APIRouter(prefix="/manual-builds", tags=["manual-builds"], dependencies=[Depends(get_current_admin)])
 
 
+def _getting_ready_generation_snapshot(build: ManualBuild) -> str:
+    """Fingerprint the persisted facts used to draft a Getting Ready manifest."""
+    evidence = build.evidence_data or {}
+    delivered_at = build.delivered_at
+    return json.dumps(
+        {
+            "build_name": build.name,
+            "build_status": getattr(build.status, "value", build.status),
+            "order_id": build.order_id,
+            "customer_id": build.customer_id,
+            "components": build.components or [],
+            "benchmark_results": evidence.get("benchmark_results") or evidence.get("performance_card"),
+            "playbook_assignment": evidence.get("playbook_assignment"),
+            "delivered_at": delivered_at.isoformat() if delivered_at else None,
+        },
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        default=str,
+    )
+
+
 class ComponentRatingInput(BaseModel):
     component_slot: str
     component_key: str
     overall_rating: int = Field(ge=1, le=5)
+
+
+class ApprovedResearchSource(BaseModel):
+    """A human-reviewed primary source allowed into the content-generation prompt."""
+
+    model_config = {"extra": "forbid"}
+
+    component_name: str = Field(min_length=2, max_length=240)
+    topic: Literal["driver_firmware", "manual", "rgb", "software", "compatibility"]
+    source_url: AnyHttpUrl
+    publisher: str = Field(min_length=2, max_length=160)
+    title: str = Field(min_length=2, max_length=300)
+    accessed_at: date
+    claim: str = Field(min_length=8, max_length=1200)
+    operator_approved: Literal[True]
+
+    @field_validator("source_url")
+    @classmethod
+    def require_https_source(cls, value: AnyHttpUrl) -> AnyHttpUrl:
+        if value.scheme != "https":
+            raise ValueError("Research sources must use HTTPS")
+        return value
+
+
+class GettingReadyGenerationRequest(BaseModel):
+    playbook_id: int | None = None
+    curated_build_id: str | None = None
+    playbook_segment: str | None = None
+    customer_software_selections: list[str] | None = None
+    approved_research_bundle: list[ApprovedResearchSource] = Field(default_factory=list, max_length=40)
+    approved_component_manuals: list[dict] = Field(default_factory=list, max_length=40)
+    getting_started_guide_text: str | None = None
+    upgrade_policy: dict = Field(default_factory=dict)
+
+
+class ComponentResearchDiscoveryRequest(BaseModel):
+    model_config = {"extra": "forbid"}
+
+    component_name: str = Field(min_length=2, max_length=240)
+    topic: Literal["driver_firmware", "manual", "rgb", "software", "compatibility"]
+
+
+class GettingReadyPackageApproval(BaseModel):
+    confirm_manifest_reviewed: bool = False
+    confirm_customer_details_checked: bool = False
+    confirm_windows_license_handling: bool = False
+    confirm_playbook_defaults_for_indirect_customer: bool = False
+    reviewer_notes: str | None = Field(default=None, max_length=2000)
+
+
+class WindowsLicenseHelperRequest(BaseModel):
+    confirm_private_key_release: bool = False
+
+
+class WindowsDeploymentEvidence(BaseModel):
+    schema_version: Literal["1.0"]
+    build_id: int = Field(ge=1)
+    build_name: str = Field(min_length=1, max_length=200)
+    verified_at_utc: str = Field(min_length=1, max_length=64)
+    edition: Literal["Windows 11 Pro"]
+    locale: Literal["en-GB"]
+    target_drive_model: str = Field(min_length=1, max_length=200)
+    target_drive_serial: str = Field(min_length=1, max_length=200)
+    target_drive_size_bytes: int = Field(gt=0)
+    verification_method: Literal["FlipFlop read-only post-install verification"]
+    installation_method: str = Field(min_length=1, max_length=300)
+    target_drive_confirmed: Literal[True]
+
+
+class WindowsTargetSelection(BaseModel):
+    model: str = Field(min_length=1, max_length=200)
+    serial: str = Field(min_length=1, max_length=200)
+    inspected_at_utc: str = Field(min_length=1, max_length=64)
+    confirm_new_build_drive: Literal[True]
+
+
+def _insurance_provider_response_summary(evidence_data: dict | None) -> dict | None:
+    """Expose only safe insurer reconciliation values to the admin queue."""
+    attempt = (evidence_data or {}).get("insurance_policy_creation")
+    provider = attempt.get("provider_response") if isinstance(attempt, dict) else None
+    if not isinstance(provider, dict):
+        return None
+
+    def safe_amount(key: str):
+        value = provider.get(key)
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            return None
+        return value if _gbp_amount_to_pence(value) is not None else None
+
+    def safe_reference(key: str):
+        value = provider.get(key)
+        if not isinstance(value, str) or len(value) > 200 or any(ord(char) < 32 or ord(char) == 127 for char in value):
+            return None
+        return value or None
+
+    mismatches = provider.get("mismatches")
+    return {
+        "policy_id": safe_reference("policy_id"),
+        "invoice_id": safe_reference("invoice_id"),
+        "insured_value_gbp": safe_amount("insured_value_gbp"),
+        "price_gbp": safe_amount("price_gbp"),
+        "currency": safe_reference("currency"),
+        "mode": safe_reference("mode"),
+        "received_at": safe_reference("received_at"),
+        "mismatches": [item[:200] for item in mismatches[:8] if isinstance(item, str)]
+        if isinstance(mismatches, list) else [],
+    }
+
+
+def _manual_build_has_physical_handover(build: ManualBuild) -> bool:
+    """Treat recorded handover, carrier delivery, and later states as irreversible."""
+    evidence_data = getattr(build, "evidence_data", None)
+    evidence = evidence_data if isinstance(evidence_data, dict) else {}
+    handover = evidence.get("physical_handover_confirmation")
+    return bool(
+        build.dispatch_status in {"dispatched", "delivered"}
+        or build.delivered_at is not None
+        or (isinstance(handover, dict) and handover.get("confirmed") is True)
+    )
+
+
+async def _assigned_windows_pro_key(db: AsyncSession, build_id: int, job: GettingStartedJob | None) -> str | None:
+    linked_order_id = job.order_id if job else None
+    if linked_order_id is None:
+        linked_order_id = (await db.execute(
+            select(Build.order_id)
+            .where(Build.manual_build_id == build_id, Build.order_id.is_not(None))
+            .order_by(Build.id.desc())
+            .limit(1)
+        )).scalar_one_or_none()
+    if linked_order_id is None:
+        return None
+    component = (await db.execute(
+        select(OSComponent).where(OSComponent.assigned_to_order_id == linked_order_id)
+    )).scalar_one_or_none()
+    if not component or str(component.os_type or "").casefold() not in {
+        "windows_pro", "windows 11 pro", "windows_11_pro"
+    }:
+        return None
+    key = re.sub(r"[-\s]", "", str(component.license_key or "")).upper()
+    if not re.fullmatch(r"[A-Z0-9]{25}", key):
+        raise HTTPException(409, "The assigned Windows Pro licence key is invalid; correct the order's OS component before using Getting Ready")
+    return key
+
+
+class GettingReadyChecklistUpdate(BaseModel):
+    status: str
+    note: str | None = Field(default=None, max_length=1000)
+    evidence_ref: str | None = Field(default=None, max_length=500)
+    windows_deployment_evidence: WindowsDeploymentEvidence | None = None
+    windows_target: WindowsTargetSelection | None = None
+    confirm_paid_ai_scope: bool = False
+    driver_firmware_outcomes: list[dict] | None = Field(default=None, max_length=100)
+
+
+class CreateInsurancePolicyRequest(BaseModel):
+    confirm_terms: bool = False
+    confirm_live_purchase: bool = False
+    confirm_customer_data_share: bool = False
+    confirm_signed_for_delivery: bool = False
+    confirm_double_packaging: bool = False
+    confirm_discreet_packaging: bool = False
+    confirm_rigid_outer_container: bool = False
+    confirm_contents_not_deducible: bool = False
+    confirm_direct_signature: bool = False
+    confirm_official_carrier_handover: bool = False
+    quoted_price_gbp: float = Field(gt=0)
     reliability_rating: int | None = Field(default=None, ge=1, le=5)
     installation_rating: int | None = Field(default=None, ge=1, le=5)
     aesthetics_rating: int | None = Field(default=None, ge=1, le=5)
     value_rating: int | None = Field(default=None, ge=1, le=5)
     customer_appeal_rating: int | None = Field(default=None, ge=1, le=5)
     notes: str | None = None
+
+
+class ReconcileInsurancePolicyRequest(BaseModel):
+    resolution: Literal["policy_exists", "no_policy"]
+    provider_checked: bool
+    note: str = Field(min_length=12, max_length=1000)
+    policy_id: str | None = Field(default=None, max_length=200)
+    invoice_id: str | None = Field(default=None, max_length=200)
+    provider_tracking_number: str | None = Field(default=None, max_length=200)
+    insured_value_gbp: float | None = Field(default=None, gt=0)
+    cost_gbp: float | None = Field(default=None, ge=0)
+
+    @field_validator("note")
+    @classmethod
+    def validate_reconciliation_note(cls, value: str) -> str:
+        if len(value.strip()) < 12:
+            raise ValueError("Record a meaningful insurer-account check note (at least 12 characters)")
+        return value.strip()
 
 
 class ComponentRatingsInput(BaseModel):
@@ -92,6 +359,27 @@ class ComponentRatingsInput(BaseModel):
 class ComponentPurchaseInput(BaseModel):
     price_paid: float | None = Field(default=None, ge=0)
     source: str | None = None
+
+
+class AIBuildCreateInput(BaseModel):
+    component_ids: list[int] = Field(min_length=4, max_length=8)
+    playbook_id: int
+    curated_build_id: str = Field(min_length=1, max_length=80)
+    build_name: str = Field(min_length=2, max_length=300)
+    rationale: str = Field(default="", max_length=1600)
+    playbook_rationale: str = Field(default="", max_length=1200)
+
+
+_AI_BUILD_CATEGORY_SLOTS = {
+    "cpu": "cpu",
+    "motherboard": "motherboard",
+    "ram": "ram",
+    "gpu": "gpu",
+    "ssd": "ssd",
+    "psu": "psu",
+    "cooler": "cooler",
+    "case": "case",
+}
 
 
 class FaqSelectionInput(BaseModel):
@@ -105,6 +393,23 @@ class QueueBuild3DAssetsInput(BaseModel):
 
 class CollectionDateInput(BaseModel):
     collection_date: datetime
+
+
+class DispatchBuildInput(BaseModel):
+    confirm_physical_handover: bool = False
+
+
+class ReviewDispatchEvidenceRequest(BaseModel):
+    approved: bool
+    note: str = Field(min_length=12, max_length=1000)
+
+    @field_validator("note")
+    @classmethod
+    def note_must_be_meaningful(cls, value: str) -> str:
+        value = value.strip()
+        if len(value) < 12:
+            raise ValueError("Record at least 12 characters describing the evidence review")
+        return value
 
 
 def _build_customer_hub_dir(build_id: int) -> Path:
@@ -262,7 +567,11 @@ async def _run_build_3d_generation(
                 async with httpx.AsyncClient(timeout=120, follow_redirects=True) as client:
                     response = await client.get(result.glb_url)
                     response.raise_for_status()
-                local_path.write_bytes(response.content)
+                optimized = await persist_optimized_glb(
+                    response.content,
+                    local_path,
+                    _BUILD_GLB_ORIGINALS_ROOT / str(build_id),
+                )
                 if not local_path.is_file() or local_path.stat().st_size == 0:
                     raise RuntimeError(f"Downloaded GLB was not persisted at {local_path}")
                 _persist_build_model_download(build_id, filename, local_path)
@@ -271,6 +580,8 @@ async def _run_build_3d_generation(
                     progress=result.progress,
                     task_id=result.task_id,
                     glb_url=public_url,
+                    original_file_size_bytes=optimized.original_bytes,
+                    file_size_bytes=optimized.output_bytes,
                     preview_url=result.thumbnail_url,
                     completed_at=datetime.utcnow().isoformat(),
                 )
@@ -411,10 +722,179 @@ def _description_with_selected_faqs(description: str, build: ManualBuild) -> str
 
 _IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
 _MAX_IMAGE_BYTES = 15 * 1024 * 1024  # 15 MB
+_MAX_DISPATCH_VIDEO_BYTES = 500 * 1024 * 1024
+_PRIVATE_DISPATCH_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "private_dispatch"
+
+
+def _missing_verified_dispatch_evidence(
+    job: GettingStartedJob | None,
+    build_id: int,
+    categories: tuple[str, ...],
+) -> list[str]:
+    """Require approved evidence files to still match their build-bound checksum and size."""
+    artifacts = deepcopy(job.artifact_index or []) if job else []
+    root = _PRIVATE_DISPATCH_ROOT.resolve()
+    build_dir = (root / str(build_id)).resolve()
+    allowed_media = {
+        "working_pc": ("image/", "video/"),
+        "package_contents": ("image/",),
+        "sealed_package": ("image/",),
+    }
+    missing: list[str] = []
+    build_dir_is_scoped = root in build_dir.parents
+    for category in categories:
+        if not build_dir_is_scoped:
+            missing.append(category)
+            continue
+        valid_artifact = False
+        for artifact in artifacts:
+            if not isinstance(artifact, dict) or artifact.get("category") != category:
+                continue
+            if artifact.get("review_status") != "approved":
+                continue
+            content_type = str(artifact.get("content_type") or "")
+            if not content_type.startswith(allowed_media.get(category, ())):
+                continue
+            try:
+                path = (root / str(artifact.get("storage_key") or "")).resolve()
+                if root not in path.parents or build_dir not in path.parents or not path.is_file():
+                    continue
+                expected_size = int(artifact.get("size_bytes"))
+                if path.stat().st_size != expected_size:
+                    continue
+                digest = hashlib.sha256()
+                with path.open("rb") as evidence_file:
+                    while chunk := evidence_file.read(1024 * 1024):
+                        digest.update(chunk)
+                if digest.hexdigest() != artifact.get("sha256"):
+                    continue
+            except (OSError, TypeError, ValueError):
+                continue
+            valid_artifact = True
+            break
+        if not valid_artifact:
+            missing.append(category)
+    return missing
+
+
+def _remove_uncommitted_getting_ready_packages(package: dict, *, build_id: int) -> None:
+    """Remove package files only when the database transaction is known not to have committed."""
+    for key in ("storage_key", "workshop_storage_key"):
+        storage_key = package.get(key)
+        if not storage_key:
+            continue
+        try:
+            package_path(str(storage_key)).unlink(missing_ok=True)
+        except (GettingReadyPackageError, OSError) as error:
+            log.error(
+                "getting_ready_package_cleanup_failed",
+                build_id=build_id,
+                storage_key=str(storage_key),
+                error=str(error),
+            )
+
+
+async def _commit_getting_ready_package_approval(db: AsyncSession, package: dict, *, build_id: int) -> None:
+    """Persist package metadata, cleaning files only before COMMIT is attempted."""
+    try:
+        await db.flush()
+    except BaseException:
+        try:
+            await db.rollback()
+        except Exception:
+            log.exception("getting_ready_package_flush_rollback_failed", build_id=build_id)
+        _remove_uncommitted_getting_ready_packages(package, build_id=build_id)
+        raise
+    try:
+        await db.commit()
+    except BaseException:
+        try:
+            await db.rollback()
+        except Exception:
+            log.exception("getting_ready_package_commit_rollback_failed", build_id=build_id)
+        log.exception(
+            "getting_ready_package_commit_outcome_uncertain",
+            build_id=build_id,
+            storage_key=package.get("storage_key"),
+            workshop_storage_key=package.get("workshop_storage_key"),
+        )
+        raise
+
+
+def _remove_uncommitted_getting_ready_packages(package: dict, *, build_id: int) -> None:
+    """Remove private ZIPs only when their database transaction did not commit."""
+    for key in ("storage_key", "workshop_storage_key"):
+        storage_key = package.get(key)
+        if not storage_key:
+            continue
+        try:
+            package_path(str(storage_key)).unlink(missing_ok=True)
+        except (GettingReadyPackageError, OSError) as error:
+            log.error(
+                "getting_ready_package_cleanup_failed",
+                build_id=build_id,
+                storage_key=str(storage_key),
+                error=str(error),
+            )
+
+
+def _gbp_amount_to_pence(value: object) -> int | None:
+    """Convert a finite non-negative GBP amount to its displayed penny value."""
+    try:
+        amount = Decimal(str(value))
+        if not amount.is_finite() or amount < 0:
+            return None
+        return int((amount * 100).quantize(Decimal("1"), rounding=ROUND_HALF_UP))
+    except (InvalidOperation, TypeError, ValueError):
+        return None
+
+
+def _gbp_amounts_match_to_penny(left: object, right: object) -> bool:
+    """Compare the two-decimal GBP amounts the operator actually reviewed."""
+    left_pence = _gbp_amount_to_pence(left)
+    right_pence = _gbp_amount_to_pence(right)
+    return left_pence is not None and right_pence is not None and left_pence == right_pence
+
+
+async def _portal_grant_required_for_build(
+    db: AsyncSession, build: ManualBuild,
+) -> tuple[bool, PortalAccessGrant | None]:
+    """Resolve whether dispatch needs a current guest/printed portal claim."""
+    linked_order = (await db.execute(
+        select(Order)
+        .join(Build, Build.manual_build_id == build.id)
+        .outerjoin(Product, Product.build_id == Build.id)
+        .where(or_(Build.order_id == Order.id, Product.sold_order_id == Order.id))
+        .limit(1)
+        .with_for_update(of=Order)
+    )).scalar_one_or_none()
+    direct_storefront_sale = bool(
+        linked_order and linked_order.customer_id and not build.ebay_order_id
+    )
+    if build.storefront_product_id:
+        sold_product = await db.get(Product, build.storefront_product_id)
+        if sold_product and sold_product.sold_via_channel is not None:
+            channel = getattr(sold_product.sold_via_channel, "value", sold_product.sold_via_channel)
+            direct_storefront_sale = channel == "storefront"
+    if direct_storefront_sale:
+        if not linked_order or not linked_order.customer_id:
+            raise HTTPException(409, "A linked customer order is required to verify portal access before delivery")
+        customer = await db.get(Customer, linked_order.customer_id)
+        if not customer:
+            raise HTTPException(409, "The linked customer record is unavailable; verify portal ownership before delivery")
+        if customer.password_hash or customer.google_id or customer.github_id:
+            return False, None
+        return True, await find_printable_portal_claim(
+            db, order_id=linked_order.id, channel="direct_guest"
+        )
+    return True, await find_printable_portal_claim(db, manual_build_id=build.id)
+
+
 _UPLOADS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "uploads" / "manual_builds"
 _PUBLIC_MEDIA_ROOT = Path(__file__).resolve().parents[3].parent / "FlipFlop.shop" / "public" / "media"
 _MODELS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "uploads" / "models"
 _BUILD_ASSETS_ROOT = Path(__file__).resolve().parents[3] / "builds"
+_BUILD_GLB_ORIGINALS_ROOT = _BUILD_ASSETS_ROOT.parent / "runtime" / "glb-originals" / "build-models"
 _BUILD_3D_SUBDIR = "3D Build"
 _BUILD_ASSET_SUBDIRS = {"Media", "Performance", "Registration", "Specifications"}
 # Served directly by this process (see app.mount("/api/uploads", ...) in
@@ -607,7 +1087,193 @@ def _extract_html_section(text: str) -> str | None:
 
 @router.post("/", response_model=ManualBuildOut, status_code=201)
 async def create_build(body: ManualBuildCreate, db: AsyncSession = Depends(get_db)):
-    build = ManualBuild(name=body.name, components=[], total_cost=None)
+    if bool(body.playbook_id) != bool(body.curated_build_id):
+        raise HTTPException(422, "Choose both a Playbook and a curated budget cell, or neither")
+    evidence_data: dict = {}
+    if body.playbook_id and body.curated_build_id:
+        playbook = await db.get(Playbook, body.playbook_id)
+        if not playbook:
+            raise HTTPException(404, "Playbook not found")
+        try:
+            profile = await software_profile_for_curated_cell_from_db(
+                db, body.curated_build_id, playbook.name, playbook.software_profile
+            )
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from exc
+        from app.services.curated_build_policy import definitions
+        cell = next(item for item in definitions()["builds"] if item["id"] == body.curated_build_id)
+        evidence_data["playbook_assignment"] = {
+            "playbook_id": playbook.id,
+            "curated_build_id": body.curated_build_id,
+            "customer_type": cell["segment"],
+            "budget_tier": cell["tier"],
+            "cell_name": cell["name"],
+            "software_profile": profile,
+            "assigned_at": datetime.utcnow().isoformat(),
+        }
+    build = ManualBuild(
+        name=body.name,
+        components=[],
+        total_cost=None,
+        evidence_data=evidence_data,
+        warranty_reserve_pct=body.warranty_reserve_pct,
+    )
+    db.add(build)
+    await db.flush()
+    await db.refresh(build)
+    return build
+
+
+@router.post("/ai-generate")
+async def generate_ai_ready_to_ship_build(db: AsyncSession = Depends(get_db)):
+    """Ask the configured LLM to assemble a build from active GEM listings."""
+    from app.gem_radar.observations import get_active_buy_it_now_listing_ids
+    from app.services.curated_build_policy import definitions
+
+    active_ids = await get_active_buy_it_now_listing_ids(db)
+    if not active_ids:
+        raise HTTPException(409, "Gem Radar has no active buy-it-now listings to build from")
+    rows = (await db.execute(
+        select(GemRadarScoredListing)
+        .where(
+            GemRadarScoredListing.listing_id.in_(active_ids),
+            GemRadarScoredListing.classification.in_(("SUPER_GEM", "GEM")),
+            GemRadarScoredListing.category.in_(tuple(_AI_BUILD_CATEGORY_SLOTS)),
+            GemRadarScoredListing.delivered_price > 0,
+        )
+        .order_by(GemRadarScoredListing.deal_score.desc())
+    )).scalars().all()
+
+    candidates_by_category: dict[str, list[GemRadarScoredListing]] = {key: [] for key in _AI_BUILD_CATEGORY_SLOTS}
+    seen_listing_ids: set[str] = set()
+    for row in rows:
+        if row.listing_id in seen_listing_ids:
+            continue
+        seen_listing_ids.add(row.listing_id)
+        candidates_by_category[row.category].append(row)
+    required = ("cpu", "motherboard", "ram", "gpu", "ssd", "psu")
+    missing = [category for category in required if not candidates_by_category[category]]
+    if missing:
+        raise HTTPException(409, "Active GEM/SUPER_GEM listings are missing for: " + ", ".join(missing))
+
+    candidates = [item for category in _AI_BUILD_CATEGORY_SLOTS for item in candidates_by_category[category][:18]]
+    playbooks = (await db.execute(select(Playbook))).scalars().all()
+    playbook_ids = {playbook.name.casefold(): playbook.id for playbook in playbooks}
+    segments = [
+        {"id": cell["id"], "name": cell["name"], "segment": cell["segment"], "tier": cell["tier"],
+         "use": cell.get("use", ""), "playbook_id": playbook_ids.get(str(cell.get("segment", "")).casefold())}
+        for cell in definitions().get("builds", [])
+        if playbook_ids.get(str(cell.get("segment", "")).casefold())
+    ]
+    if not segments:
+        raise HTTPException(409, "No configured Playbook segments are available for recommendation")
+    candidate_payload = [
+        {"id": item.id, "category": item.category, "title": item.title, "classification": item.classification,
+         "delivered_price_gbp": round(float(item.delivered_price), 2), "deal_score": round(float(item.deal_score or 0), 1)}
+        for item in candidates
+    ]
+    try:
+        result = await model_selection_service.complete(
+            task="AI Ready-to-Ship build recommendation",
+            messages=[{"role": "user", "content": json.dumps({"candidates": candidate_payload, "playbook_cells": segments})}],
+            system_prompt=(
+                "You are an expert PC build curator. Select one listing per required category: CPU, motherboard, RAM, GPU, SSD, PSU. "
+                "You may add a cooler or case. Use only supplied candidate IDs. Prioritize SUPER_GEM, then GEM. Avoid obvious socket/DDR "
+                "mismatches from titles. Recommend one supplied Playbook cell that best matches performance, use and total parts budget. "
+                "Return JSON with keys build_name, rationale, components (array of {id, slot}), playbook_cell_id, playbook_rationale, "
+                "compatibility_notes. Do not invent IDs or claim compatibility is verified when it is unclear."
+            ),
+            max_tokens=1300,
+            timeout=90,
+            json_mode=True,
+        )
+        proposal = json.loads(result.text)
+    except (ModelSelectionError, json.JSONDecodeError, TypeError, ValueError) as exc:
+        log.warning("manual_build.ai_generation_failed", error=str(exc))
+        raise HTTPException(502, "The AI could not produce a valid build recommendation. Try again.") from exc
+
+    allowed = {item.id: item for item in candidates}
+    selected_items = []
+    selected_categories: set[str] = set()
+    try:
+        for choice in proposal["components"]:
+            item = allowed[int(choice["id"])]
+            if item.category in selected_categories or choice.get("slot") != _AI_BUILD_CATEGORY_SLOTS[item.category]:
+                raise ValueError("duplicate or mismatched component slot")
+            selected_categories.add(item.category)
+            selected_items.append(item)
+        if not set(required).issubset(selected_categories):
+            raise ValueError("required component missing")
+        cell = next(item for item in segments if item["id"] == proposal["playbook_cell_id"])
+    except (KeyError, TypeError, ValueError, StopIteration) as exc:
+        raise HTTPException(502, "The AI returned an invalid recommendation. Generate another build.") from exc
+
+    return {
+        "build_name": str(proposal.get("build_name") or "AI Sourced Build")[:300],
+        "rationale": str(proposal.get("rationale") or "")[:1600],
+        "components": [
+            {"id": item.id, "slot": _AI_BUILD_CATEGORY_SLOTS[item.category], "name": item.title,
+             "classification": item.classification, "deal_score": float(item.deal_score or 0),
+             "price": round(float(item.delivered_price), 2),
+             "listing_url": item.url or f"https://www.ebay.co.uk/itm/{item.listing_id}", "image_url": item.image_url}
+            for item in selected_items
+        ],
+        "estimated_parts_cost": round(sum(float(item.delivered_price) for item in selected_items), 2),
+        "playbook_recommendation": {**cell, "rationale": str(proposal.get("playbook_rationale") or "")[:1200]},
+        "compatibility_notes": [str(note)[:300] for note in proposal.get("compatibility_notes", []) if isinstance(note, str)][:8],
+        "model": result.model,
+    }
+
+
+@router.post("/ai-create", response_model=ManualBuildOut, status_code=201)
+async def create_ai_ready_to_ship_build(body: AIBuildCreateInput, db: AsyncSession = Depends(get_db)):
+    """Persist selected AI candidates as an in-progress, unpaid sourcing draft."""
+    from app.gem_radar.observations import get_active_buy_it_now_listing_ids
+    from app.services.curated_build_policy import definitions
+
+    if len(set(body.component_ids)) != len(body.component_ids):
+        raise HTTPException(422, "A sourcing listing may only be selected once")
+    active_ids = await get_active_buy_it_now_listing_ids(db)
+    items = (await db.execute(select(GemRadarScoredListing).where(
+        GemRadarScoredListing.id.in_(body.component_ids),
+        GemRadarScoredListing.listing_id.in_(active_ids),
+        GemRadarScoredListing.classification.in_(("SUPER_GEM", "GEM")),
+    ))).scalars().all()
+    if len(items) != len(body.component_ids):
+        raise HTTPException(409, "A selected listing is no longer active. Generate a fresh recommendation.")
+    by_category = {item.category: item for item in items}
+    if len(by_category) != len(items) or not {"cpu", "motherboard", "ram", "gpu", "ssd", "psu"}.issubset(by_category):
+        raise HTTPException(422, "The selection must include one CPU, motherboard, RAM, GPU, SSD, and PSU")
+    if any(category not in _AI_BUILD_CATEGORY_SLOTS for category in by_category):
+        raise HTTPException(422, "The selection includes an unsupported component category")
+    cell = next((item for item in definitions().get("builds", []) if item["id"] == body.curated_build_id), None)
+    playbook = await db.get(Playbook, body.playbook_id)
+    if not cell or not playbook or playbook.name.casefold() != str(cell.get("segment", "")).casefold():
+        raise HTTPException(422, "Choose a valid Playbook cell and matching segment")
+    try:
+        profile = await software_profile_for_curated_cell_from_db(db, body.curated_build_id, playbook.name, playbook.software_profile)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    components = [
+        {"slot": _AI_BUILD_CATEGORY_SLOTS[item.category], "name": item.title,
+         "price_paid": round(float(item.delivered_price), 2), "source": "manual",
+         "listing_url": item.url or f"https://www.ebay.co.uk/itm/{item.listing_id}", "image_url": item.image_url,
+         "purchased": False, "condition": item.condition or "unknown", "sourcing_candidate": True,
+         "gem_classification": item.classification, "gem_radar_listing_id": item.id}
+        for item in items
+    ]
+    evidence_data = {
+        "playbook_assignment": {"playbook_id": playbook.id, "curated_build_id": body.curated_build_id,
+            "customer_type": cell["segment"], "budget_tier": cell["tier"], "cell_name": cell["name"],
+            "software_profile": profile, "assigned_at": datetime.utcnow().isoformat()},
+        "ai_sourcing": {"created_at": datetime.utcnow().isoformat(), "status": "candidate_listings_not_purchased",
+            "candidate_listing_ids": [item.listing_id for item in items]},
+    }
+    playbook_assignment = evidence_data["playbook_assignment"]
+    playbook_assignment["ai_recommendation_rationale"] = body.playbook_rationale
+    evidence_data["ai_sourcing"]["build_rationale"] = body.rationale
+    build = ManualBuild(name=body.build_name, creation_method="ai", components=components, total_cost=0,
+                        evidence_data=evidence_data, warranty_reserve_pct=5.0)
     db.add(build)
     await db.flush()
     await db.refresh(build)
@@ -659,7 +1325,9 @@ async def list_builds(include_archived: bool = False, db: AsyncSession = Depends
             ManualBuildSummary(
                 id=build.id,
                 name=build.name,
+                creation_method=build.creation_method or "manual",
                 total_cost=build.total_cost,
+                ebay_price=build.ebay_price,
                 component_count=len(build.components or []),
                 status=live_status,
                 updated_at=build.updated_at,
@@ -789,15 +1457,1339 @@ async def update_build_faqs(
 
 @router.get("/dispatch-zone")
 async def dispatch_zone(db: AsyncSession = Depends(get_db)):
-    """Builds sold by any channel and not yet paid/booked for dispatch."""
-    rows = (await db.execute(select(ManualBuild).where(ManualBuild.status == "sold", ManualBuild.is_archived == False,).order_by(ManualBuild.updated_at.desc()))).scalars().all()  # noqa: E712
-    return [{"id": b.id, "name": b.name, "status": b.status, "dispatch_status": b.dispatch_status,
-             "sale_price": b.sale_price_actual or b.ebay_price, "buyer_name": b.buyer_name,
-             "customer_email": b.customer_email, "buyer_address": b.buyer_address_json,
+    """Show built/listed units for pre-sale preparation and sold units for dispatch."""
+    rows = (await db.execute(select(ManualBuild).where(
+        ManualBuild.status.in_(("built", "listed", "sold")),
+        ManualBuild.is_archived == False,
+    ).order_by(ManualBuild.updated_at.desc()))).scalars().all()  # noqa: E712
+    jobs = (await db.execute(select(GettingStartedJob).where(GettingStartedJob.manual_build_id.in_([b.id for b in rows])))).scalars().all() if rows else []
+    jobs_by_build = {job.manual_build_id: job for job in jobs}
+    build_order_rows = (await db.execute(
+        select(Build.manual_build_id, Build.order_id).where(
+            Build.manual_build_id.in_([b.id for b in rows]), Build.order_id.is_not(None)
+        )
+    )).all() if rows else []
+    order_by_build = {build_id: order_id for build_id, order_id in build_order_rows}
+    storefront_product_ids = [b.storefront_product_id for b in rows if b.storefront_product_id]
+    storefront_products = (await db.execute(
+        select(Product.id, Product.sold_order_id, Product.sold_via_channel).where(
+            Product.id.in_(storefront_product_ids)
+        )
+    )).all() if storefront_product_ids else []
+    products_by_id = {product_id: (order_id, channel) for product_id, order_id, channel in storefront_products}
+    linked_order_ids = {
+        order_id
+        for build in rows
+        for order_id in (
+            jobs_by_build.get(build.id).order_id if jobs_by_build.get(build.id) else None,
+            order_by_build.get(build.id),
+            products_by_id.get(build.storefront_product_id, (None, None))[0]
+            if build.storefront_product_id else None,
+        )
+        if order_id is not None
+    }
+    order_contacts = (await db.execute(
+        select(Order.id, Customer.email, Customer.name)
+        .join(Customer, Customer.id == Order.customer_id)
+        .where(Order.id.in_(linked_order_ids))
+    )).all() if linked_order_ids else []
+    contacts_by_order = {order_id: (email, name) for order_id, email, name in order_contacts}
+    grants = (await db.execute(
+        select(PortalAccessGrant)
+        .where(or_(
+            PortalAccessGrant.order_id.in_(linked_order_ids) if linked_order_ids else False,
+            PortalAccessGrant.manual_build_id.in_([b.id for b in rows]) if rows else False,
+        ))
+        .order_by(PortalAccessGrant.created_at.desc(), PortalAccessGrant.id.desc())
+    )).scalars().all() if linked_order_ids or rows else []
+    latest_grant_by_order = {}
+    latest_grant_by_build = {}
+    for grant in grants:
+        if grant.order_id is not None:
+            latest_grant_by_order.setdefault(grant.order_id, grant)
+        if grant.manual_build_id is not None:
+            latest_grant_by_build.setdefault(grant.manual_build_id, grant)
+    # Pre-sale records appear only after mark-built has opened their Getting
+    # Ready job. Sold builds remain visible even when migrating older data.
+    rows = [build for build in rows if build.status == "sold" or build.id in jobs_by_build]
+    response_rows = []
+    for b in rows:
+        job = jobs_by_build.get(b.id)
+        product_link = products_by_id.get(b.storefront_product_id, (None, None)) if b.storefront_product_id else (None, None)
+        linked_order_id = (job.order_id if job and job.order_id else None) or order_by_build.get(b.id) or product_link[0]
+        linked_order_email, linked_order_name = contacts_by_order.get(linked_order_id, (None, None))
+        product_channel = getattr(product_link[1], "value", product_link[1])
+        portal_is_direct = bool(
+            linked_order_id
+            and not b.ebay_order_id
+            and (product_channel is None or product_channel == "storefront")
+        )
+        portal_grant = (
+            latest_grant_by_order.get(linked_order_id)
+            if portal_is_direct
+            else latest_grant_by_build.get(b.id)
+        )
+        job_checklist = checklist_with_defaults(
+            job.checklist,
+            job.purchased_ai_services,
+        ) if job else {}
+        response_rows.append({"id": b.id, "name": b.name, "status": b.status, "dispatch_status": b.dispatch_status,
+             "has_physical_handover": _manual_build_has_physical_handover(b),
+             "playbook_assignment": (b.evidence_data or {}).get("playbook_assignment"),
+             "sale_price": b.sale_price_actual or b.ebay_price, "buyer_name": b.buyer_name or (linked_order_name if portal_is_direct else None),
+             "customer_email": (linked_order_email if portal_is_direct else None) or b.customer_email,
+             "portal_order_id": linked_order_id if portal_is_direct else None,
+             "portal_grant_id": portal_grant.id if portal_grant else None,
+             "portal_claim_email_status": portal_grant.email_status if portal_grant else None,
+             "buyer_address": b.buyer_address_json,
              "collection_date": b.collection_date.isoformat() if b.collection_date else None,
              "tracking_number": b.tracking_number, "shipping_label_url": b.shipping_label_url,
+             "parcel2go_order_id": b.parcel2go_order_id,
+             "parcel2go_order_line_id": b.parcel2go_order_line_id,
              "shipment_booked_at": b.shipment_booked_at.isoformat() if b.shipment_booked_at else None,
-             "warranty_started_at": b.warranty_started_at.isoformat() if b.warranty_started_at else None} for b in rows]
+             "shipment_booking_state": b.shipment_booking_state,
+             "insurance_status": b.shipping_insurance_status,
+             "insurance_policy_id": b.shipping_insurance_policy_id,
+             "insurance_cost_gbp": b.shipping_insurance_cost_gbp,
+             "insurance_provider_response": _insurance_provider_response_summary(b.evidence_data),
+             "warranty_started_at": b.warranty_started_at.isoformat() if b.warranty_started_at else None,
+             "getting_started": ({"status": job.status,
+                                  "order_id": job.order_id,
+                                  "software_selections": job.customer_software_selections or [],
+                                  "purchased_ai_services": job.purchased_ai_services or [],
+                                  "checklist": job_checklist,
+                                  "shipment_evidence": [
+                                      item for item in (job.artifact_index or [])
+                                      if item.get("category") in {"working_pc", "package_contents", "sealed_package"}
+                                  ],
+                                  "manifest": job.manifest,
+                                  "cached_component_manuals": (((b.evidence_data or {}).get("getting_ready") or {}).get("source_inputs") or {}).get("cached_component_manuals", []),
+                                  "approved_research_bundle": (((b.evidence_data or {}).get("getting_ready") or {}).get("source_inputs") or {}).get("approved_research_bundle", []),
+                                  "latest_package": max(
+                                      [item for item in (job.artifact_index or []) if item.get("category") == "customer_package"],
+                                      key=lambda item: int(item.get("version") or 0),
+                                      default=None,
+                                  ),
+                                  "generated_at": job.generated_at.isoformat() if job.generated_at else None}
+                                 if job else None)})
+    return response_rows
+
+
+@router.post("/{build_id}/getting-ready/source-suggestions")
+async def suggest_getting_ready_research_sources(
+    build_id: int,
+    body: ComponentResearchDiscoveryRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """Find untrusted manufacturer-source candidates for one exact component.
+
+    Results are neither saved nor approved. The administrator must verify each
+    page and enter the supported claim before it can reach the LLM prompt.
+    """
+    build = await db.get(ManualBuild, build_id)
+    if not build:
+        raise HTTPException(404, "Build not found")
+    from app.services.component_manual_library import normalize_manual_key
+
+    requested = normalize_manual_key(body.component_name)
+    component_matches = []
+    identity_fields = (
+        "component_name", "name", "title", "model", "model_number", "mpn",
+        "manufacturer_part_number", "part_number", "sku",
+    )
+    for component in build.components or []:
+        identities = (
+            [component.get(field) for field in identity_fields]
+            if isinstance(component, dict)
+            else [component]
+        )
+        if any(
+            isinstance(value, (str, int))
+            and normalize_manual_key(str(value)) == requested
+            for value in identities
+        ):
+            component_matches.append(component)
+    if not requested or len(component_matches) != 1:
+        raise HTTPException(422, "Research must target exactly one component identity recorded on this build")
+
+    exact_component = component_matches[0]
+    if isinstance(exact_component, dict):
+        canonical_name = next((
+            str(exact_component[field]).strip()
+            for field in identity_fields
+            if exact_component.get(field)
+        ), body.component_name.strip())
+    else:
+        canonical_name = str(exact_component).strip()
+    cached_manual_matches = []
+    if body.topic == "manual":
+        cached_manual_rows = (await db.execute(
+            select(ComponentManual).where(ComponentManual.is_active.is_(True))
+        )).scalars().all()
+        from app.services.component_manual_library import matching_manuals
+
+        cached_manual_matches = matching_manuals([exact_component], cached_manual_rows)
+        if cached_manual_matches:
+            return {
+                "build_id": build_id,
+                "component_name": canonical_name,
+                "topic": body.topic,
+                "suggestions": [],
+                "cached_manual_matches": cached_manual_matches,
+                "cache_checked": True,
+                "review_required": True,
+                "saved": False,
+                "downloaded": False,
+            }
+    from app.services.component_research_search import discover_component_sources
+
+    try:
+        suggestions = await discover_component_sources(canonical_name, body.topic)
+    except ValueError as error:
+        raise HTTPException(422, str(error)) from error
+    except Exception as error:
+        log.warning("getting_ready.source_discovery_failed", build_id=build_id, topic=body.topic, error=type(error).__name__)
+        raise HTTPException(502, "Source search is temporarily unavailable. No files were downloaded or added to the build.") from error
+    return {
+        "build_id": build_id,
+        "component_name": canonical_name,
+        "topic": body.topic,
+        "suggestions": suggestions,
+        "cached_manual_matches": cached_manual_matches,
+        "cache_checked": body.topic == "manual",
+        "review_required": True,
+        "saved": False,
+        "downloaded": False,
+    }
+
+
+@router.post("/{build_id}/getting-ready/generate")
+async def generate_getting_ready_package_content(
+    build_id: int,
+    body: GettingReadyGenerationRequest,
+    admin=Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    """Generate the review-only content manifest for a build's dispatch pack.
+
+    Inputs are grounded in recorded build evidence and admin-approved research.
+    ZIP assembly, installer execution and dispatch approval remain separate
+    deterministic/admin-controlled actions.
+    """
+    build = await db.get(ManualBuild, build_id)
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if _manual_build_has_physical_handover(build):
+        raise HTTPException(409, "Getting Ready content is locked after physical handover")
+    generation_snapshot = _getting_ready_generation_snapshot(build)
+    evidence = build.evidence_data or {}
+    from app.services.component_manual_library import matching_manuals, normalize_manual_key
+    normalized_components = [normalize_manual_key(str(component)) for component in (build.components or [])]
+    for source in body.approved_research_bundle:
+        component_name = normalize_manual_key(source.component_name)
+        if len(component_name) < 8 or not any(component_name in component for component in normalized_components):
+            raise HTTPException(
+                422,
+                f"Research component '{source.component_name}' does not match an exact component in this build",
+            )
+    cached_manual_rows = (await db.execute(
+        select(ComponentManual).where(ComponentManual.is_active.is_(True))
+    )).scalars().all()
+    cached_manual_matches = matching_manuals(build.components or [], cached_manual_rows)
+    job = (await db.execute(
+        select(GettingStartedJob).where(GettingStartedJob.manual_build_id == build_id)
+    )).scalar_one_or_none()
+    job_snapshot = (
+        job.updated_at if job else None,
+        list(job.customer_software_selections or []) if job else [],
+        list(job.purchased_ai_services or []) if job else [],
+        job.order_id if job else None,
+        job.status if job else None,
+        bool((job.checklist or {}).get("software_selection_submitted")) if job else False,
+    )
+    assignment = dict((evidence.get("playbook_assignment") or {}))
+    if body.curated_build_id:
+        if not body.playbook_id:
+            raise HTTPException(422, "Playbook ID is required with a curated cell")
+        playbook = await db.get(Playbook, body.playbook_id)
+        if not playbook:
+            raise HTTPException(404, "Playbook not found")
+        try:
+            profile = await software_profile_for_curated_cell_from_db(
+                db, body.curated_build_id, playbook.name, playbook.software_profile
+            )
+        except ValueError as error:
+            raise HTTPException(422, str(error)) from error
+        from app.services.curated_build_policy import definitions
+        cell = next(item for item in definitions()["builds"] if item["id"] == body.curated_build_id)
+        assignment = {
+            "playbook_id": playbook.id,
+            "curated_build_id": body.curated_build_id,
+            "customer_type": cell["segment"],
+            "budget_tier": cell["tier"],
+            "cell_name": cell["name"],
+            "software_profile": profile,
+            "assigned_at": datetime.utcnow().isoformat(),
+        }
+    elif not (assignment.get("playbook_id") and assignment.get("software_profile")):
+        raise HTTPException(422, "Select a Playbook customer-type × budget cell before generating this Ready-to-Ship package")
+    profile = assignment["software_profile"]
+    if job and (job.checklist or {}).get("software_selection_submitted"):
+        default_software_ids = list(job.customer_software_selections or [])
+    elif body.customer_software_selections is not None:
+        if job and job.order_id:
+            raise HTTPException(409, "For a customer order, use the customer's saved software choices instead of an admin override")
+        default_software_ids = body.customer_software_selections
+    elif job and job.customer_software_selections:
+        default_software_ids = list(job.customer_software_selections)
+    else:
+        default_software_ids = list(profile.get("recommended_package_ids") or [])
+    try:
+        selected_software_ids = validate_package_ids(default_software_ids)
+    except ValueError as error:
+        raise HTTPException(422, str(error)) from error
+    settings = get_settings()
+    from app.api.settings_router import GETTING_STARTED_GUIDE_PATH
+    guide_path = GETTING_STARTED_GUIDE_PATH
+    try:
+        configured_guide = guide_path.read_text(encoding="utf-8") if guide_path.is_file() else None
+    except OSError as error:
+        raise HTTPException(500, "The configured Getting Started guide could not be read") from error
+    guide_text, guide_metadata = guide_snapshot(
+        configured_guide=configured_guide,
+        request_guide=body.getting_started_guide_text,
+    )
+    research_reviewed_at = datetime.utcnow().isoformat()
+    reviewed_research_bundle = [
+        {
+            **item.model_dump(mode="json"),
+            "reviewed_by": getattr(admin, "email", None) or "admin",
+            "reviewed_at": research_reviewed_at,
+        }
+        for item in body.approved_research_bundle
+    ]
+    inputs = {
+        "build_name": build.name,
+        "playbook_segment": f"{assignment['customer_type']} / {assignment['budget_tier']} · {assignment['cell_name']}",
+        "build_specification": build.components or [],
+        "benchmark_results": evidence.get("benchmark_results") or evidence.get("performance_card"),
+        "customer_software_selections": selected_software_ids,
+        "software_install_scopes": [
+            {
+                "package_id": package_id,
+                "name": SOFTWARE_BY_ID[package_id]["name"],
+                "scope": SOFTWARE_BY_ID[package_id].get("install_scope", "machine"),
+                "timing": "customer_first_sign_in" if SOFTWARE_BY_ID[package_id].get("install_scope") == "customer_profile" else "workshop_pre_dispatch",
+            }
+            for package_id in selected_software_ids
+        ],
+        "purchased_ai_services": list(job.purchased_ai_services or []) if job else [],
+        "warranty_start_date": build.delivered_at.isoformat() if build.delivered_at else None,
+        "support_base_url": getattr(settings, "storefront_base_url", None),
+        "approved_research_bundle": reviewed_research_bundle,
+        "approved_component_manuals": [*body.approved_component_manuals, *cached_manual_matches],
+        "getting_started_guide_text": guide_text,
+        "upgrade_policy": body.upgrade_policy,
+    }
+    try:
+        manifest = await generate_getting_ready_manifest(inputs)
+    except GettingReadyPromptSizeError as error:
+        raise HTTPException(413, str(error)) from error
+    except GettingReadyGenerationError as error:
+        raise HTTPException(502, str(error)) from error
+    if guide_text is None:
+        guide_text, guide_metadata = guide_snapshot(
+            configured_guide=None,
+            request_guide=None,
+            generated_intro=manifest.customer_copy.get("getting_started_intro"),
+        )
+        if guide_text is None:
+            raise HTTPException(502, "The generated Getting Started guide was empty; regenerate the package.")
+        inputs["getting_started_guide_text"] = guide_text
+    current_build, current_job = await lock_manual_build_then_getting_started_job(db, build_id)
+    if current_build is None:
+        raise HTTPException(404, "Build not found")
+    if _getting_ready_generation_snapshot(current_build) != generation_snapshot:
+        raise HTTPException(409, "Build specification or evidence changed during generation. Generate a fresh review manifest.")
+    build = current_build
+    evidence = dict(build.evidence_data or {})
+    current_snapshot = (
+        current_job.updated_at if current_job else None,
+        list(current_job.customer_software_selections or []) if current_job else [],
+        list(current_job.purchased_ai_services or []) if current_job else [],
+        current_job.order_id if current_job else None,
+        current_job.status if current_job else None,
+        bool((current_job.checklist or {}).get("software_selection_submitted")) if current_job else False,
+    )
+    if current_snapshot != job_snapshot:
+        raise HTTPException(409, "Getting Ready inputs changed during generation. Generate a fresh review manifest.")
+    job = current_job
+    if body.curated_build_id:
+        current_playbook = (await db.execute(
+            select(Playbook)
+            .where(Playbook.id == body.playbook_id)
+            .with_for_update()
+            .execution_options(populate_existing=True)
+        )).scalar_one_or_none()
+        if current_playbook is None:
+            raise HTTPException(409, "The Playbook changed during generation. Select the current cell and regenerate.")
+        try:
+            current_profile = await software_profile_for_curated_cell_from_db(
+                db,
+                body.curated_build_id,
+                current_playbook.name,
+                current_playbook.software_profile,
+                lock_profile=True,
+            )
+        except ValueError as error:
+            raise HTTPException(409, "The Playbook cell changed during generation. Select the current cell and regenerate.") from error
+        if current_profile != profile:
+            raise HTTPException(409, "The Playbook software profile changed during generation. Regenerate the package content.")
+    if job is not None:
+        invalidate_ready_to_ship_reviewed_package(
+            job,
+            build,
+            checklist_reset_keys=(
+                "customer_selections_locked",
+                "content_manifest",
+                "artifacts_generated",
+                "artifacts_reviewed",
+                "customer_package",
+                "component_manuals_reviewed",
+                "driver_firmware_reviewed",
+                "drivers_updates_complete",
+            ),
+        )
+        job.checklist = {**(job.checklist or {}), "_driver_firmware_outcomes": []}
+        evidence = dict(build.evidence_data or {})
+    updated_evidence = dict(evidence)
+    updated_evidence["getting_ready"] = {
+        "manifest": manifest.model_dump(mode="json"),
+        "generated_at": datetime.utcnow().isoformat(),
+        "status": "ready_for_admin_review",
+        "source_inputs": {
+            "software_selections": selected_software_ids,
+            "purchased_ai_services": list(job.purchased_ai_services or []) if job else [],
+            "playbook_segment": f"{assignment['customer_type']} / {assignment['budget_tier']} · {assignment['cell_name']}",
+            "approved_research_bundle": reviewed_research_bundle,
+            "approved_component_manuals": body.approved_component_manuals,
+            "cached_component_manuals": cached_manual_matches,
+            "getting_started_guide_metadata": guide_metadata,
+            "getting_started_guide_text": guide_text,
+            "upgrade_policy": body.upgrade_policy,
+        },
+        "software_install_script": (
+            create_software_install_script(selected_software_ids)
+            if build.status == "sold" and job is not None
+            and (job.checklist or {}).get("software_selection_submitted")
+            else None
+        ),
+        "software_time_saving_estimate": {
+            "minutes": estimate_saved_minutes(selected_software_ids),
+            "apps": [SOFTWARE_BY_ID[item_id] for item_id in selected_software_ids],
+            "basis": "Indicative internal estimate for download/search and installer clicks; not measured or guaranteed.",
+        },
+    }
+    updated_evidence["playbook_assignment"] = assignment
+    build.evidence_data = updated_evidence
+    build.updated_at = datetime.utcnow()
+    if job is None:
+        job = GettingStartedJob(
+            manual_build_id=build.id,
+            customer_id=build.customer_id,
+            source_type="ready_to_ship",
+            status="awaiting_admin_review",
+            checklist=checklist_with_defaults(None),
+        )
+        db.add(job)
+    job.playbook_id = assignment["playbook_id"]
+    job.customer_software_selections = selected_software_ids
+    job.manifest = manifest.model_dump(mode="json")
+    job.status = "awaiting_admin_review"
+    package_checklist = {
+        **checklist_with_defaults(job.checklist, job.purchased_ai_services),
+        "component_manuals_reviewed": "needs_review",
+        "driver_firmware_reviewed": "needs_review",
+        "drivers_updates_complete": "not_ready",
+        "source_data_complete": "complete" if build.components and inputs["benchmark_results"] else "needs_review",
+        "content_manifest": "needs_review",
+    }
+    job.checklist = package_checklist
+    job.generated_at = datetime.utcnow()
+    job.updated_at = datetime.utcnow()
+    await db.commit()
+    return updated_evidence["getting_ready"]
+
+
+@router.patch("/{build_id}/getting-ready/checklist/{action}")
+async def update_getting_ready_checklist_action(
+    build_id: int,
+    action: str,
+    body: GettingReadyChecklistUpdate,
+    admin=Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    if action not in OPERATOR_CHECKLIST_ACTIONS:
+        raise HTTPException(422, "This checklist action is system-managed or unknown")
+    if body.status not in CHECKLIST_STATUSES:
+        raise HTTPException(422, f"Unknown checklist status: {body.status}")
+    if body.status == "not_required" and action not in OPTIONAL_CHECKLIST_ACTIONS:
+        raise HTTPException(422, "This preparation action is required and cannot be marked not required")
+    if body.status in {"complete", "not_required"} and len((body.note or "").strip()) < 12:
+        raise HTTPException(422, "Record a meaningful operator note for this completion or exception")
+    build, job = await lock_manual_build_then_getting_started_job(db, build_id)
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if _manual_build_has_physical_handover(build):
+        raise HTTPException(409, "The dispatch checklist is locked after courier handover")
+    if action == "windows_deployment_completed":
+        if body.status != "complete":
+            raise HTTPException(422, "Windows deployment must be verified complete before dispatch; it cannot be marked not required")
+        deployment = body.windows_deployment_evidence
+        if deployment is None:
+            raise HTTPException(422, "Import the read-only Windows deployment evidence report")
+        if deployment.build_id != build_id:
+            raise HTTPException(422, "The Windows evidence report belongs to a different build")
+        if deployment.build_name != build.name:
+            raise HTTPException(422, "The Windows evidence report build name does not match this build")
+        if any(not value.strip() for value in (
+            deployment.target_drive_model,
+            deployment.target_drive_serial,
+            deployment.installation_method,
+        )):
+            raise HTTPException(422, "Target-drive details and installation method cannot be blank")
+        try:
+            verified_at = datetime.fromisoformat(deployment.verified_at_utc.replace("Z", "+00:00"))
+        except ValueError as error:
+            raise HTTPException(422, "The Windows evidence timestamp is invalid") from error
+        if verified_at.tzinfo is None:
+            raise HTTPException(422, "The Windows evidence timestamp must include a timezone")
+        age = datetime.now(timezone.utc) - verified_at.astimezone(timezone.utc)
+        if age.total_seconds() < -300 or age > timedelta(days=30):
+            raise HTTPException(422, "The Windows evidence report must be current (no more than 30 days old)")
+        if len((body.note or "").strip()) < 12:
+            raise HTTPException(422, "Add an operator note describing the Windows deployment verification")
+    if not job:
+        raise HTTPException(404, "Getting Ready job not found")
+    if action == "component_manuals_reviewed" and body.status == "complete":
+        if not isinstance(job.manifest, dict):
+            raise HTTPException(409, "Generate the component manual review list before recording its review")
+        missing_models = missing_component_manual_models(build.components or [], job.manifest)
+        if missing_models:
+            raise HTTPException(
+                409,
+                "Regenerate the manual review list; it is missing exact build models: "
+                + ", ".join(missing_models),
+            )
+    if action == "driver_firmware_reviewed" and body.status == "complete":
+        if not isinstance(job.manifest, dict):
+            raise HTTPException(409, "Generate the driver and firmware review list before recording its review")
+        try:
+            validated_driver_outcomes = validate_component_driver_outcomes(
+                build.components or [], job.manifest, body.driver_firmware_outcomes
+            )
+        except ValueError as error:
+            raise HTTPException(409, str(error)) from error
+    if action == "drivers_updates_complete" and body.status == "complete":
+        checklist_before_update = checklist_with_defaults(job.checklist, job.purchased_ai_services)
+        if checklist_before_update.get("driver_firmware_reviewed") != "complete":
+            raise HTTPException(409, "Complete the per-component driver and firmware review before recording installation")
+        if not isinstance(job.manifest, dict):
+            raise HTTPException(409, "Generate the driver and firmware review list before recording installation")
+        try:
+            validate_component_driver_outcomes(
+                build.components or [],
+                job.manifest,
+                checklist_before_update.get("_driver_firmware_outcomes"),
+            )
+        except ValueError as error:
+            raise HTTPException(409, str(error)) from error
+    try:
+        validate_ai_setup_checklist_update(
+            action=action,
+            status=body.status,
+            purchased_ai_services=job.purchased_ai_services,
+            scope_confirmed=body.confirm_paid_ai_scope,
+        )
+    except ValueError as error:
+        raise HTTPException(409, str(error)) from error
+    checklist = checklist_with_defaults(job.checklist, job.purchased_ai_services)
+    target_identity_changed = False
+    leaflet_portal_grant_id = None
+    if action == "leaflet_printed" and body.status == "complete":
+        grant_required, portal_grant = await _portal_grant_required_for_build(db, build)
+        if grant_required and portal_grant is None:
+            raise HTTPException(409, "Issue the final buyer portal claim before printing and recording its QR leaflet")
+        leaflet_portal_grant_id = portal_grant.id if portal_grant else None
+    if action == "windows_target_confirmed":
+        target = body.windows_target
+        if body.status != "complete" or target is None:
+            raise HTTPException(422, "Record and confirm the intended new-build drive before installing Windows")
+        if not target.model.strip() or not target.serial.strip():
+            raise HTTPException(422, "The intended target drive model and serial are required")
+        try:
+            inspected_at = datetime.fromisoformat(target.inspected_at_utc.replace("Z", "+00:00"))
+        except ValueError as error:
+            raise HTTPException(422, "The target-drive inspection timestamp is invalid") from error
+        if inspected_at.tzinfo is None:
+            raise HTTPException(422, "The target-drive inspection timestamp must include a timezone")
+        age = datetime.now(timezone.utc) - inspected_at.astimezone(timezone.utc)
+        if age.total_seconds() < -300 or age > timedelta(days=30):
+            raise HTTPException(422, "Recheck the target drive; the recorded inspection must be current")
+        prior_target = checklist.get("windows_target")
+        target_identity_changed = not isinstance(prior_target, dict) or (
+            str(prior_target.get("serial", "")).strip().casefold() != target.serial.strip().casefold()
+            or str(prior_target.get("model", "")).strip().casefold() != target.model.strip().casefold()
+        )
+        if isinstance(prior_target, dict) and (
+            str(prior_target.get("serial", "")).strip().casefold() != target.serial.strip().casefold()
+            or str(prior_target.get("model", "")).strip().casefold() != target.model.strip().casefold()
+        ):
+            checklist["windows_deployment_completed"] = "not_ready"
+        checklist["windows_target"] = target.model_dump(mode="json")
+    elif action == "windows_deployment_completed":
+        target = checklist.get("windows_target")
+        deployment = body.windows_deployment_evidence
+        if not isinstance(target, dict) or deployment is None:
+            raise HTTPException(409, "Record and confirm the intended target drive before installing Windows")
+        if (
+            str(target.get("serial", "")).strip().casefold() != deployment.target_drive_serial.strip().casefold()
+            or str(target.get("model", "")).strip().casefold() != deployment.target_drive_model.strip().casefold()
+        ):
+            raise HTTPException(409, "The installed Windows system drive does not match the target recorded before installation")
+        try:
+            target_inspected_at = datetime.fromisoformat(str(target.get("inspected_at_utc") or "").replace("Z", "+00:00"))
+            system_verified_at = datetime.fromisoformat(deployment.verified_at_utc.replace("Z", "+00:00"))
+        except ValueError as error:
+            raise HTTPException(409, "The pre-install target inspection time is invalid") from error
+        if target_inspected_at.tzinfo is None or system_verified_at.tzinfo is None:
+            raise HTTPException(409, "The target inspection and Windows evidence must include timezone-aware timestamps")
+        install_gap = system_verified_at.astimezone(timezone.utc) - target_inspected_at.astimezone(timezone.utc)
+        if install_gap.total_seconds() < 0:
+            raise HTTPException(409, "The target drive must be recorded before Windows is installed")
+        if install_gap > timedelta(days=30):
+            raise HTTPException(409, "Reconfirm the target drive; its inspection is more than 30 days before this installation")
+    checklist[action] = body.status
+    if action == "driver_firmware_reviewed" and body.status != "complete":
+        checklist["drivers_updates_complete"] = "not_ready"
+        checklist["_driver_firmware_outcomes"] = []
+    elif action == "driver_firmware_reviewed" and body.status == "complete":
+        reviewed_at = datetime.utcnow().isoformat()
+        reviewer = getattr(admin, "email", None) or "admin"
+        checklist["_driver_firmware_outcomes"] = [
+            {**item, "reviewed_by": reviewer, "reviewed_at": reviewed_at}
+            for item in validated_driver_outcomes
+        ]
+    audit = list(checklist.get("_audit") or [])
+    audit.append({
+        "action": action,
+        "status": body.status,
+        "note": body.note,
+        "evidence_ref": body.evidence_ref,
+        "paid_ai_scope_confirmed": (
+            body.confirm_paid_ai_scope
+            if action == "ai_services_complete" and body.status == "complete" and job.purchased_ai_services
+            else None
+        ),
+        "windows_deployment_evidence": (
+            body.windows_deployment_evidence.model_dump(mode="json")
+            if action == "windows_deployment_completed" and body.windows_deployment_evidence is not None
+            else None
+        ),
+        "windows_target": (
+            body.windows_target.model_dump(mode="json")
+            if action == "windows_target_confirmed" and body.windows_target is not None
+            else None
+        ),
+        "portal_grant_id": leaflet_portal_grant_id if action == "leaflet_printed" else None,
+        "driver_firmware_outcomes": (
+            checklist.get("_driver_firmware_outcomes")
+            if action == "driver_firmware_reviewed" and body.status == "complete"
+            else None
+        ),
+        "actor": getattr(admin, "email", None) or "admin",
+        "recorded_at": datetime.utcnow().isoformat(),
+    })
+    checklist["_audit"] = audit[-250:]
+    job.checklist = checklist
+    if action == "windows_target_confirmed" and target_identity_changed and any(
+        isinstance(item, dict) and item.get("category") == "customer_package"
+        for item in (job.artifact_index or [])
+    ):
+        invalidate_ready_to_ship_reviewed_package(
+            job,
+            build,
+            checklist_reset_keys=(
+                "content_manifest",
+                "artifacts_generated",
+                "artifacts_reviewed",
+                "customer_package",
+            ),
+        )
+        checklist = job.checklist
+    if checklist_dispatch_ready(checklist, job.purchased_ai_services):
+        job.status = "ready_for_delivery"
+    job.updated_at = datetime.utcnow()
+    await db.commit()
+    return {"action": action, "status": body.status, "checklist": checklist}
+
+
+@router.post("/{build_id}/getting-ready/approve-and-package", status_code=201)
+async def approve_and_assemble_getting_ready_package(
+    build_id: int,
+    body: GettingReadyPackageApproval,
+    admin=Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    """Approve reviewed content and deterministically create a private ZIP.
+
+    This action creates files only. It cannot install software, alter a PC,
+    publish externally, book a courier, or buy insurance.
+    """
+    if not body.confirm_manifest_reviewed or not body.confirm_customer_details_checked:
+        raise HTTPException(409, "Confirm the manifest review and customer/build details before creating the package")
+    build, job = await lock_manual_build_then_getting_started_job(db, build_id)
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if _manual_build_has_physical_handover(build):
+        raise HTTPException(409, "Getting Ready package approval is closed after physical handover")
+    if build.status != "sold":
+        raise HTTPException(409, "Create the customer package only after the build is sold")
+    if not job or not job.manifest or not job.generated_at:
+        raise HTTPException(409, "Generate the Getting Ready review manifest first")
+    checklist = checklist_with_defaults(job.checklist, job.purchased_ai_services)
+    if checklist.get("component_manuals_reviewed") != "complete":
+        raise HTTPException(409, "Review the exact-model manual results for every component and record the outcome before approving the customer package")
+    missing_models = missing_component_manual_models(build.components or [], job.manifest)
+    if missing_models:
+        raise HTTPException(
+            409,
+            "Regenerate the manual review list; it is missing exact build models: "
+            + ", ".join(missing_models),
+        )
+    windows_target = checklist.get("windows_target")
+    if checklist.get("windows_target_confirmed") != "complete" or not isinstance(windows_target, dict):
+        raise HTTPException(409, "Record and confirm the exact new-build drive in Dispatch Centre before approving the workshop package")
+    target_model = str(windows_target.get("model") or "").strip()
+    target_serial = str(windows_target.get("serial") or "").strip()
+    if not target_model or not target_serial:
+        raise HTTPException(409, "The recorded Windows target must include both drive model and serial")
+    try:
+        target_inspected_at = datetime.fromisoformat(
+            str(windows_target.get("inspected_at_utc") or "").replace("Z", "+00:00")
+        )
+    except ValueError as error:
+        raise HTTPException(409, "The recorded Windows target has an invalid inspection time; confirm it again") from error
+    if target_inspected_at.tzinfo is None:
+        raise HTTPException(409, "The recorded Windows target inspection time must include a timezone")
+    target_age = datetime.now(timezone.utc) - target_inspected_at.astimezone(timezone.utc)
+    if target_age.total_seconds() < -300 or target_age > timedelta(days=30):
+        raise HTTPException(409, "Reconfirm the intended Windows drive; its inspection must be current before package approval")
+    if job.order_id:
+        pending_ai_purchase = (await db.execute(
+            select(AISetupPurchase.id).where(
+                AISetupPurchase.order_id == job.order_id,
+                AISetupPurchase.status == "pending",
+            ).limit(1)
+        )).scalar_one_or_none()
+        if pending_ai_purchase:
+            raise HTTPException(409, "An AI setup payment is still pending. Reconcile it before approving the customer package")
+    if job.order_id and not (job.checklist or {}).get("software_selection_submitted"):
+        raise HTTPException(409, "Wait for the customer to save their software choices in the build portal before approving the package")
+    if (
+        not job.order_id
+        and not (job.checklist or {}).get("software_selection_submitted")
+        and not body.confirm_playbook_defaults_for_indirect_customer
+    ):
+        raise HTTPException(409, "Explicitly confirm that the Playbook's recommended software list will be used for this indirect-channel customer")
+    evidence = dict(build.evidence_data or {})
+    ready_evidence = dict(evidence.get("getting_ready") or {})
+    source_inputs = dict(ready_evidence.get("source_inputs") or {})
+    existing_packages = [
+        item for item in (job.artifact_index or [])
+        if item.get("category") in {"customer_package", "superseded_customer_package"}
+    ]
+    version = max([int(item.get("version") or 0) for item in existing_packages] or [0]) + 1
+    settings = get_settings()
+    portal_url = f"{settings.frontend_url.rstrip('/')}/my-builds/{job.order_id}" if job.order_id else None
+    active_leaflet_grant = (await db.execute(
+        select(PortalAccessGrant)
+        .where(
+            PortalAccessGrant.manual_build_id == build.id,
+            PortalAccessGrant.claimed_at.is_(None),
+            PortalAccessGrant.revoked.is_(False),
+            PortalAccessGrant.expires_at >= datetime.utcnow(),
+            PortalAccessGrant.leaflet_storage_key.isnot(None),
+        )
+        .order_by(PortalAccessGrant.created_at.desc(), PortalAccessGrant.id.desc())
+        .limit(1)
+    )).scalar_one_or_none()
+    portal_leaflet_path = None
+    if active_leaflet_grant and active_leaflet_grant.leaflet_storage_key:
+        try:
+            portal_leaflet_path = package_path(active_leaflet_grant.leaflet_storage_key)
+        except GettingReadyPackageError as error:
+            raise HTTPException(409, str(error)) from error
+    cached_manual_snapshots = list(source_inputs.get("cached_component_manuals") or [])
+    from app.services.component_manual_library import matching_manuals
+    cached_manual_ids = {
+        int(item["manual_id"])
+        for item in cached_manual_snapshots
+        if isinstance(item, dict) and str(item.get("manual_id", "")).isdigit()
+    }
+    cached_manual_files: list[dict] = []
+    if cached_manual_ids:
+        cached_rows = (await db.execute(
+            select(ComponentManual).where(ComponentManual.id.in_(cached_manual_ids))
+        )).scalars().all()
+        current_matches = matching_manuals(build.components or [], cached_rows)
+        current_by_id = {int(item["manual_id"]): item for item in current_matches}
+        snapshot_by_id = {
+            int(item["manual_id"]): item for item in cached_manual_snapshots
+            if isinstance(item, dict) and str(item.get("manual_id", "")).isdigit()
+        }
+        if len(cached_rows) != len(cached_manual_ids) or set(current_by_id) != cached_manual_ids:
+            raise HTTPException(409, "A cached component manual changed or no longer exactly matches this build. Regenerate and review the manifest.")
+        for manual in cached_rows:
+            snapshot = snapshot_by_id.get(manual.id)
+            if (not manual.is_active or not snapshot
+                    or snapshot.get("sha256") != manual.sha256
+                    or snapshot.get("component_key") != manual.component_key):
+                raise HTTPException(409, "A cached component manual changed after manifest generation. Regenerate and review the manifest.")
+            try:
+                manual_file_path = package_path(manual.storage_key)
+                manual_content = manual_file_path.read_bytes()
+            except (GettingReadyPackageError, OSError) as error:
+                raise HTTPException(409, "A matched cached component manual is unavailable. Regenerate and review the manifest.") from error
+            if hashlib.sha256(manual_content).hexdigest() != manual.sha256:
+                raise HTTPException(409, "A matched cached component manual failed its SHA-256 check.")
+            cached_manual_files.append({
+                "id": manual.id,
+                "component_key": manual.component_key,
+                "component_name": manual.component_name,
+                "source_url": manual.source_url,
+                "filename": manual.filename,
+                "sha256": manual.sha256,
+                "content": manual_content,
+            })
+    windows_license_key = await _assigned_windows_pro_key(db, build.id, job)
+    if windows_license_key and not body.confirm_windows_license_handling:
+        raise HTTPException(409, "Confirm that the assigned Windows licence helper will be downloaded separately from Dispatch Centre, never stored in the package or sent to AI/customer documents, and removed from the USB folder after installation")
+    try:
+        package = assemble_getting_ready_package(
+            build_id=build.id,
+            build_name=build.name,
+            version=version,
+            specification=list(build.components or []),
+            benchmark_results=evidence.get("benchmark_results") or evidence.get("performance_card"),
+            manifest=dict(job.manifest),
+            software_package_ids=list(job.customer_software_selections or []),
+            source_inputs=source_inputs,
+            portal_url=portal_url,
+            portal_leaflet_path=portal_leaflet_path,
+            cached_component_manuals=cached_manual_files,
+            windows_license_key_present=bool(windows_license_key),
+            target_drive_model=target_model,
+            target_drive_serial=target_serial,
+            target_drive_inspected_at_utc=target_inspected_at.isoformat(),
+        )
+    except (GettingReadyPackageError, ValueError) as error:
+        raise HTTPException(409, str(error)) from error
+
+    artifact = {
+        "id": uuid.uuid4().hex,
+        "category": "customer_package",
+        **package,
+        "windows_license_helper_required": bool(windows_license_key),
+        "reviewed_by": getattr(admin, "email", None) or "admin",
+        "reviewed_at": datetime.utcnow().isoformat(),
+    }
+    job.artifact_index = [*(job.artifact_index or []), artifact]
+    job.private_storage_key = package["storage_key"]
+    job.reviewed_at = datetime.utcnow()
+    job.status = "package_ready"
+    job.admin_notes = body.reviewer_notes
+    package_checklist = {
+        **checklist_with_defaults(job.checklist, job.purchased_ai_services),
+        "customer_selections_locked": "complete",
+        "content_manifest": "complete",
+        "artifacts_generated": "complete",
+        "artifacts_reviewed": "complete",
+        "customer_package": "complete",
+    }
+    job.checklist = package_checklist
+    if windows_license_key:
+        audit = list(job.checklist.get("_audit") or [])
+        audit.append({
+            "action": "windows_license_helper_required",
+            "status": "complete",
+            "note": "Administrator confirmed that the order-assigned key will be downloaded separately and excluded from the ZIP, LLM and customer documents.",
+            "actor": getattr(admin, "email", None) or "admin",
+            "recorded_at": datetime.utcnow().isoformat(),
+        })
+        job.checklist["_audit"] = audit[-250:]
+    if not job.order_id and not package_checklist.get("software_selection_submitted"):
+        # Indirect-channel buyers may not have an authenticated FlipFlop
+        # account. Package review is the explicit operator acceptance of the
+        # Playbook defaults for those builds.
+        package_checklist["software_selection_submitted"] = True
+        package_checklist["_software_selection_decision"] = {
+            "source": "admin_accepted_playbook_defaults",
+            "operator_confirmed": True,
+            "actor": getattr(admin, "email", None) or "admin",
+            "recorded_at": datetime.utcnow().isoformat(),
+            "software_package_ids": list(job.customer_software_selections or []),
+        }
+    job.checklist = package_checklist
+    if checklist_dispatch_ready(job.checklist, job.purchased_ai_services):
+        job.status = "ready_for_delivery"
+    job.updated_at = datetime.utcnow()
+    ready_evidence["package"] = {
+        key: value for key, value in package.items()
+        if key not in {"storage_key", "workshop_storage_key"}
+    }
+    ready_evidence["status"] = "package_ready"
+    evidence["getting_ready"] = ready_evidence
+    build.evidence_data = evidence
+    build.updated_at = datetime.utcnow()
+    await _commit_getting_ready_package_approval(db, package, build_id=build.id)
+    return {
+        **package,
+        "windows_license_helper_required": bool(windows_license_key),
+        "download_url": f"/api/manual-builds/{build.id}/getting-ready/package/{version}",
+    }
+
+
+@router.post("/{build_id}/getting-ready/windows-license-helper")
+async def download_windows_license_helper(
+    build_id: int,
+    body: WindowsLicenseHelperRequest,
+    admin=Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    """Release a one-build Windows key helper only after explicit admin confirmation.
+
+    The response is generated in memory and is never stored in the ZIP, logs,
+    or customer document index.
+    """
+    if not body.confirm_private_key_release:
+        raise HTTPException(409, "Confirm the private Windows key release before downloading the helper")
+    build = await db.get(ManualBuild, build_id)
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if _manual_build_has_physical_handover(build):
+        raise HTTPException(409, "Windows licence helper release is closed after physical handover")
+    if build.status != "sold":
+        raise HTTPException(409, "The private Windows licence helper is available only after the build is sold")
+    job = (await db.execute(
+        select(GettingStartedJob).where(GettingStartedJob.manual_build_id == build_id)
+    )).scalar_one_or_none()
+    if not job:
+        raise HTTPException(409, "Getting Ready job is not linked to this build")
+    latest_reviewed_package = max(
+        [item for item in (job.artifact_index or []) if item.get("category") == "customer_package"],
+        key=lambda item: int(item.get("version") or 0),
+        default=None,
+    )
+    if not latest_reviewed_package or not latest_reviewed_package.get("windows_license_helper_required"):
+        raise HTTPException(409, "The latest reviewed package does not expect a Windows licence helper")
+    key = await _assigned_windows_pro_key(db, build_id, job)
+    if not key:
+        raise HTTPException(404, "No Windows Pro licence is assigned to this order")
+    from app.services.software_catalogue import create_windows_license_activation_script
+    script = create_windows_license_activation_script(key)
+    checklist = checklist_with_defaults(job.checklist, job.purchased_ai_services)
+    audit = list(checklist.get("_audit") or [])
+    audit.append({
+        "action": "windows_license_helper_downloaded",
+        "status": "complete",
+        "note": "A one-build Windows Pro activation helper was released to the authenticated administrator; the key is not stored in this audit record.",
+        "actor": getattr(admin, "email", None) or "admin",
+        "recorded_at": datetime.utcnow().isoformat(),
+    })
+    checklist["_audit"] = audit[-250:]
+    job.checklist = checklist
+    job.updated_at = datetime.utcnow()
+    await db.commit()
+    return Response(
+        content=script,
+        media_type="text/plain; charset=utf-8",
+        headers={
+            "Content-Disposition": f'attachment; filename="FlipFlop-Build-{build_id}-install-windows-license.ps1"',
+            "Cache-Control": "private, no-store, max-age=0",
+            "Pragma": "no-cache",
+            "X-Content-Type-Options": "nosniff",
+            "Referrer-Policy": "no-referrer",
+        },
+    )
+
+
+@router.get("/{build_id}/getting-ready/software-script")
+async def download_getting_ready_software_script(
+    build_id: int,
+    admin=Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    """Generate the reviewed machine-scope script from the locked saved selection."""
+    build, job = await lock_manual_build_then_getting_started_job(db, build_id)
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if _manual_build_has_physical_handover(build):
+        raise HTTPException(409, "Software script download is closed after physical handover")
+    if build.status != "sold":
+        raise HTTPException(409, "The software script is available only after the build is sold")
+    if not job or not (job.checklist or {}).get("software_selection_submitted"):
+        raise HTTPException(409, "Submit customer software choices or confirm the indirect-channel Playbook defaults first")
+    latest_package = max(
+        [item for item in (job.artifact_index or []) if item.get("category") == "customer_package"],
+        key=lambda item: int(item.get("version") or 0),
+        default=None,
+    )
+    if not latest_package or not job.reviewed_at:
+        raise HTTPException(409, "Approve and create the reviewed workshop package before downloading its software script")
+    try:
+        script = create_software_install_script(list(job.customer_software_selections or []))
+    except ValueError as error:
+        raise HTTPException(409, "The saved software selection is invalid; regenerate and review the package") from error
+    return Response(
+        content=script,
+        media_type="text/plain; charset=utf-8",
+        headers={
+            "Content-Disposition": f'attachment; filename="FlipFlop-Build-{build_id}-software-install.ps1"',
+            "Cache-Control": "private, no-store, max-age=0",
+            "Pragma": "no-cache",
+            "X-Content-Type-Options": "nosniff",
+            "Referrer-Policy": "no-referrer",
+        },
+    )
+
+
+@router.get("/{build_id}/getting-ready/package/{version}")
+async def download_getting_ready_package(
+    build_id: int,
+    version: int,
+    admin=Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    build = await db.get(ManualBuild, build_id)
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if build.status != "sold":
+        raise HTTPException(409, "The customer package is available only after the build is sold")
+    job = (await db.execute(
+        select(GettingStartedJob).where(GettingStartedJob.manual_build_id == build_id)
+    )).scalar_one_or_none()
+    artifact = next((
+        item for item in (job.artifact_index or [])
+        if item.get("category") == "customer_package" and int(item.get("version") or 0) == version
+    ), None) if job else None
+    if not artifact:
+        raise HTTPException(404, "Getting Ready package not found")
+    # New packages keep the customer ZIP and workshop USB ZIP separate. Older
+    # package records have only storage_key and remain downloadable as before.
+    storage_key = artifact.get("workshop_storage_key") or artifact.get("storage_key")
+    filename = artifact.get("workshop_filename") or artifact.get("filename")
+    if not storage_key or not filename:
+        raise HTTPException(404, "Getting Ready workshop package not found")
+    try:
+        path = package_path(str(storage_key))
+    except GettingReadyPackageError as error:
+        raise HTTPException(404, str(error)) from error
+    if not path.is_file():
+        raise HTTPException(404, "Getting Ready package file is missing")
+    return FileResponse(
+        path,
+        media_type="application/zip",
+        filename=str(filename),
+        headers={"Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff"},
+    )
+
+
+@router.get("/{build_id}/getting-ready/dispatch-checklist")
+async def download_getting_ready_dispatch_checklist(
+    build_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    """Serve the operator-only checklist separately from the customer ZIP."""
+    build = await db.get(ManualBuild, build_id)
+    if not build:
+        raise HTTPException(404, "Build not found")
+    try:
+        checklist = render_dispatch_checklist(build.name)
+    except GettingReadyPackageError as error:
+        raise HTTPException(500, "Dispatch checklist template is unavailable") from error
+    return Response(
+        content=checklist,
+        media_type="text/markdown; charset=utf-8",
+        headers={
+            "Content-Disposition": f'attachment; filename="FlipFlop-Build-{build_id}-dispatch-checklist.md"',
+            "Cache-Control": "private, no-store, max-age=0",
+            "Pragma": "no-cache",
+            "X-Content-Type-Options": "nosniff",
+        },
+    )
+
+
+@router.post("/{build_id}/getting-ready/evidence", status_code=201)
+async def upload_dispatch_evidence(
+    build_id: int,
+    category: str = Form(...),
+    file: UploadFile = File(...),
+    admin: AdminUser = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    """Store private dispatch photos/videos for later insurance evidence."""
+    build, job = await lock_manual_build_then_getting_started_job(db, build_id)
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if build.status != "sold":
+        raise HTTPException(409, "Shipment evidence is available only after the build is sold")
+    if _manual_build_has_physical_handover(build):
+        raise HTTPException(409, "Dispatch evidence must be captured before courier handover.")
+    if build.shipment_booking_state != "booked" or not build.tracking_number or not build.shipment_booked_at:
+        raise HTTPException(409, "Book the signed-for courier and obtain tracking before uploading shipment evidence.")
+    if category not in {"working_pc", "package_contents", "sealed_package"}:
+        raise HTTPException(422, "category must be working_pc, package_contents or sealed_package")
+    media_types = {
+        "image/jpeg": ("jpg", b"\xff\xd8\xff"),
+        "image/png": ("png", b"\x89PNG\r\n\x1a\n"),
+        "image/webp": ("webp", b"RIFF"),
+        "video/mp4": ("mp4", b"ftyp"),
+        "video/quicktime": ("mov", b"ftyp"),
+        "video/webm": ("webm", b"\x1a\x45\xdf\xa3"),
+    }
+    content_type = file.content_type or ""
+    if content_type not in media_types:
+        raise HTTPException(415, "Upload a JPEG, PNG, WebP, MP4, MOV, or WebM file")
+    if category != "working_pc" and content_type.startswith("video/"):
+        raise HTTPException(415, "Contents-before-packing and sealed-parcel evidence must be still images")
+    suffix, signature = media_types[content_type]
+    max_bytes = _MAX_DISPATCH_VIDEO_BYTES if content_type.startswith("video/") else _MAX_IMAGE_BYTES
+    artifact_id = uuid.uuid4().hex
+    build_dir = (_PRIVATE_DISPATCH_ROOT / str(build_id)).resolve()
+    build_dir.mkdir(parents=True, exist_ok=True)
+    destination = (build_dir / f"{artifact_id}.{suffix}").resolve()
+    if _PRIVATE_DISPATCH_ROOT.resolve() not in destination.parents:
+        raise HTTPException(400, "Invalid evidence path")
+
+    digest = hashlib.sha256()
+    size = 0
+    first_chunk = True
+    try:
+        with destination.open("wb") as output:
+            while chunk := await file.read(1024 * 1024):
+                size += len(chunk)
+                if size > max_bytes:
+                    raise HTTPException(413, f"Evidence file exceeds the {max_bytes // (1024 * 1024)} MB limit")
+                if first_chunk:
+                    if content_type in {"video/mp4", "video/quicktime"}:
+                        valid_signature = b"ftyp" in chunk[:16]
+                    elif content_type == "image/webp":
+                        valid_signature = len(chunk) >= 12 and chunk[:4] == b"RIFF" and chunk[8:12] == b"WEBP"
+                    else:
+                        valid_signature = chunk.startswith(signature)
+                    if not valid_signature:
+                        raise HTTPException(415, "The file contents do not match the selected media type")
+                    first_chunk = False
+                digest.update(chunk)
+                output.write(chunk)
+        if size == 0:
+            raise HTTPException(400, "Evidence file is empty")
+    except Exception:
+        destination.unlink(missing_ok=True)
+        raise
+
+    commit_attempted = False
+    try:
+        result = await db.execute(select(GettingStartedJob).where(GettingStartedJob.manual_build_id == build_id))
+        job = result.scalar_one_or_none()
+        if job is None:
+            job = GettingStartedJob(
+                manual_build_id=build_id,
+                customer_id=build.customer_id,
+                source_type="ready_to_ship",
+                status="awaiting_admin_review",
+                checklist=checklist_with_defaults(None),
+            )
+            db.add(job)
+        artifacts = list(job.artifact_index or [])
+        artifacts.append({
+            "id": artifact_id,
+            "category": category,
+            "filename": Path(file.filename or f"evidence.{suffix}").name[:160],
+            "content_type": content_type,
+            "size_bytes": size,
+            "sha256": digest.hexdigest(),
+            "storage_key": f"{build_id}/{artifact_id}.{suffix}",
+            "uploaded_at": datetime.utcnow().isoformat(),
+            "uploaded_by_admin_id": admin.id,
+            "uploaded_by_admin_name": admin.name,
+        })
+        job.artifact_index = artifacts
+        category_action = {
+            "working_pc": "working_pc_photo",
+            "package_contents": "package_contents_photo",
+            "sealed_package": "sealed_package_photo",
+        }[category]
+        artifacts[-1]["review_status"] = "needs_review"
+        job.checklist = {
+            **checklist_with_defaults(job.checklist, job.purchased_ai_services),
+            category_action: "needs_review",
+        }
+        job.status = "awaiting_admin_review"
+        commit_attempted = True
+        await db.commit()
+    except BaseException:
+        try:
+            await db.rollback()
+        except BaseException:
+            pass
+        if not commit_attempted:
+            destination.unlink(missing_ok=True)
+        else:
+            # A lost connection during COMMIT has an uncertain outcome: the
+            # database may have committed the metadata. Keep the file so that
+            # a committed artifact reference can never point at deleted bytes.
+            log.error(
+                "dispatch_evidence_commit_outcome_uncertain",
+                build_id=build_id,
+                artifact_id=artifact_id,
+                storage_key=f"{build_id}/{artifact_id}.{suffix}",
+            )
+        raise
+    return {"id": artifact_id, "category": category, "content_type": content_type, "size_bytes": size}
+
+
+@router.get("/{build_id}/getting-ready/evidence/{artifact_id}")
+async def download_dispatch_evidence(
+    build_id: int,
+    artifact_id: str,
+    db: AsyncSession = Depends(get_db),
+):
+    job = (await db.execute(
+        select(GettingStartedJob).where(GettingStartedJob.manual_build_id == build_id)
+    )).scalar_one_or_none()
+    artifact = next((item for item in (job.artifact_index or []) if item.get("id") == artifact_id), None) if job else None
+    if not artifact:
+        raise HTTPException(404, "Evidence file not found")
+    storage_root = _PRIVATE_DISPATCH_ROOT.resolve()
+    build_directory = (storage_root / str(build_id)).resolve()
+    path = (_PRIVATE_DISPATCH_ROOT / str(artifact.get("storage_key") or "")).resolve()
+    if (
+        storage_root not in build_directory.parents
+        or storage_root not in path.parents
+        or build_directory not in path.parents
+        or not path.is_file()
+    ):
+        raise HTTPException(404, "Evidence file not found")
+    evidence_file = None
+    try:
+        expected_size = int(artifact.get("size_bytes"))
+        expected_digest = str(artifact.get("sha256") or "")
+        evidence_file = path.open("rb")
+        if os.fstat(evidence_file.fileno()).st_size != expected_size:
+            raise HTTPException(409, "Evidence file changed after upload; re-upload it before review")
+        digest = hashlib.sha256()
+        while chunk := evidence_file.read(1024 * 1024):
+            digest.update(chunk)
+        if not expected_digest or digest.hexdigest() != expected_digest:
+            raise HTTPException(409, "Evidence file checksum mismatch; re-upload it before review")
+        evidence_file.seek(0)
+    except HTTPException:
+        if evidence_file is not None:
+            evidence_file.close()
+        raise
+    except (OSError, TypeError, ValueError) as exc:
+        if evidence_file is not None:
+            evidence_file.close()
+        raise HTTPException(409, "Evidence file metadata is invalid; re-upload it before review") from exc
+
+    def stream_verified_file():
+        try:
+            while chunk := evidence_file.read(1024 * 1024):
+                yield chunk
+        finally:
+            evidence_file.close()
+
+    filename = str(artifact.get("filename") or "shipment-evidence")
+    return StreamingResponse(
+        stream_verified_file(),
+        media_type=artifact.get("content_type"),
+        headers={
+            "Cache-Control": "private, no-store",
+            "Pragma": "no-cache",
+            "X-Content-Type-Options": "nosniff",
+            "Content-Disposition": f"attachment; filename*=UTF-8''{quote(filename, safe='')}",
+            "Content-Length": str(expected_size),
+        },
+        background=BackgroundTask(evidence_file.close),
+    )
+
+
+@router.post("/{build_id}/getting-ready/evidence/{artifact_id}/review")
+async def review_dispatch_evidence(
+    build_id: int,
+    artifact_id: str,
+    body: ReviewDispatchEvidenceRequest,
+    db: AsyncSession = Depends(get_db),
+    admin: AdminUser = Depends(get_current_admin),
+):
+    """Record an explicit admin review before evidence can satisfy shipment gates."""
+    build, job = await lock_manual_build_then_getting_started_job(db, build_id)
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if build.status != "sold":
+        raise HTTPException(409, "Shipment evidence can be reviewed only after the build is sold")
+    if _manual_build_has_physical_handover(build):
+        raise HTTPException(409, "Shipment evidence cannot be reviewed after courier handover")
+    artifacts = deepcopy(job.artifact_index or []) if job else []
+    artifact = next((item for item in artifacts if item.get("id") == artifact_id), None)
+    if not artifact or artifact.get("category") not in {"working_pc", "package_contents", "sealed_package"}:
+        raise HTTPException(404, "Shipment evidence not found")
+    path = (_PRIVATE_DISPATCH_ROOT / str(artifact.get("storage_key") or "")).resolve()
+    if _PRIVATE_DISPATCH_ROOT.resolve() not in path.parents or not path.is_file():
+        raise HTTPException(404, "Shipment evidence file not found")
+    review_digest = hashlib.sha256()
+    with path.open("rb") as evidence_file:
+        while chunk := evidence_file.read(1024 * 1024):
+            review_digest.update(chunk)
+    if review_digest.hexdigest() != artifact.get("sha256"):
+        raise HTTPException(409, "Evidence checksum mismatch; upload the file again before review")
+
+    artifact.update({
+        "review_status": "approved" if body.approved else "rejected",
+        "reviewed_at": datetime.utcnow().isoformat(),
+        "reviewed_by_admin_id": admin.id,
+        "reviewed_by_admin_name": admin.name,
+        "review_note": body.note.strip(),
+    })
+    category_actions = {
+        "working_pc": ("working_pc_photo", ("image/", "video/")),
+        "package_contents": ("package_contents_photo", ("image/",)),
+        "sealed_package": ("sealed_package_photo", ("image/",)),
+    }
+    action, allowed_prefixes = category_actions[artifact["category"]]
+    approved_copy_exists = any(
+        isinstance(item, dict)
+        and item.get("category") == artifact["category"]
+        and item.get("review_status") == "approved"
+        and str(item.get("content_type") or "").startswith(allowed_prefixes)
+        for item in artifacts
+    )
+    checklist = checklist_with_defaults(job.checklist, job.purchased_ai_services)
+    checklist[action] = "complete" if approved_copy_exists else "needs_review"
+    job.checklist = checklist
+    job.artifact_index = artifacts
+    job.status = "ready_for_delivery" if checklist_dispatch_ready(checklist, job.purchased_ai_services) else "awaiting_admin_review"
+    job.updated_at = datetime.utcnow()
+    await db.commit()
+    return {
+        "id": artifact_id,
+        "category": artifact["category"],
+        "review_status": artifact["review_status"],
+        "reviewed_at": artifact["reviewed_at"],
+        "reviewed_by_admin_id": admin.id,
+    }
 
 
 @router.get("/{build_id}", response_model=ManualBuildOut)
@@ -868,15 +2860,39 @@ async def get_build(build_id: int, db: AsyncSession = Depends(get_db)):
 
 @router.patch("/{build_id}", response_model=ManualBuildOut)
 async def patch_build(build_id: int, body: ManualBuildPatch, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
+    result = await db.execute(
+        select(ManualBuild).where(ManualBuild.id == build_id).with_for_update()
+    )
     build = result.scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
+    if _manual_build_has_physical_handover(build):
+        raise HTTPException(409, "Build identity and component specification are locked after physical handover")
+    if body.components is not None and build.status == "sold":
+        raise HTTPException(
+            409,
+            "A sold build's component specification cannot be edited directly; use an approved customer order-change flow",
+        )
     if body.name is not None:
         build.name = body.name
     if body.components is not None:
-        build.components = [c.model_dump() for c in body.components]
-        build.total_cost = sum(c.price_paid for c in body.components)
+        if build.creation_method == "ai":
+            existing_components = list(build.components or [])
+            if len(body.components) != len(existing_components):
+                raise HTTPException(422, "AI sourcing draft component slots cannot be added or removed through manual editing")
+            if any(component.slot != existing.get("slot") for component, existing in zip(body.components, existing_components)):
+                raise HTTPException(422, "AI sourcing draft slots cannot be changed through manual editing")
+            build.components = [
+                {**component.model_dump(), **{
+                    key: existing.get(key)
+                    for key in ("sourcing_candidate", "gem_classification", "gem_radar_listing_id")
+                    if key in existing
+                }, "purchased": existing.get("purchased", False)}
+                for component, existing in zip(body.components, existing_components)
+            ]
+        else:
+            build.components = [c.model_dump() for c in body.components]
+            build.total_cost = sum(c.price_paid for c in body.components)
     build.updated_at = datetime.utcnow()
     await db.flush()
     await db.refresh(build)
@@ -903,6 +2919,19 @@ async def purchase_build_component(
     if index is None:
         raise HTTPException(404, f"Component slot {slot} not found")
     component = dict(components[index])
+    if component.get("sourcing_candidate") and not component.get("purchased"):
+        if body.price_paid is None or body.price_paid == component.get("price_paid"):
+            raise HTTPException(409, "Enter the confirmed purchase price before recording this sourcing candidate as purchased.")
+        component["price_paid"] = body.price_paid
+        component["source"] = body.source or "Confirmed purchase"
+        component["purchased"] = True
+        component["sourcing_candidate"] = False
+        components[index] = component
+        build.components = components
+        build.total_cost = sum(float(item.get("price_paid") or 0) for item in components)
+        await db.flush()
+        await db.refresh(build)
+        return build
     if component.get("inventory_item_id"):
         component["purchased"] = True
         components[index] = component
@@ -947,7 +2976,11 @@ async def purchase_build_component(
     component["inventory_item_id"] = item.id
     components[index] = component
     build.components = components
-    build.total_cost = sum(float(existing.get("price_paid") or 0) for existing in components)
+    build.total_cost = sum(
+        float(existing.get("price_paid") or 0)
+        for existing in components
+        if build.creation_method != "ai" or existing.get("purchased")
+    )
     add_event(db, inventory_item_id=item.id, manual_build_id=build.id, event_type="purchased", quantity=1,
               detail={"source": item.source, "listing_url": item.listing_url})
     add_event(db, inventory_item_id=item.id, manual_build_id=build.id, event_type="reserved", quantity=1,
@@ -967,10 +3000,14 @@ async def delete_build(build_id: int, db: AsyncSession = Depends(get_db)):
     logged. Archiving keeps the row (and those eBay identifiers) intact so
     it can still be found and reconciled later.
     """
-    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
+    result = await db.execute(
+        select(ManualBuild).where(ManualBuild.id == build_id).with_for_update()
+    )
     build = result.scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
+    if _manual_build_has_physical_handover(build):
+        raise HTTPException(409, "A handed-over build cannot be archived or have its inventory released")
     from app.services.inventory_lifecycle import release_manual_build_inventory
     await release_manual_build_inventory(db, build, reason="draft archived")
     build.is_archived = True
@@ -1074,10 +3111,14 @@ low/mid/high = estimated resale prices in GBP. uplift = estimated price increase
 
 @router.post("/{build_id}/mark-built", response_model=ManualBuildOut)
 async def mark_built(build_id: int, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
+    result = await db.execute(
+        select(ManualBuild).where(ManualBuild.id == build_id).with_for_update()
+    )
     build = result.scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
+    if build.status not in {"in_progress", "built"}:
+        raise HTTPException(409, f"A build in {build.status!r} cannot transition to Built")
     if not build.components:
         raise HTTPException(400, "Build has no components")
 
@@ -1094,6 +3135,34 @@ async def mark_built(build_id: int, db: AsyncSession = Depends(get_db)):
 
     build.status = "built"
     build.updated_at = datetime.utcnow()
+    assignment = (build.evidence_data or {}).get("playbook_assignment") or {}
+    software_profile = assignment.get("software_profile") or {}
+    existing_job = (await db.execute(
+        select(GettingStartedJob).where(GettingStartedJob.manual_build_id == build.id)
+    )).scalar_one_or_none()
+    if existing_job is None:
+        db.add(GettingStartedJob(
+            manual_build_id=build.id,
+            customer_id=build.customer_id,
+            playbook_id=assignment.get("playbook_id"),
+            source_type="ready_to_ship",
+            status="awaiting_sale_and_customer_choices",
+            customer_software_selections=list(software_profile.get("recommended_package_ids") or []),
+            checklist={
+                "specification": "pending",
+                "benchmark_results": "pending",
+                "getting_started_guide": "pending",
+                "software_setup": "pending_customer_selection",
+                "drivers_and_firmware": "pending_review",
+                "component_manuals": "pending_research",
+                "upgrade_path": "pending",
+                "private_media_evidence": "pending",
+            },
+        ))
+    else:
+        existing_job.playbook_id = assignment.get("playbook_id") or existing_job.playbook_id
+        if not (existing_job.checklist or {}).get("software_selection_submitted") and software_profile:
+            existing_job.customer_software_selections = list(software_profile.get("recommended_package_ids") or [])
     from app.services.inventory_lifecycle import record_consumption
     await record_consumption(db, build)
 
@@ -1403,10 +3472,19 @@ async def generate_specifics(build_id: int, db: AsyncSession = Depends(get_db)):
 
 
 @router.patch("/{build_id}/collection-date")
-async def set_collection_date(build_id: int, body: CollectionDateInput, db: AsyncSession = Depends(get_db)):
-    build = await db.get(ManualBuild, build_id)
+async def set_collection_date(
+    build_id: int,
+    body: CollectionDateInput,
+    admin: AdminUser = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    build = (await db.execute(
+        select(ManualBuild).where(ManualBuild.id == build_id).with_for_update()
+    )).scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
+    if _manual_build_has_physical_handover(build):
+        raise HTTPException(409, "Collection cannot be changed after courier handover")
     build.collection_date = body.collection_date
     build.dispatch_status = "collection_scheduled"
     build.updated_at = datetime.utcnow()
@@ -1488,6 +3566,7 @@ async def get_courier_quote(
         courier_name=quote.courier_name, service_name=quote.service_name,
         price_gbp=quote.price_gbp, tracked=quote.tracked,
         estimated_days=quote.estimated_days, service_slug=quote.service_slug,
+        signature_tracking=quote.signature_tracking,
         protection_scope=quote.protection_scope,
         full_value_damage_cover=quote.full_value_damage_cover,
         protection_warning=quote.protection_warning,
@@ -1520,6 +3599,379 @@ async def get_build_insurance_quote(
     )
 
 
+@router.post("/{build_id}/insurance-policy")
+async def create_build_insurance_policy(
+    build_id: int,
+    body: CreateInsurancePolicyRequest,
+    db: AsyncSession = Depends(get_db),
+    admin=Depends(get_current_admin),
+):
+    """Create one actual provider policy after fresh quote and explicit confirmation."""
+    settings = get_settings()
+    if not settings.secursus_live_parcel_creation_enabled:
+        raise HTTPException(409, "Live insurance purchase is disabled until the provider approves this account and shipment use.")
+    if not all((
+        body.confirm_terms,
+        body.confirm_live_purchase,
+        body.confirm_customer_data_share,
+        body.confirm_signed_for_delivery,
+        body.confirm_double_packaging,
+        body.confirm_discreet_packaging,
+        body.confirm_rigid_outer_container,
+        body.confirm_contents_not_deducible,
+        body.confirm_direct_signature,
+        body.confirm_official_carrier_handover,
+    )):
+        raise HTTPException(422, "Confirm new double packaging, rigid outer packaging, discreet contents, direct signature, official carrier handover, insurer terms, customer data sharing, and the displayed premium before purchase.")
+
+    build = (await db.execute(
+        select(ManualBuild).where(ManualBuild.id == build_id).with_for_update()
+    )).scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if build.status != "sold":
+        raise HTTPException(409, "Insurance can be purchased only after the build is sold")
+    if build.shipping_insurance_policy_id:
+        return {
+            "status": "created",
+            "policy_id": build.shipping_insurance_policy_id,
+            "invoice_id": build.shipping_insurance_invoice_id,
+            "cost_gbp": build.shipping_insurance_cost_gbp,
+            "idempotent": True,
+        }
+    if build.shipping_insurance_status in {"creating", "creation_uncertain"}:
+        raise HTTPException(409, "A policy request may already have reached the insurer. Reconcile the provider account before retrying.")
+    if _manual_build_has_physical_handover(build):
+        raise HTTPException(409, "Insurance cannot be purchased after physical courier handover or delivery.")
+    if build.shipment_booking_state != "booked" or not build.tracking_number or not build.shipment_booked_at:
+        raise HTTPException(409, "Book the signed-for courier and obtain its tracking number before purchasing cover.")
+    booking_confirmation = (build.evidence_data or {}).get("shipment_booking_confirmation") or {}
+    if not booking_confirmation.get("signature_extra_included"):
+        raise HTTPException(409, "Obtain a fresh courier quote and book a service with the Signature extra before buying insurance")
+    evidence_job = (await db.execute(
+        select(GettingStartedJob).where(GettingStartedJob.manual_build_id == build.id)
+    )).scalar_one_or_none()
+    missing_photos = _missing_verified_dispatch_evidence(
+        evidence_job, build.id, INSURANCE_REQUIRED_PHOTO_CATEGORIES
+    )
+    if missing_photos:
+        raise HTTPException(
+            409,
+            "Approved pre-shipment photos are missing or have changed; re-upload and review: "
+            + ", ".join(missing_photos),
+        )
+
+    value_gbp = build.sale_price_actual
+    delivery = dict(build.buyer_address_json or {})
+    customer_email = build.customer_email
+    buyer_name = build.buyer_name or delivery.get("contact_name") or ""
+    linked_order = None
+    if build.storefront_product_id:
+        linked_order = (await db.execute(
+            select(Order)
+            .join(Product, Product.sold_order_id == Order.id)
+            .where(Product.id == build.storefront_product_id)
+            .limit(1)
+        )).scalar_one_or_none()
+    if linked_order:
+        value_gbp = linked_order.customer_price
+        customer = await db.get(Customer, linked_order.customer_id)
+        customer_email = customer_email or (customer.email if customer else None)
+        buyer_name = buyer_name or (customer.name if customer else "")
+        order_specs = linked_order.specs or {}
+        delivery = delivery or order_specs.get("delivery_address") or order_specs.get("shipping_address") or {}
+        if not delivery and customer and customer.address:
+            try:
+                parsed_address = json.loads(customer.address)
+                delivery = parsed_address if isinstance(parsed_address, dict) else {}
+            except (TypeError, ValueError):
+                delivery = {}
+    if not value_gbp or value_gbp <= 0:
+        raise HTTPException(409, "A confirmed paid sale value is required before insuring this parcel.")
+    if not customer_email or not buyer_name or not delivery:
+        raise HTTPException(409, "The buyer's verified name, email and delivery address must be on the order before insurance is created.")
+
+    country_map = {"GBR": "gb", "GB": "gb", "UK": "gb", "USA": "us", "US": "us"}
+    destination_country = str(delivery.get("country_code") or delivery.get("country") or "").strip().upper()
+    origin_country = str(settings.seller_address_country_iso or "GB").strip().upper()
+    destination_country = country_map.get(destination_country, destination_country.lower())
+    origin_country = country_map.get(origin_country, origin_country.lower())
+    if len(destination_country) != 2 or len(origin_country) != 2:
+        raise HTTPException(422, "The insurer requires valid two-letter origin and destination country codes.")
+
+    quote = await get_insurance_quote(value_gbp)
+    if str(quote.currency or "").upper() != "GBP":
+        raise HTTPException(502, "The insurer returned a premium outside GBP. No policy was created; check the provider configuration.")
+    if not _gbp_amounts_match_to_penny(quote.price_gbp, body.quoted_price_gbp):
+        raise HTTPException(409, f"The fresh premium is £{quote.price_gbp:.2f}; review and confirm the new price before buying.")
+
+    name_parts = buyer_name.strip().split(maxsplit=1)
+    first_name = name_parts[0]
+    last_name = name_parts[1] if len(name_parts) > 1 else first_name
+    address_lines = [
+        delivery.get("address_line1") or delivery.get("line1"),
+        delivery.get("address_line2") or delivery.get("line2"),
+        delivery.get("city"),
+        delivery.get("state_or_province") or delivery.get("county"),
+        delivery.get("postal_code") or delivery.get("postcode"),
+        delivery.get("country_name") or delivery.get("country") or destination_country.upper(),
+    ]
+    full_address = ", ".join(str(line).strip() for line in address_lines if line)
+    if not all([address_lines[0], address_lines[2], address_lines[4]]):
+        raise HTTPException(409, "The insurer requires a street address, town/city and postcode.")
+    cart_data = {
+        "build_id": build.id,
+        "build_name": build.name,
+        "sale_value_gbp": round(float(value_gbp), 2),
+        "components": build.components or [],
+        "tracking_number": build.tracking_number,
+    }
+    policy_payload = {
+        "parcel_value": round(float(value_gbp) * 100),
+        "first_name": first_name,
+        "last_name": last_name,
+        "email": customer_email,
+        "full_address": full_address,
+        "country_origin": origin_country,
+        "country_destination": destination_country,
+        "internal_reference": f"BUILD-{build.id}",
+        "cart_data": cart_data,
+        "recipient_email": customer_email,
+        "recipient_lang": "en",
+    }
+    if not booking_confirmation.get("signed_for_delivery_confirmed"):
+        booking_confirmation = {
+            "signed_for_delivery_confirmed": True,
+            "service_slug": build.parcel2go_service_slug,
+            "confirmed_at": datetime.utcnow().isoformat(),
+            "confirmed_during_insurance_purchase": True,
+        }
+        build.evidence_data = {
+            **(build.evidence_data or {}),
+            "shipment_booking_confirmation": booking_confirmation,
+        }
+    evidence_data = dict(build.evidence_data or {})
+    evidence_data["insurance_packaging_confirmation"] = {
+        "new_resistant_double_packaging_confirmed": True,
+        "rigid_outer_container_confirmed": True,
+        "contents_not_deducible_by_touch_confirmed": True,
+        "double_packaging_confirmed": True,
+        "discreet_packaging_confirmed": True,
+        "direct_signature_confirmed": True,
+        "official_carrier_handover_confirmed": True,
+        "confirmed_at": datetime.utcnow().isoformat(),
+        "confirmed_by": getattr(admin, "email", None) or "admin",
+    }
+    evidence_data["insurance_policy_creation"] = {
+        "started_at": datetime.now(timezone.utc).isoformat(),
+        "attempted_by": getattr(admin, "email", None) or "admin",
+        "attempted_by_admin_id": getattr(admin, "id", None),
+        "confirmed_premium_gbp": round(float(quote.price_gbp), 2),
+        "insured_value_gbp": round(float(value_gbp), 2),
+        "currency": quote.currency,
+    }
+    build.evidence_data = evidence_data
+    build.shipping_insurance_status = "creating"
+    await db.commit()
+
+    try:
+        policy = await create_insurance_policy(policy_payload)
+    except FiguralError as error:
+        locked = await db.get(ManualBuild, build_id)
+        if locked:
+            locked.shipping_insurance_status = "creation_uncertain" if (error.status_code or 500) >= 500 else "creation_failed"
+            await db.commit()
+        raise HTTPException(error.status_code or 502, str(error)) from error
+
+    locked = (await db.execute(select(ManualBuild).where(ManualBuild.id == build_id).with_for_update())).scalar_one()
+    response_mismatches = []
+    provider_policy_id = str(policy.policy_id or "").strip()
+    policy_id_usable = (
+        bool(provider_policy_id)
+        and len(provider_policy_id) <= 200
+        and not any(ord(character) < 32 or ord(character) == 127 for character in provider_policy_id)
+    )
+    if not policy_id_usable:
+        response_mismatches.append("provider policy ID is missing or invalid")
+    if not _gbp_amounts_match_to_penny(policy.insured_value_gbp, value_gbp):
+        response_mismatches.append("insured value differs from the recorded sale value")
+    if not _gbp_amounts_match_to_penny(policy.price_gbp, quote.price_gbp):
+        response_mismatches.append("provider premium differs from the confirmed quote")
+    if str(policy.currency or "").upper() != "GBP":
+        response_mismatches.append("provider currency is not GBP")
+    if str(policy.mode or "").casefold() != "production":
+        response_mismatches.append("provider policy is not in production mode")
+    if response_mismatches:
+        evidence = dict(locked.evidence_data or {})
+        attempt = dict(evidence.get("insurance_policy_creation") or {})
+        # Keep the returned provider reference for operator reconciliation,
+        # but do not attach it to the dispatch-valid policy fields until an
+        # administrator has checked the provider account and resolved it.
+        attempt["provider_response"] = {
+            "policy_id": provider_policy_id if policy_id_usable else None,
+            "invoice_id": policy.invoice_id,
+            "insured_value_gbp": policy.insured_value_gbp,
+            "price_gbp": policy.price_gbp,
+            "currency": policy.currency,
+            "mode": policy.mode,
+            "received_at": datetime.now(timezone.utc).isoformat(),
+            "mismatches": response_mismatches,
+        }
+        evidence["insurance_policy_creation"] = attempt
+        locked.evidence_data = evidence
+        locked.shipping_insurance_status = "creation_uncertain"
+        await db.commit()
+        raise HTTPException(
+            409,
+            f"The insurer returned policy {provider_policy_id if policy_id_usable else '(no usable policy reference)'}, but its policy ID, insured value, premium, currency or mode did not match live cover requirements. Dispatch remains blocked; check the provider account and reconcile this policy before proceeding.",
+        )
+
+    locked.shipping_insurance_policy_id = policy.policy_id
+    locked.shipping_insurance_invoice_id = policy.invoice_id
+    locked.shipping_insurance_cost_gbp = policy.price_gbp
+    locked.shipping_insurance_created_at = datetime.utcnow()
+    locked.shipping_insurance_status = "created"
+    locked.shipping_damage_cover_confirmed = True
+    await db.commit()
+    return {
+        "status": "created",
+        "policy_id": policy.policy_id,
+        "invoice_id": policy.invoice_id,
+        "insured_value_gbp": policy.insured_value_gbp,
+        "cost_gbp": policy.price_gbp,
+        "currency": policy.currency,
+        "mode": policy.mode,
+        "idempotent": False,
+    }
+
+
+@router.post("/{build_id}/insurance-policy/reconcile")
+async def reconcile_build_insurance_policy(
+    build_id: int,
+    body: ReconcileInsurancePolicyRequest,
+    db: AsyncSession = Depends(get_db),
+    admin=Depends(get_current_admin),
+):
+    """Resolve an uncertain insurer create request after checking its account."""
+    if not body.provider_checked:
+        raise HTTPException(422, "Confirm that you checked the insurer account before reconciling this request")
+    build = (await db.execute(
+        select(ManualBuild).where(ManualBuild.id == build_id).with_for_update()
+    )).scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if _manual_build_has_physical_handover(build):
+        raise HTTPException(409, "Insurance reconciliation is closed after physical handover")
+    if build.status != "sold":
+        raise HTTPException(409, "Insurance reconciliation is available only for a sold build")
+    if build.shipment_booking_state != "booked" or not build.tracking_number or not build.shipment_booked_at:
+        raise HTTPException(409, "Insurance reconciliation requires this build's confirmed courier booking and tracking number")
+    evidence = dict(build.evidence_data or {})
+    attempt = evidence.get("insurance_policy_creation") or {}
+    raw_reconciliations = evidence.get("insurance_policy_reconciliations")
+    reconciliation_history = [item for item in raw_reconciliations if isinstance(item, dict)] if isinstance(raw_reconciliations, list) else []
+    if build.shipping_insurance_policy_id:
+        if body.resolution == "policy_exists" and body.policy_id == build.shipping_insurance_policy_id:
+            if (not body.provider_tracking_number or not build.tracking_number
+                    or body.provider_tracking_number.strip().casefold() != build.tracking_number.strip().casefold()):
+                raise HTTPException(409, "The provider policy tracking number does not match this build's booked parcel")
+            if (body.cost_gbp is not None and build.shipping_insurance_cost_gbp is not None
+                    and not _gbp_amounts_match_to_penny(body.cost_gbp, build.shipping_insurance_cost_gbp)):
+                raise HTTPException(409, "The supplied premium conflicts with the linked insurer policy")
+            linked_insured_value = (
+                attempt.get("insured_value_gbp")
+                if isinstance(attempt, dict) and attempt.get("insured_value_gbp") is not None
+                else build.sale_price_actual
+            )
+            if (body.insured_value_gbp is not None and linked_insured_value is not None
+                    and not _gbp_amounts_match_to_penny(body.insured_value_gbp, linked_insured_value)):
+                raise HTTPException(409, "The supplied insured value conflicts with the linked insurer policy")
+            return {"status": "created", "policy_id": build.shipping_insurance_policy_id, "idempotent": True}
+        raise HTTPException(409, "A policy is already linked; this reconciliation conflicts with the saved policy")
+    if (build.shipping_insurance_status == "creation_failed" and body.resolution == "no_policy"
+            and reconciliation_history and isinstance(reconciliation_history[-1], dict)
+            and reconciliation_history[-1].get("resolution") == "no_policy"):
+        return {"status": "creation_failed", "policy_id": None, "idempotent": True}
+    if build.shipping_insurance_status not in {"creating", "creation_uncertain"}:
+        raise HTTPException(409, "Only an uncertain policy creation can be reconciled")
+    if build.shipping_insurance_status == "creating":
+        started_at = (attempt.get("started_at") if isinstance(attempt, dict) else None) or (
+            build.updated_at.isoformat() if build.updated_at else None
+        )
+        try:
+            started = datetime.fromisoformat(str(started_at).replace("Z", "+00:00"))
+        except (TypeError, ValueError):
+            raise HTTPException(409, "The in-flight insurer request has no reliable start time; do not reconcile or retry it automatically")
+        if started.tzinfo is None:
+            started = started.replace(tzinfo=timezone.utc)
+        if datetime.now(timezone.utc) - started.astimezone(timezone.utc) < timedelta(minutes=2):
+            raise HTTPException(409, "The insurer request may still be in flight. Wait at least two minutes, then check the provider account before reconciling.")
+
+    if body.resolution == "policy_exists":
+        if (not body.policy_id or not body.policy_id.strip() or not body.provider_tracking_number
+                or body.cost_gbp is None or body.insured_value_gbp is None):
+            raise HTTPException(422, "Enter the provider policy ID, parcel tracking number, insured value and premium shown in the insurer account")
+        provider_response = attempt.get("provider_response") if isinstance(attempt, dict) else None
+        if isinstance(provider_response, dict):
+            reported_policy_id = str(provider_response.get("policy_id") or "").strip()
+            if not reported_policy_id or reported_policy_id != body.policy_id.strip():
+                raise HTTPException(409, "The original insurer response did not provide this policy ID; keep dispatch blocked and resolve the policy with the provider before attaching it")
+            if str(provider_response.get("currency") or "").upper() != "GBP":
+                raise HTTPException(409, "The insurer response was not in GBP. Keep dispatch blocked and resolve the policy with the provider before attaching it")
+            if str(provider_response.get("mode") or "").casefold() != "production":
+                raise HTTPException(409, "The insurer response is not a production policy. Keep dispatch blocked and obtain valid live cover before proceeding")
+            if not _gbp_amounts_match_to_penny(provider_response.get("insured_value_gbp"), body.insured_value_gbp):
+                raise HTTPException(409, "The reconciled insured value conflicts with the policy returned by the original request")
+            if not _gbp_amounts_match_to_penny(provider_response.get("price_gbp"), body.cost_gbp):
+                raise HTTPException(409, "The reconciled premium conflicts with the policy returned by the original request")
+        if not build.tracking_number or body.provider_tracking_number.strip().casefold() != build.tracking_number.strip().casefold():
+            raise HTTPException(409, "The provider policy tracking number does not match this build's booked parcel")
+        expected_sale_value = build.sale_price_actual
+        if build.storefront_product_id:
+            sold_order = (await db.execute(
+                select(Order)
+                .join(Product, Product.sold_order_id == Order.id)
+                .where(Product.id == build.storefront_product_id)
+                .limit(1)
+            )).scalar_one_or_none()
+            if sold_order:
+                expected_sale_value = sold_order.customer_price
+        if not expected_sale_value or not _gbp_amounts_match_to_penny(expected_sale_value, body.insured_value_gbp):
+            raise HTTPException(409, "The provider policy insured value does not match this build's recorded sale value")
+        build.shipping_insurance_policy_id = body.policy_id.strip()
+        build.shipping_insurance_invoice_id = body.invoice_id.strip() if body.invoice_id else None
+        build.shipping_insurance_cost_gbp = body.cost_gbp
+        build.shipping_insurance_created_at = build.shipping_insurance_created_at or datetime.utcnow()
+        build.shipping_insurance_status = "created"
+        build.shipping_damage_cover_confirmed = True
+    else:
+        build.shipping_insurance_status = "creation_failed"
+
+    reconciliations = reconciliation_history
+    reconciliations.append({
+        "resolution": body.resolution,
+        "provider_checked": True,
+        "policy_id": body.policy_id.strip() if body.policy_id else None,
+        "invoice_id": body.invoice_id.strip() if body.invoice_id else None,
+        "provider_tracking_number": body.provider_tracking_number.strip() if body.provider_tracking_number else None,
+        "insured_value_gbp": body.insured_value_gbp,
+        "cost_gbp": body.cost_gbp,
+        "note": body.note.strip(),
+        "actor": getattr(admin, "email", None) or "admin",
+        "recorded_at": datetime.utcnow().isoformat(),
+    })
+    evidence["insurance_policy_reconciliations"] = reconciliations[-100:]
+    build.evidence_data = evidence
+    build.updated_at = datetime.utcnow()
+    await db.commit()
+    return {
+        "status": build.shipping_insurance_status,
+        "policy_id": build.shipping_insurance_policy_id,
+        "cost_gbp": build.shipping_insurance_cost_gbp,
+        "idempotent": False,
+    }
+
+
 @router.post("/{build_id}/sync-ebay-order", response_model=SyncEbayOrderResult)
 async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
     """Fetches this build's real eBay order — buyer name, actual delivery
@@ -1540,7 +3992,7 @@ async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
     settings = get_settings()
     try:
         order = await find_order_for_listing(
-            build.ebay_listing_id, environment=settings.ebay_listing_environment
+            build.ebay_listing_id, environment=settings.ebay_listing_environment, db=db
         )
     except EbayOrderSyncError as e:
         raise HTTPException(e.status_code or 502, str(e))
@@ -1566,6 +4018,8 @@ async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
         raise HTTPException(404, "Build not found")
 
     build.ebay_order_id = order.order_id
+    if order.ship_by_date is not None:
+        build.ebay_ship_by_date = order.ship_by_date
     build.buyer_name = order.buyer_address.contact_name
     # line_item_id is embedded here (not its own column) since it's only
     # ever needed alongside the address, to push tracking back in
@@ -1578,6 +4032,15 @@ async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
             customer.phone = build.buyer_address_json.get("phone")
     build.sale_price_actual = order.sale_price
     build.status = "sold"
+    from app.services.getting_started_jobs import ensure_manual_build_job
+    await ensure_manual_build_job(db, manual_build_id=build.id)
+    if build.warranty_started_at or build.delivered_at:
+        from app.services.warranty_service import ensure_manual_build_reserve, recalculate_reserve_status
+        reserve = await ensure_manual_build_reserve(
+            db, build, build.warranty_started_at or build.delivered_at
+        )
+        if reserve is not None:
+            await recalculate_reserve_status(db, reserve)
     from app.services.inventory_lifecycle import record_sale
     await record_sale(db, build, order.sale_price)
     build.updated_at = datetime.utcnow()
@@ -1600,28 +4063,84 @@ async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/{build_id}/book-shipment", response_model=BookShipmentResult)
-async def book_shipment(build_id: int, body: BookShipmentRequest, db: AsyncSession = Depends(get_db)):
+async def book_shipment(
+    build_id: int,
+    body: BookShipmentRequest,
+    admin=Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
     """Books and pays for a real Parcel2Go shipment using the build's real,
-    already-synced buyer address (see sync_ebay_order above), then pushes
-    the resulting tracking number to eBay so the buyer sees it.
+    already-synced buyer address (see sync_ebay_order above). The tracking
+    number is pushed to eBay only after physical carrier handover is confirmed
+    by the separate dispatch action.
 
     This is the one step in the whole shipping flow that spends real money —
     it only runs when explicitly called from the "Book & Pay" button the
     seller clicks after reviewing the quoted price, never automatically."""
-    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
+    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id).with_for_update())
     build = result.scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
 
-    if not build.buyer_address_json:
-        raise HTTPException(400, "Add the buyer's delivery address before booking a shipment.")
-    if not build.shipping_damage_cover_confirmed:
+    if build.status != "sold":
+        raise HTTPException(409, "Courier booking is available only after the build is sold")
+
+    if build.shipment_booking_state == "booked" or build.parcel2go_order_id and build.shipment_booked_at:
+        return BookShipmentResult(
+            success=True,
+            tracking_number=build.tracking_number,
+            shipping_label_url=build.shipping_label_url,
+            parcel2go_order_id=build.parcel2go_order_id,
+            warning="This shipment was already booked; returning its saved booking.",
+        )
+    if _manual_build_has_physical_handover(build):
+        raise HTTPException(409, "A courier shipment cannot be created after physical handover")
+    if build.shipment_booking_state in {"creating_order", "order_created", "paying", "reconciliation_required"}:
         raise HTTPException(
             409,
-            "Shipment booking is blocked until separate full-value transit-damage cover is confirmed. "
-            "Parcel2Go classifies computers/electricals as protected for loss only.",
+            "A previous Parcel2Go request may have created or paid for a shipment. Reconcile the provider order before any retry.",
+        )
+    if not body.confirm_live_purchase:
+        raise HTTPException(409, "Explicit confirmation of this live courier purchase is required")
+
+    if not build.buyer_address_json:
+        raise HTTPException(400, "Add the buyer's delivery address before booking a shipment.")
+    if not body.signed_for_delivery_confirmed:
+        raise HTTPException(409, "Confirm that this courier service is signed-for. Figural cover does not apply to unsigned delivery.")
+    evidence_job = (await db.execute(
+        select(GettingStartedJob).where(GettingStartedJob.manual_build_id == build.id)
+    )).scalar_one_or_none()
+    if evidence_job is None:
+        raise HTTPException(409, "Complete the Getting Ready workflow before buying the courier label.")
+    incomplete_actions = incomplete_checklist_actions(
+        evidence_job.checklist,
+        COURIER_BOOKING_BLOCKING_ACTIONS,
+        evidence_job.purchased_ai_services,
+    )
+    if incomplete_actions:
+        raise HTTPException(
+            409,
+            "Complete the Getting Ready dispatch checklist before buying the courier label: "
+            + ", ".join(incomplete_actions),
         )
 
+    grant_required, printable_claim = await _portal_grant_required_for_build(db, build)
+    if grant_required and printable_claim is None:
+        raise HTTPException(409, "Issue a private buyer portal claim and print its QR leaflet before buying this courier label")
+    if grant_required:
+        checklist = evidence_job.checklist or {}
+        leaflet_reviews = [
+            item for item in (checklist.get("_audit") or [])
+            if isinstance(item, dict) and item.get("action") == "leaflet_printed"
+        ]
+        last_leaflet_review = leaflet_reviews[-1] if leaflet_reviews else None
+        if (
+            checklist.get("leaflet_printed") != "complete"
+            or not last_leaflet_review
+            or last_leaflet_review.get("status") != "complete"
+            or last_leaflet_review.get("portal_grant_id") != printable_claim.id
+        ):
+            raise HTTPException(409, "Print and scan-test the current portal claim leaflet again before courier booking")
     missing = [
         field
         for field in ("package_weight_kg", "package_length_cm", "package_width_cm", "package_height_cm")
@@ -1643,8 +4162,56 @@ async def book_shipment(build_id: int, body: BookShipmentRequest, db: AsyncSessi
     )
     value_gbp = build.sale_price_actual or build.ebay_price or build.total_cost or 0.0
 
+    delivery_country = str(build.buyer_address_json.get("country_code") or "GBR").upper()
+    if delivery_country == "GB":
+        delivery_country = "GBR"
     try:
-        order_id, order_hash = await create_parcel2go_order(
+        fresh_quotes = await get_tracked_quotes(
+            weight_kg=build.package_weight_kg,
+            length_cm=build.package_length_cm,
+            width_cm=build.package_width_cm,
+            height_cm=build.package_height_cm,
+            value_gbp=value_gbp,
+            delivery_country=delivery_country,
+        )
+    except Parcel2GoError as error:
+        raise HTTPException(error.status_code or 502, str(error)) from error
+    selected_quote = next((quote for quote in fresh_quotes if quote.service_slug == body.service_slug), None)
+    if not selected_quote or not selected_quote.signature_tracking:
+        raise HTTPException(409, "That courier quote is no longer available with the required Signature extra. Request a fresh quote.")
+    if not _gbp_amounts_match_to_penny(selected_quote.price_gbp, body.price_gbp):
+        raise HTTPException(409, f"The courier price has changed to £{selected_quote.price_gbp:.2f}. Review and confirm the fresh quote.")
+
+    # Commit a durable in-flight marker before calling either provider
+    # endpoint. A concurrent request or retry after timeout will now stop
+    # instead of creating and paying for a duplicate label.
+    build.shipment_booking_state = "creating_order"
+    build.shipment_booking_attempted_at = datetime.utcnow()
+    build.shipment_booking_error_code = None
+    build.parcel2go_service_slug = body.service_slug
+    build.evidence_data = {
+        **(build.evidence_data or {}),
+        "shipment_booking_confirmation": {
+            "signed_for_delivery_confirmed": True,
+            "signature_extra_included": True,
+            "provider_order_total_gbp": None,
+            "live_purchase_confirmed": True,
+            "service_slug": body.service_slug,
+            # The selected quote was re-fetched and compared to the
+            # operator-confirmed amount above. Persist that exact provider
+            # price in GBP for the audit record.
+            "confirmed_price_gbp": selected_quote.price_gbp,
+            "confirmed_by_admin_id": getattr(admin, "id", None),
+            "confirmed_by_admin_name": getattr(admin, "name", None),
+            "confirmed_at": datetime.utcnow().isoformat(),
+        },
+    }
+    build.dispatch_status = "booking_in_progress"
+    build.updated_at = datetime.utcnow()
+    await db.commit()
+
+    try:
+        order_id, order_hash, order_line_id, provider_total = await create_parcel2go_order(
             service_slug=body.service_slug,
             weight_kg=build.package_weight_kg,
             length_cm=build.package_length_cm,
@@ -1652,11 +4219,78 @@ async def book_shipment(build_id: int, body: BookShipmentRequest, db: AsyncSessi
             height_cm=build.package_height_cm,
             value_gbp=value_gbp,
             buyer_address=buyer_address,
+            upsells=["Signature"],
             environment=settings.parcel2go_environment,
         )
+    except Parcel2GoBookingError as error:
+        build.shipment_booking_state = "failed_retryable" if 400 <= (error.status_code or 0) < 500 else "reconciliation_required"
+        build.shipment_booking_error_code = f"create_order_http_{error.status_code}" if error.status_code else "create_order_outcome_unknown"
+        build.dispatch_status = "awaiting_dispatch" if build.shipment_booking_state == "failed_retryable" else "booking_reconciliation_required"
+        build.updated_at = datetime.utcnow()
+        await db.commit()
+        return BookShipmentResult(success=False, error=str(error))
+    except Exception as error:
+        log.exception("shipment.booking.create_order_outcome_unknown", build_id=build_id)
+        build.shipment_booking_state = "reconciliation_required"
+        build.shipment_booking_error_code = type(error).__name__[:80]
+        build.dispatch_status = "booking_reconciliation_required"
+        build.updated_at = datetime.utcnow()
+        await db.commit()
+        return BookShipmentResult(success=False, error="Parcel2Go's response was unclear. Check the provider account before retrying.")
+
+    booking_confirmation = dict((build.evidence_data or {}).get("shipment_booking_confirmation") or {})
+    booking_confirmation["provider_order_total_gbp"] = provider_total
+    build.evidence_data = {**(build.evidence_data or {}), "shipment_booking_confirmation": booking_confirmation}
+
+    # Parent and shipment-line references are durable before payment. The
+    # provider hash remains secret; callbacks use the shipment-line ID.
+    build.parcel2go_order_id = order_id
+    build.parcel2go_order_line_id = order_line_id
+    build.shipment_booking_state = "order_created"
+    build.dispatch_status = "booking_payment_pending"
+    build.updated_at = datetime.utcnow()
+    await db.commit()
+
+    if provider_total is None or not _gbp_amounts_match_to_penny(provider_total, selected_quote.price_gbp):
+        build.shipment_booking_state = "reconciliation_required"
+        build.shipment_booking_error_code = "created_order_total_missing_or_changed"
+        build.dispatch_status = "booking_reconciliation_required"
+        build.updated_at = datetime.utcnow()
+        await db.commit()
+        return BookShipmentResult(
+            success=False,
+            parcel2go_order_id=order_id,
+            error=(
+                "Parcel2Go created an unpaid order whose total did not match the confirmed quote. "
+                "No payment was attempted; reconcile the provider order before retrying."
+            ),
+        )
+
+    if not order_line_id:
+        build.shipment_booking_state = "reconciliation_required"
+        build.shipment_booking_error_code = "missing_order_line_id"
+        build.dispatch_status = "booking_reconciliation_required"
+        build.updated_at = datetime.utcnow()
+        await db.commit()
+        return BookShipmentResult(
+            success=False,
+            parcel2go_order_id=order_id,
+            error="Parcel2Go did not return the shipment reference needed for tracking. No payment was attempted; reconcile the unpaid order before retrying.",
+        )
+
+    build.shipment_booking_state = "paying"
+    await db.commit()
+    try:
         booked = await pay_order_with_prepay(order_id, order_hash, environment=settings.parcel2go_environment)
-    except Parcel2GoBookingError as e:
-        return BookShipmentResult(success=False, error=str(e))
+    except Exception as error:
+        log.exception("shipment.booking.payment_outcome_unknown", build_id=build_id, parcel2go_order_id=order_id)
+        build.shipment_booking_state = "reconciliation_required"
+        build.shipment_booking_error_code = f"pay_order_{type(error).__name__}"[:80]
+        build.dispatch_status = "booking_reconciliation_required"
+        build.updated_at = datetime.utcnow()
+        await db.commit()
+        return BookShipmentResult(success=False, parcel2go_order_id=order_id,
+                                  error="Payment outcome is unclear. Check Parcel2Go before attempting another booking.")
 
     # Persist immediately — payment has already happened at this point, so
     # this must be saved even if the eBay push below fails.
@@ -1664,62 +4298,353 @@ async def book_shipment(build_id: int, body: BookShipmentRequest, db: AsyncSessi
     build.parcel2go_service_slug = body.service_slug
     build.tracking_number = booked.tracking_number
     build.shipping_label_url = booked.label_url
+    booking_confirmation = dict((build.evidence_data or {}).get("shipment_booking_confirmation") or {})
+    booking_confirmation["tracking_url"] = booked.tracking_url
+    build.evidence_data = {**(build.evidence_data or {}), "shipment_booking_confirmation": booking_confirmation}
     build.shipment_booked_at = datetime.utcnow()
-    build.dispatch_status = "dispatched"
+    build.shipment_booking_state = "booked"
+    build.shipment_booking_error_code = None
+    build.dispatch_status = "booked"
     build.updated_at = datetime.utcnow()
-    await db.flush()
-
-    if build.customer_email:
-        await send_shipment_update_email(
-            build.customer_email, build.buyer_name or "there", f"BUILD-{build.id}",
-            body.service_slug.split("-")[0], booked.tracking_number, None, None,
-        )
-
-    if not booked.tracking_number:
-        return BookShipmentResult(
-            success=True,
-            tracking_number=None,
-            shipping_label_url=booked.label_url,
-            parcel2go_order_id=booked.parcel2go_order_id,
-            ebay_marked_shipped=False,
-            warning=(
-                "Payment succeeded but no tracking number was found in Parcel2Go's response — "
-                "check the label manually and enter tracking on eBay yourself. "
-                f"Raw response logged for order {booked.parcel2go_order_id}."
-            ),
-        )
-
-    try:
-        # Extract the eBay-side courier name from the offer's original quote
-        # is not available here, so use the same service slug's courier via
-        # a best-effort split — good enough for eBay's carrier code mapping,
-        # which already falls back to "OTHER" on anything unrecognized.
-        courier_name = body.service_slug.split("-")[0]
-        if build.ebay_order_id:
-            await mark_order_shipped(
-                order_id=build.ebay_order_id,
-                line_item_id=build.buyer_address_json.get("line_item_id", ""),
-                tracking_number=booked.tracking_number,
-                courier_name=courier_name,
-                environment=settings.ebay_listing_environment,
-            )
-    except EbayShippingFulfillmentError as e:
-        return BookShipmentResult(
-            success=True,
-            tracking_number=booked.tracking_number,
-            shipping_label_url=booked.label_url,
-            parcel2go_order_id=booked.parcel2go_order_id,
-            ebay_marked_shipped=False,
-            warning=f"Shipment booked and paid, but marking the eBay order as shipped failed: {e}. Enter tracking on eBay manually.",
-        )
+    await db.commit()
 
     return BookShipmentResult(
         success=True,
         tracking_number=booked.tracking_number,
         shipping_label_url=booked.label_url,
         parcel2go_order_id=booked.parcel2go_order_id,
-        ebay_marked_shipped=True,
+        ebay_marked_shipped=False,
+        warning=(
+            "Courier booked and paid. Confirm physical handover with Dispatch only after the parcel is handed to the courier."
+            if booked.tracking_number else
+            "Courier booked and paid, but no tracking number was returned. Resolve tracking before dispatch."
+        ),
     )
+
+
+@router.post("/{build_id}/shipment-booking/reconcile")
+async def reconcile_shipment_booking(
+    build_id: int,
+    body: ShipmentBookingReconciliationRequest,
+    admin=Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    """Attach a provider booking or reopen only after a documented provider check."""
+    if not body.provider_checked:
+        raise HTTPException(409, "Confirm that you checked the Parcel2Go account before resolving this attempt.")
+    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id).with_for_update())
+    build = result.scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if _manual_build_has_physical_handover(build):
+        raise HTTPException(409, "Shipment booking reconciliation is closed after physical handover")
+    attaching_tracking_reference = body.resolution == "attach_tracking_reference"
+    if attaching_tracking_reference:
+        if not build.shipment_booked_at:
+            raise HTTPException(409, "A verified existing booking is required before attaching its tracking reference.")
+        if not build.parcel2go_order_id or not build.tracking_number:
+            raise HTTPException(409, "The existing parent order ID and tracking number are required.")
+        if build.parcel2go_order_line_id:
+            raise HTTPException(409, "This booking already has a Parcel2Go tracking reference.")
+        if body.provider_order_id != build.parcel2go_order_id or body.tracking_number != build.tracking_number:
+            raise HTTPException(409, "The provider order ID and tracking number must match the saved booking.")
+        if not body.provider_order_line_id:
+            raise HTTPException(422, "Enter the shipment OrderLineId from the verified Parcel2Go booking.")
+    else:
+        if build.shipment_booking_state not in {"reconciliation_required", "creating_order", "order_created", "paying"}:
+            raise HTTPException(409, "This build has no uncertain shipment booking to reconcile.")
+        if build.shipment_booked_at or build.tracking_number:
+            raise HTTPException(409, "A tracking record exists; this shipment is already reconciled.")
+
+    if body.resolution == "paid_booking" and (
+        not body.provider_order_id or not body.provider_order_line_id or not body.tracking_number
+    ):
+        raise HTTPException(422, "Enter the paid booking's order ID, shipment line ID and tracking number.")
+    if body.shipping_label_url:
+        parsed_label_url = urlparse(body.shipping_label_url)
+        if parsed_label_url.scheme != "https" or not parsed_label_url.netloc:
+            raise HTTPException(422, "The existing shipping label link must use HTTPS.")
+    if body.resolution == "no_active_booking" and not body.provider_checked:
+        raise HTTPException(409, "Confirm that Parcel2Go has no active or paid booking before reopening.")
+
+    evidence = dict(build.evidence_data or {})
+    history = list(evidence.get("shipment_booking_reconciliation") or [])
+    history.append({
+        "actor": getattr(admin, "email", None) or "admin",
+        "note": body.note,
+        "resolution": body.resolution,
+        "provider_checked": True,
+        "previous_state": build.shipment_booking_state,
+        "previous_provider_order_id": build.parcel2go_order_id,
+        "resolved_provider_order_id": body.provider_order_id,
+        "resolved_provider_order_line_id": body.provider_order_line_id,
+        "resolved_tracking_number": body.tracking_number,
+        "recorded_at": datetime.utcnow().isoformat(),
+    })
+    evidence["shipment_booking_reconciliation"] = history[-50:]
+    build.evidence_data = evidence
+    if attaching_tracking_reference:
+        build.parcel2go_order_line_id = body.provider_order_line_id
+        build.shipment_booking_state = "booked"
+    elif body.resolution == "paid_booking":
+        build.parcel2go_order_id = body.provider_order_id
+        build.parcel2go_order_line_id = body.provider_order_line_id
+        build.tracking_number = body.tracking_number
+        build.shipping_label_url = body.shipping_label_url
+        build.shipment_booked_at = datetime.utcnow()
+        build.shipment_booking_state = "booked"
+        build.shipment_booking_error_code = None
+        build.dispatch_status = "booked"
+    else:
+        build.shipment_booking_state = "failed_retryable"
+        build.shipment_booking_error_code = None
+        build.parcel2go_order_id = None
+        build.parcel2go_order_line_id = None
+        build.dispatch_status = "awaiting_dispatch"
+    build.updated_at = datetime.utcnow()
+    await db.commit()
+    return {"success": True, "shipment_booking_state": build.shipment_booking_state}
+
+
+@router.post("/{build_id}/dispatch")
+async def dispatch_booked_build(
+    build_id: int,
+    body: DispatchBuildInput,
+    admin: AdminUser = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    """Mark a booked parcel dispatched only after explicit physical handover."""
+    if not body.confirm_physical_handover:
+        raise HTTPException(409, "Confirm that the sealed parcel has been handed to the courier")
+    build, job = await lock_manual_build_then_getting_started_job(db, build_id)
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if build.status != "sold":
+        raise HTTPException(409, "Dispatch is available only after the build is sold")
+    if _manual_build_has_physical_handover(build):
+        final_status = "delivered" if build.delivered_at or build.dispatch_status == "delivered" else "dispatched"
+        if build.dispatch_status != final_status:
+            build.dispatch_status = final_status
+            await db.commit()
+        return {"success": True, "dispatch_status": final_status, "tracking_number": build.tracking_number, "already_dispatched": True}
+    if not build.parcel2go_order_id or not build.tracking_number or not build.shipment_booked_at:
+        raise HTTPException(409, "Book the courier and resolve its tracking number before dispatch")
+    if build.shipping_insurance_status != "created" or not build.shipping_insurance_policy_id:
+        raise HTTPException(409, "Register the confirmed shipment insurance policy before physical handover")
+    booking_confirmation = (build.evidence_data or {}).get("shipment_booking_confirmation") or {}
+    if not booking_confirmation.get("signed_for_delivery_confirmed") or not booking_confirmation.get("signature_extra_included"):
+        raise HTTPException(409, "A provider-quoted signature extra must be included and confirmed before dispatch")
+    missing_photos = _missing_verified_dispatch_evidence(
+        job, build.id, ("working_pc", *INSURANCE_REQUIRED_PHOTO_CATEGORIES)
+    )
+    if missing_photos:
+        raise HTTPException(
+            409,
+            "Approved pre-shipment evidence is missing or has changed; re-upload and review: "
+            + ", ".join(missing_photos),
+        )
+    incomplete = incomplete_checklist_actions(
+        job.checklist if job else {},
+        DISPATCH_BLOCKING_ACTIONS,
+        job.purchased_ai_services if job else None,
+    )
+    if incomplete:
+        raise HTTPException(409, "Complete the Getting Ready dispatch checklist: " + ", ".join(incomplete))
+
+    handover_at = datetime.utcnow()
+    evidence_data = dict(build.evidence_data or {})
+    evidence_data["physical_handover_confirmation"] = {
+        "confirmed": True,
+        "confirmed_at": handover_at.isoformat(),
+        "confirmed_by_admin_id": admin.id,
+        "confirmed_by_admin_name": admin.name,
+        "tracking_number": build.tracking_number,
+        "parcel2go_order_id": build.parcel2go_order_id,
+    }
+    build.evidence_data = evidence_data
+    build.dispatch_status = "dispatched"
+    build.updated_at = datetime.utcnow()
+    linked_order = (await db.execute(
+        select(Order)
+        .join(Build, Build.manual_build_id == build.id)
+        .outerjoin(Product, Product.build_id == Build.id)
+        .where(or_(Build.order_id == Order.id, Product.sold_order_id == Order.id))
+        .limit(1)
+    )).scalar_one_or_none()
+    courier_name = (build.parcel2go_service_slug or "courier").split("-")[0]
+    booking_confirmation = (build.evidence_data or {}).get("shipment_booking_confirmation") or {}
+    tracking_url = _safe_provider_tracking_url(booking_confirmation.get("tracking_url"))
+    if linked_order:
+        linked_order.tracking_number = build.tracking_number
+        linked_order.carrier = courier_name
+        linked_order.shipped_at = linked_order.shipped_at or datetime.utcnow()
+        linked_order.status = OrderStatus.SHIPPED
+        linked_order.updated_at = datetime.utcnow()
+    dispatch_event = ShipmentTrackingEvent(
+        order_id=linked_order.id if linked_order else None,
+        manual_build_id=None if linked_order else build.id,
+        provider=courier_name,
+        provider_event_id=f"dispatch:{build.id}:{build.shipment_booked_at.isoformat()}",
+        status_code="dispatched",
+        description="Your sealed FlipFlop build has been handed to the courier.",
+        tracking_url=tracking_url,
+        material=True,
+        occurred_at=handover_at,
+    )
+    db.add(dispatch_event)
+    await db.commit()
+    dispatch_event_id = dispatch_event.id
+    ebay_order_id = build.ebay_order_id
+    ebay_line_item_id = (build.buyer_address_json or {}).get("line_item_id", "")
+    dispatch_tracking_number = build.tracking_number
+
+    email_sent = False
+    portal_claim_email_sent: bool | None = None
+    portal_grant_id: int | None = None
+    portal_claim_email_status: str | None = None
+    is_direct_storefront_sale = bool(
+        linked_order and linked_order.customer_id and not build.ebay_order_id
+    )
+    if build.storefront_product_id:
+        sold_product = await db.get(Product, build.storefront_product_id)
+        if sold_product and sold_product.sold_via_channel is not None:
+            channel = getattr(sold_product.sold_via_channel, "value", sold_product.sold_via_channel)
+            is_direct_storefront_sale = channel == "storefront"
+    if is_direct_storefront_sale and linked_order:
+        dispatch_event.customer_notification_attempts += 1
+        dispatch_event.customer_notification_attempted_at = datetime.utcnow()
+        await db.commit()
+        direct_customer = await db.get(Customer, linked_order.customer_id)
+        if direct_customer and direct_customer.email:
+            customer_email = direct_customer.email
+            customer_name = direct_customer.name or "there"
+            order_reference = linked_order.order_id
+            order_id = linked_order.id
+            tracking_number = build.tracking_number
+            dispatched_build_name = build.name
+            has_customer_account = bool(
+                direct_customer.password_hash
+                or direct_customer.google_id
+                or direct_customer.github_id
+            )
+            tracking_url = _safe_provider_tracking_url(
+                ((build.evidence_data or {}).get("shipment_booking_confirmation") or {}).get("tracking_url")
+            )
+            tracking_email_attempted = False
+            if has_customer_account:
+                email_sent = await send_shipment_update_email(
+                    customer_email,
+                    customer_name,
+                    order_reference,
+                    courier_name,
+                    tracking_number,
+                    tracking_url,
+                    None,
+                    order_id,
+                )
+            else:
+                build_name = str(
+                    (linked_order.specs or {}).get("build_name")
+                    or (linked_order.specs or {}).get("case_name")
+                    or dispatched_build_name
+                )
+                existing_portal_grant = await find_printable_portal_claim(
+                    db, order_id=linked_order.id, channel="direct_guest", include_claimed=True
+                )
+                if existing_portal_grant:
+                    # Preserve the claim whose QR was printed before courier
+                    # booking. Rotating it here would invalidate the leaflet
+                    # already packed with the machine.
+                    portal_grant_id = existing_portal_grant.id
+                    portal_claim_email_status = existing_portal_grant.email_status
+                    tracking_email_attempted = True
+                    email_sent = await send_shipment_update_email(
+                        customer_email,
+                        customer_name,
+                        order_reference,
+                        courier_name,
+                        tracking_number,
+                        tracking_url,
+                        None,
+                        order_id,
+                    )
+                else:
+                    portal_claim_email_sent = False
+                    try:
+                        grant, claim_url = await issue_direct_order_portal_claim(
+                            db,
+                            linked_order,
+                            build_name=build_name,
+                            contact_email=customer_email,
+                            manual_build_id=build.id,
+                        )
+                        await db.commit()
+                        portal_grant_id = grant.id
+                        portal_claim_email_status = grant.email_status
+                        claim_email_sent = await send_dispatched_guest_portal_email(
+                            customer_email,
+                            customer_name,
+                            build_name,
+                            claim_url,
+                            grant.expires_at,
+                            order_reference,
+                            courier_name,
+                            tracking_number,
+                            tracking_url,
+                        )
+                        await record_portal_claim_email_result(db, grant, sent=claim_email_sent)
+                        portal_claim_email_sent = claim_email_sent
+                        portal_claim_email_status = grant.email_status
+                        email_sent = portal_claim_email_sent
+                    except Exception as error:
+                        await db.rollback()
+                        log.exception(
+                            "Could not issue direct guest portal claim at dispatch",
+                            build_id=build_id,
+                            order_id=order_id,
+                            error=str(error),
+                        )
+                if not email_sent and not tracking_email_attempted:
+                    email_sent = await send_shipment_update_email(
+                        customer_email,
+                        customer_name,
+                        order_reference,
+                        courier_name,
+                        tracking_number,
+                        tracking_url,
+                        None,
+                        order_id,
+                    )
+            if email_sent:
+                saved_dispatch_event = await db.get(ShipmentTrackingEvent, dispatch_event_id)
+                if saved_dispatch_event:
+                    saved_dispatch_event.customer_notified_at = datetime.utcnow()
+                await db.commit()
+    ebay_marked_shipped = False
+    ebay_warning = None
+    if ebay_order_id:
+        try:
+            await mark_order_shipped(
+                order_id=ebay_order_id,
+                line_item_id=ebay_line_item_id,
+                tracking_number=dispatch_tracking_number,
+                courier_name=courier_name,
+                environment=get_settings().ebay_listing_environment,
+            )
+            ebay_marked_shipped = True
+        except EbayShippingFulfillmentError as error:
+            ebay_warning = f"Dispatch saved, but eBay tracking update failed: {error}"
+    return {
+        "success": True,
+        "dispatch_status": "dispatched",
+        "tracking_number": dispatch_tracking_number,
+        "email_sent": email_sent,
+        "portal_claim_email_sent": portal_claim_email_sent,
+        "portal_grant_id": portal_grant_id,
+        "portal_claim_email_status": portal_claim_email_status,
+        "ebay_marked_shipped": ebay_marked_shipped,
+        "warning": ebay_warning,
+    }
 
 
 @router.patch("/{build_id}/aspects", response_model=ManualBuildOut)
@@ -1818,7 +4743,7 @@ async def update_ebay_config(
     if body.packaging_cost is not None:
         build.packaging_cost = max(0.0, body.packaging_cost)
     if body.warranty_reserve_pct is not None:
-        build.warranty_reserve_pct = min(25.0, max(0.0, body.warranty_reserve_pct))
+        build.warranty_reserve_pct = min(25.0, max(5.0, body.warranty_reserve_pct))
     if body.marketplace_fees_actual is not None:
         build.marketplace_fees_actual = max(0.0, body.marketplace_fees_actual)
     if body.promotion_cost_actual is not None:
@@ -1829,8 +4754,6 @@ async def update_ebay_config(
         build.warranty_claim_cost = max(0.0, body.warranty_claim_cost)
     if body.handling_time_days is not None:
         build.handling_time_days = body.handling_time_days
-    if body.shipping_damage_cover_confirmed is not None:
-        build.shipping_damage_cover_confirmed = body.shipping_damage_cover_confirmed
     if body.ships_to_countries is not None:
         build.ships_to_countries = body.ships_to_countries
     if body.domestic_only is not None:
@@ -2014,6 +4937,8 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
     if not image_urls and build.photos:
         for photo in build.photos:
             # Photo is stored as {"url": "https://www.theflipflop.shop/api/uploads/...", "kind": "photo"}
+            if isinstance(photo, dict) and photo.get("kind", "photo") != "photo":
+                continue
             photo_url = photo.get("url") if isinstance(photo, dict) else photo
             if photo_url:
                 image_urls.append(photo_url)
@@ -2345,7 +5270,14 @@ async def upload_photos(
         local_path.write_bytes(image_bytes)
 
         # Served directly from the build-owned Media directory.
-        photos.append({"url": public_url, "kind": kind, "original_filename": Path(file.filename or "photo").name[:120]})
+        entry = {"url": public_url, "kind": kind, "original_filename": Path(file.filename or "photo").name[:120]}
+        if kind == "photo":
+            from app.services.channel_images import save_master
+            try:
+                entry["channel_images"] = await asyncio.to_thread(save_master, image_bytes)
+            except (ValueError, OSError) as exc:
+                raise HTTPException(422, f"Cannot prepare product photograph: {exc}") from exc
+        photos.append(entry)
         uploaded_urls.append(public_url)
 
     build.photos = photos
@@ -2471,10 +5403,11 @@ async def upload_build_3d_model(
         raise HTTPException(400, "The GLB file is empty")
     if len(model_bytes) > 100 * 1024 * 1024:
         raise HTTPException(413, "The GLB must be 100 MB or smaller")
-    # Binary glTF begins with the ASCII magic bytes 'glTF'. This rejects a
-    # renamed ZIP/OBJ before it can reach the public storefront.
-    if model_bytes[:4] != b"glTF":
-        raise HTTPException(400, "The uploaded file is not a valid binary GLB")
+    # Reject malformed GLB containers before optimizer or filesystem writes.
+    try:
+        validate_glb(model_bytes)
+    except GlbOptimizationError as exc:
+        raise HTTPException(400, f"The uploaded file is not a valid binary GLB: {exc}") from exc
 
     build = (await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
     if not build:
@@ -2482,7 +5415,14 @@ async def upload_build_3d_model(
 
     filename = f"model-3d-{uuid.uuid4().hex}.glb"
     local_path, public_url = _build_3d_asset_path(build_id, filename)
-    local_path.write_bytes(model_bytes)
+    try:
+        await persist_optimized_glb(
+            model_bytes,
+            local_path,
+            _BUILD_GLB_ORIGINALS_ROOT / str(build_id),
+        )
+    except GlbOptimizationError as exc:
+        raise HTTPException(status_code=422, detail=f"The GLB could not be safely optimized: {exc}") from exc
     _persist_build_model_download(build_id, filename, local_path)
     build.model_3d_url = public_url
     build.updated_at = datetime.utcnow()
@@ -2589,6 +5529,7 @@ async def list_on_storefront(
         raise HTTPException(400, "Choose a hero photo before listing on the storefront")
     if not build.generated_title or not build.generated_description:
         raise HTTPException(400, "Generate the listing title/description before listing on the storefront")
+    assignment = (build.evidence_data or {}).get("playbook_assignment") or {}
 
     if build.storefront_product_id:
         product_result = await db.execute(select(Product).where(Product.id == build.storefront_product_id))
@@ -2604,6 +5545,7 @@ async def list_on_storefront(
             product.platform_category_id = _PC_BUILD_PLATFORM_CATEGORY_ID
             product.platform_category_name = _PC_BUILD_PLATFORM_CATEGORY_NAME
             product.selected_faqs = selected_faqs(build.id, build.selected_faq_ids, build.selected_faq_answer_overrides)
+            product.playbook_id = assignment.get("playbook_id")
             product.fulfilment_type = "prebuilt"
             product.handling_min_days = 1
             product.handling_max_days = 1
@@ -2635,6 +5577,7 @@ async def list_on_storefront(
         platform_category_id=_PC_BUILD_PLATFORM_CATEGORY_ID,
         platform_category_name=_PC_BUILD_PLATFORM_CATEGORY_NAME,
         selected_faqs=selected_faqs(build.id, build.selected_faq_ids, build.selected_faq_answer_overrides),
+        playbook_id=assignment.get("playbook_id"),
         fulfilment_type="prebuilt",
         handling_min_days=1,
         handling_max_days=1,

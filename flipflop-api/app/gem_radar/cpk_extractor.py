@@ -1,7 +1,7 @@
 """
-Canonical Product Key (CPK) extraction via local LLM.
+Canonical Product Key (CPK) extraction via the configured local LLM.
 
-Extracts structured product data from marketplace listings using Qwen2:7b,
+Extracts structured product data from marketplace listings using Ollama,
 creates a deterministic product consolidation key, and stores metadata for
 cross-vendor price aggregation.
 
@@ -11,22 +11,40 @@ Usage:
 from __future__ import annotations
 
 import asyncio
+from collections import OrderedDict
+from copy import deepcopy
+from time import monotonic
 import json
 import hashlib
 import re
 from dataclasses import dataclass
 from typing import Optional
 
-import httpx
 import structlog
 
 from app.config import get_settings
+from app.services.model_selection_service import ModelSelectionService, model_selection_service
+from app.services.case_product_key import case_product_key
 
 log = structlog.get_logger(__name__)
 
-# Limit concurrent Ollama requests to 4 (optimal for Qwen2:7b on GPU)
-# Tested 5 but hit VRAM exhaustion — 4 is the sweet spot
+# Limit concurrent Ollama requests to 4. The prior Qwen2:7b setup hit VRAM
+# exhaustion at 5; keep this conservative until concurrency is benchmarked again.
 _CPK_EXTRACTOR_SEMAPHORE = asyncio.Semaphore(4)
+
+
+def _extraction_service(settings=None):
+    """Use the opt-in DEV extraction model without changing shared model tiers."""
+    settings = settings or get_settings()
+    override = settings.dev_cpk_ollama_model.strip() if settings.app_env == 'dev' else ''
+    if not override:
+        return model_selection_service
+    # This task-specific route has no cloud or shared-model fallback. An error
+    # remains visible rather than silently reverting to the serial model.
+    return ModelSelectionService(settings.model_copy(update={
+        'llm_primary_provider': 'ollama', 'llm_primary_model': override,
+        'llm_secondary_provider': '', 'llm_tertiary_provider': '',
+    }), ollama_options={'num_ctx': 2048, 'num_batch': 128})
 
 # The only categories the prompt's own schema comment offers the model — a
 # multi-category answer like "cpu|gpu" (seen on full-PC-bundle listings) or
@@ -58,7 +76,7 @@ _PLACEHOLDER_ECHO_MARKERS = (
 # case bundles, where the title often contains plenty of useful identity but
 # little prose the LLM can rely on.
 _CASE_FAMILY_PATTERNS = (
-    ("corsair", r"(?:3500x|4000d|5000d|6500d|7000d|2500x|2500d|frame\s+4000d)"),
+    ("corsair", r"(?:3500x|4000d|5000d|6500d|7000d|2500x|2500d|frame\s+(?:4000d|4500x)|4500x)"),
     ("nzxt", r"(?:h[1-9]\d?|f[1-9]\d?|h[2-9]\d{2}|f[2-9]\d{2})"),
     ("fractal-design", r"(?:define\s+[rst]\d+|focus\s+g|meshify\s+[a-z]\d*|north(?:\s+xl)?)"),
     ("cooler-master", r"(?:nr\d{3,4}p?(?:\s+max)?|masterbox\s+[a-z0-9-]+)"),
@@ -142,13 +160,55 @@ class ExtractedProductData:
         }
 
 
-async def extract_cpk(
+# Exact input reuse only: no fuzzy matching across product variants or conditions.
+_CPK_RESULT_CACHE = OrderedDict()
+_CPK_INFLIGHT = {}
+_CPK_CACHE_LIMIT = 512
+
+
+async def extract_cpk(title: str, category: Optional[str] = None,
+    condition: Optional[str] = None, *, free_only: bool = False,
+    local_only: bool = False, raise_on_provider_error: bool = False,
+    timeout: float = 45) -> ExtractedProductData | None:
+    tiers=tuple((tier.provider,tier.model) for tier in _extraction_service().tiers())
+    key=(title,category,condition,free_only,local_only,raise_on_provider_error,timeout,tiers)
+    cached=_CPK_RESULT_CACHE.get(key)
+    if cached and cached[0]>monotonic():
+        _CPK_RESULT_CACHE.move_to_end(key)
+        return deepcopy(cached[1])
+    _CPK_RESULT_CACHE.pop(key,None)
+    task=_CPK_INFLIGHT.get(key)
+    if task is None:
+        async def run():
+            try:
+                value=await _extract_cpk_uncached(title,category,condition,
+                    free_only=free_only,local_only=local_only,
+                    raise_on_provider_error=raise_on_provider_error,timeout=timeout)
+                _CPK_RESULT_CACHE[key]=(monotonic()+(3600 if value is not None else 30),deepcopy(value))
+                _CPK_RESULT_CACHE.move_to_end(key)
+                while len(_CPK_RESULT_CACHE)>_CPK_CACHE_LIMIT:
+                    _CPK_RESULT_CACHE.popitem(last=False)
+                return value
+            finally:
+                _CPK_INFLIGHT.pop(key,None)
+        task=asyncio.create_task(run())
+        _CPK_INFLIGHT[key]=task
+    # Cancelling one page submission must not cancel another's shared extraction.
+    return deepcopy(await asyncio.shield(task))
+
+
+async def _extract_cpk_uncached(
     title: str,
     category: Optional[str] = None,
     condition: Optional[str] = None,
+    *,
+    free_only: bool = False,
+    local_only: bool = False,
+    raise_on_provider_error: bool = False,
+    timeout: float = 45,
 ) -> ExtractedProductData | None:
     """
-    Extract structured product data from a listing title using Qwen2:7b.
+    Extract structured product data from a listing title using the configured local model.
 
     Args:
         title: Listing title (e.g., "AMD Ryzen 7 3800X 8-Core Processor")
@@ -161,14 +221,13 @@ async def extract_cpk(
     case_identity = extract_case_identity(title)
     if case_identity and (category is None or category == "case"):
         brand, model = case_identity
-        cpk_input = f"case|{brand}|{model}"
         return ExtractedProductData(
             category="case",
             brand=brand,
             model=model,
             specs={},
             confidence=0.92,
-            cpk=hashlib.sha256(cpk_input.encode()).hexdigest()[:16],
+            cpk=case_product_key(title),
         )
 
     prompt = f"""You are a PC hardware product data extractor. Extract structured info from this listing title.
@@ -216,176 +275,61 @@ Input: "Mystery Box - PC Parts"
 Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.0,"extraction_notes":"no product data"}}
 """
 
-    # CPK extraction is enrichment and must not hold the queue hostage. A
-    # missing model endpoint should fail immediately, not occupy one of the
-    # four global extraction slots while the queue waits for retries.
-    settings = get_settings()
-    endpoint = (settings.ollama_base_url or "").strip().rstrip("/")
-    # The production web tier must never silently try to use a model on its
-    # own loopback interface. The database used to contain the default local
-    # Ollama URL even though no Ollama service exists in that container.
-    # Ollama is the local/dev provider and must win whenever it is configured.
-    # Previously the mere presence of an OpenRouter key forced every extraction
-    # request to the cloud, even when the dev API had a working local Ollama
-    # endpoint. That made a scan look busy while the local GPU remained idle.
-    use_openrouter = not bool(endpoint)
-    if use_openrouter and not settings.openrouter_api_key:
-        log.warning("cpk_extractor.no_model_endpoint")
-        return None
-    # Retry only plausibly transient failures. Low-confidence or malformed
-    # model output is a data-quality result and should remain rejected.
-    max_attempts = 2
-    timeout = httpx.Timeout(20.0, connect=3.0)
-
-    for attempt in range(max_attempts):
+    # Keep extractions from flooding the local model gateway during scans.
+    try:
+        async with _CPK_EXTRACTOR_SEMAPHORE:
+            selected = await _extraction_service().complete(
+                task="Gem Radar canonical product extraction",
+                messages=[{"role": "user", "content": prompt}],
+                system_prompt="Return only valid JSON. Do not use markdown or explanations.",
+                max_tokens=256, timeout=timeout, json_mode=True, free_only=free_only,
+                local_only=local_only, streaming=local_only,
+            )
+        output = selected.text.strip()
         try:
-            async with _CPK_EXTRACTOR_SEMAPHORE:
-                async with httpx.AsyncClient(timeout=timeout) as client:
-                    if use_openrouter:
-                        request_url = "https://openrouter.ai/api/v1/chat/completions"
-                        request_headers = {
-                            "Authorization": f"Bearer {settings.openrouter_api_key}",
-                            "Content-Type": "application/json",
-                            "HTTP-Referer": settings.frontend_url,
-                            "X-Title": "FlipFlop Gem Radar",
-                        }
-                        request_body = {
-                            "model": settings.openrouter_primary_model,
-                            "messages": [
-                                {
-                                    "role": "system",
-                                    "content": "Return only valid JSON. Do not use markdown or explanations.",
-                                },
-                                {"role": "user", "content": prompt},
-                            ],
-                            "temperature": 0.1,
-                            "max_tokens": 256,
-                            "response_format": {"type": "json_object"},
-                        }
-                    else:
-                        request_url = f"{endpoint}/api/generate"
-                        request_headers = None
-                        request_body = {
-                            "model": settings.ollama_model,
-                            "prompt": prompt,
-                            "stream": False,
-                            "format": "json",
-                            "options": {
-                                "temperature": 0.1,
-                                "num_predict": 256,
-                            },
-                        }
-                    resp = await client.post(
-                        request_url,
-                        headers=request_headers,
-                        json=request_body,
-                    )
+            data = json.loads(output)
+        except json.JSONDecodeError:
+            import re
+            match = re.search(r'\{.*\}', output, re.DOTALL)
+            if not match:
+                log.warning("cpk_extractor.json_parse_failed", output=output[:100])
+                return None
+            data = json.loads(match.group())
 
-                if resp.status_code != 200:
-                    transient_status = resp.status_code in {408, 429} or resp.status_code >= 500
-                    if transient_status and attempt + 1 < max_attempts:
-                        log.warning(
-                            "cpk_extractor.transient_error_retry",
-                            status=resp.status_code,
-                            attempt=attempt,
-                        )
-                        continue
-                    log.warning("cpk_extractor.model_error", status=resp.status_code, attempt=attempt)
-                    return None
-
-                # Success, process response
-                result = resp.json()
-                if use_openrouter:
-                    output = result.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
-                else:
-                    output = result.get("response", "").strip()
-
-                # Extract JSON from response
-                try:
-                    data = json.loads(output)
-                except json.JSONDecodeError:
-                    # Try to find JSON in output (model might add text before/after)
-                    import re
-                    match = re.search(r'\{.*\}', output, re.DOTALL)
-                    if not match:
-                        safe_output = output[:100].encode('utf-8', errors='replace').decode('utf-8', errors='replace')
-                        log.warning("cpk_extractor.json_parse_failed", output=safe_output)
-                        return None
-                    data = json.loads(match.group())
-
-                # Identity is upstream of every market cohort. A speculative
-                # match cannot be rescued by Phase 2 because it has already
-                # polluted the comparable set, so only high-confidence model
-                # extractions may receive a canonical product key.
-                if data.get("confidence", 0) < 0.7:
-                    log.debug("cpk_extractor.low_confidence", title=_safe_title(title), confidence=data.get("confidence"))
-                    return None
-
-                # Skip if no category/brand/model
-                category, brand, model = data.get("category"), data.get("brand"), data.get("model")
-                if not (category and brand and model):
-                    return None
-
-                # Skip if the model echoed its own prompt's field-description
-                # text back as the value instead of extracting real data —
-                # see _PLACEHOLDER_ECHO_MARKERS above. Accepting this as
-                # valid previously meant every listing hitting this failure
-                # mode for the same category collapsed into one shared,
-                # nonsense CPK.
-                if _is_placeholder_echo(brand) or _is_placeholder_echo(model):
-                    log.warning("cpk_extractor.placeholder_echo", title=_safe_title(title), category=category)
-                    return None
-
-                # Skip multi-category answers ("cpu|gpu") — a real standalone
-                # part is exactly one category; a hedge/join means the model
-                # couldn't tell (typically a full-PC bundle slipping past
-                # DETECTED_CATEGORY), and accepting it collapses every such
-                # bundle into one shared CPK regardless of its actual parts.
-                if category not in _VALID_CATEGORIES:
-                    log.debug("cpk_extractor.invalid_category", title=_safe_title(title), category=category)
-                    return None
-
-                # Generate Canonical Product Key from category|brand|model ONLY.
-                # `specs` is deliberately excluded from the hash input: it's a
-                # free-form dict the LLM extracts per-listing from whatever
-                # detail happens to appear in that seller's title, so it varies
-                # listing-to-listing for the exact same physical product (one
-                # seller's title mentions cores/threads/socket, another's
-                # doesn't). Since this is a cryptographic hash with no fuzzy
-                # matching, including specs meant two listings of the identical
-                # product almost never produced the same CPK — silently
-                # preventing get_market_price() from ever seeing 2+ listings
-                # share a key, so market prices never settled. specs is still
-                # captured in cpk_data for display/debugging, just not hashed.
-                data["brand"] = _slug(str(data["brand"]))
-                data["model"] = canonical_variant_model(data["category"], str(data["model"]), title)
-                if not data["brand"] or not data["model"]:
-                    return None
-                cpk_input = f"{data['category']}|{data['brand']}|{data['model']}"
-                cpk = hashlib.sha256(cpk_input.encode()).hexdigest()[:16]  # 16-char hex
-
-                return ExtractedProductData(
-                    category=data["category"],
-                    brand=data["brand"],
-                    model=data["model"],
-                    specs=data.get("specs", {}),
-                    confidence=data.get("confidence", 0),
-                    cpk=cpk,
-                )
-
-        except (httpx.TimeoutException, httpx.NetworkError) as exc:
-            if attempt + 1 < max_attempts:
-                log.warning(
-                    "cpk_extractor.transient_failure_retry",
-                    error=str(exc),
-                    attempt=attempt,
-                )
-                continue
-            log.warning("cpk_extractor.exception", error=str(exc), title=_safe_title(title))
+        # Identity is upstream of every market cohort. Only high-confidence
+        # model extractions may receive a canonical product key.
+        if data.get("confidence", 0) < 0.7:
+            log.debug("cpk_extractor.low_confidence", title=_safe_title(title), confidence=data.get("confidence"))
             return None
-        except Exception as exc:
-            log.warning("cpk_extractor.exception", error=str(exc), title=_safe_title(title))
+
+        category, brand, model = data.get("category"), data.get("brand"), data.get("model")
+        if not (category and brand and model):
             return None
+
+        if _is_placeholder_echo(brand) or _is_placeholder_echo(model):
+            log.warning("cpk_extractor.placeholder_echo", title=_safe_title(title), category=category)
+            return None
+
+        if category not in _VALID_CATEGORIES:
+            log.debug("cpk_extractor.invalid_category", title=_safe_title(title), category=category)
+            return None
+
+        data["brand"] = _slug(str(data["brand"]))
+        data["model"] = canonical_variant_model(data["category"], str(data["model"]), title)
+        if not data["brand"] or not data["model"]:
+            return None
+        cpk_input = f"{data['category']}|{data['brand']}|{data['model']}"
+        cpk = hashlib.sha256(cpk_input.encode()).hexdigest()[:16]
+
+        return ExtractedProductData(
+            category=data["category"], brand=data["brand"], model=data["model"],
+            specs=data.get("specs", {}), confidence=data.get("confidence", 0), cpk=cpk,
+        )
+    except Exception as exc:
+        log.warning("cpk_extractor.exception", error=str(exc), title=_safe_title(title))
+        if raise_on_provider_error:
+            raise
+        return None
 
 
 async def test_extraction():

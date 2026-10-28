@@ -18,16 +18,29 @@ depends_on = None
 
 
 def upgrade():
-    # Add pcbuild_id FK to builds table
-    op.add_column("builds", sa.Column("pcbuild_id", sa.Integer(), nullable=True))
-    op.create_foreign_key("fk_builds_pcbuild_id", "builds", "pc_builds", ["pcbuild_id"], ["id"])
+    inspector = sa.inspect(op.get_bind())
+    build_columns = {column["name"] for column in inspector.get_columns("builds")}
+    if "pcbuild_id" not in build_columns:
+        op.add_column("builds", sa.Column("pcbuild_id", sa.Integer(), nullable=True))
+    foreign_keys = inspector.get_foreign_keys("builds")
+    if not any(
+        fk["constrained_columns"] == ["pcbuild_id"]
+        and fk["referred_table"] == "pc_builds"
+        and fk["referred_columns"] == ["id"]
+        for fk in foreign_keys
+    ):
+        op.create_foreign_key("fk_builds_pcbuild_id", "builds", "pc_builds", ["pcbuild_id"], ["id"])
 
     # Add stage column to pc_builds with default "design"
-    op.add_column(
+    pcbuild_columns = {column["name"] for column in sa.inspect(op.get_bind()).get_columns("pc_builds")}
+    if "stage" not in pcbuild_columns:
+        op.add_column(
         "pc_builds",
         sa.Column("stage", sa.String(20), nullable=False, server_default="design"),
-    )
-    op.create_index("ix_pc_builds_stage", "pc_builds", ["stage"])
+        )
+    indexes = {index["name"] for index in sa.inspect(op.get_bind()).get_indexes("pc_builds")}
+    if "ix_pc_builds_stage" not in indexes:
+        op.create_index("ix_pc_builds_stage", "pc_builds", ["stage"])
 
     # Alter builds.build_type enum to include PREBUILT
     # SQLite doesn't support ALTER TYPE directly, so we need to use a raw SQL approach

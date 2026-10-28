@@ -1,0 +1,47 @@
+{
+  "listing_ids": [
+    16005,
+    16125,
+    16379,
+    16406,
+    16409,
+    16413
+  ],
+  "attempted": 6,
+  "captured": 5,
+  "retained": 1,
+  "unresolved": 0,
+  "by_host": {
+    "www.amazon.co.uk": {
+      "attempted": 5,
+      "captured": 5,
+      "retained": 0,
+      "unresolved": 0,
+      "capture_seconds_total": 80.207,
+      "capture_seconds_max": 17.074,
+      "queue_wait_seconds_total": 30.989,
+      "queue_wait_seconds_max": 16.205,
+      "unresolved_reasons": {}
+    },
+    "www.overclockers.co.uk": {
+      "attempted": 1,
+      "captured": 0,
+      "retained": 1,
+      "unresolved": 0,
+      "capture_seconds_total": 0.494,
+      "capture_seconds_max": 0.494,
+      "queue_wait_seconds_total": 16.437,
+      "queue_wait_seconds_max": 16.437,
+      "unresolved_reasons": {}
+    }
+  },
+  "amazon_catalogue_attributes": {
+    "attempted": 2,
+    "captured": 0,
+    "unresolved": 0,
+    "unavailable": 5,
+    "cached_unavailable": 3,
+    "status": "partial"
+  },
+  "published": false
+}

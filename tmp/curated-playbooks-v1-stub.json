@@ -2,16 +2,18 @@
   "version": "v1-stub",
   "currency": "GBP",
   "notes": [
-    "Costs are catalogue estimates \u2014 replace with FlipFlopXtension live fast-delivery vendor prices before Michael approval.",
+    "Costs are catalogue estimates — replace with FlipFlopXtension live fast-delivery vendor prices before Michael approval.",
     "indicative_sell_gbp is catalogue only; PricingBot owns suggested sell + upgrade add-ons.",
-    "Upsells are one-step-up within the same customer_type toward the next budget tier."
+    "Upsells are one-step-up within the same customer_type toward the next budget tier.",
+    "Fleet naming: Budget = shuttlecraft, Mid-range = smaller starships, High-end = major starships; Enterprise is the AI Workstation flagship.",
+    "Budget ranges are customer total spend in GBP; minimum is inclusive, maximum is exclusive, and High-end has no upper bound. Draft prices remain indicative pending PricingBot and supplier review."
   ],
   "playbooks": [
     {
       "playbook_id": "FF-GVG-01",
       "customer_type": "Great-value Gaming",
       "budget_tier": "Budget",
-      "name": "Atlas Essential",
+      "name": "Galileo",
       "status": "draft",
       "est_component_cost_gbp": 695,
       "indicative_sell_gbp": 930,
@@ -162,13 +164,15 @@
       "allowed_cases": [
         "Montech AIR 100 ARGB"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 0,
+      "budget_max_exclusive_gbp": 1300
     },
     {
       "playbook_id": "FF-GVG-02",
       "customer_type": "Great-value Gaming",
       "budget_tier": "Mid-range",
-      "name": "Atlas Pulse",
+      "name": "Cerritos",
       "status": "draft",
       "est_component_cost_gbp": 1275,
       "indicative_sell_gbp": 1700,
@@ -305,13 +309,15 @@
       "allowed_cases": [
         "Montech SKY TWO GX"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 1300,
+      "budget_max_exclusive_gbp": 2050
     },
     {
       "playbook_id": "FF-GVG-03",
       "customer_type": "Great-value Gaming",
       "budget_tier": "High-end",
-      "name": "Atlas Apex",
+      "name": "Voyager",
       "status": "draft",
       "est_component_cost_gbp": 1730,
       "indicative_sell_gbp": 2390,
@@ -412,13 +418,15 @@
       "allowed_cases": [
         "Lian Li LANCOOL 207"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 2050,
+      "budget_max_exclusive_gbp": null
     },
     {
       "playbook_id": "FF-HPG-01",
       "customer_type": "High-performance Gaming",
       "budget_tier": "Budget",
-      "name": "Vortex Start",
+      "name": "Columbus",
       "status": "draft",
       "est_component_cost_gbp": 1505,
       "indicative_sell_gbp": 1920,
@@ -541,13 +549,15 @@
       "allowed_cases": [
         "NZXT H5 Flow"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 0,
+      "budget_max_exclusive_gbp": 2150
     },
     {
       "playbook_id": "FF-HPG-02",
       "customer_type": "High-performance Gaming",
       "budget_tier": "Mid-range",
-      "name": "Prometheus ChromaFlair",
+      "name": "Defiant",
       "status": "draft",
       "est_component_cost_gbp": 1772,
       "indicative_sell_gbp": 2330,
@@ -691,13 +701,15 @@
       "allowed_cases": [
         "APNX Creator C1 ChromaFlair"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 2150,
+      "budget_max_exclusive_gbp": 4750
     },
     {
       "playbook_id": "FF-HPG-03",
       "customer_type": "High-performance Gaming",
       "budget_tier": "High-end",
-      "name": "Vortex Titan",
+      "name": "Titan",
       "status": "draft",
       "est_component_cost_gbp": 5480,
       "indicative_sell_gbp": 7190,
@@ -798,13 +810,15 @@
       "allowed_cases": [
         "Fractal Design North XL"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 4750,
+      "budget_max_exclusive_gbp": null
     },
     {
       "playbook_id": "FF-STU-01",
       "customer_type": "Student Hybrid",
       "budget_tier": "Budget",
-      "name": "Campus AI Mini",
+      "name": "Copernicus",
       "status": "draft",
       "est_component_cost_gbp": 480,
       "indicative_sell_gbp": 670,
@@ -948,13 +962,15 @@
       "allowed_cases": [
         "ASUS NUC 14 Pro-style compact chassis"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 0,
+      "budget_max_exclusive_gbp": 1000
     },
     {
       "playbook_id": "FF-STU-02",
       "customer_type": "Student Hybrid",
       "budget_tier": "Mid-range",
-      "name": "Campus Studio",
+      "name": "Equinox",
       "status": "draft",
       "est_component_cost_gbp": 1025,
       "indicative_sell_gbp": 1390,
@@ -1098,13 +1114,15 @@
       "allowed_cases": [
         "Fractal Design Pop Air"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 1000,
+      "budget_max_exclusive_gbp": 2150
     },
     {
       "playbook_id": "FF-STU-03",
       "customer_type": "Student Hybrid",
       "budget_tier": "High-end",
-      "name": "Campus Pro",
+      "name": "Discovery",
       "status": "draft",
       "est_component_cost_gbp": 2165,
       "indicative_sell_gbp": 2950,
@@ -1205,13 +1223,15 @@
       "allowed_cases": [
         "Lian Li LANCOOL 207"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 2150,
+      "budget_max_exclusive_gbp": null
     },
     {
       "playbook_id": "FF-BOF-01",
       "customer_type": "Business & Office",
       "budget_tier": "Budget",
-      "name": "Deskwise Essential",
+      "name": "Hawking",
       "status": "draft",
       "est_component_cost_gbp": 415,
       "indicative_sell_gbp": 590,
@@ -1355,13 +1375,15 @@
       "allowed_cases": [
         "Fractal Design Core 1100"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 0,
+      "budget_max_exclusive_gbp": 900
     },
     {
       "playbook_id": "FF-BOF-02",
       "customer_type": "Business & Office",
       "budget_tier": "Mid-range",
-      "name": "Deskwise Pro",
+      "name": "Reliant",
       "status": "draft",
       "est_component_cost_gbp": 945,
       "indicative_sell_gbp": 1290,
@@ -1470,13 +1492,15 @@
       "allowed_cases": [
         "Fractal Design Define 7 Compact"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 900,
+      "budget_max_exclusive_gbp": 1500
     },
     {
       "playbook_id": "FF-BOF-03",
       "customer_type": "Business & Office",
       "budget_tier": "High-end",
-      "name": "Deskwise Executive",
+      "name": "Excelsior",
       "status": "draft",
       "est_component_cost_gbp": 750,
       "indicative_sell_gbp": 1140,
@@ -1577,13 +1601,15 @@
       "allowed_cases": [
         "Premium compact aluminium mini-PC chassis"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 1500,
+      "budget_max_exclusive_gbp": null
     },
     {
       "playbook_id": "FF-CCR-01",
       "customer_type": "Content Creation",
       "budget_tier": "Budget",
-      "name": "Creator Forge",
+      "name": "Goddard",
       "status": "draft",
       "est_component_cost_gbp": 1710,
       "indicative_sell_gbp": 2170,
@@ -1727,13 +1753,15 @@
       "allowed_cases": [
         "Corsair 3500X"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 0,
+      "budget_max_exclusive_gbp": 3150
     },
     {
       "playbook_id": "FF-CCR-02",
       "customer_type": "Content Creation",
       "budget_tier": "Mid-range",
-      "name": "Creator Signal",
+      "name": "Stargazer",
       "status": "draft",
       "est_component_cost_gbp": 3200,
       "indicative_sell_gbp": 4110,
@@ -1877,13 +1905,15 @@
       "allowed_cases": [
         "ASUS ProArt PA602"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 3150,
+      "budget_max_exclusive_gbp": 5750
     },
     {
       "playbook_id": "FF-CCR-03",
       "customer_type": "Content Creation",
       "budget_tier": "High-end",
-      "name": "Creator Nova",
+      "name": "Odyssey",
       "status": "draft",
       "est_component_cost_gbp": 5675,
       "indicative_sell_gbp": 7440,
@@ -1984,13 +2014,15 @@
       "allowed_cases": [
         "Fractal Design Define 7 XL"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 5750,
+      "budget_max_exclusive_gbp": null
     },
     {
       "playbook_id": "FF-AIW-01",
       "customer_type": "AI Workstation",
       "budget_tier": "Budget",
-      "name": "Localhost 16",
+      "name": "Chaffee",
       "status": "draft",
       "est_component_cost_gbp": 1670,
       "indicative_sell_gbp": 2120,
@@ -2141,13 +2173,15 @@
       "allowed_cases": [
         "Fractal Design Meshify 2 Compact"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 0,
+      "budget_max_exclusive_gbp": 3100
     },
     {
       "playbook_id": "FF-AIW-02",
       "customer_type": "AI Workstation",
       "budget_tier": "Mid-range",
-      "name": "Localhost 32",
+      "name": "Rhode Island",
       "status": "draft",
       "est_component_cost_gbp": 3190,
       "indicative_sell_gbp": 4100,
@@ -2298,13 +2332,15 @@
       "allowed_cases": [
         "Fractal Design Meshify 2 XL"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 3100,
+      "budget_max_exclusive_gbp": 10700
     },
     {
       "playbook_id": "FF-AIW-03",
       "customer_type": "AI Workstation",
       "budget_tier": "High-end",
-      "name": "Localhost 48",
+      "name": "Enterprise",
       "status": "draft",
       "est_component_cost_gbp": 13350,
       "indicative_sell_gbp": 17260,
@@ -2405,13 +2441,15 @@
       "allowed_cases": [
         "Corsair 9000D Airflow"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 10700,
+      "budget_max_exclusive_gbp": null
     },
     {
       "playbook_id": "FF-SWD-01",
       "customer_type": "Software Development",
       "budget_tier": "Budget",
-      "name": "Codebase",
+      "name": "Sakharov",
       "status": "draft",
       "est_component_cost_gbp": 1145,
       "indicative_sell_gbp": 1480,
@@ -2562,13 +2600,15 @@
       "allowed_cases": [
         "Fractal Design Pop Air"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 0,
+      "budget_max_exclusive_gbp": 2300
     },
     {
       "playbook_id": "FF-SWD-02",
       "customer_type": "Software Development",
       "budget_tier": "Mid-range",
-      "name": "Compiler",
+      "name": "Protostar",
       "status": "draft",
       "est_component_cost_gbp": 2410,
       "indicative_sell_gbp": 3120,
@@ -2705,13 +2745,15 @@
       "allowed_cases": [
         "Fractal Design North"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 2300,
+      "budget_max_exclusive_gbp": 3950
     },
     {
       "playbook_id": "FF-SWD-03",
       "customer_type": "Software Development",
       "budget_tier": "High-end",
-      "name": "Shipyard",
+      "name": "Prometheus",
       "status": "draft",
       "est_component_cost_gbp": 3610,
       "indicative_sell_gbp": 4800,
@@ -2812,13 +2854,15 @@
       "allowed_cases": [
         "Fractal Design Define 7 XL"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 3950,
+      "budget_max_exclusive_gbp": null
     },
     {
       "playbook_id": "FF-FAM-01",
       "customer_type": "Family & Home",
       "budget_tier": "Budget",
-      "name": "Hearth",
+      "name": "Cochrane",
       "status": "draft",
       "est_component_cost_gbp": 415,
       "indicative_sell_gbp": 590,
@@ -2969,13 +3013,15 @@
       "allowed_cases": [
         "Fractal Design Core 1100"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 0,
+      "budget_max_exclusive_gbp": 1100
     },
     {
       "playbook_id": "FF-FAM-02",
       "customer_type": "Family & Home",
       "budget_tier": "Mid-range",
-      "name": "Haven",
+      "name": "Grissom",
       "status": "draft",
       "est_component_cost_gbp": 1220,
       "indicative_sell_gbp": 1640,
@@ -3126,13 +3172,15 @@
       "allowed_cases": [
         "Montech AIR 100 ARGB"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 1100,
+      "budget_max_exclusive_gbp": 2100
     },
     {
       "playbook_id": "FF-FAM-03",
       "customer_type": "Family & Home",
       "budget_tier": "High-end",
-      "name": "Horizon",
+      "name": "Galaxy",
       "status": "draft",
       "est_component_cost_gbp": 1875,
       "indicative_sell_gbp": 2580,
@@ -3233,7 +3281,9 @@
       "allowed_cases": [
         "APNX Creator C1 ChromaFlair"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 2100,
+      "budget_max_exclusive_gbp": null
     }
   ]
 }

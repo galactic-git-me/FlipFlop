@@ -1,7 +1,9 @@
 import structlog
 import asyncio
 import os
+import re
 import sys
+import threading
 
 # Windows' console defaults to cp1252, which crashes on emoji/unicode in log
 # output (e.g. AI-generated listing descriptions). Force UTF-8 before any
@@ -12,10 +14,9 @@ if sys.platform == "win32":
 
 # Load .env files FIRST, before any config imports
 from pathlib import Path
-from dotenv import load_dotenv
+from app.environment import load_application_environment
 _app_dir = Path(__file__).parent.parent
-load_dotenv(_app_dir / ".env")
-load_dotenv(_app_dir / ".env.local")
+load_application_environment(_app_dir)
 
 # Playwright requires ProactorEventLoop on Windows to launch browser subprocesses.
 # Must be set before any asyncio usage.
@@ -35,7 +36,7 @@ from app.database import engine, Base
 from app import models as _models  # noqa: F401  Ensures all ORM models are registered before create_all
 from app.workers.scheduler import start_scheduler, stop_scheduler, run_startup_bootstrap
 from app.api import listings, flips, parts, sources, chat, config, swarms, inventory, inventory_allocations, inventory_intelligence, growth
-from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms, price_evidence
+from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms, price_evidence, recommendations, commerce_intelligence, upgrades
 from app.api import alerts, reselling, ebay_listings, favourites
 from app.api import email_events
 from app.api import cross_listing
@@ -59,14 +60,71 @@ from app.api.benchmarks import router as benchmarks_router
 from app.api.companion import router as companion_router
 from app.api.price_benchmarks import router as price_benchmarks_router
 from app.api.catalogue import router as catalogue_router
+from app.api.curated_builds import router as curated_builds_router
+from app.api.custom_builds import router as custom_builds_router, public_router as custom_builds_public_router
 from app.api.configurator_admin import router as configurator_admin_router
 from app.api.public_catalogue import router as public_catalogue_router
 from app.api.public_configurator import router as public_configurator_router
+from app.api.public_studio import router as public_studio_router
+from app.api.public_support import router as public_support_router
+
+
+async def _ensure_additive_columns(conn, statements) -> None:
+    """Apply startup-added columns only when the active schema lacks them."""
+    pattern = re.compile(r"^ALTER TABLE ([a-z_][a-z0-9_]*) ADD COLUMN IF NOT EXISTS ([a-z_][a-z0-9_]*)\b", re.I)
+    for statement in statements:
+        match = pattern.match(statement.strip())
+        if match:
+            table, column = match.groups()
+            result = await conn.execute(text("""
+                SELECT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_schema=current_schema()
+                      AND table_name=:table_name AND column_name=:column_name
+                )
+            """), {"table_name": table, "column_name": column})
+            if result.scalar_one():
+                continue
+        await conn.exec_driver_sql(statement)
+
+
+async def _relax_listing_price_constraint(conn) -> None:
+    """Allow an exact source candidate to exist while its offer price is unknown."""
+    if conn.dialect.name != "postgresql":
+        return
+    result = await conn.execute(text("""
+        SELECT is_nullable = 'YES'
+        FROM information_schema.columns
+        WHERE table_schema=current_schema()
+          AND table_name='listings' AND column_name='price'
+    """))
+    if result.scalar_one() is True:
+        return
+    await conn.exec_driver_sql("ALTER TABLE listings ALTER COLUMN price DROP NOT NULL")
 
 
 async def _install_manual_build_delete_guard(conn) -> None:
     """Install the final database-layer guard for irreplaceable build rows."""
     if conn.dialect.name != "postgresql":
+        return
+    installed = await conn.execute(text("""
+        SELECT to_regclass('public.manual_build_deletion_audit') IS NOT NULL
+          AND to_regprocedure('public.protect_manual_build_from_delete()') IS NOT NULL
+          AND to_regprocedure('public.audit_manual_build_archive()') IS NOT NULL
+          AND EXISTS (
+              SELECT 1 FROM pg_trigger
+              WHERE tgrelid=to_regclass('public.manual_builds')
+                AND tgname='trg_protect_manual_build_delete' AND NOT tgisinternal
+                AND tgfoid=to_regprocedure('public.protect_manual_build_from_delete()')
+          )
+          AND EXISTS (
+              SELECT 1 FROM pg_trigger
+              WHERE tgrelid=to_regclass('public.manual_builds')
+                AND tgname='trg_audit_manual_build_archive' AND NOT tgisinternal
+                AND tgfoid=to_regprocedure('public.audit_manual_build_archive()')
+          )
+    """))
+    if installed.scalar_one():
         return
     statements = [
         """
@@ -146,6 +204,9 @@ from app.routes.admin import router as admin_router
 from app.routes.gems import router as gems_router
 from app.routes.admin_auth import router as admin_auth_router
 from app.api.motherboard_specs import router as motherboard_specs_router
+from app.api.curated_promotion import router as curated_promotion_router
+from app.api.meshy_asset_downloader import router as meshy_asset_downloader_router
+from app.api.curated_availability import public_router as curated_availability_public_router, admin_router as curated_availability_admin_router
 from app.api.logs import install_log_capture
 from app.services.playwright_scraper import chromium_available
 from app.services.antibot_preflight import run_antibot_preflight
@@ -387,11 +448,17 @@ def _install_sigchld_reaper() -> None:
     import signal as _signal
     import platform
     # SIGCHLD only exists on Unix-like systems, not Windows
-    if platform.system() != "Windows" and hasattr(_signal, 'SIGCHLD'):
+    # Signal handlers can only be installed from the main interpreter thread;
+    # ASGI test clients run lifespan in a worker thread.
+    if (
+        platform.system() != "Windows"
+        and hasattr(_signal, "SIGCHLD")
+        and threading.current_thread() is threading.main_thread()
+    ):
         _signal.signal(_signal.SIGCHLD, _signal.SIG_IGN)
         log.info("browser_pool.sigchld_reaper_installed")
     else:
-        log.info("browser_pool.sigchld_reaper_skipped (Windows or no SIGCHLD support)")
+        log.info("browser_pool.sigchld_reaper_skipped (Windows, no SIGCHLD support, or non-main thread)")
 
 
 async def _reap_zombie_children() -> None:
@@ -400,6 +467,8 @@ async def _reap_zombie_children() -> None:
     SIGCHLD=SIG_IGN approach above.  Catches both ChildProcessError and
     the broader OSError so it never silently dies.
     """
+    if not hasattr(os, "WNOHANG"):
+        return
     while True:
         try:
             reaped = 0
@@ -489,17 +558,20 @@ async def lifespan(app: FastAPI):
         # Small additive lifecycle columns used by Email Events/Dispatch
         # Zone. Keep this separate from the legacy broad migration because
         # that migration is intentionally disabled in production startup.
-        for statement in (
+        await _ensure_additive_columns(conn, (
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS customer_email VARCHAR(320)",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS dispatch_status VARCHAR(30) DEFAULT 'awaiting_dispatch'",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS collection_date TIMESTAMP",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS delivered_at TIMESTAMP",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS warranty_started_at TIMESTAMP",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS customer_id INTEGER",
+            "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS ebay_ship_by_date TIMESTAMP",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS delivery_followup_sent_at TIMESTAMP",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS relist_enabled BOOLEAN DEFAULT TRUE",
             "ALTER TABLE app_settings ADD COLUMN IF NOT EXISTS relist_interval_days INTEGER DEFAULT 7",
             "ALTER TABLE app_settings ADD COLUMN IF NOT EXISTS relist_enabled_default BOOLEAN DEFAULT TRUE",
+            "ALTER TABLE app_settings ADD COLUMN IF NOT EXISTS storefront_trust_messages JSON DEFAULT '[]'",
+            "ALTER TABLE app_settings ADD COLUMN IF NOT EXISTS storefront_trust_message_seconds INTEGER DEFAULT 6",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS recreate_enabled BOOLEAN DEFAULT FALSE",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS recreate_interval_days INTEGER",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS next_recreate_at TIMESTAMP",
@@ -510,8 +582,23 @@ async def lifespan(app: FastAPI):
             "ALTER TABLE products ADD COLUMN IF NOT EXISTS item_specifics JSON",
             "ALTER TABLE products ADD COLUMN IF NOT EXISTS platform_category_id VARCHAR(30)",
             "ALTER TABLE products ADD COLUMN IF NOT EXISTS platform_category_name VARCHAR(150)",
-        ):
-            await conn.exec_driver_sql(statement)
+            "ALTER TABLE gem_radar_scored_listings ADD COLUMN IF NOT EXISTS cpk VARCHAR(64)",
+        ))
+        # Canonical Product Keys can be up to 64 characters. ADD COLUMN IF
+        # NOT EXISTS does not widen an older VARCHAR(16) column, so normalize
+        # existing Gem Radar tables before background scoring updates run.
+        for table in ("gem_radar_scored_listings", "cpk_pricing_index"):
+            width = await conn.execute(text("""
+                SELECT character_maximum_length
+                FROM information_schema.columns
+                WHERE table_schema=current_schema()
+                  AND table_name=:table_name AND column_name='cpk'
+            """), {"table_name": table})
+            current_width = width.scalar_one_or_none()
+            if current_width is not None and current_width < 64:
+                await conn.exec_driver_sql(
+                    f"ALTER TABLE {table} ALTER COLUMN cpk TYPE VARCHAR(64)"
+                )
         await _install_manual_build_delete_guard(conn)
     # DISABLED: migrations deadlock on ALTER TABLE (PostgreSQL constraint acquisition)
     # Safe to skip because all migrations use IF NOT EXISTS and are idempotent
@@ -521,7 +608,6 @@ async def lifespan(app: FastAPI):
     # if settings.app_env == "dev":
     #     await _wipe_dev_data()
     # await _seed_default_data()
-    await _load_db_settings_into_config()
     reaper = None
     gem_radar_retention = None
     queue_processor = None
@@ -530,6 +616,13 @@ async def lifespan(app: FastAPI):
     cache = None
 
     if not settings.web_only:
+        # create_all does not migrate existing tables. Refuse to start
+        # sourcing against incompatible scan models instead of exhausting
+        # the entire queue's retries on the same missing column.
+        from app.gem_radar.schema_guard import require_scan_schema
+        from app.database import AsyncSessionLocal
+        async with AsyncSessionLocal() as schema_db:
+            await require_scan_schema(schema_db)
         start_workers()  # Uses DEFAULT_WORKERS (16) for 4x throughput
         start_eval_workers()
         start_part_eval_workers()
@@ -554,7 +647,7 @@ async def lifespan(app: FastAPI):
         cache = await get_sold_comps_cache()
         log.info("app.ready", note="full pipeline enabled - ingest/eval/build workers + scheduler + queue processor + margin verifier + sold comps cache running")
     else:
-        log.info("app.ready", note="web-only production API enabled; background and AI workers disabled")
+        log.info("app.ready", note="web-only API enabled; background and AI workers disabled")
     yield
     # Cleanup Redis cache connection
     if cache is not None:
@@ -602,40 +695,6 @@ async def _queue_unevaluated_gems():
         log.warning("startup.gem_queue_backfill_failed", error=str(exc))
 
 
-async def _load_db_settings_into_config():
-    """
-    Push DB-stored API keys and model config into the live Settings cache
-    so ai_service.py picks them up immediately on startup without requiring
-    a server restart after the user saves a key in the Settings UI.
-    """
-    from app.database import AsyncSessionLocal
-    from app.models.app_settings import AppSettings
-    from app.models.source_search_term import SourceSearchTerm
-    from sqlalchemy import select
-    try:
-        async with AsyncSessionLocal() as db:
-            result = await db.execute(select(AppSettings).where(AppSettings.name == "default"))
-            db_settings = result.scalar_one_or_none()
-            if not db_settings:
-                return
-            cfg = get_settings()
-            if db_settings.openrouter_api_key:
-                cfg.openrouter_api_key = db_settings.openrouter_api_key
-            if db_settings.openrouter_primary_model:
-                cfg.openrouter_primary_model = db_settings.openrouter_primary_model
-            if db_settings.ollama_model:
-                cfg.ollama_model = db_settings.ollama_model
-            if db_settings.ollama_base_url:
-                cfg.ollama_base_url = db_settings.ollama_base_url
-            log.info(
-                "config.loaded_from_db",
-                has_openrouter_key=bool(db_settings.openrouter_api_key),
-                model=cfg.openrouter_primary_model,
-            )
-    except Exception as exc:
-        log.warning("config.db_load_failed", error=str(exc))
-
-
 app = FastAPI(
     title="PC Flip Profit Maximizer API",
     version="5.0.0",
@@ -648,10 +707,13 @@ app = FastAPI(
 # uploads live under data/uploads and are served directly by this process.
 _uploads_dir = _app_dir / "data" / "uploads"
 _uploads_dir.mkdir(parents=True, exist_ok=True)
+_three_d_media_dir = _app_dir / "data" / "3d-media"
+_three_d_media_dir.mkdir(parents=True, exist_ok=True)
 # Mounted under /api so Caddy's existing /api/* proxy to this service (see
 # flipflop-shop's next.config.ts) makes these reachable publicly — plain
 # /uploads/* would fall through to the customer Next app instead.
 app.mount("/api/uploads", StaticFiles(directory=str(_uploads_dir)), name="uploads")
+app.mount("/api/3d-media", StaticFiles(directory=str(_three_d_media_dir)), name="3d-media")
 
 app.add_middleware(
     CORSMiddleware,
@@ -708,9 +770,15 @@ app.include_router(config.router, prefix="/api")
 app.include_router(swarms.router, prefix="/api")
 app.include_router(intel.router, prefix="/api")
 app.include_router(settings_router.router, prefix="/api")
+app.include_router(settings_router.public_router, prefix="/api")
+app.include_router(settings_router.storefront_public_router, prefix="/api")
 app.include_router(debug.router, prefix="/api")
 app.include_router(logs_api.router, prefix="/api")
 app.include_router(playbooks.router, prefix="/api")
+app.include_router(recommendations.router, prefix="/api")
+app.include_router(commerce_intelligence.router, prefix="/api")
+app.include_router(upgrades.router, prefix="/api")
+app.include_router(upgrades.admin_router, prefix="/api")
 app.include_router(growth.router, prefix="/api")
 # Keep the dashboard's legacy `/api/admin/orders` handlers ahead of the newer
 # async order-management router.  Both routers expose the same paths; route
@@ -748,9 +816,14 @@ app.include_router(companion_router, prefix="/api")
 app.include_router(ram_watch_router, prefix="/api")
 app.include_router(price_benchmarks_router, prefix="/api")
 app.include_router(catalogue_router, prefix="/api")
+app.include_router(curated_builds_router, prefix="/api")
+app.include_router(custom_builds_router, prefix="/api")
+app.include_router(custom_builds_public_router, prefix="/api")
 app.include_router(configurator_admin_router, prefix="/api")
 app.include_router(public_catalogue_router, prefix="/api")
 app.include_router(public_configurator_router, prefix="/api")
+app.include_router(public_studio_router, prefix="/api")
+app.include_router(public_support_router, prefix="/api")
 app.include_router(public_products_router, prefix="/api")
 app.include_router(public_showcase_router, prefix="/api")
 app.include_router(public_reviews_router, prefix="/api")
@@ -770,6 +843,10 @@ app.include_router(auth_router, prefix="/api")
 app.include_router(oauth_router, prefix="/api")
 app.include_router(admin_auth_router, prefix="/api")
 app.include_router(motherboard_specs_router, prefix="/api")
+app.include_router(curated_promotion_router, prefix="")
+app.include_router(meshy_asset_downloader_router, prefix="")
+app.include_router(curated_availability_public_router, prefix="")
+app.include_router(curated_availability_admin_router, prefix="")
 app.include_router(quotes_router, prefix="/api")
 app.include_router(payments_router, prefix="/api")
 app.include_router(webhooks_router, prefix="/api")
@@ -800,6 +877,13 @@ async def health():
         "status": "ok",
         "version": "5.0.0",
         "app_env": settings.app_env,
+        "web_only": settings.web_only,
+        "provider_modes": {
+            "ebay_listing": settings.ebay_listing_environment,
+            "amazon_listing": settings.amazon_sp_api_environment,
+            "courier": settings.parcel2go_environment,
+            "stripe": "test" if settings.stripe_secret_key.startswith("sk_test_") else "live" if settings.stripe_secret_key.startswith("sk_live_") else "unconfigured",
+        },
         "started_at": _startup_time.isoformat(),
     }
 
@@ -912,6 +996,7 @@ async def _migrate_add_columns():
         ("gem_radar_scored_listings", "url", "VARCHAR(1000)"),
         # Manual build → sell lifecycle (purchased components → built → listed)
         ("manual_builds", "status",                "VARCHAR(20) DEFAULT 'in_progress'"),
+        ("manual_builds", "creation_method",       "VARCHAR(20) DEFAULT 'manual'"),
         ("manual_builds", "generated_title",        "VARCHAR(80)"),
         ("manual_builds", "generated_description",  "TEXT"),
         ("manual_builds", "ebay_listing_id",         "VARCHAR(60)"),
@@ -992,6 +1077,12 @@ async def _migrate_add_columns():
                 # Log and continue - the column might already exist or operation might fail
                 # but we don't want to block startup completely
                 log.warning("migration.column_skipped", index=i, table=table, column=col, error=str(exc)[:100])
+
+        try:
+            await _relax_listing_price_constraint(conn)
+            log.debug("migration.constraint_relaxed", table="listings", column="price")
+        except Exception as exc:
+            log.warning("migration.constraint_relax_failed", table="listings", column="price", error=str(exc)[:100])
 
         # playbook_proposals.playbook_id was originally NOT NULL, but a
         # CREATE-action proposal has no playbook yet (see app/api/playbooks.py
@@ -1188,6 +1279,7 @@ async def _seed_default_data():
             ("John Pye",          "https://www.johnpye.co.uk",    False),
             ("Amazon",            "https://www.amazon.co.uk",      True),
             ("eBuyer",            "https://www.ebuyer.com",        True),
+            ("Gamers Outlet",     "https://www.gamers-outlet.net", True),
             ("Temu",              "https://www.temu.com",          True),
             ("AliExpress",        "https://www.aliexpress.com",    True),
             ("Alibaba",           "https://www.alibaba.com",       True),
@@ -1302,10 +1394,8 @@ async def _seed_default_data():
         if settings_count == 0:
             db.add(AppSettings(
                 name="default",
-                ollama_model=settings.ollama_model,
-                ollama_base_url=settings.ollama_base_url,
             ))
-            log.info("seeded.app_settings", model=settings.ollama_model)
+            log.info("seeded.app_settings")
 
         # ── Seed / migrate canonical playbooks ───────────────────────────────
         # Handled by playbook_seeder: retires old playbooks, renames, inserts

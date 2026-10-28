@@ -9,7 +9,8 @@ export const dynamic = "force-dynamic";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import JSZip from "jszip";
-import DOMPurify from "isomorphic-dompurify";
+import DOMPurify from "dompurify";
+import ChannelImageReview, { type ImageReviewRequest } from "@/components/ChannelImageReview";
 import {
   AlertTriangle,
   Check,
@@ -77,7 +78,8 @@ function listingWithImages(item: CrossListingSource, imageUrls: string[]) {
   const images = imageUrls
     .map((url, order) => {
       const image = item.listing.images.find((candidate) => candidate.url === url);
-      return image ? { ...image, order } : null;
+      const original = image ?? item.listing.images[order];
+      return original ? { ...original, url, order } : null;
     })
     .filter((image): image is NonNullable<typeof image> => Boolean(image));
   return {
@@ -892,6 +894,7 @@ export default function CrossListingPage() {
   const [editingDescriptionSource, setEditingDescriptionSource] = useState(false);
   const [draftPrice, setDraftPrice] = useState("");
   const [publishing, setPublishing] = useState(false);
+  const [channelImageReview, setChannelImageReview] = useState<ImageReviewRequest[] | null>(null);
   const [progressJobs, setProgressJobs] = useState<ProgressJob[]>([]);
   const [results, setResults] = useState<ListingResult[]>([]);
   const [imageSelectionRequests, setImageSelectionRequests] = useState<
@@ -1082,7 +1085,7 @@ export default function CrossListingPage() {
       const [summary, ebay, amazon, scheduleRows, actionRows, settings] =
         await Promise.all([
           api.manualBuilds.list(),
-          api.ebayOAuth.status().catch(() => ({ connected: false })),
+          fetch("/proxy-api/cross-listing/ebay/status", { cache: "no-store" }).then(async (response) => response.ok ? response.json() : { connected: false }).catch(() => ({ connected: false })),
           api.crossListing.amazonStatus().catch(() => ({
             connected: false,
             message: "Amazon connection could not be checked.",
@@ -1397,8 +1400,17 @@ export default function CrossListingPage() {
     setImageSelections({});
   };
 
-  const executePublish = async (selectedImageMap: Record<string, string[]> = {}) => {
+  const executePublish = async (selectedImageMap: Record<string, string[]> = {}, imagesApproved = false) => {
     if (!selectedItems.length || !destinations.length) return;
+    if (!imagesApproved) {
+      setChannelImageReview(selectedItems.flatMap((item) => destinations.map((channel) => {
+        const regularPhotos = new Set((builds[item.buildId]?.photos ?? []).filter((photo) => photo.kind === "photo").map((photo) => photo.url));
+        const limit = channelCapabilities.find((entry) => entry.channel === channel)?.maxImages ?? undefined;
+        return { buildId: item.buildId, title: item.title, channel,
+          urls: (selectedImageMap[imageSelectionKey(item.buildId, channel)] ?? item.listing.images.map((image) => image.url).filter((url) => regularPhotos.has(url))).slice(0, limit) };
+      })));
+      return;
+    }
     setPublishing(true);
     setResults([]);
     setProgressJobs(
@@ -2309,6 +2321,10 @@ export default function CrossListingPage() {
         onResult={(id, success) => void recordCodexResult(id, success)}
       />
 
+      {channelImageReview && <ChannelImageReview requests={channelImageReview} onCancel={() => setChannelImageReview(null)} onApproved={(urls) => {
+        setChannelImageReview(null);
+        void executePublish(urls, true);
+      }} />}
       {review && (
         <div
           role="dialog"

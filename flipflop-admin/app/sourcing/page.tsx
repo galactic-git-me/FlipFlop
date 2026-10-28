@@ -3,11 +3,13 @@
 import { memo, Suspense, useEffect, useId, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer, Info, X, History } from "lucide-react";
+import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer, X, History } from "lucide-react";
 import PixelCard from "../../components/ui/PixelCard";
 import { VendorLogo } from "../../components/VendorLogo";
 import { PriceHistorySparkline } from "../../components/listings/PriceHistorySparkline";
 import { api, MarketSnapshot } from "@/lib/api";
+import { normalizeScoredListingsResponse } from "@/lib/scored-listings-response";
+import { loadSourcingRefresh } from "@/lib/sourcing-refresh";
 import { fuzzyMatches } from "@/lib/fuzzy";
 import { VENDOR_ORDER, VENDOR_META, canonicalVendorKey } from "@/lib/vendors";
 import {
@@ -46,6 +48,8 @@ interface Listing {
   market_lower_price?: number | null;
   market_median_price?: number | null;
   market_upper_price?: number | null;
+  market_lower_url?: string | null;
+  market_upper_url?: string | null;
   pct_offset?: number | null;
   amazon_bestseller_rank?: number | null;
   amazon_bestseller_list?: string | null;
@@ -67,6 +71,8 @@ interface Listing {
   market_sample_size?: number | null;
   active_listing_count?: number | null;
   sold_listing_count?: number | null;
+  review_average_rating?: number | null;
+  review_count?: number | null;
   sell_through_rate_pct?: number | null;
   market_source_diversity?: number | null;
   market_spread_pct?: number | null;
@@ -141,8 +147,19 @@ interface ScanProgress {
   configuredVendors?: string[];
 }
 
+function hasNoPendingGaugeWork(scan: ScanProgress): boolean {
+  const denominator = Math.max(scan.eligibleCount ?? scan.totalListings ?? 0, scan.ingestedCount ?? 0);
+  return denominator > 0 &&
+    scan.ingestedCount >= denominator &&
+    scan.cpkAssignedCount >= scan.ingestedCount &&
+    scan.marketPricedCount >= scan.cpkAssignedCount &&
+    (scan.eligibleScoreCount ?? 0) + (scan.ineligibleScoreCount ?? 0) >= scan.marketPricedCount;
+}
+
 interface PipelineStatusResponse {
   runId?: string | null;
+  completedSweepRequestedAt?: string | null;
+  pendingSweepRequestedAt?: string | null;
   activeScans: ScanProgress[];
   recentHistory: Array<{ query: string; total_listings: number; ingested_count: number; elapsed_s: number; failed: boolean }>;
   binPricesCount: number;
@@ -343,21 +360,19 @@ function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, displayValue
   );
 }
 
-function ScoresGauge({ eligible, cpkFailures, marketFailures, upstreamFailureStart, ineligible, max }: {
+function ScoresGauge({ eligible, ineligible, upstreamFailures, upstreamFailureStart, max }: {
   eligible: number;
-  cpkFailures: number;
-  marketFailures: number;
-  upstreamFailureStart: number;
   ineligible: number;
+  upstreamFailures: number;
+  upstreamFailureStart: number;
   max: number;
 }) {
   const id = useId().replace(/:/g, "");
   const safeMax = Math.max(max, 0);
   const radius = 24;
   const circumference = 2 * Math.PI * radius;
-  // The thick band is reserved for outcomes from Scores itself.  CPK and
-  // M Prices failures are upstream of Scores, so they are deliberately
-  // combined into the thin pink arc rather than rendered as dotted bars.
+  // The thick band shows score outcomes. Eligible classifications are solid;
+  // ineligible classifications remain visible as a patterned segment.
   const rawSegments = [
     { value: eligible, dotted: false, label: "eligible scores" },
     { value: ineligible, dotted: true, label: "ineligible scores" },
@@ -368,14 +383,10 @@ function ScoresGauge({ eligible, cpkFailures, marketFailures, upstreamFailureSta
     allocated += value;
     return { ...segment, value };
   });
-  const upstreamFailures = Math.min(
-    Math.max(cpkFailures, 0) + Math.max(marketFailures, 0),
-    Math.max(safeMax - allocated, 0),
+  const upstreamFailureCount = Math.min(
+    Math.max(upstreamFailures, 0),
+    Math.max(safeMax - Math.min(Math.max(upstreamFailureStart, 0), safeMax), 0),
   );
-  // Match the upstream gauges' population positions.  M Prices failures
-  // begin immediately after the successfully market-priced listings; CPK
-  // failures follow them.  The thin combined arc therefore begins at the
-  // M Prices failure position, not after the Score-stage bands.
   const upstreamFailureStartLength = circumference * (
     Math.min(Math.max(upstreamFailureStart, 0), safeMax) / (safeMax || 1)
   );
@@ -387,7 +398,7 @@ function ScoresGauge({ eligible, cpkFailures, marketFailures, upstreamFailureSta
       <svg width={60} height={60} viewBox="0 0 60 60" className="drop-shadow-[1px_2px_1px_rgba(2,6,23,0.9)]" aria-label={`Scores: ${Math.round(pct)}% eligible`}>
         <title>{[
           ...segments.map((segment) => `${segment.label}: ${segment.value}`),
-          `upstream failures (CPK + M Prices): ${upstreamFailures}`,
+          `upstream failures: ${upstreamFailureCount}`,
         ].join(", ")}</title>
         <defs>
           {/* Keep the successful Scores arc visually identical to the other
@@ -417,20 +428,11 @@ function ScoresGauge({ eligible, cpkFailures, marketFailures, upstreamFailureSta
             strokeDashoffset={-start} strokeLinecap="butt" transform="rotate(-90 30 30)"
             className="transition-all duration-500" /> : null;
         })}
-        {upstreamFailures > 0 && (
-          <circle
-            cx={30}
-            cy={30}
-            r={radius}
-            stroke="#ec4899"
-            strokeWidth={2}
-            fill="none"
-            strokeDasharray={`${circumference * (upstreamFailures / (safeMax || 1))} ${circumference}`}
-            strokeDashoffset={-upstreamFailureStartLength}
-            strokeLinecap="butt"
-            transform="rotate(-90 30 30)"
-            className="transition-all duration-500"
-          />
+        {upstreamFailureCount > 0 && (
+          <circle cx={30} cy={30} r={radius} stroke="#ec4899" strokeWidth={2} fill="none"
+            strokeDasharray={`${circumference * (upstreamFailureCount / (safeMax || 1))} ${circumference}`}
+            strokeDashoffset={-upstreamFailureStartLength} strokeLinecap="butt"
+            transform="rotate(-90 30 30)" className="transition-all duration-500" />
         )}
         <text x={30} y={34} textAnchor="middle" className="fill-slate-100 text-[12px] font-semibold">{Math.round(pct)}%</text>
       </svg>
@@ -552,6 +554,10 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
   const lastLiveAt = useRef(0);
   const runScans = useRef(new Map<string, ScanProgress>());
   const displayedRunId = useRef<string | null>(null);
+  const runFirstSeenAt = useRef(0);
+  const observedPendingSweepAt = useRef<string | null>(null);
+  const runWasCompleted = useRef(false);
+  const statusRequestInFlight = useRef(false);
   const runMaxima = useRef({
     binPricesCount: 0,
     soldPricesCount: 0,
@@ -586,18 +592,49 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
 
   useEffect(() => {
     const fetchStatus = async () => {
+      if (statusRequestInFlight.current) return;
+      statusRequestInFlight.current = true;
       try {
+        const readStatus = async (path: string) => {
+          try {
+            const response = await fetch(path, { cache: "no-store", signal: AbortSignal.timeout(15_000) });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.json();
+          } catch (error) {
+            console.warn(`Pipeline refresh failed: ${path}`, error);
+            return null;
+          }
+        };
         const [res, queueRes, lockRes] = await Promise.all([
-          fetch("/api/gem-radar/pipeline-status", { cache: "no-store" }),
-          fetch("/api/gem-radar/queue-items", { cache: "no-store" }),
-          fetch("/api/gem-radar/scan-lock", { cache: "no-store" }),
+          readStatus("/api/gem-radar/pipeline-status"),
+          readStatus("/api/gem-radar/queue-items"),
+          readStatus("/api/gem-radar/scan-lock"),
         ]);
-        if (res.ok) {
-          const data = await res.json();
+        if (res) {
+          const data = res;
           const activeScans = data.activeScans ?? [];
           const queueIsRunning = Boolean(
             queueStatus && (queueStatus.pending > 0 || queueStatus.processing > 0),
           );
+          if (queueIsRunning && runWasCompleted.current) {
+            runScans.current.clear();
+            displayedRunId.current = null;
+            runFirstSeenAt.current = Date.now();
+            observedPendingSweepAt.current = null;
+            runWasCompleted.current = false;
+          }
+          if (activeScans.length > 0 && runFirstSeenAt.current === 0) {
+            runFirstSeenAt.current = Date.now();
+          }
+          if (data.pendingSweepRequestedAt) {
+            observedPendingSweepAt.current = data.pendingSweepRequestedAt;
+          }
+          const sweepFinished = Boolean(
+            data.completedSweepRequestedAt &&
+            (observedPendingSweepAt.current === data.completedSweepRequestedAt ||
+              Date.parse(data.completedSweepRequestedAt) >= runFirstSeenAt.current),
+          );
+          if (sweepFinished && !queueIsRunning) runWasCompleted.current = true;
           const completedRunIsIdle =
             activeScans.length > 0 &&
             !queueIsRunning &&
@@ -616,6 +653,8 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
               (!displayedRunId.current && runScans.current.size > 0)
             )) {
               runScans.current.clear();
+              runFirstSeenAt.current = Date.now();
+              observedPendingSweepAt.current = null;
               runMaxima.current = { binPricesCount: 0, soldPricesCount: 0, gemCount: 0, superGemCount: 0, avgGemScore: 0, avgSuperGemScore: 0 };
               lastLiveStatus.current = null;
             }
@@ -651,6 +690,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                   Number(count),
                 );
               }
+              const pipelineComplete = hasNoPendingGaugeWork({ ...previous, ...scan });
               runScans.current.set(scan.searchId, {
                 ...previous,
                 ...scan,
@@ -677,7 +717,12 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                 // current expression could leave every card spinning forever
                 // after its first incomplete poll, until the whole sweep was
                 // cleared by the backend.
-                isComplete: previous.isComplete || scan.isComplete,
+                // Keep the green check tied to full stage coverage even if a
+                // backend response still uses the older queue-drained rule.
+                isComplete: pipelineComplete && (
+                  previous.isComplete || scan.isComplete ||
+                  (sweepFinished && !queueIsRunning)
+                ),
               });
             }
             const accumulatedScans = Array.from(runScans.current.values());
@@ -762,41 +807,32 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             }
           }
 
-          if (activeScans.length === 0 && displayedScans.length > 0 && !queueIsRunning) {
-            // Backend's activeScans went empty -- it already called reset_run()
-            // and archived this run into recentHistory (see pipeline_status.py).
-            // Keep the cards visible until the next run starts, but flip them to
-            // "complete" instead of leaving them frozen mid-progress: without this,
-            // a card's isComplete/activeSubmissions/percentages stay stuck at
-            // whatever they were on the LAST poll before the backend cleared its
-            // state, which reads as a stalled/hung run even though it finished.
-            setDisplayedScans((prev) =>
-              prev.some((scan) => !scan.isComplete || scan.activeSubmissions !== 0)
-            ? prev.map((scan) => {
-                const scoresSettled =
-                  (scan.eligibleScoreCount ?? 0) + (scan.ineligibleScoreCount ?? 0) >=
-                  (scan.marketPricedCount ?? 0);
-                return scoresSettled
-                  ? { ...scan, isComplete: true, activeSubmissions: 0 }
-                  : { ...scan, activeSubmissions: 0 };
-              })
-                : prev
-            );
+          if (activeScans.length === 0 && displayedScans.length > 0 && !queueIsRunning && sweepFinished) {
+            // The sweep boundary only says the extension finished submitting
+            // listings. Keep each card's pipeline completion state: pending
+            // CPK, market-price, or score work must remain visible across the
+            // backend's in-memory reset instead of being turned green here.
+            setDisplayedScans((prev) => prev.map((scan) => ({
+              ...scan,
+              isComplete: scan.isComplete || hasNoPendingGaugeWork(scan),
+              activeSubmissions: 0,
+            })));
             setClientElapsed(0);
           }
         }
-        if (queueRes.ok) {
-          const queueData = await queueRes.json();
-          setQueueItems(queueData.items ?? []);
+        if (queueRes) {
+          setQueueItems(queueRes.items ?? []);
         }
-        if (lockRes.ok) setScanLock((await lockRes.json()) as PipelineStatusResponse["scanLock"]);
+        if (lockRes) setScanLock(lockRes as PipelineStatusResponse["scanLock"]);
       } catch (error) {
-        console.error("Error fetching pipeline status:", error);
+        console.warn("Pipeline refresh failed; retaining the last snapshot:", error);
+      } finally {
+        statusRequestInFlight.current = false;
       }
     };
 
     fetchStatus();
-    const interval = setInterval(fetchStatus, 1000); // Update every second
+    const interval = setInterval(fetchStatus, 5000); // Avoid competing with active ingestion.
     return () => clearInterval(interval);
   }, [displayedScans.length, queueStatus]);
 
@@ -855,15 +891,15 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             </div>
             <p className="text-xs text-slate-400">
               {hasActiveRun
-                ? `${displayedScans.length} search${displayedScans.length !== 1 ? "es" : ""} in this run`
+                ? `${displayedScans.length} search${displayedScans.length !== 1 ? "es" : ""} · latest run`
                 : latestRun
-                  ? `${latestRun.runBy} · ${new Date(latestRun.occurredAt).toLocaleString()}`
+                  ? `${latestRun.runBy} · Last updated ${new Date(latestRun.occurredAt).toLocaleString()}`
                   : "No completed scan run is available"}
             </p>
           </div>
           <div className="flex items-center gap-4">
             <QueueStatusBar queue={queueStatus} />
-            <MiniStat label="Listings" value={displayedListingCount} color="#e2e8f0" />
+            <MiniStat label="Listings Processed" value={displayedListingCount} color="#e2e8f0" />
             <MiniStat label="SUPER GEMs" value={displayedSuperGemCount} color="#fcd34d" />
             <MiniStat label="Avg Super Gem" value={displayedAvgSuperGemScore.toFixed(1)} color="#fcd34d" />
             <MiniStat label="GEMs" value={displayedGemCount} color="#93c5fd" />
@@ -882,22 +918,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
           </div>
         )}
 
-        {displayedScans.length === 0 ? (
-          latestRun ? (
-            <div className="rounded-md border border-slate-700 bg-slate-900/40 px-3 py-3 text-sm text-slate-300">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="font-medium text-white">{latestRun.searchTerm}</span>
-                <span className="text-xs text-slate-400">{latestRun.totalListingsFound.toLocaleString()} listings</span>
-              </div>
-              <div className="mt-1 text-xs text-slate-400">
-                {latestRun.vendors.length > 0 ? latestRun.vendors.join(", ") : "No vendor details recorded"}
-                {latestRun.durationSeconds > 0 && ` · ${formatElapsedTime(latestRun.durationSeconds)}`}
-              </div>
-            </div>
-          ) : (
-            <p className="text-xs text-slate-500">No completed scan run is available.</p>
-          )
-        ) : (
+        {displayedScans.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
           {sortScansByDefinitionOrder(coalesceScansBySearchId(displayedScans)).map((scan) => {
             // Preserve a consistent vendor row. When configuration metadata is
@@ -980,36 +1001,27 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                 scan.cpkFailedCount ?? 0,
                 Math.max(searchTermTotal - scan.cpkAssignedCount, 0),
               );
-            // A CPK-assigned listing with no settled market price is already
-            // known to be unmatched. It may become priced later if another
-            // comparable listing settles the same CPK, so this dotted segment
-            // can legitimately shrink while the scan is still running.
+            // A CPK-assigned listing without a settled price is still pending;
+            // it can settle on a later sighting. Leave it as an empty gauge
+            // segment instead of painting it as a terminal failure.
             const failedMarketPrices = isComplete
               ? Math.max(scan.cpkAssignedCount - scan.marketPricedCount, 0)
               : 0;
-            // There is no separate scoring-failure counter yet. A missing
-            // classification therefore stays blank (pending) until the API
-            // can distinguish a failed scoring attempt from phase-two work
-            // that has not run.
             // Keep upstream failures as the outlined/skipped segment at the
             // next stage; they were never eligible for that stage. The
             // current stage's own terminal failures use the patterned
             // segment. Anything else remains an empty pending gap.
             const skippedCpk = failedIngested;
-            const skippedMarketPrices = Math.min(
-              failedIngested + failedCpk,
-              Math.max(searchTermTotal - scan.marketPricedCount - failedMarketPrices, 0),
-            );
-            // Scores are counted independently of market-price settlement,
-            // so the raw classification total can include listings that
-            // failed upstream. Partition those overlapping listings out of
-            // the thick successful segment: upstream losses remain a thin
-            // pink arc, successful scores are solid, and the track stays
-            // blank for work that has not reached a terminal outcome.
-  // Scores use the full ingested population: terminal upstream failures occupy
-  // their own dotted segments, while only genuinely unfinished work is blank.
-  const successfulScores = scan.eligibleScoreCount ?? 0;
-  const ineligibleScores = scan.ineligibleScoreCount ?? 0;
+            const successfulScores = scan.eligibleScoreCount ?? 0;
+            // Only scores on market-priced listings reached this stage.
+            // classifiedCount also includes listings rejected upstream, so it
+            // cannot be used for the Scores dotted segment or it eats the
+            // thin line carrying CPK and M Prices failures forward.
+            const ineligibleScores = scan.ineligibleScoreCount ?? 0;
+            // Preserve the positions of the upstream dotted arcs: M Prices
+            // failures start after priced listings, then CPK failures follow.
+            const scoreUpstreamFailures = failedMarketPrices + failedCpk;
+            const scoreUpstreamStart = scan.marketPricedCount;
 
             return (
               <PixelCard key={scan.searchId || scan.query} variant={isComplete ? "emerald" : "default"}>
@@ -1055,13 +1067,12 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                     {/* Every gauge is measured against this run's ingested population. */}
                     <Gauge value={scan.ingestedCount} max={searchTermTotal} failed={failedIngested} label="Ingested" color="#8b5cf6" />
                     <Gauge value={scan.cpkAssignedCount} max={searchTermTotal} failed={failedCpk} skipped={skippedCpk} skippedStart={scan.ingestedCount} label="CPK" color="#10b981" />
-                    <Gauge value={scan.marketPricedCount} max={searchTermTotal} failed={failedMarketPrices} skipped={skippedMarketPrices} skippedStart={scan.cpkAssignedCount} label="M Prices" color="#f59e0b" />
+                    <Gauge value={scan.marketPricedCount} max={searchTermTotal} failed={failedMarketPrices} skipped={failedIngested + failedCpk} skippedStart={scan.cpkAssignedCount} label="M Prices" color="#f59e0b" />
                     <ScoresGauge
                       eligible={successfulScores}
-                      cpkFailures={failedCpk}
-                      marketFailures={failedMarketPrices}
-                      upstreamFailureStart={scan.marketPricedCount}
                       ineligible={ineligibleScores}
+                      upstreamFailures={scoreUpstreamFailures}
+                      upstreamFailureStart={scoreUpstreamStart}
                       max={searchTermTotal}
                     />
                   </div>
@@ -1101,7 +1112,7 @@ function MarketSnapshotPanel({ snapshot }: { snapshot: MarketSnapshot | null }) 
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="w-64 shrink-0">
           <h3 className="text-sm font-semibold text-white">Market Snapshot</h3>
-          <p className="text-xs text-slate-400">Every currently-active listing in the DB, not just this run</p>
+          <p className="text-xs text-slate-400">All active market listings across scan runs; sold and missed listings are archived</p>
         </div>
         <div className="flex items-center gap-4">
           <MiniStat label="Listings" value={snapshot?.ingestedCount ?? 0} color="#e2e8f0" />
@@ -1117,7 +1128,7 @@ function MarketSnapshotPanel({ snapshot }: { snapshot: MarketSnapshot | null }) 
   );
 }
 
- 
+
 // thumbnails; next/image's domain allowlist isn't worth configuring for a
 // scraper whose image hosts vary listing to listing.
 function ListingThumbnail({ src, alt, size = 40 }: { src?: string | null; alt: string; size?: number }) {
@@ -1383,11 +1394,6 @@ function GemSpotlightCard({
 }
 
 function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | null> }) {
-  const [inventoryHealth, setInventoryHealth] = useState<Awaited<ReturnType<typeof api.inventory.health>> | null>(null);
-  useEffect(() => {
-    const timer = window.setTimeout(() => api.inventory.health().then(setInventoryHealth).catch(() => undefined), 0);
-    return () => window.clearTimeout(timer);
-  }, []);
   const componentLabels: Record<string, { label: string; emoji: string }> = {
     cpu: { label: "Gem CPU", emoji: "⚡" },
     gpu: { label: "Gem GPU", emoji: "🎮" },
@@ -1398,21 +1404,6 @@ function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | 
 
   return (
     <>
-      {inventoryHealth && (
-        <div className="mt-6 rounded-xl border border-cyan-300/15 bg-cyan-300/[0.035] p-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div><h3 className="text-sm font-semibold text-slate-100">Inventory-aware sourcing</h3><p className="mt-1 text-xs text-slate-500">Use these signals before buying duplicates or prioritise parts blocking active builds.</p></div>
-            <Link href="/inventory" className="cursor-pointer rounded-md border border-cyan-300/25 px-3 py-1.5 text-xs font-semibold text-cyan-200 transition-colors hover:bg-cyan-300/10">Open inventory</Link>
-          </div>
-          <div className="mt-3 grid gap-2 sm:grid-cols-4">
-            <MiniStat label="Free units" value={inventoryHealth.free_units} color="#67e8f9" />
-            <MiniStat label="Reserved units" value={inventoryHealth.reserved_units} color="#fcd34d" />
-            <MiniStat label="Builds blocked" value={inventoryHealth.build_blockers.length} color="#fb7185" />
-            <MiniStat label="Excess categories" value={inventoryHealth.excess_stock.length} color="#a78bfa" />
-          </div>
-          {inventoryHealth.build_blockers.length > 0 && <p className="mt-3 text-xs text-amber-200">Prioritise: {Array.from(new Set(inventoryHealth.build_blockers.flatMap(blocker => blocker.missing))).join(", ")}</p>}
-        </div>
-      )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6 mt-6">
         {Object.keys(componentLabels).map((category) => {
           const gem = componentGems?.[category];
@@ -1475,7 +1466,7 @@ function SourceBadge({ source }: { source: string }) {
   return (
     <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs font-semibold whitespace-nowrap ${SOURCE_COLORS[source] || "bg-slate-600 text-slate-200"}`}>
       {domain && (
-         
+
         <img
           src={`https://www.google.com/s2/favicons?domain=${domain}&sz=32`}
           alt=""
@@ -1527,18 +1518,6 @@ function priceVariance(listing: Listing): { amount: number; percent: number } | 
   return { amount, percent: (amount / listing.delivered_price) * 100 };
 }
 
-function PriceVarianceCell({ listing }: { listing: Listing }) {
-  const variance = priceVariance(listing);
-  if (!variance) return <span className="text-slate-500">—</span>;
-  const positive = variance.amount >= 0;
-  const sign = positive ? "+" : "-";
-  return (
-    <span className={`font-semibold whitespace-nowrap ${positive ? "text-emerald-400" : "text-red-400"}`}>
-      {sign}£{Math.abs(variance.amount).toFixed(0)} ({sign}{Math.abs(variance.percent).toFixed(0)}%)
-    </span>
-  );
-}
-
 // The most recent scraping run represented in the currently loaded listings
 // — grouping by search_run_id rather than a timestamp-proximity threshold,
 // since listings within one run can be observed a little apart from each
@@ -1556,6 +1535,8 @@ function findLatestRunId(listings: Listing[]): string | null {
 
 type GemFilter = "all" | "SUPER_GEM" | "GEM" | "EVIDENCE_LIMITED_DEAL" | "EMERGING_OPPORTUNITY" | "OK_DEAL" | "AVERAGE_DEAL" | "POOR_DEAL" | "INSUFFICIENT_DATA" | "IDENTITY_FAILED" | "IDENTITY_PENDING" | "INELIGIBLE";
 type StockLane = "all" | "new" | "open_box" | "used";
+type SourcingFilters = { component: ComponentType; stockLane: StockLane; classification: GemFilter; title: string; sortKey: SortKey; sortDir: SortDir };
+type SourcingFacets = { total: number; categories: Record<string, number>; vendors: Record<string, { total: number; classifications: Record<string, number> }>; classifications: Record<string, number>; category_classifications: Record<string, Record<string, number>>; stock: Record<string, number> };
 
 const STOCK_LANES: { value: StockLane; label: string; description: string }[] = [
   { value: "all", label: "All stock", description: "Every retained sourcing opportunity" },
@@ -1591,7 +1572,7 @@ const CLASSIFICATION_RANK: Record<string, number> = {
 
 // Best deal to worst — shared between the filter tags and the row badge so
 // the two stay visually consistent.
-const CLASSIFICATION_BADGE_ORDER: string[] = ["SUPER_GEM", "GEM", "EVIDENCE_LIMITED_DEAL", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL", "INSUFFICIENT_DATA", "IDENTITY_PENDING", "IDENTITY_FAILED", "INELIGIBLE"];
+const CLASSIFICATION_BADGE_ORDER: string[] = ["SUPER_GEM", "GEM", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL", "INSUFFICIENT_DATA", "IDENTITY_PENDING", "IDENTITY_FAILED", "INELIGIBLE"];
 const CLASSIFICATION_BADGE_COLORS: Record<string, string> = {
   SUPER_GEM: "bg-amber-600 text-white",
   GEM: "bg-blue-600 text-white",
@@ -1725,13 +1706,20 @@ function StatTile({ label, value }: { label: string; value: string }) {
 }
 
 function TopListingTile({ label, listing }: { label: string; listing: Listing | null }) {
+  const currency = (value: number | null | undefined) =>
+    value == null || !Number.isFinite(value) ? "—" : `£${Math.round(value)}`;
+
   return (
     <div className="bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 min-w-0">
       <div className="text-xs text-slate-400 uppercase tracking-wide truncate">{label}</div>
       {listing ? (
         <>
           <div className="text-sm font-semibold text-slate-100 truncate" title={listing.title}>{listing.title}</div>
-          <div className="text-xs text-slate-400">score {listing.deal_score.toFixed(1)} · £{listing.delivered_price.toFixed(2)}</div>
+          <div className="text-xs text-slate-400 truncate">
+            {currency(listing.delivered_price)} buy · {currency(listing.market_median_price)} median
+            {listing.sold_listing_count != null && ` · ${listing.sold_listing_count} sold`}
+            {listing.review_average_rating != null && ` · ★ ${listing.review_average_rating.toFixed(1)}${listing.review_count != null ? ` (${listing.review_count})` : ""}`}
+          </div>
         </>
       ) : (
         <div className="text-lg font-semibold text-slate-500">—</div>
@@ -1916,6 +1904,26 @@ function evidenceStatusForChart(listing: Listing): string {
   return "INSUFFICIENT_DATA";
 }
 
+function classificationTooltip(listing: Listing): string {
+  const lines = [
+    explainClassification(listing),
+    `Evidence: ${(listing.evidence_status ?? "UNKNOWN").replace(/_/g, " ")}`,
+    `Reason: ${(listing.evidence_reason ?? "—").replace(/_/g, " ")}`,
+    `Market basis: ${(listing.scoring_explanation?.market?.basis ?? "NONE").replace(/_/g, " ")}`,
+    `Comparables: ${listing.market_sample_size ?? 0}`,
+    `Market confidence: ${listing.market_confidence == null ? "—" : `${listing.market_confidence.toFixed(0)}/100`}`,
+  ];
+  if (listing.evidence_confidence) {
+    lines.push(...Object.entries(listing.evidence_confidence).map(([name, value]) =>
+      `${name.replace(/_/g, " ")}: ${Math.round(value * 100)}%`
+    ));
+  }
+  if (listing.scoring_explanation?.risk_flags?.length) {
+    lines.push(`Warnings: ${listing.scoring_explanation.risk_flags.map((flag) => flag.replace(/_/g, " ")).join(", ")}`);
+  }
+  return lines.join("\n");
+}
+
 type PriceColumn = "listing" | "low" | "median" | "high";
 
 function priceValueForColumn(listing: Listing, column: PriceColumn): number | null {
@@ -1953,11 +1961,34 @@ function formatPriceColumn(listing: Listing, column: PriceColumn, asPercent: boo
     return value == null ? "—" : `${value.toFixed(1)}%`;
   }
   const value = priceValueForColumn(listing, column);
-  return value == null ? "—" : `£${value.toFixed(2)}`;
+  return value == null ? "—" : `£${Math.round(value).toLocaleString()}`;
 }
 
-function VendorStackedBarChart({ listings }: { listings: Listing[] }) {
-  const sources = [...new Set(listings.map((l) => l.source))].sort(
+function MarketPriceCell({ listing, column, asPercent }: { listing: Listing; column: "low" | "median" | "high"; asPercent: boolean }) {
+  const marketPrice = priceValueForColumn(listing, column);
+  const amount = marketPrice == null ? null : marketPrice - listing.delivered_price;
+  const percent = amount != null && listing.delivered_price > 0 ? (amount / listing.delivered_price) * 100 : null;
+  const positive = amount != null && amount >= 0;
+  const sign = positive ? "+" : "-";
+  const url = column === "low" ? listing.market_lower_url : column === "high" ? listing.market_upper_url : null;
+  return (
+    <div title={column === "median" ? "Median of the robust, same-condition comparable cohort used by classification. Difference from delivered listing price." : "Difference from delivered listing price."}>
+      {url ? (
+        <a href={url} target="_blank" rel="noopener noreferrer" className="underline decoration-dotted underline-offset-2 hover:text-cyan-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-400" aria-label={`Open listing closest to market ${column} for ${listing.title}`} title={`Open comparable listing closest to market ${column} (market price may be an estimate)`}>
+          {formatPriceColumn(listing, column, asPercent)}
+        </a>
+      ) : <div>{formatPriceColumn(listing, column, asPercent)}</div>}
+      {amount != null && percent != null && (
+        <div className={`whitespace-nowrap text-[10px] font-semibold ${positive ? "text-emerald-400" : "text-red-400"}`}>
+          {sign}£{Math.abs(amount).toFixed(0)} ({sign}{Math.abs(percent).toFixed(0)}%)
+        </div>
+      )}
+    </div>
+  );
+}
+
+function VendorStackedBarChart({ listings, facets }: { listings: Listing[]; facets: SourcingFacets | null }) {
+  const sources = facets ? Object.keys(facets.vendors).sort((a, b) => facets.vendors[b].total - facets.vendors[a].total) : [...new Set(listings.map((l) => l.source))].sort(
     (a, b) => listings.filter((l) => l.source === b).length - listings.filter((l) => l.source === a).length
   );
 
@@ -1967,7 +1998,7 @@ function VendorStackedBarChart({ listings }: { listings: Listing[] }) {
     const vendorListings = listings.filter((l) => l.source === source);
     const row: Record<string, string | number> = { vendor: SOURCE_LABELS[source] || source };
     for (const tier of VENDOR_CHART_TIERS) {
-      row[tier] = tier === "INSUFFICIENT_DATA"
+      row[tier] = facets ? (facets.vendors[source]?.classifications[tier] ?? 0) : tier === "INSUFFICIENT_DATA"
         ? vendorListings.filter((l) => l.classification === tier && evidenceStatusForChart(l) === "INSUFFICIENT_DATA").length
         : VENDOR_EVIDENCE_TIERS.includes(tier)
           ? vendorListings.filter((l) => l.classification === "INSUFFICIENT_DATA" && evidenceStatusForChart(l) === tier).length
@@ -2013,8 +2044,8 @@ function VendorStackedBarChart({ listings }: { listings: Listing[] }) {
   );
 }
 
-function VendorSummaryTable({ listings }: { listings: Listing[] }) {
-  const sources = [...new Set(listings.map((l) => l.source))].sort(
+function VendorSummaryTable({ listings, sourceActivity, facets }: { listings: Listing[]; sourceActivity: Record<string, string | null>; facets: SourcingFacets | null }) {
+  const sources = facets ? Object.keys(facets.vendors).sort((a, b) => facets.vendors[b].total - facets.vendors[a].total) : [...new Set(listings.map((l) => l.source))].sort(
     (a, b) => listings.filter((l) => l.source === b).length - listings.filter((l) => l.source === a).length
   );
 
@@ -2041,11 +2072,12 @@ function VendorSummaryTable({ listings }: { listings: Listing[] }) {
               <tr key={source} className="border-b border-slate-700 last:border-b-0">
                 <td className="p-2.5">
                   <SourceBadge source={source} />
+                  {sourceActivity[source] && <span className="ml-2 text-[10px] text-slate-400" title="Last listing observed; this does not prove a live connection">Seen {new Date(sourceActivity[source]!).toLocaleString()}</span>}
                 </td>
-                <td className="p-2.5 text-right text-slate-100 font-semibold">{vendorListings.length}</td>
+                <td className="p-2.5 text-right text-slate-100 font-semibold">{facets ? facets.vendors[source].total : vendorListings.length}</td>
                 {VENDOR_SUMMARY_TABLE_TIERS.map((tier) => (
                   <td key={tier} className="p-2.5 text-right text-slate-300">
-                    {vendorListings.filter((l) => l.classification === tier).length}
+                    {facets ? (facets.vendors[source].classifications[tier] ?? 0) : vendorListings.filter((l) => l.classification === tier).length}
                   </td>
                 ))}
               </tr>
@@ -2057,17 +2089,20 @@ function VendorSummaryTable({ listings }: { listings: Listing[] }) {
   );
 }
 
-function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; highlightListingId?: string | null }) {
-  const PAGE_SIZE = 100;
+function ListingsTab({ listings, sourceActivity, facets, total, legacy, highlightListingId, page, hasMore, onPageChange, onFiltersChange }: { listings: Listing[]; sourceActivity: Record<string, string | null>; facets: SourcingFacets | null; total: number; legacy: boolean; highlightListingId?: string | null; page: number; hasMore: boolean; onPageChange: (page: number) => void; onFiltersChange: (filters: SourcingFilters) => void }) {
   const [componentTab, setComponentTab] = useState<ComponentType>("CPU");
   const [stockLane, setStockLane] = useState<StockLane>("all");
+  const [explanationListing, setExplanationListing] = useState<Listing | null>(null);
   const [gemFilter, setGemFilter] = useState<GemFilter>("all");
   const [sortKey, setSortKey] = useState<SortKey>("deal_score");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [titleQuery, setTitleQuery] = useState("");
-  const [explanationListing, setExplanationListing] = useState<Listing | null>(null);
   const [showRowPercentages, setShowRowPercentages] = useState(false);
-  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    const timer = setTimeout(() => onFiltersChange({ component: componentTab, stockLane, classification: gemFilter, title: titleQuery, sortKey, sortDir }), 250);
+    return () => clearTimeout(timer);
+  }, [componentTab, stockLane, gemFilter, titleQuery, sortKey, sortDir]);
 
   // Jump straight to a specific listing when arriving from a favourite-match
   // toast/notification link (?listing=<listing_id>) — switch to its tab so
@@ -2124,38 +2159,25 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
     }
   }
   const mergedListings = [...mergedByProduct.values()];
-  const filtered = mergedListings.sort((a, b) => {
+  const filtered = [...(legacy ? mergedListings : listings)].sort((a, b) => {
     const cmp = compareSortValue(a, b, sortKey);
     return sortDir === "asc" ? cmp : -cmp;
   });
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const currentPage = Math.min(page, totalPages);
-  const pageStart = (currentPage - 1) * PAGE_SIZE;
-  const visibleListings = filtered.slice(pageStart, pageStart + PAGE_SIZE);
-
-  useEffect(() => {
-    setPage(1);
-  }, [componentTab, stockLane, gemFilter, sortKey, sortDir, titleQuery]);
-
-  useEffect(() => {
-    if (!highlightListingId) return;
-    const index = filtered.findIndex((listing) => listing.listing_id === highlightListingId);
-    if (index >= 0) setPage(Math.floor(index / PAGE_SIZE) + 1);
-  }, [highlightListingId, componentTab]);
+  const visibleListings = filtered;
   const tabCounts = COMPONENT_TABS.map((tab) => ({
     tab,
-    count: byLane.filter((l) => listingTab(l) === tab).length,
+    count: facets ? (facets.categories[tab.toLowerCase()] ?? 0) : byLane.filter((l) => listingTab(l) === tab).length,
   }));
   const classificationCounts = CLASSIFICATION_BADGE_ORDER.map((classification) => ({
     classification,
-    count: byComponent.filter((l) => l.classification === classification).length,
+    count: facets ? (facets.category_classifications[componentTab.toLowerCase()]?.[classification] ?? 0) : byComponent.filter((l) => l.classification === classification).length,
   }));
 
   return (
     <>
       <div className="flex flex-col lg:flex-row gap-4">
-        <VendorSummaryTable listings={listings} />
-        <VendorStackedBarChart listings={listings} />
+        <VendorSummaryTable listings={listings} sourceActivity={sourceActivity} facets={facets} />
+        <VendorStackedBarChart listings={listings} facets={facets} />
       </div>
 
       <div className="flex gap-2 overflow-x-auto pb-2 border-b border-slate-700 mb-4">
@@ -2183,7 +2205,7 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
               : "bg-slate-700/40 text-slate-300 border border-slate-600/40 hover:bg-slate-700/70"
           }`}
         >
-          All ({byComponent.length})
+          All ({facets ? (facets.categories[componentTab.toLowerCase()] ?? 0) : byComponent.length})
         </button>
         {classificationCounts.map(({ classification, count }) => (
           <button
@@ -2204,12 +2226,12 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
 
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3 text-sm">
         <span className="text-slate-400">
-          Showing {filtered.length === 0 ? 0 : pageStart + 1}–{Math.min(pageStart + PAGE_SIZE, filtered.length)} of {filtered.length}
+          Showing {filtered.length} rows on page {page} of {Math.max(1, Math.ceil(total / 100))} ({total.toLocaleString()} matching scored fixed-price listings). Vendor and category totals cover the whole scored set.
         </span>
         <div className="flex items-center gap-2">
-          <button type="button" disabled={currentPage <= 1} onClick={() => setPage((value) => Math.max(1, value - 1))} className="rounded border border-slate-600 bg-slate-700 px-3 py-1.5 text-slate-200 disabled:cursor-not-allowed disabled:opacity-40">Previous</button>
-          <span className="min-w-24 text-center text-slate-300">Page {currentPage} of {totalPages}</span>
-          <button type="button" disabled={currentPage >= totalPages} onClick={() => setPage((value) => Math.min(totalPages, value + 1))} className="rounded border border-slate-600 bg-slate-700 px-3 py-1.5 text-slate-200 disabled:cursor-not-allowed disabled:opacity-40">Next</button>
+          <button type="button" disabled={page <= 1} onClick={() => onPageChange(Math.max(1, page - 1))} className="cursor-pointer rounded border border-slate-600 bg-slate-700 px-3 py-1.5 text-slate-200 disabled:cursor-not-allowed disabled:opacity-40">Previous</button>
+          <span className="min-w-20 text-center text-slate-300">Page {page}</span>
+          <button type="button" disabled={!hasMore} onClick={() => onPageChange(page + 1)} className="cursor-pointer rounded border border-slate-600 bg-slate-700 px-3 py-1.5 text-slate-200 disabled:cursor-not-allowed disabled:opacity-40">Next</button>
         </div>
       </div>
 
@@ -2264,13 +2286,13 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                 <SortHeader label={showRowPercentages ? "Low %" : "Low"} sortKey="market_lower_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
                 <SortHeader label={showRowPercentages ? "Median %" : "Median"} sortKey="market_median_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
                 <SortHeader label={showRowPercentages ? "High %" : "High"} sortKey="market_upper_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
-                <SortHeader label="Vs Median" sortKey="price_variance" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-24" />
                 <SortHeader label="Class" sortKey="classification" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} widthClassName="w-24" />
-                <SortHeader label="Decision" sortKey="decision" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} widthClassName="w-20" />
+                <th className="text-left text-slate-200 font-semibold w-20" title="Evidence quality is separate from deal class and score">Evidence</th>
                 <SortHeader label="Score" sortKey="deal_score" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-14" />
-                <th className="text-left text-slate-200 font-semibold w-16">Evidence</th>
                 <SortHeader label="Amazon BSR" sortKey="amazon_bestseller_rank" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
                 <SortHeader label="Performance" sortKey="performance_rank" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-24" />
+                <th className="text-right text-slate-200 font-semibold w-20" title="Sampled sold comparables in the last 90 days">Sold (90d)</th>
+                <th className="text-right text-slate-200 font-semibold w-24" title="Product star rating and review count">Stars (reviews)</th>
               </tr>
             </thead>
             <tbody>
@@ -2330,42 +2352,28 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                       <PriceHistorySparkline listingId={listing.listing_id} listingTitle={listing.title} />
                     </td>
                     <td className="p-3 text-right text-slate-100">
-                      {formatPriceColumn(listing, "low", showRowPercentages)}
+                      <MarketPriceCell listing={listing} column="low" asPercent={showRowPercentages} />
                     </td>
                     <td className="p-3 text-right text-slate-100">
-                      {(listing.market_median_price ?? listing.conservative_resale_price) != null ? (
-                        <span title="Median of the robust, same-condition comparable cohort used by classification.">
-                          {formatPriceColumn(listing, "median", showRowPercentages)}
-                        </span>
-                      ) : formatPriceColumn(listing, "median", showRowPercentages)}
+                      <MarketPriceCell listing={listing} column="median" asPercent={showRowPercentages} />
                     </td>
                     <td className="p-3 text-right text-slate-100">
-                      {formatPriceColumn(listing, "high", showRowPercentages)}
-                    </td>
-                    <td className="p-3 text-right">
-                      <PriceVarianceCell listing={listing} />
-                    </td>
-                    <td className="p-3" title={explainClassification(listing)}>
-                      <ClassificationBadge classification={listing.classification} />
+                      <MarketPriceCell listing={listing} column="high" asPercent={showRowPercentages} />
                     </td>
                     <td className="p-3">
-                      <DecisionBadge
-                        decision={listing.decision}
-                        classification={listing.classification}
-                        confidence={listing.confidence}
-                      />
+                      <button type="button" onClick={() => setExplanationListing(listing)} title={classificationTooltip(listing)} aria-label={`Classification evidence for ${listing.title}`} className="cursor-pointer rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+                        <ClassificationBadge classification={listing.classification} />
+                      </button>
+                    </td>
+                    <td className="p-3" title={classificationTooltip(listing)}>
+                      {listing.evidence_status === "CLASSIFIABLE" ? (
+                        <span className="rounded bg-emerald-900/40 px-1.5 py-1 text-emerald-300">Verified</span>
+                      ) : listing.evidence_status ? (
+                        <span className="rounded bg-amber-900/40 px-1.5 py-1 text-amber-300">Limited</span>
+                      ) : <span className="text-slate-500">—</span>}
                     </td>
                     <td className="p-3 text-right text-slate-100 font-semibold" title={explainClassification(listing)}>
                       {listing.deal_score.toFixed(1)}
-                    </td>
-                    <td className="p-3">
-                      <button
-                        type="button"
-                        onClick={() => setExplanationListing(listing)}
-                        className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-cyan-400/25 bg-cyan-400/10 px-2 py-1 text-xs font-semibold text-cyan-300 transition-colors duration-200 hover:bg-cyan-400/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
-                      >
-                        <Info className="h-3.5 w-3.5" /> Why?
-                      </button>
                     </td>
                     <td className="p-3 text-right text-cyan-300">
                       {listing.amazon_bestseller_rank != null ? (
@@ -2381,6 +2389,14 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                         </span>
                       ) : "—"}
                     </td>
+                    <td className="p-3 text-right text-slate-200" title="Sampled sold comparables for the same product and condition in the last 90 days; not this seller's total sales.">
+                      {listing.sold_listing_count != null ? listing.sold_listing_count.toLocaleString() : "—"}
+                    </td>
+                    <td className="p-3 text-right text-amber-300" title="Product star rating and review count; not this seller's rating.">
+                      {listing.review_average_rating != null ? (
+                        <span className="whitespace-nowrap">★ {listing.review_average_rating.toFixed(1)} {listing.review_count != null ? `(${listing.review_count.toLocaleString()})` : ""}</span>
+                      ) : "—"}
+                    </td>
                   </tr>
                 );
               })}
@@ -2391,7 +2407,7 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
 
       <div className="mb-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3" role="group" aria-label="Stock condition lane">
         {STOCK_LANES.map((lane) => {
-          const count = lane.value === "all" ? listings.length : listings.filter((listing) => stockLaneFor(listing) === lane.value).length;
+          const count = facets ? (facets.stock[lane.value] ?? 0) : lane.value === "all" ? listings.length : listings.filter((listing) => stockLaneFor(listing) === lane.value).length;
           const active = stockLane === lane.value;
           return (
             <button
@@ -2459,7 +2475,7 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
   );
 }
 
-const CLASSIFICATION_ORDER = ["SUPER_GEM", "GEM", "EVIDENCE_LIMITED_DEAL", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL", "INSUFFICIENT_DATA", "INELIGIBLE"] as const;
+const CLASSIFICATION_ORDER = ["SUPER_GEM", "GEM", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL", "INSUFFICIENT_DATA", "IDENTITY_PENDING", "IDENTITY_FAILED", "INELIGIBLE"] as const;
 const CLASSIFICATION_COLORS: Record<string, string> = {
   SUPER_GEM: "#f59e0b",
   GEM: "#3b82f6",
@@ -2469,8 +2485,12 @@ const CLASSIFICATION_COLORS: Record<string, string> = {
   AVERAGE_DEAL: "#64748b",
   POOR_DEAL: "#ef4444",
   INSUFFICIENT_DATA: "#475569",
+  IDENTITY_PENDING: "#a855f7",
+  IDENTITY_FAILED: "#d946ef",
   INELIGIBLE: "#9f1239",
 };
+
+type AnalyticsListing = Pick<Listing, "title" | "deal_score" | "classification" | "delivered_price" | "market_median_price" | "roi_pct" | "expected_profit" | "sell_through_rate_pct" | "sold_listing_count" | "market_confidence" | "market_sample_size" | "amazon_bestseller_rank">;
 
 interface ScatterPoint {
   title: string;
@@ -2491,7 +2511,7 @@ function ClassificationLegend({ classifications }: { classifications: string[] }
 // Only plot economics produced by the scoring model. Falling back to the
 // listing's own delivered price manufactured a 0% ROI for every unscored
 // listing and flattened the useful 1,500-point distribution into one line.
-function buildScatterPoints(listings: Listing[]): ScatterPoint[] {
+function buildScatterPoints(listings: AnalyticsListing[]): ScatterPoint[] {
   return listings
     .filter((l) => Number.isFinite(l.roi_pct) && Number.isFinite(l.expected_profit))
     .map((l) => ({
@@ -2528,7 +2548,7 @@ function ScatterTooltip({ active, payload, metricLabel = "Model ROI" }: { active
   );
 }
 
-const DealScoreRoiChart = memo(function DealScoreRoiChart({ listings }: { listings: Listing[] }) {
+const DealScoreRoiChart = memo(function DealScoreRoiChart({ listings }: { listings: AnalyticsListing[] }) {
   const points = useMemo(() => buildScatterPoints(listings), [listings]);
   const yDomain = useMemo(() => computeRoiDomain(points.map((p) => p.roiPercent)), [points]);
   const plottedPoints = useMemo(() => points.map((point) => ({
@@ -2611,12 +2631,12 @@ interface InsightPoint {
   bubbleUnit?: string;
 }
 
-function priceVariancePercent(listing: Listing): number | null {
+function priceVariancePercent(listing: AnalyticsListing): number | null {
   if (!Number.isFinite(listing.delivered_price) || listing.delivered_price <= 0 || !Number.isFinite(listing.market_median_price) || listing.market_median_price! <= 0) return null;
   return ((listing.market_median_price! - listing.delivered_price) / listing.delivered_price) * 100;
 }
 
-function buildInsightPoints(listings: Listing[], kind: "sellThrough" | "profitRoi" | "confidenceVariance" | "amazonBestsellerVariance" | "priceMedian"): InsightPoint[] {
+function buildInsightPoints(listings: AnalyticsListing[], kind: "sellThrough" | "profitRoi" | "confidenceVariance" | "amazonBestsellerVariance" | "priceMedian"): InsightPoint[] {
   return listings.flatMap((listing) => {
     const variance = priceVariancePercent(listing);
     const base = { title: listing.title, classification: listing.classification };
@@ -2653,7 +2673,7 @@ function InsightTooltip({ active, payload }: { active?: boolean; payload?: Array
   </div>;
 }
 
-const InsightScatterChart = memo(function InsightScatterChart({ listings, kind, title, description, insight, diagonal = false }: { listings: Listing[]; kind: "sellThrough" | "profitRoi" | "confidenceVariance" | "amazonBestsellerVariance" | "priceMedian"; title: string; description: string; insight: string; diagonal?: boolean }) {
+const InsightScatterChart = memo(function InsightScatterChart({ listings, kind, title, description, insight, diagonal = false }: { listings: AnalyticsListing[]; kind: "sellThrough" | "profitRoi" | "confidenceVariance" | "amazonBestsellerVariance" | "priceMedian"; title: string; description: string; insight: string; diagonal?: boolean }) {
   const points = useMemo(() => buildInsightPoints(listings, kind), [listings, kind]);
   const xDomain = useMemo(() => insightDomain(points.map((point) => point.x)), [points]);
   const yDomain = useMemo(() => diagonal ? xDomain : insightDomain(points.map((point) => point.y)), [diagonal, points, xDomain]);
@@ -2910,19 +2930,53 @@ const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
   );
 });
 
-const AnalyticsTab = memo(function AnalyticsTab({ listings }: { listings: Listing[] }) {
+interface SourcingAnalytics {
+  total: number;
+  classification_counts: Record<string, number>;
+  items: AnalyticsListing[];
+}
+
+const AnalyticsTab = memo(function AnalyticsTab() {
+  const [analytics, setAnalytics] = useState<SourcingAnalytics | null>(null);
+  const [analyticsError, setAnalyticsError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/gem-radar/sourcing-analytics", {
+      cache: "no-store",
+      signal: AbortSignal.timeout(30_000),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error(`Analytics request failed (${response.status})`);
+        return response.json() as Promise<SourcingAnalytics>;
+      })
+      .then((data) => {
+        if (!cancelled) setAnalytics(data);
+      })
+      .catch((error: unknown) => {
+        if (!cancelled) setAnalyticsError(error instanceof Error ? error.message : "Could not load sourcing analytics");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <div className="space-y-6">
       <ScanRunsOverTimeChart />
+      {analyticsError ? <p role="alert" className="rounded-lg border border-red-700 bg-red-950/30 p-3 text-sm text-red-200">{analyticsError}. Restart the local API if the new analytics endpoint is not active.</p> : !analytics ? <p role="status" className="text-sm text-slate-400">Loading full-population analytics…</p> : <p className="text-sm text-slate-400">Charts use {analytics.items.length.toLocaleString()} stratified points from {analytics.total.toLocaleString()} active listings, independent of Listings filters. Every BSR-linked listing is included.</p>}
+      {analytics && <div className="flex flex-wrap gap-2 text-xs text-slate-300">{CLASSIFICATION_ORDER.map(c => <span key={c} className="rounded border border-slate-700 px-2 py-1">{c.replaceAll("_", " ")}: {(analytics.classification_counts[c] ?? 0).toLocaleString()}</span>)}</div>}
+      {analytics && <>
       <div className="grid items-stretch gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-        <DealScoreRoiChart listings={listings} />
-        <InsightScatterChart listings={listings} kind="sellThrough" title="Price Variance vs Sell-through" description="Discount opportunity against observed market liquidity; bubble size is sold comparable count." insight="Upper-right points combine a meaningful discount with proven demand. A large discount with weak sell-through is a warning, not automatically a bargain." />
-        <InsightScatterChart listings={listings} kind="profitRoi" title="Expected Profit vs Model ROI" description="Absolute return against percentage return; bubble size is the listing price." insight="Top-right points are strongest on both measures. High ROI with tiny profit is a small-ticket opportunity; high profit with low ROI ties up more capital." />
-        <InsightScatterChart listings={listings} kind="confidenceVariance" title="Market Confidence vs Price Variance" description="How much the market supports the price gap; bubble size is comparable sample size." insight="Look for positive variance with high confidence. Large gaps supported by small samples or low confidence are the most likely false gems." />
-        <InsightScatterChart listings={listings} kind="amazonBestsellerVariance" title="Amazon Best Seller Rank vs Price Variance" description="Amazon category position against the gap to market; lower rank numbers are better. Bubble size is the listing price." insight="Look for a positive price gap with a low Amazon rank. Amazon rank is a product-level signal, not a measure of this marketplace listing's demand." />
-        <InsightScatterChart listings={listings} kind="priceMedian" title="Listing Price vs Market Median" description="Direct price positioning; the dashed diagonal marks parity with the market median." insight="Points above the diagonal have a listing price below market. The farther above, the larger the discount; use classification colour and bubble profit to judge quality." diagonal />
+        <DealScoreRoiChart listings={analytics.items} />
+        <InsightScatterChart listings={analytics.items} kind="sellThrough" title="Price Variance vs Sell-through" description="Discount opportunity against observed market liquidity; bubble size is sold comparable count." insight="Upper-right points combine a meaningful discount with proven demand. A large discount with weak sell-through is a warning, not automatically a bargain." />
+        <InsightScatterChart listings={analytics.items} kind="profitRoi" title="Expected Profit vs Model ROI" description="Absolute return against percentage return; bubble size is the listing price." insight="Top-right points are strongest on both measures. High ROI with tiny profit is a small-ticket opportunity; high profit with low ROI ties up more capital." />
+        <InsightScatterChart listings={analytics.items} kind="confidenceVariance" title="Market Confidence vs Price Variance" description="How much the market supports the price gap; bubble size is comparable sample size." insight="Look for positive variance with high confidence. Large gaps supported by small samples or low confidence are the most likely false gems." />
+        <InsightScatterChart listings={analytics.items} kind="amazonBestsellerVariance" title="Amazon Best Seller Rank vs Price Variance" description="Amazon category position against the gap to market; lower rank numbers are better. Bubble size is the listing price." insight="Look for a positive price gap with a low Amazon rank. Amazon rank is a product-level signal, not a measure of this marketplace listing's demand." />
+        <InsightScatterChart listings={analytics.items} kind="priceMedian" title="Listing Price vs Market Median" description="Direct price positioning; the dashed diagonal marks parity with the market median." insight="Points above the diagonal have a listing price below market. The farther above, the larger the discount; use classification colour and bubble profit to judge quality." diagonal />
       </div>
       <ClassificationLegend classifications={[...CLASSIFICATION_ORDER]} />
+      </>}
 
       <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700/30">
         <p className="text-blue-200">
@@ -3010,17 +3064,29 @@ function SourcingPageInner() {
   const highlightListingId = searchParams.get("listing");
   const [mainTab, setMainTab] = useState<MainTab>("stats");
   const [listings, setListings] = useState<Listing[]>([]);
+  const [listingPage, setListingPage] = useState(1);
+  const [listingHasMore, setListingHasMore] = useState(false);
+  const [listingTotal, setListingTotal] = useState(0);
+  const [listingFacets, setListingFacets] = useState<SourcingFacets | null>(null);
+  const [listingFilters, setListingFilters] = useState<SourcingFilters>({ component: "CPU", stockLane: "all", classification: "all", title: "", sortKey: "deal_score", sortDir: "desc" });
+  const [legacyListingsApi, setLegacyListingsApi] = useState(false);
   const [componentGems, setComponentGems] = useState<Record<string, GemData | null> | null>(null);
   const [queueStatus, setQueueStatus] = useState<QueueStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
+  const [backendConnected, setBackendConnected] = useState(false);
+  const [sourceActivity, setSourceActivity] = useState<Record<string, string | null>>({});
   const [nextRefreshIn, setNextRefreshIn] = useState(0);
   const [nextScanAt, setNextScanAt] = useState<Date | null>(null);
   const [lastScanAt, setLastScanAt] = useState<Date | null>(null);
   const [scanIntervalMinutes, setScanIntervalMinutes] = useState<number | null>(null);
   const [nowTick, setNowTick] = useState(() => Date.now());
   const [marketSnapshot, setMarketSnapshot] = useState<MarketSnapshot | null>(null);
+  const [refreshError, setRefreshError] = useState("");
   const dataRequestInFlight = useRef(false);
+  const currentTab = useRef(mainTab);
+  currentTab.current = mainTab;
+  const refreshSeconds = mainTab === "listings" ? 15 : 5;
 
   useEffect(() => {
     if (highlightListingId) setMainTab("listings");
@@ -3041,7 +3107,7 @@ function SourcingPageInner() {
       setNextScanAt(status.next_scan_at ? new Date(status.next_scan_at) : null);
       setScanIntervalMinutes(status.scan_interval_minutes);
     } catch (error) {
-      console.error("Error fetching scan schedule:", error);
+      console.warn("Scan schedule refresh failed; retaining the last snapshot:", error);
     }
   };
 
@@ -3049,7 +3115,7 @@ function SourcingPageInner() {
     try {
       setMarketSnapshot(await api.gemRadar.marketSnapshot());
     } catch (error) {
-      console.error("Error fetching market snapshot:", error);
+      console.warn("Market snapshot refresh failed; retaining the last snapshot:", error);
     }
   };
 
@@ -3060,39 +3126,52 @@ function SourcingPageInner() {
       // Do not let one unhealthy Gem Radar endpoint leave the whole page in
       // its initial loading state forever. Each poll gets a bounded lifetime;
       // the next scheduled refresh can recover normally.
-      const signal = AbortSignal.timeout(15_000);
-      const [listingsRes, componentRes, queueRes] = await Promise.all([
-        fetch(`/api/gem-radar/scored-listings-latest-run?environment=${process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live" ? "LIVE" : "DEV"}&limit=500`, { cache: "no-store", signal }),
-        fetch(`/api/gem-radar/gem-by-component`, { cache: "no-store", signal }),
-        fetch(`/api/gem-radar/queue-status`, { cache: "no-store", signal }),
-      ]);
+      // Allow headroom for active sweeps; the in-flight guard prevents overlap.
+      const fetchCritical = async <T,>(url: string): Promise<T | null> => {
+        try {
+          const response = await fetch(url, { cache: "no-store", signal: AbortSignal.timeout(url.includes("scored-listings-latest-run") ? 30_000 : 15_000) });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          // The timeout also covers the body. Parse inside this request's
+          // catch so a slow listing body cannot discard a successful queue read.
+          return await response.json();
+        } catch (error) {
+          console.warn(`Gem Radar request failed: ${url}`, error);
+          return null;
+        }
+      };
+      const { listingsData, queueData, failedEndpoints } = await loadSourcingRefresh<unknown, QueueStatus>(
+        mainTab,
+        `/api/gem-radar/scored-listings-latest-run?environment=${process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live" ? "LIVE" : "DEV"}&limit=100&offset=${(listingPage - 1) * 100}&paged=true&category=${listingFilters.component.toLowerCase()}&classification=${listingFilters.classification}&stock_lane=${listingFilters.stockLane}&title_query=${encodeURIComponent(listingFilters.title)}&sort_key=${listingFilters.sortKey}&sort_dir=${listingFilters.sortDir}`,
+        fetchCritical,
+      );
+      // A slow request from a previous tab must not restore its warning here.
+      if (currentTab.current !== mainTab) return;
+      setBackendConnected(Boolean(listingsData || queueData));
+      setRefreshError(failedEndpoints.length ? `${failedEndpoints.join(" and ")} could not refresh. Showing the last available values; retrying automatically.` : "");
 
-      if (listingsRes.ok) {
-        const data = await listingsRes.json();
-        setListings(data);
-        if (data.length === 0) {
+      if (listingsData) {
+        const data = normalizeScoredListingsResponse<Listing>(listingsData);
+        setListings(data.items);
+        setListingHasMore(data.hasMore);
+        setListingTotal(data.total);
+        setLegacyListingsApi(data.legacy);
+        if (data.items.length === 0) {
           console.debug("scored-listings returned empty (queue still processing or listings not recently observed)");
         } else {
-          const gems = data.filter((l: Listing) => l.classification === "GEM").length;
-          const superGems = data.filter((l: Listing) => l.classification === "SUPER_GEM").length;
-          console.debug(`scored-listings: ${data.length} total, ${superGems} SUPER_GEM, ${gems} GEM`);
+          const gems = data.items.filter((l: Listing) => l.classification === "GEM").length;
+          const superGems = data.items.filter((l: Listing) => l.classification === "SUPER_GEM").length;
+          console.debug(`scored-listings page ${listingPage}: ${data.items.length} rows, ${superGems} SUPER_GEM, ${gems} GEM`);
         }
-      } else {
-        console.warn(`scored-listings returned ${listingsRes.status}`);
       }
-      if (componentRes.ok) {
-        const data = await componentRes.json();
-        setComponentGems(data);
-      }
-      if (queueRes.ok) {
-        const data = await queueRes.json();
-        setQueueStatus(data);
+      if (queueData) {
+        setQueueStatus(queueData);
       }
 
-      setLastUpdate(new Date());
-      setNextRefreshIn(5);
+      if (listingsData || queueData) setLastUpdate(new Date());
+      setNextRefreshIn(refreshSeconds);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      setRefreshError("Sourcing data could not refresh. Showing the last available values; retrying automatically.");
+      console.warn("Sourcing refresh failed:", error);
     } finally {
       dataRequestInFlight.current = false;
       setLoading(false);
@@ -3101,33 +3180,73 @@ function SourcingPageInner() {
 
   useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, 5000);
+    const interval = setInterval(fetchData, refreshSeconds * 1000);
 
     // Countdown timer for next refresh
     const countdown = setInterval(() => {
-      setNextRefreshIn((prev) => (prev > 0 ? prev - 1 : 5));
+      setNextRefreshIn((prev) => (prev > 0 ? prev - 1 : refreshSeconds));
     }, 1000);
 
     return () => {
       clearInterval(interval);
       clearInterval(countdown);
     };
+  }, [mainTab, listingPage, listingFilters]);
+
+  useEffect(() => {
+    let active = true;
+    const fetchComponentGems = async () => {
+      try {
+        const response = await fetch("/api/gem-radar/gem-by-component", {
+          cache: "no-store",
+          signal: AbortSignal.timeout(30_000),
+        });
+        if (response.ok && active) setComponentGems(await response.json());
+      } catch (error) {
+        console.warn("Error fetching component gem summary:", error);
+      }
+    };
+
+    void fetchComponentGems();
+    const interval = setInterval(fetchComponentGems, 60_000);
+    return () => {
+      active = false;
+      clearInterval(interval);
+    };
   }, []);
 
   useEffect(() => {
     fetchScanSchedule();
     fetchMarketSnapshot();
+    const fetchListingFacets = async () => {
+      try {
+        const response = await fetch("/api/gem-radar/scored-listings-facets", { cache: "no-store" });
+        if (response.ok) setListingFacets(await response.json());
+      } catch { /* Listings remain usable while summary refreshes. */ }
+    };
+    void fetchListingFacets();
+    const fetchSourceActivity = async () => {
+      try {
+        const response = await fetch("/api/gem-radar/source-activity", { cache: "no-store" });
+        if (response.ok) setSourceActivity(await response.json());
+      } catch { /* Last-observed timestamps are advisory. */ }
+    };
+    void fetchSourceActivity();
     // Keep lightweight schedule polling frequent enough for the countdown.
     const scheduleInterval = setInterval(fetchScanSchedule, 30000);
     // Market snapshot is a whole-database aggregation; it must not compete
     // with the 1s pipeline progress polling or active queue work.
     const snapshotInterval = setInterval(fetchMarketSnapshot, 120000);
+    const activityInterval = setInterval(fetchSourceActivity, 60000);
+    const facetsInterval = setInterval(fetchListingFacets, 60000);
     // Tick every second purely to re-render the countdown display.
     const tickInterval = setInterval(() => setNowTick(Date.now()), 1000);
 
     return () => {
       clearInterval(scheduleInterval);
       clearInterval(snapshotInterval);
+      clearInterval(activityInterval);
+      clearInterval(facetsInterval);
       clearInterval(tickInterval);
     };
   }, []);
@@ -3158,6 +3277,10 @@ function SourcingPageInner() {
         </div>
 
         <div className="flex items-center gap-3">
+          <div className="hidden rounded-xl border border-white/10 bg-white/[0.06] px-3 py-2 text-xs text-slate-200 lg:block" title={lastUpdate ? `Last successful API response: ${lastUpdate.toLocaleString()}. Browser extension online status is not tracked here.` : "No successful API response yet. Browser extension online status is not tracked here."}>
+            <span className={backendConnected ? "text-emerald-400" : "text-amber-300"}>●</span> API {backendConnected ? "connected" : "unavailable"}
+            <span className="ml-2 text-slate-400">· Extension status not tracked</span>
+          </div>
           {/* Next scan countdown — estimate only, see fetchScanSchedule's comment */}
           <div
             className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-xl px-4 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
@@ -3196,6 +3319,8 @@ function SourcingPageInner() {
         </div>
       </div>
 
+      {refreshError && <p role="status" className="relative text-sm text-amber-300">{refreshError}</p>}
+
       {/* Main Tabs */}
       <div className="relative flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl px-3 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
         <div className="flex gap-2">
@@ -3228,8 +3353,11 @@ function SourcingPageInner() {
             <StatsTab componentGems={componentGems || undefined} />
           </>
         )}
-        {mainTab === "listings" && <ListingsTab listings={listings} highlightListingId={highlightListingId} />}
-        {mainTab === "analytics" && <AnalyticsTab listings={listings} />}
+        {mainTab === "listings" && <>
+          {legacyListingsApi && <p role="status" className="mb-3 rounded border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-sm text-amber-200">The API is still running the old listings code. Restart the local backend to enable global category filters, accurate vendor totals and pagination.</p>}
+          <ListingsTab listings={listings} sourceActivity={sourceActivity} facets={listingFacets} total={listingTotal} legacy={legacyListingsApi} highlightListingId={highlightListingId} page={listingPage} hasMore={listingHasMore} onPageChange={setListingPage} onFiltersChange={filters => { setListingPage(1); setListingFilters(current => JSON.stringify(current) === JSON.stringify(filters) ? current : filters); }} />
+        </>}
+        {mainTab === "analytics" && <AnalyticsTab />}
       </div>
     </div>
   );

@@ -1,16 +1,13 @@
-"""Claude-assisted screening (PRD §29-30) — identity refinement, bundle
-detection, risk interpretation, and reasoning text ONLY. Output is forced
-through a tool schema (never parsed from free text — see _OPENROUTER tier)
-so malformed output is a schema-validation error, not a regex miss.
+"""Model-assisted screening (PRD §29-30) — identity refinement, bundle
+detection, risk interpretation, and reasoning text ONLY. Output is validated
+from a tool call or JSON-mode response; malformed output fails safe.
 
 Two-stage cost control (PRD §30): the caller (router) only invokes this for
 the top `max_candidates_for_deep_research` listings by deterministic score
 per scan — see api/gem_radar.py.
 
-Two-tier provider chain: Ollama (local, GPU-accelerated, no rate limits) ->
-OpenRouter (cloud fallback, free models, OpenAI-compatible tool-calling).
-Ollama handles text-only screening via JSON-mode; most locally-runnable
-models lack vision + tool-calling for photo-verification tier.
+Provider and model selection is delegated to ModelSelectionService, which
+skips incompatible tiers for vision requests.
 """
 from __future__ import annotations
 
@@ -43,6 +40,7 @@ import structlog
 
 from app.config import get_settings, Settings
 from app.gem_radar.schemas import ExtractedListing, Identity
+from app.services.model_selection_service import model_selection_service
 
 log = structlog.get_logger(__name__)
 
@@ -160,164 +158,6 @@ def _build_user_prompt(listing: ExtractedListing, identity: Identity) -> str:
     )
 
 
-async def _screen_via_anthropic(
-    settings: Settings, user_prompt: str, max_retries: int
-) -> ClaudeAssistResult | None:
-    if not settings.anthropic_api_key:
-        return None
-
-    import anthropic
-
-    client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
-    for attempt in range(max_retries + 1):
-        try:
-            response = await client.messages.create(
-                model="claude-opus-4-8",
-                max_tokens=512,
-                system=_SYSTEM_PROMPT,
-                messages=[{"role": "user", "content": user_prompt}],
-                tools=[_ASSESS_TOOL_SCHEMA],
-                tool_choice={"type": "tool", "name": "submit_identity_and_risk_assessment"},
-            )
-        except Exception as exc:
-            log.warning("gem_radar.claude_screening.anthropic_failed", attempt=attempt, error=str(exc))
-            continue
-
-        tool_use_block = next((b for b in response.content if b.type == "tool_use"), None)
-        if tool_use_block is None:
-            log.warning("gem_radar.claude_screening.anthropic_no_tool_use_block", attempt=attempt)
-            continue
-
-        result = _parse_assist_result(tool_use_block.input)
-        if result is not None:
-            return result
-
-    return None
-
-
-async def _openrouter_tool_call(
-    settings: Settings,
-    system_prompt: str,
-    user_content,
-    tool_schema: dict,
-    max_tokens: int,
-    max_retries: int,
-) -> dict | None:
-    """OpenAI-compatible tool-calling request to OpenRouter. user_content can
-    be a plain string (text-only) or a list of OpenAI-format content blocks
-    (text + image_url). Returns the parsed tool-call arguments dict, or None
-    — same never-fabricate contract as the Anthropic tier."""
-    if not settings.openrouter_api_key:
-        return None
-
-    model = settings.openrouter_primary_model or "meta-llama/llama-3.1-8b-instruct"
-    tool_name = tool_schema["name"]
-    openai_tool = {
-        "type": "function",
-        "function": {
-            "name": tool_name,
-            "description": tool_schema["description"],
-            "parameters": tool_schema["input_schema"],
-        },
-    }
-
-    for attempt in range(max_retries + 1):
-        try:
-            wait = (2**attempt) * 5
-            if attempt > 0:
-                await asyncio.sleep(wait)
-            async with httpx.AsyncClient(timeout=60) as client:
-                resp = await client.post(
-                    "https://openrouter.ai/api/v1/chat/completions",
-                    headers={
-                        "Authorization": f"Bearer {settings.openrouter_api_key}",
-                        "HTTP-Referer": settings.frontend_url,
-                        "X-Title": "FlipFlop Gem Radar",
-                    },
-                    json={
-                        "model": model,
-                        "messages": [
-                            {"role": "system", "content": system_prompt},
-                            {"role": "user", "content": user_content},
-                        ],
-                        "tools": [openai_tool],
-                        "tool_choice": {"type": "function", "function": {"name": tool_name}},
-                        "max_tokens": max_tokens,
-                    },
-                )
-                if resp.status_code == 429:
-                    retry_after = int(resp.headers.get("Retry-After", wait))
-                    log.warning("gem_radar.claude_screening.openrouter_rate_limited", attempt=attempt)
-                    await asyncio.sleep(retry_after)
-                    continue
-                resp.raise_for_status()
-                data = resp.json()
-                tool_calls = data["choices"][0]["message"].get("tool_calls") or []
-                if not tool_calls:
-                    log.warning("gem_radar.claude_screening.openrouter_no_tool_call", attempt=attempt)
-                    continue
-                return json.loads(tool_calls[0]["function"]["arguments"])
-        except Exception as exc:
-            log.warning("gem_radar.claude_screening.openrouter_failed", attempt=attempt, error=str(exc))
-            continue
-
-    return None
-
-
-async def _screen_via_openrouter(
-    settings: Settings, user_prompt: str, max_retries: int
-) -> ClaudeAssistResult | None:
-    data = await _openrouter_tool_call(
-        settings, _SYSTEM_PROMPT, user_prompt, _ASSESS_TOOL_SCHEMA, max_tokens=512, max_retries=max_retries
-    )
-    return _parse_assist_result(data) if data is not None else None
-
-
-async def _screen_via_ollama(settings: Settings, user_prompt: str) -> ClaudeAssistResult | None:
-    """Local primary screening — fast GPU-accelerated inference, no rate limits.
-    No forced tool schema (Qwen models don't support tool-calling as reliably
-    as OpenRouter), so this asks for JSON via Ollama's format="json" mode
-    instead and parses leniently. Text-only screening still goes through
-    _parse_assist_result's validation, so malformed JSON fails safe (returns None)."""
-    if not settings.ollama_base_url:
-        return None
-    try:
-        # Separate connect timeout, not one blanket 180s: a dead/unreachable
-        # host (DNS failure, VPN down) should fail in ~5s, not burn the full
-        # budget meant for slow local inference once actually connected —
-        # otherwise every listing needing this fallback wastes nearly its
-        # whole per-listing timeout on a connection that was never going to
-        # succeed, starving the rest of the batch for no benefit.
-        timeout = httpx.Timeout(connect=5.0, read=15.0, write=10.0, pool=5.0)
-        async with _ollama_semaphore, httpx.AsyncClient(timeout=timeout) as client:
-            resp = await client.post(
-                f"{settings.ollama_base_url}/api/chat",
-                json={
-                    "model": settings.ollama_model,
-                    "messages": [
-                        {
-                            "role": "system",
-                            "content": _SYSTEM_PROMPT
-                            + "\n\nRespond with ONLY a single JSON object with these exact keys: "
-                            "canonical_name, canonical_model_id, identity_confidence, release_year, is_bundle, "
-                            "bundle_components, additional_risk_notes, reasoning_summary.",
-                        },
-                        {"role": "user", "content": user_prompt},
-                    ],
-                    "format": "json",
-                    "stream": False,
-                },
-            )
-            resp.raise_for_status()
-            content = resp.json().get("message", {}).get("content")
-            if not content:
-                return None
-            return _parse_assist_result(json.loads(content))
-    except Exception as exc:
-        log.warning("gem_radar.claude_screening.ollama_failed", error=str(exc))
-        return None
-
-
 async def screen_with_claude(
     listing: ExtractedListing, identity: Identity, max_retries: int = 2
 ) -> ClaudeAssistResult | None:
@@ -328,26 +168,32 @@ async def screen_with_claude(
 
     Provider priority: Ollama (local, fast, GPU) -> OpenRouter (cloud, fallback)
     """
-    settings = get_settings()
-    if not (settings.openrouter_api_key or settings.ollama_base_url):
-        log.info("gem_radar.claude_screening.no_provider_configured")
-        return None
-
     user_prompt = _build_user_prompt(listing, identity)
-
-    # Try local Ollama first (fast, GPU-accelerated, no rate limits)
-    result = await _screen_via_ollama(settings, user_prompt)
-    if result is not None:
-        return result
-
-    # Fall back to OpenRouter (cloud, when local is unavailable)
-    return await _screen_via_openrouter(settings, user_prompt, max_retries)
+    try:
+        selected = await model_selection_service.complete(
+            task="Gem Radar identity and risk screening",
+            messages=[{"role": "user", "content": user_prompt}],
+            system_prompt=_SYSTEM_PROMPT + "\n\nReturn one JSON object with keys: canonical_name, canonical_model_id, identity_confidence, release_year, is_bundle, bundle_components, additional_risk_notes, reasoning_summary.",
+            max_tokens=512, timeout=180, json_mode=True,
+            tools=[_ASSESS_TOOL_SCHEMA], require_tools=True,
+            tool_choice={"type": "function", "function": {"name": "submit_identity_and_risk_assessment"}},
+        )
+        if selected.tool_calls:
+            args = selected.tool_calls[0].get("function", {}).get("arguments", {})
+            if isinstance(args, str):
+                args = json.loads(args)
+            return _parse_assist_result(args)
+        if selected.text:
+            return _parse_assist_result(json.loads(selected.text))
+    except Exception as exc:
+        log.warning("gem_radar.claude_screening.model_selection_failed", error=str(exc))
+    return None
 
 
 # --- Batched photo/title category verification -----------------------------
 #
 # Cost-batching without stitching photos into a physical collage: both
-# Anthropic and OpenRouter (OpenAI-compatible) natively accept several
+# Ollama and OpenRouter (OpenAI-compatible) natively accept several
 # separate images in one message, so a batch of N candidates costs one
 # system prompt + one round of output tokens instead of N of each, while
 # every photo stays at full resolution. A stitched grid would save the same
@@ -356,9 +202,8 @@ async def screen_with_claude(
 # box, a cable connector needing to be read) gets missed.
 #
 # Kept deliberately conservative: too large a batch risks the model losing
-# track of which numbered image maps to which listing. No Ollama tier here
-# — vision + structured output together is a much higher bar than most
-# locally-runnable models reliably clear; this tier stays cloud-only.
+# track of which numbered image maps to which listing. Text-only Ollama
+# models are skipped by the shared selector for this vision task.
 VERIFICATION_BATCH_SIZE = 10
 
 _VERIFY_TOOL_SCHEMA = {
@@ -460,81 +305,37 @@ async def _fetch_batch_images(
     return numbered, index_to_listing_id
 
 
-async def _verify_batch_via_anthropic(
-    client, numbered: list, index_to_listing_id: dict[int, str], max_retries: int
-) -> list[VerificationFailure]:
-    content: list[dict] = []
-    for n, (title, category, image_bytes, media_type) in enumerate(numbered, start=1):
-        content.append({"type": "text", "text": f'Listing {n}: "{title}" — claimed category: {category}'})
-        content.append(
-            {
-                "type": "image",
-                "source": {
-                    "type": "base64",
-                    "media_type": media_type,
-                    "data": base64.standard_b64encode(image_bytes).decode("ascii"),
-                },
-            }
-        )
-    if not content:
-        return []
-
-    for attempt in range(max_retries + 1):
-        try:
-            response = await client.messages.create(
-                model="claude-opus-4-8",
-                max_tokens=1024,
-                system=_VERIFY_SYSTEM_PROMPT,
-                messages=[{"role": "user", "content": content}],
-                tools=[_VERIFY_TOOL_SCHEMA],
-                tool_choice={"type": "tool", "name": "submit_category_verification"},
-            )
-        except Exception as exc:
-            log.warning("gem_radar.claude_screening.verify_request_failed", attempt=attempt, error=str(exc))
-            continue
-
-        tool_use_block = next((b for b in response.content if b.type == "tool_use"), None)
-        if tool_use_block is None:
-            log.warning("gem_radar.claude_screening.verify_no_tool_use_block", attempt=attempt)
-            continue
-
-        failures = _parse_verify_result(tool_use_block.input, index_to_listing_id)
-        if failures or tool_use_block.input.get("not_matching") == []:
-            return failures
-
-    return []
-
-
-async def _verify_batch_via_openrouter(
-    settings: Settings, numbered: list, index_to_listing_id: dict[int, str], max_retries: int
-) -> list[VerificationFailure]:
-    content: list[dict] = []
-    for n, (title, category, image_bytes, media_type) in enumerate(numbered, start=1):
-        content.append({"type": "text", "text": f'Listing {n}: "{title}" — claimed category: {category}'})
-        b64 = base64.standard_b64encode(image_bytes).decode("ascii")
-        content.append({"type": "image_url", "image_url": {"url": f"data:{media_type};base64,{b64}"}})
-    if not content:
-        return []
-
-    data = await _openrouter_tool_call(
-        settings, _VERIFY_SYSTEM_PROMPT, content, _VERIFY_TOOL_SCHEMA, max_tokens=1024, max_retries=max_retries
-    )
-    if data is None:
-        return []
-    return _parse_verify_result(data, index_to_listing_id)
-
-
 async def _verify_one_batch(
     settings: Settings, candidates: list[tuple[str, str, str, str]], max_retries: int
 ) -> list[VerificationFailure]:
-    """candidates: list of (listing_id, title, category, image_url).
-
-    Only uses OpenRouter (Anthropic removed). No local tier for vision."""
+    """Verify a batch through the centralized vision-capable model chain."""
     numbered, index_to_listing_id = await _fetch_batch_images(candidates)
     if not numbered:
         return []
-
-    return await _verify_batch_via_openrouter(settings, numbered, index_to_listing_id, max_retries)
+    text_parts = []
+    images = []
+    for n, (title, category, image_bytes, media_type) in enumerate(numbered, start=1):
+        text_parts.append(f'Listing {n}: "{title}" — claimed category: {category}')
+        images.append((image_bytes, media_type))
+    try:
+        selected = await model_selection_service.complete(
+            task="Gem Radar photo category verification",
+            messages=[{"role": "user", "content": "\n".join(text_parts)}],
+            system_prompt=_VERIFY_SYSTEM_PROMPT, max_tokens=1024, timeout=180,
+            tools=[_VERIFY_TOOL_SCHEMA], require_vision=True, require_tools=True,
+            images=images,
+            tool_choice={"type": "function", "function": {"name": "submit_category_verification"}},
+        )
+        if selected.tool_calls:
+            data = selected.tool_calls[0].get("function", {}).get("arguments", {})
+            if isinstance(data, str):
+                data = json.loads(data)
+        else:
+            data = json.loads(selected.text)
+        return _parse_verify_result(data, index_to_listing_id)
+    except Exception as exc:
+        log.warning("gem_radar.claude_screening.verify_model_selection_failed", error=str(exc))
+        return []
 
 
 async def verify_categories_batch(
@@ -543,8 +344,8 @@ async def verify_categories_batch(
     """Batched photo+title category check for a set of candidates, each a
     (listing_id, title, category, image_url) tuple. Split into batches of
     VERIFICATION_BATCH_SIZE and run concurrently — one vision request per
-    batch instead of per listing. Uses OpenRouter only (Anthropic removed,
-    no Ollama tier for vision).
+    batch instead of per listing. Uses the configured hierarchy, skipping
+    any provider/model that cannot handle image input.
 
     Returns only the listings flagged as NOT matching their claimed
     category — an empty list if no provider is configured or every attempt
@@ -553,7 +354,7 @@ async def verify_categories_batch(
     flagged".
     """
     settings = get_settings()
-    if not settings.openrouter_api_key or not candidates:
+    if not candidates:
         return []
 
     batches = _chunks(candidates, VERIFICATION_BATCH_SIZE)

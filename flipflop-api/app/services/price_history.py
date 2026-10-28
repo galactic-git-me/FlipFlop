@@ -134,7 +134,8 @@ class PriceHistoryService:
         # Trend: old price vs new price
         oldest = prices[-1]
         newest = prices[0]
-        trend = (newest - oldest).to_float()
+        # Price deltas may be negative even though a Money price cannot be.
+        trend = float(newest.amount - oldest.amount)
 
         # Volatility: price range as % of average
         volatility_pct = ((max_price - min_price).to_float() / float(avg_price)) * 100 if avg_price > 0 else 0

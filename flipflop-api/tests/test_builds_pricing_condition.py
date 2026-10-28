@@ -1,3 +1,5 @@
+import pytest
+
 from app.api.builds_pricing import (
     SoldCompDetail,
     _build_condition,
@@ -5,9 +7,26 @@ from app.api.builds_pricing import (
     _build_sold_queries,
     _extract_ram_gb,
     _extract_storage_gb,
+    _observed_warranty_rate,
+    _sale_based_reserve_floor,
+    _sale_based_warranty_reserve,
     _title_has_model,
     _weighted_median,
 )
+
+
+def test_pricing_reserve_uses_expected_sale_price():
+    assert _sale_based_warranty_reserve(1000, 5) == 50
+
+
+def test_warranty_calibration_uses_historical_sale_value_denominator():
+    assert _observed_warranty_rate(100, 1000) == 10
+    assert _observed_warranty_rate(100, 0) is None
+
+
+def test_pricing_floor_accounts_for_sale_based_reserve_and_fees():
+    floor = _sale_based_reserve_floor(1000, 0.10, 5)
+    assert floor == pytest.approx(1100 / 0.845)
 
 
 def test_full_pc_capacity_parsing_ignores_gpu_vram():

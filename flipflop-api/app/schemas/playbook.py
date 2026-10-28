@@ -15,6 +15,7 @@ class PlaybookBase(BaseModel):
     search_strategy: dict[str, Any] = {}
     upgrade_strategy: dict[str, Any] = {}
     profit_strategy: dict[str, Any] = {}
+    software_profile: Optional[dict[str, Any]] = None
 
     # Customer profile
     target_customer: Optional[str] = None
@@ -53,6 +54,7 @@ class PlaybookUpdate(BaseModel):
     search_strategy: Optional[dict[str, Any]] = None
     upgrade_strategy: Optional[dict[str, Any]] = None
     profit_strategy: Optional[dict[str, Any]] = None
+    software_profile: Optional[dict[str, Any]] = None
     status: Optional[str] = None
 
 

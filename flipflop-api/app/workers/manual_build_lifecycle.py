@@ -21,10 +21,14 @@ from app.workers.manual_build_scheduler import post_build_to_ebay
 
 log = structlog.get_logger(__name__)
 
-async def _get_token() -> str | None:
+def _is_legacy_item_id(value: str | None) -> bool:
+    return bool(value and value.isdecimal())
+
+
+async def _get_token(db=None) -> str | None:
     settings = get_settings()
     try:
-        return await get_valid_ebay_access_token(settings.ebay_listing_environment)
+        return await get_valid_ebay_access_token(settings.ebay_listing_environment, db=db)
     except ValueError:
         return None
 
@@ -38,10 +42,6 @@ async def run_manual_build_offer_poll_job() -> dict:
     polled, countered, errors = 0, 0, 0
 
     async with AsyncSessionLocal() as db:
-        token = await _get_token()
-        if not token:
-            return {"polled": 0, "countered": 0, "errors": 0, "note": "No eBay refresh token configured."}
-
         result = await db.execute(
             select(ManualBuild).where(
                 ManualBuild.status == "listed",
@@ -49,7 +49,12 @@ async def run_manual_build_offer_poll_job() -> dict:
                 ManualBuild.ebay_listing_id.isnot(None),
             )
         )
-        builds = result.scalars().all()
+        builds = [build for build in result.scalars().all() if _is_legacy_item_id(build.ebay_listing_id)]
+        if not builds:
+            return {"polled": 0, "countered": 0, "errors": 0, "note": "No valid eBay listings to poll."}
+        token = await _get_token(db)
+        if not token:
+            return {"polled": 0, "countered": 0, "errors": 0, "note": "Connect the eBay seller account in Settings."}
 
         for build in builds:
             try:
@@ -101,10 +106,6 @@ async def run_manual_build_send_to_watchers_job() -> dict:
     sent, errors = 0, 0
 
     async with AsyncSessionLocal() as db:
-        token = await _get_token()
-        if not token:
-            return {"sent": 0, "errors": 0, "note": "No eBay refresh token configured."}
-
         result = await db.execute(
             select(ManualBuild).where(
                 ManualBuild.status == "listed",
@@ -113,7 +114,12 @@ async def run_manual_build_send_to_watchers_job() -> dict:
                 ManualBuild.listed_at.isnot(None),
             )
         )
-        builds = result.scalars().all()
+        builds = [build for build in result.scalars().all() if _is_legacy_item_id(build.ebay_listing_id)]
+        if not builds:
+            return {"sent": 0, "errors": 0, "note": "No valid eBay listings to contact."}
+        token = await _get_token(db)
+        if not token:
+            return {"sent": 0, "errors": 0, "note": "Connect the eBay seller account in Settings."}
 
         for build in builds:
             listing_price = build.ebay_price or build.total_cost
@@ -216,7 +222,7 @@ async def _recreate_manual_build(build, db) -> None:
     # End + republish on eBay if a token is available; otherwise this
     # cycle's state (price/title/schedule) still advances so the app stays
     # internally consistent, and gets applied on the next successful publish.
-    await post_build_to_ebay(build)
+    await post_build_to_ebay(build, db=db)
 
     build.last_recreate_at = datetime.utcnow()
     build.recreate_cycle_count += 1

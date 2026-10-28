@@ -16,7 +16,8 @@ from typing import Literal
 import structlog
 from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
-from sqlalchemy import func, select, update
+from sqlalchemy import String, any_, bindparam, func, select, text, update
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import require_operator
@@ -74,8 +75,51 @@ from app.gem_radar.schemas import (
 from app.services.submission_queue_service import SubmissionQueueService
 from app.services.hardware_performance import enrich_listing_performance, load_benchmark_context
 from app.services.product_reviews import aggregate_cpk_reviews
+from app.services.amazon_bestsellers import bestseller_item_matches_category
 
 router = APIRouter(prefix="/gem-radar", tags=["gem-radar"])
+
+
+@router.get('/playbook-market-searches')
+async def playbook_market_searches(db:AsyncSession=Depends(get_db), _:None=Depends(require_operator)):
+    from app.services.playbook_extension import searches
+    return await searches(db)
+
+
+from pydantic import Field
+from app.schemas.commercial_quote import StrictModel
+from app.gem_radar.schemas import CamelModel
+
+
+class PlaybookMarketListing(CamelModel):
+    price_is_range: bool = False
+    url: str = Field(max_length=2000)
+    title: str = Field(min_length=1,max_length=1000)
+    item_price: float = Field(ge=0,allow_inf_nan=False)
+    postage_price: float = Field(ge=0,allow_inf_nan=False)
+    currency: str = Field(max_length=3)
+    condition_normalised: str = Field(max_length=40)
+    delivery_cost_known: bool = False
+    sold_confirmed: bool = False
+    sold_date_text: str | None = Field(default=None,max_length=160)
+    best_offer_enabled: bool = False
+
+
+class PlaybookMarketCapture(StrictModel):
+    playbook_id: int = Field(gt=0)
+    cell_id: str = Field(max_length=120)
+    bom_sha256: str = Field(pattern=r'^[0-9a-f]{64}$')
+    search_id: str = Field(max_length=160)
+    vendor: str = Field(max_length=40)
+    kind: Literal['active','sold']
+    source_url: str = Field(max_length=4000)
+    listings: list[PlaybookMarketListing] = Field(max_length=100)
+
+
+@router.post('/playbook-market-captures')
+async def playbook_market_capture(body:PlaybookMarketCapture,db:AsyncSession=Depends(get_db), _:None=Depends(require_operator)):
+    from app.services.playbook_extension import ingest
+    return await ingest(db,body)
 
 # Phase 2 can persist temporary/non-actionable classifications while identity
 # resolution is still running (for example ``IDENTITY_PENDING``).  Those
@@ -357,7 +401,7 @@ async def pipeline_status_endpoint(
                 "isComplete": False,
                 "searchRunIds": set(),
             })
-            scan["totalListings"] += len(row.listings_json or [])
+            scan["totalListings"] += row.listings_count
             scan["searchRunIds"].add(row.search_run_id)
             # Queue work may be processed by a different process, where the
             # in-memory stopwatch is unavailable.  Use the durable enqueue
@@ -528,6 +572,23 @@ async def pipeline_status_endpoint(
                 for s in snapshot["activeScans"]
             ),
         }
+    # The worker clears this flag only after Phase 2 and catalogue publication
+    # succeed. Its timestamp lets a separate API process report the sweep's
+    # terminal boundary to dashboard clients.
+    from app.models.gem_radar_sweep_signal import GemRadarSweepSignal
+    sweep_signal = (await db.execute(
+        select(GemRadarSweepSignal).where(GemRadarSweepSignal.id == 1)
+    )).scalar_one_or_none()
+    snapshot["completedSweepRequestedAt"] = (
+        sweep_signal.requested_at.isoformat() + "Z"
+        if sweep_signal and not sweep_signal.pending and sweep_signal.requested_at
+        else None
+    )
+    snapshot["pendingSweepRequestedAt"] = (
+        sweep_signal.requested_at.isoformat() + "Z"
+        if sweep_signal and sweep_signal.pending and sweep_signal.requested_at
+        else None
+    )
     return snapshot
 
 
@@ -870,10 +931,18 @@ async def get_scored_listings(
     # its own raw UPDATE of these same columns), so read them the same way.
     ids = [s.id for s in scored]
     raw_result = await db.execute(
-        text("SELECT id, market_median_price FROM gem_radar_scored_listings WHERE id = ANY(:ids)"),
+        text("""
+            SELECT s.id, s.market_median_price,
+                (SELECT o.search_tags FROM gem_radar_listing_observations o
+                 WHERE o.listing_id = s.listing_id
+                 ORDER BY o.observed_at DESC, o.id DESC LIMIT 1) AS search_tags
+            FROM gem_radar_scored_listings s WHERE s.id = ANY(:ids)
+        """),
         {"ids": ids},
     )
-    median_by_id = {row.id: row.market_median_price for row in raw_result}
+    result_rows = raw_result.fetchall()
+    median_by_id = {row.id: row.market_median_price for row in result_rows}
+    tags_by_id = {row.id: row.search_tags for row in result_rows}
 
     response: list[ScoredListing] = []
     for rank, s in enumerate(scored, start=1):
@@ -900,6 +969,9 @@ async def get_scored_listings(
                     watch_count=s.watch_count,
                     auction_end_at=None,
                     image_url=s.image_url,
+                    image_urls=s.image_urls or ([s.image_url] if s.image_url else []),
+                    video_urls=s.video_urls or [],
+                    search_tags=tags_by_id.get(s.id),
                     sponsored=False,
                     extracted_at=s.listing_observed_at,
                     epid=s.epid,
@@ -1006,6 +1078,9 @@ async def get_scored_listings_current(
             "delivered_price": s.delivered_price,
             "delivery_text": s.delivery_text,
             "delivery_postcode": s.delivery_postcode,
+            "prime_eligible": s.prime_eligible,
+            "delivery_working_days": s.delivery_working_days,
+            "delivery_estimate_source": s.delivery_estimate_source,
             "market_new_price": s.market_new_price,
             "market_used_price": s.market_used_price,
             **cpk_price_fields.get(s.id, {}),
@@ -1077,9 +1152,147 @@ async def _fetch_cpk_price_fields(db: AsyncSession, ids: list[int]) -> dict[int,
     }
 
 
+@router.get("/scored-listings-facets")
+async def get_scored_listings_facets(db: AsyncSession = Depends(get_db), _: None = Depends(require_operator)) -> dict:
+    """Full active scored BIN population behind the Listings tab filters."""
+    from sqlalchemy import text
+
+    rows = (await db.execute(text("""
+        WITH latest_observation AS (
+            SELECT DISTINCT ON (listing_id) listing_id, listing_type, observed_at
+            FROM gem_radar_listing_observations
+            ORDER BY listing_id, observed_at DESC, id DESC
+        ), active AS (
+            SELECT o.listing_id FROM latest_observation o
+            LEFT JOIN gem_radar_listing_lifecycle lifecycle USING (listing_id)
+            WHERE o.listing_type = 'buy_it_now'
+              AND (lifecycle.status IS NULL OR lifecycle.status = 'active'
+                   OR o.observed_at > lifecycle.archived_at)
+              AND NOT EXISTS (SELECT 1 FROM listing_archive a WHERE a.external_id = o.listing_id)
+              AND NOT EXISTS (SELECT 1 FROM listings l WHERE l.external_id = o.listing_id AND l.status <> 'active')
+        ), latest AS (
+            SELECT DISTINCT ON (s.listing_id)
+                   s.source, s.category, s.classification, s.condition
+            FROM gem_radar_scored_listings s
+            JOIN active a ON a.listing_id = s.listing_id
+            ORDER BY s.listing_id, s.scored_at DESC, s.id DESC
+        )
+        SELECT source, category, classification, condition, COUNT(*) AS n
+        FROM latest GROUP BY source, category, classification, condition
+    """))).fetchall()
+    categories: dict[str, int] = {}
+    vendors: dict[str, dict] = {}
+    classes: dict[str, int] = {}
+    category_classes: dict[str, dict[str, int]] = {}
+    stock = {"all": 0, "new": 0, "open_box": 0, "used": 0}
+    total = 0
+    known = {"cpu", "motherboard", "ram", "psu", "ssd", "gpu", "cooler", "fan", "case"}
+    for row in rows:
+        n = int(row.n)
+        total += n
+        stock["all"] += n
+        condition = (row.condition or "").lower().replace("-", " ").replace("_", " ")
+        if condition == "new":
+            stock["new"] += n
+        elif any(term in condition for term in ("refurb", "open box", "new other", "b grade")):
+            stock["open_box"] += n
+        elif any(term in condition for term in ("used", "pre owned")):
+            stock["used"] += n
+        category = row.category if row.category in known else "other"
+        categories[category] = categories.get(category, 0) + n
+        source = row.source or "unknown"
+        vendor = vendors.setdefault(source, {"total": 0, "classifications": {}})
+        vendor["total"] += n
+        tier = row.classification or "unknown"
+        vendor["classifications"][tier] = vendor["classifications"].get(tier, 0) + n
+        classes[tier] = classes.get(tier, 0) + n
+        category_bucket = category_classes.setdefault(category, {})
+        category_bucket[tier] = category_bucket.get(tier, 0) + n
+    return {"total": total, "categories": categories, "vendors": vendors, "classifications": classes, "category_classifications": category_classes, "stock": stock}
+
+
+@router.get("/sourcing-analytics")
+async def get_sourcing_analytics(
+    db: AsyncSession = Depends(get_db),
+    _: None = Depends(require_operator),
+) -> dict:
+    """Chart cohort across all active listings, independent of table paging.
+
+    Keep every BSR-linked row and a bounded, classification-stratified sample
+    of the rest so rare tiers remain visible without rendering tens of
+    thousands of scatter points in the browser.
+    """
+    from sqlalchemy import text
+
+    rows = (await db.execute(text("""
+        WITH active AS (
+            SELECT DISTINCT listing_id FROM gem_radar_listing_observations
+            WHERE observed_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
+              AND listing_type = 'buy_it_now'
+        ), latest AS (
+            SELECT DISTINCT ON (s.listing_id) s.*
+            FROM gem_radar_scored_listings s JOIN active a USING (listing_id)
+            ORDER BY s.listing_id, s.scored_at DESC, s.id DESC
+        ), latest_bsr AS (
+            SELECT DISTINCT ON (cpk) cpk, rank
+            FROM amazon_bestseller_observations WHERE cpk IS NOT NULL
+            ORDER BY cpk, captured_at DESC, id DESC
+        ), ranked AS (
+            SELECT l.id, l.title, l.classification, l.deal_score,
+                   l.roi_pct, l.expected_profit, l.delivered_price,
+                   l.market_median_price, l.market_confidence,
+                   l.market_sample_size, l.sell_through_rate_pct,
+                   l.sold_listing_count, b.rank AS amazon_bestseller_rank,
+                   ROW_NUMBER() OVER (
+                       PARTITION BY l.classification ORDER BY l.scored_at DESC, l.id DESC
+                   ) AS sample_rank
+            FROM latest l LEFT JOIN latest_bsr b ON b.cpk = l.cpk
+        )
+        SELECT title, classification, deal_score, roi_pct, expected_profit,
+               delivered_price, market_median_price, market_confidence,
+               market_sample_size, sell_through_rate_pct, sold_listing_count,
+               amazon_bestseller_rank
+        FROM ranked
+        WHERE sample_rank <= 250 OR amazon_bestseller_rank IS NOT NULL
+        ORDER BY classification, sample_rank
+    """))).mappings().all()
+    counts = (await db.execute(text("""
+        WITH latest_observation AS (
+            SELECT DISTINCT ON (listing_id) listing_id, listing_type, observed_at
+            FROM gem_radar_listing_observations
+            ORDER BY listing_id, observed_at DESC, id DESC
+        ), active AS (
+            SELECT o.listing_id FROM latest_observation o
+            LEFT JOIN gem_radar_listing_lifecycle lifecycle USING (listing_id)
+            WHERE o.listing_type = 'buy_it_now'
+              AND (lifecycle.status IS NULL OR lifecycle.status = 'active'
+                   OR o.observed_at > lifecycle.archived_at)
+              AND NOT EXISTS (SELECT 1 FROM listing_archive a WHERE a.external_id = o.listing_id)
+              AND NOT EXISTS (SELECT 1 FROM listings l WHERE l.external_id = o.listing_id AND l.status <> 'active')
+        ), latest AS (
+            SELECT DISTINCT ON (s.listing_id) s.listing_id, s.classification
+            FROM gem_radar_scored_listings s JOIN active a USING (listing_id)
+            ORDER BY s.listing_id, s.scored_at DESC, s.id DESC
+        ) SELECT classification, COUNT(*) AS total FROM latest GROUP BY classification
+    """))).all()
+    return {
+        "total": sum(row.total for row in counts),
+        "classification_counts": {row.classification or "UNKNOWN": row.total for row in counts},
+        "items": [dict(row) for row in rows],
+    }
+
+
 @router.get("/scored-listings-latest-run")
 async def get_scored_listings_latest_run(
     environment: Literal["DEV", "LIVE"] | None = Query(default=None),
+    offset: int = Query(default=0, ge=0),
+    paged: bool = Query(default=False),
+    category: str | None = Query(default=None),
+    classification: str | None = Query(default=None),
+    stock_lane: Literal["all", "new", "open_box", "used"] = Query(default="all"),
+    title_query: str | None = Query(default=None, max_length=120),
+    sort_key: str = Query(default="deal_score"),
+    sort_dir: Literal["asc", "desc"] = Query(default="desc"),
     limit: int = Query(
         default=500,
         ge=1,
@@ -1088,30 +1301,28 @@ async def get_scored_listings_latest_run(
     ),
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
-) -> list[dict]:
+) -> list[dict] | dict:
     """Get the latest scored row for every active fixed-price listing.
 
     Historical and auction rows remain in the database for evidence and
     Auction Intel, but are never actionable sourcing cards.
     """
-    from sqlalchemy import select, func, text
+    from sqlalchemy import select, func, text, or_
 
     # The API/database instance is already environment-specific: the live API
     # points at the production database and the local API points at the DEV
     # database. Observation search_run_id values are UUIDs (and some older
     # rows use internal pipeline IDs), so they must not be filtered by a
     # fabricated DEV/LIVE prefix here.
-    active_observations = await db.execute(
-        text("""
-            SELECT DISTINCT listing_id
-            FROM gem_radar_listing_observations
-            WHERE observed_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
-              AND listing_type = 'buy_it_now'
-        """),
+    # Keep the active snapshot in PostgreSQL. Expanding every active ID into
+    # Python and back into an IN clause exceeded asyncpg's 32,767-argument
+    # limit during large sweeps and made every five-second dashboard poll
+    # transfer and re-plan the same large list.
+    from app.models.gem_radar_observation import GemRadarListingObservation
+    actionable_ids = select(GemRadarListingObservation.listing_id).where(
+        GemRadarListingObservation.observed_at >= func.now() - text("INTERVAL '24 hours'"),
+        GemRadarListingObservation.listing_type == 'buy_it_now',
     )
-    actionable_ids = {row.listing_id for row in active_observations}
-    if not actionable_ids:
-        return []
 
     # Get the latest scored row for each listing in this environment's active
     # observation snapshot.  This remains isolated even when DEV and LIVE
@@ -1127,17 +1338,46 @@ async def get_scored_listings_latest_run(
         .group_by(GemRadarScoredListing.listing_id)
         .subquery()
     )
-    result = await db.execute(
+    statement = (
         select(GemRadarScoredListing)
         .join(
             latest_scored_at,
             (GemRadarScoredListing.listing_id == latest_scored_at.c.listing_id)
             & (GemRadarScoredListing.scored_at == latest_scored_at.c.scored_at),
         )
-        .order_by(GemRadarScoredListing.scored_at.desc())
-        .limit(limit)
     )
+    if category == "other":
+        statement = statement.where(or_(GemRadarScoredListing.category.is_(None), ~GemRadarScoredListing.category.in_(["cpu", "motherboard", "ram", "psu", "ssd", "gpu", "cooler", "fan", "case"])))
+    elif category:
+        statement = statement.where(GemRadarScoredListing.category == category.lower())
+    if classification and classification != "all":
+        statement = statement.where(GemRadarScoredListing.classification == classification)
+    condition = func.lower(func.coalesce(GemRadarScoredListing.condition, ""))
+    if stock_lane == "new":
+        statement = statement.where(condition == "new")
+    elif stock_lane == "open_box":
+        statement = statement.where(or_(condition.contains("refurb"), condition.contains("open"), condition.contains("new other"), condition.contains("new_other"), condition.contains("b grade"), condition.contains("b_grade")))
+    elif stock_lane == "used":
+        statement = statement.where(or_(condition.contains("used"), condition.contains("pre owned"), condition.contains("pre_owned")))
+    if title_query:
+        statement = statement.where(GemRadarScoredListing.title.ilike(f"%{title_query.strip()}%"))
+    total = (await db.execute(select(func.count()).select_from(statement.order_by(None).subquery()))).scalar_one() if paged else 0
+    sort_columns = {
+        "source": GemRadarScoredListing.source,
+        "title": GemRadarScoredListing.title,
+        "condition": GemRadarScoredListing.condition,
+        "delivered_price": GemRadarScoredListing.delivered_price,
+        "classification": GemRadarScoredListing.classification,
+        "decision": GemRadarScoredListing.decision,
+        "deal_score": GemRadarScoredListing.deal_score,
+    }
+    sort_column = sort_columns.get(sort_key, GemRadarScoredListing.deal_score)
+    statement = statement.order_by(sort_column.asc().nulls_last() if sort_dir == "asc" else sort_column.desc().nulls_last(), GemRadarScoredListing.id.desc())
+    result = await db.execute(statement.offset(offset).limit(limit + 1 if paged else limit))
     scored = result.scalars().all()
+    has_more = paged and len(scored) > limit
+    if paged:
+        scored = scored[:limit]
     scored = [
         row for row in scored
         if not is_malformed_awdit_listing(row.url, row.title)
@@ -1166,22 +1406,104 @@ async def get_scored_listings_latest_run(
         for row in observation_result
     }
 
-    # Reviews describe the matched product, not the marketplace listing.
-    # Prefer a non-eBay retailer's product review when available, then share
-    # that value with every listing carrying the same CPK.
-    review_observations = [
-        (row.cpk, row.source, row.review_average_rating, row.review_count)
-        for row in scored
-    ]
+    # Product reviews must be aggregated over the entire CPK, not merely
+    # vendors that happen to be present on the current paginated page.
+    page_cpks = list({row.cpk for row in scored if row.cpk})
+    # Use the very cohort retained in each row's market explanation, not a
+    # generic CPK search result. Quantiles can be interpolated, so link the
+    # nearest contributing listing rather than claiming an exact-price match.
+    from collections import defaultdict
+    from app.gem_radar.market_links import market_endpoint_links
+    market_candidates: dict[tuple[str, str, str], list[tuple[str, str, float]]] = defaultdict(list)
+    if page_cpks:
+        sold_link_rows = await db.execute(text("""
+            SELECT cpk, LOWER(condition), price + COALESCE(postage, 0), source_url
+            FROM gem_radar_sold_observations
+            WHERE cpk = ANY(:cpks) AND source_url IS NOT NULL
+              AND observed_at >= CURRENT_TIMESTAMP - INTERVAL '90 days' AND price > 0
+        """), {"cpks": page_cpks})
+        for cpk, condition, price, url in sold_link_rows:
+            cohort = "new" if condition == "new" else "used"
+            market_candidates[(cpk, cohort, "sold")].append((url, url, float(price)))
+        active_link_rows = await db.execute(text("""
+            WITH latest_observation AS (
+                SELECT DISTINCT ON (listing_id) listing_id, title, source, condition_normalised
+                FROM gem_radar_listing_observations
+                WHERE listing_id IN (
+                    SELECT listing_id FROM gem_radar_cpk_listing_price WHERE cpk = ANY(:cpks)
+                )
+                ORDER BY listing_id, observed_at DESC, id DESC
+            ), latest_scored AS (
+                SELECT DISTINCT ON (listing_id) listing_id, url
+                FROM gem_radar_scored_listings
+                WHERE listing_id IN (
+                    SELECT listing_id FROM gem_radar_cpk_listing_price WHERE cpk = ANY(:cpks)
+                )
+                ORDER BY listing_id, scored_at DESC, id DESC
+            )
+            SELECT p.cpk, p.listing_id, p.price, o.source, o.title,
+                   o.condition_normalised, s.url
+            FROM gem_radar_cpk_listing_price p
+            JOIN latest_observation o ON o.listing_id = p.listing_id
+            LEFT JOIN latest_scored s ON s.listing_id = p.listing_id
+            WHERE p.cpk = ANY(:cpks) AND p.price > 0
+              AND p.updated_at >= CURRENT_TIMESTAMP - INTERVAL '14 days'
+        """), {"cpks": page_cpks})
+        fixed_sources = {"amazon", "overclockers", "scan", "awd_it", "computer_orbit", "bargain_hardware", "cex"}
+        for cpk, listing_id, price, source, title, condition, url in active_link_rows:
+            cohort = "used" if re.search(r"\b(?:b[ -]?grade|open[ -]?box|refurbished|renewed)\b", title or "", re.I) else ("new" if (condition or "").lower() == "new" else "used")
+            factor = 1.0 if source in fixed_sources else (0.92 if cohort == "new" else 0.88)
+            key = f"{source or 'active'}://{listing_id}"
+            if url:
+                market_candidates[(cpk, cohort, "active")].append((key, url, float(price) * factor))
+    market_links_by_id = {}
+    for listing in scored:
+        prices = cpk_price_fields.get(listing.id, {})
+        explanation = listing.scoring_explanation or {}
+        basis = (explanation.get("market") or {}).get("basis", "")
+        cohort = "used" if re.search(r"\b(?:b[ -]?grade|open[ -]?box|refurbished|renewed)\b", listing.title or "", re.I) else ("new" if (listing.condition or "").lower() == "new" else "used")
+        candidates = market_candidates.get((listing.cpk, cohort, "sold" if basis == "SOLD_REFINED" else "active"), [])
+        market_links_by_id[listing.id] = market_endpoint_links(
+            explanation, prices.get("market_lower_price"), prices.get("market_upper_price"), candidates,
+        )
+    review_observations = []
+    if page_cpks:
+        scored_review_result = await db.execute(
+            text("""
+                SELECT cpk, source, review_average_rating, review_count
+                FROM gem_radar_scored_listings
+                WHERE cpk = ANY(:cpks)
+                  AND review_average_rating IS NOT NULL AND review_count > 0
+            """), {"cpks": page_cpks},
+        )
+        review_observations.extend(tuple(row) for row in scored_review_result)
+        observed_review_result = await db.execute(
+            text("""
+                WITH latest AS (
+                    SELECT DISTINCT ON (listing_id) listing_id, source,
+                           review_average_rating, review_count
+                    FROM gem_radar_listing_observations
+                    WHERE review_average_rating IS NOT NULL AND review_count > 0
+                      AND listing_id IN (
+                          SELECT listing_id FROM gem_radar_listing_cpk WHERE cpk = ANY(:cpks)
+                      )
+                    ORDER BY listing_id, observed_at DESC, id DESC
+                )
+                SELECT c.cpk, l.source, l.review_average_rating, l.review_count
+                FROM latest l JOIN gem_radar_listing_cpk c ON c.listing_id = l.listing_id
+                WHERE c.cpk = ANY(:cpks)
+            """), {"cpks": page_cpks},
+        )
+        review_observations.extend(tuple(row) for row in observed_review_result)
     amazon_review_result = await db.execute(
         text("""
             SELECT DISTINCT ON (cpk)
                    cpk, rating, review_count
             FROM amazon_bestseller_observations
-            WHERE cpk IS NOT NULL
+            WHERE cpk = ANY(:cpks)
               AND (rating IS NOT NULL OR review_count IS NOT NULL)
             ORDER BY cpk, captured_at DESC, id DESC
-        """)
+        """), {"cpks": page_cpks}
     )
     review_observations.extend(
         (row.cpk, "amazon", row.rating, row.review_count)
@@ -1195,11 +1517,11 @@ async def get_scored_listings_latest_run(
     bestseller_result = await db.execute(
         text("""
             SELECT DISTINCT ON (cpk)
-                   cpk, category, list_name, rank, captured_at
+                   cpk, category, title, list_name, rank, captured_at
             FROM amazon_bestseller_observations
-            WHERE cpk IS NOT NULL
+            WHERE cpk = ANY(:cpks)
             ORDER BY cpk, captured_at DESC, id DESC
-        """)
+        """), {"cpks": page_cpks}
     )
     bestseller_by_cpk = {
         row.cpk: {
@@ -1209,6 +1531,7 @@ async def get_scored_listings_latest_run(
             "amazon_bestseller_captured_at": row.captured_at.isoformat() if row.captured_at else None,
         }
         for row in bestseller_result
+        if bestseller_item_matches_category(row.title, row.category)
     }
 
     benchmark_index, peer_scores = await load_benchmark_context(db)
@@ -1228,7 +1551,7 @@ async def get_scored_listings_latest_run(
         if performance.get("performance_status") == "MATCHED":
             performance_by_cpk.setdefault(row.cpk, performance)
 
-    return [
+    items = [
         {
             "id": s.id,
             "listing_id": s.listing_id,
@@ -1245,6 +1568,7 @@ async def get_scored_listings_latest_run(
             "market_new_price": s.market_new_price,
             "market_used_price": s.market_used_price,
             **cpk_price_fields.get(s.id, {}),
+            **market_links_by_id.get(s.id, {}),
             "watch_count": observation_fields.get(s.listing_id, {}).get("watch_count", s.watch_count),
             "best_offer_enabled": observation_fields.get(s.listing_id, {}).get("best_offer_enabled", False),
             "review_average_rating": (product_reviews.get(s.cpk) or (s.review_average_rating, s.review_count))[0],
@@ -1296,6 +1620,7 @@ async def get_scored_listings_latest_run(
         }
         for s in scored
     ]
+    return {"items": items, "has_more": has_more, "total": total} if paged else items
 
 
 async def _new_vs_recurring_counts(db: AsyncSession, active_ids: set[str]) -> dict[str, dict[str, int]]:
@@ -1885,18 +2210,26 @@ def _is_obsolete_socket(title: str, price: float | None = None) -> bool:
     return False
 
 
-async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, require_modern: bool = False) -> dict | None:
+async def _fetch_best_gem_for_category(
+    db: AsyncSession,
+    category: str,
+    since,
+    require_modern: bool = False,
+    actionable_ids: set[str] | None = None,
+) -> dict | None:
     """Best gem for a specific component category, sorted by deal_score.
     If no qualifying GEM/SUPER_GEM exists, falls back to the highest-scoring listing."""
     from sqlalchemy import select
 
-    actionable_ids = await get_active_buy_it_now_listing_ids(db)
+    if actionable_ids is None:
+        actionable_ids = await get_active_buy_it_now_listing_ids(db)
     if not actionable_ids:
         return None
+    active_ids_param = bindparam("actionable_ids", type_=ARRAY(String()))
     query = (
         select(GemRadarScoredListing)
         .where(
-            GemRadarScoredListing.listing_id.in_(actionable_ids),
+            GemRadarScoredListing.listing_id == any_(active_ids_param),
             GemRadarScoredListing.listing_observed_at >= since,
             GemRadarScoredListing.category == category,
             GemRadarScoredListing.classification.in_(("GEM", "SUPER_GEM")),
@@ -1905,7 +2238,7 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
     )
     if not require_modern:
         query = query.limit(1)
-        result = await db.execute(query)
+        result = await db.execute(query, {"actionable_ids": list(actionable_ids)})
         best = result.scalar_one_or_none()
         if best and (
             _is_damaged(best.title)
@@ -1921,7 +2254,7 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
         ):
             best = None
     else:
-        result = await db.execute(query.limit(200))
+        result = await db.execute(query.limit(200), {"actionable_ids": list(actionable_ids)})
         best = None
         for candidate in result.scalars():
             # Priority 1: Blocking filters (reject immediately)
@@ -1970,14 +2303,14 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
         fallback_query = (
             select(GemRadarScoredListing)
             .where(
-                GemRadarScoredListing.listing_id.in_(actionable_ids),
+                GemRadarScoredListing.listing_id == any_(active_ids_param),
                 GemRadarScoredListing.listing_observed_at >= since,
                 GemRadarScoredListing.category == category,
             )
             .order_by(GemRadarScoredListing.deal_score.desc())
             .limit(1)
         )
-        result = await db.execute(fallback_query)
+        result = await db.execute(fallback_query, {"actionable_ids": list(actionable_ids)})
         best = result.scalar_one_or_none()
 
     # It is normal for a category to have no active, qualifying listing. The
@@ -2014,31 +2347,53 @@ async def get_gem_by_component(
     """Best active fixed-price gem in each major component category."""
     from datetime import datetime, timedelta, timezone
 
-    active_cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
+    # Lifecycle state determines whether a listing is active. A failed sweep
+    # must not erase every spotlight simply because its score is >24h old.
+    active_cutoff = datetime.min
     categories = ["cpu", "gpu", "motherboard", "ssd", "psu"]
 
+    actionable_ids = await get_active_buy_it_now_listing_ids(db)
     gems = {}
     for category in categories:
-        gem = await _fetch_best_gem_for_category(db, category, active_cutoff.replace(tzinfo=None), require_modern=True)
+        gem = await _fetch_best_gem_for_category(
+            db,
+            category,
+            active_cutoff.replace(tzinfo=None),
+            require_modern=True,
+            actionable_ids=actionable_ids,
+        )
         gems[category] = gem
 
     return gems
 
 
+@router.get("/source-activity")
+async def get_source_activity(db: AsyncSession = Depends(get_db), _: None = Depends(require_operator)) -> dict:
+    """Last actual listing observation per vendor, not a connection heartbeat."""
+    from sqlalchemy import text
+
+    rows = (await db.execute(text("""
+        SELECT source, MAX(observed_at) AS last_seen
+        FROM gem_radar_listing_observations
+        WHERE source IS NOT NULL
+        GROUP BY source
+    """))).fetchall()
+    return {row.source: row.last_seen.isoformat() if row.last_seen else None for row in rows}
+
+
 @router.get("/market-snapshot")
 async def get_market_snapshot(db: AsyncSession = Depends(get_db), _: None = Depends(require_operator)) -> dict:
-    """Whole-DB view of the current market — same categories as the Current
-    Scan Run panel (Listings/SUPER GEMs/GEMs/Avg scores/BIN Prices/Sold
-    Prices), but scoped to every currently-active listing (see
-    observations.get_active_listing_ids) rather than just the latest run.
-    This is the "most up to date view of the market" total, not a run delta.
+    """Whole-DB market totals across stored, unarchived listings.
+
+    Unlike the live Listings table, this snapshot is cumulative across scan
+    runs. Known archived and non-active listings are excluded.
 
     Dedupes to each listing's most recent scored row (gem_radar_scored_listings
     is append-only, same reasoning as /scored-listings) so a re-scored
     listing isn't double-counted or counted under a stale classification.
     """
-    # Keep the active set inside PostgreSQL. Materialising every active
-    # listing ID in Python and binding it to several ANY(:ids) predicates
+    # Keep the population inside PostgreSQL. Materialising every listing
+    # ID in Python and binding it to several ANY(:ids) predicates
     # caused PostgreSQL OOM once the market grew into the hundreds of
     # thousands of rows.
     from sqlalchemy import text
@@ -2047,10 +2402,44 @@ async def get_market_snapshot(db: AsyncSession = Depends(get_db), _: None = Depe
         await db.execute(
             text(
                 """
-                WITH active_ids AS (
-                    SELECT DISTINCT listing_id
+                WITH stored_ids AS (
+                    SELECT listing_id, MAX(observed_at) AS last_seen_at
                     FROM gem_radar_listing_observations
-                    WHERE observed_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
+                    GROUP BY listing_id
+                ),
+                candidate_ids AS (
+                    -- The lifecycle table is the durable current-state index.
+                    -- Do not require a retained observation row for an active
+                    -- listing: observations are pruned after 30 days, while an
+                    -- active lifecycle row remains authoritative until the
+                    -- listing is sold or missed in consecutive scan snapshots.
+                    SELECT lifecycle.listing_id
+                    FROM gem_radar_listing_lifecycle lifecycle
+                    WHERE lifecycle.status = 'active'
+
+                    UNION
+
+                    -- Include listings not yet reconciled, and fresh sightings
+                    -- that have reappeared since their last archived decision.
+                    SELECT s.listing_id
+                    FROM stored_ids s
+                    LEFT JOIN gem_radar_listing_lifecycle lifecycle
+                      ON lifecycle.listing_id = s.listing_id
+                    WHERE lifecycle.status IS NULL
+                       OR s.last_seen_at > lifecycle.archived_at
+                ),
+                active_ids AS (
+                    SELECT candidates.listing_id
+                    FROM candidate_ids candidates
+                    WHERE NOT EXISTS (
+                        SELECT 1 FROM listing_archive a
+                        WHERE a.external_id = candidates.listing_id
+                    )
+                    AND NOT EXISTS (
+                        SELECT 1 FROM listings l
+                        WHERE l.external_id = candidates.listing_id
+                          AND l.status <> 'active'
+                    )
                 ),
                 latest_scored AS (
                     SELECT DISTINCT ON (s.listing_id)
@@ -2076,9 +2465,10 @@ async def get_market_snapshot(db: AsyncSession = Depends(get_db), _: None = Depe
                      JOIN active_ids a ON a.listing_id = p.listing_id) AS bin_prices_count,
                     (SELECT COUNT(*)
                      FROM gem_radar_sold_observations s
-                     JOIN active_cpks c ON c.cpk = s.cpk) AS sold_prices_count
+                     JOIN active_cpks c ON c.cpk = s.cpk
+                       ) AS sold_prices_count
                 """
-            )
+            ), {}
         )
     ).mappings().one()
 
@@ -2650,7 +3040,19 @@ async def _submit_scan_body(
     import time as _time
 
     from app.gem_radar.cpk_pipeline import assign_cpk_and_accumulate_price
+    from app.gem_radar.cpk_pipeline import _deterministic_identity, _lookup_unique_catalog_alias
     from app.gem_radar.observations import find_existing_listing
+
+    # Search tags describe discovery intent, not product identity. Preserve
+    # every valid source observation before resolving its actual identifiers;
+    # a missing/incorrect existing CPK must not discard repair evidence.
+
+    # Persist search tags on each observation payload so the Curated marker is
+    # carried through queueing and any scoring result built from that listing.
+    if payload.tags:
+        payload = payload.model_copy(update={
+            "listings": [listing.model_copy(update={"search_tags": payload.tags}) for listing in payload.listings]
+        })
 
     malformed_awdit = [
         listing for listing in payload.listings
@@ -2757,7 +3159,9 @@ async def _submit_scan_body(
             # This listing was seen in a previous run
             price_unchanged = abs(existing.delivered_price - listing.current_delivered_price) < 0.01
 
-            if price_unchanged:
+            identifiers_changed = any(getattr(listing, name, None) != getattr(existing, name, None)
+                for name in ('gtin', 'mpn', 'model_number') if getattr(listing, name, None))
+            if price_unchanged and not identifiers_changed and not listing.stock_evidence and not existing.commercial_source_evidence:
                 # Price hasn't changed, just touch to update observed_at
                 await touch_observation(
                     db,
@@ -2767,10 +3171,18 @@ async def _submit_scan_body(
                     if listing.extracted_at.tzinfo
                     else listing.extracted_at,
                     search_query=payload.query,
+                    image_url=listing.image_url,
+                    image_urls=listing.image_urls,
+                    video_urls=listing.video_urls,
+                    search_tags=payload.tags,
+                    delivery_text=listing.delivery_text,
+                    delivery_postcode=listing.delivery_postcode,
+                    prime_eligible=listing.prime_eligible,
                 )
                 touched_unchanged_count += 1
             else:
-                # Price changed: record new observation with new price, but skip CPK
+                # Preserve a fresh commercial capture even when price is unchanged.
+                # A sighting touch cannot renew original price/stock provenance.
                 # This lets us track price history and update market pricing without
                 # reprocessing the identity/research (CPK already exists from first run)
                 await record_observation(
@@ -2788,12 +3200,23 @@ async def _submit_scan_body(
             # skipping extraction must not let a still-live price age out of
             # the 14-day CPK market window.
             cpk_result = await db.execute(
-                select(GemRadarListingCpk.cpk).where(
+                select(GemRadarListingCpk.cpk, GemRadarListingCpk.cpk_data).where(
                     GemRadarListingCpk.listing_id == listing.listing_id
                 ).limit(1)
             )
-            existing_cpk = cpk_result.scalar_one_or_none()
-            if existing_cpk is not None:
+            identity_row = cpk_result.first()
+            existing_cpk = identity_row[0] if identity_row else None
+            cached_identity = (identity_row[1] or {}) if identity_row else {}
+            from app.gem_radar.cpk_pipeline import _valid_existing_cpk
+            from app.gem_radar.search_identity import SEARCH_IDENTITY_VERSION
+            import hashlib as identity_hashlib
+            import re as identity_re
+            title_signature = identity_hashlib.sha256(identity_re.sub(r'\s+', ' ', listing.title.casefold()).strip().encode()).hexdigest()
+            reusable = bool(existing_cpk and not identifiers_changed
+                and cached_identity.get('identity_validation_version') == SEARCH_IDENTITY_VERSION
+                and cached_identity.get('identity_title_sha256') == title_signature
+                and _valid_existing_cpk(cached_identity, listing.title))
+            if reusable:
                 await upsert_listing_price(
                     db, existing_cpk, listing.listing_id,
                     float(listing.current_delivered_price),
@@ -2862,6 +3285,9 @@ async def _submit_scan_body(
                         condition=listing.condition_normalised,
                         price=listing.current_delivered_price,
                         scan_price=listing.scan_price,
+                        source_url=listing.url,
+                        gtin=listing.gtin, mpn=listing.mpn,
+                        model_number=listing.model_number, brand=listing.brand,
                     )
                     await task_db.commit()
                     return (listing.listing_id, cpk)
@@ -2893,6 +3319,10 @@ async def _submit_scan_body(
                 # separately so is_complete doesn't wait on a count that can
                 # never be reached this run.
                 pipeline_status.increment(payload.search_id, cpk_failed_count=1)
+    if payload.tags:
+        from app.services.catalogue_tag_sync import sync_search_tags_to_catalogue
+        await sync_search_tags_to_catalogue(db, payload.listings, payload.tags)
+
     log.info(
         "diag.scan.phase1_ingest_done",
         elapsed_s=round(_time.monotonic() - _t0, 1),
@@ -2932,12 +3362,22 @@ async def submit_scan_queued(
     """Queue a scan for async processing. Returns immediately with 202 Accepted.
     The background worker will process the submission asynchronously.
     This ensures no data is lost if the backend restarts."""
+    from app.gem_radar.schema_guard import require_scan_schema
+    from fastapi import HTTPException
+    from app.config import get_settings
+    if get_settings().web_only:
+        raise HTTPException(status_code=503, detail="Sourcing workers are disabled in WEB_ONLY mode. Start normal DEV mode before submitting scans.")
+    try:
+        await require_scan_schema(db)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
     submission = await SubmissionQueueService.enqueue_submission(
         db,
         search_run_id=payload.search_run_id,
         search_id=payload.search_id,
         query=payload.query,
         source_url=payload.source_url,
+        search_tags=payload.tags,
         max_candidates_for_deep_research=payload.max_candidates_for_deep_research,
         # mode="json" — plain model_dump() leaves extracted_at/auction_end_at
         # as Python datetime objects, which the listings_json JSON column's
@@ -2996,7 +3436,7 @@ async def queue_items(
     )
     return QueueItemsResponse(items=[QueueItemResponse(
         id=row.id, search_run_id=row.search_run_id, search_id=row.search_id,
-        query=row.query, status=row.status, listings_count=len(row.listings_json or []),
+        query=row.query, status=row.status, listings_count=row.listings_count,
         last_attempt_at=row.last_attempt_at,
     ) for row in rows])
 
@@ -3581,6 +4021,8 @@ async def ebay_search(
                     "gtin": listing.get("gtin"),  # Global Trade Item Number from eBay Browse API productSummary
                     "mpn": listing.get("mpn"),  # Manufacturer Part Number from eBay Browse API productSummary
                     "modelNumber": listing.get("model_number"),  # Model number from eBay Browse API productSummary
+                    "deliveryCostKnown": listing.get('delivery_cost_known', False),
+                    "bestOfferEnabled": listing.get('best_offer_enabled', False),
                 }
                 for listing in listings
             ],
@@ -3619,3 +4061,208 @@ async def get_about_flipflop(
         "error": "About FlipFlop file not found",
         "content": "",
     }
+@router.get("/best-sellers")
+async def get_best_sellers(
+    category: str = Query(default="case"),
+    db: AsyncSession = Depends(get_db),
+    _: None = Depends(require_operator),
+) -> dict:
+    """Latest observed Amazon list, with explicit per-category freshness."""
+    from sqlalchemy import text
+    from app.services.amazon_bestsellers import COMPONENT_BESTSELLER_LISTS
+
+    if category not in COMPONENT_BESTSELLER_LISTS:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=400, detail="Unsupported bestseller category")
+    category_rows = (await db.execute(text("""
+        SELECT category, MAX(captured_at) AS latest
+        FROM amazon_bestseller_observations
+        WHERE category = ANY(:categories)
+        GROUP BY category
+    """), {"categories": list(COMPONENT_BESTSELLER_LISTS)})).all()
+    latest_by_category = {row.category: row.latest for row in category_rows}
+    summaries = []
+    for key, (name, url) in COMPONENT_BESTSELLER_LISTS.items():
+        latest = latest_by_category.get(key)
+        count = matched = rated = 0
+        if latest:
+            counts = (await db.execute(text("""
+                SELECT COUNT(DISTINCT asin), COUNT(DISTINCT asin) FILTER (WHERE cpk IS NOT NULL),
+                       COUNT(DISTINCT asin) FILTER (WHERE rating IS NOT NULL AND review_count > 0)
+                FROM amazon_bestseller_observations
+                WHERE category=:category AND captured_at >= CAST(:latest AS timestamp) - INTERVAL '1 second'
+            """), {"category": key, "latest": latest})).one()
+            count, matched, rated = map(int, counts)
+        summaries.append({"category": key, "name": name, "source_url": url,
+                          "count": count, "matched": matched, "rated": rated,
+                          "last_captured_at": latest.isoformat() if latest else None})
+    current = next(row for row in summaries if row["category"] == category)
+    products = []
+    if current["last_captured_at"]:
+        rows = (await db.execute(text("""
+            SELECT DISTINCT ON (asin) asin, title, url, image_url, rank, cpk,
+                   rating, review_count, price, rrp, sales_velocity, captured_at
+            FROM amazon_bestseller_observations
+            WHERE category=:category
+              AND captured_at >= CAST(:latest AS timestamp) - INTERVAL '1 second'
+            ORDER BY asin, captured_at DESC, id DESC
+        """), {"category": category, "latest": latest_by_category[category]})).all()
+        products = [
+            {"asin": row.asin, "title": row.title, "url": row.url, "image_url": row.image_url,
+             "category": category, "list_name": current["name"],
+             "rank": row.rank, "cpk": row.cpk, "rating": row.rating,
+             "review_count": row.review_count, "price": row.price, "rrp": row.rrp,
+             "sales_velocity": row.sales_velocity, "captured_at": row.captured_at.isoformat(),
+             "performance_rank": None, "performance_peer_count": None,
+             "marketplace_listing_count": None, "marketplace_sources": [],
+             "cheapest_market_price": None, "cheapest_market_url": None,
+             "cheapest_market_source": None,
+             "market_low": None, "market_median": None, "market_high": None}
+            for row in sorted(rows, key=lambda item: item.rank)
+        ]
+        cpks = list({product["cpk"] for product in products if product["cpk"]})
+        listing_counts: dict[str, dict] = {}
+        if cpks:
+            benchmark_index, peer_scores = await load_benchmark_context(db)
+            for product in products:
+                if not product["cpk"]:
+                    continue
+                performance = enrich_listing_performance(
+                    category=category,
+                    title=product["title"],
+                    canonical_model_id=None,
+                    release_year=None,
+                    delivered_price=float(product["price"] or 0),
+                    benchmark_index=benchmark_index,
+                    peer_scores=peer_scores,
+                )
+                product["performance_rank"] = performance.get("performance_rank")
+                product["performance_peer_count"] = performance.get("performance_peer_count")
+            count_rows = (await db.execute(text("""
+                WITH resolved_listing_cpks AS (
+                    SELECT d.listing_id, d.cpk, COALESCE(s.source, o.source) AS source
+                    FROM gem_radar_listing_cpk d
+                    LEFT JOIN LATERAL (
+                        SELECT source FROM gem_radar_scored_listings
+                        WHERE listing_id=d.listing_id
+                        ORDER BY scored_at DESC NULLS LAST, id DESC LIMIT 1
+                    ) s ON TRUE
+                    LEFT JOIN LATERAL (
+                        SELECT source FROM gem_radar_listing_observations
+                        WHERE listing_id=d.listing_id
+                        ORDER BY observed_at DESC, id DESC LIMIT 1
+                    ) o ON TRUE
+                    WHERE d.cpk = ANY(:cpks)
+                    UNION
+                    SELECT s.listing_id, s.cpk, COALESCE(s.source, o.source) AS source
+                    FROM gem_radar_scored_listings s
+                    LEFT JOIN LATERAL (
+                        SELECT source FROM gem_radar_listing_observations
+                        WHERE listing_id=s.listing_id
+                        ORDER BY observed_at DESC, id DESC LIMIT 1
+                    ) o ON TRUE
+                    WHERE s.cpk = ANY(:cpks)
+                )
+                , active_listing_cpks AS (
+                    SELECT r.listing_id, r.cpk, r.source
+                    FROM resolved_listing_cpks r
+                    LEFT JOIN gem_radar_listing_lifecycle lifecycle
+                      ON lifecycle.listing_id = r.listing_id
+                    WHERE (lifecycle.status IS NULL OR lifecycle.status = 'active'
+                           OR EXISTS (
+                               SELECT 1 FROM gem_radar_listing_observations o
+                               WHERE o.listing_id = r.listing_id
+                                 AND o.observed_at > lifecycle.archived_at
+                           ))
+                      AND NOT EXISTS (
+                          SELECT 1 FROM listing_archive a
+                          WHERE a.external_id = r.listing_id
+                      )
+                      AND NOT EXISTS (
+                          SELECT 1 FROM listings l
+                          WHERE l.external_id = r.listing_id AND l.status <> 'active'
+                      )
+                )
+                , latest_offer_details AS (
+                    SELECT DISTINCT ON (p.listing_id)
+                           p.listing_id, p.cpk, p.price,
+                           COALESCE(o.source, s.source) AS source,
+                           s.url
+                    FROM gem_radar_cpk_listing_price p
+                    LEFT JOIN LATERAL (
+                        SELECT source FROM gem_radar_listing_observations
+                        WHERE listing_id=p.listing_id
+                        ORDER BY observed_at DESC, id DESC LIMIT 1
+                    ) o ON TRUE
+                    LEFT JOIN LATERAL (
+                        SELECT source, url FROM gem_radar_scored_listings
+                        WHERE listing_id=p.listing_id
+                        ORDER BY scored_at DESC NULLS LAST, id DESC LIMIT 1
+                    ) s ON TRUE
+                    WHERE p.cpk = ANY(:cpks) AND p.price > 0
+                      AND p.updated_at >= CURRENT_TIMESTAMP - INTERVAL '14 days'
+                      AND EXISTS (
+                          SELECT 1 FROM active_listing_cpks active
+                          WHERE active.listing_id = p.listing_id AND active.cpk = p.cpk
+                      )
+                    ORDER BY p.listing_id, p.updated_at DESC
+                )
+                SELECT active_listing_cpks.cpk,
+                       COUNT(DISTINCT active_listing_cpks.listing_id) AS listing_count,
+                       ARRAY_AGG(DISTINCT active_listing_cpks.source) FILTER (WHERE active_listing_cpks.source IS NOT NULL) AS marketplace_sources,
+                       MIN(offers.price) FILTER (WHERE offers.price > 0) AS cheapest_market_price,
+                       (ARRAY_AGG(offers.url ORDER BY offers.price ASC NULLS LAST) FILTER (WHERE offers.price > 0))[1] AS cheapest_market_url,
+                       (ARRAY_AGG(offers.source ORDER BY offers.price ASC NULLS LAST) FILTER (WHERE offers.price > 0))[1] AS cheapest_market_source
+                FROM active_listing_cpks
+                LEFT JOIN LATERAL (
+                    SELECT listing_id, url, price, source
+                    FROM latest_offer_details d
+                    WHERE d.cpk = active_listing_cpks.cpk
+                ) offers ON offers.listing_id = active_listing_cpks.listing_id
+                WHERE active_listing_cpks.cpk = ANY(:cpks)
+                GROUP BY active_listing_cpks.cpk
+            """), {"cpks": cpks})).all()
+            listing_counts = {
+                row.cpk: {
+                    "marketplace_listing_count": int(row.listing_count),
+                    "marketplace_sources": list(row.marketplace_sources or []),
+                    "cheapest_market_price": row.cheapest_market_price,
+                    "cheapest_market_url": row.cheapest_market_url,
+                    "cheapest_market_source": row.cheapest_market_source,
+                }
+                for row in count_rows
+            }
+            market_rows = (await db.execute(text("""
+                SELECT cpk, min_price, median_price, max_price
+                FROM gem_radar_cpk_market_price
+                WHERE cpk = ANY(:cpks)
+            """), {"cpks": cpks})).all()
+            for row in market_rows:
+                listing_counts.setdefault(row.cpk, {
+                    "marketplace_listing_count": 0,
+                    "marketplace_sources": [],
+                    "cheapest_market_price": None,
+                    "cheapest_market_url": None,
+                    "cheapest_market_source": None,
+                }).update({
+                    "market_low": row.min_price,
+                    "market_median": row.median_price,
+                    "market_high": row.max_price,
+                })
+        for product in products:
+            product.update(listing_counts.get(product["cpk"], {
+                "marketplace_listing_count": None if not product["cpk"] else 0,
+                "marketplace_sources": [],
+                "market_low": None,
+                "market_median": None,
+                "market_high": None,
+            }))
+            amazon_price = product.get("price")
+            market_price = product.get("cheapest_market_price")
+            if amazon_price is not None and amazon_price > 0 and (
+                market_price is None or amazon_price <= market_price
+            ):
+                product["cheapest_market_price"] = amazon_price
+                product["cheapest_market_url"] = product.get("url")
+                product["cheapest_market_source"] = "amazon"
+    return {"categories": summaries, "selected_category": category, "products": products}

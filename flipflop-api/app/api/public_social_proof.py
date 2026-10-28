@@ -4,7 +4,7 @@ for the storefront's live globe widget. No auth required (display names are
 already reduced to first-name + initial before they ever reach the DB).
 """
 import structlog
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends, HTTPException, Response
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -15,6 +15,24 @@ from app.services.social_proof import broadcaster, serialize_event
 log = structlog.get_logger(__name__)
 
 router = APIRouter(prefix="/public/social-proof", tags=["public-social-proof"])
+
+
+@router.get("/purchases")
+async def purchases(response: Response, db: AsyncSession = Depends(get_db)):
+    """Real confirmed purchases, including charged total and a stable public product link."""
+    from app.services.purchase_activity import recent_purchases
+    response.headers["Cache-Control"] = "no-store"
+    return await recent_purchases(db)
+
+
+@router.get("/purchases/{purchase_id}")
+async def purchase_snapshot(purchase_id: int, response: Response, db: AsyncSession = Depends(get_db)):
+    from app.services.purchase_activity import purchase_by_id
+    purchase = await purchase_by_id(db, purchase_id)
+    if purchase is None:
+        raise HTTPException(404, "This purchase is not available.")
+    response.headers["Cache-Control"] = "no-store"
+    return purchase
 
 
 @router.get("/recent")

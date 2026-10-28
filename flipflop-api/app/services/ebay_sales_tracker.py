@@ -47,6 +47,7 @@ class eBaySalesTracker:
         from app.config import get_settings
 
         settings = get_settings()
+        from app.services.ebay_token_manager import get_valid_ebay_access_token
         result = {
             "found": 0,
             "matched": 0,
@@ -57,6 +58,15 @@ class eBaySalesTracker:
 
         try:
             async with AsyncSessionLocal() as db:
+                try:
+                    access_token = await get_valid_ebay_access_token(settings.ebay_listing_environment, db=db)
+                except ValueError:
+                    log.info("ebay_sales_tracker.skipped", reason="seller_oauth_unavailable")
+                    return {**result, "note": "Connect the eBay seller account in Settings."}
+                if not access_token:
+                    log.info("ebay_sales_tracker.skipped", reason="seller_oauth_unavailable")
+                    return {**result, "note": "Connect the eBay seller account in Settings."}
+
                 query = await db.execute(
                     select(Flip).where(
                         Flip.stage == FlipStage.ready_for_sale,
@@ -72,6 +82,7 @@ class eBaySalesTracker:
                             flip.ebay_listing_id,
                             environment=settings.ebay_listing_environment,
                             lookback_days=self.lookback_days,
+                            db=db,
                         )
                     except EbayOrderSyncError as e:
                         log.warning(
@@ -113,6 +124,7 @@ class eBaySalesTracker:
                     ManualBuild.ebay_listing_id.isnot(None),
                     ManualBuild.ebay_listing_status.in_(["active", "unknown"]),
                 ))).scalars().all()
+                manual_rows = [build for build in manual_rows if str(build.ebay_listing_id).isdecimal()]
                 orphaned_local_rows = (await db.execute(select(ManualBuild).where(
                     ManualBuild.status == "listed",
                     ManualBuild.ebay_listing_id.is_(None),
@@ -126,7 +138,10 @@ class eBaySalesTracker:
                 for build in manual_rows:
                     previous = build.ebay_listing_status
                     try:
-                        current = await reconcile_manual_build_listing(build, db, force=True)
+                        current = await reconcile_manual_build_listing(
+                            build, db, force=True, access_token=access_token,
+                            environment=settings.ebay_listing_environment,
+                        )
                         if current != previous:
                             result["manual_builds_changed"] += 1
                     except Exception as exc:

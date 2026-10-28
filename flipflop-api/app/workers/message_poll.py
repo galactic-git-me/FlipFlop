@@ -43,16 +43,21 @@ def _parse_ebay_datetime(value: Optional[str]) -> Optional[datetime]:
 
 async def run_message_poll_job() -> dict:
     settings = get_settings()
-    try:
-        token = await get_valid_ebay_access_token(settings.ebay_listing_environment)
-    except ValueError:
-        return {"checked": 0, "flagged": 0, "note": "No eBay refresh token configured."}
+    from app.database import AsyncSessionLocal
 
-    try:
-        messages = await ebay_trading_api.get_member_messages(token)
-    except Exception as exc:
-        log.warning("message_poll.fetch_failed", error=str(exc))
-        return {"checked": 0, "flagged": 0, "error": str(exc)}
+    async with AsyncSessionLocal() as db:
+        try:
+            token = await get_valid_ebay_access_token(settings.ebay_listing_environment, db=db)
+        except ValueError:
+            return {"checked": 0, "flagged": 0, "note": "Connect the eBay seller account in Settings."}
+        if not token:
+            return {"checked": 0, "flagged": 0, "note": "Connect the eBay seller account in Settings."}
+
+        try:
+            messages = await ebay_trading_api.get_member_messages(token)
+        except Exception as exc:
+            log.warning("message_poll.fetch_failed", error=str(exc))
+            return {"checked": 0, "flagged": 0, "error": str(exc)}
 
     now = datetime.utcnow()
     flagged = 0

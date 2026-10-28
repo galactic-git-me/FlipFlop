@@ -3,6 +3,7 @@ Fetches benchmark data from PassMark public rankings pages.
 Parses HTML tables and returns BenchmarkRecord lists.
 """
 from __future__ import annotations
+import asyncio
 import re
 from dataclasses import dataclass, field
 from typing import Optional
@@ -13,7 +14,8 @@ from app.services.benchmark_normaliser import normalise_cpu, normalise_gpu, norm
 
 log = structlog.get_logger(__name__)
 
-PASSMARK_CPU_URL  = "https://www.cpubenchmark.net/cpu_list.php"
+PASSMARK_CPU_URL  = "https://www.cpubenchmark.net/cpu-list/"
+PASSMARK_AMD_CPU_URL = "https://www.cpubenchmark.net/cpu-list/amd"
 PASSMARK_GPU_URL  = "https://www.videocardbenchmark.net/gpu_list.php"
 PASSMARK_DISK_URL = "https://www.harddrivebenchmark.net/hdd_list.php"
 
@@ -156,8 +158,16 @@ async def fetch_html(url: str, timeout: int = 30) -> str:
 
 async def fetch_passmark_cpus() -> list[BenchmarkRecord]:
     try:
-        html = await fetch_html(PASSMARK_CPU_URL)
-        return parse_passmark_cpu_table(html)
+        intel_html, amd_html = await asyncio.gather(
+            fetch_html(PASSMARK_CPU_URL), fetch_html(PASSMARK_AMD_CPU_URL),
+        )
+        intel = parse_passmark_cpu_table(intel_html)
+        amd = parse_passmark_cpu_table(amd_html)
+        if not any(row.normalized_model.startswith("intel_") for row in intel):
+            raise ValueError("PassMark Intel CPU coverage missing")
+        if not any(row.normalized_model.startswith("amd_") for row in amd):
+            raise ValueError("PassMark AMD CPU coverage missing")
+        return intel + amd
     except Exception as exc:
         log.warning("benchmark_fetcher.cpu.failed", error=str(exc))
         return []

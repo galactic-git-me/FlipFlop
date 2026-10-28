@@ -19,10 +19,10 @@ def _score(title: str, ram_type: str) -> float:
     return result.score
 
 
-def test_am4_ddr4_scores_higher_than_am5_ddr5_when_otherwise_equal():
+def test_am4_ddr4_and_am5_ddr5_score_equally_when_otherwise_equal():
     am4_score = _score("Gaming PC Ryzen 7 B550 AM4 bundle", "DDR4")
     am5_score = _score("Gaming PC Ryzen 7 B650 AM5 bundle", "DDR5")
-    assert am4_score > am5_score
+    assert am4_score == am5_score
 
 
 def test_am5_ddr5_is_still_scored_not_excluded():

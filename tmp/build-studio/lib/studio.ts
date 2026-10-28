@@ -3,13 +3,27 @@ import { normalizeAnchorManifest, type ResolvedAsset } from './asset-api';
 export type Specs = Record<string, unknown>;
 export interface Product { id: number; title: string; display_price: number; images?: string[]; description?: string; specifications: Specs; price_updated_at?: string; availability?: string }
 export interface Slot { slot_id: number; slot_type: string; variants_by_tier: Record<string, Product[]> }
-export interface Chassis { id: number; name: string; brand: string; images: string[]; rrp_gbp: number; form_factor: string; width_mm?: number; height_mm?: number; depth_mm?: number; max_gpu_length_mm?: number; max_cooler_height_mm?: number; engineering?: Specs }
+export interface Chassis { id: number; asset_subject_id?: number | null; name: string; brand: string; images: string[]; rrp_gbp: number; form_factor: string; width_mm?: number; height_mm?: number; depth_mm?: number; max_gpu_length_mm?: number; max_cooler_height_mm?: number; engineering?: Specs; style_tags?: string[]; colour?: string | null; is_transparent_panel?: boolean; bestseller_rank?: number | null; is_preferred?: boolean }
 export interface Configuration { selections: Record<number, number>; caseId: number | null }
 export interface Check { code: string; severity: 'pass' | 'warning' | 'unknown' | 'error'; message: string; affected: string[] }
 export interface Evaluation { checks: Check[]; can_checkout: boolean; price: { total: number; parts_total: number; labour: number; overhead: number } | null; verdicts: { slot_id: number; variants: { variant_id: number; is_compatible: boolean; reason: string | null }[] }[] }
 export const labels: Record<string, string> = { case: 'Chassis', cpu: 'Processor', gpu: 'Graphics', motherboard: 'Motherboard', ram: 'Memory', storage: 'Storage', cooling: 'Cooling', psu: 'Power supply', fan: 'Case fans', os: 'Operating system' };
 export const order = ['case', 'cpu', 'motherboard', 'gpu', 'ram', 'storage', 'cooling', 'psu', 'fan', 'os'];
 export const money = (value: number) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 2 }).format(value);
+const caseColours = /\b(white\/black|black\/white|white\/silver|black\/silver|black|white|silver|grey|gray)\b/ig;
+export function shortCaseName(name: string, brand?: string): string {
+  const normalized = name.replace(/\s+/g, ' ').trim();
+  const colourMatches = [...normalized.matchAll(caseColours)];
+  const colour = colourMatches[colourMatches.length - 1]?.[0];
+  let model = normalized
+    .replace(/\s+(?:[-–—|])\s+/g, ' · ')
+    .split(' · ')[0]
+    .replace(/\b(?:compact|mid[- ]tower|mini[- ]tower|micro[- ]atx|full[- ]tower|pc case|computer case|gaming case|tempered glass|panoramic|chassis)\b.*$/i, '')
+    .replace(/[\s,·–—-]+$/, '')
+    .trim();
+  if (brand && !model.toLowerCase().startsWith(brand.toLowerCase())) model = `${brand} ${model}`;
+  return [model || brand || normalized, colour].filter(Boolean).join(' · ');
+}
 export const options = (slot: Slot) => Array.from(new Map(Object.values(slot.variants_by_tier).flat().map(p => [p.id, p])).values());
 export function selected(slot: Slot, config: Configuration) { return options(slot).find(p => p.id === config.selections[slot.slot_id]); }
 export function changePart(config: Configuration, slotId: number, variantId: number | null): Configuration {
@@ -25,11 +39,11 @@ export async function request<T>(path: string, signal?: AbortSignal, body?: unkn
   if (!res.ok) { const error = await res.json().catch(() => ({})); throw new Error(typeof error.detail === 'string' ? error.detail : `Catalogue unavailable (${res.status}). Please retry.`); }
   return res.json();
 }
-export async function getAssets(slots: Slot[], config: Configuration, signal: AbortSignal) {
+export async function getAssets(slots: Slot[], config: Configuration, signal: AbortSignal, caseSubjectId?: number | null) {
   const subjects = slots.filter(s => config.selections[s.slot_id]).map(s => ({ subject_type: 'variant', subject_id: config.selections[s.slot_id], category: s.slot_type }));
-  if (config.caseId) subjects.push({ subject_type: 'case', subject_id: config.caseId, category: 'case' });
+  if (config.caseId) subjects.push({ subject_type: 'case', subject_id: caseSubjectId ?? config.caseId, category: 'case' });
   const data = await request<{ results: { query: { subject_type: string; subject_id: number }; asset: ResolvedAsset | null }[] }>('assets/resolve', signal, { subjects });
-  return Object.fromEntries(data.results.map(r => [r.query.subject_type + ':' + r.query.subject_id, r.asset ? { ...r.asset, anchor_manifest: normalizeAnchorManifest(r.asset.anchor_manifest) } : null]));
+  return Object.fromEntries(data.results.map(r => [r.query.subject_type === 'case' ? 'case:' + config.caseId : r.query.subject_type + ':' + r.query.subject_id, r.asset ? { ...r.asset, anchor_manifest: normalizeAnchorManifest(r.asset.anchor_manifest) } : null]));
 }
 export function assetURL(ref: string | null | undefined): string | null {
   if (!ref) return null;

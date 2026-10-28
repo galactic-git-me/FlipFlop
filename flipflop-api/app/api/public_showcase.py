@@ -9,6 +9,7 @@ pedestal) until a real twin exists — the frontend never fabricates a 3D
 model for a build that doesn't have one.
 """
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
@@ -24,15 +25,39 @@ from app.models.cx_document import CXDocument, CXDocumentType, CXDocumentStatus
 from app.models.capture_3d import Capture3DAsset, Capture3DStatus
 from app.routes.auth import get_current_user
 from app.schemas.product_checkout import (
-    ProductCheckoutIntentResponse, ProductCheckoutIntentRequest, ProductCheckoutConfirmRequest, ProductCheckoutConfirmation,
+    ProductCheckoutIntentResponse, ProductCheckoutIntentRequest, ProductCheckoutOptionsRequest,
+    ProductCheckoutConfirmRequest, ProductCheckoutConfirmation,
 )
 from app.services.payment_service import PaymentService
 from app.services.email_service import send_order_confirmation_email
 from app.services.alerts import emit_alert
 from app.services.cross_channel_guard import withdraw_ebay_for_sold_build
 from app.config import get_settings
+from app.services.storefront_delivery import delivery_choice, checkout_metadata, load_delivery_settings, add_working_days
+from app.models.app_settings import AppSettings
+from app.services.product_software import software_profile_for_product
+from app.services.software_catalogue import (
+    SOFTWARE_CATALOGUE,
+    customer_software_selection_from_metadata,
+    initial_customer_software_selection,
+    serialize_customer_software_selection,
+    updated_customer_software_selection,
+)
 
 router = APIRouter(prefix="/public", tags=["public-showcase"])
+
+
+@router.get("/delivery-policy")
+async def get_delivery_policy(db: AsyncSession = Depends(get_db)):
+    settings = await load_delivery_settings(db)
+    return {
+        "speedy_delivery_price_gbp": settings.speedy_delivery_price_gbp,
+        "standard_curated_custom_days": settings.standard_curated_custom_days,
+        "speedy_curated_custom_days": settings.speedy_curated_custom_days,
+        "flexible_curated_custom_days": settings.flexible_curated_custom_days,
+        "standard_prebuilt_days": settings.standard_prebuilt_days,
+        "speedy_prebuilt_cutoff_hour": settings.speedy_prebuilt_cutoff_hour,
+    }
 
 # How long a reservation holds a product out of sale while the buyer is
 # mid-checkout — matches Product.reserved_until's documented purpose (Ch.9.6).
@@ -53,6 +78,24 @@ def _twin_ref(cap: Capture3DAsset | None) -> dict | None:
     }
 
 
+def _public_build_photos(photos: list | None, hero_photo_url: str | None) -> list[dict[str, str]]:
+    """Expose only uploaded, customer-facing build photos; never listing cards or internal media."""
+    gallery: list[dict[str, str]] = []
+    seen: set[str] = set()
+    if hero_photo_url:
+        gallery.append({"url": hero_photo_url, "title": "Completed build"})
+        seen.add(hero_photo_url)
+    for photo in photos or []:
+        if not isinstance(photo, dict) or photo.get("kind") != "photo":
+            continue
+        url = photo.get("url")
+        if not isinstance(url, str) or not url or url in seen:
+            continue
+        seen.add(url)
+        gallery.append({"url": url, "title": f"Build photo {len(gallery) + 1}"})
+    return gallery
+
+
 @router.get("/showcase-builds")
 async def public_list_showcase_builds(db: AsyncSession = Depends(get_db)):
     """Completed FlipFlop builds for the Previous Builds hangar."""
@@ -69,6 +112,14 @@ async def public_list_showcase_builds(db: AsyncSession = Depends(get_db)):
         )
     ).scalars().all()
 
+    manual_build_ids = [p.build.manual_build_id for p in products if p.build and p.build.manual_build_id]
+    photos_by_build_id: dict[int, list] = {}
+    if manual_build_ids:
+        photo_rows = await db.execute(
+            select(ManualBuild.id, ManualBuild.photos).where(ManualBuild.id.in_(manual_build_ids))
+        )
+        photos_by_build_id = {row.id: row.photos or [] for row in photo_rows}
+
     twin_ids = [p.capture_3d_asset_id for p in products if p.capture_3d_asset_id]
     twins_by_id: dict[int, Capture3DAsset] = {}
     if twin_ids:
@@ -82,7 +133,12 @@ async def public_list_showcase_builds(db: AsyncSession = Depends(get_db)):
             "id": p.id,
             "title": p.title,
             "hero_photo_url": p.hero_photo_url,
+            "photos": _public_build_photos(
+                photos_by_build_id.get(p.build.manual_build_id, []) if p.build and p.build.manual_build_id else [],
+                p.hero_photo_url,
+            ),
             "spec_highlights": (p.build.spec_json if p.build else None),
+            "playbook_id": p.playbook_id or (p.build.playbook_id if p.build else None),
             "twin_3d": _twin_ref(twins_by_id.get(p.capture_3d_asset_id))
             if p.capture_3d_asset_id
             else ({"optimized_asset_ref": p.model_3d_url, "preview_image_ref": None, "ar_ready": False} if p.model_3d_url else None),
@@ -114,6 +170,12 @@ async def public_showcase_build_detail(product_id: int, db: AsyncSession = Depen
     ):
         raise HTTPException(status_code=404, detail="Build not found")
 
+    manual_build = None
+    if product.build and product.build.manual_build_id:
+        manual_build = (
+            await db.execute(select(ManualBuild).where(ManualBuild.id == product.build.manual_build_id))
+        ).scalar_one_or_none()
+
     benchmark = None
     if product.benchmark_report_document_id:
         doc = (
@@ -142,6 +204,7 @@ async def public_showcase_build_detail(product_id: int, db: AsyncSession = Depen
         "title": product.title,
         "description": product.description,
         "hero_photo_url": product.hero_photo_url,
+        "photos": _public_build_photos(manual_build.photos if manual_build else [], product.hero_photo_url),
         "model_3d_url": product.model_3d_url,
         "fulfilment": {
             "type": product.fulfilment_type,
@@ -151,6 +214,10 @@ async def public_showcase_build_detail(product_id: int, db: AsyncSession = Depen
             "delivery_max_days": product.delivery_max_days,
         },
         "spec": product.build.spec_json if product.build else None,
+        "software_options": {
+            "profile": await software_profile_for_product(db, product),
+            "apps": SOFTWARE_CATALOGUE,
+        },
         "benchmark_report": benchmark,
         "twin_3d": twin,
         "price": product.price,
@@ -160,7 +227,10 @@ async def public_showcase_build_detail(product_id: int, db: AsyncSession = Depen
 
 
 async def _load_buyable_product(product_id: int, db: AsyncSession) -> Product:
-    result = await db.execute(select(Product).where(Product.id == product_id))
+    # The availability check and reservation write share one transaction.
+    # Refresh a previously loaded ORM instance after waiting for another buyer.
+    result = await db.execute(select(Product).where(Product.id == product_id)
+                              .with_for_update().execution_options(populate_existing=True))
     product = result.scalar_one_or_none()
     if not product or product.product_type != ProductType.PREBUILT:
         raise HTTPException(404, "Build not found")
@@ -172,6 +242,8 @@ async def _load_buyable_product(product_id: int, db: AsyncSession) -> Product:
         raise HTTPException(409, "This build is no longer available.")
     if product.status == ProductStatus.RESERVED and not reservation_stale:
         raise HTTPException(409, "Someone else is currently checking out with this build — try again shortly.")
+    if product.status not in (ProductStatus.LISTED, ProductStatus.RESERVED):
+        raise HTTPException(409, "This build is not available for checkout.")
     if product.price is None or product.price <= 0:
         raise HTTPException(400, "This build has no price set yet.")
     return product
@@ -180,21 +252,28 @@ async def _load_buyable_product(product_id: int, db: AsyncSession) -> Product:
 @router.post("/showcase-builds/{product_id}/checkout-intent", response_model=ProductCheckoutIntentResponse)
 async def create_checkout_intent(
     product_id: int,
-    body: ProductCheckoutIntentRequest | None = None,
+    body: ProductCheckoutIntentRequest,
     db: AsyncSession = Depends(get_db),
     customer: Customer = Depends(get_current_user),
 ):
-    """Reserves this specific pre-built unit for 15 minutes and opens a
-    Stripe PaymentIntent for its real listed price. Requires the buyer to
-    be logged in — reuses the same auth as the rest of the storefront
-    (see app/routes/auth.py's get_current_user), since a real delivery
-    address/name is needed and the account already holds one."""
+    """Reserve a specific pre-built unit and snapshot checkout addresses."""
     product = await _load_buyable_product(product_id, db)
-    discount = 50.0 if body and (body.discount_code or "").strip().upper() == "XXXXXX" else 0.0
-    payable_price = max(0.0, float(product.price) - discount)
+    discount_code = "UKSEP50"
+    discount = 50.0 if (body.discount_code or "").strip().upper() == discount_code else 0.0
+    choice = await delivery_choice(db, "prebuilt", body.speedy_delivery)
+    payable_price = max(0.0, float(product.price) - discount) + choice["fee_gbp"]
+    profile = await software_profile_for_product(db, product)
+    try:
+        selected_apps = initial_customer_software_selection(
+            body.software_package_ids,
+            profile.get("recommended_package_ids", []),
+        )
+    except ValueError as exc:
+        raise HTTPException(422, str(exc))
 
     product.status = ProductStatus.RESERVED
     product.reserved_until = datetime.utcnow() + timedelta(minutes=_RESERVATION_MINUTES)
+    product.checkout_addresses = body.checkout_addresses.model_dump(mode="json")
     product.updated_at = datetime.utcnow()
     await db.flush()
 
@@ -203,7 +282,9 @@ async def create_checkout_intent(
         intent_data = await payment_service.create_payment_intent(
             customer_id=customer.id,
             budget=payable_price,
-            quote_data={"purchase_type": "product", "product_id": product.id, "discount_code": "XXXXXX" if discount else None},
+            quote_data={"purchase_type": "product", "product_id": product.id, "discount_code": discount_code if discount else None},
+            metadata={"purchase_type": "product", "product_id": product.id,
+                      "software_package_ids": serialize_customer_software_selection(selected_apps), **checkout_metadata(choice)},
         )
     except ValueError as e:
         raise HTTPException(400, str(e))
@@ -215,10 +296,84 @@ async def create_checkout_intent(
     import stripe
     stripe.PaymentIntent.modify(
         intent_data["intent_id"],
-        metadata={"purchase_type": "product", "product_id": str(product.id), "customer_id": str(customer.id)},
+        metadata={"purchase_type": "product", "product_id": str(product.id), "customer_id": str(customer.id),
+                  "software_package_ids": serialize_customer_software_selection(selected_apps),
+                  "discount_code": discount_code if discount else "",
+                  "software_profile_curated_build_id": str(profile.get("curated_build_id") or ""),
+                  **checkout_metadata(choice)},
     )
 
-    return ProductCheckoutIntentResponse(**intent_data)
+    return ProductCheckoutIntentResponse(
+        **intent_data,
+        delivery_option=choice["delivery_option"],
+        delivery_days=choice["delivery_days"],
+        delivery_promise=choice["promise"],
+    )
+
+
+@router.post("/showcase-builds/{product_id}/checkout-options", response_model=ProductCheckoutIntentResponse)
+async def update_checkout_options(
+    product_id: int,
+    body: ProductCheckoutOptionsRequest,
+    db: AsyncSession = Depends(get_db),
+    customer: Customer = Depends(get_current_user),
+):
+    """Update the current reserved checkout's price and selection in place."""
+    product = (await db.execute(select(Product).where(Product.id == product_id).with_for_update())).scalar_one_or_none()
+    if not product or product.product_type != ProductType.PREBUILT:
+        raise HTTPException(404, "Build not found")
+    if product.status != ProductStatus.RESERVED or not product.reserved_until or product.reserved_until < datetime.utcnow():
+        raise HTTPException(409, "This checkout reservation has expired. Please start checkout again.")
+    payment_service = PaymentService()
+    import stripe
+    try:
+        current = stripe.PaymentIntent.retrieve(body.intent_id)
+    except stripe.StripeError as exc:
+        raise HTTPException(400, "Could not retrieve this payment session.") from exc
+    metadata = dict(current.metadata or {})
+    if (metadata.get("purchase_type") != "product" or metadata.get("product_id") != str(product_id)
+            or metadata.get("customer_id") != str(customer.id)):
+        raise HTTPException(403, "This payment session does not belong to this checkout.")
+    if current.status in {"succeeded", "canceled"}:
+        raise HTTPException(409, "This payment session can no longer be changed.")
+
+    profile = await software_profile_for_product(db, product)
+    try:
+        selected_apps = updated_customer_software_selection(
+            body.software_package_ids,
+            metadata,
+            profile.get("recommended_package_ids", []),
+        )
+    except ValueError as exc:
+        raise HTTPException(422, str(exc))
+
+    discount = 50.0 if metadata.get("discount_code") == "UKSEP50" else 0.0
+    choice = await delivery_choice(db, "prebuilt", body.speedy_delivery)
+    amount = max(0.0, float(product.price or 0) - discount) + choice["fee_gbp"]
+    try:
+        updated = stripe.PaymentIntent.modify(
+            body.intent_id,
+            amount=int(round(amount * 100)),
+            metadata={**metadata, "software_package_ids": serialize_customer_software_selection(selected_apps),
+                      "software_profile_curated_build_id": str(profile.get("curated_build_id") or ""),
+                      **checkout_metadata(choice)},
+        )
+    except stripe.StripeError as exc:
+        raise HTTPException(400, "Could not update this payment session.") from exc
+    # Keep the durable order snapshot aligned with the active PaymentIntent;
+    # a failed Stripe update must not silently change the eventual address.
+    product.checkout_addresses = body.checkout_addresses.model_dump(mode="json")
+    product.updated_at = datetime.utcnow()
+    return ProductCheckoutIntentResponse(
+        client_secret=updated.client_secret,
+        publishable_key=payment_service.config.publishable_key,
+        amount=amount,
+        currency=updated.currency,
+        intent_id=updated.id,
+        delivery_option=choice["delivery_option"],
+        delivery_days=choice["delivery_days"],
+        delivery_promise=choice["promise"],
+    )
 
 
 @router.post("/showcase-builds/{product_id}/checkout-confirm", response_model=ProductCheckoutConfirmation)
@@ -234,6 +389,23 @@ async def confirm_checkout(
     rare case this call never fires (tab closed mid-flow)."""
     result = await db.execute(select(Product).where(Product.id == product_id))
     product = result.scalar_one_or_none()
+    existing_order = (await db.execute(select(Order).where(
+        Order.stripe_payment_intent_id == body.intent_id,
+        Order.customer_id == customer.id,
+    ))).scalar_one_or_none()
+    if existing_order is not None:
+        if str((existing_order.specs or {}).get("product_id")) != str(product_id):
+            raise HTTPException(403, "This payment does not belong to this build.")
+        return ProductCheckoutConfirmation(
+            order_id=existing_order.id,
+            product_id=product_id,
+            status=existing_order.status.value,
+            amount=float(existing_order.customer_price),
+            currency="gbp",
+            payment_intent_id=body.intent_id,
+            created_at=existing_order.created_at,
+            ebay_listing_withdrawn=None,
+        )
     if not product:
         raise HTTPException(404, "Build not found")
     if product.status == ProductStatus.SOLD:
@@ -241,11 +413,26 @@ async def confirm_checkout(
 
     try:
         payment_service = PaymentService()
+        import stripe
+        preflight_intent = stripe.PaymentIntent.retrieve(body.intent_id)
+        preflight_metadata = dict(preflight_intent.metadata or {})
+        if (preflight_metadata.get("purchase_type") != "product"
+                or preflight_metadata.get("product_id") != str(product_id)
+                or preflight_metadata.get("customer_id") != str(customer.id)):
+            raise HTTPException(403, "This payment does not belong to this build and customer.")
         payment_data = await payment_service.handle_payment_success(
             intent_id=body.intent_id, customer_id=customer.id, quote_data={},
         )
+    except stripe.StripeError as e:
+        raise HTTPException(400, "Could not verify this payment session.") from e
     except ValueError as e:
         raise HTTPException(400, str(e))
+
+    intent_metadata = payment_data.get("metadata", {})
+    if (intent_metadata.get("purchase_type") != "product"
+            or intent_metadata.get("product_id") != str(product_id)
+            or intent_metadata.get("customer_id") != str(customer.id)):
+        raise HTTPException(403, "This payment does not belong to this build and customer.")
 
     # Find any linked ManualBuild before taking locks (unlocked — these FKs
     # don't change concurrently), so we can lock it first below. Global lock
@@ -279,25 +466,85 @@ async def confirm_checkout(
     if manual_build and manual_build.status == "sold":
         raise HTTPException(409, "This build has already been sold.")
 
+    playbook_assignment = (manual_build.evidence_data or {}).get("playbook_assignment") if manual_build else None
+    software_profile = await software_profile_for_product(db, product)
+    try:
+        software_package_ids = customer_software_selection_from_metadata(
+            payment_data["metadata"],
+            software_profile.get("recommended_package_ids", []),
+        )
+    except ValueError as exc:
+        raise HTTPException(400, "The software selection on this payment is invalid.") from exc
     order = Order(
         order_id=f"ORD-PROD-{body.intent_id[-12:]}",
         customer_id=customer.id,
         status=OrderStatus.READY_TO_PACKAGE,  # already built — nothing left to source/assemble
-        specs={"product_id": product.id, "build_title": product.title},
+        specs={
+            "product_id": product.id,
+            "build_title": product.title,
+            "payment_evidence": payment_data.get("payment_evidence", {}),
+            "delivery_address": (product.checkout_addresses or {}).get("delivery"),
+            "billing_address": (product.checkout_addresses or {}).get("billing"),
+            "fulfilment_type": product.fulfilment_type or "prebuilt",
+            "delivery_option": payment_data["metadata"].get("delivery_option", "standard"),
+            "delivery_promise": payment_data["metadata"].get("delivery_promise"),
+            "delivery_estimate_source": "configured_fulfilment_default",
+            "delivery_days": payment_data["metadata"].get("delivery_days"),
+            "software_profile": software_profile,
+            "software_package_ids": software_package_ids,
+            "software_estimated_minutes_saved": sum(
+                int(item["estimated_minutes_saved"]) for item in SOFTWARE_CATALOGUE
+                if item["package_id"] in software_package_ids
+            ),
+            **({
+                "curated_build_id": playbook_assignment.get("curated_build_id"),
+                "playbook_cell": f"{playbook_assignment.get('customer_type')} / {playbook_assignment.get('budget_tier')}",
+                "software_profile": playbook_assignment.get("software_profile") or software_profile,
+            } if playbook_assignment else {}),
+        },
         customer_price=payment_data["amount"],
+        fast_track_selected=payment_data["metadata"].get("delivery_option") == "fast_track",
+        fast_track_fee=float(payment_data["metadata"].get("delivery_fee_gbp", 0)),
+        promised_delivery_date=(
+            add_working_days(
+                datetime.now(ZoneInfo("Europe/London")).replace(tzinfo=None),
+                int(payment_data["metadata"].get("delivery_days") or 1),
+            )
+            if payment_data["metadata"].get("delivery_days") else None
+        ),
         component_costs=0.0,
         overhead_amount=0.0,
         stripe_payment_intent_id=body.intent_id,
+        playbook_id=product.playbook_id,
         notes=f"Pre-built showcase purchase. Product #{product.id}. Intent: {body.intent_id}",
     )
     db.add(order)
     await db.flush()
+
+    from app.services.getting_started_jobs import ensure_order_job
+    fulfilment = str(product.fulfilment_type or "prebuilt").lower().replace("-", "_")
+    source_type = "ready_to_ship" if fulfilment in {"prebuilt", "ready_to_ship"} else "curated_for_you"
+    await ensure_order_job(
+        db,
+        order_id=order.id,
+        customer_id=customer.id,
+        playbook_id=order.playbook_id,
+        source_type=source_type,
+        manual_build_id=manual_build.id if manual_build else None,
+    )
 
     product.status = ProductStatus.SOLD
     product.sold_via_channel = SoldChannel.STOREFRONT
     product.sold_order_id = order.id
     product.reserved_until = None
     product.updated_at = datetime.utcnow()
+    if manual_build:
+        delivery_address = (product.checkout_addresses or {}).get("delivery") or {}
+        manual_build.buyer_name = delivery_address.get("contact_name") or customer.name
+        manual_build.buyer_address_json = dict(delivery_address)
+        manual_build.customer_id = customer.id
+        manual_build.customer_email = customer.email
+        manual_build.sale_price_actual = payment_data["amount"]
 
     # Deliberately NOT setting manual_build.status = "sold" here — that must
     # stay unset until after withdraw_ebay_for_sold_build runs below, because
@@ -307,6 +554,13 @@ async def confirm_checkout(
     # concurrent sync_ebay_order/cross_channel_guard check relies on, so it's
     # safe to defer this bookkeeping field to the second commit below.
     will_withdraw_ebay = bool(manual_build and manual_build.ebay_sku)
+    if manual_build and not will_withdraw_ebay:
+        # Direct storefront stock that was never listed on eBay must still
+        # enter the sold-build dispatch queue in the same transaction.
+        manual_build.status = "sold"
+        from app.services.inventory_lifecycle import record_sale
+        await record_sale(db, manual_build, payment_data["amount"])
+        manual_build.updated_at = datetime.utcnow()
 
     # Commit the sale now, before any external network calls — the payment
     # already succeeded, so the sale must be durable even if the eBay

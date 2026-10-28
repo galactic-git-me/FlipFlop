@@ -21,7 +21,7 @@ Generate Quote (POST /api/quotes/generate)
     ↓
 Create Payment Intent (POST /api/payments/intent)
     ↓
-Frontend: Collect Card Details (Stripe Elements)
+Frontend: Stripe Payment Element (eligible configured methods)
     ↓
 Confirm Payment (POST /api/payments/confirm)
     ↓
@@ -29,6 +29,13 @@ Create Order + Email Confirmation
     ↓
 Order Tracking (GET /api/orders/{id})
 ```
+
+PaymentIntents use automatic payment methods so Stripe can offer the methods
+enabled in the account configuration and eligible for each order. In the
+current development test account, Klarna and Amazon Pay are enabled alongside
+cards, Apple Pay and Link. Klarna plans depend on customer/order eligibility and
+Klarna's own approval and terms. Test-mode settings do not confirm live-mode
+availability.
 
 ### Components
 

@@ -1,0 +1,95 @@
+{
+  "at": "2026-10-27T00:31:33.693776+00:00",
+  "examined": 45690,
+  "candidates": 841,
+  "by_source": {
+    "ebay": 337,
+    "awd_it": 82,
+    "ebuyer": 12,
+    "scan": 37,
+    "computer_orbit": 8,
+    "bargain_hardware": 10,
+    "google_shopping": 57,
+    "amazon": 175,
+    "newegg_uk": 87,
+    "overclockers": 36
+  },
+  "applied": false,
+  "examples": [
+    {
+      "source": "ebay",
+      "title": "Intel Core i5 6600T Processor CPU LGA1151 Socket SR2L9 2.70GHz Quad Desktop Pc",
+      "cpk": "a38b711011105550"
+    },
+    {
+      "source": "awd_it",
+      "title": "AWD-IT Lian Li A3 Intel Core Ultra 225F Nvidia GeForce RTX 5070 12GB White Gaming PC",
+      "cpk": "4ac872ac2957aafc"
+    },
+    {
+      "source": "ebay",
+      "title": "Workstation PC Ryzen 9 9950X3D 64GB DDR5 4TB SSD RTX or Radeon GPU",
+      "cpk": "697b6ce5c65f97d7"
+    },
+    {
+      "source": "ebay",
+      "title": "Intel Core i5-6500 3.20GHz Socket LGA1151 Processor CPU (SR2L6) Desktop PC",
+      "cpk": "ce9ef88c9291dc2f"
+    },
+    {
+      "source": "ebay",
+      "title": "ARCTIC Liquid Freezer II 360 Multi Compatible All-in-One CPU Water Cooler",
+      "cpk": "7031770d6d330ace"
+    },
+    {
+      "source": "awd_it",
+      "title": "AWD-IT G370A Mesh Intel Core I5 14400F Ten Core Intel ARC B580 12GB Desktop PC for Gaming",
+      "cpk": "3ff0ded6bb1ba53c"
+    },
+    {
+      "source": "ebay",
+      "title": "ARCTIC Liquid Freezer III Pro 360 - Multi Compatible All-in-One CPU Water Cooler",
+      "cpk": "9735a13b55dff7db"
+    },
+    {
+      "source": "ebay",
+      "title": "ARCTIC Liquid Freezer III Pro 280 - Multi Compatible All-in-One CPU Water Cooler",
+      "cpk": "c536a1f28442e469"
+    },
+    {
+      "source": "ebay",
+      "title": "be quiet! Pure Loop 3 LX All-in-One 240mm Intel / AMD CPU Water Cooler",
+      "cpk": "bb0c83f45e3e627f"
+    },
+    {
+      "source": "ebuyer",
+      "title": "PCSpecialist\nWraith 180 Gaming PC - Core Ultra 7 265KF RTX 5060 Ti 16GB RAM 1TB SSD - 1440p Gaming",
+      "cpk": "b5a170c500fec69e"
+    },
+    {
+      "source": "awd_it",
+      "title": "AWD-IT Dark Xpanse Ryzen 7 7700 NVIDIA RTX 5070 12GB AI Desktop PC for Gaming",
+      "cpk": "f138eb3a060b8417"
+    },
+    {
+      "source": "awd_it",
+      "title": "AWD-IT A31 PLUS White AMD Ryzen 5 9600X Nvidia Geforce RTX 5070 12GB Gaming PC",
+      "cpk": "deef458356e09110"
+    },
+    {
+      "source": "awd_it",
+      "title": "AWD-IT M120R AMD Ryzen 5500 RTX 5050 8GB Desktop PC for Gaming",
+      "cpk": "3231c72c02c457cc"
+    },
+    {
+      "source": "ebuyer",
+      "title": "PCSpecialist\nWraith 181 Gaming PC - Ryzen 7 7700X RTX 5060 Ti 16GB RAM 1TB SSD - 1440p Gaming",
+      "cpk": "f52d5cafc9b231c4"
+    },
+    {
+      "source": "awd_it",
+      "title": "AWD-IT FRAME 4000D RGB AMD Ryzen 9600X Nvidia RTX 5090 32GB Desktop PC for Gaming",
+      "cpk": "447ace3c185f923a"
+    }
+  ]
+}

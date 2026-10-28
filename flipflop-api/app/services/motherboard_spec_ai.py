@@ -1,11 +1,9 @@
 """AI-assisted structured spec extraction for motherboards.
 
-Provider order follows app/services/ai_service.py's established convention,
-NOT claude_evaluator.py's (which puts paid Anthropic first) — local Ollama
-first (free, no rate limits, this app's actual default), then OpenRouter's
-free tier, then Anthropic only as a last resort. This is a low-stakes
-extraction task (one motherboard model's public spec sheet), not the kind of
-high-stakes reasoning that would justify skipping straight to a paid model.
+Provider order follows the environment-configured model selection hierarchy:
+local Ollama, OpenRouter free tier, then the cheapest paid OpenRouter model.
+This is a low-stakes extraction task (one motherboard model's public spec
+sheet).
 
 Every row this produces is saved with reviewed=False — see MotherboardSpec's
 docstring for why an unreviewed AI guess must never drive a hard
@@ -19,7 +17,7 @@ from dataclasses import dataclass
 
 import structlog
 
-from app.config import get_settings
+from app.services.model_selection_service import model_selection_service
 
 log = structlog.get_logger(__name__)
 
@@ -73,91 +71,60 @@ class MotherboardSpecAIResult:
     raw: dict
 
 
-async def _try_ollama(settings, user_content: str) -> str | None:
-    if not settings.ollama_base_url:
-        return None
-    try:
-        import httpx
-        async with httpx.AsyncClient(timeout=60) as client:
-            resp = await client.post(
-                f"{settings.ollama_base_url}/api/chat",
-                json={
-                    "model": settings.ollama_model,
-                    "messages": [
-                        {"role": "system", "content": _SYSTEM_PROMPT},
-                        {"role": "user", "content": user_content},
-                    ],
-                    "stream": False,
-                },
-            )
-            resp.raise_for_status()
-            return resp.json().get("message", {}).get("content")
-    except Exception as exc:
-        log.warning("motherboard_spec_ai.ollama_failed", error=str(exc), exc_type=type(exc).__name__)
-        return None
+def title_verified_motherboard_facts(title: str) -> dict:
+    """Extract only compatibility fields literally stated in a listing title.
+
+    LLM output can suggest a model identity, but it cannot turn remembered or
+    inferred specifications into source evidence. Unstated fields stay absent.
+    """
+    text = re.sub(r"[^a-z0-9]+", " ", (title or "").casefold())
+    facts = {}
+    socket = re.search(r"\b(am4|am5|lga\s?\d{4})\b", text)
+    if socket:
+        facts['socket'] = re.sub(r"\s+", "", socket.group(1))
+    memory = re.search(r"\bddr\s?([45])\b", text)
+    if memory:
+        facts['ram_type'] = f"ddr{memory.group(1)}"
+    chipset = re.search(r"\b([abxzh]\d{3,4}e?)[a-z]?\b", text)
+    if chipset:
+        facts['chipset'] = chipset.group(1)
+    if re.search(r"\b(micro\s?atx|m\s?atx|matx)\b", text):
+        facts['form_factor'] = 'matx'
+    elif re.search(r"\batx\b", text):
+        facts['form_factor'] = 'atx'
+    elif re.search(r"\bitx\b", text):
+        facts['form_factor'] = 'itx'
+    slot_count = re.search(r"\b(2|4|6|8)\s*(?:x\s*)?(?:dimm|memory|ram)\s*slots?\b", text)
+    if slot_count:
+        facts['ram_slots'] = int(slot_count.group(1))
+    maximum = re.search(r"\b(?:max(?:imum)?\s*)?(\d{2,3})\s*gb\s*(?:max(?:imum)?\s*)?(?:memory|ram)\b", text)
+    if maximum:
+        facts['max_ram_gb'] = int(maximum.group(1))
+    pcie_count = re.search(r"\b(\d+)\s*x\s*(?:pcie|pci express)(?:\s*\d+){0,2}\s*x\s*16\b", text)
+    if pcie_count:
+        facts['pcie_x16_slots'] = int(pcie_count.group(1))
+    m2_count = re.search(r"\b(\d+)\s*x\s*m\s*2\b", text)
+    if m2_count:
+        facts['m2_slots'] = int(m2_count.group(1))
+    sata_count = re.search(r"\b(\d+)\s*x\s*sata\b", text)
+    if sata_count:
+        facts['sata_ports'] = int(sata_count.group(1))
+    if re.search(r"\bwi\s?fi\d*\b", text):
+        facts['wifi'] = True
+    return facts
 
 
-async def _try_openrouter(settings, user_content: str) -> str | None:
-    if not settings.openrouter_api_key:
-        return None
-    try:
-        import httpx
-        async with httpx.AsyncClient(timeout=60) as client:
-            resp = await client.post(
-                "https://openrouter.ai/api/v1/chat/completions",
-                headers={
-                    "Authorization": f"Bearer {settings.openrouter_api_key}",
-                    "HTTP-Referer": settings.frontend_url,
-                    "X-Title": "FlipFlop Motherboard Spec Backfill",
-                },
-                json={
-                    "model": settings.openrouter_primary_model or "meta-llama/llama-3.1-8b-instruct",
-                    "messages": [
-                        {"role": "system", "content": _SYSTEM_PROMPT},
-                        {"role": "user", "content": user_content},
-                    ],
-                    "max_tokens": 400,
-                },
-            )
-            resp.raise_for_status()
-            data = resp.json()
-            return data["choices"][0]["message"]["content"]
-    except Exception as exc:
-        log.warning("motherboard_spec_ai.openrouter_failed", error=str(exc))
-        return None
-
-
-async def _try_anthropic(settings, user_content: str) -> str | None:
-    if not settings.anthropic_api_key:
-        return None
-    try:
-        import anthropic
-        client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
-        resp = await client.messages.create(
-            model="claude-opus-4-8",
-            max_tokens=400,
-            system=_SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": user_content}],
-        )
-        return resp.content[0].text if resp.content else None
-    except Exception as exc:
-        log.warning("motherboard_spec_ai.anthropic_failed", error=str(exc))
-        return None
-
-
-async def extract_motherboard_spec(title: str) -> MotherboardSpecAIResult | None:
-    settings = get_settings()
+async def extract_motherboard_spec(title: str, *, free_only: bool = True) -> MotherboardSpecAIResult | None:
     user_content = f"Motherboard listing title: {title}"
-
-    # Local first (free, this app's actual default per ai_service.py) → free
-    # OpenRouter tier → paid Anthropic only as a last resort.
-    raw_text = await _try_ollama(settings, user_content)
-    if not raw_text:
-        raw_text = await _try_openrouter(settings, user_content)
-    if not raw_text:
-        raw_text = await _try_anthropic(settings, user_content)
-
-    if not raw_text:
+    try:
+        result = await model_selection_service.complete(
+            task="Motherboard specification extraction",
+            messages=[{"role": "user", "content": user_content}],
+            system_prompt=_SYSTEM_PROMPT, max_tokens=400, free_only=free_only,
+        )
+        raw_text = result.text
+    except Exception as exc:
+        log.warning("motherboard_spec_ai.all_models_failed", error=str(exc))
         return None
 
     match = re.search(r"\{[\s\S]*\}", raw_text)
@@ -186,6 +153,6 @@ async def extract_motherboard_spec(title: str) -> MotherboardSpecAIResult | None
         form_factor=(d.get("form_factor") or None) and str(d.get("form_factor")).lower(),
         wifi=d.get("wifi"),
         confidence=float(d.get("confidence") or 0.0),
-        reasoning=str(d.get("reasoning") or ""),
+        reasoning=str(d.get("reasoning") or "")[:500],
         raw=d,
     )

@@ -76,13 +76,12 @@ Production runs from the separate Andromeda checkout using Docker Compose:
 
 ### Shared Ollama endpoint
 
-Both environments use Ollama on the Prometheus host at `localhost:11434`.
-The Andromeda host reaches that same daemon through the SSH tunnel that maps
-Andromeda's `localhost:11434` to Prometheus' `127.0.0.1:11434`. The production
-Compose services therefore use `http://host.docker.internal:11434`, which is
-the Docker host gateway; using `localhost` inside a container would point back
-to that container and silently send CPK/scoring requests to the wrong place.
-The tunnel must be running before restarting `gemradar-worker`.
+Both environments use the Ollama priority gateway on the Prometheus host.
+Production requests use the highest-priority listener (`127.0.0.1:11436`);
+the Andromeda SSH tunnel forwards it to the production worker container as
+`http://ollama-tunnel:11434`. Development uses `127.0.0.1:11435`, and other
+local apps use `127.0.0.1:11434`, the lowest-priority listener. The tunnel
+must be running before restarting `gemradar-worker`.
 
 Port `4311` on Andromeda belongs to production. It is not a reason to start a production backend on the development machine.
 

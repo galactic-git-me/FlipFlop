@@ -320,6 +320,33 @@ _FULL_SYSTEM_KEYWORDS = re.compile(
     re.IGNORECASE,
 )
 
+
+def is_full_system_listing(title: str) -> bool:
+    """True when a listing is a complete computer rather than a component."""
+    title = _strip_scrape_artifacts(title)
+    if re.search(r'\b(?:pre[- ]?built|complete\s+(?:pc|system|build)|full\s+(?:pc|system|build))\b', title, re.I):
+        return True
+    # A whole-system specification lists both installed RAM and storage.
+    # This precedes component words: a PC title also mentions its SSD.
+    installed_ram = re.search(r'\b\d+\s*gb\s*(?:ram|ddr[345])\b',title,re.I)
+    installed_storage = re.search(r'\b\d+(?:\.\d+)?\s*(?:tb|gb)\s*(?:ssd|nvme|hdd)\b',title,re.I)
+    if installed_ram and installed_storage and re.search(r'\b(?:pc|computer|desktop|workstation|laptop|notebook|win(?:dows)?\s*(?:10|11)|w11)\b',title,re.I):
+        return True
+    # Product-type words describe the item being sold; "for laptop" or
+    # "gaming PC" compatibility copy must not turn an SSD/cooler into a PC.
+    if re.search(r'\b(?:motherboard|mainboard|graphics\s+card|video\s+card|'
+                 r'(?:cpu|liquid|air)\s+(?:(?:liquid|water|air)\s+)?cooler|'
+                 r'processor|cpu|gpu|psu|power\s+supply|fan|'
+                 r'case|chassis|cooler|watercooling|'
+                 r'ssd|solid[ -]state\s+drive|hard\s+drive|'
+                 r'(?:ddr[345]|sodimm|dimm)\b.*\b(?:ram|memory)|'
+                 r'(?:ram|memory)\b.*\b(?:ddr[345]|sodimm)|'
+                 r'(?:licen[cs]e|activation|product)\s+key)\b',title,re.I):
+        return False
+    if re.search(r'\b(?:asus\s+tuf\s+gaming\s+a\d{2}|rog\s+zephyrus)\b',title,re.I):
+        return True
+    return bool(_FULL_SYSTEM_KEYWORDS.search(title))
+
 # Backstop for full systems that don't use any of the keywords above (e.g. a
 # custom build sold as "Asus X870 Motherboard + Ryzen 9 + 32GB RAM bundle,
 # cash on collection" with no single word flagging it as "a system"): if a
@@ -456,7 +483,7 @@ def _detect_category(title: str) -> Optional[str]:
     if is_likely_accessory(title):
         return None
     clean_title = _strip_scrape_artifacts(title)
-    if _FULL_SYSTEM_KEYWORDS.search(clean_title):
+    if is_full_system_listing(clean_title):
         return None
 
     # Prefer phrases which say what the item *is* over secondary components

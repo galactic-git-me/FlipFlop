@@ -17,6 +17,14 @@ from app.services.price_alert_emails import (
     send_alert_summary_email,
 )
 from app.services.money import Money
+from app.services.feature_flags import FeatureFlags, set_flag_for_testing
+
+
+@pytest.fixture(autouse=True)
+def enable_price_alert_email_for_tests():
+    set_flag_for_testing(FeatureFlags.PRICE_ALERTS_EMAIL_ENABLED, True)
+    yield
+    set_flag_for_testing(FeatureFlags.PRICE_ALERTS_EMAIL_ENABLED, False)
 
 
 @pytest.mark.asyncio
@@ -44,14 +52,14 @@ class TestPriceAlertEmails:
         current_price = Money(75.00, "GBP")
 
         # Mock email_service to avoid SMTP
-        with patch("app.services.price_alert_emails._send") as mock_send:
+        with patch("app.services.price_alert_emails.send_email_async", new_callable=AsyncMock) as mock_send:
             mock_send.return_value = True
 
             result = await send_price_alert_email(db, alert, current_price)
 
             # Verify
             assert result is True
-            mock_send.assert_called_once()
+            mock_send.assert_awaited_once()
 
     async def test_email_suppressed_by_flag(self, db: AsyncSession):
         """Email suppressed when feature flag disabled."""
@@ -90,17 +98,14 @@ class TestPriceAlertEmails:
 
         current_price = Money(72.99, "GBP")
 
-        with patch("app.services.price_alert_emails._send") as mock_send:
+        with patch("app.services.price_alert_emails.send_email_async", new_callable=AsyncMock) as mock_send:
             mock_send.return_value = True
 
             await send_price_alert_email(db, alert, current_price)
 
             # Get email content from mock
-            call_args = mock_send.call_args
-            email_msg = call_args[0][0]
-
-            # Verify content
-            subject = email_msg["Subject"]
+            email_args = mock_send.await_args.kwargs
+            subject = email_args["subject"]
             assert "72.99" in subject or "Custom PC" in subject
 
     async def test_summary_email_multiple_alerts(self, db: AsyncSession):
@@ -128,7 +133,7 @@ class TestPriceAlertEmails:
             (alert2, Money(110.00, "GBP")),
         ]
 
-        with patch("app.services.price_alert_emails._send") as mock_send:
+        with patch("app.services.price_alert_emails.send_email_async", new_callable=AsyncMock) as mock_send:
             mock_send.return_value = True
 
             result = await send_alert_summary_email(
@@ -136,7 +141,7 @@ class TestPriceAlertEmails:
             )
 
             assert result is True
-            mock_send.assert_called_once()
+            mock_send.assert_awaited_once()
 
     async def test_summary_email_shows_savings(self, db: AsyncSession):
         """Summary email calculates and displays total savings."""
@@ -153,14 +158,13 @@ class TestPriceAlertEmails:
         current_price = Money(89.99, "GBP")
         triggered = [(alert, current_price)]
 
-        with patch("app.services.price_alert_emails._send") as mock_send:
+        with patch("app.services.price_alert_emails.send_email_async", new_callable=AsyncMock) as mock_send:
             mock_send.return_value = True
 
             await send_alert_summary_email(db, "user@example.com", triggered)
 
-            call_args = mock_send.call_args
-            email_msg = call_args[0][0]
-            subject = email_msg["Subject"]
+            email_args = mock_send.await_args.kwargs
+            subject = email_args["subject"]
 
             # Should mention number of alerts
             assert "1" in subject or "alert" in subject.lower()
@@ -199,7 +203,7 @@ class TestPriceAlertEmails:
         current_price = Money(75.00, "GBP")
 
         # Mock SMTP failure
-        with patch("app.services.price_alert_emails._send") as mock_send:
+        with patch("app.services.price_alert_emails.send_email_async", new_callable=AsyncMock) as mock_send:
             mock_send.side_effect = Exception("SMTP connection failed")
 
             result = await send_price_alert_email(db, alert, current_price)
@@ -227,13 +231,13 @@ class TestEmailPrecision:
 
         current_price = Money(0.29, "GBP")
 
-        with patch("app.services.price_alert_emails._send") as mock_send:
+        with patch("app.services.price_alert_emails.send_email_async", new_callable=AsyncMock) as mock_send:
             mock_send.return_value = True
 
             await send_price_alert_email(db, alert, current_price)
 
             # Money type ensures precision - no rounding errors in email
-            assert mock_send.called
+            mock_send.assert_awaited_once()
 
     async def test_summary_calculates_exact_savings(self, db: AsyncSession):
         """Summary email calculates exact savings with Money type."""
@@ -251,10 +255,10 @@ class TestEmailPrecision:
         current_price = Money(99.99, "GBP")
         triggered = [(alert, current_price)]
 
-        with patch("app.services.price_alert_emails._send") as mock_send:
+        with patch("app.services.price_alert_emails.send_email_async", new_callable=AsyncMock) as mock_send:
             mock_send.return_value = True
 
             # Savings should be exactly £0.01
             await send_alert_summary_email(db, "user@example.com", triggered)
 
-            assert mock_send.called
+            mock_send.assert_awaited_once()

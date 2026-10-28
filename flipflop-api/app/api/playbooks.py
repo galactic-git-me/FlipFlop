@@ -34,6 +34,10 @@ from app.database import get_db
 from app.models.playbook import Playbook, PlaybookProposal
 from app.services.alerts import emit_alert
 from app.models.flip_intelligence import FlipIntelligence
+from app.services.software_catalogue import (
+    SOFTWARE_CATALOGUE,
+    normalize_software_profile,
+)
 from app.schemas.playbook import (
     PlaybookCreate, PlaybookUpdate, PlaybookOut,
     ProposalCreate, ProposalResolve, ProposalOut,
@@ -41,6 +45,15 @@ from app.schemas.playbook import (
 
 log = structlog.get_logger(__name__)
 router = APIRouter(prefix="/playbooks", tags=["playbooks"])
+
+
+@router.get("/software-catalogue")
+async def get_software_catalogue():
+    """Apps available for optional WinGet setup; no installer is downloaded here."""
+    return {
+        "items": SOFTWARE_CATALOGUE,
+        "estimate_basis": "Indicative internal minutes saved per app for finding, downloading and clicking through a typical installer; not benchmarked or guaranteed.",
+    }
 
 
 # ─── Playbook CRUD ────────────────────────────────────────────────────────────
@@ -78,7 +91,9 @@ async def list_playbooks_ranked(db: AsyncSession = Depends(get_db)):
 
 @router.post("", response_model=PlaybookOut, status_code=201)
 async def create_playbook(body: PlaybookCreate, db: AsyncSession = Depends(get_db)):
-    pb = Playbook(**body.model_dump())
+    data = body.model_dump()
+    data["software_profile"] = _normalize_software_profile_or_422(data.get("software_profile"))
+    pb = Playbook(**data)
     db.add(pb)
     await db.flush()
     await db.refresh(pb)
@@ -250,7 +265,10 @@ async def update_playbook(
     playbook_id: int, body: PlaybookUpdate, db: AsyncSession = Depends(get_db)
 ):
     pb = await _get_or_404(playbook_id, db)
-    for k, v in body.model_dump(exclude_none=True).items():
+    values = body.model_dump(exclude_none=True)
+    if "software_profile" in values:
+        values["software_profile"] = _normalize_software_profile_or_422(values["software_profile"])
+    for k, v in values.items():
         setattr(pb, k, v)
     await db.flush()
     await db.refresh(pb)
@@ -276,7 +294,12 @@ async def create_proposal(body: ProposalCreate, db: AsyncSession = Depends(get_d
     if body.playbook_id:
         await _get_or_404(body.playbook_id, db)
 
-    proposal = PlaybookProposal(**body.model_dump())
+    proposal_data = body.model_dump()
+    proposed_data = dict(proposal_data.get("proposed_data") or {})
+    if "software_profile" in proposed_data:
+        proposed_data["software_profile"] = _normalize_software_profile_or_422(proposed_data["software_profile"])
+    proposal_data["proposed_data"] = proposed_data
+    proposal = PlaybookProposal(**proposal_data)
     db.add(proposal)
     await db.flush()
     await db.refresh(proposal)
@@ -301,11 +324,17 @@ async def approve_proposal(
     if proposal.status != "pending":
         raise HTTPException(409, detail=f"Proposal is already {proposal.status}")
 
+    if (proposal.demand_signals or {}).get("source") == "catalogue_playbook_service_v1":
+        raise HTTPException(409, "Review this generated build through the Playbook service approval endpoint")
+
     now = datetime.utcnow()
 
     if proposal.action == "CREATE":
         # Materialise a new active playbook from proposed_data
         data = proposal.proposed_data or {}
+        data = dict(data)
+        if "software_profile" in data:
+            data["software_profile"] = _normalize_software_profile_or_422(data["software_profile"])
         data["status"] = "active"
         data.setdefault("activated_at", now)
         pb = Playbook(**data)
@@ -318,9 +347,9 @@ async def approve_proposal(
         # Capture a rollback snapshot before applying update.
         rollback_snapshot = {
             "name": pb.name,
-            "description": pb.description,
+            "description": pb.what_they_use_it_for or pb.what_they_want_from_build,
             "emoji": pb.emoji,
-            "status": pb.status,
+            "status": pb.status.value if hasattr(pb.status, "value") else pb.status,
             "target_use_case": pb.target_use_case,
             "requirements": pb.requirements,
             "component_catalogue": pb.component_catalogue,
@@ -328,11 +357,15 @@ async def approve_proposal(
             "upgrade_strategy": pb.upgrade_strategy,
             "profit_strategy": pb.profit_strategy,
             "upsell_strategy": pb.upsell_strategy,
+            "software_profile": pb.software_profile,
         }
         ds = dict(proposal.demand_signals or {})
         ds["rollback_snapshot"] = rollback_snapshot
         proposal.demand_signals = ds
-        for k, v in (proposal.proposed_data or {}).items():
+        proposed_data = dict(proposal.proposed_data or {})
+        if "software_profile" in proposed_data:
+            proposed_data["software_profile"] = _normalize_software_profile_or_422(proposed_data["software_profile"])
+        for k, v in proposed_data.items():
             setattr(pb, k, v)
         await db.flush()
         await db.refresh(pb)
@@ -426,6 +459,8 @@ async def reject_proposal(
     db: AsyncSession = Depends(get_db),
 ):
     proposal = await _get_proposal_or_404(proposal_id, db)
+    if (proposal.demand_signals or {}).get("source") == "catalogue_playbook_service_v1":
+        raise HTTPException(409, "Review this generated build through the Playbook service approval endpoint")
     if proposal.status != "pending":
         raise HTTPException(409, detail=f"Proposal is already {proposal.status}")
 
@@ -463,3 +498,10 @@ async def _get_proposal_or_404(proposal_id: int, db: AsyncSession) -> PlaybookPr
     if not p:
         raise HTTPException(404, detail=f"Proposal {proposal_id} not found")
     return p
+
+
+def _normalize_software_profile_or_422(profile: dict | None) -> dict | None:
+    try:
+        return normalize_software_profile(profile)
+    except ValueError as exc:
+        raise HTTPException(422, detail=str(exc)) from exc

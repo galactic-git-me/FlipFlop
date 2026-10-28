@@ -1,0 +1,99 @@
+{
+  "status": "hardware_only_review_candidate",
+  "publishable": false,
+  "rows": [
+    {
+      "sku": "B0CQ4JV8D5",
+      "title": "AMD Ryzensets 5 8500G Processor (integrated Radeon graphics, 6 Cores/12 Threads, 65W TDP, AM5 Socket, 22MB Cache , up to 5 GHz max boost frequency, wraith stealth cooler)",
+      "url": "https://www.amazon.co.uk/dp/B0CQ4JV8D5",
+      "item_gbp": "129.00",
+      "delivery_gbp": "0",
+      "delivery_working_days": 5,
+      "observed_at": "2026-10-22T20:00:41.202669+00:00"
+    },
+    {
+      "sku": "B0C6HX977C",
+      "title": "Asus PRO A620M-C-CSM - Corporate Stable Model, AMD A620, AM5, Micro ATX, 2 DDR5, VGA, HDMI, DP, GB LAN, PCIe4, 2x M.2",
+      "url": "https://www.amazon.co.uk/dp/B0C6HX977C",
+      "item_gbp": "57.74",
+      "delivery_gbp": "0",
+      "delivery_working_days": 5,
+      "observed_at": "2026-10-22T20:14:45.352740+00:00"
+    },
+    {
+      "sku": "B09XY6PBG9",
+      "title": "Patriot Viper Venom DDR5 16GB (2 x 8GB) 5600MHz UDIMM Desktop Gaming Memory KIT - PVV516G560C40K",
+      "url": "https://www.amazon.co.uk/dp/B09XY6PBG9",
+      "item_gbp": "239.99",
+      "delivery_gbp": "0",
+      "delivery_working_days": 4,
+      "observed_at": "2026-10-22T20:06:55.322776+00:00"
+    },
+    {
+      "sku": "B0DBR3DZWG",
+      "title": "Kingston NV3 NVMe PCIe 4.0 Internal SSD 1TB M.2 2280-SNV3S/1000G",
+      "url": "https://www.amazon.co.uk/dp/B0DBR3DZWG",
+      "item_gbp": "129.98",
+      "delivery_gbp": "0",
+      "delivery_working_days": 3,
+      "observed_at": "2026-10-22T20:06:57.994946+00:00"
+    },
+    {
+      "sku": "B0FZCPSC4D",
+      "title": "be quiet! Pure Power 12 850W Gaming PSU, 80 Plus Gold, ATX 3.1, 12V-Rail",
+      "url": "https://www.amazon.co.uk/dp/B0FZCPSC4D",
+      "item_gbp": "84.99",
+      "delivery_gbp": "0",
+      "delivery_working_days": 4,
+      "observed_at": "2026-10-22T20:07:00.227574+00:00"
+    },
+    {
+      "sku": "B093S1H4G2",
+      "title": "Montech AIR 100 ARGB, Micro-ATX, Tempered Glass - schwarz",
+      "url": "https://www.amazon.co.uk/dp/B093S1H4G2",
+      "item_gbp": "41.99",
+      "delivery_gbp": "0",
+      "delivery_working_days": 5,
+      "observed_at": "2026-10-22T19:55:47.004752+00:00"
+    }
+  ],
+  "landed_hardware_gbp": "683.69",
+  "economics": {
+    "price": "993.46",
+    "floor": "993.46",
+    "net": "993.46",
+    "charges": {
+      "payment_rate": "31.30",
+      "warranty_rate": "49.68",
+      "returns_rate": "19.87"
+    },
+    "true_cost": "894.11",
+    "contribution": "99.35"
+  },
+  "cost_assumptions": {
+    "build_labour": "0",
+    "packaging": "6",
+    "outbound_delivery": "20",
+    "insurance": "15",
+    "payment_fixed": "0.20",
+    "expected_failure_cost": "0",
+    "allocated_overhead": "68.37",
+    "other_variable_costs": "0"
+  },
+  "minimum_end_to_end_working_days": 7,
+  "blocked_by": [
+    "OS licence procurement and resale rights missing; hardware floor excludes licence",
+    "Connectivity requirement not yet evidenced; no WiFi included in basket",
+    "Exact engineering and shipped BIOS/update plan pending",
+    "Measured workload acceptance pending",
+    "Qualified exact recent sold complete-PC cohort pending",
+    "Five-day Standard deadline not met",
+    "Exact specification and price owner approval pending"
+  ],
+  "excluded_offer": {
+    "asin": "B0C39YS8DD",
+    "reason": "Amazon Resale used condition; must not join all-new basket"
+  },
+  "bundled_cooler": "Boxed 8500G Wraith Stealth included CPU cost; verify exact supplied SKU",
+  "floor_check": "Production Decimal economics passes floor; one penny below fails"
+}

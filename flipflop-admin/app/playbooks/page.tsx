@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import Link from "next/link";
 import {
   BookOpen, Plus, CheckCircle, XCircle, Clock, ChevronRight,
   TrendingUp, Zap, Target, Search, AlertTriangle, RefreshCw,
@@ -59,6 +60,8 @@ interface PlaybookFormData {
   target_margin: string;
   flip_structure: string;
   profit_notes: string;
+  software_package_ids: string;
+  software_rationale: string;
 }
 
 const BLANK_FORM: PlaybookFormData = {
@@ -68,6 +71,7 @@ const BLANK_FORM: PlaybookFormData = {
   upgrade_required: "", upgrade_optional: "",
   target_profit: "100", target_margin: "40",
   flip_structure: "buy_upgrade_sell", profit_notes: "",
+  software_package_ids: "", software_rationale: "",
 };
 
 function formToPlaybook(f: PlaybookFormData): Record<string, unknown> {
@@ -105,6 +109,10 @@ function formToPlaybook(f: PlaybookFormData): Record<string, unknown> {
       flip_structure: f.flip_structure,
       notes: f.profit_notes.trim() || null,
     },
+    software_profile: {
+      recommended_package_ids: f.software_package_ids.split("\n").map(id => id.trim()).filter(Boolean),
+      rationale: f.software_rationale.trim(),
+    },
   };
 }
 
@@ -113,6 +121,7 @@ function playbookToForm(pb: Playbook): PlaybookFormData {
   const ss = pb.search_strategy || {};
   const us = pb.upgrade_strategy || {};
   const ps = pb.profit_strategy || {};
+  const sw = pb.software_profile || {};
   return {
     name: pb.name,
     description: pb.description || "",
@@ -131,6 +140,8 @@ function playbookToForm(pb: Playbook): PlaybookFormData {
     target_margin: String(ps.target_margin_pct || 40),
     flip_structure: ps.flip_structure || "buy_upgrade_sell",
     profit_notes: ps.notes || "",
+    software_package_ids: (sw.recommended_package_ids || []).join("\n"),
+    software_rationale: sw.rationale || "",
   };
 }
 
@@ -317,6 +328,26 @@ function PlaybookFormModal({
             </div>
           </section>
 
+          {/* Software */}
+          <section>
+            <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">Getting Started Software</h3>
+            <p className="text-xs text-slate-400 mb-3">Choose package IDs from the reviewed software catalogue. These are free pre-install options; customers can change the selection before checkout.</p>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Recommended package IDs (one per line)</label>
+                <textarea value={form.software_package_ids} onChange={e => set("software_package_ids", e.target.value)} rows={5}
+                  placeholder="VideoLAN.VLC&#10;7zip.7zip"
+                  className="w-full bg-[#111c2e] border border-[#1e2d45] rounded-lg px-3 py-2 text-xs font-mono text-slate-100 placeholder:text-slate-600 focus:border-[#00dc82]/50 focus:outline-none resize-y" />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Why these suit this segment</label>
+                <textarea value={form.software_rationale} onChange={e => set("software_rationale", e.target.value)} rows={5}
+                  placeholder="Explain the use-case fit; avoid promising compatibility without verification."
+                  className="w-full bg-[#111c2e] border border-[#1e2d45] rounded-lg px-3 py-2 text-sm text-slate-100 placeholder:text-slate-600 focus:border-[#00dc82]/50 focus:outline-none resize-y" />
+              </div>
+            </div>
+          </section>
+
         </div>
         <div className="sticky bottom-0 bg-[#0d1726] border-t border-[#1e2d45] px-6 py-4 flex justify-end gap-3">
           <Button variant="ghost" onClick={onClose} className="text-slate-400">Cancel</Button>
@@ -341,6 +372,9 @@ function ProposalCard({
 }) {
   const [expanded, setExpanded] = useState(false);
   const actionCfg = PROPOSAL_ACTION_CONFIG[proposal.action];
+  const generated = proposal.demand_signals?.source === "catalogue_playbook_service_v1";
+  const availabilityReplacements = Array.isArray(proposal.proposed_data?.availability_replacements)
+    ? proposal.proposed_data.availability_replacements as Array<Record<string, unknown>> : [];
 
   return (
     <div className="bg-[#0d1726] border border-[#1e2d45] rounded-xl p-4">
@@ -364,7 +398,19 @@ function ProposalCard({
           {proposal.reason && (
             <p className="text-sm text-slate-400 leading-snug">{proposal.reason}</p>
           )}
-          {Object.keys(proposal.demand_signals || {}).length > 0 && (
+          {generated && availabilityReplacements.length > 0 && (
+            <div className="mt-3 rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2">
+              <p className="text-xs font-semibold text-amber-300">Availability replacements found</p>
+              <ul className="mt-1 space-y-1">
+                {availabilityReplacements.map((replacement, index) => (
+                  <li key={`${String(replacement.role)}-${index}`} className="text-xs text-slate-300">
+                    <span className="capitalize">{String(replacement.role || "component")}</span>: {String(replacement.from_title || "Previous part")} → {String(replacement.to_title || "Replacement candidate")}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {!generated && Object.keys(proposal.demand_signals || {}).length > 0 && (
             <div className="flex gap-2 mt-2 flex-wrap">
               {Object.entries(proposal.demand_signals).map(([k, v]) => (
                 <span key={k} className="text-xs bg-[#111c2e] border border-[#1e2d45] text-slate-400 px-2 py-0.5 rounded-full">
@@ -376,7 +422,8 @@ function ProposalCard({
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
           <span className="text-xs text-slate-600">{relTime(proposal.proposed_at)}</span>
-          {proposal.status === "pending" && (
+          {proposal.status === "pending" && generated && <Link href={`/playbooks/commercial?cell=${encodeURIComponent(String(proposal.proposed_data.cell_id))}`} className="rounded border border-emerald-500/30 px-3 py-1 text-xs text-emerald-400">Review {String(proposal.proposed_data.name)} · {String(proposal.proposed_data.tier)}</Link>}
+          {proposal.status === "pending" && !generated && (
             <>
               <button onClick={() => onApprove(proposal.id)}
                 className="flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs px-2.5 py-1 rounded-lg hover:bg-emerald-500/20 transition-colors">
@@ -396,7 +443,7 @@ function ProposalCard({
         </div>
       </div>
 
-      {proposal.action !== "RETIRE" && Object.keys(proposal.proposed_data || {}).length > 0 && (
+      {!generated && proposal.action !== "RETIRE" && Object.keys(proposal.proposed_data || {}).length > 0 && (
         <button onClick={() => setExpanded(e => !e)}
           className="flex items-center gap-1 text-xs text-slate-600 hover:text-slate-400 mt-2 transition-colors">
           {expanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
@@ -833,6 +880,7 @@ export default function PlaybooksPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <Link href="/playbooks/commercial" className="rounded border border-cyan-700 px-3 py-2 text-sm text-cyan-300">Commercial readiness</Link>
           <button onClick={load}
             className="p-2 text-slate-500 hover:text-slate-200 hover:bg-white/5 rounded-lg transition-colors">
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />

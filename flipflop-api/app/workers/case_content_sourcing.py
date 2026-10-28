@@ -1,4 +1,4 @@
-"""Resumable full-queue photo and YouTube sourcing for the frozen case campaign."""
+"""Resumable photo and YouTube sourcing for Amazon's top 100 cases and the frozen campaign."""
 from __future__ import annotations
 
 import asyncio
@@ -11,7 +11,7 @@ from urllib.parse import parse_qs, quote_plus, unquote, urljoin, urlparse
 import httpx
 import structlog
 from bs4 import BeautifulSoup
-from sqlalchemy import or_, select
+from sqlalchemy import and_, or_, select
 
 from app.config import get_settings
 from app.database import AsyncSessionLocal
@@ -217,9 +217,16 @@ async def run_case_content_sourcing() -> dict:
     async with AsyncSessionLocal() as db:
         rows = (await db.execute(
             select(Case.id).where(
-                Case.priority_3d_rank.is_not(None),
+                or_(
+                    Case.priority_3d_rank.is_not(None),
+                    and_(
+                        Case.source_site == "Amazon",
+                        Case.bestseller_rank.is_not(None),
+                        Case.bestseller_rank <= 100,
+                    ),
+                ),
                 or_(Case.name.is_(None), ~Case.name.ilike("%raspberry pi%")),
-            ).order_by(Case.priority_3d_rank).limit(settings.case_content_sourcing_batch_size)
+            ).order_by(Case.priority_3d_rank.asc().nullslast(), Case.bestseller_rank.asc().nullslast()).limit(settings.case_content_sourcing_batch_size)
         )).scalars().all()
     semaphore = asyncio.Semaphore(max(1, settings.case_content_sourcing_concurrency))
     results = await asyncio.gather(*(_process_case(case_id, semaphore) for case_id in rows), return_exceptions=True)

@@ -1,22 +1,13 @@
-"""AI-generated tradeoff analysis for a multi-build comparison.
-
-Reuses the same AsyncAnthropic client pattern as _claude_chat
-(app/services/ai_service.py) rather than the sync `Anthropic` client used in
-gem_service.py — this runs inside an async FastAPI endpoint, where a
-blocking sync HTTP call would stall the event loop. Uses a stronger model
-than ai_service.py's haiku-tier chat: comparison analysis is a lower-
-frequency, higher-stakes-per-call feature (helping a customer choose between
-two builds they might spend real money on) than casual chat.
-"""
+"""AI-generated tradeoff analysis for multi-build comparisons."""
 
 import structlog
-from app.config import get_settings
+from app.services.model_selection_service import model_selection_service
 from app.schemas.build_comparison import ComparedBuildOut
 
 log = structlog.get_logger(__name__)
 
 FALLBACK_MESSAGE = (
-    "AI analysis is unavailable right now (ANTHROPIC_API_KEY not configured). "
+    "AI analysis is unavailable right now (configured model tiers are unavailable). "
     "The comparison table above is still accurate."
 )
 
@@ -42,21 +33,12 @@ def _build_prompt(builds: list[ComparedBuildOut]) -> str:
 
 
 async def generate_comparison_analysis(builds: list[ComparedBuildOut]) -> str:
-    settings = get_settings()
-    if not settings.anthropic_api_key:
-        return FALLBACK_MESSAGE
-
     try:
-        import anthropic
-
-        client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
-        resp = await client.messages.create(
-            model="claude-sonnet-5",
-            max_tokens=600,
-            messages=[{"role": "user", "content": _build_prompt(builds)}],
+        result = await model_selection_service.complete(
+            task="Build comparison analysis",
+            messages=[{"role": "user", "content": _build_prompt(builds)}], max_tokens=600,
         )
-        text = resp.content[0].text if resp.content else None
-        return text.strip() if text else FALLBACK_MESSAGE
+        return result.text.strip() if result.text else FALLBACK_MESSAGE
     except Exception as e:
         log.warning("comparison_analysis.claude_call_failed", error=str(e))
         return FALLBACK_MESSAGE

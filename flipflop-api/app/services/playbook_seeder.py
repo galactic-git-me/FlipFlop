@@ -13,6 +13,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.playbook import Playbook, PlaybookStatus
+from app.services.software_catalogue import default_software_profile_for_playbook
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Live benchmark fallbacks — calibrated June 2026 UK eBay sold prices.
@@ -978,6 +979,7 @@ def _curated_seed_data() -> list[dict]:
     for source_name, curated_name in _CURATED_RENAMES.items():
         data = dict(by_name[source_name])
         data["name"] = curated_name
+        data["software_profile"] = default_software_profile_for_playbook(curated_name)
         if curated_name == "Student Hybrid":
             data.update({
                 "target_customer": "Students who need one affordable machine for coursework and gaming",
@@ -1046,7 +1048,9 @@ async def refresh_playbook_economics_from_benchmarks() -> int:
         for pb in playbooks:
             economics = compute_live_economics(pb.name, benchmarks)
             if economics:
-                pb.pricing_model = economics.get("pricing_model", pb.pricing_model)
+                pb.pricing_model = {**(pb.pricing_model or {}), **(economics.get("pricing_model") or {}),
+                    **{key:value for key,value in (pb.pricing_model or {}).items()
+                       if key in {"commercial_cells", "commercial_configurations", "managed_offers"}}}
                 pb.profit_model  = economics.get("profit_model",  pb.profit_model)
                 updated += 1
         await db.commit()
@@ -1138,8 +1142,14 @@ async def seed_playbooks(db: AsyncSession) -> int:
         else:
             # Refresh live pricing even for existing records
             if economics:
-                existing.pricing_model = economics.get("pricing_model", existing.pricing_model)
+                existing.pricing_model = {**(existing.pricing_model or {}), **(economics.get("pricing_model") or {}),
+                    **{key:value for key,value in (existing.pricing_model or {}).items()
+                       if key in {"commercial_cells", "commercial_configurations", "managed_offers"}}}
                 existing.profit_model  = economics.get("profit_model",  existing.profit_model)
+            # Seed a useful starter recommendation once, without overwriting
+            # a profile already reviewed or authored by the administrator.
+            if not existing.software_profile:
+                existing.software_profile = default_software_profile_for_playbook(existing.name)
 
     await db.commit()
     return created

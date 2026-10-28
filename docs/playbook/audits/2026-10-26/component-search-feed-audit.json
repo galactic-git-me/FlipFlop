@@ -1,0 +1,4954 @@
+{
+  "feed_terms": 192,
+  "top90_missing": [
+    {
+      "asin": "B0BBJDS62N",
+      "product": "AMD Ryzensets 5 7600X Processor (integrated radeon graphics, 6 cores/12 threads, 105W TDP, AM5 socket, 38MB cache, up to 5.3",
+      "type": "CPU"
+    },
+    {
+      "asin": "B0BW66YHB5",
+      "product": "Gigabyte B550M K Motherboard - Supports AMD Ryzen 5000 Series AM4 CPUs, up to 4733MHz DDR4 (OC), 2xPCIe 3.0 M.2, GbE LAN, USB",
+      "type": "Motherboard"
+    },
+    {
+      "asin": "B01N0TQPQB",
+      "product": "Kingston A400 SSD Internal Solid State Drive 2.5\" SATA Rev 3.0, 480GB - SA400S37/480G",
+      "type": "SATA SSD"
+    },
+    {
+      "asin": "B0DF7G8JFP",
+      "product": "Corsair NAUTILUS 360 RS ARGB Liquid CPU Cooler \u2013 360mm AIO \u2013 Low-Noise \u2013 Direct Motherboard Connection \u2013 Daisy-Chain \u2013 Intel",
+      "type": "CPU cooler"
+    },
+    {
+      "asin": "B0D2MK6NML",
+      "product": "NZXT H5 Flow - Compact ATX Mid-Tower PC Case - Black | Compact mid-tower with 2 included 120mm fans, 360mm front radiator sup",
+      "type": "Case"
+    }
+  ],
+  "feed": [
+    {
+      "id": "catalogue-component-9d5ac9af4ce9ea0d3fd5",
+      "label": "CORSAIR VENGEANCE DDR5 RAM 96GB (2x48GB) Up to 5600MHz CL40 Intel XMP iCUE Compatible Computer Memory - Black (CMK96GX5M2B5600C40)",
+      "query": "CORSAIR VENGEANCE DDR5 RAM 96GB (2x48GB) Up to 5600MHz CL40 Intel XMP iCUE Compatible Computer Memory - Black (CMK96GX5M2B5600C40)",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:ram",
+        "CPK:767ee631b021c776",
+        "ASIN:B0BVN1FLKN"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "170083",
+      "priority": 0,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-57c9297d03cfb4548df3",
+      "label": "Crucial Pro DDR5 RAM 128GB Kit (2x64GB) 5600MHz",
+      "query": "Crucial Pro DDR5 RAM 128GB Kit (2x64GB) 5600MHz",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:ram",
+        "ASIN:B0DSR5P84D"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "170083",
+      "priority": 0,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-3a90c34e6cfa1fb2cf94",
+      "label": "Fractal Design Define 7 XL Black Brushed Aluminum/Steel E-ATX Silent Modular Full Tower Computer Case",
+      "query": "Fractal Design Define 7 XL Black Brushed Aluminum/Steel E-ATX Silent Modular Full Tower Computer Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:1011004eb3fe045c",
+        "ASIN:B08146GB6Y"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 0,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-9d4763b1117c0fc0dd3f",
+      "label": "amd amd ryzen 5 5600",
+      "query": "amd amd ryzen 5 5600",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "ASIN:B09VCHR1VH"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-94a42489f84a6b2920e5",
+      "label": "amd amd ryzen 9 9950x",
+      "query": "amd amd ryzen 9 9950x",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "CPK:bb4c41572659d76a",
+        "ASIN:B0D6NNRBGP"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-e0b4a4658a8b1aed2dde",
+      "label": "amd aqua elite 360 v3",
+      "query": "amd aqua elite 360 v3",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cooling",
+        "CPK:7b1d1bebcbeaac4c",
+        "ASIN:B0DWW3RQC1"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "131486",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-079e49673ef5abfc2c97",
+      "label": "amd assassin x 120r se",
+      "query": "amd assassin x 120r se",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cooling",
+        "CPK:d4b7749cfeead415",
+        "ASIN:B0DWSQ9VX2"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "131486",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-dc6e0bd855336f0a90a4",
+      "label": "amd ryzen 5 9600x",
+      "query": "amd ryzen 5 9600x",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "CPK:b0fffabf7c90c1ea",
+        "ASIN:B0D6NN6TM7"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-7fe36812770c214e6191",
+      "label": "amd ryzen 7 7800x3d",
+      "query": "amd ryzen 7 7800x3d",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "CPK:f6b1c2b22900496e",
+        "ASIN:B0BTZB7F88"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-1ae6aa3080d37e6b0ee6",
+      "label": "amd ryzen 7 9700x",
+      "query": "amd ryzen 7 9700x",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "CPK:31acab48551f360d",
+        "ASIN:B0D6NMDNNX"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-4b972ea8300fb65ff095",
+      "label": "amd ryzen 7 9850x3d",
+      "query": "amd ryzen 7 9850x3d",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "CPK:16275be9d5dfb62e",
+        "ASIN:B0G8JMLXNQ"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-183ea07c72c713607517",
+      "label": "amd threadripper pro 7975wx",
+      "query": "amd threadripper pro 7975wx",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "ASIN:B0CK2TZWZX"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-a41b0af1134565159d13",
+      "label": "APNX Creator C1 ChromaFlair Mid Tower Case",
+      "query": "APNX Creator C1 ChromaFlair Mid Tower Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:103cff44da82024b"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-7fd9312972c1aa6df6ca",
+      "label": "asrock b850m steel legend wifi",
+      "query": "asrock b850m steel legend wifi",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "CPK:c4adf4668269fdf4"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-1fc0c481de4c8766db70",
+      "label": "ASUS Dual GeForce RTX 5060 Ti 16GB GDDR7 OC Edition (PCIe 5.0",
+      "query": "ASUS Dual GeForce RTX 5060 Ti 16GB GDDR7 OC Edition (PCIe 5.0",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:b4f4cc0a70d92840",
+        "ASIN:B0F4DX2GLY"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-ce62fc4a4f7ddda913fb",
+      "label": "Asus GeForce RTX 5050 Dual OC 8GB GDDR6 PCI-Express Graphics Card",
+      "query": "Asus GeForce RTX 5050 Dual OC 8GB GDDR6 PCI-Express Graphics Card",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:4ad08851de0737ac"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-dfca5cbefa28dd6ff396",
+      "label": "asus prime x870 p",
+      "query": "asus prime x870 p",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "CPK:5616e240604b68a2",
+        "ASIN:B09KBJQPV1"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-cc94d7001f40cb08629d",
+      "label": "asus pro ws wrx90e sage se",
+      "query": "asus pro ws wrx90e sage se",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "CPK:d69126a18026e46a"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-7d11d6dbf5340bf9cd4a",
+      "label": "asus proart x870e creator wifi am5",
+      "query": "asus proart x870e creator wifi am5",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "CPK:831c868dfb9d8c28",
+        "ASIN:B09KB8GGN1"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-9c67b8c051e692ee1752",
+      "label": "Asus Radeon RX 9070 Prime OC 16GB GDDR6 PCI-Express Graphics Card",
+      "query": "Asus Radeon RX 9070 Prime OC 16GB GDDR6 PCI-Express Graphics Card",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:28dd13b8f40dc7bb"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-3da31c07e774f437f4c5",
+      "label": "Asus Radeon RX 9070 XT Prime OC 16GB GDDR6 PCI-Express Graphics Card",
+      "query": "Asus Radeon RX 9070 XT Prime OC 16GB GDDR6 PCI-Express Graphics Card",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-22d4195381406493b307",
+      "label": "Asus Radeon Turbo AI Pro R9700 32GB GDDR6 PCI-Express Workstation Graphics Card",
+      "query": "Asus Radeon Turbo AI Pro R9700 32GB GDDR6 PCI-Express Workstation Graphics Card",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:eeded7faa1d6b2dd"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-ed36e52fbded1efaaa41",
+      "label": "asus rog crosshair x870e hero",
+      "query": "asus rog crosshair x870e hero",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "CPK:88107c10863823ec",
+        "ASIN:B0DDZSP2BG"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-82892bf44890c337073e",
+      "label": "asus tuf gaming z890 plus wifi",
+      "query": "asus tuf gaming z890 plus wifi",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "CPK:669eced70a3f8a39",
+        "ASIN:B0DJDFKV2J"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-697ce00a75bba18fbc99",
+      "label": "be quiet! system power 11 750w",
+      "query": "be quiet! system power 11 750w",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:psu",
+        "CPK:ca12f42f8b926f56",
+        "ASIN:B0FNDFHLQX"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42017",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-12e5dd1be7e7b8f4cc82",
+      "label": "be-quiet pure power 13 m",
+      "query": "be-quiet pure power 13 m",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:psu",
+        "CPK:ed2a43bebd6f6202",
+        "ASIN:B0FNDGQ7CK"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42017",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-8ae39b69080d75b3f7dd",
+      "label": "CORSAIR DOMINATOR TITANIUM RGB DDR5 64GB (2x32GB) DDR5 Up to 6000MHz CL30 AMD EXPO Intel XMP iCUE Compatible Computer Memory",
+      "query": "CORSAIR DOMINATOR TITANIUM RGB DDR5 64GB (2x32GB) DDR5 Up to 6000MHz CL30 AMD EXPO Intel XMP iCUE Compatible Computer Memory",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:ram",
+        "CPK:d4cdb064a1b29b12",
+        "ASIN:B0CHSGDFN4"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "170083",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-fc4c2502ca9b4eaa206d",
+      "label": "CORSAIR VENGEANCE RGB DDR5 32GB (2x16GB) DDR5 Up to 6000MHz CL30 AMD EXPO Intel XMP iCUE Compatible Computer Memory \u2013 Grey (C",
+      "query": "CORSAIR VENGEANCE RGB DDR5 32GB (2x16GB) DDR5 Up to 6000MHz CL30 AMD EXPO Intel XMP iCUE Compatible Computer Memory \u2013 Grey (C",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:ram",
+        "ASIN:B0BPTKD797"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "170083",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-1af75f60430fb056df81",
+      "label": "CORSAIR VENGEANCE RGB PRO DDR4 RAM 32GB (2x16GB) Up to 3200MHz CL16 Intel XMP AMD EXPO Computer Memory \u2013 Black (CMW32GX4M2E32",
+      "query": "CORSAIR VENGEANCE RGB PRO DDR4 RAM 32GB (2x16GB) Up to 3200MHz CL16 Intel XMP AMD EXPO Computer Memory \u2013 Black (CMW32GX4M2E32",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:ram",
+        "ASIN:B081XWLQKS"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "170083",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-cc868dc8a628ce45abf5",
+      "label": "Crucial P310 2TB SSD M.2 2280 NVMe PCIe Gen4",
+      "query": "Crucial P310 2TB SSD M.2 2280 NVMe PCIe Gen4",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "ASIN:B0DC8RVRBZ"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-5367fa1c95e7e192d929",
+      "label": "fsp hydro ptm pro",
+      "query": "fsp hydro ptm pro",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:psu",
+        "CPK:0d0c19a960f73c8a"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42017",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-ee4033fbe1dee5c7b2ef",
+      "label": "Gainward GeForce RTX 5070 Ti Phoenix-S 16GB GDDR7 PCI-Express Graphics Card",
+      "query": "Gainward GeForce RTX 5070 Ti Phoenix-S 16GB GDDR7 PCI-Express Graphics Card",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:26da8494aaccec45"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-8ea9460455b0f4dd9b38",
+      "label": "gigabyte a520m k v2",
+      "query": "gigabyte a520m k v2",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "CPK:4298fbaeeb16e08c",
+        "ASIN:B0BXFBN121"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-3656bfa1651b332ba335",
+      "label": "Gigabyte Radeon RX 9060 XT GAMING OC 16G Graphics Card - 16GB GDDR6",
+      "query": "Gigabyte Radeon RX 9060 XT GAMING OC 16G Graphics Card - 16GB GDDR6",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:dc47c23f48eb171f",
+        "ASIN:B0F7HTR8DQ"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-f2264b401d5db6ed019c",
+      "label": "intel core ultra 5 processor 250k plus",
+      "query": "intel core ultra 5 processor 250k plus",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "CPK:594fec5d4f53eba7",
+        "ASIN:B0GMKXVVJQ"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-ae6128c1f641233290c4",
+      "label": "intel core ultra 7 processing unit 270k plus",
+      "query": "intel core ultra 7 processing unit 270k plus",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "CPK:3ad3380547f171c8",
+        "ASIN:B0GMLJCBBM"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-460afefc411f5de42bd6",
+      "label": "Kingston NV3 NVMe PCIe 4.0 Internal SSD 1TB M.2 2280-SNV3S/1000G",
+      "query": "Kingston NV3 NVMe PCIe 4.0 Internal SSD 1TB M.2 2280-SNV3S/1000G",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "CPK:171817f97851df4f",
+        "ASIN:B0DBR3DZWG"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-bd77bf4bae5abc38203f",
+      "label": "kolink power supply",
+      "query": "kolink power supply",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:psu"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42017",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-e102abb74935755fe13b",
+      "label": "Lian Li Lancool 207 ATX Mid Tower Gaming PC Case",
+      "query": "Lian Li Lancool 207 ATX Mid Tower Gaming PC Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:48884ff52c12e319",
+        "ASIN:B0DJDM7V1R"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-e14f4cf3879bcec13149",
+      "label": "MSI GeForce RTX 5080 16G VENTUS 3X OC Graphics Card - RTX 5080 GPU",
+      "query": "MSI GeForce RTX 5080 16G VENTUS 3X OC Graphics Card - RTX 5080 GPU",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:5184f43aa9c92747",
+        "ASIN:B0DT6NZ9V9"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-36745a5ae7f5500e592a",
+      "label": "noctua nh d15 g2",
+      "query": "noctua nh d15 g2",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cooling",
+        "CPK:e7d740ebfd267e76",
+        "ASIN:B0FXGWKHND"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "131486",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-22b35092c41925440bfe",
+      "label": "noctua nh u14s tr5 sp6",
+      "query": "noctua nh u14s tr5 sp6",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cooling",
+        "CPK:a0bab0600f3dab48"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "131486",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-9dac609eb9e6ded999ab",
+      "label": "PNY NVIDIA RTX 6000 ADA",
+      "query": "PNY NVIDIA RTX 6000 ADA",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:ef464a08d963fa09",
+        "ASIN:B0BNYR4VX8"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-080f6998020783f85492",
+      "label": "Samsung 990 PRO NVMe M.2 SSD",
+      "query": "Samsung 990 PRO NVMe M.2 SSD",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "CPK:488ce84a5a4c053b",
+        "ASIN:B0CBYZ6DD1"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-8027d133b5927d4cc9b3",
+      "label": "Silicon Power RDIMM 32GB (1x32GB) DDR5 C40 4800MHz Single Channel Kit",
+      "query": "Silicon Power RDIMM 32GB (1x32GB) DDR5 C40 4800MHz Single Channel Kit",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:ram"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "170083",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-c5a5401322e908a1c9ce",
+      "label": "Sparkle Intel Arc B580 Titan OC 12GB GDDR6",
+      "query": "Sparkle Intel Arc B580 Titan OC 12GB GDDR6",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:110d582008617d28",
+        "ASIN:B0DNMH4KQM"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-375e596ac2fa2e7ab49c",
+      "label": "thermalright aqua elite 240 v3",
+      "query": "thermalright aqua elite 240 v3",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cooling",
+        "CPK:1220f30e6243bc6e",
+        "ASIN:B0CCP1T3W7"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "131486",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-5a9a9963adeb513f2aa7",
+      "label": "thermalright peerless assassin 120 se",
+      "query": "thermalright peerless assassin 120 se",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cooling",
+        "CPK:d0a075dce9d7f074",
+        "ASIN:B0B4G8QKZP"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "131486",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-bb420ec87cfcb43d1c76",
+      "label": "WD_BLACK SN850P 8TB PS5 SSD",
+      "query": "WD_BLACK SN850P 8TB PS5 SSD",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "CPK:ee7bfce48d79935f",
+        "ASIN:B0DBQP4F3Z"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-bab697e8035716d34b28",
+      "label": "Zotac GeForce RTX 5090 Solid OC 32GB GDDR7 PCI-Express Graphics Card",
+      "query": "Zotac GeForce RTX 5090 Solid OC 32GB GDDR7 PCI-Express Graphics Card",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:c50fa35a4e6fa20b"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 1,
+      "intervalMinutes": 180
+    },
+    {
+      "id": "catalogue-component-ce23326d6d4c15821ce5",
+      "label": "Acer Predator GM7 1TB SSD",
+      "query": "Acer Predator GM7 1TB SSD",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "ASIN:B0C3ZJ8T6F"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-565756dc0a92aaccf74f",
+      "label": "amd ryzen 5 9600x",
+      "query": "amd ryzen 5 9600x",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "ASIN:B0DPXP4CKL"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-6cb385e1d96f9b4d30b2",
+      "label": "amd ryzen 5600x",
+      "query": "amd ryzen 5600x",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "CPK:3f9249eb57cbca95",
+        "ASIN:B08166SLDF"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-eaf97fc48869c9e5077e",
+      "label": "amd ryzen 7 5800x3d",
+      "query": "amd ryzen 7 5800x3d",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "CPK:47ef8d83abc12992",
+        "ASIN:B0H41D4KFT"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-3308ed76bd4b7ac5d055",
+      "label": "amd ryzen 7 7800x3d",
+      "query": "amd ryzen 7 7800x3d",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "CPK:f6b1c2b22900496e",
+        "ASIN:B0CTD76W9C"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-a389a591b6cae0dfedf1",
+      "label": "amd ryzen 7 9800x",
+      "query": "amd ryzen 7 9800x",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "CPK:45f34c6e0df05c43",
+        "ASIN:B0DKFMSMYK"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-c9328efc4a653c2bd9b9",
+      "label": "amd ryzen 9 9950x3d",
+      "query": "amd ryzen 9 9950x3d",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "CPK:697b6ce5c65f97d7",
+        "ASIN:B0DVZSG8D5"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-ae50bcaaccd6e4d57cdd",
+      "label": "amd wraith stealth",
+      "query": "amd wraith stealth",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cooling",
+        "CPK:cff19a78a113f113",
+        "ASIN:B07MFMFL7R"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "131486",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-eb908947a11b5c7823a7",
+      "label": "amiibo b550m pro vdh wifi",
+      "query": "amiibo b550m pro vdh wifi",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "ASIN:B08BCR4ZRS"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-c506b6d60b05e0a4ef36",
+      "label": "ANSAITE ATX PC Case - Pre-Installed 8 PWM ARGB Fan",
+      "query": "ANSAITE ATX PC Case - Pre-Installed 8 PWM ARGB Fan",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "ASIN:B0GLFVFLKR"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-915c1c8b275f544ff9f9",
+      "label": "arctic freezer 36 120mm",
+      "query": "arctic freezer 36 120mm",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cooling",
+        "CPK:6e82f9fae24dfc7f",
+        "ASIN:B09VH14935"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "131486",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-5d3eaa8f8deb5604e8f8",
+      "label": "arctic liquid freezer iii pro 360 aio",
+      "query": "arctic liquid freezer iii pro 360 aio",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cooling",
+        "CPK:7a5f9c1875b001cc",
+        "ASIN:B0DLWGG85P"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "131486",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-e7cd88c63cdb3e4aef28",
+      "label": "arctic liquid freezer iii pro 360 argb aio",
+      "query": "arctic liquid freezer iii pro 360 argb aio",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cooling",
+        "CPK:c270427a0539baa8",
+        "ASIN:B0DLWFCVSD"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "131486",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-7463f87480200549041f",
+      "label": "ASUS Dual GeForce RTX 5060 8GB GDDR7 OC Edition (PCIe 5.0",
+      "query": "ASUS Dual GeForce RTX 5060 8GB GDDR7 OC Edition (PCIe 5.0",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:3354315bf306b3fa",
+        "ASIN:B0F7HZ9QSZ"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-ec13248a29e89e66eb83",
+      "label": "ASUS GeForce RTX 3060 12G DUAL V2 OC Gaming Graphics Card - 1867MHz Boost Clock",
+      "query": "ASUS GeForce RTX 3060 12G DUAL V2 OC Gaming Graphics Card - 1867MHz Boost Clock",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:52e5552e43f3812e",
+        "ASIN:B096658ZWP"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-ae0074f7192a68baac29",
+      "label": "Asus GeForce RTX 5060 Ti Dual OC 16GB GDDR7 PCI-Express Graphics Card",
+      "query": "Asus GeForce RTX 5060 Ti Dual OC 16GB GDDR7 PCI-Express Graphics Card",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:71e140bf67b3c3b6"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-2e8aed5e8e105cb474bd",
+      "label": "ASUS NVIDIA GeForce RTX 5060 Ti DUAL OC 16GB Blackwell Graphics Card",
+      "query": "ASUS NVIDIA GeForce RTX 5060 Ti DUAL OC 16GB Blackwell Graphics Card",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:247892c4a1c1b716",
+        "ASIN:B0F4DVKSZ4"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-a2b792e69d5ce8a6f5e8",
+      "label": "ASUS Prime GeForce RTX 5080 EVO 16GB GDDR7 OC Edition Gaming Graphics Card (Nvidia GeForce RTX5080",
+      "query": "ASUS Prime GeForce RTX 5080 EVO 16GB GDDR7 OC Edition Gaming Graphics Card (Nvidia GeForce RTX5080",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:3f18905aa2a0777a",
+        "ASIN:B09BD59F4T"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-657aa6de1ad05282af13",
+      "label": "ASUS Prime GeForce RTX\u2122 5070 GDDR7 12GB OC Edition \u2013 Graphics Card (PCIe 5.0",
+      "query": "ASUS Prime GeForce RTX\u2122 5070 GDDR7 12GB OC Edition \u2013 Graphics Card (PCIe 5.0",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:6208f4777da94c2a",
+        "ASIN:B0DYPFY7JG"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-814940778a376e8a92cb",
+      "label": "asus proart z890 creator wifi",
+      "query": "asus proart z890 creator wifi",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "CPK:42a833d1628733de",
+        "ASIN:B0DL75T61Q"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-e876edb7a0454327fe5f",
+      "label": "asus strix 1200w platinum",
+      "query": "asus strix 1200w platinum",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:psu",
+        "CPK:ee6e2dc2c93e2033",
+        "ASIN:B09T9P4MSL"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42017",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-9c53752f07eff1609e16",
+      "label": "asus strix b850 a gaming wifi",
+      "query": "asus strix b850 a gaming wifi",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "CPK:621f3ab432f8a463",
+        "ASIN:B0DP5FBV4P"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-6cbdce142e0673491a1a",
+      "label": "asus tuf gaming b550 plus wi fi",
+      "query": "asus tuf gaming b550 plus wi fi",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "CPK:3c28a1fb58b961af",
+        "ASIN:B09LVQYGXH"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-9bdbd8fa3de0fe3cbe08",
+      "label": "asus tuf gaming b850 plus wifi",
+      "query": "asus tuf gaming b850 plus wifi",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "CPK:2e31f3c1a1e3d0a6",
+        "ASIN:B0DP5DQPRC"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-d23763c46b9ab8bfe7af",
+      "label": "ASUS TUF Gaming GeForce RTX 5080 16GB GDDR7 OC Edition Gaming Graphics Card (PCIe 5.0",
+      "query": "ASUS TUF Gaming GeForce RTX 5080 16GB GDDR7 OC Edition Gaming Graphics Card (PCIe 5.0",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:0d33b1bce2052523",
+        "ASIN:B0DS65KD1C"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-af1c07e4df7fb17661f5",
+      "label": "asus tuf gaming x870 plus wifi",
+      "query": "asus tuf gaming x870 plus wifi",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "CPK:fdf3b68ee225fba5",
+        "ASIN:B0DGQ9C2TH"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-e5ce2614262eefce6459",
+      "label": "be quiet! Pure Base 501 PC Case",
+      "query": "be quiet! Pure Base 501 PC Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:41dba22ceeaa3dea",
+        "ASIN:B0DGXQL5T9"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-6931664b64b6f68a6860",
+      "label": "be_quiet pure_power_12_850w",
+      "query": "be_quiet pure_power_12_850w",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:psu",
+        "CPK:810bdb89c9f87588",
+        "ASIN:B0FZCPSC4D"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42017",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-5e46337ff550538f0113",
+      "label": "BIWIN Black Opal NV7400 1TB SSD",
+      "query": "BIWIN Black Opal NV7400 1TB SSD",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "CPK:2ac62f335bb15f6e",
+        "ASIN:B0DM1R7KHZ"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-7a0714d365af7b5c9e21",
+      "label": "CiT Academy Office PC Case Micro ATX",
+      "query": "CiT Academy Office PC Case Micro ATX",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:ce992da39fedd8db",
+        "ASIN:B0DX7MFQGY"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-65e98b3c5286e6c454cc",
+      "label": "CiT Bolt Gaming PC Case",
+      "query": "CiT Bolt Gaming PC Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:892f8178f2173ff7",
+        "ASIN:B0DWFR3SB8"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-52ddec8bf51ed3cc0bbf",
+      "label": "CiT F3 Curved Glass mATX Gaming PC Case - Panoramic Curved Front & Side Tempered Glass - 3x 120mm ARGB Fans Included - Daisy Chain Lighting - USB 3.0 + USB 2.0-240mm AIO Support",
+      "query": "CiT F3 Curved Glass mATX Gaming PC Case - Panoramic Curved Front & Side Tempered Glass - 3x 120mm ARGB Fans Included - Daisy Chain Lighting - USB 3.0 + USB 2.0-240mm AIO Support",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "ASIN:B0G59DF6FV"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-c031f477728caca1799e",
+      "label": "CiT F3 Gaming PC Case Micro ATX",
+      "query": "CiT F3 Gaming PC Case Micro ATX",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:8148a6a8dbe995cd",
+        "ASIN:B0FD3Z46GN"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-bc01fa1cfee839972c44",
+      "label": "CiT F3 Gaming PC Case \u2013 Micro-ATX Computer Case with Mesh Front & Tempered Glass Side Panels - 3 x 120mm ARGB Fans Included -",
+      "query": "CiT F3 Gaming PC Case \u2013 Micro-ATX Computer Case with Mesh Front & Tempered Glass Side Panels - 3 x 120mm ARGB Fans Included -",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:8148a6a8dbe995cd",
+        "ASIN:B0FD3V9Q6P"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-899c396f123a6b4826a7",
+      "label": "CiT Flash Gaming PC Case Micro ATX",
+      "query": "CiT Flash Gaming PC Case Micro ATX",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:d292656daf65a4e9",
+        "ASIN:B085FR4R5V"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-ec6528e53e5d1f96e260",
+      "label": "CiT Galaxy Gaming PC Case",
+      "query": "CiT Galaxy Gaming PC Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:d3153f8933d57b70",
+        "ASIN:B0CB1HPQDY"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-9fd14aaca23ed7f24675",
+      "label": "CiT Jet Stream Office PC Case ATX Mid Tower",
+      "query": "CiT Jet Stream Office PC Case ATX Mid Tower",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:ab7fa9db55f914d2",
+        "ASIN:B01BV8JU96"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-faed3c5746139bae4645",
+      "label": "CiT Level 5 Gaming PC Case",
+      "query": "CiT Level 5 Gaming PC Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:be7a5f9d792db832",
+        "ASIN:B0FCGBM7VY"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-9de20e862ece6e6d21e5",
+      "label": "CiT MTX-008B Mini-ITX Office PC Case with 300W Power Supply \u2013 Slim ODD Bay - 80mm Front Fan - 2 x USB 3.0",
+      "query": "CiT MTX-008B Mini-ITX Office PC Case with 300W Power Supply \u2013 Slim ODD Bay - 80mm Front Fan - 2 x USB 3.0",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "ASIN:B07L487Y8Z"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-6c737ca5a975d4557006",
+      "label": "coralium cx650 80plus brown",
+      "query": "coralium cx650 80plus brown",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:psu",
+        "ASIN:B0CJRXX5WT"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42017",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-56bfdea82704e038a3bc",
+      "label": "coralium rm1000x shift 2025",
+      "query": "coralium rm1000x shift 2025",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:psu",
+        "ASIN:B0FMYJ24Z8"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42017",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-c834377aff93502e980c",
+      "label": "CORSAIR 3500X LX-R RGB iCUE LINK Panoramic Mid-Tower PC Case \u2013 3x Pre-Installed LX120-R RGB Fans",
+      "query": "CORSAIR 3500X LX-R RGB iCUE LINK Panoramic Mid-Tower PC Case \u2013 3x Pre-Installed LX120-R RGB Fans",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:8a0a6e5dff2fa2e9",
+        "ASIN:B0FJ2VPQRP"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-be0005006145f3ee59af",
+      "label": "CORSAIR 3500X Mid-Tower ATX PC Case \u2013 Panoramic Tempered Glass \u2013 Reverse Connection Motherboard Compatible \u2013 No Fans Included \u2013 White",
+      "query": "CORSAIR 3500X Mid-Tower ATX PC Case \u2013 Panoramic Tempered Glass \u2013 Reverse Connection Motherboard Compatible \u2013 No Fans Included \u2013 White",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:26261532747256eb",
+        "ASIN:B0CZV22HDF"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-80714d8a6bc9eec4ec55",
+      "label": "CORSAIR AIR 5400 RS-R ARGB Triple-Chamber Mid-Tower Panoramic PC Case \u2013 3x Pre-Installed Reverse-Rotor RS120-R ARGB Fans",
+      "query": "CORSAIR AIR 5400 RS-R ARGB Triple-Chamber Mid-Tower Panoramic PC Case \u2013 3x Pre-Installed Reverse-Rotor RS120-R ARGB Fans",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:b90e0481a8188367",
+        "ASIN:B0FJ8SWG15"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-ceb7348a1daccb74f4c3",
+      "label": "CORSAIR FRAME 4000D Modular Mid-Tower ATX PC Case \u2013 High Airflow",
+      "query": "CORSAIR FRAME 4000D Modular Mid-Tower ATX PC Case \u2013 High Airflow",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:ab04f1ac0677e667",
+        "ASIN:B0DFHQG8VH"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-5642261a4f19c2f7b1e3",
+      "label": "CORSAIR Frame 4000D RS ARGB Modular Mid-Tower ATX PC Case \u2013 Black",
+      "query": "CORSAIR Frame 4000D RS ARGB Modular Mid-Tower ATX PC Case \u2013 Black",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:935d79de04a72bf4",
+        "ASIN:B0DFHNV7TK"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-cd70a626b2cc0f1f02e1",
+      "label": "CORSAIR FRAME 4500X LX-R RGB LINK Panoramic Glass Mid-Tower PC Case \u2013 InfiniRail Mounting System",
+      "query": "CORSAIR FRAME 4500X LX-R RGB LINK Panoramic Glass Mid-Tower PC Case \u2013 InfiniRail Mounting System",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:55d44b2d9e359f26",
+        "ASIN:B0FJ2SRYHT"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-9de70ef36db7871ebaf7",
+      "label": "CORSAIR FRAME 4500X RS-R ARGB Panoramic Glass Mid-Tower PC Case \u2013 InfiniRail Mounting System",
+      "query": "CORSAIR FRAME 4500X RS-R ARGB Panoramic Glass Mid-Tower PC Case \u2013 InfiniRail Mounting System",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:cb82d5bd3a3c8ba5",
+        "ASIN:B0FJ2QMQYC"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-c0e361de2696c4cca316",
+      "label": "CORSAIR FRAME 5000D RS Modular High Airflow Mid-Tower PC Case \u2013 4x Pre-Installed RS Fans",
+      "query": "CORSAIR FRAME 5000D RS Modular High Airflow Mid-Tower PC Case \u2013 4x Pre-Installed RS Fans",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:d0b96f3c94e180a2",
+        "ASIN:B0F3XNXCMV"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-caa53d7a01ee1d2e6815",
+      "label": "corsair hx1500i 2025",
+      "query": "corsair hx1500i 2025",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:psu",
+        "CPK:0a1bf95f7c034569",
+        "ASIN:B0F3JF1YY3"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42017",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-837ff1c77ce2439f9467",
+      "label": "corsair nautilus 360 rs lcd",
+      "query": "corsair nautilus 360 rs lcd",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cooling",
+        "CPK:96420c1b5ef15a63",
+        "ASIN:B0FGDJ3QP1"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "131486",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-a7759cec08f27ba2beee",
+      "label": "corsair rm1000x",
+      "query": "corsair rm1000x",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:psu",
+        "CPK:890bd5d85376d7a8",
+        "ASIN:B0D9C1HG19"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42017",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-de45e8c13e219e40c277",
+      "label": "corsair rm850e 2025",
+      "query": "corsair rm850e 2025",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:psu",
+        "CPK:28f25953bb2f8d28",
+        "ASIN:B0DMTL43VR"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42017",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-8c241787e4aaa1b36e32",
+      "label": "corsair sf750",
+      "query": "corsair sf750",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:psu",
+        "CPK:572f5d9455f30bf4",
+        "ASIN:B0D5HTTCSB"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42017",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-2530ce408a5c50a84556",
+      "label": "CORSAIR VENGEANCE LPX DDR4 RAM 16GB (2x8GB) Up to 3200MHz CL16 Intel XMP AMD EXPO Computer Memory \u2013 Black (CMK16GX4M2B3200C16",
+      "query": "CORSAIR VENGEANCE LPX DDR4 RAM 16GB (2x8GB) Up to 3200MHz CL16 Intel XMP AMD EXPO Computer Memory \u2013 Black (CMK16GX4M2B3200C16",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:ram",
+        "ASIN:B0143UM4TC"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "170083",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-5f9946217e5e47d754cd",
+      "label": "CORSAIR VENGEANCE LPX DDR4 RAM 32GB (2x16GB) Up to 3200MHz CL16-20-20-38 1.35V Intel XMP AMD EXPO Computer Memory \u2013 Black (CMK32GX4M2E3200C16)",
+      "query": "CORSAIR VENGEANCE LPX DDR4 RAM 32GB (2x16GB) Up to 3200MHz CL16-20-20-38 1.35V Intel XMP AMD EXPO Computer Memory \u2013 Black (CMK32GX4M2E3200C16)",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:ram",
+        "ASIN:B07RW6Z692"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "170083",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-57f7bc5c0c7c5efb310c",
+      "label": "CORSAIR VENGEANCE RGB RS DDR5 16GB (2 x 8GB) Up To 6000MHz AMD INTEL RAM",
+      "query": "CORSAIR VENGEANCE RGB RS DDR5 16GB (2 x 8GB) Up To 6000MHz AMD INTEL RAM",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:ram",
+        "ASIN:B0GQC6MV6C"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "170083",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-7fe35655f9f95393e6fa",
+      "label": "Crucial BX500 SATA SSD 1TB",
+      "query": "Crucial BX500 SATA SSD 1TB",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "ASIN:B0CCN9NHTC"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-e6ccec45de07928946a3",
+      "label": "Crucial P510 1TB SSD NVMe M.2 PCIe 5.0 x4 Gen5",
+      "query": "Crucial P510 1TB SSD NVMe M.2 PCIe 5.0 x4 Gen5",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "ASIN:B0DZ5ZK225"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-1657ae8b8d0212ba9bfe",
+      "label": "Crucial Pro DDR5 RAM 32GB Kit (2x16GB) 6000MHz CL36",
+      "query": "Crucial Pro DDR5 RAM 32GB Kit (2x16GB) 6000MHz CL36",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:ram",
+        "ASIN:B0CTHXMYL8"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "170083",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-e3e94ed57fcccc23cce0",
+      "label": "Crucial Pro DDR5 RAM 32GB Kit (2x16GB) 6400MHz CL32",
+      "query": "Crucial Pro DDR5 RAM 32GB Kit (2x16GB) 6400MHz CL32",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:ram",
+        "ASIN:B0FQMLKVLS"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "170083",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-f42f0ddc4fed7ed46b9a",
+      "label": "Crucial Pro DDR5 RAM 64GB Kit (2x32GB) 6000MHz CL40",
+      "query": "Crucial Pro DDR5 RAM 64GB Kit (2x32GB) 6000MHz CL40",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:ram",
+        "ASIN:B0DSQTD4TN"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "170083",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-0373eb9ed4a46215bbb9",
+      "label": "darkFlash Micro ATX PC Case",
+      "query": "darkFlash Micro ATX PC Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "ASIN:B0DBL8S1NR"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-98dd7a9bcda1f685c90b",
+      "label": "fanxiang 512GB 2.5\" SATA III SSD",
+      "query": "fanxiang 512GB 2.5\" SATA III SSD",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "ASIN:B0CM63ZP2Y"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-f77770465712c63147a9",
+      "label": "fanxiang 512GB NVMe M.2 2280 SSD",
+      "query": "fanxiang 512GB NVMe M.2 2280 SSD",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "CPK:157a2906a591f3e2",
+        "ASIN:B0CNSV1M47"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-e9c50697906b3867244c",
+      "label": "fanxiang SATA SSD 256GB Internal SSD 2.5\" SATA III",
+      "query": "fanxiang SATA SSD 256GB Internal SSD 2.5\" SATA III",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "ASIN:B09XDJWWG7"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-03e2cf0e3ac2b06ec30b",
+      "label": "Fikwot FX815 256GB SSD",
+      "query": "Fikwot FX815 256GB SSD",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "CPK:55603d32cf5f4608",
+        "ASIN:B0CX8P2N9S"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-3b6137860a559fe0167a",
+      "label": "Fikwot FX991 1TB SSD",
+      "query": "Fikwot FX991 1TB SSD",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "CPK:62ea95fa20ccd9b3",
+        "ASIN:B0D4YN1K8G"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-a2f68dc1e73a6e2b3289",
+      "label": "FOIFKIN F300 PC Case ATX with 4 Non-RGB Fans",
+      "query": "FOIFKIN F300 PC Case ATX with 4 Non-RGB Fans",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "ASIN:B0DG61TSZK"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-0e57ee6d01d17c9dc0ab",
+      "label": "FOIFKIN F600 PC Case ATX with 7 PWM ARGB Fans",
+      "query": "FOIFKIN F600 PC Case ATX with 7 PWM ARGB Fans",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "ASIN:B0DFX1J2S5"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-e0dcd83804a0c0d7695a",
+      "label": "FOIFKIN K6 PC Case ATX with 6 PWM ARGB Fans(3X 140mm and 3X 120mm",
+      "query": "FOIFKIN K6 PC Case ATX with 6 PWM ARGB Fans(3X 140mm and 3X 120mm",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "ASIN:B0F54JXW21"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-4132da4f4a161a27bdae",
+      "label": "FOIFKIN M1 PC Case ATX with 4 PWM ARGB Fans",
+      "query": "FOIFKIN M1 PC Case ATX with 4 PWM ARGB Fans",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "ASIN:B0DXQG3MDK"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-274944718d13492d9a22",
+      "label": "Fractal Design Define 7 Compact Black Brushed Aluminum/Steel ATX Compact Silent Mid Tower Computer Case",
+      "query": "Fractal Design Define 7 Compact Black Brushed Aluminum/Steel ATX Compact Silent Mid Tower Computer Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:0d57c6d2a27814ac",
+        "ASIN:B08146YTWY"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-9eec86fc04438d182c80",
+      "label": "Fractal Design Define 7 XL Black Brushed Aluminum/Steel E-ATX Silent Modular Full Tower Computer Case",
+      "query": "Fractal Design Define 7 XL Black Brushed Aluminum/Steel E-ATX Silent Modular Full Tower Computer Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:1011004eb3fe045c"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-3a13d55c68249a18ccb2",
+      "label": "Fractal Design Define R5 - Mid Tower Computer Case - ATX - Optimized For High Airflow And Silent - 2x Fractal Design Dynamic",
+      "query": "Fractal Design Define R5 - Mid Tower Computer Case - ATX - Optimized For High Airflow And Silent - 2x Fractal Design Dynamic",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:334cc1d9b20de2ee",
+        "ASIN:B00Q2Z11QE"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-fdc871b4f94b0f351232",
+      "label": "Fractal Design Meshify 2 Compact Black ATX Flexible High-Airflow Mid Tower Computer Case",
+      "query": "Fractal Design Meshify 2 Compact Black ATX Flexible High-Airflow Mid Tower Computer Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:1a9d507907f9f891",
+        "ASIN:B0822W433F"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-bd24b1afbd8f213793d0",
+      "label": "Fractal Design North XL Charcoal Black TG- three 140mm Aspect PWM fans included- Type C USB- EATX airflow full tower PC gamin",
+      "query": "Fractal Design North XL Charcoal Black TG- three 140mm Aspect PWM fans included- Type C USB- EATX airflow full tower PC gamin",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:96327021a50efe92",
+        "ASIN:B0CJCJ3ZZB"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-4d187fe37fbda6a80c98",
+      "label": "Fractal Design Pop Silent Black Mid Tower PC Case - Sound-Dampening Panels with 3 Aspect Fans - ATX mATX Mini ITX Compatibili",
+      "query": "Fractal Design Pop Silent Black Mid Tower PC Case - Sound-Dampening Panels with 3 Aspect Fans - ATX mATX Mini ITX Compatibili",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:bf25b11a7ab6c2a4",
+        "ASIN:B08KTMY385"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-cff2b41ac51deaf99e1e",
+      "label": "gigabyte b850 aorus elite wifi7",
+      "query": "gigabyte b850 aorus elite wifi7",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "CPK:923b890b993c0ace",
+        "ASIN:B0DQM8GPR7"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-7949a75f4b6fa9386f43",
+      "label": "Gigabyte GeForce RTX 5080 GAMING OC 16G Graphics Card - 16GB GDDR7",
+      "query": "Gigabyte GeForce RTX 5080 GAMING OC 16G Graphics Card - 16GB GDDR7",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:fa9cb25bd3a3c296",
+        "ASIN:B0DSQ1RCZV"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-5416648c69d999995b2d",
+      "label": "Gigabyte Radeon AI PRO R9700 AI TOP 32G Graphics Card- 32GB GDDR6",
+      "query": "Gigabyte Radeon AI PRO R9700 AI TOP 32G Graphics Card- 32GB GDDR6",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "ASIN:B0FJ8XPXTM"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-46d28f46285854ca85be",
+      "label": "Gigabyte Radeon RX 9070 XT GAMING OC 16G Graphics Card - 16GB GDDR6",
+      "query": "Gigabyte Radeon RX 9070 XT GAMING OC 16G Graphics Card - 16GB GDDR6",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:1490671ec918cc90",
+        "ASIN:B0DT7B79K9"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-6e33eebd2bb84f9acb0e",
+      "label": "H2 (2026) HYXN PC Case ATX with 8 Fans (6 x 140 and 2 x 120) Large Dual Chamber Mid-Tower Computer Case Airflow Gaming PC Cas",
+      "query": "H2 (2026) HYXN PC Case ATX with 8 Fans (6 x 140 and 2 x 120) Large Dual Chamber Mid-Tower Computer Case Airflow Gaming PC Cas",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:564e96d331ac03cb",
+        "ASIN:B0FZCV9FHC"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-9e9d91eab948241a92d3",
+      "label": "HYTE Y70 Touch Infinite Dual Chamber ATX Mid Tower Modern Aesthetic Case with Integrated 2.5K LCD Touchscreen - Pitch Black",
+      "query": "HYTE Y70 Touch Infinite Dual Chamber ATX Mid Tower Modern Aesthetic Case with Integrated 2.5K LCD Touchscreen - Pitch Black",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:a753b03384ca66a7",
+        "ASIN:B0DKJKGPYZ"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-19b1ba1c1e58f0a25939",
+      "label": "HYTE Y70 Touch Infinite Dual Chamber ATX Mid Tower Modern Aesthetic Case with Integrated 2.5K LCD Touchscreen - Snow White",
+      "query": "HYTE Y70 Touch Infinite Dual Chamber ATX Mid Tower Modern Aesthetic Case with Integrated 2.5K LCD Touchscreen - Snow White",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:f43ae3b064f8c67f",
+        "ASIN:B0DKJKG9V5"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-be52791e8b53c1d4f77d",
+      "label": "HYXN H1 ATX PC Case-Pre-Installed 7 PWM ARGB Fans",
+      "query": "HYXN H1 ATX PC Case-Pre-Installed 7 PWM ARGB Fans",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "ASIN:B0FCM65FKM"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-115397929679e4e57637",
+      "label": "HYXN H3 ATX PC Case - Pre-Installed with 3 ARGB Fans - Compact Dual Cavity Mid-Tower Gaming PC Case",
+      "query": "HYXN H3 ATX PC Case - Pre-Installed with 3 ARGB Fans - Compact Dual Cavity Mid-Tower Gaming PC Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:ae5eebc42580331a",
+        "ASIN:B0GGQL8KZH"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-5989e9139f4c1d74af5b",
+      "label": "Integral SSD 256GB NVME M.2 2280 PCIe Gen3x4 R-3350MB/s W-1350MB/s M2 Solid State Drive",
+      "query": "Integral SSD 256GB NVME M.2 2280 PCIe Gen3x4 R-3350MB/s W-1350MB/s M2 Solid State Drive",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "ASIN:B09P58BJ2L"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-1b4d7d67d5b635342f28",
+      "label": "Integral V Series 250GB SATA III 2.5 Inch Internal Solid State Drive (SSD) up to 450MB/s Read and 400MB/s Write",
+      "query": "Integral V Series 250GB SATA III 2.5 Inch Internal Solid State Drive (SSD) up to 450MB/s Read and 400MB/s Write",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "CPK:8cbf8ba8871c4ccd",
+        "ASIN:B09M7KC46Q"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-8732a2c64871e340766a",
+      "label": "Integral V Series S 1TB Internal Solid State Drive (SSD) - 2.5\" SATA III (6Gb/s)",
+      "query": "Integral V Series S 1TB Internal Solid State Drive (SSD) - 2.5\" SATA III (6Gb/s)",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "ASIN:B0CW9SCZWK"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-e1868bed4406460b2c20",
+      "label": "intel core i7 14700kf",
+      "query": "intel core i7 14700kf",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "CPK:35550f3d35c95b4a",
+        "ASIN:B0CGJC178L"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-5896b34a2ea4c4710ced",
+      "label": "intel core ultra 5 250k plus arrow lake",
+      "query": "intel core ultra 5 250k plus arrow lake",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "CPK:6f7d748cd7dc8025"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-40521bffbb8a1ae8b495",
+      "label": "IONZ APEX EMBER- PC Gaming Case",
+      "query": "IONZ APEX EMBER- PC Gaming Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:07d8ac29adbeec82",
+        "ASIN:B0FH2FYC3X"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-55926bc8ba8c488bf257",
+      "label": "IONZ KZ-ZE/B PC Gaming Case",
+      "query": "IONZ KZ-ZE/B PC Gaming Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:78dc8e05974fc5a2",
+        "ASIN:B0DCNYYZLN"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-62f82173b718824d2604",
+      "label": "iONZ KZ10 PC Gaming Case Mid Tower ATX Tempered Glass With 4 x 120mm ARGB Fans - Black",
+      "query": "iONZ KZ10 PC Gaming Case Mid Tower ATX Tempered Glass With 4 x 120mm ARGB Fans - Black",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:f52d1257ccde1495",
+        "ASIN:B08HQNF5VT"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-b23bf59f632756cbeee5",
+      "label": "IONZ PC Computer Case - ATX",
+      "query": "IONZ PC Computer Case - ATX",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "ASIN:B0G15TNHD8"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-5ab452347be1ede42104",
+      "label": "iONZ PC Gaming White Case Mid Tower ATX",
+      "query": "iONZ PC Gaming White Case Mid Tower ATX",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:ab06f5e7e233d166",
+        "ASIN:B0BZ8T8VL3"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-cbda1d8409ca58f42970",
+      "label": "KingSpec 1TB 2.5\" SATA III 6Gb/s SSD",
+      "query": "KingSpec 1TB 2.5\" SATA III 6Gb/s SSD",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "ASIN:B0B2K51BHH"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-ebbf5acf74fb55f3dd52",
+      "label": "Lexar THOR Z Series OC DDR5 RAM 32GB Kit (2x16GB) 6000 MHz CL36",
+      "query": "Lexar THOR Z Series OC DDR5 RAM 32GB Kit (2x16GB) 6000 MHz CL36",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:ram",
+        "ASIN:B0GDJT14BQ"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "170083",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-f4fed820f8436a02ac6a",
+      "label": "Lian Li A3 mATX Gaming PC Case",
+      "query": "Lian Li A3 mATX Gaming PC Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:db21718a708b957f",
+        "ASIN:B0DFS88R2L"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-eee5849cd584a45c6fa3",
+      "label": "Lian Li DAN Cases B4 Micro-ATX PC Case",
+      "query": "Lian Li DAN Cases B4 Micro-ATX PC Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:12428f9140988145",
+        "ASIN:B0H6PW5CPC"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-97dd997cb47042bf3525",
+      "label": "Lian Li Lancool 216 RGB ATX Mid Tower Gaming PC Case with Fans",
+      "query": "Lian Li Lancool 216 RGB ATX Mid Tower Gaming PC Case with Fans",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:21d159d250fba4c0",
+        "ASIN:B0BN3SY5XW"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-6f27083194d99912e031",
+      "label": "Lian Li Lancool 217 ATX Mid Tower Gaming PC Case with 5 Fans",
+      "query": "Lian Li Lancool 217 ATX Mid Tower Gaming PC Case with 5 Fans",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:4c2923dc93cbf108",
+        "ASIN:B0F74LMG5R"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-a9b2c7de9959a13b341f",
+      "label": "Lian Li O11 Dynamic Mini V2 Compact ATX Mid Tower Gaming PC Case",
+      "query": "Lian Li O11 Dynamic Mini V2 Compact ATX Mid Tower Gaming PC Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:d33933e9bbe26f5b",
+        "ASIN:B0FK5FH387"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-f3de218e5827cf953df5",
+      "label": "Lian Li O11 Vision Compact ATX Mid Tower Gaming PC Case",
+      "query": "Lian Li O11 Vision Compact ATX Mid Tower Gaming PC Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:929a764e06da9306",
+        "ASIN:B0DJT8SRD6"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-4484bc79e64b6dc632ff",
+      "label": "Lian Li O11 Vision-M Mid-Tower PC Case Black",
+      "query": "Lian Li O11 Vision-M Mid-Tower PC Case Black",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:c0739efbede7c898",
+        "ASIN:B0H1STVJGQ"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-4c630ca922bf26d75751",
+      "label": "Lian Li V100 ATX Mid Tower Gaming PC Case",
+      "query": "Lian Li V100 ATX Mid Tower Gaming PC Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:4f0248380bc9aabc",
+        "ASIN:B0FD4CDMFW"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-f8c439a59970e43e4705",
+      "label": "microsoft.mag b850 tomahawk max wifi",
+      "query": "microsoft.mag b850 tomahawk max wifi",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "ASIN:B0DPKVF29H"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-8ba4109d3e9b8266e513",
+      "label": "mpg b550 gaming plus",
+      "query": "mpg b550 gaming plus",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "CPK:b3201ac32c885a9e",
+        "ASIN:B08B4V6H3N"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-2ead792afb9647da8ae3",
+      "label": "msi b550m pro vdh",
+      "query": "msi b550m pro vdh",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "CPK:c008ca83e09292c3",
+        "ASIN:B08NCK1MBQ"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-ed4c71334189055b166d",
+      "label": "msi b760 gaming plus wifi ddr4",
+      "query": "msi b760 gaming plus wifi ddr4",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "CPK:3e296b3e016042e7",
+        "ASIN:B0BSLMNGM9"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-32547a79bbb2cc678274",
+      "label": "msi b850 gaming plus wifi",
+      "query": "msi b850 gaming plus wifi",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "CPK:2e079146b75e446c",
+        "ASIN:B0DPKV94MX"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-a104ea249749cbd79be7",
+      "label": "msi b850 tomahawk",
+      "query": "msi b850 tomahawk",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:motherboard",
+        "CPK:4297306275b08173",
+        "ASIN:B0FXHHTDW3"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "1244",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-3569a8596487e4f0d540",
+      "label": "MSI GeForce RTX 5050 8G GAMING OC Graphics Card - RTX 5050 GPU",
+      "query": "MSI GeForce RTX 5050 8G GAMING OC Graphics Card - RTX 5050 GPU",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:9582325d327266f7",
+        "ASIN:B096Y5JNZC"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-eac5cd997b1de6e3bcce",
+      "label": "MSI GeForce RTX 5060 Ti 8G GAMING TRIO OC Graphics Card - RTX 5060 Ti GPU",
+      "query": "MSI GeForce RTX 5060 Ti 8G GAMING TRIO OC Graphics Card - RTX 5060 Ti GPU",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:e7cf3ce2698679c7",
+        "ASIN:B096Z886F8"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-164aed39a9a22f828996",
+      "label": "MSI MAG FORGE 100R Mid Tower Gaming Computer Case (Black",
+      "query": "MSI MAG FORGE 100R Mid Tower Gaming Computer Case (Black",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:efa9543f2f3b1abb",
+        "ASIN:B07YQ7HXBD"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-6d4d655bccc140617588",
+      "label": "MSI MAG FORGE 320R AIRFLOW Mid-Tower PC Case - ATX Capacity",
+      "query": "MSI MAG FORGE 320R AIRFLOW Mid-Tower PC Case - ATX Capacity",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:e65219b168f19035",
+        "ASIN:B0CFYKNHW7"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-175470324885b24a7dc9",
+      "label": "MSI MAG FORGE 321R AIRFLOW Mid-Tower PC Case - ATX Capacity",
+      "query": "MSI MAG FORGE 321R AIRFLOW Mid-Tower PC Case - ATX Capacity",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "ASIN:B0CXQ664BW"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-ee3ccd232854ca1521d2",
+      "label": "Netac DDR4 3200MHz 32GB (2 X 16GB) 2-in-1 RAM Computer Desktop Memory DRAM Kit C16 XPM2.0 Gaming Memory 32GB with Heat Sink",
+      "query": "Netac DDR4 3200MHz 32GB (2 X 16GB) 2-in-1 RAM Computer Desktop Memory DRAM Kit C16 XPM2.0 Gaming Memory 32GB with Heat Sink",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:ram",
+        "ASIN:B0D1Y5PCFZ"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "170083",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-e868194449889993f5dc",
+      "label": "NZXT H2 Flow - Mini-ITX 20.7L Airflow PC Case - Black",
+      "query": "NZXT H2 Flow - Mini-ITX 20.7L Airflow PC Case - Black",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:79562bbf3b363d57",
+        "ASIN:B0FJD21RLV"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-5be598d1e5a2faa4918b",
+      "label": "NZXT H3 Flow - Micro-ATX Airflow PC Case - Black",
+      "query": "NZXT H3 Flow - Micro-ATX Airflow PC Case - Black",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:d8b1c652dfb3bfd0",
+        "ASIN:B0DQPMJ6MJ"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-83bf66e9d3ad08aac572",
+      "label": "NZXT H6 Flow",
+      "query": "NZXT H6 Flow",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:37332d31d1f26727",
+        "ASIN:B0C89FCDFP"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-a2f43a5c21277377b8db",
+      "label": "Palit GeForce RTX 5090 GameRock 32GB GDDR7 PCI-Express Graphics Card",
+      "query": "Palit GeForce RTX 5090 GameRock 32GB GDDR7 PCI-Express Graphics Card",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:bc59882768f01448"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-fe0344d9dc92b62dd9b7",
+      "label": "Patriot P210 SATA 3 256GB SSD 2.5 Inch Internal Solid State Drive - P210S256G25",
+      "query": "Patriot P210 SATA 3 256GB SSD 2.5 Inch Internal Solid State Drive - P210S256G25",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "ASIN:B087K9L3R5"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-957c1149e46a0713b193",
+      "label": "Patriot Viper Venom DDR5 32GB (2 x 16GB) 6000MT/s UDIMM Desktop Gaming Memory KIT - PVV532G600C30K",
+      "query": "Patriot Viper Venom DDR5 32GB (2 x 16GB) 6000MT/s UDIMM Desktop Gaming Memory KIT - PVV532G600C30K",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:ram",
+        "ASIN:B0D4NLSP87"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "170083",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-5ff87cb70d1c4a038639",
+      "label": "PCZZOI ATX Gaming PC CASE with 6 PWM ARGB Fans",
+      "query": "PCZZOI ATX Gaming PC CASE with 6 PWM ARGB Fans",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:8ce19b49a1caaea5",
+        "ASIN:B0F6Y23LJ7"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-82c13b89f2395d2e46a9",
+      "label": "PCZZOI PC CASE ATX 5 Fans Pre-Installed",
+      "query": "PCZZOI PC CASE ATX 5 Fans Pre-Installed",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:1952324a092fc8fa",
+        "ASIN:B0FGDPR3FC"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-c868b948ac86669716d9",
+      "label": "Phanteks EX5 PLUS Gaming PC Case",
+      "query": "Phanteks EX5 PLUS Gaming PC Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:bae27d1012e3e0bd",
+        "ASIN:B0GSBW9HZT"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-96a356dcb9f5e71d35a4",
+      "label": "Phanteks XT Pro Ultra ATX Mid Tower Case",
+      "query": "Phanteks XT Pro Ultra ATX Mid Tower Case",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:case",
+        "CPK:8625ac5e62039172",
+        "ASIN:B0CT5V2XJK"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "42014",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-5233351dad5b7019835b",
+      "label": "PNY CS900 1TB Internal SSD SATA III 2.5\"",
+      "query": "PNY CS900 1TB Internal SSD SATA III 2.5\"",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "ASIN:B07Y5VDNT9"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-2309f7b262f7b72d0837",
+      "label": "PNY NVIDIA RTX 6000 ADA",
+      "query": "PNY NVIDIA RTX 6000 ADA",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:ef464a08d963fa09"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-5d971e7e4c76ab024b9c",
+      "label": "PowerColor Radeon RX 9060 XT Reaper 16GB GDDR6 PCI-Express Graphics Card",
+      "query": "PowerColor Radeon RX 9060 XT Reaper 16GB GDDR6 PCI-Express Graphics Card",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:8db487ecafb70aa4"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-882270d7a173e4b223a6",
+      "label": "PowerColor Reaper AMD Radeon RX 9070 16GB GDDR6 Graphics Card",
+      "query": "PowerColor Reaper AMD Radeon RX 9070 16GB GDDR6 Graphics Card",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:62d4687b2f175811",
+        "ASIN:B0DSWL46CF"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-be7e31be85b7ac4513e6",
+      "label": "Samsung 990 PRO NVMe M.2 SSD",
+      "query": "Samsung 990 PRO NVMe M.2 SSD",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "CPK:54033a100e32fa43",
+        "ASIN:B0B9C4DKKG"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-fb5fcf8c6c5b99b914c8",
+      "label": "Sparkle Intel ARC B580 TITAN OC 12GB GDDR6 Graphics Card",
+      "query": "Sparkle Intel ARC B580 TITAN OC 12GB GDDR6 Graphics Card",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu",
+        "CPK:376667bc46c648f5"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-25dd39c0b1dfa03c2780",
+      "label": "thermalright assassin x120 se argb",
+      "query": "thermalright assassin x120 se argb",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cooling",
+        "CPK:1d9d64663ca2ce01",
+        "ASIN:B0B8YY59JZ"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "131486",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-d4312862f0671a8f9617",
+      "label": "thermalright peerless assassin 120 se",
+      "query": "thermalright peerless assassin 120 se",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cooling",
+        "CPK:d0a075dce9d7f074",
+        "ASIN:B0B8Z19XNM"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "131486",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-35a09bb3fafcd9ab53c5",
+      "label": "thermalright phantom spirit 120",
+      "query": "thermalright phantom spirit 120",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cooling",
+        "ASIN:B0D97JHQ6H"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "131486",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-5995af4b87f37e7be28d",
+      "label": "veno scorp",
+      "query": "veno scorp",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "ASIN:B0BFWXPWM8"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-13783afcabe3c60baee7",
+      "label": "veno scorp",
+      "query": "veno scorp",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:cpu",
+        "ASIN:B0C8VC377Z"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "164",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-1c50f8e555796bbf454a",
+      "label": "WD_BLACK SN850X NVMe SSD 1TB (up to 7",
+      "query": "WD_BLACK SN850X NVMe SSD 1TB (up to 7",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:storage",
+        "CPK:718f5949e2eb46d2",
+        "ASIN:B0B7CKVCCV"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "175669",
+      "priority": 2,
+      "intervalMinutes": 1440
+    },
+    {
+      "id": "catalogue-component-ec86e520f7b8a9dca6f8",
+      "label": "Zotac GeForce RTX 5080 Solid Core OC 16GB GDDR7 PCI-Express Graphics Card",
+      "query": "Zotac GeForce RTX 5080 Solid Core OC 16GB GDDR7 PCI-Express Graphics Card",
+      "tags": [
+        "curated",
+        "Managed-catalogue",
+        "Role:gpu"
+      ],
+      "marketplaces": [
+        "ebay",
+        "amazon",
+        "overclockers",
+        "scan",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "ebuyer",
+        "google_shopping"
+      ],
+      "ebayCategory": "27386",
+      "priority": 2,
+      "intervalMinutes": 1440
+    }
+  ]
+}

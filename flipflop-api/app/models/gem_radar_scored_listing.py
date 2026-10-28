@@ -28,6 +28,8 @@ class GemRadarScoredListing(Base):
     title: Mapped[str] = mapped_column(String(500))
     seller_name: Mapped[str | None] = mapped_column(String(200))
     image_url: Mapped[str | None] = mapped_column(String(1000), nullable=True)
+    image_urls: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
+    video_urls: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
     condition: Mapped[str | None] = mapped_column(String(30), nullable=True)  # new, used, refurbished, etc.
     # Resolved product category (cpu, gpu, ram, motherboard, ssd, psu, cooler)
     # from identity.resolve_identity() — None when identity resolution found
@@ -76,10 +78,20 @@ class GemRadarScoredListing(Base):
     # Delivery promise/location carried through from the latest observation.
     delivery_text: Mapped[str | None] = mapped_column(String(500), nullable=True)
     delivery_postcode: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    prime_eligible: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    delivery_working_days: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    delivery_estimate_source: Mapped[str | None] = mapped_column(String(32), nullable=True)
 
     # Market prices (from eBay Browse API)
     market_new_price: Mapped[float | None] = mapped_column(Float, nullable=True)  # Today's new BIN
     market_used_price: Mapped[float | None] = mapped_column(Float, nullable=True)  # Today's used BIN
+    # Resale price range used by deal classification and analytics. These
+    # columns predate the ORM declaration and are maintained by phase2_runner.
+    market_lower_price: Mapped[float | None] = mapped_column(Float, nullable=True)
+    market_median_price: Mapped[float | None] = mapped_column(Float, nullable=True)
+    market_upper_price: Mapped[float | None] = mapped_column(Float, nullable=True)
+    pct_offset: Mapped[float | None] = mapped_column(Float, nullable=True)
+    recommendation: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
     # Demand signals (for GEM/SUPER_GEM quality scoring)
     bid_count: Mapped[int | None] = mapped_column(Integer, nullable=True)

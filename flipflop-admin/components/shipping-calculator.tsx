@@ -69,7 +69,12 @@ Provide your response in JSON format ONLY (no markdown, no explanation):
 
 Be realistic with estimates - add 5-10cm padding for packaging on each dimension.`;
 
-      const response = await fetch("http://localhost:11434/api/generate", {
+      const ollamaBaseUrl = process.env.NEXT_PUBLIC_OLLAMA_BASE_URL?.trim().replace(/\/$/, "");
+      if (!ollamaBaseUrl) {
+        throw new Error("Ollama is not configured. Set NEXT_PUBLIC_OLLAMA_BASE_URL for this environment.");
+      }
+
+      const response = await fetch(`${ollamaBaseUrl}/api/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -182,7 +187,7 @@ Be realistic with estimates - add 5-10cm padding for packaging on each dimension
           {loading ? (
             <>
               <Zap className="w-3.5 h-3.5 animate-spin mr-2" />
-              Calculating with Qwen2…
+              Calculating with local AI…
             </>
           ) : estimate ? (
             <>
@@ -196,7 +201,7 @@ Be realistic with estimates - add 5-10cm padding for packaging on each dimension
         </Button>
 
         <div className="text-xs text-slate-500">
-          ✓ Uses local Ollama (Qwen2 7B) to estimate box dimensions based on case model
+          ✓ Uses the configured local Ollama model to estimate box dimensions based on case model
           <br />
           ✓ Estimates weight including typical components
           <br />

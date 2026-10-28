@@ -7,6 +7,7 @@ from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from pydantic import BaseModel, Field
 from sqlalchemy import or_, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -24,6 +25,7 @@ from app.schemas.catalogue import (
 from app.services.catalogue_service import approve_variant, reject_variant
 from app.services.hardware_performance import enrich_listing_performance, load_benchmark_context
 from app.services.product_reviews import aggregate_cpk_reviews
+from app.services.curated_media import media_urls
 from app.routes.admin_auth import get_current_admin
 
 router = APIRouter(prefix="/catalogue", tags=["catalogue"], dependencies=[Depends(get_current_admin)])
@@ -49,7 +51,7 @@ async def get_review_queue(db: AsyncSession = Depends(get_db)):
             "id": v.id,
             "listing_id": v.listing_id,
             "listing_title": l.title,
-            "image_url": (l.image_urls[0] if l.image_urls else None),
+            "image_url": (v.asset_media_review or {}).get("main_photo_approved_url") or next(iter(media_urls(l.image_urls or [])), None),
             "listing_price": l.price,
             "gem_score": l.gem_score,
             "slot_id": v.slot_id,
@@ -112,7 +114,7 @@ async def list_variants(
         # Catalogue membership is a curated output of gem detection, not a
         # mirror of the raw listings table.  Legacy variants can outlive a
         # listing's classification, so enforce the contract at read time.
-        .where(Listing.classification.in_((Classification.gem, Classification.amazing_gem)))
+        .where(CatalogueVariant.curated_for_builds.is_(True))
         # The catalogue is a fixed-price sourcing surface. Auctions and
         # classified listings remain available to their own evidence views,
         # but must never appear here, including legacy rows.
@@ -410,11 +412,11 @@ async def list_variants(
             "id": v.id,
             "listing_id": v.listing_id,
             "listing_title": l.title,
-            "image_url": (
-                (l.image_urls[0] if l.image_urls else None)
-                or getattr(scored(l), "image_url", None)
-                or observation_image_by_item.get(item_key(l))
-            ),
+            "image_url": next(iter(media_urls([
+                *(l.image_urls or []),
+                getattr(scored(l), "image_url", None),
+                observation_image_by_item.get(item_key(l)),
+            ])), None),
             "source_name": l.source_name,
             "channel_sources": channels_by_fingerprint.get(l.spec_fingerprint, [l.source_name]),
             "price_history_listing_id": l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id,
@@ -561,3 +563,22 @@ async def update_slot(slot_id: int, body: PlaybookSlotUpdate, db: AsyncSession =
     slot.updated_at = datetime.utcnow().isoformat()
     await db.commit()
     return {"id": slot.id, "slot_type": slot.slot_type, "updated": True}
+
+
+@router.get("/marketing-copy/status")
+async def marketing_copy_status_endpoint(db: AsyncSession = Depends(get_db)):
+    from app.services.catalogue_marketing_copy import marketing_copy_status
+    return await marketing_copy_status(db)
+
+
+class MarketingCopyBatchInput(BaseModel):
+    limit: int = Field(default=4, ge=1, le=4)
+
+
+@router.post("/marketing-copy/generate-batch")
+async def generate_marketing_copy_batch_endpoint(body: MarketingCopyBatchInput, db: AsyncSession = Depends(get_db)):
+    from app.services.catalogue_marketing_copy import generate_next_marketing_copy_batch
+    try:
+        return await generate_next_marketing_copy_batch(db, body.limit)
+    except Exception as exc:
+        raise HTTPException(status_code=503, detail="Catalogue copy batch could not be completed") from exc

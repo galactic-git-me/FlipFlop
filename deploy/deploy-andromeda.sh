@@ -53,18 +53,22 @@ if [[ -n "$OLD_IMAGE" ]]; then
   docker image tag "$OLD_IMAGE" flipflop-api:rollback
 fi
 
-log "Building production API"
-docker compose -f "$COMPOSE_FILE" build api gemradar-worker
+log "Building production API, Gem Radar, and admin"
+# The customer site is deployed from its own repository by flipflop-shop.service.
+# Starting the legacy compose storefront would contend for its live port 3020.
+docker compose -f "$COMPOSE_FILE" build api gemradar-worker admin
 
 log "Applying database migrations"
 docker compose -f "$COMPOSE_FILE" run --rm api alembic upgrade head
 
-log "Starting production API"
-docker compose -f "$COMPOSE_FILE" up -d --no-deps api gemradar-worker
+log "Starting production stack"
+docker compose -f "$COMPOSE_FILE" up -d api gemradar-worker admin
 
 healthy=0
 for _ in $(seq 1 30); do
-  if curl --fail --silent --show-error http://127.0.0.1:4311/health >/dev/null; then
+  if curl --fail --silent --show-error http://127.0.0.1:4311/health >/dev/null \
+    && curl --fail --silent --show-error http://127.0.0.1:3020/ >/dev/null \
+    && curl --fail --silent --show-error http://127.0.0.1:3021/health >/dev/null; then
     healthy=1
     break
   fi
@@ -86,5 +90,13 @@ if [[ "$callback_status" != "307" && "$callback_status" != "302" ]]; then
   log "Public eBay callback check failed with HTTP $callback_status."
   exit 1
 fi
+
+for public_url in https://www.theflipflop.shop/ https://admin.theflipflop.shop/; do
+  public_status="$(curl --silent --output /dev/null --write-out '%{http_code}' "$public_url")"
+  if [[ "$public_status" -lt 200 || "$public_status" -ge 500 ]]; then
+    log "Public endpoint check failed for $public_url with HTTP $public_status."
+    exit 1
+  fi
+done
 
 log "Deployment completed at $(git rev-parse --short HEAD)."

@@ -1,0 +1,270 @@
+{
+  "version": 1,
+  "observed_at": "2026-10-22T19:31:15.125479+00:00",
+  "method": "Signed-in Chrome, public sold cards and two detail pages; manually normalized research subset",
+  "queries": [
+    "7800X3D 9070 gaming pc",
+    "5600G desktop pc"
+  ],
+  "filters": {
+    "LH_Sold": "1",
+    "LH_Complete": "1",
+    "LH_BIN": "1",
+    "LH_PrefLoc": "1",
+    "_sop": "12"
+  },
+  "coverage": "Selected research subset of first result pages, not complete scan or extension ingestion. Baseline search changed category to all categories; conditions inspected per row.",
+  "publishable": false,
+  "exact_new_build_sold_sample_size": 0,
+  "records": [
+    {
+      "listing_id": "127940525246",
+      "url": "https://www.ebay.co.uk/itm/127940525246",
+      "title_summary": "7800X3D / RX9070XT 16GB / 32GB DDR5 / 1TB SSD",
+      "sold_date": "2026-10-22",
+      "condition_label": "new",
+      "displayed_item_gbp": "1849.00",
+      "postage_gbp": "0.00",
+      "blockers": [
+        "mixed_component_condition",
+        "private_seller_service_difference"
+      ],
+      "detail_checked": true,
+      "status": "context_only",
+      "verified_transaction_price_gbp": null,
+      "detail_evidence": {
+        "condition_specifics": "New",
+        "seller_type": "private",
+        "stock": "out of stock; 3 sold (listing count, not three verified equal-price transactions)",
+        "motherboard": "GIGABYTE B650 EAGLE AX WIFI6E",
+        "gpu": "ASUS Prime RX9070XT 16GB",
+        "ram": "Corsair Vengeance 2x16GB DDR5-6000 CL36; explicitly Used",
+        "storage": "Transcend 1TB Gen4 NVMe",
+        "psu": "SAMA G750 GOLD PCIe5.1",
+        "os": "Windows 11 Pro activated; licence provenance unknown",
+        "description_condition": "Combination of new, open-box or pre-owned components",
+        "delivery": "Free DPD Next Day, UK location",
+        "returns": "No returns accepted"
+      }
+    },
+    {
+      "listing_id": "336853265987",
+      "url": "https://www.ebay.co.uk/itm/336853265987",
+      "title_summary": "7800X3D / RX9070 XT or GRE / 16-32GB / 1TB",
+      "sold_date": "2026-10-20",
+      "condition_label": "opened_never_used",
+      "displayed_item_gbp": "1469.00",
+      "postage_gbp": "0.00",
+      "blockers": [
+        "price_range",
+        "configuration_unresolved",
+        "wrong_condition"
+      ],
+      "detail_checked": false,
+      "status": "context_only",
+      "verified_transaction_price_gbp": null
+    },
+    {
+      "listing_id": "377543951338",
+      "url": "https://www.ebay.co.uk/itm/377543951338",
+      "title_summary": "7800X3D / RX9070XT / 32GB DDR5 / 1TB",
+      "sold_date": "2026-10-15",
+      "condition_label": "new",
+      "displayed_item_gbp": "1842.70",
+      "postage_gbp": "25.00",
+      "blockers": [
+        "accepted_offer_hidden"
+      ],
+      "detail_checked": false,
+      "status": "context_only",
+      "verified_transaction_price_gbp": null
+    },
+    {
+      "listing_id": "257798165381",
+      "url": "https://www.ebay.co.uk/itm/257798165381",
+      "title_summary": "7800X3D / RX9070XT 16GB / 32GB DDR5 / 2TB",
+      "sold_date": "2026-10-14",
+      "condition_label": "used",
+      "displayed_item_gbp": "1766.20",
+      "postage_gbp": "0.00",
+      "blockers": [
+        "wrong_condition"
+      ],
+      "detail_checked": false,
+      "status": "context_only",
+      "verified_transaction_price_gbp": null
+    },
+    {
+      "listing_id": "227560682463",
+      "url": "https://www.ebay.co.uk/itm/227560682463",
+      "title_summary": "7800X3D / RX9070XT / 32GB DDR5 / 2TB SFF",
+      "sold_date": "2026-10-13",
+      "condition_label": "used",
+      "displayed_item_gbp": "1699.00",
+      "postage_gbp": "22.95",
+      "blockers": [
+        "wrong_condition",
+        "accepted_offer_hidden"
+      ],
+      "detail_checked": false,
+      "status": "context_only",
+      "verified_transaction_price_gbp": null
+    },
+    {
+      "listing_id": "167037383414",
+      "url": "https://www.ebay.co.uk/itm/167037383414",
+      "title_summary": "7800X3D / RTX5080 or RX9070XT / 32GB / 2TB",
+      "sold_date": "2026-10-12",
+      "condition_label": "new",
+      "displayed_item_gbp": "1349.99",
+      "postage_gbp": "0.00",
+      "blockers": [
+        "price_range",
+        "configuration_unresolved"
+      ],
+      "detail_checked": false,
+      "status": "context_only",
+      "verified_transaction_price_gbp": null
+    },
+    {
+      "listing_id": "227558714598",
+      "url": "https://www.ebay.co.uk/itm/227558714598",
+      "title_summary": "7800X3D / RX9070 / 32GB DDR5 / 2TB",
+      "sold_date": "2026-10-11",
+      "condition_label": "new",
+      "displayed_item_gbp": "1680.00",
+      "postage_gbp": "0.00",
+      "blockers": [
+        "accepted_offer_hidden",
+        "adjacent_gpu"
+      ],
+      "detail_checked": false,
+      "status": "context_only",
+      "verified_transaction_price_gbp": null
+    },
+    {
+      "listing_id": "298724776199",
+      "url": "https://www.ebay.co.uk/itm/298724776199",
+      "title_summary": "7500X3D / RX9070XT / 32GB DDR5 / 1TB",
+      "sold_date": "2026-10-01",
+      "condition_label": "new",
+      "displayed_item_gbp": "1300.00",
+      "postage_gbp": "35.00",
+      "blockers": [
+        "adjacent_cpu",
+        "detail_review_pending"
+      ],
+      "detail_checked": false,
+      "status": "context_only",
+      "verified_transaction_price_gbp": null
+    },
+    {
+      "listing_id": "297475566131",
+      "url": "https://www.ebay.co.uk/itm/297475566131",
+      "title_summary": "Gladiator Colosseum 9800X3D / RX9070XT / 32GB / 2TB, 7000216",
+      "sold_date": "2026-10-21",
+      "condition_label": "new",
+      "displayed_item_gbp": "2062.92",
+      "postage_gbp": "0.00",
+      "blockers": [
+        "adjacent_cpu",
+        "full_component_and_warranty_review_pending"
+      ],
+      "detail_checked": true,
+      "status": "context_only",
+      "verified_transaction_price_gbp": null,
+      "detail_evidence": {
+        "seller_type": "business",
+        "seller": "laptopsdirectltd",
+        "condition": "New",
+        "stock": "out of stock; 3 sold (not three verified transactions)",
+        "displayed_item_gbp": "2062.92"
+      }
+    },
+    {
+      "listing_id": "298721718561",
+      "url": "https://www.ebay.co.uk/itm/298721718561",
+      "title_summary": "7500X3D / RX9070XT / 32GB DDR5 / 2TB",
+      "sold_date": "2026-10-01",
+      "condition_label": "new",
+      "displayed_item_gbp": "1450.00",
+      "postage_gbp": "35.00",
+      "blockers": [
+        "adjacent_cpu",
+        "detail_review_pending"
+      ],
+      "detail_checked": false,
+      "status": "context_only",
+      "verified_transaction_price_gbp": null
+    },
+    {
+      "listing_id": "206592374638",
+      "url": "https://www.ebay.co.uk/itm/206592374638",
+      "title_summary": "Mini-ITX 5600G / 16GB DDR4 / 1TB M.2 / Windows 11 Pro",
+      "sold_date": "2026-10-22",
+      "condition_label": "used",
+      "displayed_item_gbp": "312.70",
+      "postage_gbp": "10.00",
+      "blockers": [
+        "wrong_condition",
+        "ram_below_32gb",
+        "detail_review_pending"
+      ],
+      "detail_checked": false,
+      "status": "context_only",
+      "verified_transaction_price_gbp": null
+    },
+    {
+      "listing_id": "327272614673",
+      "url": "https://www.ebay.co.uk/itm/327272614673",
+      "title_summary": "XUM Titan 5600G / 16GB / 256GB / Windows 11",
+      "sold_date": "2026-10-07",
+      "condition_label": "new",
+      "displayed_item_gbp": "427.99",
+      "postage_gbp": "0.00",
+      "blockers": [
+        "best_offer_price_unknown",
+        "ram_below_32gb",
+        "storage_below_1tb"
+      ],
+      "detail_checked": false,
+      "status": "context_only",
+      "verified_transaction_price_gbp": null
+    },
+    {
+      "listing_id": "900008819181",
+      "url": "https://www.ebay.co.uk/itm/900008819181",
+      "title_summary": "5600G / RTX3070 / 32GB DDR4 / 1TB / Windows 11 Pro",
+      "sold_date": "2026-10-13",
+      "condition_label": "used",
+      "displayed_item_gbp": "749.99",
+      "postage_gbp": "22.95",
+      "blockers": [
+        "wrong_condition",
+        "discrete_gpu_not_integrated_baseline",
+        "detail_review_pending"
+      ],
+      "detail_checked": false,
+      "status": "context_only",
+      "verified_transaction_price_gbp": null
+    },
+    {
+      "listing_id": "117464791494",
+      "url": "https://www.ebay.co.uk/itm/117464791494",
+      "title_summary": "5600G / RTX4060 / 16GB / 1TB SFF",
+      "sold_date": "2026-10-14",
+      "condition_label": "used",
+      "displayed_item_gbp": "599.00",
+      "postage_gbp": "14.54",
+      "blockers": [
+        "wrong_condition",
+        "discrete_gpu_not_integrated_baseline",
+        "ram_below_32gb",
+        "detail_review_pending"
+      ],
+      "detail_checked": false,
+      "status": "context_only",
+      "verified_transaction_price_gbp": null
+    }
+  ]
+}

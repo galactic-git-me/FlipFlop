@@ -18,7 +18,7 @@ class VerificationResponse(BaseModel):
 
 @router.get("/{listing_id}", response_model=VerificationResponse)
 async def get_verification_status(listing_id: str):
-    """Check if a GEM listing has completed margin verification via Qwen2:7b.
+    """Check if a GEM listing has completed local-LLM margin verification.
 
     Returns is_verified=false if verification hasn't completed yet (non-blocking).
     Viable flips have is_viable_flip=true and profit_margin_gbp > £30.

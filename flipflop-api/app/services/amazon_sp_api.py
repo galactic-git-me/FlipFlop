@@ -8,6 +8,7 @@ when a category or approval requirement still needs seller action.
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 import httpx
@@ -102,6 +103,25 @@ class AmazonSPAPI:
         )
         return _json(response) or {}
 
+    async def search_catalog_items_by_asin(self, asins: list[str]) -> dict[str, Any]:
+        """Read exact Amazon catalogue attributes for up to 20 ASINs.
+
+        Catalog Items attributes and normalized dimensions are distinct from a
+        seller offer: callers must still capture stock, price and delivery from
+        the selected product page. Amazon requires the Product Listing role.
+        """
+        normalized=list(dict.fromkeys(str(value).strip().upper() for value in asins))
+        if not normalized or len(normalized)>20 or any(not re.fullmatch(r'[A-Z0-9]{10}',value) for value in normalized):
+            raise AmazonSPAPIError("Catalog Items lookup requires one to twenty valid ASINs.")
+        response=await self._request("GET","/catalog/2022-04-01/items",params={
+            "marketplaceIds":self.marketplace_id,
+            "identifiers":",".join(normalized),
+            "identifiersType":"ASIN",
+            "includedData":"attributes,dimensions,identifiers,summaries",
+        })
+        payload=_json(response) or {}
+        return payload if isinstance(payload,dict) else {}
+
     async def upsert_listing(self, *, sku: str, title: str, description: str, bullet_points: list[str], price: float, quantity: int, condition: str, images: list[str]) -> dict[str, Any]:
         if not sku.strip():
             raise AmazonSPAPIError("Amazon listing SKU cannot be empty.")
@@ -109,6 +129,12 @@ class AmazonSPAPI:
             raise AmazonSPAPIError("Amazon listing price must be greater than zero.")
         if not images or any(not url.startswith(("https://", "http://")) for url in images):
             raise AmazonSPAPIError("Amazon requires at least one publicly reachable product image URL.")
+        from app.services.channel_images import prepare_channel_urls, require_public_images
+        try:
+            images = await prepare_channel_urls(images[:10], "amazon")
+            await require_public_images(images, "amazon")
+        except (ValueError, OSError) as exc:
+            raise AmazonSPAPIError(str(exc)) from exc
 
         attributes: dict[str, Any] = {
             "item_name": [{"value": title[:200], "language_tag": "en_GB", "marketplace_id": self.marketplace_id}],

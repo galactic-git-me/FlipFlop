@@ -1,0 +1,28 @@
+{
+  "status": "captured",
+  "url": "https://www.overclockers.co.uk/zotac-geforce-rtx-5090-solid-oc-32gb-gddr7-pci-express-graphics-card/GRA-ZTC-04048.html",
+  "observed_at": "2026-10-24T04:28:14.701419+00:00",
+  "title": "Zotac GeForce RTX 5090 Solid OC 32GB GDDR7 PCI-Express Graphics Card",
+  "sku": "GRA-ZTC-04048",
+  "mpn": "GRA-ZTC-04048",
+  "item_gbp": "6989.99",
+  "delivery_gbp": null,
+  "postage_verified": false,
+  "delivery_calendar_days": null,
+  "delivery_working_days": null,
+  "delivery_estimate_source": "structured_product_offer_calendar_days",
+  "stock_status": "available",
+  "stock_evidence": "https://schema.org/InStock",
+  "product_image_urls": [
+    "https://www.overclockers.co.uk/dw/image/v2/BLRM_PRD/on/demandware.static/-/Sites-master-catalog-ocuk/default/dwd0b31a79/images/data/product/b0/d45631/fcec2f164867d2e2cde80024e04219ef0fd02559.jpg?sw=672",
+    "https://www.overclockers.co.uk/dw/image/v2/BLRM_PRD/on/demandware.static/-/Sites-master-catalog-ocuk/default/dw299f601c/images/data/product/b0/d45631/0bd340e680243bd049b28c0d87fbda3d8d330780.jpg?sw=672",
+    "https://www.overclockers.co.uk/dw/image/v2/BLRM_PRD/on/demandware.static/-/Sites-master-catalog-ocuk/default/dw6e564797/images/data/product/b0/d45631/14db66fdcd2ef5dfc7e7408fd1bac9bbd7753806.jpg?sw=672",
+    "https://www.overclockers.co.uk/dw/image/v2/BLRM_PRD/on/demandware.static/-/Sites-master-catalog-ocuk/default/dw9f524d1f/images/data/product/b0/d45631/1d1a3e23d62cabe5781e3a49b4d94628b700f109.jpg?sw=672",
+    "https://www.overclockers.co.uk/dw/image/v2/BLRM_PRD/on/demandware.static/-/Sites-master-catalog-ocuk/default/dwaa76d298/images/data/product/b0/d45631/74924ea447033338ea50cb22dedb686638c28670.jpg?sw=672",
+    "https://www.overclockers.co.uk/dw/image/v2/BLRM_PRD/on/demandware.static/-/Sites-master-catalog-ocuk/default/dwf734011f/images/data/product/b0/d45631/e9c3ca62dd0c3ff3f46fd1ee323e2d7a5ea900de.jpg?sw=672",
+    "https://www.overclockers.co.uk/dw/image/v2/BLRM_PRD/on/demandware.static/-/Sites-master-catalog-ocuk/default/dwfdb109aa/images/data/product/b0/d45631/f4d56842af98d7da539bd97846b64c351469c44e.jpg?sw=672"
+  ],
+  "product_properties": {},
+  "engineering_reviewed": false,
+  "prime_eligible": null
+}

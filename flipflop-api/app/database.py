@@ -1,6 +1,8 @@
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from sqlalchemy.pool import NullPool
 from sqlalchemy.orm import DeclarativeBase
 from app.config import get_settings
+from sqlalchemy.engine import make_url
 import os
 
 settings = get_settings()
@@ -17,14 +19,21 @@ if not _database_url.startswith("postgresql"):
         "This app requires Postgres for concurrent-write support — SQLite is not supported."
     )
 
+_test_database = (make_url(_database_url).database or "").endswith("_test")
 engine = create_async_engine(
     _database_url,
     echo=False,
-    pool_size=30,  # Increased to handle concurrent workers + dashboard
-    max_overflow=15,  # Allow up to 45 total connections before failing
-    pool_pre_ping=True,  # Test connection before reuse
-    pool_recycle=300,  # Reduced from 3600s — recycle dead connections faster (5 min)
-    pool_timeout=10,  # Wait max 10s for available connection before failing
+    **(
+        {"poolclass": NullPool}
+        if _test_database
+        else {
+            "pool_size": 30,  # Increased to handle concurrent workers + dashboard
+            "max_overflow": 15,  # Allow up to 45 total connections before failing
+            "pool_pre_ping": True,  # Test connection before reuse
+            "pool_recycle": 300,  # Recycle dead connections every 5 minutes
+            "pool_timeout": 10,  # Wait max 10s for available connection
+        }
+    ),
 )
 
 AsyncSessionLocal = async_sessionmaker(

@@ -16,6 +16,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import PriceAlert, PriceAlertEvent, ManualBuild
 from app.services.price_alerts import PriceAlertsService, PriceAlertError
 from app.services.money import Money
+from app.services.feature_flags import FeatureFlags, set_flag_for_testing
+
+
+@pytest.fixture(autouse=True)
+def enable_price_alert_rules_for_tests():
+    set_flag_for_testing(FeatureFlags.PRICE_ALERTS_RULES_ENABLED, True)
+    yield
+    set_flag_for_testing(FeatureFlags.PRICE_ALERTS_RULES_ENABLED, False)
 
 
 @pytest.mark.asyncio

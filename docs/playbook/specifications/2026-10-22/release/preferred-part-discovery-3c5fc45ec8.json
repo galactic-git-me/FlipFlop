@@ -1,0 +1,405 @@
+{
+  "role": "gpu",
+  "specification": "RTX 5050 8GB",
+  "observed_at": "2026-10-22T20:09:47.443886+00:00",
+  "commercially_verified": false,
+  "exact_search_candidates": [
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-GeForce-DisplayPort-Axial-tech-technology/dp/B09CMF65V5/ref=sr_1_2",
+      "title": "Dual GeForce RTX 5050 8GB GDDR6 OC Edition (PCIe 5.0, 8GB GDDR6, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2-slot, Axial-tech fan design, 0dB technology, Dual BIOS)",
+      "price": 329.99,
+      "url": "https://www.amazon.co.uk/ASUS-GeForce-DisplayPort-Axial-tech-technology/dp/B09CMF65V5/ref=sr_1_2?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-2",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71GhnAUiOZL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-Graphics-GDDR6-128-bit-Extreme-Performance/dp/B0FFVFD58L/ref=sr_1_19",
+      "title": "Gaming RTX 5050 8G Shadow 2X OC Graphics Card (8GB GDDR6.128-bit, Extreme Performance: 2617MHz, DisplayPort x3 2.1a, HDMI 2.1b, NVIDIA Blackwell Architecture)",
+      "price": 410.6,
+      "url": "https://www.amazon.co.uk/MSI-Graphics-GDDR6-128-bit-Extreme-Performance/dp/B0FFVFD58L/ref=sr_1_19?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-19",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71HQSXg4qVL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 1
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Gigabyte-GeForce-5050-Graphics-Card/dp/B0FQCJSMHC/ref=sr_1_24",
+      "title": "GeForce RTX 5050 D6 8G Graphics Card - 8GB GDDR6, 128bit, PCI-E 5.0, 2572MHz Core Clock, 2 x DP, 2 x HDMI, NVIDIA DLSS 4, GV-N5050D6-8GD",
+      "price": 476.82,
+      "url": "https://www.amazon.co.uk/Gigabyte-GeForce-5050-Graphics-Card/dp/B0FQCJSMHC/ref=sr_1_24?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-24",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71IB5aXgVfL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 29
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ionz-Gaming-PC-Graphics-Windows/dp/B0G83MJVR9/ref=sr_1_20",
+      "title": "Gaming PC - AMD Ryzen 5 5500, RTX 5050 8GB Graphics Card, 16GB RAM, 1TB SSD, Windows 11, 500W PSU (Apex, Black)",
+      "price": 899.95,
+      "url": "https://www.amazon.co.uk/ionz-Gaming-PC-Graphics-Windows/dp/B0G83MJVR9/ref=sr_1_20?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-20",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81QV3MoIzHL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 27
+    }
+  ],
+  "all_search_candidates": [
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-GeForce-DisplayPort-Axial-tech-technology/dp/B09CMF65V5/ref=sr_1_2",
+      "title": "Dual GeForce RTX 5050 8GB GDDR6 OC Edition (PCIe 5.0, 8GB GDDR6, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2-slot, Axial-tech fan design, 0dB technology, Dual BIOS)",
+      "price": 329.99,
+      "url": "https://www.amazon.co.uk/ASUS-GeForce-DisplayPort-Axial-tech-technology/dp/B09CMF65V5/ref=sr_1_2?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-2",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71GhnAUiOZL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-GeForce-Axial-Tech-DisplayPort-DUAL-RTX5060-O8G/dp/B0F7HZ9QSZ/ref=sr_1_3",
+      "title": "Dual GeForce RTX 5060 8GB GDDR7 OC Edition (PCIe 5.0, 8GB GDDR7, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2.5 slot design, Axial tech fan design, 0dB technology, and more)",
+      "price": 374.99,
+      "url": "https://www.amazon.co.uk/ASUS-GeForce-Axial-Tech-DisplayPort-DUAL-RTX5060-O8G/dp/B0F7HZ9QSZ/ref=sr_1_3?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-3",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81i5KcFKysL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-GeForce-VENTUS-Gaming-Graphics/dp/B0BSN1QFXX/ref=sr_1_4",
+      "title": "GeForce RTX 3050 VENTUS 2X E 6G OC Gaming Graphics Card",
+      "price": 264.98,
+      "url": "https://www.amazon.co.uk/MSI-GeForce-VENTUS-Gaming-Graphics/dp/B0BSN1QFXX/ref=sr_1_4?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-4",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/716ZIsBcSQL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/PNY-GEFORCE-RTXTM-5050-Single/dp/B0FSSZY5FL/ref=sr_1_5",
+      "title": "GeForce RTX\u2122 5050 8GB Graphics Card DLSS 4",
+      "price": 335.99,
+      "url": "https://www.amazon.co.uk/PNY-GEFORCE-RTXTM-5050-Single/dp/B0FSSZY5FL/ref=sr_1_5?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-5",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71n8yIff4wL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-GeForce-5050-VENTUS-Graphics/dp/B096Y5WCCZ/ref=sr_1_6",
+      "title": "GeForce RTX 4060 Ti VENTUS 2X BLACK 16G OC Graphics Card",
+      "price": 389.97,
+      "url": "https://www.amazon.co.uk/MSI-GeForce-5050-VENTUS-Graphics/dp/B096Y5WCCZ/ref=sr_1_6?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-6",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71I6T45IdjL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-GeForce-5050-SHADOW-Graphics/dp/B0FG33PH79/ref=sr_1_7",
+      "title": "GeForce RTX 4060 Ti VENTUS 2X BLACK 16G OC Graphics Card",
+      "price": 389.99,
+      "url": "https://www.amazon.co.uk/MSI-GeForce-5050-SHADOW-Graphics/dp/B0FG33PH79/ref=sr_1_7?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-7",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71spmtQxCuL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-8G-GAMING-TRIO-OC/dp/B096Z886F8/ref=sr_1_10",
+      "title": "GeForce RTX 5060 Ti 8G GAMING TRIO OC Graphics Card - RTX 5060 Ti GPU",
+      "price": 429.99,
+      "url": "https://www.amazon.co.uk/MSI-8G-GAMING-TRIO-OC/dp/B096Z886F8/ref=sr_1_10?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-10",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71WCqRmZYmL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-GeForce-5060-VENTUS-Graphics/dp/B0972BP9YR/ref=sr_1_11",
+      "title": "GeForce RTX 5060 8G VENTUS 2X OC Graphics Card - RTX 5060 GPU",
+      "price": 429.98,
+      "url": "https://www.amazon.co.uk/MSI-GeForce-5060-VENTUS-Graphics/dp/B0972BP9YR/ref=sr_1_11?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-11",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71FzJUle1XL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-RTX-5060-8G-GAMING/dp/B0972C4MS9/ref=sr_1_12",
+      "title": "GeForce RTX 5060 8G GAMING OC Graphics Card - RTX 5060 GPU",
+      "price": 469.99,
+      "url": "https://www.amazon.co.uk/MSI-RTX-5060-8G-GAMING/dp/B0972C4MS9/ref=sr_1_12?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-12",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71pIBq-oJnL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-SFF-Ready-Graphics-2-5-slot-Axial-tech/dp/B0CSFMYN1W/ref=sr_1_13",
+      "title": "Prime GeForce RTX 5060 8GB GDDR7 OC Edition SFF Ready Graphics Card (PCIe 5.0, 8GB GDDR7, HDMI/DP 2.1, 2.5 slot, Axial tech fans, Dual BIOS)",
+      "price": 439.99,
+      "url": "https://www.amazon.co.uk/ASUS-SFF-Ready-Graphics-2-5-slot-Axial-tech/dp/B0CSFMYN1W/ref=sr_1_13?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-13",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81naCU3eaAL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-DisplayPort-2-5-slot-Axial-tech-technology/dp/B0FMS51B6M/ref=sr_1_16",
+      "title": "Dual GeForce RTX 5060 8GB GDDR7 White OC Edition (PCIe 5.0, 8GB GDDR7, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2.5-slot design, Axial-tech fan design, 0dB technology) White",
+      "price": 449.99,
+      "url": "https://www.amazon.co.uk/ASUS-DisplayPort-2-5-slot-Axial-tech-technology/dp/B0FMS51B6M/ref=sr_1_16?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-16",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71Ip-T9YmiL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-GeForce-DisplayPort-Technology-Design/dp/B0FFXJZMYZ/ref=sr_1_17",
+      "title": "Dual GeForce RTX\u2122 5050 8GB GDDR6 (PCIe 5.0, 8GB GDDR6, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2 Slots, Axial Technology Fan Design, 0dB Technology, Dual BIOS and more)",
+      "price": 378.42,
+      "url": "https://www.amazon.co.uk/ASUS-GeForce-DisplayPort-Technology-Design/dp/B0FFXJZMYZ/ref=sr_1_17?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-17",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71f-99+7enL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 5
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Gigabyte-GeForce-5060-AERO-Graphics/dp/B0F4ZGWSPJ/ref=sr_1_18",
+      "title": "GeForce RTX 5060 Ti AERO OC 8G Graphics Card - 8GB GDDR7, 128bit, PCI-E 5.0, 2647MHz Core Clock, 3 x DisplayPort, 1 x HDMI, GV-N506TAERO OC-8GD",
+      "price": 449.99,
+      "url": "https://www.amazon.co.uk/Gigabyte-GeForce-5060-AERO-Graphics/dp/B0F4ZGWSPJ/ref=sr_1_18?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-18",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/713i93WqAML._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-Graphics-GDDR6-128-bit-Extreme-Performance/dp/B0FFVFD58L/ref=sr_1_19",
+      "title": "Gaming RTX 5050 8G Shadow 2X OC Graphics Card (8GB GDDR6.128-bit, Extreme Performance: 2617MHz, DisplayPort x3 2.1a, HDMI 2.1b, NVIDIA Blackwell Architecture)",
+      "price": 410.6,
+      "url": "https://www.amazon.co.uk/MSI-Graphics-GDDR6-128-bit-Extreme-Performance/dp/B0FFVFD58L/ref=sr_1_19?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-19",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71HQSXg4qVL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 1
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ionz-Gaming-PC-Graphics-Windows/dp/B0G83MJVR9/ref=sr_1_20",
+      "title": "Gaming PC - AMD Ryzen 5 5500, RTX 5050 8GB Graphics Card, 16GB RAM, 1TB SSD, Windows 11, 500W PSU (Apex, Black)",
+      "price": 899.95,
+      "url": "https://www.amazon.co.uk/ionz-Gaming-PC-Graphics-Windows/dp/B0G83MJVR9/ref=sr_1_20?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-20",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81QV3MoIzHL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-GeForce-3050-Gaming-Graphics/dp/B086ZSQZZ7/ref=sr_1_21",
+      "title": "GeForce RTX 3050 6G DUAL OC Gaming Graphics Card - 1537MHz Boost Clock, GDDR6, PCIe Gen 4, DLSS 2, 3 x DP v1.4a, 1 x HDMI 2.1 (Supports 4K)",
+      "price": 239.99,
+      "url": "https://www.amazon.co.uk/ASUS-GeForce-3050-Gaming-Graphics/dp/B086ZSQZZ7/ref=sr_1_21?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-21",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81mwcITtHBL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-GeForce-5060-SHADOW-Graphics/dp/B09729YMPT/ref=sr_1_22",
+      "title": "GeForce RTX 5060 8G SHADOW 2X OC Graphics Card - RTX 5060 GPU",
+      "price": 499.99,
+      "url": "https://www.amazon.co.uk/MSI-GeForce-5060-SHADOW-Graphics/dp/B09729YMPT/ref=sr_1_22?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-22",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71edk5q7MPL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Gigabyte-GeForce-5050-Graphics-Card/dp/B0FQCJSMHC/ref=sr_1_24",
+      "title": "GeForce RTX 5050 D6 8G Graphics Card - 8GB GDDR6, 128bit, PCI-E 5.0, 2572MHz Core Clock, 2 x DP, 2 x HDMI, NVIDIA DLSS 4, GV-N5050D6-8GD",
+      "price": 476.82,
+      "url": "https://www.amazon.co.uk/Gigabyte-GeForce-5050-Graphics-Card/dp/B0FQCJSMHC/ref=sr_1_24?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-24",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71IB5aXgVfL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 29
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-GeForce-Graphics-Low-profile-Resistance/dp/B09CL951LS/ref=sr_1_25",
+      "title": "GeForce RTX 5060 LP BRK 8GB GDDR7 Graphics Card (PCIe 5.0, 8GB GDDR7, HDMI/DP 2.1, Low-profile Design, IP5X Dust Resistance)",
+      "price": 429.98,
+      "url": "https://www.amazon.co.uk/ASUS-GeForce-Graphics-Low-profile-Resistance/dp/B09CL951LS/ref=sr_1_25?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-25",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/811j490Sn1L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MOUGOL-Graphics-Express-Equipped-Working/dp/B0FN7N4F5Y/ref=sr_1_26",
+      "title": "AMD Radeon RX 580 Gaming Graphics Card, 8GB GDDR5 VRAM, 256-Bit Memory Interface, DP/HDMI/DVI-D Outputs, PCIe 3.0 x16 GPU for Desktop PC Gaming, Supports Windows 11/10/7",
+      "price": 139.99,
+      "url": "https://www.amazon.co.uk/MOUGOL-Graphics-Express-Equipped-Working/dp/B0FN7N4F5Y/ref=sr_1_26?dib=eyJ2IjoiMSJ9.a1W8zFP7Wj59dTqBStlJ5SN2EPrjfVt2brxIhHJYGSCrDS_NBPXFQaMZ40tkh_g0TxVDkgU2_YhZFKIoDdz5KOTdlGxr_2CTDPtpYjGABLs4XALT00nwE2fo850-Z2Iuuc-rNeOscIYWVqpv3tYcYrGvypHFNF4tu9ki6dGphM7J6V68upXYyNVV7B20DyEBqbJjia5CVRVw6Z25roW6FkX12HfVrn2wJYHKNU1DhrAk3rUUAlOSHJL-p84_bNn8h3wqClE5gusTVCGINBV0h_cTGGF7SSYxx7-qNXsS9As.w-w5xWgWvNv2Co9GTU4r696gv6tRgLOhU14pplKCHdg&dib_tag=se&keywords=RTX+5050+8GB+graphics+card&qid=1792699783&s=computers&sr=1-26",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71estYgT3XL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5050 8GB graphics card",
+      "estimated_delivery_days": 26
+    }
+  ],
+  "exact_offer": {
+    "status": "captured",
+    "url": "https://www.amazon.co.uk/dp/B09CMF65V5",
+    "observed_at": "2026-10-22T20:09:49.613625+00:00",
+    "title": "ASUS Dual GeForce RTX 5050 8GB GDDR6 OC Edition (PCIe 5.0, 8GB GDDR6, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2-slot, Axial-tech fan design, 0dB technology, Dual BIOS)",
+    "sku": "B09CMF65V5",
+    "mpn": null,
+    "merchant_name": null,
+    "condition": "new",
+    "item_gbp": "329.99",
+    "delivery_gbp": "0",
+    "postage_verified": true,
+    "delivery_calendar_days": 36,
+    "delivery_working_days": 26,
+    "delivery_estimate_source": "amazon_displayed_default_destination",
+    "prime_eligible": null,
+    "delivery_destination": "TW12",
+    "stock_status": "unknown",
+    "stock_evidence": null,
+    "product_properties": {
+      "Graphics co-processor": "RTX5050",
+      "Brand": "ASUS",
+      "Graphics RAM size": "8 GB",
+      "GPU clock speed": "2647 MHz",
+      "Video output interface": "DisplayPort, HDMI",
+      "Graphics processor manufacturer": "NVIDIA",
+      "Graphics RAM type": "GDDR6",
+      "Recommended uses for product": "Gaming",
+      "Included components": "Graphics Card",
+      "Compatible devices": "Desktop",
+      "Graphics Coprocessor": "RTX5050",
+      "Graphics Card Ram": "8 GB",
+      "GPU Clock Speed": "2647 MHz",
+      "Video Output Interface": "DisplayPort, HDMI",
+      "Graphics Ram Type": "GDDR6",
+      "Compatible Devices": "Desktop",
+      "Graphics Card Interface": "PCI-Express x8",
+      "Memory Clock Speed": "2647 MHz",
+      "Number of Fans": "2",
+      "GPU Series": "NVIDIA RTX 50 Series",
+      "Display Maximum Resolution": "7680 x 4320",
+      "Maximum Display Resolution": "7680x4320",
+      "Item Dimensions L x W": "26.8L x 26.8W centimetres",
+      "Brand Name": "ASUS",
+      "Video Processor": "NVIDIA",
+      "Antenna Location": "Gaming",
+      "Box Contents": "Graphics Card",
+      "Model Name": "RTX 5050",
+      "Graphics Description": "NVIDIA GeForce RTX 5050, 8GB GDDR6, 2647MHz (Standard Mode), 2677MHz (OC Mode)",
+      "Unit Count": "1.0 count",
+      "Global Trade Identification Number": "04711636178518",
+      "Number of Packs": "1",
+      "Manufacturer": "ASUS",
+      "Number of Items": "1",
+      "Country of Origin": "China",
+      "Item Weight": "0.51 Kilograms",
+      "Manufacturer Contact Information": "ASUS Computer GmbH, LegalCompliance@asus.com, https://www.asus.com/de/ , Harkortstra\u00dfe 21-23 City: Ratingen Postcode: 40880 Country: Germany",
+      "Model Number": "ZHANGJIN",
+      "Manufacturer Part Number": "ZHANGJIN",
+      "Product Warranty": "3 Years Manufacturer",
+      "Best Sellers Rank": "658 in Computers & Accessories ( See Top 100 in Computers & Accessories ) 1 in Graphics Cards",
+      "ASIN": "B09CMF65V5",
+      "Customer Reviews": "4.7 4.7 out of 5 stars (98) 4.7 out of 5 stars"
+    },
+    "product_image_urls": [
+      "https://m.media-amazon.com/images/I/41Gpen5DjhL._AC_US40_.jpg",
+      "https://m.media-amazon.com/images/I/41+yfOKX1HL._AC_US40_.jpg",
+      "https://m.media-amazon.com/images/I/51y9dt-V58L._AC_US40_.jpg",
+      "https://m.media-amazon.com/images/I/41Nxd5rgLQL._AC_US40_.jpg",
+      "https://m.media-amazon.com/images/I/41LGFielIaL._AC_US40_.jpg",
+      "https://m.media-amazon.com/images/I/416CuixdtoL._AC_US40_.jpg",
+      "https://m.media-amazon.com/images/I/71zePFcvboL.SS40_BG85,85,85_BR-120_PKdp-play-icon-overlay__.jpg",
+      "https://m.media-amazon.com/images/I/71GhnAUiOZL._AC_SY355_.jpg",
+      "https://m.media-amazon.com/images/I/71GhnAUiOZL._AC_SY450_.jpg",
+      "https://m.media-amazon.com/images/I/71GhnAUiOZL._AC_SX425_.jpg",
+      "https://m.media-amazon.com/images/I/71GhnAUiOZL._AC_SX466_.jpg",
+      "https://m.media-amazon.com/images/I/71GhnAUiOZL._AC_SX522_.jpg",
+      "https://m.media-amazon.com/images/I/71GhnAUiOZL._AC_SX569_.jpg",
+      "https://m.media-amazon.com/images/I/71GhnAUiOZL._AC_SX679_.jpg"
+    ],
+    "engineering_reviewed": false,
+    "merchant_text": null
+  }
+}

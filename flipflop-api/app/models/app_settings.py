@@ -1,6 +1,6 @@
 """Single-row settings table — keyed by name='default'."""
 from datetime import datetime
-from sqlalchemy import String, Integer, Float, Boolean, DateTime, Text
+from sqlalchemy import String, Integer, Float, Boolean, DateTime, Text, JSON
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
 
@@ -17,7 +17,9 @@ class AppSettings(Base):
     auto_buy_autonomous: Mapped[bool] = mapped_column(Boolean, default=False)
     auto_buy_daily_limit: Mapped[int] = mapped_column(Integer, default=3)
 
-    ollama_base_url: Mapped[str] = mapped_column(Text, default="http://localhost:11434")
+    # Kept for API compatibility. Runtime routing is controlled by the
+    # OLLAMA_BASE_URL environment variable, not by a persisted user setting.
+    ollama_base_url: Mapped[str] = mapped_column(Text, default="")
     ollama_model: Mapped[str] = mapped_column(String(100), default="")
     openrouter_api_key: Mapped[str] = mapped_column(Text, default="")
     openrouter_primary_model: Mapped[str] = mapped_column(String(100), default="google/gemma-4-31b-it:free")
@@ -25,6 +27,12 @@ class AppSettings(Base):
 
     image_gen_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     image_gen_provider: Mapped[str] = mapped_column(String(50), default="pollinations")
+
+    # Paid Getting Ready AI offers are disabled and unpriced until reviewed by
+    # an administrator. These are commercial settings, not runtime secrets.
+    ai_setup_offers: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
+    storefront_trust_messages: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
+    storefront_trust_message_seconds: Mapped[int] = mapped_column(Integer, default=6, nullable=False)
 
     # ── Seller Policies (playbook rows 11-15, 43, 44) — configured once here,
     # applied to every listing via the eBay Business Policies API, not
@@ -40,6 +48,14 @@ class AppSettings(Base):
     # their publish time rather than from the moment the settings are saved.
     relist_interval_days: Mapped[int] = mapped_column(Integer, default=7)
     relist_enabled_default: Mapped[bool] = mapped_column(Boolean, default=True)
+
+    # Storefront delivery option promises, shown and priced at checkout.
+    speedy_delivery_price_gbp: Mapped[float] = mapped_column(Float, default=49.0)
+    standard_curated_custom_days: Mapped[int] = mapped_column(Integer, default=5)
+    speedy_curated_custom_days: Mapped[int] = mapped_column(Integer, default=3)
+    flexible_curated_custom_days: Mapped[int] = mapped_column(Integer, default=10)
+    standard_prebuilt_days: Mapped[int] = mapped_column(Integer, default=3)
+    speedy_prebuilt_cutoff_hour: Mapped[int] = mapped_column(Integer, default=14)
 
     # One cadence shared by all indirect/manual cross-listing channels.
     indirect_channel_recreate_interval_days: Mapped[int] = mapped_column(Integer, default=7)
@@ -67,14 +83,12 @@ class AppSettings(Base):
     # only — the backend otherwise has zero visibility into it). Synced
     # best-effort by the extension's setConfig() on every save (see
     # FlipFlopXtension/src/lib/storage.ts) via PUT /api/gem-radar/scan-interval.
-    # Used to derive the "2 consecutive scan cycles missed -> inactive"
-    # listing threshold — see gem_radar/observations.get_active_listing_ids.
-    # Default matches the extension's own SchedulerConfigSchema default.
+    # The extension's scan cadence. Default matches its scheduler setting.
     gem_radar_scan_interval_minutes: Mapped[int] = mapped_column(Integer, default=180)
     # How many consecutive scan cycles a listing can go unseen before it's
-    # treated as inactive — configurable in the extension's Retention
-    # settings (retention.consecutiveMissesBeforeInactive), synced the same
-    # way as gem_radar_scan_interval_minutes above.
+    # archived after later completed scans of the same search term and vendor
+    # — configurable in the extension's Retention settings and used by the
+    # Gem Radar listing lifecycle reconciliation.
     gem_radar_consecutive_misses_before_inactive: Mapped[int] = mapped_column(Integer, default=2)
     # Retention config (extension's retention.scrapeArtifactsHours /
     # preserveWatchedListingEvidence), synced the same way — see

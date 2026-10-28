@@ -10,7 +10,7 @@ from datetime import datetime
 from hashlib import sha256
 from typing import Literal, Optional
 
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 def _to_camel(snake: str) -> str:
@@ -31,6 +31,14 @@ ConfidenceBand = Literal["high", "medium", "low"]
 
 
 class ExtractedListing(CamelModel):
+    source_currency: Optional[Literal['EUR', 'GBP']] = None
+    source_item_price: Optional[float] = Field(default=None, gt=0)
+    exchange_rate: Optional[float] = Field(default=None, gt=0)
+    exchange_rate_date: Optional[str] = None
+    exchange_rate_source: Optional[str] = None
+    price_is_range: bool = False
+    stock_status: Literal['available', 'unavailable', 'unknown'] = 'unknown'
+    stock_evidence: Optional[str] = Field(default=None, max_length=1000)
     listing_id: str
     url: str
     title: str
@@ -49,6 +57,8 @@ class ExtractedListing(CamelModel):
     watch_count: Optional[int] = None
     auction_end_at: Optional[datetime]
     image_url: Optional[str]
+    image_urls: Optional[list[str]] = None
+    video_urls: Optional[list[str]] = None
     # Populated by FlipflopXtension only for Amazon PC-case searches. Keeping
     # this optional preserves the existing payload for every other category.
     image_urls: Optional[list[str]] = None
@@ -69,6 +79,7 @@ class ExtractedListing(CamelModel):
     # "Ryzen 9 9800X3D" vs "AMD Ryzen 9 9800X3D" all have the same GTIN).
     # Only populated for listings sourced via eBay Browse API with productSummary.
     gtin: Optional[str] = None
+    brand: Optional[str] = None
     # Manufacturer Part Number — another stable, canonical identifier for the
     # same product across title variants. Used alongside GTIN for consolidating
     # listings into a single price bucket. Only populated via eBay Browse API.
@@ -89,6 +100,10 @@ class ExtractedListing(CamelModel):
     prime_eligible: Optional[bool] = None
     delivery_text: Optional[str] = None
     delivery_postcode: Optional[str] = None
+    search_tags: list[str] = Field(default_factory=list)
+    delivery_cost_known: Optional[bool] = None
+    sold_confirmed: Optional[bool] = None
+    sold_date_text: Optional[str] = None
 
     @field_validator("listing_id", mode="before")
     @classmethod
@@ -124,7 +139,8 @@ class ExtractedListing(CamelModel):
         if not isinstance(value, str):
             return None
         image_url = value.strip()
-        if len(image_url) > 1000 or not image_url.lower().startswith(("https://", "http://")):
+        if (len(image_url) > 1000 or not image_url.lower().startswith(("https://", "http://"))
+                or image_url.lower().endswith("._rc")):
             return None
         return image_url
 
@@ -134,6 +150,7 @@ class ScanSubmitRequest(CamelModel):
     search_id: str
     query: str
     source_url: str
+    tags: list[str] = Field(default_factory=list)
     max_candidates_for_deep_research: int
     listings: list[ExtractedListing]
 

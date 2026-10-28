@@ -26,6 +26,7 @@ from app.services.benchmark_refresh_job import run_benchmark_refresh
 from app.services.ram_watcher import run_ram_watcher
 from app.services.price_refresh import run_price_refresh
 from app.services.catalogue_service import run_catalogue_pipeline_job, run_catalogue_digest_job
+from app.services.catalogue_marketing_copy import run_marketing_copy_maintenance
 from app.workers.recreate_cycle import run_deferred_publish_job, run_recreate_cycle_job
 from app.workers.manual_build_scheduler import run_deferred_manual_build_publish_job
 from app.workers.markdown_event import run_markdown_event_scan_job, run_manual_build_markdown_event_scan_job
@@ -37,8 +38,13 @@ from app.workers.manual_build_lifecycle import (
 )
 from app.workers.cross_listing_recreate import run_cross_listing_recreate_job
 from app.workers.delivery_followup import run_delivery_followup_job
+from app.workers.warranty_reserve import run_warranty_reserve_job
+from app.services.shipment_notifications import retry_pending_dispatch_notifications
+from app.services.customer_problem_notifications import retry_pending_customer_problem_notifications
+from app.services.parcel2go_notifications import retry_pending_tracking_notifications
 from app.workers.message_poll import run_message_poll_job
 from app.workers.case_content_sourcing import run_case_content_sourcing
+from app.workers.overclockers_gallery import run_overclockers_gallery_sourcing
 from app.services.amazon_bestsellers import scrape_amazon_component_bestsellers
 from app.services.ai_build_generator import generate_ai_builds
 from app.services.email_monitor import EmailMonitor
@@ -53,6 +59,8 @@ settings = get_settings()
 _scheduler: AsyncIOScheduler | None = None
 _job_history: dict[str, deque[dict]] = {
     "cases": deque(maxlen=50),
+    "commercial_reconciliation": deque(maxlen=50),
+    "curated_analytics_retention": deque(maxlen=50),
     "case_content_sourcing": deque(maxlen=50),
     "amazon_case_bestsellers": deque(maxlen=50),
     "amazon_component_bestsellers": deque(maxlen=50),
@@ -83,6 +91,10 @@ _job_history: dict[str, deque[dict]] = {
     "ai_build_generator": deque(maxlen=50),
     "email_monitor": deque(maxlen=50),
     "ebay_sales_tracker": deque(maxlen=50),
+    "warranty_reserve": deque(maxlen=50),
+    "dispatch_notification_retry": deque(maxlen=50),
+    "customer_problem_notification_retry": deque(maxlen=50),
+    "parcel2go_notification_retry": deque(maxlen=50),
 }
 _running_jobs: set[str] = set()
 _STATE_FILE = Path(__file__).resolve().parents[2] / "data" / "scheduler_state.json"
@@ -194,6 +206,8 @@ async def _run_job_with_history(job_id: str, fn: Callable[[], Awaitable[dict]]) 
         result = await fn()
         finished = datetime.now(timezone.utc)
         took_ms = int((perf_counter() - t0) * 1000)
+        if job_id == "amazon_component_bestsellers" and isinstance(result, dict) and result.get("ok") is False:
+            raise RuntimeError(str(result.get("reason") or result.get("category_results") or "incomplete bestseller coverage"))
         if isinstance(result, dict) and result.get("ok") is False:
             reason = str(result.get("reason") or "not_ready")
             summary = f"Skipped ({reason}, {took_ms}ms)"
@@ -263,6 +277,39 @@ def start_scheduler():
     scheduler = get_scheduler()
 
     now = datetime.now(timezone.utc)
+    if settings.commercial_reconciliation_enabled:
+        from app.services.playbook_service import (run_scheduled_playbook_refresh,
+            run_pending_scheduled_playbook_rebuild)
+        scheduler.add_job(
+            _run_job_with_history, trigger=IntervalTrigger(hours=1),
+            id='playbook_catalogue_refresh', name='Catalogue-owned Playbook proposals',
+            kwargs={'job_id':'playbook_catalogue_refresh','fn':run_scheduled_playbook_refresh},
+            replace_existing=True, max_instances=1, coalesce=True,
+            next_run_time=now + timedelta(minutes=2),
+        )
+        from app.services.commercial_reconciliation import run_commercial_reconciliation
+        scheduler.add_job(
+            _run_job_with_history, trigger=IntervalTrigger(hours=1),
+            id='commercial_reconciliation', name='Commercial evidence reconciliation',
+            kwargs={'job_id':'commercial_reconciliation','fn':run_commercial_reconciliation},
+            replace_existing=True, max_instances=1, coalesce=True,
+            next_run_time=now + timedelta(minutes=1),
+        )
+        scheduler.add_job(
+            _run_job_with_history, trigger=IntervalTrigger(minutes=1),
+            id='playbook_rebuild_queue', name='Changed-fact Playbook rebuild queue',
+            kwargs={'job_id':'playbook_rebuild_queue','fn':run_pending_scheduled_playbook_rebuild},
+            replace_existing=True, max_instances=1, coalesce=True,
+            next_run_time=now + timedelta(seconds=30),
+        )
+        from app.services.playbook_compatibility_worker import run_pending_playbook_compatibility_reviews
+        scheduler.add_job(
+            _run_job_with_history, trigger=IntervalTrigger(minutes=1),
+            id='playbook_compatibility_reviews', name='Pending Playbook compatibility reviews',
+            kwargs={'job_id':'playbook_compatibility_reviews','fn':run_pending_playbook_compatibility_reviews},
+            replace_existing=True, max_instances=1, coalesce=True,
+            next_run_time=now + timedelta(seconds=45),
+        )
     # DISABLED: Backend scraper swarms replaced by FlipFlopXtension
     # flip_next = _next_run_for("flip_opportunities", settings.flip_scan_interval_minutes, now)
     # upgrade_start = now
@@ -325,6 +372,16 @@ def start_scheduler():
         replace_existing=True,
         max_instances=1,
         next_run_time=now + timedelta(seconds=20),
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=30),
+        id="overclockers_gallery_sourcing",
+        name="Overclockers Product Galleries",
+        kwargs={"job_id": "overclockers_gallery_sourcing", "fn": run_overclockers_gallery_sourcing},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(seconds=30),
     )
     scheduler.add_job(
         _run_job_with_history,
@@ -569,6 +626,16 @@ def start_scheduler():
     scheduler.add_job(
         _run_job_with_history,
         trigger=IntervalTrigger(hours=24),
+        id="warranty_reserve",
+        name="Warranty Reserve Expiry Review",
+        kwargs={"job_id": "warranty_reserve", "fn": run_warranty_reserve_job},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(minutes=10),
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(hours=24),
         id="manual_build_markdown_event_scan",
         name="Manual Build Markdown Event Candidate Scan",
         kwargs={"job_id": "manual_build_markdown_event_scan", "fn": run_manual_build_markdown_event_scan_job},
@@ -658,6 +725,25 @@ def start_scheduler():
 
     scheduler.add_job(
         _run_job_with_history,
+        trigger=IntervalTrigger(minutes=2),
+        id="catalogue_marketing_copy",
+        name="Catalogue product guides and upgrade descriptions",
+        kwargs={"job_id": "catalogue_marketing_copy", "fn": run_marketing_copy_maintenance},
+        replace_existing=True, max_instances=1, coalesce=True,
+        next_run_time=now + timedelta(seconds=30),
+    )
+    from app.services.growth_social import run_curated_analytics_retention
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(hours=24),
+        id="curated_analytics_retention",
+        name="Delete expired consented Playbook journey analytics",
+        kwargs={"job_id": "curated_analytics_retention", "fn": run_curated_analytics_retention},
+        replace_existing=True, max_instances=1, coalesce=True,
+        next_run_time=now + timedelta(hours=24),
+    )
+    scheduler.add_job(
+        _run_job_with_history,
         trigger=IntervalTrigger(minutes=1),
         id="growth_social_publisher",
         name="Growth Engine Social Publisher",
@@ -665,6 +751,39 @@ def start_scheduler():
         replace_existing=True,
         max_instances=1,
         next_run_time=now + timedelta(minutes=1),
+    )
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=5),
+        id="dispatch_notification_retry",
+        name="Retry direct-storefront dispatch notifications",
+        kwargs={"job_id": "dispatch_notification_retry", "fn": retry_pending_dispatch_notifications},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(minutes=5),
+    )
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=5),
+        id="customer_problem_notification_retry",
+        name="Retry direct customer aftercare notifications",
+        kwargs={"job_id": "customer_problem_notification_retry", "fn": retry_pending_customer_problem_notifications},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(minutes=5),
+    )
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=5),
+        id="parcel2go_notification_retry",
+        name="Retry direct-customer courier tracking notifications",
+        kwargs={"job_id": "parcel2go_notification_retry", "fn": retry_pending_tracking_notifications},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(minutes=5),
     )
 
     if settings.ebay_reselling_enabled:

@@ -2,12 +2,18 @@ from app.services.benchmark_normaliser import normalise_cpu, normalise_gpu, norm
 
 def test_normalise_cpu_variants():
     assert normalise_cpu("AMD Ryzen 7 7800X3D") == "amd_ryzen_7_7800x3d"
+    assert normalise_cpu("AMD Ryzensets 5 9600X Processor (Socket AM5)") == "amd_ryzen_5_9600x"
+    assert normalise_cpu("AMD RYZEN™ 7 9850X3D") == "amd_ryzen_7_9850x3d"
+    assert normalise_cpu("Intel Core Ultra 5 Processor 250K Plus") == "intel_core_ultra_5_250k_plus"
     assert normalise_cpu("Ryzen 7 7800X3D") == "amd_ryzen_7_7800x3d"
     assert normalise_cpu("R7 7800X3D") == "amd_ryzen_7_7800x3d"
     assert normalise_cpu("7800 X3D") == "amd_ryzen_7_7800x3d"
     assert normalise_cpu("Intel Core i7-13700K") == "intel_core_i7_13700k"
     assert normalise_cpu("i7 13700K") == "intel_core_i7_13700k"
     assert normalise_cpu("Core i5-12400F") == "intel_core_i5_12400f"
+    assert normalise_cpu("AMD Ryzen 7 7700 CPU - 5.3 GHz, Socket AM5") == "amd_ryzen_7_7700"
+    assert normalise_cpu("AMD Ryzen 5 9600 Processor (AM5) - Tray CPU") == "amd_ryzen_5_9600"
+    assert normalise_cpu("AMD Ryzen 7 7800X3D 8-Core Processor") == "amd_ryzen_7_7800x3d"
 
 def test_normalise_gpu_variants():
     assert normalise_gpu("RTX 3070") == "nvidia_geforce_rtx_3070"
@@ -16,6 +22,8 @@ def test_normalise_gpu_variants():
     assert normalise_gpu("3070 8GB") == "nvidia_geforce_rtx_3070"
     assert normalise_gpu("RX 6800 XT") == "amd_radeon_rx_6800_xt"
     assert normalise_gpu("Radeon RX 6800XT") == "amd_radeon_rx_6800_xt"
+    assert normalise_gpu("Gigabyte Radeon AI PRO R9700 AI TOP 32GB") == "amd_radeon_ai_pro_r9700"
+    assert normalise_gpu("Intel Arc B580 12GB") == "intel_arc_b580"
 
 def test_normalise_storage_variants():
     assert normalise_storage("Samsung 970 EVO 1TB") == "samsung_970_evo_1tb"

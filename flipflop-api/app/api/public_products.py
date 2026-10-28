@@ -16,6 +16,8 @@ from app.models.product import Product, ProductStatus, ProductType
 from app.models.manual_build import ManualBuild
 from app.models.cx_document import CXDocument, CXDocumentType, CXDocumentStatus
 from app.models.capture_3d import Capture3DAsset, Capture3DStatus
+from app.services.product_software import software_profile_for_product
+from app.services.software_catalogue import SOFTWARE_CATALOGUE
 
 router = APIRouter(prefix="/public", tags=["public-products"])
 
@@ -136,12 +138,15 @@ def _build_asset_pack(
 
 
 def _summary_payload(p: Product) -> dict:
+    from app.services.channel_images import cached_variant_url
     return {
         "id": p.id,
         "title": p.title,
         "price": p.price,
         "status": p.status.value,
         "hero_photo_url": p.hero_photo_url,
+        "card_photo_url": cached_variant_url(p.hero_photo_url, "website_card") or p.hero_photo_url,
+        "website_hero_url": cached_variant_url(p.hero_photo_url, "website_hero") or p.hero_photo_url,
         "has_benchmark_report": p.benchmark_report_document_id is not None,
         "has_3d_twin": p.capture_3d_asset_id is not None or bool(p.model_3d_url),
         "model_3d_url": p.model_3d_url,
@@ -218,6 +223,12 @@ async def public_product_detail(product_id: int, db: AsyncSession = Depends(get_
                 await db.execute(select(ManualBuild).where(ManualBuild.id == product.build.manual_build_id))
             ).scalar_one_or_none()
 
+    from app.services.playbook_fit import public_playbook_fit
+    playbook_assignment = (
+        (manual_build.evidence_data or {}).get("playbook_assignment") if manual_build else None
+    )
+    playbook_fit = public_playbook_fit(playbook_assignment)
+
     benchmark = None
     if product.benchmark_report_document_id:
         doc = (
@@ -254,6 +265,7 @@ async def public_product_detail(product_id: int, db: AsyncSession = Depends(get_
         "build_id": product.build.manual_build_id if product.build else product.id,
         "build_name": manual_build.name if manual_build and manual_build.name else product.title,
         "description": product.description,
+        "playbook_fit": playbook_fit,
         "spec": build_spec,
         "item_specifics": item_specifics,
         "platform_category": platform_category,
@@ -272,6 +284,10 @@ async def public_product_detail(product_id: int, db: AsyncSession = Depends(get_
             "warranty": "UK statutory consumer rights apply. Any remaining transferable manufacturer warranty is identified with the build; no unsupported manufacturer cover is implied.",
             "delivery": "Ready-to-ship PCs are dispatched after 1 working day handling, with an estimated 1–2 working day tracked delivery window.",
             "support": "Direct setup, troubleshooting and upgrade support is available through the personalised owner portal.",
+        },
+        "software_options": {
+            "profile": await software_profile_for_product(db, product),
+            "apps": SOFTWARE_CATALOGUE,
         },
         "faqs": product.selected_faqs or [],
     }

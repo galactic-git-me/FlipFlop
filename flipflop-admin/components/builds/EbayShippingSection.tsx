@@ -22,7 +22,7 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
   const [shippingMethod, setShippingMethod] = useState(build.shipping_method ?? "tracked");
   const [shippingCost, setShippingCost] = useState((build.shipping_cost ?? 0).toString());
   const [packagingCost, setPackagingCost] = useState((build.packaging_cost ?? 0).toString());
-  const [warrantyReservePct, setWarrantyReservePct] = useState((build.warranty_reserve_pct ?? 3).toString());
+  const [warrantyReservePct, setWarrantyReservePct] = useState(Math.max(5, build.warranty_reserve_pct ?? 5).toString());
   const [handlingDays, setHandlingDays] = useState((build.handling_time_days ?? 1).toString());
   const [fulfillmentPolicyId, setFulfillmentPolicyId] = useState(build.fulfillment_policy_id ?? "");
   const [weightKg, setWeightKg] = useState((build.package_weight_kg ?? "").toString());
@@ -236,7 +236,7 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
     shippingMethod !== (build.shipping_method ?? "tracked") ||
     parseFloat(shippingCost) !== (build.shipping_cost ?? 0) ||
     parseFloat(packagingCost) !== (build.packaging_cost ?? 0) ||
-    parseFloat(warrantyReservePct) !== (build.warranty_reserve_pct ?? 3) ||
+    parseFloat(warrantyReservePct) !== (build.warranty_reserve_pct ?? 5) ||
     parseInt(handlingDays, 10) !== (build.handling_time_days ?? 1) ||
     fulfillmentPolicyId !== (build.fulfillment_policy_id ?? "");
 
@@ -291,8 +291,8 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
         </label>
         <label className="text-xs font-semibold text-slate-300">
           Warranty reserve (%)
-          <input type="number" step="0.5" min="0" max="25" value={warrantyReservePct} onChange={(event) => setWarrantyReservePct(event.target.value)} className="mt-2 w-full rounded border border-slate-600 bg-slate-700 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none" />
-          <span className="mt-1 block font-normal text-slate-500">Held back from proceeds for expected warranty claims.</span>
+          <input type="number" step="0.5" min="5" max="25" value={warrantyReservePct} onChange={(event) => setWarrantyReservePct(event.target.value)} className="mt-2 w-full rounded border border-slate-600 bg-slate-700 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none" />
+          <span className="mt-1 block font-normal text-slate-500">At least 5% is held back from every build sale for warranty claims; a higher rate may be set when expected costs justify it.</span>
         </label>
       </div>
 
@@ -449,6 +449,7 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
                   £{quotePrice?.toFixed(2) ?? "—"} tracked
                   {quote.estimated_days != null && ` · ${quote.estimated_days} day est.`}
                 </p>
+                <p className="text-[10px] text-emerald-200">Signature tracking is included in this estimated quote.</p>
                 <p className="mt-2 flex items-start gap-1.5 text-amber-200">
                   <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                   {quote.protection_warning}

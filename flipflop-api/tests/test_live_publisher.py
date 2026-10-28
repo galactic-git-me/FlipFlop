@@ -17,6 +17,16 @@ from app.services.live_publisher import LivePublisher
 from app.services.feature_flags import set_flag_for_testing
 
 
+@pytest.fixture(autouse=True)
+def reviewed_product_images(monkeypatch):
+    """Publisher state tests use reviewed media without remote downloads."""
+    async def prepared(urls, channel, **kwargs):
+        if not urls:
+            raise ValueError("At least one product photograph is required")
+        return ["https://images.example.test/reviewed-square.jpg"]
+    monkeypatch.setattr("app.services.channel_images.prepare_channel_urls", prepared)
+
+
 @pytest.mark.asyncio
 class TestPublishToChannel:
     """Test publishing to single channel."""
@@ -43,6 +53,7 @@ class TestPublishToChannel:
         build = ManualBuild(
             name="Complete Build",
             status="built",
+            photos=[{"url": "https://images.example.test/original.jpg", "kind": "photo"}],
             generated_title="Gaming PC",
             generated_description="High-performance gaming build",
             ebay_price=999.99,
@@ -66,6 +77,7 @@ class TestPublishToChannel:
         build = ManualBuild(
             name="Test",
             status="built",
+            photos=[{"url": "https://images.example.test/original.jpg", "kind": "photo"}],
             generated_title="PC",
             generated_description="Gaming PC",
             ebay_price=999.99,
@@ -90,6 +102,7 @@ class TestPublishToChannel:
         build = ManualBuild(
             name="Test",
             status="built",
+            photos=[{"url": "https://images.example.test/original.jpg", "kind": "photo"}],
             generated_title="PC",
             generated_description="Gaming PC",
             ebay_price=999.99,
@@ -123,6 +136,7 @@ class TestPublishToChannel:
         build = ManualBuild(
             name="Test",
             status="built",
+            photos=[{"url": "https://images.example.test/original.jpg", "kind": "photo"}],
             generated_title="PC",
             generated_description="Gaming PC",
             ebay_price=999.99,
@@ -148,6 +162,7 @@ class TestPublishMultipleChannels:
         build = ManualBuild(
             name="Test",
             status="built",
+            photos=[{"url": "https://images.example.test/original.jpg", "kind": "photo"}],
             generated_title="PC",
             generated_description="Gaming PC",
             ebay_price=999.99,
@@ -174,6 +189,7 @@ class TestPublishMultipleChannels:
         build = ManualBuild(
             name="Test",
             status="built",
+            photos=[{"url": "https://images.example.test/original.jpg", "kind": "photo"}],
             generated_title="PC",
             generated_description="Gaming PC",
             ebay_price=999.99,
@@ -205,6 +221,7 @@ class TestWithdraw:
         build = ManualBuild(
             name="Test",
             status="built",
+            photos=[{"url": "https://images.example.test/original.jpg", "kind": "photo"}],
             generated_title="PC",
             generated_description="Gaming PC",
             ebay_price=999.99,
@@ -251,6 +268,7 @@ class TestWithdraw:
         build = ManualBuild(
             name="Test",
             status="built",
+            photos=[{"url": "https://images.example.test/original.jpg", "kind": "photo"}],
             generated_title="PC",
             generated_description="Gaming PC",
             ebay_price=999.99,
@@ -284,6 +302,7 @@ class TestAuditTrail:
         build = ManualBuild(
             name="Test",
             status="built",
+            photos=[{"url": "https://images.example.test/original.jpg", "kind": "photo"}],
             generated_title="PC",
             generated_description="Gaming PC",
             ebay_price=999.99,
@@ -322,6 +341,7 @@ class TestAuditTrail:
         build = ManualBuild(
             name="Test",
             status="built",
+            photos=[{"url": "https://images.example.test/original.jpg", "kind": "photo"}],
             generated_title="PC",
             generated_description="Gaming PC",
             ebay_price=999.99,
@@ -363,6 +383,7 @@ class TestDryRunMode:
         build = ManualBuild(
             name="Test",
             status="built",
+            photos=[{"url": "https://images.example.test/original.jpg", "kind": "photo"}],
             generated_title="PC",
             generated_description="Gaming PC",
             ebay_price=999.99,

@@ -273,6 +273,10 @@ export interface Playbook {
   search_strategy: PlaybookSearchStrategy;
   upgrade_strategy: PlaybookUpgradeStrategy;
   profit_strategy: PlaybookProfitStrategy;
+  software_profile?: {
+    recommended_package_ids?: string[];
+    rationale?: string;
+  };
   flip_count: number;
   avg_profit_gbp: number | null;
   avg_days_to_sell: number | null;

@@ -1,0 +1,52 @@
+name: Pull request checks
+
+on:
+  pull_request:
+    branches: [main, dev]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: flipflop_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d flipflop_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      OLLAMA_MODEL: disabled-in-ci
+      FLIPFLOP_CI_FULL_API_TESTS: "1"
+      EBAY_TOKEN_ENCRYPTION_KEY: ci-only-ebay-token-encryption-test-key
+      STRIPE_SECRET_KEY: sk_test_flipflop_ci_only
+      STRIPE_WEBHOOK_SECRET: whsec_flipflop_ci_only
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/flipflop_test
+      SYNC_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/flipflop_test
+      TEST_DATABASE_URL: postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/flipflop_test
+      TEST_DATABASE_SCHEMA: flipflop_test
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: flipflop-admin/package-lock.json
+      - name: Run repository checks
+        shell: bash
+        run: bash scripts/ci.sh

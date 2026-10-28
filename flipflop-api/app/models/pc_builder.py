@@ -22,7 +22,11 @@ class PCBuild(Base):
     playbook_tier: Mapped[str] = mapped_column(String(20))  # budget, midrange, highend
 
     # Build workflow stage: design | build | sell (default design)
-    stage: Mapped[str] = mapped_column(Enum(PCBuildStage), default=PCBuildStage.DESIGN, index=True)
+    stage: Mapped[str] = mapped_column(
+        Enum(PCBuildStage, native_enum=False, values_callable=lambda values: [item.value for item in values]),
+        default=PCBuildStage.DESIGN,
+        index=True,
+    )
 
     # Build status within stage: draft | completed (only meaningful in sell stage)
     status: Mapped[str] = mapped_column(String(20), index=True, default="draft")

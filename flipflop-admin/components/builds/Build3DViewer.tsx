@@ -23,6 +23,7 @@ export function Build3DViewer({ url }: { url: string }) {
       try {
         const THREE = await import("three");
         const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
+        const { MeshoptDecoder } = await import("three/examples/jsm/libs/meshopt_decoder.module.js");
         const { OrbitControls } = await import("three/examples/jsm/controls/OrbitControls.js");
         if (disposed) return;
 
@@ -76,7 +77,7 @@ export function Build3DViewer({ url }: { url: string }) {
         };
 
         const loadUrl = url.startsWith("http") ? `/api/proxy-glb?url=${encodeURIComponent(url)}` : url;
-        const gltf = await new GLTFLoader().loadAsync(loadUrl);
+        const gltf = await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync(loadUrl);
         if (disposed) return;
         const model = gltf.scene;
         const box = new THREE.Box3().setFromObject(model);

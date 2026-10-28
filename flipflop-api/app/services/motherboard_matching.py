@@ -55,6 +55,20 @@ def match_motherboard_spec(title: str, candidates: list[MotherboardSpec]) -> Mot
     return None
 
 
+def match_exact_reviewed_motherboard_spec(title: str, candidates: list[MotherboardSpec]) -> MotherboardSpec | None:
+    """Return only a reviewed reference whose canonical model is in the title.
+
+    Playbook publication requires source-grade compatibility evidence, so the
+    fuzzy convenience match above is deliberately unsuitable here. Ambiguous
+    exact matches and unreviewed rows remain unresolved.
+    """
+    normalized = _normalize(title)
+    matches = [row for row in candidates
+        if row.reviewed and _normalize(row.canonical_model)
+        and _normalize(row.canonical_model) in normalized]
+    return matches[0] if len(matches) == 1 else None
+
+
 async def resolve_motherboard_spec(db: AsyncSession, title: str) -> MotherboardSpec | None:
     """Single-title convenience wrapper — fetches the reference table fresh.
     Fine for one-off lookups (e.g. admin tools); use match_motherboard_spec

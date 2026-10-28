@@ -30,7 +30,7 @@ if TYPE_CHECKING:
 log = structlog.get_logger(__name__)
 
 # Image constants
-EBAY_OPTIMAL_SIZE = (1500, 1500)  # eBay recommends 1500x1500 for best quality
+EBAY_OPTIMAL_SIZE = (1600, 1600)
 QUALITY_COMPRESSION = 85
 MAX_IMAGE_SIZE_KB = 150
 
@@ -73,7 +73,7 @@ def process_image_bytes(
     image_bytes: bytes,
     target_size: tuple = EBAY_OPTIMAL_SIZE,
     quality: int = QUALITY_COMPRESSION,
-    add_watermark: bool = True,
+    add_watermark: bool = False,
     watermark_text: Optional[str] = None,
 ) -> Optional[bytes]:
     """
@@ -92,6 +92,9 @@ def process_image_bytes(
     _check_pil_available()
 
     try:
+        if target_size == EBAY_OPTIMAL_SIZE and not add_watermark:
+            from app.services.channel_images import render_variant
+            return render_variant(image_bytes, "marketplace")[0]
         # Open image
         img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
 
@@ -195,7 +198,7 @@ def _add_watermark(img: "Image.Image", text: str = "FlipFlop", opacity: float = 
 async def process_images_for_listing(
     image_urls: List[str],
     max_concurrent: int = 3,
-    add_watermark: bool = True,
+    add_watermark: bool = False,
 ) -> tuple[List[bytes], List[str]]:
     """
     Process multiple images for a listing.
@@ -210,6 +213,8 @@ async def process_images_for_listing(
     """
     _check_pil_available()
 
+    if add_watermark:
+        raise ImageProcessingError("Product listing photographs must be clean. Keep branding and promotional stickers as separate website elements.")
     processed = []
     errors = []
 

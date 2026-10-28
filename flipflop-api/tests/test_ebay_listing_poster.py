@@ -133,8 +133,8 @@ async def test_existing_listing_uses_revise_instead_of_create():
             new=AsyncMock(),
         ) as create,
         patch(
-            "app.services.ebay_trading_api.revise_fixed_price_item",
-            new=AsyncMock(return_value="188805793027"),
+            "app.services.ebay_listing_poster.EbayListingPoster.update_listing",
+            new=AsyncMock(return_value={"success": True, "listing_id": "188805793027", "url": "https://www.ebay.co.uk/itm/188805793027"}),
         ) as revise,
     ):
         result = await post_flip_to_ebay(
@@ -165,8 +165,8 @@ async def test_duplicate_rejection_adopts_and_revises_original_listing():
             new=AsyncMock(return_value={"success": False, "error": duplicate_error}),
         ),
         patch(
-            "app.services.ebay_trading_api.revise_fixed_price_item",
-            new=AsyncMock(return_value="188805793027"),
+            "app.services.ebay_listing_poster.EbayListingPoster.update_listing",
+            new=AsyncMock(return_value={"success": True, "listing_id": "188805793027", "url": "https://www.ebay.co.uk/itm/188805793027"}),
         ) as revise,
     ):
         result = await post_flip_to_ebay(

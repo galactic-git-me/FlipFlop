@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Check, AlertCircle, RefreshCw, LockKeyhole, Images, Plus, Sparkles, ExternalLink, Upload, Eye, Star, Heart, Video, Search } from "lucide-react";
+import { Box, Check, AlertCircle, RefreshCw, LockKeyhole, Images, Plus, Sparkles, ExternalLink, Upload, Eye, Star, Heart, Video, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
@@ -25,6 +25,7 @@ interface PriorityCaseItem {
   source_site?: string;
   source_url?: string;
   image_url?: string;
+  vendor_count?: number;
   bestseller_rank?: number;
   priority_3d_rank?: number;
   priority_3d_batch?: number;
@@ -37,12 +38,13 @@ interface PriorityCaseItem {
   is_preferred?: boolean;
   has_3d_model?: boolean;
   model_3d_url?: string;
+  overclockers_gallery?: string[];
   sourcing_3d_evidence?: {
     stages?: Record<string, SourcingStageEvidence>;
   };
 }
 
-type ReferenceSource = "amazon" | "manufacturer" | "google" | "retailer" | "manual";
+type ReferenceSource = "amazon" | "manufacturer" | "google" | "bing" | "retailer" | "manual";
 
 interface ReferenceCandidate {
   url: string;
@@ -54,10 +56,50 @@ interface ReferenceCandidate {
 interface ReferenceCandidateResponse {
   sourcing_ready: boolean;
   candidates: ReferenceCandidate[];
-  approved_selection?: { status?: string; images?: ReferenceCandidate[] };
+  vendor_count?: number;
+  vendor_names?: string[];
+  approved_selection?: { status?: string; images?: ReferenceCandidate[]; model_images?: ReferenceCandidate[] };
 }
-const DIRECT_BACKEND_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4314").replace(/\/$/, "");
-const GOOGLE_CSE_ENGINE_ID = process.env.NEXT_PUBLIC_GOOGLE_CSE_ENGINE_ID;
+interface GeneratedReviewLink {
+  version: 1;
+  url: string;
+  imageUrls: string[];
+}
+const DIRECT_BACKEND_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4311").replace(/\/$/, "");
+const hasValidReferenceCount = (count: number) => count >= 1 && count <= 4;
+
+async function readCaseList(response: Response): Promise<PriorityCaseItem[]> {
+  const data = await readJsonResponse<unknown>(response);
+  if (!response.ok) {
+    const failure = data as { detail?: unknown; error?: unknown } | null;
+    const message = failure?.detail || failure?.error;
+    throw new Error(typeof message === "string" ? message : `Could not load cases (${response.status})`);
+  }
+  if (!Array.isArray(data)) throw new Error("Could not load cases: expected a case list from the server");
+  return data;
+}
+
+function sameImageOrder(first: string[], second: string[]) {
+  return first.length === second.length && first.every((url, index) => url === second[index]);
+}
+
+function readGeneratedReviewLink(caseId: number, approvedImages: ReferenceCandidate[]): GeneratedReviewLink | null {
+  const key = `case-3d-review-${caseId}`;
+  const raw = window.localStorage.getItem(key);
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw) as Partial<GeneratedReviewLink>;
+    const currentImageUrls = approvedImages.map(image => image.url);
+    if (parsed.version === 1 && typeof parsed.url === "string" && Array.isArray(parsed.imageUrls)
+      && sameImageOrder(parsed.imageUrls, currentImageUrls)) {
+      return parsed as GeneratedReviewLink;
+    }
+  } catch {
+    // Old versions stored a URL without the image set that produced it.
+  }
+  window.localStorage.removeItem(key);
+  return null;
+}
 
 const sourcingLabels: Array<[string, string]> = [
   ["product_images", "Images"],
@@ -129,6 +171,18 @@ function compactCaseName(caseItem: PriorityCaseItem) {
   return [brand, model, colour].filter(Boolean).join("-").toLocaleUpperCase();
 }
 
+function shortCaseSearchName(caseItem: PriorityCaseItem) {
+  const name = caseItem.name.replace(/\s+/g, " ").trim();
+  const shortened = name.split(/\s+(?:ARGB|RGB|Panoramic|Tempered|Glass|Mid[- ]Tower|Gaming|PC Case|Computer Case)\b/i)[0].trim();
+  return shortened || name;
+}
+
+function candidateMatchesQuery(candidate: ReferenceCandidate, query: string) {
+  const terms = query.toLowerCase().split(/[^a-z0-9]+/).filter(term => term.length > 2);
+  const haystack = `${candidate.label || ""} ${candidate.source_page || ""} ${candidate.url}`.toLowerCase();
+  return terms.length > 0 && terms.filter(term => haystack.includes(term)).length >= Math.min(2, terms.length);
+}
+
 function hasIncludedFans(caseItem: PriorityCaseItem) {
   const title = caseItem.name;
   if (/(?:fans?\s+(?:included|pre-installed)|pre-installed[^,;–|]{0,60}fans?|includes?\s+\d+\s*(?:x\s*)?(?:\d+\s*mm\s*)?(?:\w+\s+){0,3}fans?|with\s+\d+\s*(?:x\s*)?(?:\d+\s*mm\s*)?(?:\w+\s+){0,3}fans?)/i.test(title)) return true;
@@ -191,6 +245,18 @@ function imageSetApproved(caseItem: PriorityCaseItem) {
   return stage?.status === "complete" && selection?.status === "approved";
 }
 
+function readyForMeshy(caseItem: PriorityCaseItem) {
+  const stages = caseItem.sourcing_3d_evidence?.stages || {};
+  const manufacturerStatus = stages.manufacturer_3d?.status;
+  const thirdPartyStatus = stages.third_party_3d?.status;
+  const generationStatus = stages.meshy_generation?.status;
+  return !caseItem.has_3d_model
+    && imageSetApproved(caseItem)
+    && ["not_found", "complete"].includes(manufacturerStatus || "")
+    && thirdPartyStatus === "not_found"
+    && !["found", "complete", "blocked", "searching"].includes(generationStatus || "");
+}
+
 function modelEvidenceStatus(caseItem: PriorityCaseItem) {
   const stages = caseItem.sourcing_3d_evidence?.stages || {};
   const statuses = [stages.manufacturer_3d?.status, stages.third_party_3d?.status, stages.meshy_generation?.status];
@@ -217,21 +283,35 @@ function liveStatus(caseItem: PriorityCaseItem) {
 export default function Cases3DPriorityPage() {
   const router = useRouter();
   const [cases, setCases] = useState<PriorityCaseItem[]>([]);
+  const [caseScope, setCaseScope] = useState<"Amazon Top 100" | "All retailers" | "Priority campaign" | "Overclockers" | "Amazon">("Amazon Top 100");
+  const [listLayout, setListLayout] = useState<"table" | "grid">("table");
+  const [casePage, setCasePage] = useState(1);
+  const [campaignFrozen, setCampaignFrozen] = useState(false);
+  const [hasNextCasePage, setHasNextCasePage] = useState(false);
   const [loading, setLoading] = useState(true);
   const [completedCases, setCompletedCases] = useState<PriorityCaseItem[]>([]);
   const [freezing, setFreezing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [referenceCaseId, setReferenceCaseId] = useState<number | null>(null);
   const [referenceData, setReferenceData] = useState<ReferenceCandidateResponse | null>(null);
+  const [listingReferences, setListingReferences] = useState<ReferenceCandidate[]>([]);
   const [selectedReferences, setSelectedReferences] = useState<ReferenceCandidate[]>([]);
+  const [selectedVideos, setSelectedVideos] = useState<string[]>([]);
   const [referenceBusy, setReferenceBusy] = useState(false);
   const [referenceNotice, setReferenceNotice] = useState<string | null>(null);
+  const [autoOpenedCaseId, setAutoOpenedCaseId] = useState<number | null>(null);
   const [newReferenceUrl, setNewReferenceUrl] = useState("");
   const [newReferenceSource, setNewReferenceSource] = useState<ReferenceSource>("manufacturer");
-  const [imageSearchQuery, setImageSearchQuery] = useState("");
-  const [googleCseLoadError, setGoogleCseLoadError] = useState<string | null>(null);
-  const [generatedReviewUrl, setGeneratedReviewUrl] = useState<string | null>(null);
+  const [overclockersResults, setOverclockersResults] = useState<ReferenceCandidate[]>([]);
+  const [overclockersError, setOverclockersError] = useState<string | null>(null);
+  const [overclockersBusy, setOverclockersBusy] = useState(false);
+  const [bingResults, setBingResults] = useState<ReferenceCandidate[]>([]);
+  const [bingError, setBingError] = useState<string | null>(null);
+  const [bingBusy, setBingBusy] = useState(false);
+  const [generatedReviewLink, setGeneratedReviewLink] = useState<GeneratedReviewLink | null>(null);
   const [generatingCaseId, setGeneratingCaseId] = useState<number | null>(null);
+  const [generationProgress, setGenerationProgress] = useState(0);
+  const [generationTaskStatus, setGenerationTaskStatus] = useState("STARTING");
   const [evidenceReview, setEvidenceReview] = useState<{ caseItem: PriorityCaseItem; stage: "product_images" | "youtube_video" | "meshy_generation" } | null>(null);
 
   const openReferenceSelection = async (caseId: number) => {
@@ -248,8 +328,12 @@ export default function Cases3DPriorityPage() {
       if (!response.ok) throw new Error(data.detail || "Could not load reference pictures");
       setReferenceCaseId(caseId);
       setReferenceData(data);
-      setSelectedReferences(data.approved_selection?.images || []);
-      setGeneratedReviewUrl(window.localStorage.getItem(`case-3d-review-${caseId}`));
+      const approvedListingImages = data.approved_selection?.images || [];
+      const approvedModelImages = data.approved_selection?.model_images || approvedListingImages.slice(0, 4);
+      setListingReferences(approvedListingImages);
+      setSelectedReferences(approvedModelImages);
+      setSelectedVideos((data.approved_selection as { video_urls?: string[] } | undefined)?.video_urls || []);
+      setGeneratedReviewLink(readGeneratedReviewLink(caseId, approvedModelImages));
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not load reference pictures");
     } finally {
@@ -258,6 +342,8 @@ export default function Cases3DPriorityPage() {
   };
 
   const toggleReference = (candidate: ReferenceCandidate) => {
+    setGeneratedReviewLink(null);
+    if (referenceCaseId !== null) window.localStorage.removeItem(`case-3d-review-${referenceCaseId}`);
     setReferenceData(current => current ? { ...current, approved_selection: undefined } : current);
     setReferenceNotice(null);
     setSelectedReferences(current => {
@@ -265,6 +351,48 @@ export default function Cases3DPriorityPage() {
       if (current.length >= 4) return current;
       return [...current, candidate];
     });
+  };
+
+  const toggleListingReference = (candidate: ReferenceCandidate) => {
+    setReferenceData(current => current ? { ...current, approved_selection: undefined } : current);
+    setReferenceNotice(null);
+    setListingReferences(current => current.some(item => item.url === candidate.url)
+      ? current.filter(item => item.url !== candidate.url)
+      : [...current, candidate]);
+  };
+
+  const toggleAllListingReferences = () => {
+    const candidates = referenceData?.candidates || [];
+    const allSelected = candidates.length > 0 && candidates.every(candidate => listingReferences.some(item => item.url === candidate.url));
+    setListingReferences(allSelected ? [] : candidates);
+    setReferenceData(current => current ? { ...current, approved_selection: undefined } : current);
+    setReferenceNotice(null);
+  };
+
+  const renderReferenceTile = (candidate: ReferenceCandidate) => {
+    const isListingPhoto = listingReferences.some(item => item.url === candidate.url);
+    const modelIndex = selectedReferences.findIndex(item => item.url === candidate.url);
+    return (
+      <div key={candidate.url} className={`relative overflow-hidden rounded-md border bg-white ${isListingPhoto ? "border-emerald-300 ring-2 ring-emerald-400/30" : "border-slate-700"}`}>
+        <button type="button" onClick={() => toggleListingReference(candidate)} aria-pressed={isListingPhoto} aria-label={`${isListingPhoto ? "Remove from" : "Approve as"} listing photos: ${candidate.label || candidate.source}`} className="block w-full cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300">
+          <img src={candidate.url} alt={candidate.label || `${candidate.source} product photo`} className="h-32 w-full object-contain" />
+          <span className="absolute inset-x-0 bottom-0 truncate bg-slate-950/85 px-2 py-1 text-[10px] text-white">{candidate.label || candidate.source}</span>
+          {isListingPhoto && <span className="absolute left-2 top-2 rounded-full bg-emerald-400 px-2 py-1 text-[10px] font-bold text-slate-950">LISTING</span>}
+        </button>
+        <button type="button" onClick={() => toggleReference(candidate)} aria-pressed={modelIndex >= 0} disabled={modelIndex < 0 && selectedReferences.length >= 4} className={`absolute right-1 top-1 rounded px-2 py-1 text-[10px] font-bold ${modelIndex >= 0 ? "bg-cyan-400 text-slate-950" : "bg-slate-950/85 text-white disabled:cursor-not-allowed disabled:opacity-40"}`}>
+          {modelIndex >= 0 ? `3D ${modelIndex + 1} ×` : "＋ 3D"}
+        </button>
+      </div>
+    );
+  };
+
+  const clearReferenceSelection = () => {
+    if (referenceCaseId !== null) window.localStorage.removeItem(`case-3d-review-${referenceCaseId}`);
+    setGeneratedReviewLink(null);
+    setReferenceData(current => current ? { ...current, approved_selection: undefined } : current);
+    setSelectedReferences([]);
+    setListingReferences([]);
+    setReferenceNotice("Photo selections cleared. Choose listing photos and up to four separate photos for the 3D model.");
   };
 
   const addReferenceCandidate = () => {
@@ -311,33 +439,97 @@ export default function Cases3DPriorityPage() {
     }
   };
 
+  const loadOverclockersGallery = async (caseId: number) => {
+    setOverclockersBusy(true);
+    setOverclockersError(null);
+    try {
+      let data: { results?: ReferenceCandidate[]; detail?: string; captured?: boolean; status?: string } = {};
+      for (let attempt = 0; attempt < 30; attempt += 1) {
+        const response = await fetch(`/api/cases/${caseId}/3d-overclockers-gallery`, { cache: "no-store" });
+        data = await readJsonResponse<typeof data & { detail?: string }>(response);
+        if (!response.ok) throw new Error(data.detail || "Could not load Overclockers photos");
+        if (data.status !== "retrieving") break;
+        await new Promise(resolve => window.setTimeout(resolve, 2000));
+      }
+      const results = data.results || [];
+      setOverclockersResults(results);
+      setReferenceData(current => current ? {
+        ...current,
+        candidates: [...current.candidates, ...results.filter(candidate => !current.candidates.some(existing => existing.url === candidate.url))],
+      } : current);
+      if (data.status === "retrieving") setOverclockersError("Photo retrieval is taking longer than expected. Reload the gallery to check again.");
+      else if (!data.captured && results.length === 0) setOverclockersError("No matching Overclockers photos were found for this product.");
+    } catch (caught) {
+      setOverclockersError(caught instanceof Error ? caught.message : "Could not load Overclockers photos");
+    } finally {
+      setOverclockersBusy(false);
+    }
+  };
+
+  const loadBingImages = async (caseId: number) => {
+    setBingBusy(true);
+    setBingError(null);
+    try {
+      const response = await fetch(`/api/cases/${caseId}/3d-bing-images`, { cache: "no-store" });
+      const data = await readJsonResponse<{ results?: ReferenceCandidate[]; detail?: string }>(response);
+      if (!response.ok) throw new Error(data.detail || "Could not load Bing images");
+      setBingResults(data.results || []);
+    } catch (caught) {
+      setBingError(caught instanceof Error ? caught.message : "Could not load Bing images");
+    } finally {
+      setBingBusy(false);
+    }
+  };
+
+  const sourceBingInChrome = () => {
+    if (!evidenceReview) return;
+    const caseId = evidenceReview.caseItem.id;
+    const query = shortCaseSearchName(evidenceReview.caseItem);
+    window.open(`https://www.bing.com/images/search?q=${encodeURIComponent(query)}#flipflop-bing-case-${caseId}`, "_blank", "noopener,noreferrer");
+    let attempts = 0;
+    const timer = window.setInterval(() => {
+      attempts += 1;
+      void loadBingImages(caseId);
+      if (attempts >= 20) window.clearInterval(timer);
+    }, 2000);
+  };
+
   useEffect(() => {
-    if (!GOOGLE_CSE_ENGINE_ID || evidenceReview?.stage !== "product_images") return;
-    document.getElementById("google-programmable-search")?.remove();
-    setGoogleCseLoadError(null);
-    const script = document.createElement("script");
-    script.id = "google-programmable-search";
-    script.async = true;
-    script.src = `https://cse.google.com/cse.js?cx=${encodeURIComponent(GOOGLE_CSE_ENGINE_ID)}`;
-    script.onerror = () => setGoogleCseLoadError("Google's approved-sites search could not load. Check your connection or any content blocker, then reopen this panel.");
-    document.head.appendChild(script);
-  }, [evidenceReview?.stage]);
+    if (evidenceReview?.stage !== "product_images") return;
+    setOverclockersResults([]);
+    setOverclockersBusy(true);
+    setOverclockersError(null);
+    void (async () => {
+      try {
+        const response = await fetch(`/api/cases/${evidenceReview.caseItem.id}/3d-overclockers-gallery`, { method: "POST" });
+        const data = await readJsonResponse<{ detail?: string }>(response);
+        if (!response.ok) throw new Error(data.detail || "Could not automatically source product photos");
+        await loadOverclockersGallery(evidenceReview.caseItem.id);
+      } catch (caught) {
+        setOverclockersError(caught instanceof Error ? caught.message : "Could not automatically source product photos");
+      } finally {
+        setOverclockersBusy(false);
+      }
+    })();
+    setBingResults([]);
+    void loadBingImages(evidenceReview.caseItem.id);
+  }, [evidenceReview?.caseItem.id, evidenceReview?.stage]);
 
   const approveReferences = async (caseId: number) => {
-    if (selectedReferences.length !== 4) return;
+    if (listingReferences.length < 1) return;
     setReferenceBusy(true);
     setError(null);
     try {
       const response = await fetch(`/api/cases/${caseId}/3d-reference-selection`, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ selected_images: selectedReferences }),
+        body: JSON.stringify({ listing_images: listingReferences, model_images: selectedReferences }),
       });
       const data = await readJsonResponse<PriorityCaseItem & { detail?: string }>(response);
       if (!response.ok) throw new Error(data.detail || "Could not approve reference pictures");
       setCases(current => current.map(item => item.id === caseId ? data : item));
-      setReferenceData(current => current ? { ...current, approved_selection: { status: "approved", images: selectedReferences } } : current);
-      setReferenceNotice("Four reference pictures approved. Picture 1 is the texture and colour master.");
+      setReferenceData(current => current ? { ...current, approved_selection: { status: "approved", images: listingReferences, model_images: selectedReferences } } : current);
+      setReferenceNotice(`${listingReferences.length} listing photo${listingReferences.length === 1 ? "" : "s"} approved. ${selectedReferences.length} photo${selectedReferences.length === 1 ? "" : "s"} selected for 3D generation.`);
       return true;
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not approve reference pictures");
@@ -348,11 +540,33 @@ export default function Cases3DPriorityPage() {
   };
 
   const generateFromApprovedReferences = async (caseId: number) => {
-    if (selectedReferences.length !== 4 || referenceData?.approved_selection?.status !== "approved") return;
+    if (!referenceData?.sourcing_ready || !hasValidReferenceCount(selectedReferences.length) || referenceData.approved_selection?.status !== "approved") return;
     setReferenceBusy(true);
     setGeneratingCaseId(caseId);
+    setGenerationProgress(0);
+    setGenerationTaskStatus("STARTING");
     setError(null);
-    setReferenceNotice("Generating the textured model. Keep this page open — Meshy can take up to 10 minutes. You will be taken to the approval viewer when it finishes.");
+    setReferenceNotice(`Generating a textured ${selectedReferences.length === 1 ? "single-image" : "multi-image"} model. Keep this page open — Meshy can take up to 10 minutes. You will be taken to the approval viewer when it finishes.`);
+    const requestedImageUrls = selectedReferences.map(item => item.url);
+    const requestId = crypto.randomUUID();
+    const pollProgress = async () => {
+      try {
+        const statusResponse = await fetch(
+          `${DIRECT_BACKEND_URL}/api/assets-3d/cases/${caseId}/generate-status?request_id=${encodeURIComponent(requestId)}`,
+          { credentials: "include", cache: "no-store" },
+        );
+        if (!statusResponse.ok) return;
+        const status = await readJsonResponse<{ request_id: string; progress: number; task_status: string }>(statusResponse);
+        if (status.request_id === requestId) {
+          setGenerationProgress(Math.max(0, Math.min(100, Math.round(status.progress))));
+          setGenerationTaskStatus(status.task_status || "IN_PROGRESS");
+        }
+      } catch {
+        // Keep the generation request alive if a progress poll briefly fails.
+      }
+    };
+    void pollProgress();
+    const progressTimer = window.setInterval(() => void pollProgress(), 1500);
     try {
       // Meshy can take up to ten minutes. Calling the backend directly avoids
       // Next's rewrite proxy terminating the long-lived connection.
@@ -361,8 +575,9 @@ export default function Cases3DPriorityPage() {
         headers: { "content-type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
-          image_urls: selectedReferences.map(item => item.url),
-          notes: "Generated only from the separately owner-approved four-picture set. Preserve the first picture as the texture and colour master; match case finish and illuminated RGB faithfully.",
+          image_urls: requestedImageUrls,
+          request_id: requestId,
+          notes: `Generated only from the separately owner-approved ${requestedImageUrls.length}-picture set. Preserve the first picture as the texture and colour master; match case finish and illuminated RGB faithfully.`,
         }),
       });
       const asset = await readJsonResponse<{ id: number; review_batch_id?: string | null; detail?: string }>(response);
@@ -379,14 +594,16 @@ export default function Cases3DPriorityPage() {
         batchId = batch.batch_id;
       }
       const reviewUrl = `/components-3d-review?batch=${batchId}`;
-      setGeneratedReviewUrl(reviewUrl);
-      window.localStorage.setItem(`case-3d-review-${caseId}`, reviewUrl);
+      const generatedLink: GeneratedReviewLink = { version: 1, url: reviewUrl, imageUrls: requestedImageUrls };
+      setGeneratedReviewLink(generatedLink);
+      window.localStorage.setItem(`case-3d-review-${caseId}`, JSON.stringify(generatedLink));
       setReferenceNotice("Draft generated successfully. Opening the 3D approval viewer…");
       router.push(reviewUrl);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "3D generation failed");
       setReferenceNotice(null);
     } finally {
+      window.clearInterval(progressTimer);
       setReferenceBusy(false);
       setGeneratingCaseId(null);
     }
@@ -399,7 +616,11 @@ export default function Cases3DPriorityPage() {
       const response = await fetch("/api/cases/priority-for-3d", { method: "POST" });
       const data = await readJsonResponse<{ cases?: PriorityCaseItem[]; detail?: string; error?: string }>(response);
       if (!response.ok) throw new Error(data.detail || data.error || "Could not freeze campaign");
-      setCases(data.cases || []);
+      const refreshed = await fetch("/api/cases/priority-for-3d?limit=101", { cache: "no-store" });
+      const refreshedCases = await readCaseList(refreshed);
+      setCampaignFrozen(refreshedCases.some(caseItem => caseItem.priority_3d_rank != null));
+      setHasNextCasePage(refreshedCases.length > 100);
+      setCases(refreshedCases.slice(0, 100));
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not freeze campaign");
     } finally {
@@ -408,12 +629,24 @@ export default function Cases3DPriorityPage() {
   };
 
   const openEvidenceReview = async (caseItem: PriorityCaseItem, stage: "product_images" | "youtube_video" | "meshy_generation") => {
-    if (stage === "product_images") {
-      setImageSearchQuery(`${caseItem.name} PC case product photos`);
-    }
     if (stage === "product_images" || stage === "meshy_generation") await openReferenceSelection(caseItem.id);
+    if (stage === "youtube_video") {
+      const attempts = caseItem.sourcing_3d_evidence?.stages?.youtube_video?.attempts || [];
+      const saved = [...attempts].reverse().find(attempt => Array.isArray(attempt.selected_video_urls))?.selected_video_urls;
+      setSelectedVideos(Array.isArray(saved) ? saved.filter((url): url is string => typeof url === "string") : []);
+    }
     setEvidenceReview({ caseItem, stage });
   };
+
+  useEffect(() => {
+    if (loading || autoOpenedCaseId !== null) return;
+    const requestedCaseId = Number(new URLSearchParams(window.location.search).get("case"));
+    if (!Number.isFinite(requestedCaseId) || requestedCaseId < 1) return;
+    const caseItem = cases.find(item => item.id === requestedCaseId);
+    if (!caseItem) return;
+    setAutoOpenedCaseId(requestedCaseId);
+    void openEvidenceReview(caseItem, "product_images");
+  }, [loading, cases, autoOpenedCaseId]);
 
   const closeEvidenceReview = () => {
     if (evidenceReview?.stage === "product_images" || evidenceReview?.stage === "meshy_generation") setReferenceCaseId(null);
@@ -422,6 +655,10 @@ export default function Cases3DPriorityPage() {
 
   const decideEvidenceStage = async (decision: "complete" | "blocked") => {
     if (!evidenceReview) return;
+    if (evidenceReview.stage === "youtube_video" && decision === "complete" && selectedVideos.length === 0) {
+      setError("Select at least one video to approve.");
+      return;
+    }
     setReferenceBusy(true);
     setError(null);
     try {
@@ -431,7 +668,7 @@ export default function Cases3DPriorityPage() {
         body: JSON.stringify({
           stage: evidenceReview.stage,
           status: decision,
-          attempt: { owner_decision: decision === "complete" ? "approved" : "declined" },
+          attempt: { owner_decision: decision === "complete" ? "approved" : "declined", ...(evidenceReview.stage === "youtube_video" ? { selected_video_urls: decision === "complete" ? selectedVideos : [] } : {}) },
         }),
       });
       const updated = await readJsonResponse<PriorityCaseItem & { detail?: string; error?: string }>(response);
@@ -448,38 +685,74 @@ export default function Cases3DPriorityPage() {
   useEffect(() => {
     const load = async () => {
       setLoading(true);
+      setError(null);
       try {
-        // Fetch priority cases for 3D modeling (top 30)
-        // Include explicitly-added priority exceptions (for example APNX C1 at
-        // rank 31) as well as the original frozen top-30 campaign.
-        const response = await fetch("/api/cases/priority-for-3d?limit=100");
-        const data = await readJsonResponse<PriorityCaseItem[]>(response);
-        setCases(data.filter(caseItem => !/raspberry\s*pi|raspberrypi|\brpi\b/i.test(caseItem.name)));
+        const params = new URLSearchParams({ limit: "101", offset: String((casePage - 1) * 100) });
+        if (caseScope === "Amazon Top 100") params.set("source_site", "Amazon Top 100");
+        else if (caseScope === "All retailers") params.set("source_site", "Retailers");
+        else if (caseScope === "Priority campaign") params.set("source_site", "Campaign");
+        else params.set("source_site", caseScope);
+        const response = await fetch(`/api/cases/priority-for-3d?${params}`, { cache: "no-store" });
+        const data = await readCaseList(response);
+        if (caseScope === "Priority campaign") setCampaignFrozen(data.some(caseItem => caseItem.priority_3d_rank != null));
+        setHasNextCasePage(data.length > 100);
+        setCases(data.slice(0, 100).filter(caseItem => !/raspberry\s*pi|raspberrypi|\brpi\b/i.test(caseItem.name)));
 
         // Count how many already have models
         const withModels = await fetch("/api/cases/with-3d-models?limit=1000");
-        const completed = await readJsonResponse<PriorityCaseItem[]>(withModels);
+        const completed = await readCaseList(withModels);
         setCompletedCases(completed.filter(caseItem => !/raspberry\s*pi|raspberrypi|\brpi\b/i.test(caseItem.name)));
       } catch (error) {
-        console.error("Error loading cases:", error);
+        setError(error instanceof Error ? error.message : "Could not load cases");
       } finally {
         setLoading(false);
       }
     };
 
     void load();
-  }, []);
+  }, [caseScope, casePage]);
 
-  const meshyQueueCount = cases.filter(caseItem => {
-    const status = caseItem.sourcing_3d_evidence?.stages?.meshy_generation?.status || "not_started";
-    return imageSetApproved(caseItem) && !["found", "complete", "blocked"].includes(status);
-  }).length;
+  useEffect(() => {
+    const refreshGalleryPhotos = async () => {
+      try {
+        const params = new URLSearchParams({ limit: "101", offset: String((casePage - 1) * 100) });
+        if (caseScope === "Amazon Top 100") params.set("source_site", "Amazon Top 100");
+        else if (caseScope === "All retailers") params.set("source_site", "Retailers");
+        else if (caseScope === "Priority campaign") params.set("source_site", "Campaign");
+        else params.set("source_site", caseScope);
+        const response = await fetch(`/api/cases/priority-for-3d?${params}`, { cache: "no-store" });
+        if (!response.ok) return;
+        const data = await readCaseList(response);
+        setCases(data.slice(0, 100).filter(caseItem => !/raspberry\s*pi|raspberrypi|\brpi\b/i.test(caseItem.name)));
+      } catch {
+        // Keep the currently displayed cases if a background refresh fails.
+      }
+    };
+    const timer = window.setInterval(() => void refreshGalleryPhotos(), 60000);
+    return () => window.clearInterval(timer);
+  }, [caseScope, casePage]);
+
+  const meshyQueueCount = cases.filter(readyForMeshy).length;
   const allWorkflowCases = [...cases, ...completedCases];
   const photosApprovedCount = allWorkflowCases.filter(imageSetApproved).length;
   const modelReadyCount = allWorkflowCases.filter(caseItem =>
     !caseItem.has_3d_model && caseItem.sourcing_3d_evidence?.stages?.meshy_generation?.status === "found",
   ).length;
   const liveCount = completedCases.filter(caseItem => caseItem.has_3d_model && caseItem.model_3d_url).length;
+  const amazonReferenceCandidates = (referenceData?.candidates || []).filter(candidate => candidate.source === "amazon");
+  const otherReferenceCandidates = (referenceData?.candidates || []).filter(candidate => candidate.source !== "amazon");
+
+  const generationProgressPanel = (caseId: number) => generatingCaseId === caseId ? (
+    <div className="mt-3 w-full rounded-md border border-purple-500/30 bg-purple-950/30 p-3" role="status" aria-live="polite">
+      <div className="mb-1 flex justify-between gap-3 text-xs text-purple-100">
+        <span>{generationTaskStatus === "PUBLISHING" ? "Meshy finished · publishing generated model" : `Meshy generation · ${generationTaskStatus.toLowerCase()}`}</span>
+        <span>{generationProgress}%</span>
+      </div>
+      <div role="progressbar" aria-label="Meshy generation progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={generationProgress} className="h-2 overflow-hidden rounded bg-slate-800">
+        <div className="h-full rounded bg-purple-400 transition-[width] duration-500" style={{ width: `${generationProgress}%` }} />
+      </div>
+    </div>
+  ) : null;
 
   return (
     <div className="p-6 space-y-6">
@@ -490,20 +763,25 @@ export default function Cases3DPriorityPage() {
             <Box className="w-6 h-6 text-purple-400" /> 3D Model Priority Queue
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Frozen priority cases plus manually added exceptions. Select four source pictures before generating a draft model.
+            Amazon’s top 100 ranked cases are the default worklist. Other retailer and frozen-campaign views remain available when needed.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button type="button" variant="outline" onClick={() => router.push("/components-3d-review")} className="cursor-pointer border-purple-500/40 text-purple-200">
             <Eye className="mr-2 h-4 w-4" /> Open 3D approval viewer
           </Button>
-          <Button onClick={freezeCampaign} disabled={freezing || cases.some(item => item.priority_3d_rank)} className="cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-300">
+          <Button onClick={freezeCampaign} disabled={freezing || caseScope !== "Priority campaign" || campaignFrozen || casePage > 1} className="cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-300">
             {freezing ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <LockKeyhole className="mr-2 h-4 w-4" />}
-            {cases.some(item => item.priority_3d_rank) ? "Top 30 frozen" : "Freeze top 30"}
+            {campaignFrozen ? "Top 30 frozen" : "Freeze top 30"}
           </Button>
         </div>
       </div>
       <ThreeDWorkflowNav />
+      <div className="flex flex-wrap items-center gap-2" aria-label="Case source">
+        {(["Amazon Top 100", "Priority campaign", "All retailers", "Overclockers", "Amazon"] as const).map(scope => <button key={scope} type="button" aria-pressed={caseScope === scope} onClick={() => { setCaseScope(scope); setCasePage(1); }} className={`rounded-lg border px-3 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-cyan-400 ${caseScope === scope ? "border-cyan-400 bg-cyan-950 text-cyan-100" : "border-slate-700 text-slate-300 hover:border-slate-500"}`}>{scope}</button>)}
+        {caseScope === "Priority campaign" && <span className="text-xs text-slate-400">Frozen top-30 worklist · page {casePage}</span>}
+        {caseScope !== "Priority campaign" && <span className="text-xs text-slate-400">Page {casePage} · cases without 3D models</span>}
+      </div>
       {error && <div role="alert" className="rounded-md border border-red-500/60 bg-red-950/60 px-4 py-3 text-sm text-red-200">{error}</div>}
 
       {/* Progress summary */}
@@ -524,7 +802,7 @@ export default function Cases3DPriorityPage() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-cyan-400">{photosApprovedCount}</div>
-            <p className="mt-1 text-xs text-slate-500">four-picture sets approved</p>
+            <p className="mt-1 text-xs text-slate-500">one-to-four-picture sets approved</p>
           </CardContent>
         </Card>
 
@@ -566,7 +844,7 @@ export default function Cases3DPriorityPage() {
         <div className="flex items-center justify-center py-12 text-slate-500">
           <RefreshCw className="w-4 h-4 animate-spin mr-2" /> Loading priority cases…
         </div>
-      ) : cases.length === 0 ? (
+      ) : cases.length === 0 && !error ? (
         <Card className="bg-[#00dc82]/5 border-[#00dc82]/30">
           <CardContent className="pt-6 text-center">
             <Check className="w-12 h-12 text-[#00dc82] mx-auto mb-3" />
@@ -577,9 +855,16 @@ export default function Cases3DPriorityPage() {
       ) : (
         <div className="space-y-3">
           <div className="flex items-center justify-between gap-4">
-            <p className="text-xs font-medium uppercase tracking-wider text-slate-500">Next to create, ordered by popularity</p>
-            <p className="text-xs text-slate-500">{cases.length} cases</p>
+            <p className="text-xs font-medium uppercase tracking-wider text-slate-500">Retailer cases without a 3D model</p>
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
+              <span>{cases.length} cases</span>
+              <div className="flex rounded-md border border-slate-700 p-0.5" aria-label="List layout">
+                {(["table", "grid"] as const).map(layout => <button key={layout} type="button" aria-pressed={listLayout === layout} onClick={() => setListLayout(layout)} className={`rounded px-2 py-1 capitalize ${listLayout === layout ? "bg-cyan-900 text-cyan-100" : "text-slate-400 hover:text-slate-100"}`}>{layout}</button>)}
+              </div>
+              {(casePage > 1 || hasNextCasePage) && <><button type="button" disabled={casePage === 1} onClick={() => setCasePage(page => page - 1)} className="rounded border border-slate-600 px-2 py-1 disabled:opacity-40">Previous</button><button type="button" disabled={!hasNextCasePage} onClick={() => setCasePage(page => page + 1)} className="rounded border border-slate-600 px-2 py-1 disabled:opacity-40">Next</button></>}
+            </div>
           </div>
+          {listLayout === "table" ? (
           <div className="overflow-x-auto rounded-xl border border-[#1e2d45] bg-[#0b121d]">
             <table className="w-full min-w-[1380px] border-collapse text-left text-sm">
               <thead className="sticky top-0 z-10 bg-[#111b2a] text-[11px] uppercase tracking-wider text-slate-400">
@@ -606,15 +891,16 @@ export default function Cases3DPriorityPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3 align-middle">
-                    <div className="flex min-w-[260px] items-center gap-3">
-                      <div className="h-14 w-14 flex-shrink-0 overflow-hidden rounded-md border border-slate-700 bg-[#0a1119]">
+                    <div className="flex min-w-[340px] items-center gap-4">
+                      <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-slate-700 bg-[#0a1119]">
                         {caseItem.image_url ? (
                         <img
                           src={caseItem.image_url}
                           alt={`${caseItem.name} product thumbnail`}
-                          className="h-full w-full object-cover"
+                          className="h-full w-full object-contain"
                         />
                         ) : <Box className="m-4 h-5 w-5 text-slate-600" />}
+                        <span title="Matching vendors" className="absolute bottom-0 right-0 rounded-tl bg-cyan-950/90 px-1 text-[10px] font-bold text-cyan-100">{caseItem.vendor_count ?? 0} vendors</span>
                       </div>
                       <div className="min-w-0">
                         <p
@@ -638,6 +924,19 @@ export default function Cases3DPriorityPage() {
                             </span>
                           )}
                         </div>
+                        {!!caseItem.overclockers_gallery?.length && (
+                          <div className="mt-2 flex max-w-md items-center gap-1" aria-label={`${caseItem.overclockers_gallery.length} Overclockers product photos`}>
+                            <button type="button" aria-label="Scroll photos left" onClick={() => document.getElementById(`case-gallery-${caseItem.id}`)?.scrollBy({ left: -160, behavior: "smooth" })} className="flex h-8 w-6 flex-none items-center justify-center rounded border border-slate-700 text-slate-300 hover:border-cyan-500/50 hover:text-cyan-200"><ChevronLeft className="h-4 w-4" /></button>
+                            <div id={`case-gallery-${caseItem.id}`} className="flex min-w-0 max-w-md gap-1 overflow-x-auto scroll-smooth pb-1">
+                              {caseItem.overclockers_gallery.map((url, imageIndex) => (
+                                <a key={url} href={url} target="_blank" rel="noreferrer" title={`Overclockers photo ${imageIndex + 1}`} className="h-10 w-10 flex-none overflow-hidden rounded border border-slate-700 bg-white">
+                                  <img src={url} alt={`${compactCaseName(caseItem)} photo ${imageIndex + 1}`} loading="lazy" className="h-full w-full object-contain" />
+                                </a>
+                              ))}
+                            </div>
+                            <button type="button" aria-label="Scroll photos right" onClick={() => document.getElementById(`case-gallery-${caseItem.id}`)?.scrollBy({ left: 160, behavior: "smooth" })} className="flex h-8 w-6 flex-none items-center justify-center rounded border border-slate-700 text-slate-300 hover:border-cyan-500/50 hover:text-cyan-200"><ChevronRight className="h-4 w-4" /></button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </td>
@@ -739,33 +1038,20 @@ export default function Cases3DPriorityPage() {
                     <tr className="bg-slate-900/65">
                       <td colSpan={10} className="px-6 py-5">
                     <section aria-label={`Reference picture approval for ${caseItem.name}`}>
-                      <div className="mb-3 rounded-md border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-100">
-                        Choose exactly four clean pictures of the same empty chassis. They must show useful exterior angles and the interior, with no text panels or noisy backgrounds. Select the best colour/texture view first.
+                    <div className="mb-3 rounded-md border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-100">
+                        Approve any number of listing photos, then select up to four clean photos separately for the 3D model. Put the best colour/texture view first in the 3D set.
                       </div>
                       {!referenceData.sourcing_ready && (
                         <div className="mb-3 rounded-md border border-red-500/40 bg-red-950/40 p-3 text-xs text-red-200">
-                          Finish the manufacturer and licensed third-party 3D-model searches first. Image-to-3D is the fallback only.
+                        Listing photos can be approved now. Meshy generation remains locked until manufacturer and licensed third-party 3D-model searches are complete.
                         </div>
                       )}
+                      <div className="mb-3 flex flex-wrap items-center gap-2">
+                        <Button type="button" variant="outline" disabled={referenceBusy || !referenceData.candidates.length} onClick={toggleAllListingReferences}>{referenceData.candidates.every(candidate => listingReferences.some(item => item.url === candidate.url)) ? "Deselect all listing photos" : "Select all listing photos"}</Button>
+                        <span className="text-xs text-slate-400">{listingReferences.length} listing photos · {selectedReferences.length}/4 for 3D</span>
+                      </div>
                       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-                        {referenceData.candidates.map(candidate => {
-                          const selectedIndex = selectedReferences.findIndex(item => item.url === candidate.url);
-                          return (
-                            <button
-                              key={candidate.url}
-                              type="button"
-                              onClick={() => toggleReference(candidate)}
-                              className={`group relative cursor-pointer overflow-hidden rounded-md border text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700 hover:border-slate-500"}`}
-                            >
-                              { }
-                              <img src={candidate.url} alt="" className="h-36 w-full bg-white object-contain" />
-                              {selectedIndex >= 0 && <span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{selectedIndex + 1}</span>}
-                              <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-1 bg-slate-950/85 px-1.5 py-0.5 text-[9px] uppercase text-slate-200 opacity-0 backdrop-blur-sm transition group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
-                                {candidate.source}{selectedIndex === 0 ? " · texture master" : ""}
-                              </span>
-                            </button>
-                          );
-                        })}
+                        {referenceData.candidates.map(renderReferenceTile)}
                       </div>
                       <div className="mt-3 flex flex-col gap-2 md:flex-row">
                         <select value={newReferenceSource} onChange={event => setNewReferenceSource(event.target.value as ReferenceSource)} className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-slate-200">
@@ -801,22 +1087,23 @@ export default function Cases3DPriorityPage() {
                         </div>
                       </div>
                       <div className="mt-3 flex flex-wrap items-center gap-2">
-                        <Button type="button" onClick={() => void approveReferences(caseItem.id)} disabled={referenceBusy || !referenceData.sourcing_ready || selectedReferences.length !== 4} className="cursor-pointer bg-cyan-700 hover:bg-cyan-600">
-                          <Check className="mr-2 h-4 w-4" /> Approve these 4 pictures
+                        <Button type="button" onClick={() => void approveReferences(caseItem.id)} disabled={referenceBusy || listingReferences.length < 1} className="cursor-pointer bg-cyan-700 hover:bg-cyan-600">
+                          <Check className="mr-2 h-4 w-4" /> Approve {listingReferences.length} listing photo{listingReferences.length === 1 ? "" : "s"}
                         </Button>
-                        <Button type="button" onClick={() => void generateFromApprovedReferences(caseItem.id)} disabled={referenceBusy || referenceData.approved_selection?.status !== "approved" || selectedReferences.length !== 4} className="cursor-pointer bg-purple-700 hover:bg-purple-600">
+                        <Button type="button" onClick={() => void generateFromApprovedReferences(caseItem.id)} disabled={referenceBusy || !referenceData.sourcing_ready || referenceData.approved_selection?.status !== "approved" || !hasValidReferenceCount(selectedReferences.length)} className="cursor-pointer bg-purple-700 hover:bg-purple-600">
                           {generatingCaseId === caseItem.id ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
                           {generatingCaseId === caseItem.id ? "Generating — keep this page open" : "Generate draft model"}
                         </Button>
-                        {generatedReviewUrl && (
-                          <Button type="button" variant="outline" onClick={() => router.push(generatedReviewUrl)} className="cursor-pointer border-emerald-500/50 text-emerald-200">
+                        {generatedReviewLink && sameImageOrder(generatedReviewLink.imageUrls, selectedReferences.map(item => item.url)) && (
+                          <Button type="button" variant="outline" onClick={() => router.push(generatedReviewLink.url)} className="cursor-pointer border-emerald-500/50 text-emerald-200">
                             <Eye className="mr-2 h-4 w-4" /> View and approve generated model
                           </Button>
                         )}
-                        <span className="text-xs text-slate-400">{selectedReferences.length}/4 selected</span>
+                        <span className="text-xs text-slate-400">{selectedReferences.length}/4 3D photos selected</span>
                         {caseItem.source_url && <a href={caseItem.source_url} target="_blank" rel="noreferrer" className="ml-auto inline-flex items-center text-xs text-cyan-300 hover:text-cyan-200">Product page <ExternalLink className="ml-1 h-3 w-3" /></a>}
                       </div>
                       {referenceNotice && <p className="mt-2 text-xs text-emerald-300" role="status">{referenceNotice}</p>}
+                      {generationProgressPanel(caseItem.id)}
                     </section>
                       </td>
                     </tr>
@@ -826,6 +1113,53 @@ export default function Cases3DPriorityPage() {
               </tbody>
             </table>
           </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+              {cases.map((caseItem, idx) => {
+                const live = liveStatus(caseItem);
+                return <Card key={caseItem.id} className="overflow-hidden border-[#1e2d45] bg-[#0b121d]">
+                  <div className="relative flex h-52 items-center justify-center bg-slate-950/70 p-3">
+                    {caseItem.image_url ? <img src={caseItem.image_url} alt={`${caseItem.name} product photo`} loading="lazy" className="h-full w-full object-contain" /> : <Box className="h-10 w-10 text-slate-600" />}
+                    <span className="absolute left-3 top-3 rounded border border-purple-400/30 bg-slate-950/90 px-2 py-1 text-xs font-bold text-purple-200">#{caseItem.priority_3d_rank || idx + 1}</span>
+                    <span className="absolute right-3 top-3 rounded border border-cyan-500/30 bg-slate-950/90 px-2 py-1 text-[10px] text-cyan-100">{caseItem.source_site || "Retailer"}</span>
+                    {caseItem.is_preferred && <Heart className="absolute bottom-3 right-3 h-5 w-5 fill-rose-500 text-rose-400" aria-label="Preferred case" />}
+                  </div>
+                  <CardContent className="space-y-3 p-4">
+                    <div className="min-h-12">
+                      <h2 className="font-semibold text-slate-100" title={caseItem.name}>{compactCaseName(caseItem)}</h2>
+                      <p className="mt-1 text-xs uppercase text-slate-500">{caseManufacturer(caseItem)}{caseItem.vendor_count != null ? ` · ${caseItem.vendor_count} vendors` : ""}</p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 text-sm">
+                      <span className="font-semibold tabular-nums text-[#00dc82]">{formatCurrency(caseItem.price)}</span>
+                      {caseItem.rrp && caseItem.rrp > caseItem.price ? <><span className="text-xs tabular-nums text-slate-500 line-through">{formatCurrency(caseItem.rrp)}</span><span className="rounded border border-emerald-500/40 bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-300">{Math.round(((caseItem.rrp - caseItem.price) / caseItem.rrp) * 100)}% OFF</span></> : null}
+                      {caseItem.rating ? <span className="ml-auto inline-flex items-center gap-1 text-xs text-amber-300"><Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />{caseItem.rating.toFixed(1)}</span> : null}
+                    </div>
+                    <div className="flex min-h-6 flex-wrap gap-1">
+                      {compatibleBoardFormats(caseItem).map(format => <span key={format} className="rounded border border-blue-500/30 bg-blue-500/10 px-1.5 py-0.5 text-[10px] uppercase text-blue-200">{format}</span>)}
+                      {hasIncludedFans(caseItem) && <span className="rounded border border-cyan-500/35 bg-cyan-500/10 px-1.5 py-0.5 text-[10px] text-cyan-200">FANS INCLUDED</span>}
+                      {/\bARGB\b/i.test(caseItem.name) && <span className="rounded border border-fuchsia-500/35 bg-fuchsia-500/10 px-1.5 py-0.5 text-[10px] text-fuchsia-200">ARGB</span>}
+                    </div>
+                    <div className="flex flex-wrap gap-1.5" aria-label="3D sourcing progress">
+                      {sourcingLabels.map(([key, label]) => {
+                        const status = key === "meshy_generation" ? modelEvidenceStatus(caseItem) : caseItem.sourcing_3d_evidence?.stages?.[key]?.status || "not_started";
+                        const locked = key === "meshy_generation" && status !== "complete" && !imageSetApproved(caseItem);
+                        return <button key={key} type="button" title={`Review ${label}: ${status.replaceAll("_", " ")}`} onClick={() => void openEvidenceReview(caseItem, key as "product_images" | "youtube_video" | "meshy_generation")} disabled={locked} className={`rounded border px-1.5 py-0.5 text-[10px] ${statusColour(status)} disabled:cursor-not-allowed disabled:opacity-40`}>{label}</button>;
+                      })}
+                      <span title={live.title} className={`rounded border px-1.5 py-0.5 text-[10px] ${live.colour}`}>{live.label}</span>
+                    </div>
+                    <div className="flex items-center justify-between border-t border-slate-800 pt-3">
+                      {caseItem.source_url ? <a href={caseItem.source_url} target="_blank" rel="noreferrer" className="inline-flex items-center text-xs text-cyan-300 hover:text-cyan-200">Product page <ExternalLink className="ml-1 h-3 w-3" /></a> : <span />}
+                      <div className="flex items-center gap-1.5" aria-label="Approval actions">
+                        <button type="button" title="Approve pictures" aria-label="Approve pictures" onClick={() => void openEvidenceReview(caseItem, "product_images")} className="rounded-md border border-cyan-500/40 p-2 text-cyan-200 hover:bg-cyan-500/10"><Images className="h-4 w-4" /></button>
+                        <button type="button" title="Approve YouTube evidence" aria-label="Approve YouTube evidence" onClick={() => void openEvidenceReview(caseItem, "youtube_video")} className="rounded-md border border-red-500/40 p-2 text-red-200 hover:bg-red-500/10"><Video className="h-4 w-4" /></button>
+                        <button type="button" title={imageSetApproved(caseItem) ? "Create or review 3D model" : "Approve pictures before creating a 3D model"} aria-label="Create or review 3D model" disabled={modelEvidenceStatus(caseItem) !== "complete" && !imageSetApproved(caseItem)} onClick={() => void openEvidenceReview(caseItem, "meshy_generation")} className="rounded-md border border-purple-500/40 p-2 text-purple-200 hover:bg-purple-500/10 disabled:cursor-not-allowed disabled:opacity-35"><Sparkles className="h-4 w-4" /></button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>;
+              })}
+            </div>
+          )}
         </div>
       )}
 
@@ -853,56 +1187,71 @@ export default function Cases3DPriorityPage() {
             <div className="p-5">
               {evidenceReview.stage === "product_images" && (
                 <>
-                  <p className="mb-4 text-sm text-slate-300">Select exactly four images. The first selected image is the texture and colour master.</p>
-                  <section aria-label="Approved-sites image search" className="mb-5 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.04] p-4">
-                    <h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">Search approved sites</h3>
-                    <p className="mt-1 text-xs text-slate-400">Search Google&apos;s approved-site index below, switch to <strong>Image</strong>, then open a suitable result and add its direct image URL or upload the image.</p>
-                    {!GOOGLE_CSE_ENGINE_ID ? (
-                      <p role="alert" className="mt-3 text-xs text-red-300">Set NEXT_PUBLIC_GOOGLE_CSE_ENGINE_ID in the admin environment to enable this search.</p>
-                    ) : googleCseLoadError ? (
-                      <p role="alert" className="mt-3 text-xs text-red-300">{googleCseLoadError}</p>
-                    ) : (
-                      <div className="gcse-search mt-4" data-enableImageSearch="true" data-linkTarget="_blank" data-query={imageSearchQuery} />
-                    )}
+                  <p className="mb-4 text-sm text-slate-300">Select any number of listing photos, then mark up to four photos separately for 3D generation. The first 3D photo sets the texture and colour.</p>
+                  <div className="mb-4 flex flex-wrap items-center gap-2">
+                    <Button type="button" variant="outline" disabled={!referenceData?.candidates.length || referenceBusy} onClick={toggleAllListingReferences}>{referenceData?.candidates.length && referenceData.candidates.every(candidate => listingReferences.some(item => item.url === candidate.url)) ? "Deselect all listing photos" : "Select all listing photos"}</Button>
+                    <span className="text-xs text-slate-400">{listingReferences.length} listing photos · {selectedReferences.length}/4 for 3D</span>
+                  </div>
+                  <section aria-label="Amazon product gallery" className="mb-5 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.04] p-4">
+                    <h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">1. Amazon product photos ({amazonReferenceCandidates.length})</h3>
+                    {referenceBusy && !referenceData ? <p className="mt-3 text-xs text-slate-400">Loading Amazon photos…</p> : amazonReferenceCandidates.length > 0 ? <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">{amazonReferenceCandidates.map(renderReferenceTile)}</div> : <p className="mt-3 text-xs text-slate-400">No Amazon product photos were found for this case.</p>}
                   </section>
+                  <section aria-label="Overclockers gallery" className="mb-5 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.04] p-4">
+                    <div className="flex items-center justify-between gap-3"><h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">2. Overclockers product gallery</h3><div className="flex gap-2"><Button type="button" variant="outline" disabled={overclockersBusy} onClick={() => void loadOverclockersGallery(evidenceReview.caseItem.id)}>Reload gallery</Button></div></div>
+                    {overclockersBusy && overclockersResults.length === 0 && <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4" aria-label="Loading Overclockers photos" role="status">{Array.from({ length: 4 }, (_, index) => <div key={index} className="relative aspect-[3/4] overflow-hidden rounded-md border border-slate-700 bg-slate-900"><div className="absolute inset-0 animate-pulse bg-gradient-to-br from-slate-800 via-slate-700/70 to-slate-900" /><Images className="absolute left-1/2 top-1/2 h-7 w-7 -translate-x-1/2 -translate-y-1/2 animate-pulse text-slate-500" aria-hidden="true" /></div>)}</div>}
+                    {overclockersError && <p className="mt-3 text-xs text-amber-300">{overclockersError}</p>}
+                    {!overclockersBusy && !overclockersError && overclockersResults.length === 0 && <p className="mt-3 text-xs text-slate-400">No exact Overclockers product found.</p>}
+                    {overclockersResults.length > 0 && <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">{overclockersResults.map(renderReferenceTile)}</div>}
+                  </section>
+                  <section aria-label="Other matching product photos" className="mb-5">
+                    <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-cyan-200">3. Other matching product photos ({otherReferenceCandidates.length})</h3>
                   {referenceBusy && !referenceData ? (
                     <div className="flex items-center justify-center py-16 text-slate-400"><RefreshCw className="mr-2 h-4 w-4 animate-spin" /> Loading images…</div>
-                  ) : referenceData?.candidates.length ? (
-                    <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
-                      {referenceData.candidates.map(candidate => {
-                        const selectedIndex = selectedReferences.findIndex(item => item.url === candidate.url);
-                        return (
-                          <button
-                            key={candidate.url}
-                            type="button"
-                            onClick={() => toggleReference(candidate)}
-                            className={`relative cursor-pointer overflow-hidden rounded-md border bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700 hover:border-slate-500"}`}
-                          >
-                            { }
-                            <img src={candidate.url} alt={candidate.label || "Case reference"} className="h-44 w-full object-contain" />
-                            {selectedIndex >= 0 && <span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{selectedIndex + 1}</span>}
-                          </button>
-                        );
-                      })}
+                  ) : otherReferenceCandidates.length ? (
+                    <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">{otherReferenceCandidates.map(renderReferenceTile)}</div>
+                  ) : <p className="py-12 text-center text-slate-500">No other matching product photos are available for this case yet.</p>}
+                  </section>
+                  <section aria-label="Bing Images results" className="mb-5 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.04] p-4">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">4. Bing Images results</h3>
+                      <div className="flex gap-2"><Button type="button" variant="outline" onClick={sourceBingInChrome}>Search Bing in Chrome</Button><Button type="button" variant="outline" disabled={bingBusy} onClick={() => void loadBingImages(evidenceReview.caseItem.id)}>Reload results</Button></div>
                     </div>
-                  ) : <p className="py-12 text-center text-slate-500">No candidate images have been recorded.</p>}
+                    <p className="mt-2 text-xs text-slate-400">Searches {shortCaseSearchName(evidenceReview.caseItem)}. Review each result before selecting it.</p>
+                    {bingBusy && <p className="mt-3 text-xs text-slate-400">Loading Bing images…</p>}
+                    {bingError && <p className="mt-3 text-xs text-amber-300">{bingError}</p>}
+                    {!bingBusy && !bingError && bingResults.length === 0 && <p className="mt-3 text-xs text-slate-400">No matching Bing images captured yet. Open the search in Chrome to source them.</p>}
+                    {bingResults.length > 0 && <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">{bingResults.map(renderReferenceTile)}</div>}
+                  </section>
+                  <section aria-label="Selected reference photos" className="rounded-lg border border-slate-700 p-4">
+                    <div className="mb-3 flex flex-wrap items-center justify-between gap-2"><div><h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">3D generation photos ({selectedReferences.length}/4)</h3><p className="mt-1 text-[11px] text-slate-400">These are separate from approved listing photos. Previously approved choices are restored when you reopen this case.</p></div>{(selectedReferences.length > 0 || listingReferences.length > 0) && <Button type="button" variant="outline" onClick={clearReferenceSelection} disabled={referenceBusy} className="cursor-pointer">Clear all selections</Button>}</div>
+                    <div className="grid grid-cols-2 gap-3 md:grid-cols-4">{selectedReferences.map((candidate, index) => <button key={candidate.url} type="button" onClick={() => toggleReference(candidate)} className="relative cursor-pointer overflow-hidden rounded-md border border-cyan-300 bg-white"><img src={candidate.url} alt={`Selected reference ${index + 1}`} className="h-32 w-full object-contain" /><span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{index + 1}</span></button>)}</div>
+                  </section>
                 </>
               )}
 
               {evidenceReview.stage === "youtube_video" && (() => {
-                const urls = evidenceUrls(evidenceReview.caseItem.sourcing_3d_evidence?.stages?.youtube_video);
+                const urls = evidenceUrls(evidenceReview.caseItem.sourcing_3d_evidence?.stages?.youtube_video).filter(url => youtubeEmbedUrl(url));
+                const allSelected = urls.length > 0 && urls.every(url => selectedVideos.includes(url));
                 return urls.length ? (
-                  <div className="grid gap-4 md:grid-cols-2">
-                    {urls.map(url => {
-                      const embedUrl = youtubeEmbedUrl(url);
-                      return embedUrl ? (
-                        <div key={url} className="overflow-hidden rounded-lg border border-slate-700 bg-slate-950">
-                          <iframe src={embedUrl} title="Case sourcing video" className="aspect-video w-full" allowFullScreen />
-                          <a href={url} target="_blank" rel="noreferrer" className="flex items-center px-3 py-2 text-xs text-cyan-300 hover:text-cyan-200">Open on YouTube <ExternalLink className="ml-1 h-3 w-3" /></a>
-                        </div>
-                      ) : null;
-                    })}
-                  </div>
+                  <>
+                    <div className="mb-4 flex flex-wrap items-center gap-2">
+                      <Button type="button" variant="outline" onClick={() => setSelectedVideos(allSelected ? [] : urls)}>{allSelected ? "Deselect all videos" : "Select all videos"}</Button>
+                      <span className="text-xs text-slate-400">{selectedVideos.length} selected</span>
+                    </div>
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                      {urls.map(url => {
+                        const embedUrl = youtubeEmbedUrl(url)!;
+                        const videoId = embedUrl.split("/embed/")[1];
+                        const selected = selectedVideos.includes(url);
+                        return (
+                          <div key={url} className={`overflow-hidden rounded-lg border ${selected ? "border-emerald-300 ring-2 ring-emerald-400/30" : "border-slate-700"}`}>
+                            <button type="button" aria-pressed={selected} onClick={() => setSelectedVideos(current => selected ? current.filter(item => item !== url) : [...current, url])} className="group relative block w-full bg-slate-950 text-left"><img src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`} alt="YouTube video thumbnail" className="aspect-video w-full object-cover" /><span className={`absolute right-2 top-2 rounded px-2 py-1 text-xs font-bold ${selected ? "bg-emerald-400 text-slate-950" : "bg-slate-950/90 text-white"}`}>{selected ? "Selected" : "Select"}</span></button>
+                            <a href={url} target="_blank" rel="noreferrer" className="flex items-center px-3 py-2 text-xs text-cyan-300">Open on YouTube <ExternalLink className="ml-1 h-3 w-3" /></a>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
                 ) : <p className="py-12 text-center text-slate-500">No YouTube evidence has been recorded.</p>;
               })()}
 
@@ -919,7 +1268,7 @@ export default function Cases3DPriorityPage() {
                     {evidenceReview.caseItem.sourcing_3d_evidence?.stages?.meshy_generation?.status !== "found" && evidenceReview.caseItem.sourcing_3d_evidence?.stages?.meshy_generation?.status !== "complete" && (
                       <Button
                         type="button"
-                        disabled={referenceBusy || referenceData?.approved_selection?.status !== "approved" || selectedReferences.length !== 4}
+                        disabled={referenceBusy || !referenceData?.sourcing_ready || referenceData?.approved_selection?.status !== "approved" || !hasValidReferenceCount(selectedReferences.length)}
                         onClick={() => void generateFromApprovedReferences(evidenceReview.caseItem.id)}
                         className="cursor-pointer bg-purple-700 hover:bg-purple-600"
                       >
@@ -927,10 +1276,11 @@ export default function Cases3DPriorityPage() {
                         {generatingCaseId === evidenceReview.caseItem.id ? "Generating model…" : "Create Meshy draft from approved pictures"}
                       </Button>
                     )}
-                    <Button type="button" variant="outline" onClick={() => router.push(generatedReviewUrl || "/components-3d-review")} className="cursor-pointer border-purple-500/40 text-purple-200">
+                    <Button type="button" variant="outline" onClick={() => router.push(generatedReviewLink?.url || "/components-3d-review")} className="cursor-pointer border-purple-500/40 text-purple-200">
                       <Eye className="mr-2 h-4 w-4" /> Open 3D approval viewer
                     </Button>
                   </div>
+                  {generationProgressPanel(evidenceReview.caseItem.id)}
                 </div>
               )}
 
@@ -941,18 +1291,18 @@ export default function Cases3DPriorityPage() {
                 {evidenceReview.stage === "product_images" ? (
                   <Button
                     type="button"
-                    disabled={referenceBusy || !referenceData?.sourcing_ready || selectedReferences.length !== 4}
+                    disabled={referenceBusy || listingReferences.length < 1}
                     onClick={async () => {
                       if (await approveReferences(evidenceReview.caseItem.id)) closeEvidenceReview();
                     }}
                     className="cursor-pointer bg-cyan-700 hover:bg-cyan-600"
                   >
-                    <Check className="mr-2 h-4 w-4" /> Approve selected 4 ({selectedReferences.length}/4)
+                    <Check className="mr-2 h-4 w-4" /> Approve {listingReferences.length} listing photos · {selectedReferences.length}/4 for 3D
                   </Button>
                 ) : (
                   <Button
                     type="button"
-                    disabled={referenceBusy || (evidenceReview.stage === "meshy_generation" && !["found", "complete"].includes(evidenceReview.caseItem.sourcing_3d_evidence?.stages?.meshy_generation?.status || ""))}
+                    disabled={referenceBusy || (evidenceReview.stage === "meshy_generation" && !["found", "complete"].includes(evidenceReview.caseItem.sourcing_3d_evidence?.stages?.meshy_generation?.status || "")) || (evidenceReview.stage === "youtube_video" && selectedVideos.length === 0)}
                     onClick={() => void decideEvidenceStage("complete")}
                     className="cursor-pointer bg-emerald-700 hover:bg-emerald-600"
                   >

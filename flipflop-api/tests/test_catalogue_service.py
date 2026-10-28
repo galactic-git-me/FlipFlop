@@ -55,5 +55,14 @@ def test_infer_slot_type_storage():
 def test_infer_slot_type_unknown_returns_none():
     assert infer_slot_type("Complete Gaming PC i7 RTX 3060") is None
 
-def test_infer_slot_type_psu_returns_none():
-    assert infer_slot_type("Corsair 650W modular psu") is None
+def test_infer_slot_type_psu_is_a_required_build_component():
+    assert infer_slot_type("Corsair 650W modular psu") == 'psu'
+
+
+def test_all_bestseller_hardware_categories_reach_catalogue_slots():
+    for category, role in [('motherboard','motherboard'),('psu','psu'),('cooler','cooling'),('cooling','cooling'),('storage','storage')]:
+        assert infer_slot_type('Exact sourced product',category) == role
+
+
+def test_windows_operating_system_category_reaches_os_slot():
+    assert infer_slot_type('Microsoft Windows 11 Home FPP Retail USB','os')=='os'

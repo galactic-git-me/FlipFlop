@@ -24,9 +24,11 @@ def aggregate_cpk_reviews(
     """
     by_vendor: dict[tuple[str, str], tuple[float | None, int | None]] = {}
     for cpk, source, rating, count in observations:
-        if not cpk or (rating is None and count is None):
+        # A count without a star rating cannot contribute to a weighted
+        # average, and must not inflate the displayed rating sample size.
+        if not cpk or rating is None or count is None:
             continue
-        if count is not None and count < 0:
+        if count <= 0 or not 0 <= rating <= 5:
             continue
         key = (cpk, review_vendor(source))
         current = by_vendor.get(key)

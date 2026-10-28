@@ -22,6 +22,7 @@ export function EbayShipmentBookingSection({ build, onRefresh }: Props) {
   const [booking, setBooking] = useState(false);
   const [bookError, setBookError] = useState<string | null>(null);
   const [bookWarning, setBookWarning] = useState<string | null>(null);
+  const [signedForConfirmed, setSignedForConfirmed] = useState(false);
 
   const handleSync = async () => {
     setSyncing(true);
@@ -44,6 +45,7 @@ export function EbayShipmentBookingSection({ build, onRefresh }: Props) {
     try {
       const result = await api.manualBuilds.getCourierQuote(build.id);
       setQuotes(result);
+      setSignedForConfirmed(false);
     } catch (error) {
       setQuoteError(error instanceof Error ? error.message : "Failed to get courier quote");
     } finally {
@@ -53,6 +55,7 @@ export function EbayShipmentBookingSection({ build, onRefresh }: Props) {
 
   const handleBook = async () => {
     if (!quote?.service_slug) return;
+    if (!window.confirm(`Book ${quote.courier_name} — ${quote.service_name} for £${quote.price_gbp.toFixed(2)}? Parcel2Go will charge the account and the booking cannot be undone automatically.`)) return;
     setBooking(true);
     setBookError(null);
     setBookWarning(null);
@@ -60,6 +63,8 @@ export function EbayShipmentBookingSection({ build, onRefresh }: Props) {
       const result = await api.manualBuilds.bookShipment(build.id, {
         service_slug: quote.service_slug,
         price_gbp: quote.price_gbp,
+        signed_for_delivery_confirmed: signedForConfirmed,
+        confirm_live_purchase: true,
       });
       if (!result.success) {
         setBookError(result.error ?? "Booking failed");
@@ -74,12 +79,10 @@ export function EbayShipmentBookingSection({ build, onRefresh }: Props) {
     }
   };
 
-  // Only relevant once the build has actually been posted to eBay — sync
-  // itself is what confirms whether it's sold yet, so this can't gate on
-  // build.status === "sold" (that status is only set BY a successful sync).
-  if (!build.ebay_listing_id) return null;
-
   const hasBuyerAddress = Boolean(build.buyer_address_json);
+  // Direct storefront sales already carry their paid order address. For an
+  // eBay listing, show the panel before sale so staff can sync the real order.
+  if (!build.ebay_listing_id && !hasBuyerAddress) return null;
   const alreadyBooked = Boolean(build.tracking_number);
   const address = build.buyer_address_json;
 
@@ -87,6 +90,9 @@ export function EbayShipmentBookingSection({ build, onRefresh }: Props) {
     <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 flex flex-col gap-3 mb-6">
       <p className="text-sm font-semibold flex items-center gap-2">
         <Truck className="w-4 h-4 text-slate-500" /> Real Shipment
+      </p>
+      <p className="text-[11px] text-slate-400">
+        Booking the signed-for courier is a separate, explicit purchase. Upload the required pre-shipment photos and register insurance in Dispatch Centre before confirming physical handover.
       </p>
 
       {!hasBuyerAddress ? (
@@ -166,7 +172,10 @@ export function EbayShipmentBookingSection({ build, onRefresh }: Props) {
                   <span className="mb-1 block font-semibold">Courier service</span>
                   <select
                     value={selectedQuoteIndex}
-                    onChange={(event) => setSelectedQuoteIndex(Number(event.target.value))}
+                    onChange={(event) => {
+                      setSelectedQuoteIndex(Number(event.target.value));
+                      setSignedForConfirmed(false);
+                    }}
                     className="w-full rounded border border-white/10 bg-slate-900 px-3 py-2 text-xs text-slate-100 outline-none focus:border-cyan-400"
                   >
                     {quotes.map((option, index) => (
@@ -180,12 +189,17 @@ export function EbayShipmentBookingSection({ build, onRefresh }: Props) {
               <p className="text-xs text-amber-100 font-semibold">
                 {quote.courier_name} — {quote.service_name}: £{quote.price_gbp.toFixed(2)}
               </p>
+              <p className="text-[10px] text-emerald-200">Parcel2Go Signature extra is included in this live quote.</p>
               <p className="text-[10px] text-amber-300/80">
                 Booking charges your Parcel2Go account immediately and can&apos;t be undone automatically.
               </p>
+              <label className="flex items-start gap-2 text-[11px] leading-5 text-slate-300">
+                <input type="checkbox" className="mt-1 accent-amber-400" checked={signedForConfirmed} onChange={event => setSignedForConfirmed(event.target.checked)} />
+                I confirm the Signature extra is included, and approve this service, address and total for live payment.
+              </label>
               <button
                 onClick={handleBook}
-                disabled={booking || !quote.service_slug}
+                disabled={booking || !quote.service_slug || !signedForConfirmed}
                 className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold bg-amber-600 hover:bg-amber-500 disabled:opacity-60 text-black rounded-lg transition-colors"
               >
                 {booking ? <Loader2 className="w-4 h-4 animate-spin" /> : null}

@@ -28,6 +28,7 @@ import httpx
 from bs4 import BeautifulSoup
 
 from app.config import get_settings
+from app.services.model_selection_service import model_selection_service
 from app.services.scraper import RawListing, classify_seller, _parse_ebay_time_left
 
 settings = get_settings()
@@ -527,37 +528,16 @@ async def analyse_image(
     Run Ollama vision on an image and return a RawListing.
     Falls back to a minimal listing if vision is unavailable.
     """
-    s = get_settings()
     extracted: dict = {}
-
-    # Try Ollama vision
-    if s.ollama_base_url:
-        b64 = base64.b64encode(image_bytes).decode()
-        try:
-            async with httpx.AsyncClient(timeout=30) as client:
-                resp = await client.post(
-                    f"{s.ollama_base_url.rstrip('/')}/api/chat",
-                    json={
-                        "model": s.ollama_model,
-                        "stream": False,
-                        "messages": [
-                            {
-                                "role": "user",
-                                "content": _VISION_PROMPT,
-                                "images": [b64],
-                            }
-                        ],
-                    },
-                )
-                if resp.status_code == 200:
-                    data = resp.json()
-                    content = data.get("message", {}).get("content", "")
-                    # Extract JSON from response
-                    m = re.search(r"\{[\s\S]*\}", content)
-                    if m:
-                        extracted = json.loads(m.group())
-        except Exception as e:
-            print(f"[manual_scraper] Ollama vision failed: {e}")
+    try:
+        result = await model_selection_service.complete(
+            task="Manual listing photo extraction", messages=[{"role": "user", "content": "Extract listing details from this photo."}],
+            system_prompt=_VISION_PROMPT, max_tokens=700, timeout=90, images=[(image_bytes, content_type)],
+            require_vision=True, json_mode=True,
+        )
+        extracted = json.loads(result.text)
+    except Exception as e:
+        print(f"[manual_scraper] configured model tiers failed for vision: {e}")
 
     # Build title from extracted data or user override
     title = user_title or extracted.get("title") or "Manual Photo Submission"

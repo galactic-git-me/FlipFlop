@@ -23,15 +23,21 @@ from app.models.market_ingestion import SourceRun, ListingRaw, ListingNormalized
 from app.models.source_search_term import SourceSearchTerm
 from app.models.listing_archive import ListingArchive
 from app.models.manual_build import ManualBuild
+from app.models.getting_started_job import GettingStartedJob
+from app.models.playbook_refresh_run import PlaybookRefreshRun
 from app.models.pc_builder import PCBuild, PCBuildPurchasePlan
 from app.models.benchmark import HardwareBenchmark, ComponentPerformanceMetric, BenchmarkRefreshRun
 from app.models.catalogue import PlaybookSlot, CatalogueVariant, CaseCatalogue
+from app.models.catalogue_marketing_copy import CatalogueMarketingCopy
+from app.models.curated_build_segment import CuratedBuildSegment
+from app.models.custom_build_settings import CustomBuildSettings
 from app.models.build_capacity import BuildCapacity
 from app.models.build_capacity_override import BuildCapacityOverride
 from app.models.inventory_allocation import InventoryAllocation
 from app.models.pricing_bias import PricingBias
 from app.models.draft_build import DraftBuild
 from app.models.gem_radar_observation import GemRadarListingObservation
+from app.models.gem_radar_listing_lifecycle import GemRadarListingLifecycle
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
 from app.models.gem_radar_seller_profile import GemRadarSellerProfile
 from app.models.gem_radar_sold_observation import GemRadarSoldObservation
@@ -57,6 +63,12 @@ from app.models.demand_metrics_snapshot import DemandMetricsSnapshot
 from app.models.demand_alert import DemandAlert
 from app.models.demand_export_audit import DemandExportAudit
 from app.models.customer_review import CustomerReview
+from app.models.recommendation_session import RecommendationSession
+from app.models.upgrade_assessment import UpgradeAssessment
+from app.models.commerce_evidence import (
+    SupplierOfferEvidence, PriceQuoteSnapshot, WorkshopCapacityEvidence,
+    WorkshopCapacityReservation, WorkshopCapacityReservationEvent,
+)
 
 __all__ = [
     "Listing", "ListingStatus",
@@ -91,6 +103,9 @@ __all__ = [
     "PlaybookSlot",
     "CatalogueVariant",
     "CaseCatalogue",
+    "CatalogueMarketingCopy",
+    "CuratedBuildSegment",
+    "CustomBuildSettings",
     "Order",
     "BuildCapacity",
     "BuildCapacityOverride",
@@ -128,9 +143,10 @@ __all__ = [
 ]
 
 from .customer import Customer
+from .favourite import Favourite
 from .admin_user import AdminUser
 from .motherboard_spec import MotherboardSpec
-from .order import Order, OrderStatus
+from .order import Order, OrderStatus, PaymentStatus
 from .order_checklist import OrderChecklist
 from .order_photo import OrderPhoto
 from .playbook import Playbook, PlaybookStatus
@@ -175,12 +191,22 @@ from .quality_gate import QualityGateCheck, QualityGateResult, EvidenceRequireme
 from .cx_cost_record import CXCostRecord
 from .social_proof_event import SocialProofEvent
 from .customer_problem import CustomerProblem
+from .curated_promotion import CuratedPromotion
+from .curated_component_sku import CuratedComponentSKU, CuratedBuildAvailability, SKUSwapEvent
+from .customer_problem_notification import CustomerProblemNotification
+from .customer_problem_shipment import CustomerProblemShipment
+from .warranty import WarrantyReserve, WarrantyClaim
+from .shipment_tracking_event import ShipmentTrackingEvent
+from .portal_access_grant import PortalAccessGrant
+from .component_manual import ComponentManual
+from .order_checkout_snapshot import OrderCheckoutSnapshot
+from .ai_setup_purchase import AISetupPurchase
 
 __all__ = [
     "Customer",
     "AdminUser",
     "MotherboardSpec",
-    "Order", "OrderStatus",
+    "Order", "OrderStatus", "PaymentStatus",
     "OrderChecklist",
     "OrderPhoto",
     "Playbook", "PlaybookStatus",
@@ -214,4 +240,18 @@ __all__ = [
     "CXCostRecord",
     "SocialProofEvent",
     "CustomerProblem",
+    "CuratedPromotion",
+    "CuratedComponentSKU",
+    "CuratedBuildAvailability",
+    "SKUSwapEvent",
+    "CustomerProblemNotification",
+    "CustomerProblemShipment",
+    "WarrantyReserve", "WarrantyClaim",
+    "ShipmentTrackingEvent",
+    "PortalAccessGrant",
+    "ComponentManual",
+    "OrderCheckoutSnapshot",
+    "AISetupPurchase",
+    "SupplierOfferEvidence", "PriceQuoteSnapshot", "WorkshopCapacityEvidence",
+    "WorkshopCapacityReservation", "WorkshopCapacityReservationEvent",
 ]

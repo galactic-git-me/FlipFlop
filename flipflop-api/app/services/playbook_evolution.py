@@ -174,7 +174,7 @@ def _compute_composite_rank(
     demand_factor = market_size_score / 10.0
     liquidity_factor = liquidity_score / 10.0
     resellability_factor = resellability_score / 10.0
-    profit_factor = max(0.1, profit_opportunity_score / 5.0)
+    profit_factor = max(0.1, float(profit_opportunity_score or 0.0) / 5.0)
     risk_factor = max(0.1, (10.0 - risk_score) / 10.0)
     raw = roi_factor * demand_factor * liquidity_factor * resellability_factor * profit_factor * risk_factor
     return round(min(100.0, raw * 100.0), 2)

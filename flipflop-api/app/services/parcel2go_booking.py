@@ -7,14 +7,16 @@ explicit user confirmation before calling this, never an automatic trigger.
 Schema confirmed against Parcel2Go's Swagger docs (www.parcel2go.com/api/swagger)
 as of 2026-08. The exact success-response shape of PayWithPrepay wasn't fully
 documented in what's publicly readable — pay_order_with_prepay defensively
-parses several plausible field paths for the label URL and tracking number,
-and always returns the raw response too so a real booking can be inspected
-if the parse comes back empty.
+parses several plausible field paths for the label URL and tracking number.
+Provider response bodies are not logged or retained because they may contain
+buyer and delivery details.
 """
 from __future__ import annotations
 
+import math
 import uuid
 from dataclasses import dataclass
+from urllib.parse import urlsplit
 
 import httpx
 import structlog
@@ -24,6 +26,27 @@ from app.services.ebay_order_sync import BuyerAddress
 from app.services.parcel2go_courier import _get_access_token, _BASE_URLS
 
 log = structlog.get_logger(__name__)
+
+
+def _safe_provider_tracking_url(value: object) -> str | None:
+    """Accept only bounded, credential-free HTTPS links for customer display."""
+    if not isinstance(value, str):
+        return None
+    candidate = value.strip()
+    if not candidate or len(candidate) > 1000:
+        return None
+    try:
+        parsed = urlsplit(candidate)
+        if (
+            parsed.scheme != "https"
+            or not parsed.hostname
+            or parsed.username
+            or parsed.password
+        ):
+            return None
+    except ValueError:
+        return None
+    return candidate
 
 
 class Parcel2GoBookingError(Exception):
@@ -37,7 +60,7 @@ class BookedShipment:
     parcel2go_order_id: str
     tracking_number: str | None
     label_url: str | None
-    raw_response: dict
+    tracking_url: str | None
 
 
 def _seller_collection_address(settings) -> dict:
@@ -93,11 +116,11 @@ async def create_order(
     height_cm: float,
     value_gbp: float,
     buyer_address: BuyerAddress,
+    upsells: list[str],
     contents_summary: str = "PC hardware (built computer)",
     environment: str | None = None,
-) -> tuple[str, str]:
-    """Creates a Parcel2Go order (does not pay yet). Returns (order_id, hash)
-    — hash is required by the follow-up pay_order_with_prepay call."""
+) -> tuple[str, str, str | None, float | None]:
+    """Create an unpaid order and return its IDs and validated provider total."""
     settings = get_settings()
     env = environment or settings.parcel2go_environment
     token = await _get_access_token(env)
@@ -111,6 +134,7 @@ async def create_order(
             {
                 "Id": item_id,
                 "Service": service_slug,
+                "Upsells": [{"Type": upsell} for upsell in upsells],
                 "CollectionAddress": _seller_collection_address(settings),
                 "OriginCountry": settings.seller_address_country_iso,
                 "VatStatus": "NotRegistered",
@@ -147,17 +171,40 @@ async def create_order(
         )
 
     if resp.status_code not in (200, 201):
-        log.error("parcel2go_booking.create_order_failed", status=resp.status_code, body=resp.text[:1000], payload=payload)
-        raise Parcel2GoBookingError(f"Parcel2Go order creation failed ({resp.status_code}): {resp.text[:500]}", resp.status_code)
+        # The payload includes the buyer's delivery address and phone. Keep
+        # provider diagnostics without copying customer data into application logs.
+        log.error("parcel2go_booking.create_order_failed", status=resp.status_code)
+        raise Parcel2GoBookingError(f"Parcel2Go order creation failed ({resp.status_code}).", resp.status_code)
 
     data = resp.json()
     order_id = data.get("OrderId")
     order_hash = data.get("Hash", "")
     if not order_id:
-        raise Parcel2GoBookingError(f"Parcel2Go order creation returned no OrderId: {data}")
+        raise Parcel2GoBookingError("Parcel2Go order creation returned no order reference.")
 
-    log.info("parcel2go_booking.order_created", order_id=order_id, total_price=data.get("TotalPrice"))
-    return order_id, order_hash
+    line_map = data.get("OrderlineIdMap") or data.get("OrderLineIdMap") or []
+    order_line_id = None
+    if isinstance(line_map, list):
+        match = next((line for line in line_map if isinstance(line, dict) and str(line.get("ItemId") or "") == item_id), None)
+        if match:
+            order_line_id = str(match.get("OrderLineId") or "").strip() or None
+
+    log.info(
+        "parcel2go_booking.order_created",
+        order_id=order_id,
+        has_order_line_id=bool(order_line_id),
+        total_price=data.get("TotalPrice"),
+    )
+    total_price = data.get("TotalPrice")
+    try:
+        parsed_total_price = float(total_price)
+    except (TypeError, ValueError, OverflowError):
+        parsed_total_price = None
+    if parsed_total_price is not None and (
+        not math.isfinite(parsed_total_price) or parsed_total_price <= 0
+    ):
+        parsed_total_price = None
+    return str(order_id), str(order_hash or ""), order_line_id, parsed_total_price
 
 
 async def pay_order_with_prepay(
@@ -166,9 +213,8 @@ async def pay_order_with_prepay(
     """Pays for a created order from the account's Parcel2Go PrePay balance —
     the account must have sufficient balance topped up already; this call
     fails outright if it doesn't (Parcel2Go does not silently fall back to
-    a card). Returns the label URL and tracking number if the response
-    shape matches what's expected; always includes raw_response so a real
-    booking can be inspected if either field comes back None."""
+    a card). Returns only parsed dispatch fields; provider response bodies
+    are not retained because they may contain buyer and delivery details."""
     settings = get_settings()
     env = environment or settings.parcel2go_environment
     token = await _get_access_token(env)
@@ -185,14 +231,22 @@ async def pay_order_with_prepay(
         )
 
     if resp.status_code not in (200, 201):
-        log.error("parcel2go_booking.payment_failed", status=resp.status_code, body=resp.text[:1000], order_id=order_id)
-        raise Parcel2GoBookingError(f"Parcel2Go payment failed ({resp.status_code}): {resp.text[:500]}", resp.status_code)
+        log.error(
+            "parcel2go_booking.payment_failed",
+            status=resp.status_code,
+            order_id=order_id,
+        )
+        raise Parcel2GoBookingError(
+            f"Parcel2Go payment failed ({resp.status_code}).",
+            resp.status_code,
+        )
 
     data = resp.json()
     links = data.get("Links", [])
 
     label_url = None
     tracking_number = None
+    tracking_url = None
     for link in links:
         rel = (link.get("Rel") or link.get("rel") or "").lower()
         href = link.get("Href") or link.get("href")
@@ -200,6 +254,7 @@ async def pay_order_with_prepay(
             label_url = href
         if "track" in rel:
             tracking_number = link.get("TrackingNumber") or link.get("trackingNumber")
+            tracking_url = _safe_provider_tracking_url(href)
 
     if not tracking_number:
         # Fall back: some Parcel2Go responses carry tracking numbers per-parcel
@@ -209,14 +264,13 @@ async def pay_order_with_prepay(
     log.info(
         "parcel2go_booking.paid",
         order_id=order_id,
-        label_url=label_url,
-        tracking_number=tracking_number,
-        found_expected_fields=bool(label_url and tracking_number),
+        has_label_url=bool(label_url),
+        has_tracking_number=bool(tracking_number),
     )
 
     return BookedShipment(
         parcel2go_order_id=order_id,
         tracking_number=tracking_number,
         label_url=label_url,
-        raw_response=data,
+        tracking_url=tracking_url,
     )

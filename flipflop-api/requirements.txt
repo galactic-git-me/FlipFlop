@@ -1,6 +1,7 @@
 # Core
 fastapi>=0.115.5
 uvicorn[standard]==0.32.1
+watchfiles>=1.0,<2.0
 python-dotenv==1.0.1
 
 # Database
@@ -56,3 +57,4 @@ stripe>=11.0.0
 # PDF Generation
 reportlab>=4.0.0
 Pillow>=10.0.0
+qrcode[pil]>=7.4.2

@@ -11,6 +11,7 @@ Docs: https://developer.ebay.com/api-docs/sell/fulfillment/resources/order/metho
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime, timezone
 
 import httpx
 import structlog
@@ -63,6 +64,7 @@ class EbayOrderInfo:
     buyer_address: BuyerAddress
     sale_price: float
     currency: str
+    ship_by_date: datetime | None = None
 
 
 def _parse_order(order: dict, matching_legacy_item_id: str | None = None) -> EbayOrderInfo | None:
@@ -94,6 +96,16 @@ def _parse_order(order: dict, matching_legacy_item_id: str | None = None) -> Eba
 
     pricing_summary = order.get("pricingSummary", {})
     total = pricing_summary.get("total", {})
+    ship_by_date = None
+    fulfillment_instructions = line_item.get("lineItemFulfillmentInstructions") or {}
+    raw_ship_by_date = fulfillment_instructions.get("shipByDate")
+    if raw_ship_by_date:
+        try:
+            ship_by_date = datetime.fromisoformat(str(raw_ship_by_date).replace("Z", "+00:00"))
+            if ship_by_date.tzinfo is not None:
+                ship_by_date = ship_by_date.astimezone(timezone.utc).replace(tzinfo=None)
+        except ValueError:
+            ship_by_date = None
 
     return EbayOrderInfo(
         order_id=order["orderId"],
@@ -102,16 +114,17 @@ def _parse_order(order: dict, matching_legacy_item_id: str | None = None) -> Eba
         buyer_address=address,
         sale_price=float(total.get("value", 0)),
         currency=total.get("currency", "GBP"),
+        ship_by_date=ship_by_date,
     )
 
 
 async def get_order(
-    order_id: str, environment: str = "production", ebay_listing_id: str | None = None
+    order_id: str, environment: str = "production", ebay_listing_id: str | None = None, db=None
 ) -> EbayOrderInfo:
     """Fetch a single order's real buyer address + sale price by eBay order ID.
     Pass ebay_listing_id to pick the right line item on a multi-item order —
     otherwise the first line item is used."""
-    access_token = await get_valid_ebay_access_token(environment)
+    access_token = await get_valid_ebay_access_token(environment, db=db)
     base_url = _EBAY_API_BASE[environment]
 
     async with httpx.AsyncClient(timeout=30.0) as client:
@@ -140,7 +153,7 @@ async def get_order(
 
 
 async def find_order_for_listing(
-    ebay_listing_id: str, environment: str = "production", lookback_days: int = 90
+    ebay_listing_id: str, environment: str = "production", lookback_days: int = 90, db=None
 ) -> EbayOrderInfo | None:
     """Search recent orders for one containing the given listing ID, since a
     ManualBuild only stores its listing ID (not the order ID) until now.
@@ -148,7 +161,12 @@ async def find_order_for_listing(
     yet, or it sold further back than lookback_days."""
     from datetime import datetime, timedelta, timezone
 
-    access_token = await get_valid_ebay_access_token(environment)
+    try:
+        access_token = await get_valid_ebay_access_token(environment, db=db)
+    except ValueError as exc:
+        raise EbayOrderSyncError(str(exc), 401) from exc
+    if not access_token:
+        raise EbayOrderSyncError("Connect the eBay seller account in Settings.", 401)
     base_url = _EBAY_API_BASE[environment]
 
     date_from = (datetime.now(timezone.utc) - timedelta(days=lookback_days)).strftime("%Y-%m-%dT%H:%M:%S.000Z")

@@ -165,8 +165,7 @@ export default function StudioScene(props: Props) {
           <directionalLight position={[1,2,3]} intensity={4} /><directionalLight position={[-2,1,-1]} color="#85b8ff" intensity={3} />
           <pointLight position={[.2,.1,.2]} color={props.accent} intensity={.4} distance={1} />
           <Suspense fallback={null}>{props.parts.filter(p => positions[p.category]).map(p => <Part key={p.category+':'+p.id} part={p} props={props} chassis={chassis} onHover={setHover} />)}</Suspense>
-          <mesh position={[0,-.265,0]} rotation={[-Math.PI/2,0,0]}><circleGeometry args={[.42,64]} /><meshStandardMaterial color="#121c2b" metalness={.7} roughness={.5} /></mesh>
-          <mesh position={[0,-.263,0]} rotation={[-Math.PI/2,0,0]}><ringGeometry args={[.419,.421,96]} /><meshBasicMaterial color={props.accent} transparent opacity={.45} /></mesh>
+          <gridHelper args={[4,40,0x00ff00,0x00aa00]} position={[0,-.235,0]} />
           <Camera props={props} interaction={interaction} />
         </Canvas>
       </ModelBoundary>}

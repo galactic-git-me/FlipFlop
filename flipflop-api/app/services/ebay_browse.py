@@ -55,6 +55,20 @@ def _is_accessory(title: str) -> bool:
     tl = title.lower()
     return any(tok in tl for tok in _ACCESSORY_TOKENS)
 
+
+def _extract_listing_image_url(item: dict) -> str | None:
+    image = item.get("image") or {}
+    if isinstance(image, dict) and image.get("imageUrl"):
+        return image["imageUrl"]
+    # Browse search can omit the primary `image` while still returning
+    # product thumbnails/additional images.
+    candidates = [*(item.get("thumbnailImages") or []), *(item.get("additionalImages") or [])]
+    return next(
+        (candidate.get("imageUrl") for candidate in candidates
+         if isinstance(candidate, dict) and candidate.get("imageUrl")),
+        None,
+    )
+
 # Global semaphore — Browse API has per-app rate limits
 _API_SEM = asyncio.Semaphore(1)
 
@@ -143,7 +157,7 @@ class ComponentPrices(TypedDict):
     new_min: float | None
 
 
-async def _search(token: str, query: str, condition_filter: str, limit: int = 50, min_price: float = 10.0, offset: int = 0) -> list[EbayListing]:
+async def _search(token: str, query: str, condition_filter: str, limit: int = 50, min_price: float = 10.0, offset: int = 0, category_id: str | None = None) -> list[EbayListing]:
     """
     Search eBay Buy Browse API for BIN listings of a given condition.
     condition_filter examples: 'NEW|LIKE_NEW', 'USED|EXCELLENT|VERY_GOOD|GOOD|ACCEPTABLE'
@@ -163,6 +177,8 @@ async def _search(token: str, query: str, condition_filter: str, limit: int = 50
         "fieldgroups": "MATCHING_ITEMS",
     }
 
+    if category_id:
+        params['category_ids'] = category_id
     global _consecutive_429_failures, _circuit_open_until
 
     if time.time() < _circuit_open_until:
@@ -227,12 +243,14 @@ async def _search(token: str, query: str, condition_filter: str, limit: int = 50
         # checkout with no value yet; both default to 0 (best-effort — this
         # will slightly favour listings with unstated/calculated shipping).
         shipping_cost = 0.0
+        shipping_cost_known = False
         for option in item.get("shippingOptions") or []:
             cost = (option or {}).get("shippingCost") or {}
             if cost.get("currency", "GBP") != "GBP":
                 continue
             try:
                 shipping_cost = float(cost.get("value") or 0)
+                shipping_cost_known = cost.get('value') is not None
             except (ValueError, TypeError):
                 shipping_cost = 0.0
             break  # first shipping option is eBay's default/cheapest one
@@ -255,7 +273,7 @@ async def _search(token: str, query: str, condition_filter: str, limit: int = 50
         if any(x in condition for x in defect_conditions):
             continue
 
-        image = item.get("image") or {}
+        image_url = _extract_listing_image_url(item)
         # Extract canonical identifiers from productSummary if available. These are stable,
         # canonical identifiers that consolidate the same product across title
         # variants ("9800X3D" vs "Ryzen 9 9800X3D" vs "AMD Ryzen 9 9800X3D" all
@@ -283,9 +301,10 @@ async def _search(token: str, query: str, condition_filter: str, limit: int = 50
         results.append({
             "title": title,
             "price": price,
+            "delivery_cost_known": shipping_cost_known,
             "condition": condition,
             "url": item_url,
-            "image_url": image.get("imageUrl"),
+            "image_url": image_url,
             "epid": item.get("epid"),
             "gtin": gtin,
             "mpn": mpn,
@@ -362,7 +381,7 @@ async def get_component_prices(model_name: str, force_refresh: bool = False, min
 
 
 async def search_active_listings(
-    query: str, condition_filter: str = "USED|EXCELLENT|VERY_GOOD|GOOD|ACCEPTABLE", limit: int = 50, min_price: float = 20.0, offset: int = 0
+    query: str, condition_filter: str = "USED|EXCELLENT|VERY_GOOD|GOOD|ACCEPTABLE", limit: int = 50, min_price: float = 20.0, offset: int = 0, category_id: str | None = None
 ) -> list[EbayListing]:
     """Public entry point for a raw free-text active-BIN-listing search (e.g.
     a whole finished-PC query like "gaming pc ryzen 5 5600x rtx 3070 32gb"),
@@ -373,7 +392,7 @@ async def search_active_listings(
     if not token:
         log.warning("ebay_browse.no_token")
         return []
-    return await _search(token, query, condition_filter, limit=limit, min_price=min_price, offset=offset)
+    return await _search(token, query, condition_filter, limit=limit, min_price=min_price, offset=offset, category_id=category_id)
 
 
 def _empty() -> ComponentPrices:

@@ -36,6 +36,11 @@ async def run_cross_listing_recreate_job() -> dict:
                 row.last_recreate_message = "Paused because the build is unavailable or sold."
                 continue
             try:
+                # Check media before ending an existing listing. An unreviewed
+                # replacement must not withdraw a working channel listing.
+                from app.services.channel_images import prepare_channel_urls
+                image_urls = await prepare_channel_urls(
+                    [photo["url"] for photo in (build.photos or []) if isinstance(photo, dict) and photo.get("kind", "photo") == "photo" and photo.get("url")], row.channel)
                 if row.channel in MANUAL_CODEX_CHANNELS:
                     row.last_recreate_at = now
                     row.recreate_count += 1
@@ -48,7 +53,7 @@ async def run_cross_listing_recreate_job() -> dict:
                         channel_listing_id=row.id,
                         event_type="recreate_handoff_required",
                         message=row.last_recreate_message,
-                        event_metadata={"build_id": build.id, "channel": row.channel, "requires_browser_assist": True, "at": now.isoformat()},
+                        event_metadata={"build_id": build.id, "channel": row.channel, "requires_browser_assist": True, "at": now.isoformat(), "image_urls": image_urls},
                     ))
                     await db.commit()
                     await emit_alert(

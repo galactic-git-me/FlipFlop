@@ -1,7 +1,7 @@
 """
 Batch extract Canonical Product Keys (CPK) for all scored listings.
 
-Processes all 11.8k+ listings, extracts structured product data via Qwen2,
+Processes all 11.8k+ listings, extracts structured product data via the configured local Ollama model,
 generates deterministic CPKs, and stores in database for cross-vendor consolidation.
 
 Usage:

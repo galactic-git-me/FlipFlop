@@ -8,6 +8,7 @@ get_current_admin override since app/api/manual_builds.py's router requires
 an admin JWT.
 """
 from datetime import datetime, timedelta
+from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -20,6 +21,7 @@ from app.main import app
 from app.database import Base, get_db
 from app.database import engine as real_engine
 from app.models.manual_build import ManualBuild
+from app.models.component_manual import ComponentManual
 from app.routes.admin_auth import get_current_admin
 
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
@@ -40,7 +42,7 @@ async def _dispose_real_engine_pool():
 
 
 @pytest.fixture
-async def test_db():
+async def test_db(monkeypatch):
     engine = create_async_engine(
         TEST_DATABASE_URL, echo=False,
         connect_args={"check_same_thread": False},
@@ -61,6 +63,14 @@ async def test_db():
 
     app.dependency_overrides[get_db] = override_get_db
     app.dependency_overrides[get_current_admin] = override_get_current_admin
+    from types import SimpleNamespace
+    from unittest.mock import AsyncMock
+    import app.api.manual_builds as manual_builds
+    monkeypatch.setattr(
+        manual_builds,
+        "list_fulfillment_policies",
+        AsyncMock(return_value=[SimpleNamespace(policy_id="test-fulfillment-policy", marketplace_id="EBAY_GB")]),
+    )
     yield SessionLocal
     app.dependency_overrides.clear()
     await engine.dispose()
@@ -106,6 +116,24 @@ async def test_mark_built_fires_demand_check_and_pricing(client, test_db):
     assert body["demand_active_count"] == 40
     assert body["price_floor"] == pytest.approx(320.0 * 1.10, abs=0.01)
     assert body["sold_comp_target"] == 310
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("prior_status", ["listed", "sold"])
+async def test_mark_built_rejects_rewinding_a_listed_or_sold_build(client, test_db, prior_status):
+    build_id = await _built_build(client, test_db)
+    async with test_db() as db:
+        build = await db.get(ManualBuild, build_id)
+        build.status = prior_status
+        await db.commit()
+
+    response = client.post(f"/api/manual-builds/{build_id}/mark-built")
+
+    assert response.status_code == 409
+    assert "cannot transition to Built" in response.json()["detail"]
+    async with test_db() as db:
+        persisted = await db.get(ManualBuild, build_id)
+        assert persisted.status == prior_status
 
 
 @pytest.mark.asyncio
@@ -163,7 +191,7 @@ async def _clean_real_manual_builds():
 
 @pytest.mark.asyncio
 async def test_manual_build_offer_poll_counters_and_persists(client, test_db):
-    build_id = await _real_db_build(status="listed", ebay_listing_id="item-123", ebay_price=320.0)
+    build_id = await _real_db_build(status="listed", ebay_listing_id="188805793027", ebay_price=320.0)
 
     from app.workers.manual_build_lifecycle import run_manual_build_offer_poll_job
 
@@ -191,7 +219,7 @@ async def test_manual_build_offer_poll_counters_and_persists(client, test_db):
 async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, test_db):
     build_id = await _real_db_build(
         status="listed",
-        ebay_listing_id="item-123",
+        ebay_listing_id="188805793027",
         ebay_listing_url="https://ebay.co.uk/itm/item-123",
         ebay_price=400.0,
         price_floor=352.0,
@@ -202,6 +230,7 @@ async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, t
         photos=[{"url": "https://x/1.jpg", "kind": "photo"}, {"url": "https://x/2.jpg", "kind": "photo"}],
         listed_at=datetime.utcnow() - timedelta(days=8),
         next_recreate_at=datetime.utcnow() - timedelta(minutes=5),
+        relist_enabled=True,
     )
 
     from app.workers.manual_build_lifecycle import run_manual_build_recreate_cycle_job
@@ -212,12 +241,8 @@ async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, t
     ), patch(
         "app.workers.manual_build_lifecycle.post_build_to_ebay", new=AsyncMock(return_value="not_ready")
     ), patch(
-        "app.api.manual_builds.ai_service.chat",
-        new=AsyncMock(return_value=(
-            '{"titles": ["New Title 1", "New Title 2"], "description": "<p>new</p>", '
-            '"aspects": {"Brand": "FlipFlop", "Type": "Desktop"}}',
-            "claude",
-        )),
+        "app.api.manual_builds.generate_listing",
+        new=AsyncMock(return_value=SimpleNamespace(titles=["New Title 1", "Alternative Title"])),
     ):
         result = await run_manual_build_recreate_cycle_job()
 
@@ -353,8 +378,8 @@ async def test_post_to_ebay_creates_remote_draft(client, test_db):
     with patch(
         "app.services.ebay_token_manager.get_valid_ebay_access_token", new=AsyncMock(return_value="TOKEN")
     ), patch(
-        "app.api.manual_builds.post_flip_to_ebay",
-        new=AsyncMock(return_value={"success": True, "offer_id": "offer-1", "sku": "sku-1", "status": "DRAFT"}),
+        "app.api.manual_builds.EbayListingPoster.create_item_draft",
+        new=AsyncMock(return_value={"success": True, "draft_id": "draft-1", "draft_url": "https://ebay.example/draft-1"}),
     ) as mock_post:
         resp = client.post(
             f"/api/manual-builds/{build_id}/post-to-ebay",
@@ -364,12 +389,126 @@ async def test_post_to_ebay_creates_remote_draft(client, test_db):
     assert resp.status_code == 200
     response_body = resp.json()
     assert response_body["success"] is True
-    assert response_body["offer_id"] == "offer-1"
+    assert response_body["draft_id"] == "draft-1"
     assert response_body["action"] == "drafted"
-    assert mock_post.await_args.kwargs["publish"] is False
+    assert mock_post.await_args.kwargs["title"] == "Title"
 
     async with test_db() as db:
         refreshed = await db.get(ManualBuild, build_id)
-        assert refreshed.ebay_offer_id == "offer-1"
-        assert refreshed.ebay_sku == "sku-1"
+        assert refreshed.ebay_draft_id == "draft-1"
         assert refreshed.ebay_listing_status == "draft"
+
+
+async def _research_build(SessionLocal, components):
+    async with SessionLocal() as db:
+        build = ManualBuild(name="Research test build", components=components)
+        db.add(build)
+        await db.commit()
+        await db.refresh(build)
+        return build.id
+
+
+@pytest.mark.asyncio
+async def test_manual_source_suggestions_return_exact_cache_hit_without_search(
+    client, test_db, monkeypatch
+):
+    from app.services import component_research_search
+
+    build_id = await _research_build(test_db, [
+        {"slot": "Motherboard", "name": "MSI MAG B650 TOMAHAWK WIFI"},
+    ])
+    async with test_db() as db:
+        db.add(ComponentManual(
+            component_key="MSI MAG B650 TOMAHAWK WIFI",
+            component_name="MSI MAG B650 TOMAHAWK WIFI",
+            source_url="https://www.msi.com/Motherboard/MAG-B650-TOMAHAWK-WIFI/support",
+            storage_key="manuals/msi-b650.pdf",
+            filename="msi-b650.pdf",
+            sha256="a" * 64,
+            size_bytes=1234,
+            is_active=True,
+        ))
+        await db.commit()
+
+    search = AsyncMock(return_value=[])
+    monkeypatch.setattr(component_research_search, "discover_component_sources", search)
+    response = client.post(
+        f"/api/manual-builds/{build_id}/getting-ready/source-suggestions",
+        json={"component_name": "MSI MAG B650 TOMAHAWK WIFI", "topic": "manual"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["cache_checked"] is True
+    assert body["suggestions"] == []
+    assert body["cached_manual_matches"][0]["filename"] == "msi-b650.pdf"
+    assert body["saved"] is False
+    assert body["downloaded"] is False
+    search.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_source_suggestions_reject_component_not_recorded_on_build(
+    client, test_db, monkeypatch
+):
+    from app.services import component_research_search
+
+    build_id = await _research_build(test_db, [
+        {"slot": "Motherboard", "name": "MSI MAG B650 TOMAHAWK WIFI"},
+    ])
+    search = AsyncMock(return_value=[])
+    monkeypatch.setattr(component_research_search, "discover_component_sources", search)
+    response = client.post(
+        f"/api/manual-builds/{build_id}/getting-ready/source-suggestions",
+        json={"component_name": "AMD Ryzen 7 7800X3D", "topic": "driver_firmware"},
+    )
+
+    assert response.status_code == 422
+    search.assert_not_awaited()
+
+
+@pytest.mark.parametrize(
+    ("build_component_name", "manual_active"),
+    [
+        ("MSI MAG B650 TOMAHAWK WIFI MAX", True),
+        ("MSI MAG B650 TOMAHAWK WIFI", False),
+    ],
+)
+@pytest.mark.asyncio
+async def test_manual_source_suggestions_do_not_use_ineligible_cache_match(
+    client, test_db, monkeypatch, build_component_name, manual_active
+):
+    from app.services import component_research_search
+
+    build_id = await _research_build(test_db, [
+        {"slot": "Motherboard", "name": build_component_name},
+    ])
+    async with test_db() as db:
+        db.add(ComponentManual(
+            component_key="MSI MAG B650 TOMAHAWK WIFI",
+            component_name="MSI MAG B650 TOMAHAWK WIFI",
+            source_url="https://www.msi.com/Motherboard/MAG-B650-TOMAHAWK-WIFI/support",
+            storage_key="manuals/msi-b650.pdf",
+            filename="msi-b650.pdf",
+            sha256="b" * 64,
+            size_bytes=1234,
+            is_active=manual_active,
+        ))
+        await db.commit()
+
+    search = AsyncMock(return_value=[{
+        "title": "Official support page",
+        "source_url": "https://www.msi.com/support",
+        "publisher": "msi.com",
+    }])
+    monkeypatch.setattr(component_research_search, "discover_component_sources", search)
+    response = client.post(
+        f"/api/manual-builds/{build_id}/getting-ready/source-suggestions",
+        json={"component_name": build_component_name, "topic": "manual"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["cached_manual_matches"] == []
+    assert body["suggestions"][0]["publisher"] == "msi.com"
+    search.assert_awaited_once()

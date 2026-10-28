@@ -1,0 +1,105 @@
+﻿category,planned_specification,used_by_builds,photo_candidate_found,approved_exact_model_found,physical_3d_required,supplier_stock_verified
+cpu,AMD Ryzen 5 5600,FF-GVG-01,False,False,True,False
+motherboard,MSI B550M PRO-VDH WIFI,"FF-GVG-01,FF-BOF-01,FF-FAM-01",False,False,True,False
+ram,32GB (2x16GB) DDR4-3200,"FF-GVG-01,FF-BOF-01,FF-FAM-01",True,False,True,False
+gpu,NVIDIA GeForce RTX 5050 8GB,FF-GVG-01,False,False,True,False
+storage,1TB PCIe 4.0 NVMe SSD,"FF-GVG-01,FF-HPG-01,FF-STU-01,FF-BOF-01,FF-FAM-01",True,False,True,False
+case,Montech AIR 100 ARGB,"FF-GVG-01,FF-FAM-02",False,False,True,False
+psu,Corsair CX650 650W 80+ Bronze,FF-GVG-01,False,False,True,False
+cooling,Thermalright Assassin X 120 SE,"FF-GVG-01,FF-STU-02,FF-FAM-02",False,False,True,False
+os,Windows 11 Home,"FF-GVG-01,FF-GVG-02,FF-GVG-03,FF-HPG-01,FF-HPG-02,FF-STU-01,FF-STU-02,FF-STU-03,FF-CCR-01,FF-FAM-01,FF-FAM-02,FF-FAM-03",False,False,False,False
+cpu,AMD Ryzen 5 9600X,"FF-GVG-02,FF-STU-01,FF-STU-02,FF-AIW-01,FF-SWD-01,FF-FAM-02",False,False,True,False
+motherboard,ASRock B850 Steel Legend WiFi,"FF-GVG-02,FF-FAM-02",False,False,True,False
+ram,32GB (2x16GB) DDR5-6000 CL30,"FF-GVG-02,FF-GVG-03,FF-STU-02,FF-FAM-02",True,False,True,False
+gpu,AMD Radeon RX 9060 XT 16GB,"FF-GVG-02,FF-FAM-02",False,False,True,False
+storage,2TB PCIe 4.0 NVMe SSD,"FF-GVG-02,FF-GVG-03,FF-STU-02,FF-STU-03,FF-BOF-02,FF-BOF-03,FF-CCR-01,FF-AIW-01,FF-SWD-01,FF-FAM-02",True,False,True,False
+case,Montech SKY TWO GX,FF-GVG-02,False,False,True,False
+psu,Corsair RM750e 750W 80+ Gold,"FF-GVG-02,FF-HPG-01,FF-CCR-01,FF-AIW-01",False,False,True,False
+cooling,Thermalright Peerless Assassin 120 SE,"FF-GVG-02,FF-AIW-01,FF-SWD-01",False,False,True,False
+cpu,AMD Ryzen 7 9800X3D,FF-GVG-03,False,False,True,False
+motherboard,ASUS TUF Gaming X870-PLUS WIFI,"FF-GVG-03,FF-FAM-03",False,False,True,False
+gpu,AMD Radeon RX 9070 16GB,"FF-GVG-03,FF-FAM-03",False,False,True,False
+case,Lian Li LANCOOL 207,"FF-GVG-03,FF-STU-03",False,False,True,False
+psu,Corsair RM850e 850W 80+ Gold,"FF-GVG-03,FF-STU-03,FF-SWD-02,FF-FAM-03",False,False,True,False
+cooling,Arctic Liquid Freezer III 240,"FF-GVG-03,FF-STU-03,FF-CCR-01",False,False,True,False
+cpu,Intel Core Ultra 5 250K Plus,"FF-HPG-01,FF-BOF-02,FF-CCR-01",False,False,True,False
+motherboard,MSI Z890 GAMING PLUS WIFI,"FF-HPG-01,FF-CCR-01",False,False,True,False
+ram,32GB (2x16GB) DDR5-6400,"FF-HPG-01,FF-BOF-02",True,False,True,False
+gpu,NVIDIA GeForce RTX 5060 Ti 16GB,"FF-HPG-01,FF-CCR-01,FF-AIW-01,FF-SWD-02",False,False,True,False
+case,NZXT H5 Flow,FF-HPG-01,False,False,True,False
+cooling,Thermalright Phantom Spirit 120 SE,FF-HPG-01,False,False,True,False
+cpu,AMD Ryzen 7 7800X3D,FF-HPG-02,False,False,True,False
+motherboard,ASUS PRIME X870-P,FF-HPG-02,False,False,True,False
+ram,32GB (2x16GB) Lexar DDR5-6400 CL38,FF-HPG-02,True,False,True,False
+gpu,AMD Radeon RX 9070 XT 16GB,FF-HPG-02,False,False,True,False
+storage,1TB PCIe 3.0 NVMe SSD,FF-HPG-02,True,False,True,False
+case,APNX Creator C1 ChromaFlair,"FF-HPG-02,FF-FAM-03",False,False,True,False
+psu,Corsair RM750i 750W modular,FF-HPG-02,False,False,True,False
+cooling,Thermalright Aqua Elite 240 V3,"FF-HPG-02,FF-FAM-03",False,False,True,False
+cpu,AMD Ryzen 7 9850X3D,FF-HPG-03,True,False,True,False
+motherboard,ASUS ROG Crosshair X870E Hero,FF-HPG-03,False,False,True,False
+ram,64GB (2x32GB) DDR5-6000 CL30,"FF-HPG-03,FF-AIW-01,FF-SWD-01,FF-FAM-03",True,False,True,False
+gpu,NVIDIA GeForce RTX 5090 32GB,"FF-HPG-03,FF-CCR-03",False,False,True,False
+storage,4TB PCIe 4.0 NVMe SSD,"FF-HPG-03,FF-CCR-02,FF-AIW-02,FF-SWD-02,FF-FAM-03",True,False,True,False
+case,Fractal Design North XL,FF-HPG-03,False,False,True,False
+psu,Corsair HX1200i 1200W 80+ Platinum,"FF-HPG-03,FF-CCR-03",False,False,True,False
+cooling,Arctic Liquid Freezer III 360,"FF-HPG-03,FF-CCR-02,FF-AIW-02,FF-SWD-03",True,False,True,False
+os,Windows 11 Pro,"FF-HPG-03,FF-BOF-01,FF-BOF-02,FF-BOF-03,FF-CCR-02,FF-CCR-03",False,False,False,False
+motherboard,MSI B850 GAMING PLUS WIFI6E,"FF-STU-01,FF-BOF-03",False,False,True,False
+ram,32GB (2x16GB) DDR5-6000,FF-STU-01,True,False,True,False
+gpu,AMD Radeon integrated graphics,"FF-STU-01,FF-BOF-03",False,False,True,False
+case,ATX desktop case,FF-STU-01,False,False,True,False
+psu,650W ATX 80+ Gold,"FF-STU-01,FF-BOF-03",False,False,True,False
+cooling,ARCTIC Freezer 36,"FF-STU-01,FF-BOF-03",False,False,True,False
+motherboard,MSI B850 GAMING PLUS WIFI,"FF-STU-02,FF-SWD-01",False,False,True,False
+gpu,Intel Arc B580 12GB,"FF-STU-02,FF-SWD-01",False,False,True,False
+case,Fractal Design Pop Air,"FF-STU-02,FF-SWD-01",False,False,True,False
+psu,Corsair RM650e 650W 80+ Gold,"FF-STU-02,FF-BOF-02,FF-SWD-01,FF-FAM-02",False,False,True,False
+cpu,Intel Core Ultra 7 270K Plus,"FF-STU-03,FF-CCR-02,FF-SWD-02",False,False,True,False
+motherboard,ASUS TUF GAMING Z890-PLUS WIFI,FF-STU-03,False,False,True,False
+ram,64GB (2x32GB) DDR5-6400,"FF-STU-03,FF-CCR-01,FF-CCR-02",True,False,True,False
+gpu,NVIDIA GeForce RTX 5070 Ti 16GB,FF-STU-03,False,False,True,False
+cpu,AMD Ryzen 5 5600G,"FF-BOF-01,FF-FAM-01",False,False,True,False
+gpu,Radeon Vega integrated,"FF-BOF-01,FF-FAM-01",False,False,True,False
+case,Fractal Design Core 1100,"FF-BOF-01,FF-FAM-01",False,False,True,False
+psu,Corsair CX550 550W 80+ Bronze,"FF-BOF-01,FF-FAM-01",False,False,True,False
+cooling,AMD Wraith Stealth,"FF-BOF-01,FF-FAM-01",False,False,True,False
+motherboard,ASUS Pro Q870M-C-CSM,FF-BOF-02,False,False,True,False
+gpu,Intel integrated graphics,FF-BOF-02,False,False,True,False
+case,Fractal Design Define 7 Compact,FF-BOF-02,False,False,True,False
+cooling,Noctua NH-U12S redux,FF-BOF-02,False,False,True,False
+cpu,AMD Ryzen 7 9700X,"FF-BOF-03,FF-FAM-03",False,False,True,False
+ram,64GB (2x32GB) DDR5-6000,FF-BOF-03,True,False,True,False
+case,Quiet ATX desktop case,FF-BOF-03,False,False,True,False
+case,Corsair 3500X,FF-CCR-01,True,False,True,False
+motherboard,ASUS ProArt Z890-CREATOR WIFI,"FF-CCR-02,FF-SWD-02",False,False,True,False
+gpu,NVIDIA GeForce RTX 5080 16GB,"FF-CCR-02,FF-SWD-03",False,False,True,False
+case,ASUS ProArt PA602,FF-CCR-02,False,False,True,False
+psu,Corsair RM1000x 1000W 80+ Gold,"FF-CCR-02,FF-AIW-02,FF-SWD-03",False,False,True,False
+cpu,AMD Ryzen 9 9950X,"FF-CCR-03,FF-AIW-02,FF-SWD-03",True,False,True,False
+motherboard,ASUS ProArt X870E-Creator WiFi,"FF-CCR-03,FF-AIW-02,FF-SWD-03",False,False,True,False
+ram,128GB (4x32GB) DDR5-5600,"FF-CCR-03,FF-AIW-02,FF-SWD-03",True,False,True,False
+storage,4TB PCIe 4.0 NVMe SSD + 4TB project SSD,FF-CCR-03,True,False,True,False
+case,Fractal Design Define 7 XL,"FF-CCR-03,FF-AIW-03,FF-SWD-03",False,False,True,False
+cooling,Arctic Liquid Freezer III 420,FF-CCR-03,False,False,True,False
+motherboard,MSI MAG B850 Tomahawk MAX WiFi,FF-AIW-01,False,False,True,False
+case,Fractal Design Meshify 2 Compact,FF-AIW-01,False,False,True,False
+os,Windows 11 Pro + Ubuntu option,FF-AIW-01,False,False,False,False
+gpu,ASRock AMD Radeon AI PRO R9700 Creator 32GB,FF-AIW-02,False,False,True,False
+case,Fractal Design Meshify 2 XL,FF-AIW-02,False,False,True,False
+os,Ubuntu 24.04 LTS + Windows 11 Pro dual-boot,FF-AIW-02,False,False,False,False
+cpu,AMD Ryzen Threadripper PRO 7975WX,FF-AIW-03,False,False,True,False
+motherboard,ASUS Pro WS WRX90E-SAGE SE,FF-AIW-03,False,False,True,False
+ram,256GB (8x32GB) DDR5 ECC RDIMM,FF-AIW-03,False,False,True,False
+gpu,NVIDIA RTX 6000 Ada 48GB,FF-AIW-03,False,False,True,False
+storage,4TB PCIe 4.0 NVMe SSD + 8TB data SSD,FF-AIW-03,True,False,True,False
+psu,Corsair AX1600i 1600W 80+ Titanium,FF-AIW-03,False,False,True,False
+cooling,Noctua NH-U14S TR5-SP6,FF-AIW-03,False,False,True,False
+os,Ubuntu 24.04 LTS + Windows 11 Pro,FF-AIW-03,False,False,False,False
+os,Windows 11 Pro + WSL2,FF-SWD-01,False,False,False,False
+ram,96GB (2x48GB) DDR5-6400,FF-SWD-02,True,False,True,False
+case,Fractal Design North,FF-SWD-02,True,False,True,False
+cooling,Noctua NH-D15 G2,FF-SWD-02,False,False,True,False
+os,Windows 11 Pro + Ubuntu VM,FF-SWD-02,False,False,False,False
+storage,4TB PCIe 4.0 NVMe SSD + 4TB build-cache SSD,FF-SWD-03,True,False,True,False
+os,Windows 11 Pro + Ubuntu 24.04 dual-boot,FF-SWD-03,False,False,False,False

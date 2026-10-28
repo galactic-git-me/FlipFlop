@@ -7,6 +7,7 @@ from sqlalchemy.sql.expression import cast as sa_cast
 from app.database import get_db
 from app.models.listing import Listing, ListingStatus, Classification
 from app.schemas.listing import ListingAlternative, ListingOut, ListingFilter
+from app.services.model_selection_service import model_selection_service
 
 router = APIRouter(prefix="/listings", tags=["listings"])
 
@@ -537,18 +538,11 @@ async def analyze_listings(
     data: dict,
 ):
     """
-    Analyze marketplace listings with Claude to find top 5 deals.
+    Analyze marketplace listings to find top 5 deals.
     """
-    import anthropic
-    from app.config import get_settings
-
     listings = data.get("listings", [])
     if not listings:
         raise HTTPException(status_code=400, detail="No listings provided")
-
-    settings = get_settings()
-    if not settings.anthropic_api_key:
-        raise HTTPException(status_code=500, detail="Anthropic API key not configured")
 
     # Format listings for Claude
     listings_text = "\n".join(
@@ -570,26 +564,10 @@ For each top deal, explain:
 Format your response as a clear ranking with reasoning."""
 
     try:
-        client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
-        message = client.messages.create(
-            model="claude-opus-4-8",
-            max_tokens=1024,
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt,
-                }
-            ],
+        result = await model_selection_service.complete(
+            task="Deep listing deal analysis", messages=[{"role": "user", "content": prompt}], max_tokens=1024,
         )
-
-        analysis_text = message.content[0].text if message.content else ""
-
-        if not analysis_text:
-            raise HTTPException(status_code=500, detail="No analysis returned from Claude")
-
-        return {
-            "analysis": analysis_text,
-            "listings_analyzed": len(listings),
-        }
-    except anthropic.APIError as e:
-        raise HTTPException(status_code=500, detail=f"Claude API error: {str(e)}")
+        return {"analysis": result.text, "listings_analyzed": len(listings),
+                "model_used": f"{result.provider}/{result.model}"}
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail=f"All configured model tiers failed: {exc}")

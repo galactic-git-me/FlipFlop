@@ -1,5 +1,7 @@
 """Tests for payment integration and order creation flow."""
 
+import os
+
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 from fastapi import HTTPException
@@ -9,6 +11,7 @@ from app.schemas.payment import (
     CreatePaymentIntentRequest,
     ConfirmPaymentRequest,
 )
+from stripe import SignatureVerificationError, StripeError
 
 
 @pytest.mark.unit
@@ -18,7 +21,14 @@ class TestPaymentService:
     @pytest.fixture
     def payment_service(self):
         """Create PaymentService instance."""
-        return PaymentService()
+        from types import SimpleNamespace
+        from app.services.payment_service import StripeConfig
+        service = PaymentService()
+        service.config = StripeConfig()
+        service.config.api_key = "sk_test_isolated"
+        service.config.webhook_secret = "whsec_isolated"
+        service.config.publishable_key = "pk_test_isolated"
+        return service
 
     @patch("app.services.payment_service.stripe")
     async def test_create_payment_intent_success(self, mock_stripe, payment_service):
@@ -55,7 +65,7 @@ class TestPaymentService:
     ):
         """Test payment intent creation with Stripe error."""
         # Mock Stripe error
-        mock_stripe.PaymentIntent.create.side_effect = Exception(
+        mock_stripe.PaymentIntent.create.side_effect = StripeError(
             "Stripe API Error"
         )
 
@@ -120,6 +130,7 @@ class TestPaymentService:
         with patch("app.services.payment_service.stripe.Webhook.construct_event") as mock_construct:
             # Mock valid event
             mock_event = {
+                "id": "evt_test123",
                 "type": "payment_intent.succeeded",
                 "data": {"object": {"id": "pi_test123"}},
             }
@@ -137,7 +148,9 @@ class TestPaymentService:
         """Test webhook signature verification with invalid signature."""
         with patch("app.services.payment_service.stripe.Webhook.construct_event") as mock_construct:
             # Mock signature error
-            mock_construct.side_effect = Exception("Invalid signature")
+            mock_construct.side_effect = SignatureVerificationError(
+                "Invalid signature", "invalid_signature"
+            )
 
             # Should raise ValueError
             with pytest.raises(ValueError) as exc_info:
@@ -146,7 +159,7 @@ class TestPaymentService:
                     signature="invalid_signature",
                 )
 
-            assert "Invalid webhook payload" in str(exc_info.value)
+            assert "Invalid signature" in str(exc_info.value)
 
     @patch("app.services.payment_service.stripe")
     async def test_refund_payment_success(self, mock_stripe, payment_service):
@@ -173,7 +186,7 @@ class TestPaymentService:
         assert result["refund_id"] == "re_test123"
         assert result["amount"] == 1200.00
         assert result["status"] == "succeeded"
-        assert result["reason"] == "customer_request"
+        assert result["reason"] == "requested_by_customer"
 
     @patch("app.services.payment_service.stripe")
     async def test_refund_payment_no_charge(self, mock_stripe, payment_service):
@@ -192,6 +205,9 @@ class TestPaymentService:
 
 
 @pytest.mark.integration
+@pytest.mark.skip(
+    reason="Endpoint and webhook cases are empty placeholders with no assertions; implement them against the current isolated API fixtures before enabling."
+)
 class TestPaymentEndpoints:
     """Tests for payment API endpoints."""
 
@@ -221,6 +237,9 @@ class TestPaymentEndpoints:
 
 
 @pytest.mark.integration
+@pytest.mark.skip(
+    reason="Endpoint and webhook cases are empty placeholders with no assertions; implement them against the current isolated API fixtures before enabling."
+)
 class TestPaymentWebhooks:
     """Tests for Stripe webhook handlers."""
 
