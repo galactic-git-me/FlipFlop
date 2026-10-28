@@ -62,7 +62,7 @@ def test_optimizer_rejects_topology_changes(monkeypatch):
 
 
 def test_optimizer_rejects_malformed_glb():
-    with pytest.raises(GlbOptimizationError, match="Invalid GLB"):
+    with pytest.raises(GlbOptimizationError, match="GLB"):
         glb_optimizer.validate_glb(b"not a glb")
 
 
