@@ -2507,7 +2507,11 @@ async def get_compatible_gem_spotlight(db: AsyncSession, actionable_ids: set[str
             "compatibility": {"status": "unavailable", "summary": "No compatible candidate set has been confirmed.", "model": None, "checks": []},
             "metrics": {}}
         for category in all_categories:
-            builds[objective]["gems"][category] = next(iter(gem_index[category].values())) if gem_index[category] else None
+            # Seed every concept from its own objective ranking. Keep these
+            # visible if the model service is unavailable so its outage does
+            # not erase listing images and price evidence from the page.
+            first_ranked_id = ranked[objective][category][0] if ranked[objective][category] else None
+            builds[objective]["gems"][category] = gem_index[category].get(first_ranked_id)
 
     if all(pools[category] for category in all_categories):
         candidate_payload = {category: [{key: item[key] for key in ("id", "title", "classification", "deal_score", "price",
@@ -2565,15 +2569,14 @@ async def get_compatible_gem_spotlight(db: AsyncSession, actionable_ids: set[str
                 build["compatibility"]["summary"] = "The AI compatibility review could not be completed. Refresh to try again."
 
     for objective, build in builds.items():
-        if build["compatibility"]["status"] != "compatible":
-            for category in all_categories:
-                build["gems"][category] = None
-            continue
         selected = [build["gems"][category] for category in all_categories]
         priced = [item for item in selected if item]
         build["metrics"] = {
             "parts_total": round(sum(float(item["price"]) for item in priced), 2),
             "component_profit_signal": round(sum(float(item.get("expected_profit") or 0) for item in priced), 2),
+            "component_profit_evidence_count": sum(item.get("expected_profit") is not None for item in priced),
+            "market_reference_total": (round(sum(float(item["market_reference"]) for item in priced), 2)
+                if priced and all(item.get("market_reference") is not None for item in priced) else None),
             "popularity_signal": round(sum(float(item.get("popularity_score") or 0) for item in priced), 2),
             "listing_watch_count": sum(int(item.get("watch_count") or 0) for item in priced),
             "listing_bid_count": sum(int(item.get("bid_count") or 0) for item in priced),

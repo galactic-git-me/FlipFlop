@@ -17,6 +17,8 @@ interface GemData {
   category?: string;
   classification?: "SUPER_GEM" | "GEM";
   deal_score?: number;
+  market_reference?: number | null;
+  expected_profit?: number | null;
 }
 
 interface GemCompatibilityReview {
@@ -35,6 +37,8 @@ interface GemBuildConcept {
   metrics: {
     parts_total?: number;
     component_profit_signal?: number;
+    component_profit_evidence_count?: number;
+    market_reference_total?: number | null;
     popularity_signal?: number;
     listing_watch_count?: number;
     listing_bid_count?: number;
@@ -163,7 +167,7 @@ export default function GemBasedPrebuilds() {
       const complete = concept.compatibility.status === "compatible" && selected.every(item => item.gem && ["GEM", "SUPER_GEM"].includes(item.gem.classification ?? ""));
       const partsTotal = concept.metrics.parts_total ?? selected.reduce((sum, item) => sum + (item.gem?.price ?? 0), 0);
       const fixedCosts = partsTotal + partsTotal * 0.10 + 20 + 15 + 6 + 0.20;
-      const sellingPrice = complete ? Math.ceil((fixedCosts * 1.10 / (1 - (0.0315 + 0.05 + 0.02) * 1.10)) * 100) / 100 : null;
+      const sellingPrice = concept.metrics.market_reference_total ?? null;
       const estimatedProfit = sellingPrice === null ? null : sellingPrice - fixedCosts - Math.ceil(sellingPrice * 0.1015 * 100) / 100;
       return <article key={key} className="rounded-2xl border border-white/10 bg-white/[0.035] p-5 shadow-lg shadow-black/20">
         <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
@@ -172,12 +176,12 @@ export default function GemBasedPrebuilds() {
         </div>
 
         <div className="mb-4 grid gap-3 rounded-xl border border-emerald-400/15 bg-emerald-400/[0.04] p-4 sm:grid-cols-2">
-          <div><p className="text-xs text-slate-400">Estimated selling price</p><p className="text-lg font-bold text-white">{sellingPrice === null ? "—" : money(sellingPrice)}</p></div>
-          <div><p className="text-xs text-slate-400">Estimated profit after costs and reserves</p><p className={`text-lg font-bold ${estimatedProfit !== null && estimatedProfit >= 0 ? "text-emerald-200" : "text-slate-500"}`}>{estimatedProfit === null ? "—" : money(estimatedProfit)}</p></div>
+          <div><p className="text-xs text-slate-400">Estimated resale value from component evidence</p><p className="text-lg font-bold text-white">{sellingPrice === null ? "Insufficient listing data" : money(sellingPrice)}</p></div>
+          <div><p className="text-xs text-slate-400">Estimated profit after costs and reserves</p><p className={`text-lg font-bold ${estimatedProfit !== null && estimatedProfit >= 0 ? "text-emerald-200" : "text-slate-500"}`}>{estimatedProfit === null ? "Insufficient listing data" : money(estimatedProfit)}</p></div>
           {key === "most_profitable" && <p className="text-[11px] text-slate-500 sm:col-span-2">Combined Gem market profit signal: {concept.metrics.component_profit_signal == null ? "—" : money(concept.metrics.component_profit_signal)} · listing-level estimate, not guaranteed whole-PC profit.</p>}
           {key === "most_popular" && <p className="text-[11px] text-slate-500 sm:col-span-2">Listing signals: {concept.metrics.listing_watch_count ?? 0} watches · {concept.metrics.listing_bid_count ?? 0} bids. These reflect the selected listings, not total product demand.</p>}
           {key === "highest_end" && <p className="text-[11px] text-slate-500 sm:col-span-2">Average matched CPU/GPU benchmark percentile: {concept.metrics.performance_percentile == null ? "unavailable" : `${concept.metrics.performance_percentile}th`}.</p>}
-          <p className="text-[11px] leading-relaxed text-slate-500 sm:col-span-2">Estimate includes 10% parts overhead, £20 outbound delivery, £15 insurance, £6 packaging, £0 labour, £0.20 fixed payment cost, and payment, warranty and returns reserves. Buying postage and full PC resale value are not confirmed; compatibility is an AI estimate from listing information.</p>
+          <p className="text-[11px] leading-relaxed text-slate-500 sm:col-span-2">Resale value sums each listing’s available market reference; it is not a confirmed whole-PC selling price. Profit estimate subtracts asking costs, 10% parts overhead, £20 outbound delivery, £15 insurance, £6 packaging, £0 labour, £0.20 fixed payment cost, and payment, warranty and returns reserves. Buying postage is not confirmed. Compatibility is an AI estimate from listing information.</p>
         </div>
 
         <div className={`mb-4 rounded-xl border px-4 py-3 ${concept.compatibility.status === "compatible" ? "border-emerald-400/20 bg-emerald-400/[0.04]" : "border-amber-400/20 bg-amber-400/[0.04]"}`}>
@@ -191,7 +195,7 @@ export default function GemBasedPrebuilds() {
           const Icon = meta.icon;
           return <div key={category} className="flex min-w-0 items-center gap-3 rounded-xl border border-white/[0.07] bg-black/20 p-3">
             {gem?.image_url ? <img src={gem.image_url} alt="" className="h-12 w-12 shrink-0 rounded-lg bg-slate-800 object-contain" /> : <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-slate-800 text-slate-500"><Icon size={20} /></div>}
-            <div className="min-w-0 flex-1"><p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">{meta.label}</p><p className="truncate text-sm text-slate-200">{gem?.title ?? "No compatible Gem available"}</p></div>
+            <div className="min-w-0 flex-1"><p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">{meta.label}</p><p className="truncate text-sm text-slate-200">{gem?.title ?? "No active Gem available"}</p>{gem && <p className="mt-0.5 truncate text-[10px] text-slate-500">Market: {gem.market_reference == null ? "unknown" : money(gem.market_reference)} · Profit signal: {gem.expected_profit == null ? "unknown" : money(gem.expected_profit)}</p>}</div>
             {gem && <span className="shrink-0 text-sm font-semibold text-emerald-200">{money(gem.price)}</span>}
           </div>;
         })}</div>
