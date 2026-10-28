@@ -3,10 +3,11 @@
 import { memo, Suspense, useEffect, useId, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer, X, History, Cpu, MemoryStick, HardDrive, Zap, CircuitBoard, Fan, Box, Save } from "lucide-react";
+import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer, X, History } from "lucide-react";
 import PixelCard from "../../components/ui/PixelCard";
 import { VendorLogo } from "../../components/VendorLogo";
 import { PriceHistorySparkline } from "../../components/listings/PriceHistorySparkline";
+import GemSpotlightRow from "@/components/builds/GemSpotlightRow";
 import { api, MarketSnapshot } from "@/lib/api";
 import { normalizeScoredListingsResponse } from "@/lib/scored-listings-response";
 import { loadSourcingRefresh } from "@/lib/sourcing-refresh";
@@ -88,47 +89,6 @@ interface Listing {
   scored_at: string;
   listing_observed_at: string | null;
   search_run_id: string | null;
-}
-
-interface GemData {
-  id: number;
-  title: string;
-  price: number;
-  seller?: string;
-  condition: string;
-  url: string;
-  image_url?: string | null;
-  cpu?: string | null;
-  category?: string;
-  classification?: "SUPER_GEM" | "GEM";
-  deal_score?: number;
-}
-
-interface GemCompatibilityReview {
-  status: "compatible" | "unavailable";
-  summary: string;
-  model?: string | null;
-  checks: { pair: string; status: string; reason: string }[];
-}
-
-interface GemSpotlightData {
-  builds: Record<GemBuildConceptKey, GemBuildConcept>;
-}
-
-type GemBuildConceptKey = "best" | "cheapest" | "highest_end" | "most_profitable" | "most_popular";
-
-interface GemBuildConcept {
-  title: string;
-  gems: Record<string, GemData | null>;
-  compatibility: GemCompatibilityReview;
-  metrics: {
-    parts_total?: number;
-    component_profit_signal?: number;
-    popularity_signal?: number;
-    listing_watch_count?: number;
-    listing_bid_count?: number;
-    performance_percentile?: number;
-  };
 }
 
 interface QueueStatus {
@@ -1361,206 +1321,6 @@ function PipelineHealthPanel({ listings }: { listings: Listing[] }) {
         </div>
       </div>
     </div>
-  );
-}
-
-const GEM_SPOTLIGHT_ACCENTS = {
-  amber: { label: "text-amber-300", price: "text-amber-200", ring: "ring-amber-400/30", glow: "from-amber-500/20" },
-  blue: { label: "text-blue-300", price: "text-blue-200", ring: "ring-blue-400/30", glow: "from-blue-500/20" },
-  cyan: { label: "text-cyan-300", price: "text-cyan-200", ring: "ring-cyan-400/30", glow: "from-cyan-500/20" },
-  purple: { label: "text-purple-300", price: "text-purple-200", ring: "ring-purple-400/30", glow: "from-purple-500/20" },
-  emerald: { label: "text-emerald-300", price: "text-emerald-200", ring: "ring-emerald-400/30", glow: "from-emerald-500/20" },
-  orange: { label: "text-orange-300", price: "text-orange-200", ring: "ring-orange-400/30", glow: "from-orange-500/20" },
-} as const;
-
-function GemSpotlightCard({
-  gem,
-  label,
-  accent,
-}: {
-  gem: GemData;
-  label: string;
-  accent: keyof typeof GEM_SPOTLIGHT_ACCENTS;
-}) {
-  const colors = GEM_SPOTLIGHT_ACCENTS[accent];
-  return (
-    <a
-      href={gem.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`group relative block aspect-square overflow-hidden rounded-2xl ring-1 ${colors.ring} shadow-lg shadow-black/40`}
-    >
-      {gem.image_url ? (
-        <img
-          src={gem.image_url}
-          alt={gem.title}
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-          onError={(e) => {
-            (e.target as HTMLImageElement).style.display = "none";
-          }}
-        />
-      ) : (
-        <div className="absolute inset-0 bg-slate-800" />
-      )}
-
-      {/* Scrim so the glass panel stays legible over any photo */}
-      <div className={`absolute inset-0 bg-gradient-to-t ${colors.glow} via-black/10 to-black/60`} />
-
-      <div className="absolute top-3 left-3 rounded-full bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1">
-        <span className={`text-[10px] uppercase tracking-wide font-semibold ${colors.label}`}>{label}</span>
-      </div>
-
-      <div className="absolute inset-x-0 bottom-0 bg-black/35 backdrop-blur-md border-t border-white/10 p-4">
-        <div className="text-sm text-white truncate group-hover:underline">{gem.title.substring(0, 40)}...</div>
-        {gem.cpu && <div className="text-xs text-white/70 mt-0.5 truncate">⚡ {gem.cpu}</div>}
-        <div className={`text-xl font-bold mt-1 ${colors.price}`}>£{gem.price.toFixed(2)}</div>
-      </div>
-    </a>
-  );
-}
-
-function StatsTab({ componentGems }: { componentGems?: GemSpotlightData }) {
-  const router = useRouter();
-  const [savingSpotlightDraft, setSavingSpotlightDraft] = useState<GemBuildConceptKey | null>(null);
-  const [spotlightDraftError, setSpotlightDraftError] = useState("");
-  const componentLabels: Record<string, { label: string; emoji: string }> = {
-    cpu: { label: "Gem CPU", emoji: "⚡" },
-    gpu: { label: "Gem GPU", emoji: "🎮" },
-    motherboard: { label: "Gem Motherboard", emoji: "🔧" },
-    ram: { label: "Gem RAM", emoji: "🧠" },
-    ssd: { label: "Gem SSD", emoji: "💿" },
-    psu: { label: "Gem PSU", emoji: "🔌" },
-    cooler: { label: "Gem CPU Cooler", emoji: "❄️" },
-    case: { label: "Gem PC Case", emoji: "🖥️" },
-  };
-  const componentOrder = ["motherboard", "cpu", "cooler", "ram", "gpu", "ssd", "psu", "case"];
-  const bestBuildGems = componentGems?.builds?.best?.gems;
-  const money = (value: number) => new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format(value);
-  const concepts: { key: GemBuildConceptKey; title: string; description: string; signal: string }[] = [
-    { key: "best", title: "The Best Gem Build", description: "Highest-ranked overall compatible set by Gem deal score.", signal: "Overall Gem deal score" },
-    { key: "cheapest", title: "The Cheapest Gem Build", description: "Lowest total asking price while meeting the compatibility checks.", signal: "Lowest parts total" },
-    { key: "highest_end", title: "The Highest-end Gem Build", description: "Highest known CPU/GPU benchmark tier, with component specs considered where benchmark data is unavailable.", signal: "CPU/GPU benchmark percentile" },
-    { key: "most_profitable", title: "The Most Profitable Gem Build", description: "Highest combined per-listing expected profit from available Gem market evidence.", signal: "Combined component profit signal" },
-    { key: "most_popular", title: "The Most Popular Gem Build", description: "Highest combined desirability, liquidity, watch and bid signals from the selected listings.", signal: "Observed demand signals" },
-  ];
-
-  const createSpotlightDraft = async (key: GemBuildConceptKey, concept: GemBuildConcept) => {
-    const buildComponents = componentOrder.map(category => ({ category, gem: concept.gems[category] ?? null }));
-    const completeBuild = concept.compatibility.status === "compatible" && buildComponents.every(item => item.gem !== null && ["GEM", "SUPER_GEM"].includes(item.gem.classification ?? ""));
-    if (!completeBuild || savingSpotlightDraft) return;
-    setSavingSpotlightDraft(key);
-    setSpotlightDraftError("");
-    try {
-      const draft = await api.manualBuilds.createGemSpotlightDraft({
-        listing_ids: buildComponents.map(item => item.gem!.id),
-        build_name: concept.title,
-        concept: key,
-      });
-      router.push(`/builds?new=${draft.id}`);
-    } catch (error) {
-      setSpotlightDraftError(error instanceof Error ? error.message : "Could not create the build draft.");
-      setSavingSpotlightDraft(null);
-    }
-  };
-
-  return (
-    <>
-      <div className="mb-6 mt-6 w-full min-w-0 pb-2">
-        <div className="grid w-full min-w-0 grid-cols-8 gap-2">
-        {componentOrder.map((category) => {
-          const gem = bestBuildGems?.[category];
-          return gem ? (
-            <GemSpotlightCard
-              key={category}
-              gem={gem}
-              label={componentLabels[category].label}
-              accent={category === "cpu" ? "cyan" : category === "gpu" ? "purple" : category === "motherboard" ? "emerald" : category === "ssd" ? "blue" : "orange"}
-            />
-          ) : (
-            <div key={category} className="min-h-48 rounded-2xl border border-white/10 bg-white/[0.03] p-5 flex flex-col justify-between">
-              <span className="text-[10px] uppercase tracking-wide font-semibold text-slate-400">{componentLabels[category].label}</span>
-              <p className="text-sm text-slate-500">No qualifying gem in the current snapshot</p>
-            </div>
-          );
-        })}
-        </div>
-      </div>
-
-      {spotlightDraftError && <p role="alert" className="mb-4 rounded-lg border border-red-500/30 bg-red-950/30 px-3 py-2 text-sm text-red-200">{spotlightDraftError}</p>}
-      {concepts.map(({ key, title, description, signal }) => {
-        const concept = componentGems?.builds?.[key];
-        if (!concept) return null;
-        const buildComponents = componentOrder.map(category => ({ category, gem: concept.gems[category] ?? null }));
-        const completeBuild = concept.compatibility.status === "compatible" && buildComponents.every(item => item.gem !== null && ["GEM", "SUPER_GEM"].includes(item.gem.classification ?? ""));
-        const estimatedPartsCost = concept.metrics.parts_total ?? buildComponents.reduce((sum, item) => sum + (item.gem?.price ?? 0), 0);
-        const estimateFixedCosts = estimatedPartsCost + estimatedPartsCost * 0.10 + 20 + 15 + 6 + 0.20;
-        const estimateSellingPrice = completeBuild ? Math.ceil((estimateFixedCosts * 1.10 / (1 - (0.0315 + 0.05 + 0.02) * 1.10)) * 100) / 100 : null;
-        const estimateProfit = estimateSellingPrice === null ? null : estimateSellingPrice - estimateFixedCosts - Math.ceil(estimateSellingPrice * 0.1015 * 100) / 100;
-        const saveInProgress = savingSpotlightDraft === key;
-        return <section key={key} className="mb-4 rounded-2xl border border-white/10 bg-white/[0.035] p-5 shadow-lg shadow-black/20">
-        <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-emerald-300">Pre-built concept · {signal}</p>
-            <h2 className="mt-1 text-lg font-semibold text-white">{title}</h2>
-            <p className="mt-1 max-w-3xl text-sm text-slate-400">{description} Every concept must pass the same AI compatibility review before its draft can be created.</p>
-          </div>
-          <div className="text-right">
-            <p className="text-xs text-slate-400">Estimated parts total</p>
-            <p className="text-xl font-bold text-emerald-200">{money(estimatedPartsCost)}</p>
-            <p className="text-[11px] text-slate-500">Asking prices · not paid cost</p>
-          </div>
-        </div>
-
-        <div className="mb-4 grid gap-3 rounded-xl border border-emerald-400/15 bg-emerald-400/[0.04] p-4 sm:grid-cols-2">
-          <div>
-            <p className="text-xs text-slate-400">Estimated selling price</p>
-            <p className="text-lg font-bold text-white">{estimateSellingPrice === null ? "—" : money(estimateSellingPrice)}</p>
-          </div>
-          <div>
-            <p className="text-xs text-slate-400">Estimated profit after costs and reserves</p>
-            <p className={`text-lg font-bold ${estimateProfit !== null && estimateProfit >= 0 ? "text-emerald-200" : "text-slate-500"}`}>{estimateProfit === null ? "—" : money(estimateProfit)}</p>
-          </div>
-          {key === "most_profitable" && <p className="text-[11px] text-slate-500">Combined Gem market profit signal: {concept.metrics.component_profit_signal == null ? "—" : money(concept.metrics.component_profit_signal)} · listing-level estimate, not guaranteed whole-PC profit.</p>}
-          {key === "most_popular" && <p className="text-[11px] text-slate-500">Listing signals: {concept.metrics.listing_watch_count ?? 0} watches · {concept.metrics.listing_bid_count ?? 0} bids. These reflect the selected listings, not total product demand.</p>}
-          {key === "highest_end" && <p className="text-[11px] text-slate-500">Average matched CPU/GPU benchmark percentile: {concept.metrics.performance_percentile == null ? "unavailable" : `${concept.metrics.performance_percentile}th`}.</p>}
-          <p className="text-[11px] leading-relaxed text-slate-500 sm:col-span-2">Estimated selling price and profit use the same operating cost assumptions. Buying postage and full PC resale value are not confirmed; compatibility is an AI estimate from the listing information.</p>
-        </div>
-
-        <div className={`mb-4 rounded-xl border px-4 py-3 ${concept.compatibility.status === "compatible" ? "border-emerald-400/20 bg-emerald-400/[0.04]" : "border-amber-400/20 bg-amber-400/[0.04]"}`}>
-          <p className="text-sm font-semibold text-slate-200">{concept.compatibility.status === "compatible" ? "AI compatibility review passed" : "No confirmed compatible set"}</p>
-          <p className="mt-1 text-xs text-slate-400">{concept.compatibility.summary}</p>
-          {concept.compatibility.checks?.length ? <ul className="mt-2 grid gap-1 text-[11px] text-slate-500 sm:grid-cols-2">{concept.compatibility.checks.map(check => <li key={check.pair}><span className="text-emerald-300">{check.pair}:</span> {check.reason}</li>)}</ul> : null}
-        </div>
-
-        <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
-          {buildComponents.map(({ category, gem }) => {
-            const meta = {
-              cpu: { label: "CPU", icon: Cpu }, motherboard: { label: "Motherboard", icon: CircuitBoard },
-              ram: { label: "Memory", icon: MemoryStick }, gpu: { label: "GPU", icon: CircuitBoard },
-              ssd: { label: "Storage", icon: HardDrive }, psu: { label: "Power supply", icon: Zap },
-              cooler: { label: "CPU cooler", icon: Fan }, case: { label: "PC case", icon: Box },
-            }[category] ?? { label: category, icon: Gem };
-            const Icon = meta.icon;
-            return (
-              <div key={category} className="flex min-w-0 items-center gap-3 rounded-xl border border-white/[0.07] bg-black/20 p-3">
-                {gem?.image_url ? <img src={gem.image_url} alt="" className="h-12 w-12 shrink-0 rounded-lg bg-slate-800 object-contain" /> : <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-slate-800 text-slate-500"><Icon size={20} /></div>}
-                <div className="min-w-0 flex-1"><p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">{meta.label}</p><p className="truncate text-sm text-slate-200">{gem?.title ?? "No qualifying Gem available"}</p></div>
-                {gem && <span className="shrink-0 text-sm font-semibold text-emerald-200">{money(gem.price)}</span>}
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.07] pt-4">
-          <p className="max-w-2xl text-xs text-slate-500">{completeBuild ? "Creates an unpaid sourcing draft from these eight listings. It does not buy parts or publish an offer." : "A compatible, active Gem is required for each of the eight component types."}</p>
-          <button type="button" onClick={() => void createSpotlightDraft(key, concept)} disabled={!completeBuild || savingSpotlightDraft !== null} className="inline-flex items-center gap-2 rounded-lg bg-emerald-400 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-50">
-            {saveInProgress ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-            {saveInProgress ? "Creating draft…" : `Create ${title} draft`}
-          </button>
-        </div>
-      </section>;
-      })}
-    </>
   );
 }
 
@@ -3181,7 +2941,6 @@ function SourcingPageInner() {
   const [listingFacets, setListingFacets] = useState<SourcingFacets | null>(null);
   const [listingFilters, setListingFilters] = useState<SourcingFilters>({ component: "CPU", stockLane: "all", classification: "all", title: "", sortKey: "deal_score", sortDir: "desc" });
   const [legacyListingsApi, setLegacyListingsApi] = useState(false);
-  const [componentGems, setComponentGems] = useState<GemSpotlightData | null>(null);
   const [queueStatus, setQueueStatus] = useState<QueueStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
@@ -3303,28 +3062,6 @@ function SourcingPageInner() {
       clearInterval(countdown);
     };
   }, [mainTab, listingPage, listingFilters]);
-
-  useEffect(() => {
-    let active = true;
-    const fetchComponentGems = async () => {
-      try {
-        const response = await fetch("/api/gem-radar/gem-by-component", {
-          cache: "no-store",
-          signal: AbortSignal.timeout(110_000),
-        });
-        if (response.ok && active) setComponentGems(await response.json());
-      } catch (error) {
-        console.warn("Error fetching component gem summary:", error);
-      }
-    };
-
-    void fetchComponentGems();
-    const interval = setInterval(fetchComponentGems, 5 * 60_000);
-    return () => {
-      active = false;
-      clearInterval(interval);
-    };
-  }, []);
 
   useEffect(() => {
     fetchScanSchedule();
@@ -3461,7 +3198,8 @@ function SourcingPageInner() {
           <>
             <MarketSnapshotPanel snapshot={marketSnapshot} />
             <PipelineDashboard queueStatus={queueStatus} marketSnapshot={marketSnapshot} />
-            <StatsTab componentGems={componentGems || undefined} />
+            <GemSpotlightRow />
+            <Link href="/gem-based-pre-builds" className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-emerald-400/20 bg-emerald-400/[0.04] p-4 transition hover:border-emerald-300/40"><span><span className="block font-semibold text-emerald-200">Gem-based pre-builds</span><span className="mt-1 block text-sm text-slate-400">Review the Best, Cheapest, Highest-end, Most Profitable and Most Popular Gem builds.</span></span><span className="text-sm font-semibold text-emerald-200">Open page →</span></Link>
           </>
         )}
         {mainTab === "listings" && <>

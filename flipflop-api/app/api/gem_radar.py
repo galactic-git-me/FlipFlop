@@ -2590,7 +2590,24 @@ async def get_gem_by_component(
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
 ) -> dict:
-    """Best component Gems, with the constrained parts selected as a compatible set."""
+    """One current image-ready Gem per component category for the Sourcing dashboard."""
+    from datetime import datetime
+
+    actionable_ids = await get_active_buy_it_now_listing_ids(db)
+    categories = ("motherboard", "cpu", "cooler", "ram", "gpu", "ssd", "psu", "case")
+    gems = {}
+    for category in categories:
+        gems[category] = await _fetch_best_gem_for_category(db, category, datetime.min,
+            require_modern=True, actionable_ids=actionable_ids, require_image=True)
+    return gems
+
+
+@router.get("/gem-build-concepts")
+async def get_gem_build_concepts(
+    db: AsyncSession = Depends(get_db),
+    _: None = Depends(require_operator),
+) -> dict:
+    """Five objective-specific Gem builds, each checked as a compatible set."""
     actionable_ids = await get_active_buy_it_now_listing_ids(db)
     return await get_compatible_gem_spotlight(db, actionable_ids)
 

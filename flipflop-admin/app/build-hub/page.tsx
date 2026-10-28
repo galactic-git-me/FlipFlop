@@ -4,10 +4,10 @@ import PixelCard from "../../components/ui/PixelCard";
 
 const buildTypes = [
   {
-    href: "/builds",
+    href: "/ready-to-ship",
     title: "Ready-to-Ship",
-    label: "Existing builds",
-    description: "Upload a build file or assemble a PC from the catalogue, then prepare it for listing and fulfilment.",
+    label: "Build workflows",
+    description: "Create a build manually, start with Gem-based pre-build concepts, or continue working on current builds.",
     icon: Box,
     titleColor: "admin-lime-title",
     accent: "border-orange-400/25 from-orange-400/[.08]",
