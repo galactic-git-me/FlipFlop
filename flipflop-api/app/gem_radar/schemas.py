@@ -10,7 +10,7 @@ from datetime import datetime
 from hashlib import sha256
 from typing import Literal, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 def _to_camel(snake: str) -> str:
@@ -139,10 +139,28 @@ class ExtractedListing(CamelModel):
         if not isinstance(value, str):
             return None
         image_url = value.strip()
-        if (len(image_url) > 1000 or not image_url.lower().startswith(("https://", "http://"))
-                or image_url.lower().endswith("._rc")):
+        from app.services.curated_media import media_urls
+        if len(image_url) > 1000 or not media_urls([image_url]):
             return None
         return image_url
+
+    @field_validator("image_urls", mode="before")
+    @classmethod
+    def keep_storable_image_urls(cls, value: object) -> list[str]:
+        from app.services.curated_media import media_urls
+        if not isinstance(value, list):
+            return []
+        return media_urls([url for url in value if isinstance(url, str)])[:12]
+
+    @model_validator(mode="after")
+    def require_usable_product_image(self) -> "ExtractedListing":
+        from app.services.curated_media import media_urls
+        images = media_urls([self.image_url, *(self.image_urls or [])])
+        if not images:
+            raise ValueError("A usable product image is required for each scraped listing")
+        self.image_url = images[0]
+        self.image_urls = images[:12]
+        return self
 
 
 class ScanSubmitRequest(CamelModel):

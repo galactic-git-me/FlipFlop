@@ -8,8 +8,10 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import json
 import os
 import re
+import time
 from datetime import datetime, timedelta, timezone
 from typing import Literal
 
@@ -78,6 +80,8 @@ from app.services.product_reviews import aggregate_cpk_reviews
 from app.services.amazon_bestsellers import bestseller_item_matches_category
 
 router = APIRouter(prefix="/gem-radar", tags=["gem-radar"])
+
+_GEM_SPOTLIGHT_COMPATIBILITY_CACHE: dict[str, tuple[float, dict]] = {}
 
 
 @router.get('/playbook-market-searches')
@@ -2216,10 +2220,12 @@ async def _fetch_best_gem_for_category(
     since,
     require_modern: bool = False,
     actionable_ids: set[str] | None = None,
+    require_image: bool = False,
 ) -> dict | None:
     """Best gem for a specific component category, sorted by deal_score.
     If no qualifying GEM/SUPER_GEM exists, falls back to the highest-scoring listing."""
     from sqlalchemy import select
+    from app.services.curated_media import media_urls
 
     if actionable_ids is None:
         actionable_ids = await get_active_buy_it_now_listing_ids(db)
@@ -2257,6 +2263,8 @@ async def _fetch_best_gem_for_category(
         result = await db.execute(query.limit(200), {"actionable_ids": list(actionable_ids)})
         best = None
         for candidate in result.scalars():
+            if require_image and not media_urls([candidate.image_url, *(candidate.image_urls or [])]):
+                continue
             # Priority 1: Blocking filters (reject immediately)
             if not _has_valid_category(candidate.category):  # Malformed or unknown
                 continue
@@ -2299,7 +2307,7 @@ async def _fetch_best_gem_for_category(
             best = candidate
             break
 
-    if best is None:
+    if best is None and not require_image:
         fallback_query = (
             select(GemRadarScoredListing)
             .where(
@@ -2325,6 +2333,7 @@ async def _fetch_best_gem_for_category(
         if cpu_match:
             cpu = cpu_match.group(0)
 
+    image_urls = media_urls([best.image_url, *(best.image_urls or [])])
     return {
         "id": best.id,
         "title": best.title,
@@ -2332,7 +2341,8 @@ async def _fetch_best_gem_for_category(
         "seller": best.seller_name,
         "condition": best.condition,
         "url": usable_listing_url(best.url, best.listing_id, best.source, best.title),
-        "image_url": best.image_url,
+        "image_url": image_urls[0] if image_urls else None,
+        "image_urls": image_urls,
         "deal_score": best.deal_score,
         "classification": best.classification,
         "category": best.category,
@@ -2340,34 +2350,148 @@ async def _fetch_best_gem_for_category(
     }
 
 
+async def _gem_spotlight_candidates(db: AsyncSession, category: str, actionable_ids: set[str], limit: int = 8) -> list[dict]:
+    """Return the highest-scoring active image-ready Gems for compatibility selection."""
+    from app.services.curated_media import media_urls
+
+    if not actionable_ids:
+        return []
+    active_ids_param = bindparam("actionable_ids", type_=ARRAY(String()))
+    query = (select(GemRadarScoredListing)
+        .where(GemRadarScoredListing.listing_id == any_(active_ids_param),
+            GemRadarScoredListing.category == category,
+            GemRadarScoredListing.classification.in_(("GEM", "SUPER_GEM")))
+        .order_by(GemRadarScoredListing.deal_score.desc()).limit(200))
+    result = await db.execute(query, {"actionable_ids": list(actionable_ids)})
+    candidates = []
+    for row in result.scalars():
+        if not media_urls([row.image_url, *(row.image_urls or [])]):
+            continue
+        if (not _has_valid_category(category) or _is_server_hardware(row.title, category)
+                or _is_complete_system(row.title) or _is_bundled_components(row.title)
+                or _is_obsolete_socket(row.title, row.delivered_price) or _is_damaged(row.title)
+                or not _is_reasonable_price(category, row.delivered_price)
+                or not _is_desktop_appropriate(row.title, category)
+                or _is_component_price_anomaly(category, row.title, row.delivered_price)
+                or _is_price_misaligned_to_market(row.delivered_price, row.market_new_price, row.market_used_price)):
+            continue
+        if category == "ram" and not _is_current_gen_ram(row.title):
+            continue
+        if category != "ram" and not _is_current_gen(row.title, category):
+            continue
+        candidates.append({"id": row.id, "title": row.title, "category": category,
+            "classification": row.classification, "deal_score": float(row.deal_score or 0),
+            "price": float(row.delivered_price), "image_url": media_urls([row.image_url, *(row.image_urls or [])])[0]})
+        if len(candidates) >= limit:
+            break
+    return candidates
+
+
+def _spotlight_titles_have_hard_mismatch(selected: dict[str, dict]) -> str | None:
+    """Deterministic guard against an LLM overlooking explicit socket/DDR/form-factor conflicts."""
+    cpu_socket = re.search(r"\b(AM4|AM5|LGA\s?\d{4,5})\b", selected["cpu"]["title"], re.I)
+    board_socket = re.search(r"\b(AM4|AM5|LGA\s?\d{4,5})\b", selected["motherboard"]["title"], re.I)
+    if cpu_socket and board_socket and re.sub(r"\s", "", cpu_socket.group(1)).casefold() != re.sub(r"\s", "", board_socket.group(1)).casefold():
+        return "The CPU and motherboard titles show different sockets."
+    board_ddr = re.search(r"\bDDR[345]\b", selected["motherboard"]["title"], re.I)
+    ram_ddr = re.search(r"\bDDR[345]\b", selected["ram"]["title"], re.I)
+    if board_ddr and ram_ddr and board_ddr.group(0).upper() != ram_ddr.group(0).upper():
+        return "The motherboard and RAM titles show different DDR generations."
+    board_title = selected["motherboard"]["title"].casefold()
+    case_title = selected["case"]["title"].casefold()
+    board_is_itx = bool(re.search(r"\bmini[- ]?itx\b", board_title))
+    board_is_matx = bool(re.search(r"\b(?:micro[- ]?atx|m[- ]?atx|matx)\b", board_title)) or bool(re.search(r"\bb\d{3}m\b", board_title))
+    case_is_itx_only = "mini-itx only" in case_title or "itx only" in case_title
+    case_is_matx_only = ("matx only" in case_title or "micro-atx only" in case_title)
+    if case_is_itx_only and not board_is_itx:
+        return "The case title limits support to Mini-ITX, but the motherboard title does not identify a Mini-ITX board."
+    if case_is_matx_only and not (board_is_itx or board_is_matx):
+        return "The case title limits support to Micro-ATX, but the motherboard title does not identify a supported board."
+    return None
+
+
+async def get_compatible_gem_spotlight(db: AsyncSession, actionable_ids: set[str] | None = None) -> dict:
+    """Choose the best available active Gem set after an LLM compatibility review."""
+    from datetime import datetime
+    from app.services.model_selection_service import model_selection_service, ModelSelectionError
+
+    categories = ("cpu", "motherboard", "ram", "gpu", "case")
+    actionable_ids = actionable_ids if actionable_ids is not None else await get_active_buy_it_now_listing_ids(db)
+    pools = {category: await _gem_spotlight_candidates(db, category, actionable_ids) for category in categories}
+    pool_key = hashlib.sha256(repr(tuple((category, tuple(item["id"] for item in pools[category])) for category in categories)).encode()).hexdigest()
+    cached = _GEM_SPOTLIGHT_COMPATIBILITY_CACHE.get(pool_key)
+    if cached and time.monotonic() - cached[0] < 300:
+        return cached[1]
+
+    all_categories = ("motherboard", "cpu", "cooler", "ram", "gpu", "ssd", "psu", "case")
+    gems = {}
+    for category in all_categories:
+        if category in pools:
+            gems[category] = pools[category][0] if pools[category] else None
+        else:
+            gems[category] = await _fetch_best_gem_for_category(db, category, datetime.min,
+                require_modern=True, actionable_ids=actionable_ids, require_image=True)
+
+    compatibility = {"status": "unavailable", "summary": "Compatibility has not been confirmed; no build draft can be created.",
+        "model": None, "checks": []}
+    if all(pools[category] for category in categories):
+        candidate_payload = {category: [{"id": item["id"], "title": item["title"],
+                "classification": item["classification"], "deal_score": item["deal_score"]}
+                for item in pools[category]] for category in categories}
+        try:
+            response = await model_selection_service.complete(
+                task="Gem Radar pre-built component compatibility",
+                messages=[{"role": "user", "content": json.dumps({"candidates": candidate_payload})}],
+                system_prompt=(
+                    "You are checking exact PC component listings for a draft pre-built concept. Choose the highest-ranked compatible "
+                    "candidate set (rank is array order; use the next candidate when the top candidate conflicts). Check CPU socket with "
+                    "motherboard, GPU interface with motherboard, RAM generation with motherboard, and motherboard form factor with case. "
+                    "Use only supplied IDs and product knowledge reliably supported by those exact model names. If any check is uncertain, "
+                    "treat it as unknown and do not claim compatibility. Return strict JSON: {\"compatible\":true,"
+                    "\"selected\":{\"cpu\":id,\"motherboard\":id,\"ram\":id,\"gpu\":id,\"case\":id},"
+                    "\"checks\":[{\"pair\":\"CPU/motherboard\",\"status\":\"compatible\",\"reason\":\"...\"},"
+                    "{\"pair\":\"GPU/motherboard\",\"status\":\"compatible\",\"reason\":\"...\"},"
+                    "{\"pair\":\"RAM/motherboard\",\"status\":\"compatible\",\"reason\":\"...\"},"
+                    "{\"pair\":\"motherboard/case\",\"status\":\"compatible\",\"reason\":\"...\"}],"
+                    "\"summary\":\"short explanation\"}. Set compatible=false if no supplied set passes every check. Never invent specifications or IDs."
+                ), max_tokens=900, timeout=45, json_mode=True)
+            proposal = json.loads(response.text)
+            selected_ids = proposal.get("selected") or {}
+            pool_by_id = {category: {item["id"]: item for item in pools[category]} for category in categories}
+            chosen = {category: pool_by_id[category].get(selected_ids.get(category)) for category in categories}
+            expected_pairs = {"CPU/motherboard", "GPU/motherboard", "RAM/motherboard", "motherboard/case"}
+            checks = proposal.get("checks") or []
+            checks_ok = (len(checks) == 4 and {str(check.get("pair")) for check in checks} == expected_pairs
+                and all(check.get("status") == "compatible" and isinstance(check.get("reason"), str) and check["reason"].strip() for check in checks))
+            hard_mismatch = _spotlight_titles_have_hard_mismatch(chosen) if all(chosen.values()) else "The AI selected a candidate outside the supplied lists."
+            if proposal.get("compatible") is True and all(chosen.values()) and checks_ok and not hard_mismatch:
+                for category, item in chosen.items():
+                    gems[category] = item
+                compatibility = {"status": "compatible", "summary": str(proposal.get("summary") or "AI checked all four compatibility pairs.")[:300],
+                    "model": response.model, "checks": [{"pair": check["pair"], "status": "compatible", "reason": str(check["reason"])[:250]} for check in checks]}
+            else:
+                compatibility = {"status": "unavailable", "summary": str(hard_mismatch or proposal.get("summary") or "No fully supported compatible candidate set was found.")[:300],
+                    "model": response.model, "checks": [{"pair": str(check.get("pair", ""))[:80], "status": str(check.get("status", "unknown"))[:30], "reason": str(check.get("reason", ""))[:250]} for check in checks[:4]]}
+        except (ModelSelectionError, json.JSONDecodeError, TypeError, ValueError, AttributeError) as exc:
+            structlog.get_logger(__name__).warning("gem_spotlight.compatibility_failed", error=str(exc))
+            compatibility["summary"] = "The AI compatibility review could not be completed. Refresh to try again."
+
+    if compatibility["status"] != "compatible":
+        for category in categories:
+            gems[category] = None
+    result = {**gems, "_compatibility": compatibility}
+    _GEM_SPOTLIGHT_COMPATIBILITY_CACHE[pool_key] = (time.monotonic(), result)
+    return result
+
+
 @router.get("/gem-by-component")
 async def get_gem_by_component(
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
 ) -> dict:
-    """Best active fixed-price gem in each major component category."""
-    from datetime import datetime, timedelta, timezone
-
-    # Lifecycle state determines whether a listing is active. A failed sweep
-    # must not erase every spotlight simply because its score is >24h old.
-    active_cutoff = datetime.min
-    categories = ["cpu", "gpu", "motherboard", "ram", "ssd", "psu"]
-
+    """Best component Gems, with the constrained parts selected as a compatible set."""
     actionable_ids = await get_active_buy_it_now_listing_ids(db)
-    gems = {}
-    for category in categories:
-        gem = await _fetch_best_gem_for_category(
-            db,
-            category,
-            active_cutoff.replace(tzinfo=None),
-            require_modern=True,
-            actionable_ids=actionable_ids,
-        )
-        if gem and gem.get("classification") not in {"GEM", "SUPER_GEM"}:
-            gem = None
-        gems[category] = gem
-
-    return gems
+    return await get_compatible_gem_spotlight(db, actionable_ids)
 
 
 @router.get("/source-activity")

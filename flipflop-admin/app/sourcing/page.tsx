@@ -3,7 +3,7 @@
 import { memo, Suspense, useEffect, useId, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer, X, History, Cpu, MemoryStick, HardDrive, Zap, CircuitBoard, Save } from "lucide-react";
+import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer, X, History, Cpu, MemoryStick, HardDrive, Zap, CircuitBoard, Fan, Box, Save } from "lucide-react";
 import PixelCard from "../../components/ui/PixelCard";
 import { VendorLogo } from "../../components/VendorLogo";
 import { PriceHistorySparkline } from "../../components/listings/PriceHistorySparkline";
@@ -103,6 +103,15 @@ interface GemData {
   classification?: "SUPER_GEM" | "GEM";
   deal_score?: number;
 }
+
+interface GemCompatibilityReview {
+  status: "compatible" | "unavailable";
+  summary: string;
+  model?: string | null;
+  checks: { pair: string; status: string; reason: string }[];
+}
+
+type GemSpotlightData = Record<string, GemData | null> & { _compatibility?: GemCompatibilityReview };
 
 interface QueueStatus {
   pending: number;
@@ -1392,7 +1401,7 @@ function GemSpotlightCard({
   );
 }
 
-function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | null> }) {
+function StatsTab({ componentGems }: { componentGems?: GemSpotlightData }) {
   const router = useRouter();
   const [savingSpotlightDraft, setSavingSpotlightDraft] = useState(false);
   const [spotlightDraftError, setSpotlightDraftError] = useState("");
@@ -1403,12 +1412,20 @@ function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | 
     ram: { label: "Gem RAM", emoji: "🧠" },
     ssd: { label: "Gem SSD", emoji: "💿" },
     psu: { label: "Gem PSU", emoji: "🔌" },
+    cooler: { label: "Gem CPU Cooler", emoji: "❄️" },
+    case: { label: "Gem PC Case", emoji: "🖥️" },
   };
-  const componentOrder = ["cpu", "motherboard", "ram", "gpu", "ssd", "psu"];
+  const componentOrder = ["motherboard", "cpu", "cooler", "ram", "gpu", "ssd", "psu", "case"];
   const buildComponents = componentOrder.map(category => ({ category, gem: componentGems?.[category] ?? null }));
-  const completeBuild = buildComponents.every(item => item.gem !== null && ["GEM", "SUPER_GEM"].includes(item.gem.classification ?? ""));
+  const compatibilityReview = componentGems?._compatibility;
+  const completeBuild = compatibilityReview?.status === "compatible" && buildComponents.every(item => item.gem !== null && ["GEM", "SUPER_GEM"].includes(item.gem.classification ?? ""));
   const estimatedPartsCost = buildComponents.reduce((sum, item) => sum + (item.gem?.price ?? 0), 0);
   const money = (value: number) => new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format(value);
+  const estimateFixedCosts = estimatedPartsCost + estimatedPartsCost * 0.10 + 20 + 15 + 6 + 0.20;
+  const estimateSellingPrice = completeBuild
+    ? Math.ceil((estimateFixedCosts * 1.10 / (1 - (0.0315 + 0.05 + 0.02) * 1.10)) * 100) / 100
+    : null;
+  const estimateProfit = estimateSellingPrice === null ? null : estimateSellingPrice - estimateFixedCosts - Math.ceil(estimateSellingPrice * 0.1015 * 100) / 100;
 
   const createSpotlightDraft = async () => {
     if (!completeBuild) return;
@@ -1429,7 +1446,7 @@ function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | 
   return (
     <>
       <div className="mb-6 mt-6 overflow-x-auto pb-2">
-        <div className="grid min-w-[1180px] grid-cols-6 gap-4">
+        <div className="grid min-w-[1480px] grid-cols-8 gap-4">
         {componentOrder.map((category) => {
           const gem = componentGems?.[category];
           return gem ? (
@@ -1453,8 +1470,8 @@ function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | 
         <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-emerald-300">Pre-built concept</p>
-            <h2 className="mt-1 text-lg font-semibold text-white">A build using these six component Gems</h2>
-            <p className="mt-1 max-w-3xl text-sm text-slate-400">Current active Gem listings assembled into a draft preview. Compatibility, complete-system cost and performance have not been verified.</p>
+          <h2 className="mt-1 text-lg font-semibold text-white">A build using these eight component Gems</h2>
+            <p className="mt-1 max-w-3xl text-sm text-slate-400">Current active Gem listings assembled into a draft preview. CPU, motherboard, GPU, RAM and case compatibility must pass the AI review before a draft can be created.</p>
           </div>
           <div className="text-right">
             <p className="text-xs text-slate-400">Estimated parts total</p>
@@ -1463,12 +1480,31 @@ function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | 
           </div>
         </div>
 
+        <div className="mb-4 grid gap-3 rounded-xl border border-emerald-400/15 bg-emerald-400/[0.04] p-4 sm:grid-cols-2">
+          <div>
+            <p className="text-xs text-slate-400">Estimated selling price</p>
+            <p className="text-lg font-bold text-white">{estimateSellingPrice === null ? "—" : money(estimateSellingPrice)}</p>
+          </div>
+          <div>
+            <p className="text-xs text-slate-400">Estimated profit after costs and reserves</p>
+            <p className={`text-lg font-bold ${estimateProfit !== null && estimateProfit >= 0 ? "text-emerald-200" : "text-slate-500"}`}>{estimateProfit === null ? "—" : money(estimateProfit)}</p>
+          </div>
+          <p className="text-[11px] leading-relaxed text-slate-500 sm:col-span-2">Estimate includes 10% parts overhead, £20 outbound delivery, £15 insurance, £6 packaging, £0 labour, £0.20 fixed payment cost, and payment, warranty and returns reserves. Buying postage is not captured; compatibility is only an AI estimate from the listing information.</p>
+        </div>
+
+        <div className={`mb-4 rounded-xl border px-4 py-3 ${compatibilityReview?.status === "compatible" ? "border-emerald-400/20 bg-emerald-400/[0.04]" : "border-amber-400/20 bg-amber-400/[0.04]"}`}>
+          <p className="text-sm font-semibold text-slate-200">{compatibilityReview?.status === "compatible" ? "AI compatibility review passed" : "Compatibility review required"}</p>
+          <p className="mt-1 text-xs text-slate-400">{compatibilityReview?.summary ?? "Waiting for the AI to check CPU, motherboard, GPU, RAM and case compatibility."}</p>
+          {compatibilityReview?.checks?.length ? <ul className="mt-2 grid gap-1 text-[11px] text-slate-500 sm:grid-cols-2">{compatibilityReview.checks.map(check => <li key={check.pair}><span className="text-emerald-300">{check.pair}:</span> {check.reason}</li>)}</ul> : null}
+        </div>
+
         <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
           {buildComponents.map(({ category, gem }) => {
             const meta = {
               cpu: { label: "CPU", icon: Cpu }, motherboard: { label: "Motherboard", icon: CircuitBoard },
               ram: { label: "Memory", icon: MemoryStick }, gpu: { label: "GPU", icon: CircuitBoard },
               ssd: { label: "Storage", icon: HardDrive }, psu: { label: "Power supply", icon: Zap },
+              cooler: { label: "CPU cooler", icon: Fan }, case: { label: "PC case", icon: Box },
             }[category] ?? { label: category, icon: Gem };
             const Icon = meta.icon;
             return (
@@ -1483,7 +1519,7 @@ function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | 
 
         {spotlightDraftError && <p role="alert" className="mt-4 rounded-lg border border-red-500/30 bg-red-950/30 px-3 py-2 text-sm text-red-200">{spotlightDraftError}</p>}
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.07] pt-4">
-          <p className="max-w-2xl text-xs text-slate-500">{completeBuild ? "Creating this draft saves the six listings as unpaid sourcing candidates. It does not buy parts or publish a pre-built offer." : "A draft needs one active GEM or SUPER_GEM for each: CPU, motherboard, RAM, GPU, SSD and PSU."}</p>
+          <p className="max-w-2xl text-xs text-slate-500">{completeBuild ? "Creating this draft saves the eight listings as unpaid sourcing candidates. It does not buy parts or publish a pre-built offer." : "A draft needs one active GEM or SUPER_GEM for each: CPU, motherboard, RAM, GPU, SSD, PSU, CPU cooler and PC case."}</p>
           <button type="button" onClick={() => void createSpotlightDraft()} disabled={!completeBuild || savingSpotlightDraft} className="inline-flex items-center gap-2 rounded-lg bg-emerald-400 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-50">
             {savingSpotlightDraft ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             {savingSpotlightDraft ? "Creating draft…" : "Create pre-built draft"}
@@ -3111,7 +3147,7 @@ function SourcingPageInner() {
   const [listingFacets, setListingFacets] = useState<SourcingFacets | null>(null);
   const [listingFilters, setListingFilters] = useState<SourcingFilters>({ component: "CPU", stockLane: "all", classification: "all", title: "", sortKey: "deal_score", sortDir: "desc" });
   const [legacyListingsApi, setLegacyListingsApi] = useState(false);
-  const [componentGems, setComponentGems] = useState<Record<string, GemData | null> | null>(null);
+  const [componentGems, setComponentGems] = useState<GemSpotlightData | null>(null);
   const [queueStatus, setQueueStatus] = useState<QueueStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
