@@ -1465,8 +1465,8 @@ function StatsTab({ componentGems }: { componentGems?: GemSpotlightData }) {
 
   return (
     <>
-      <div className="mb-6 mt-6 overflow-x-auto pb-2">
-        <div className="grid min-w-[1480px] grid-cols-8 gap-4">
+      <div className="mb-6 mt-6 w-full min-w-0 pb-2">
+        <div className="grid w-full min-w-0 grid-cols-8 gap-2">
         {componentOrder.map((category) => {
           const gem = bestBuildGems?.[category];
           return gem ? (
@@ -1486,6 +1486,7 @@ function StatsTab({ componentGems }: { componentGems?: GemSpotlightData }) {
         </div>
       </div>
 
+      {spotlightDraftError && <p role="alert" className="mb-4 rounded-lg border border-red-500/30 bg-red-950/30 px-3 py-2 text-sm text-red-200">{spotlightDraftError}</p>}
       {concepts.map(({ key, title, description, signal }) => {
         const concept = componentGems?.builds?.[key];
         if (!concept) return null;
@@ -1550,7 +1551,6 @@ function StatsTab({ componentGems }: { componentGems?: GemSpotlightData }) {
           })}
         </div>
 
-        {spotlightDraftError && <p role="alert" className="mt-4 rounded-lg border border-red-500/30 bg-red-950/30 px-3 py-2 text-sm text-red-200">{spotlightDraftError}</p>}
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.07] pt-4">
           <p className="max-w-2xl text-xs text-slate-500">{completeBuild ? "Creates an unpaid sourcing draft from these eight listings. It does not buy parts or publish an offer." : "A compatible, active Gem is required for each of the eight component types."}</p>
           <button type="button" onClick={() => void createSpotlightDraft(key, concept)} disabled={!completeBuild || savingSpotlightDraft !== null} className="inline-flex items-center gap-2 rounded-lg bg-emerald-400 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-50">
@@ -3310,7 +3310,7 @@ function SourcingPageInner() {
       try {
         const response = await fetch("/api/gem-radar/gem-by-component", {
           cache: "no-store",
-          signal: AbortSignal.timeout(70_000),
+          signal: AbortSignal.timeout(110_000),
         });
         if (response.ok && active) setComponentGems(await response.json());
       } catch (error) {

@@ -2360,11 +2360,25 @@ async def _gem_spotlight_candidates(db: AsyncSession, category: str, actionable_
     query = (select(GemRadarScoredListing)
         .where(GemRadarScoredListing.listing_id == any_(active_ids_param),
             GemRadarScoredListing.category == category,
-            GemRadarScoredListing.classification.in_(("GEM", "SUPER_GEM")))
-        .order_by(GemRadarScoredListing.deal_score.desc()).limit(200))
-    result = await db.execute(query, {"actionable_ids": list(actionable_ids)})
+            GemRadarScoredListing.classification.in_(("GEM", "SUPER_GEM"))))
+    reference_value = func.coalesce(GemRadarScoredListing.conservative_resale_price,
+        GemRadarScoredListing.market_median_price, GemRadarScoredListing.market_new_price,
+        GemRadarScoredListing.market_used_price)
+    profit_value = func.coalesce(GemRadarScoredListing.expected_profit,
+        reference_value - GemRadarScoredListing.delivered_price)
+    popularity_value = (func.coalesce(GemRadarScoredListing.desirability_score, 0)
+        + func.coalesce(GemRadarScoredListing.liquidity_score, 0)
+        + func.coalesce(GemRadarScoredListing.watch_count, 0)
+        + func.coalesce(GemRadarScoredListing.bid_count, 0))
+    orderings = (GemRadarScoredListing.deal_score.desc(), GemRadarScoredListing.delivered_price.asc(),
+        reference_value.desc().nullslast(), profit_value.desc().nullslast(), popularity_value.desc())
+    candidate_rows = {}
+    for ordering in orderings:
+        result = await db.execute(query.order_by(ordering).limit(200), {"actionable_ids": list(actionable_ids)})
+        for row in result.scalars():
+            candidate_rows[row.id] = row
     candidates = []
-    for row in result.scalars():
+    for row in candidate_rows.values():
         if not media_urls([row.image_url, *(row.image_urls or [])]):
             continue
         if (not _has_valid_category(category) or _is_server_hardware(row.title, category)
@@ -2393,11 +2407,15 @@ async def _gem_spotlight_candidates(db: AsyncSession, category: str, actionable_
                 canonical_model_id=row.canonical_model_id, release_year=row.release_year,
                 delivered_price=row.delivered_price, benchmark_index=benchmark_index, peer_scores=peer_scores)
             performance_percentile = performance.get("performance_percentile")
+        cpu_match = re.search(r'(Intel|AMD)\s+(?:Core\s+)?(?:i[3-9]|Ryzen\s+[3-9]|[A-Z]+\s+\d+)[^\s]*', row.title, re.IGNORECASE) if category == "cpu" else None
         popularity_score = float(row.desirability_score or 0) + float(row.liquidity_score or 0)
         popularity_score += float(row.watch_count or 0) + float(row.bid_count or 0)
         candidates.append({"id": row.id, "title": row.title, "category": category,
             "classification": row.classification, "deal_score": float(row.deal_score or 0),
             "price": float(row.delivered_price), "image_url": media_urls([row.image_url, *(row.image_urls or [])])[0],
+            "url": usable_listing_url(row.url, row.listing_id, row.source, row.title),
+            "seller": row.seller_name, "condition": row.condition,
+            "cpu": cpu_match.group(0) if cpu_match else None,
             "market_reference": reference_price, "expected_profit": expected_profit,
             "performance_percentile": performance_percentile,
             "desirability_score": float(row.desirability_score or 0),
@@ -2445,11 +2463,9 @@ def _spotlight_titles_have_hard_mismatch(selected: dict[str, dict]) -> str | Non
 
 async def get_compatible_gem_spotlight(db: AsyncSession, actionable_ids: set[str] | None = None) -> dict:
     """Select five objective-specific Gem builds, each checked by the configured LLM."""
-    from datetime import datetime
     from app.services.hardware_performance import load_benchmark_context
     from app.services.model_selection_service import model_selection_service, ModelSelectionError
 
-    constrained_categories = ("cpu", "motherboard", "ram", "gpu", "case")
     all_categories = ("motherboard", "cpu", "cooler", "ram", "gpu", "ssd", "psu", "case")
     objectives = ("best", "cheapest", "highest_end", "most_profitable", "most_popular")
     titles = {"best": "The Best Gem Build", "cheapest": "The Cheapest Gem Build",
@@ -2458,20 +2474,20 @@ async def get_compatible_gem_spotlight(db: AsyncSession, actionable_ids: set[str
     actionable_ids = actionable_ids if actionable_ids is not None else await get_active_buy_it_now_listing_ids(db)
     benchmark_context = await load_benchmark_context(db)
     pools = {category: await _gem_spotlight_candidates(db, category, actionable_ids, benchmark_context)
-        for category in constrained_categories}
+        for category in all_categories}
     cache_facts = {category: [{key: item[key] for key in ("id", "deal_score", "price", "market_reference",
         "expected_profit", "performance_percentile", "popularity_score")} for item in pools[category]]
-        for category in constrained_categories}
+        for category in all_categories}
     pool_key = hashlib.sha256(json.dumps(cache_facts, sort_keys=True).encode()).hexdigest()
     cached = _GEM_SPOTLIGHT_COMPATIBILITY_CACHE.get(pool_key)
     if cached and time.monotonic() - cached[0] < 300:
         return cached[1]
 
-    gem_index = {category: {item["id"]: item for item in pools[category]} for category in constrained_categories}
+    gem_index = {category: {item["id"]: item for item in pools[category]} for category in all_categories}
     ranked: dict[str, dict[str, list[int]]] = {}
     for objective in objectives:
         ranked[objective] = {}
-        for category in constrained_categories:
+        for category in all_categories:
             values = pools[category]
             if objective == "best":
                 ordered = sorted(values, key=lambda item: item["deal_score"], reverse=True)
@@ -2491,17 +2507,12 @@ async def get_compatible_gem_spotlight(db: AsyncSession, actionable_ids: set[str
             "compatibility": {"status": "unavailable", "summary": "No compatible candidate set has been confirmed.", "model": None, "checks": []},
             "metrics": {}}
         for category in all_categories:
-            builds[objective]["gems"][category] = None
-            if category in gem_index and gem_index[category]:
-                builds[objective]["gems"][category] = next(iter(gem_index[category].values()))
-            elif category not in gem_index:
-                builds[objective]["gems"][category] = await _fetch_best_gem_for_category(db, category, datetime.min,
-                    require_modern=True, actionable_ids=actionable_ids, require_image=True)
+            builds[objective]["gems"][category] = next(iter(gem_index[category].values())) if gem_index[category] else None
 
-    if all(pools[category] for category in constrained_categories):
+    if all(pools[category] for category in all_categories):
         candidate_payload = {category: [{key: item[key] for key in ("id", "title", "classification", "deal_score", "price",
             "market_reference", "expected_profit", "performance_percentile", "desirability_score", "sell_through_rate_pct",
-            "watch_count", "bid_count")} for item in pools[category]] for category in constrained_categories}
+            "watch_count", "bid_count")} for item in pools[category]] for category in all_categories}
         try:
             response = await model_selection_service.complete(
                 task="Gem Radar five compatible build concepts",
@@ -2512,10 +2523,10 @@ async def get_compatible_gem_spotlight(db: AsyncSession, actionable_ids: set[str
                     "part with the next candidate in that category. Check CPU/motherboard socket, GPU/motherboard interface, RAM/motherboard "
                     "memory generation, and motherboard/case size. Objectives: best=highest Gem deal score; cheapest=lowest component prices; "
                     "highest_end=highest known CPU/GPU benchmark percentile, then strongest component specs from title/reference; most_profitable="
-                    "highest sum of per-listing expected_profit (market reference less asking cost when available); most_popular=highest observed "
+                    "highest sum of per-listing expected_profit across all eight component categories (market reference less asking cost when available); most_popular=highest observed "
                     "desirability/liquidity plus listing watch and bid signals. If any pair is uncertain, mark that objective unavailable. "
                     "Return strict JSON with builds object keyed by best, cheapest, highest_end, most_profitable, most_popular. Each value must be "
-                    "{\"compatible\":true,\"selected\":{\"cpu\":id,\"motherboard\":id,\"ram\":id,\"gpu\":id,\"case\":id},"
+                    "{\"compatible\":true,\"selected\":{\"cpu\":id,\"motherboard\":id,\"ram\":id,\"gpu\":id,\"case\":id,\"cooler\":id,\"ssd\":id,\"psu\":id},"
                     "\"checks\":[{\"pair\":\"CPU/motherboard\",\"status\":\"compatible\",\"reason\":\"...\"},"
                     "{\"pair\":\"GPU/motherboard\",\"status\":\"compatible\",\"reason\":\"...\"},"
                     "{\"pair\":\"RAM/motherboard\",\"status\":\"compatible\",\"reason\":\"...\"},"
@@ -2528,13 +2539,20 @@ async def get_compatible_gem_spotlight(db: AsyncSession, actionable_ids: set[str
             for objective in objectives:
                 proposed = proposed_builds.get(objective) or {}
                 selected_ids = proposed.get("selected") or {}
-                chosen = {category: gem_index[category].get(selected_ids.get(category)) for category in constrained_categories}
+                chosen = {category: gem_index[category].get(selected_ids.get(category)) for category in all_categories}
                 checks = proposed.get("checks") or []
                 checks_ok = (len(checks) == 4 and {check.get("pair") for check in checks} == expected_pairs
                     and all(check.get("status") == "compatible" and isinstance(check.get("reason"), str) and check["reason"].strip() for check in checks))
                 hard_mismatch = _spotlight_titles_have_hard_mismatch(chosen) if all(chosen.values()) else "The AI did not select supplied candidate IDs for every required part."
-                if proposed.get("compatible") is not True or not all(chosen.values()) or not checks_ok or hard_mismatch:
-                    builds[objective]["compatibility"]["summary"] = str(hard_mismatch or proposed.get("summary") or "No fully supported compatible set was found for this concept.")[:300]
+                objective_evidence_issue = None
+                if all(chosen.values()) and objective == "most_profitable":
+                    profits = [item["expected_profit"] for item in chosen.values()]
+                    if any(value is None for value in profits) or sum(float(value or 0) for value in profits) <= 0:
+                        objective_evidence_issue = "There is not enough positive market-profit evidence to label a build most profitable."
+                if all(chosen.values()) and objective == "most_popular" and sum(float(item["popularity_score"] or 0) for item in chosen.values()) <= 0:
+                    objective_evidence_issue = "No listing demand signals are available to identify a most popular build."
+                if proposed.get("compatible") is not True or not all(chosen.values()) or not checks_ok or hard_mismatch or objective_evidence_issue:
+                    builds[objective]["compatibility"]["summary"] = str(objective_evidence_issue or hard_mismatch or proposed.get("summary") or "No fully supported compatible set was found for this concept.")[:300]
                     continue
                 for category, item in chosen.items():
                     builds[objective]["gems"][category] = item
@@ -2548,7 +2566,7 @@ async def get_compatible_gem_spotlight(db: AsyncSession, actionable_ids: set[str
 
     for objective, build in builds.items():
         if build["compatibility"]["status"] != "compatible":
-            for category in constrained_categories:
+            for category in all_categories:
                 build["gems"][category] = None
             continue
         selected = [build["gems"][category] for category in all_categories]
