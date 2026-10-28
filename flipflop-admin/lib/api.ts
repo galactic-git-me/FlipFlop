@@ -197,7 +197,7 @@ export interface PriceAlertList {
 export interface ManualBuild {
   id: number;
   name: string;
-  creation_method?: "manual" | "ai";
+  creation_method?: "manual" | "ai" | "gem_spotlight";
   components: BuildComponent[];
   total_cost: number | null;
   last_evaluation: ManualBuildEvaluation | null;
@@ -403,7 +403,7 @@ export interface ScanScheduleStatus {
 export interface ManualBuildSummary {
   id: number;
   name: string;
-  creation_method?: "manual" | "ai";
+  creation_method?: "manual" | "ai" | "gem_spotlight";
   total_cost: number | null;
   ebay_price?: number | null;
   component_count: number;
@@ -1287,6 +1287,12 @@ export const api = {
     generateAi: () => request<AiReadyToShipProposal>("/manual-builds/ai-generate", { method: "POST" }),
     createAi: (data: { component_ids: number[]; playbook_id: number; curated_build_id: string; build_name: string; rationale: string; playbook_rationale: string }) =>
       request<ManualBuild>("/manual-builds/ai-create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }),
+    createGemSpotlightDraft: (data: { listing_ids: number[]; build_name: string }) =>
+      request<ManualBuild>("/manual-builds/gem-spotlight-draft", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

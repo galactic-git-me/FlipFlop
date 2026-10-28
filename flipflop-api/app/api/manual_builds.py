@@ -369,6 +369,11 @@ class AIBuildCreateInput(BaseModel):
     playbook_rationale: str = Field(default="", max_length=1200)
 
 
+class GemSpotlightDraftInput(BaseModel):
+    listing_ids: list[int] = Field(min_length=6, max_length=6)
+    build_name: str = Field(min_length=2, max_length=300)
+
+
 _AI_BUILD_CATEGORY_SLOTS = {
     "cpu": "cpu",
     "motherboard": "motherboard",
@@ -1266,6 +1271,67 @@ async def create_ai_ready_to_ship_build(body: AIBuildCreateInput, db: AsyncSessi
     evidence_data["ai_sourcing"]["build_rationale"] = body.rationale
     build = ManualBuild(name=body.build_name, creation_method="ai", components=components, total_cost=0,
                         evidence_data=evidence_data, warranty_reserve_pct=5.0)
+    db.add(build)
+    await db.flush()
+    await db.refresh(build)
+    return build
+
+
+@router.post("/gem-spotlight-draft", response_model=ManualBuildOut, status_code=201)
+async def create_gem_spotlight_draft(body: GemSpotlightDraftInput, db: AsyncSession = Depends(get_db)):
+    """Save the exact six current component Gems as an unpaid, editable build draft."""
+    from app.gem_radar.observations import get_active_buy_it_now_listing_ids
+
+    required_categories = ("cpu", "motherboard", "ram", "gpu", "ssd", "psu")
+    if len(set(body.listing_ids)) != len(required_categories):
+        raise HTTPException(422, "Choose one distinct Gem for each required component")
+
+    active_listing_ids = await get_active_buy_it_now_listing_ids(db)
+    rows = (await db.execute(
+        select(GemRadarScoredListing).where(
+            GemRadarScoredListing.id.in_(body.listing_ids),
+            GemRadarScoredListing.listing_id.in_(active_listing_ids),
+            GemRadarScoredListing.classification.in_(("SUPER_GEM", "GEM")),
+        )
+    )).scalars().all()
+    by_category = {item.category: item for item in rows}
+    if len(rows) != len(body.listing_ids) or len(by_category) != len(rows) or set(by_category) != set(required_categories):
+        raise HTTPException(409, "One or more displayed Gems are no longer active. Refresh the Sourcing page and try again.")
+    if any(float(item.delivered_price or 0) <= 0 for item in rows):
+        raise HTTPException(409, "A selected Gem no longer has a valid delivered price. Refresh the Sourcing page and try again.")
+
+    components = [
+        {
+            "slot": category,
+            "name": by_category[category].title,
+            "price_paid": round(float(by_category[category].delivered_price), 2),
+            "source": "manual",
+            "listing_url": by_category[category].url,
+            "image_url": by_category[category].image_url,
+            "purchased": False,
+            "condition": by_category[category].condition or "unknown",
+            "sourcing_candidate": True,
+            "gem_classification": by_category[category].classification,
+            "gem_radar_listing_id": by_category[category].id,
+        }
+        for category in required_categories
+    ]
+    estimated_parts_cost = round(sum(component["price_paid"] for component in components), 2)
+    build = ManualBuild(
+        name=body.build_name.strip(),
+        creation_method="gem_spotlight",
+        components=components,
+        total_cost=0,
+        evidence_data={
+            "sourcing_spotlight": {
+                "created_at": datetime.utcnow().isoformat(),
+                "candidate_listing_ids": [by_category[category].listing_id for category in required_categories],
+                "estimated_parts_cost_gbp": estimated_parts_cost,
+                "compatibility_status": "unverified",
+            }
+        },
+        warranty_reserve_pct=5.0,
+    )
     db.add(build)
     await db.flush()
     await db.refresh(build)
@@ -2868,7 +2934,7 @@ async def patch_build(build_id: int, body: ManualBuildPatch, db: AsyncSession = 
     if body.name is not None:
         build.name = body.name
     if body.components is not None:
-        if build.creation_method == "ai":
+        if build.creation_method in {"ai", "gem_spotlight"}:
             existing_components = list(build.components or [])
             if len(body.components) != len(existing_components):
                 raise HTTPException(422, "AI sourcing draft component slots cannot be added or removed through manual editing")
@@ -2920,7 +2986,11 @@ async def purchase_build_component(
         component["sourcing_candidate"] = False
         components[index] = component
         build.components = components
-        build.total_cost = sum(float(item.get("price_paid") or 0) for item in components)
+        build.total_cost = sum(
+            float(item.get("price_paid") or 0)
+            for item in components
+            if item.get("purchased")
+        )
         await db.flush()
         await db.refresh(build)
         return build
@@ -2971,7 +3041,7 @@ async def purchase_build_component(
     build.total_cost = sum(
         float(existing.get("price_paid") or 0)
         for existing in components
-        if build.creation_method != "ai" or existing.get("purchased")
+        if build.creation_method not in {"ai", "gem_spotlight"} or existing.get("purchased")
     )
     add_event(db, inventory_item_id=item.id, manual_build_id=build.id, event_type="purchased", quantity=1,
               detail={"source": item.source, "listing_url": item.listing_url})

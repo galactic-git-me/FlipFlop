@@ -2,8 +2,8 @@
 
 import { memo, Suspense, useEffect, useId, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer, X, History } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer, X, History, Cpu, MemoryStick, HardDrive, Zap, CircuitBoard, Save } from "lucide-react";
 import PixelCard from "../../components/ui/PixelCard";
 import { VendorLogo } from "../../components/VendorLogo";
 import { PriceHistorySparkline } from "../../components/listings/PriceHistorySparkline";
@@ -91,6 +91,7 @@ interface Listing {
 }
 
 interface GemData {
+  id: number;
   title: string;
   price: number;
   seller?: string;
@@ -99,6 +100,8 @@ interface GemData {
   image_url?: string | null;
   cpu?: string | null;
   category?: string;
+  classification?: "SUPER_GEM" | "GEM";
+  deal_score?: number;
 }
 
 interface QueueStatus {
@@ -1390,18 +1393,44 @@ function GemSpotlightCard({
 }
 
 function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | null> }) {
+  const router = useRouter();
+  const [savingSpotlightDraft, setSavingSpotlightDraft] = useState(false);
+  const [spotlightDraftError, setSpotlightDraftError] = useState("");
   const componentLabels: Record<string, { label: string; emoji: string }> = {
     cpu: { label: "Gem CPU", emoji: "⚡" },
     gpu: { label: "Gem GPU", emoji: "🎮" },
     motherboard: { label: "Gem Motherboard", emoji: "🔧" },
+    ram: { label: "Gem RAM", emoji: "🧠" },
     ssd: { label: "Gem SSD", emoji: "💿" },
     psu: { label: "Gem PSU", emoji: "🔌" },
+  };
+  const componentOrder = ["cpu", "motherboard", "ram", "gpu", "ssd", "psu"];
+  const buildComponents = componentOrder.map(category => ({ category, gem: componentGems?.[category] ?? null }));
+  const completeBuild = buildComponents.every(item => item.gem !== null && ["GEM", "SUPER_GEM"].includes(item.gem.classification ?? ""));
+  const estimatedPartsCost = buildComponents.reduce((sum, item) => sum + (item.gem?.price ?? 0), 0);
+  const money = (value: number) => new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format(value);
+
+  const createSpotlightDraft = async () => {
+    if (!completeBuild) return;
+    setSavingSpotlightDraft(true);
+    setSpotlightDraftError("");
+    try {
+      const draft = await api.manualBuilds.createGemSpotlightDraft({
+        listing_ids: buildComponents.map(item => item.gem!.id),
+        build_name: "Gem Radar component spotlight build",
+      });
+      router.push(`/builds?new=${draft.id}`);
+    } catch (error) {
+      setSpotlightDraftError(error instanceof Error ? error.message : "Could not create the build draft.");
+      setSavingSpotlightDraft(false);
+    }
   };
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6 mt-6">
-        {Object.keys(componentLabels).map((category) => {
+      <div className="mb-6 mt-6 overflow-x-auto pb-2">
+        <div className="grid min-w-[1180px] grid-cols-6 gap-4">
+        {componentOrder.map((category) => {
           const gem = componentGems?.[category];
           return gem ? (
             <GemSpotlightCard
@@ -1417,7 +1446,50 @@ function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | 
             </div>
           );
         })}
+        </div>
       </div>
+
+      <section className="mb-4 rounded-2xl border border-white/10 bg-white/[0.035] p-5 shadow-lg shadow-black/20">
+        <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-emerald-300">Pre-built concept</p>
+            <h2 className="mt-1 text-lg font-semibold text-white">A build using these six component Gems</h2>
+            <p className="mt-1 max-w-3xl text-sm text-slate-400">Current active Gem listings assembled into a draft preview. Compatibility, complete-system cost and performance have not been verified.</p>
+          </div>
+          <div className="text-right">
+            <p className="text-xs text-slate-400">Estimated parts total</p>
+            <p className="text-xl font-bold text-emerald-200">{money(estimatedPartsCost)}</p>
+            <p className="text-[11px] text-slate-500">Asking prices · not paid cost</p>
+          </div>
+        </div>
+
+        <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+          {buildComponents.map(({ category, gem }) => {
+            const meta = {
+              cpu: { label: "CPU", icon: Cpu }, motherboard: { label: "Motherboard", icon: CircuitBoard },
+              ram: { label: "Memory", icon: MemoryStick }, gpu: { label: "GPU", icon: CircuitBoard },
+              ssd: { label: "Storage", icon: HardDrive }, psu: { label: "Power supply", icon: Zap },
+            }[category] ?? { label: category, icon: Gem };
+            const Icon = meta.icon;
+            return (
+              <div key={category} className="flex min-w-0 items-center gap-3 rounded-xl border border-white/[0.07] bg-black/20 p-3">
+                {gem?.image_url ? <img src={gem.image_url} alt="" className="h-12 w-12 shrink-0 rounded-lg bg-slate-800 object-contain" /> : <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-slate-800 text-slate-500"><Icon size={20} /></div>}
+                <div className="min-w-0 flex-1"><p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">{meta.label}</p><p className="truncate text-sm text-slate-200">{gem?.title ?? "No qualifying Gem available"}</p></div>
+                {gem && <span className="shrink-0 text-sm font-semibold text-emerald-200">{money(gem.price)}</span>}
+              </div>
+            );
+          })}
+        </div>
+
+        {spotlightDraftError && <p role="alert" className="mt-4 rounded-lg border border-red-500/30 bg-red-950/30 px-3 py-2 text-sm text-red-200">{spotlightDraftError}</p>}
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.07] pt-4">
+          <p className="max-w-2xl text-xs text-slate-500">{completeBuild ? "Creating this draft saves the six listings as unpaid sourcing candidates. It does not buy parts or publish a pre-built offer." : "A draft needs one active GEM or SUPER_GEM for each: CPU, motherboard, RAM, GPU, SSD and PSU."}</p>
+          <button type="button" onClick={() => void createSpotlightDraft()} disabled={!completeBuild || savingSpotlightDraft} className="inline-flex items-center gap-2 rounded-lg bg-emerald-400 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-50">
+            {savingSpotlightDraft ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+            {savingSpotlightDraft ? "Creating draft…" : "Create pre-built draft"}
+          </button>
+        </div>
+      </section>
     </>
   );
 }

@@ -2326,6 +2326,7 @@ async def _fetch_best_gem_for_category(
             cpu = cpu_match.group(0)
 
     return {
+        "id": best.id,
         "title": best.title,
         "price": best.delivered_price,
         "seller": best.seller_name,
@@ -2350,7 +2351,7 @@ async def get_gem_by_component(
     # Lifecycle state determines whether a listing is active. A failed sweep
     # must not erase every spotlight simply because its score is >24h old.
     active_cutoff = datetime.min
-    categories = ["cpu", "gpu", "motherboard", "ssd", "psu"]
+    categories = ["cpu", "gpu", "motherboard", "ram", "ssd", "psu"]
 
     actionable_ids = await get_active_buy_it_now_listing_ids(db)
     gems = {}
@@ -2362,6 +2363,8 @@ async def get_gem_by_component(
             require_modern=True,
             actionable_ids=actionable_ids,
         )
+        if gem and gem.get("classification") not in {"GEM", "SUPER_GEM"}:
+            gem = None
         gems[category] = gem
 
     return gems
