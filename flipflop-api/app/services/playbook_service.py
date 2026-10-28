@@ -1349,7 +1349,7 @@ def estimate_delivery_products(parts, definition, parent, settings):
     return outputs
 
 
-async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None):
+async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None,*,variant_ids=None):
     source_cache={} if source_cache is None else source_cache
     from sqlalchemy import or_
     rows=(await db.execute(select(CatalogueVariant,Listing,PlaybookSlot).join(Listing,Listing.id==CatalogueVariant.listing_id)
@@ -1357,7 +1357,8 @@ async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None):
             PlaybookSlot.playbook_id==parent_id,CatalogueVariant.curated_for_builds.is_(True),
             CatalogueVariant.status.in_(('active','pending_review','hidden')),
             or_(Listing.price.is_(None),Listing.price>0,(PlaybookSlot.slot_type=='os_secondary')&(Listing.price==0)),
-            Listing.status=='active'))).all()
+            Listing.status=='active',
+            CatalogueVariant.id.in_(variant_ids) if variant_ids is not None else True))).all()
     # Reuse only exact, human-reviewed reference-board evidence. Fuzzy board
     # matches are useful for exploratory configurator warnings, but cannot
     # certify a Playbook component for sale.
@@ -1911,7 +1912,7 @@ async def build_cell_offer(db,definition,parent,settings,candidates,benchmark_in
     return offer
 
 
-async def approve_proposal(db,proposal_id,revision,actor_id):
+async def approve_proposal(db,proposal_id,revision,actor_id,*,exact_reviewed_bom=False):
     """Rebuild the exact reviewed offer before enabling any sale."""
     await db.execute(text('SELECT pg_advisory_xact_lock(61311, 1)'))
     proposal=(await db.execute(select(PlaybookProposal).where(PlaybookProposal.id==proposal_id)
@@ -1927,7 +1928,9 @@ async def approve_proposal(db,proposal_id,revision,actor_id):
         raise HTTPException(409,'The active segment definition changed; refresh the proposal')
     from app.services.hardware_performance import load_benchmark_context
     benchmark_index,_=await load_benchmark_context(db)
-    candidates=await _catalogue_candidates(db,parent.id,'curated')
+    selected_ids=({part['variant_id'] for part in proposal.proposed_data['components']}
+        if exact_reviewed_bom else None)
+    candidates=await _catalogue_candidates(db,parent.id,'curated',variant_ids=selected_ids)
     # Proposal refresh normalizes exact source/manufacturer engineering facts
     # before it selects the BOM. Repeat that same non-price-mutating step here
     # before comparing revisions; using raw candidates selected a different

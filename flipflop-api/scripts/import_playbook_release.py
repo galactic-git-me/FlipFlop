@@ -48,7 +48,12 @@ def values(table,row):
             cls=col.type.enum_class
             if cls:
                 value=next((m.name if not col.type.values_callable else m.value for m in cls if value in {m.name,m.value}),value)
-        result[key]=value
+        def public_media(item):
+            if isinstance(item,str):return item.replace('http://127.0.0.1:4311/api/3d-media/','https://www.theflipflop.shop/api/3d-media/').replace('http://127.0.0.1:4311/api/uploads/','https://www.theflipflop.shop/api/uploads/')
+            if isinstance(item,list):return [public_media(v) for v in item]
+            if isinstance(item,dict):return {k:public_media(v) for k,v in item.items()}
+            return item
+        result[key]=public_media(value)
     return result
 
 async def upsert(db,table,row,identity):
