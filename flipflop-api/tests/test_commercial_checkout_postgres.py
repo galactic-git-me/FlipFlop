@@ -97,6 +97,7 @@ class CommercialPostgresTests(unittest.IsolatedAsyncioTestCase):
         self.now = datetime.now(timezone.utc)
         data["market"]["observed_at"] = self.now.isoformat()
         data["market"]["sold_median_gbp"] = "10000"
+        data["market"]["sold_p75_gbp"] = "11000"
         self.policy = CellCommercialPolicy.model_validate(data)
         self.playbook.pricing_model={"commercial_cells": {self.definition["id"]: self.policy.model_dump(mode="json")}}
         self.config = PlaybookBuildConfig(playbook_id=self.playbook.id, slot_selections=self.slot_selections,
@@ -307,7 +308,7 @@ class CommercialPostgresTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(order.specs["commercial_quote"]["price_gbp"],quote["modes"]["flexible"]["price_gbp"])
         self.assertEqual(order.specs["delivery_option"],"flexible")
         self.assertEqual(order.specs["slots"][0]["title"],"Exact CPU")
-        self.assertIsNotNone(order.promised_delivery_date)
+        self.assertIsNone(order.promised_delivery_date)
 
     async def test_webhook_recovers_accepted_build_and_mode_without_checkout_snapshot(self):
         from app.routes.webhooks import _handle_payment_intent_succeeded

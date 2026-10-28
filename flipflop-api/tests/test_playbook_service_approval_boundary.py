@@ -15,13 +15,15 @@ async def test_refresh_releases_catalogue_locks_before_browser_collection_and_re
         async def __aenter__(self):return self
         async def __aexit__(self,*_args):return False
         async def commit(self):events.append('commit')
+        async def execute(self,*_args):
+            return SimpleNamespace(scalars=lambda:SimpleNamespace(all=lambda:[]))
     monkeypatch.setattr(database,'AsyncSessionLocal',Session)
     async def ranks(**_kwargs):return {}
     async def royal(_db):events.append('royal');return {}
     async def sync(_db,*,check_free_software=True):
         events.append('catalogue' if check_free_software else 'catalogue_after_capture');return {}
     async def capture(_db):
-        assert events==['royal','commit','catalogue','commit','discovery','commit']
+        assert events==['commit','catalogue','commit','discovery','commit']
         events.append('capture');return {}
     async def discovery(_db):events.append('discovery');return {}
     monkeypatch.setattr('app.services.playbook_requirement_sources.discover_missing_requirement_sources',discovery)
@@ -35,12 +37,13 @@ async def test_refresh_releases_catalogue_locks_before_browser_collection_and_re
     monkeypatch.setattr(playbook_service,'refresh_playbooks',failed_build)
     with pytest.raises(RuntimeError,match='build failed'):
         await playbook_service.run_playbook_refresh(0)
-    assert events==['royal','commit','catalogue','commit','discovery','commit','capture','commit',
+    assert events==['commit','catalogue','commit','discovery','commit','capture','commit',
         'catalogue_after_capture','commit']
 
 
 @pytest.mark.asyncio
 async def test_build_offer_assesses_approved_evidence_without_importing_supplier_facts(monkeypatch):
+    monkeypatch.setattr('app.services.playbook_planning_checks.wireless_extra_required',lambda _:[])
     roles = ("cpu", "gpu")
     parts = {
         role: {
@@ -53,9 +56,10 @@ async def test_build_offer_assesses_approved_evidence_without_importing_supplier
                 "fresh": True,
                 "active_listing": True,
                 "stock_status": "available",
+                "condition": "new",
             },
             "catalogue_approved": True,
-            "engineering": {},
+            "engineering": {"reviewed":True},
         }
         for index, role in enumerate(roles, start=1)
     }
@@ -119,6 +123,7 @@ async def test_build_offer_assesses_approved_evidence_without_importing_supplier
 
 @pytest.mark.asyncio
 async def test_build_offer_selects_standard_eligible_benchmark_qualified_shared_bom(monkeypatch):
+    monkeypatch.setattr('app.services.playbook_planning_checks.wireless_extra_required',lambda _:[])
     roles = ("cpu", "gpu")
     monkeypatch.setattr(playbook_service, "required_roles", lambda _definition: roles)
     monkeypatch.setattr(playbook_service, "required_parts", lambda _definition: roles)
@@ -144,7 +149,7 @@ async def test_build_offer_selects_standard_eligible_benchmark_qualified_shared_
 
     def source(days):
         return {"fresh": True, "commercial_capture_verified": True, "active_listing": True,
-            "stock_status": "available", "stock_evidence": "In stock", "postage_verified": True,
+            "stock_status": "available", "condition":"new", "stock_evidence": "In stock", "postage_verified": True,
             "delivery_working_days": days}
 
     candidates = [

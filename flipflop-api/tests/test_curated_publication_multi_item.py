@@ -44,3 +44,33 @@ def test_non_multidrive_cell_omits_an_unneeded_segment_alias_slot():
     snapshot=publication_snapshot(definition,segment,slots,[{'id':301,'name':'Corsair 4000D','rrp_gbp':100}])
 
     assert not any(slot['slot_type']=='storage_secondary' for slot in snapshot['slots'])
+
+
+def test_unused_segment_fan_slot_does_not_require_an_extra_part_for_a_complete_case():
+    definition=base_definition('1TB NVMe SSD')
+    definition['components']['gpu']='Integrated graphics'
+    roles=['cpu','motherboard','ram','storage','cooling','psu','case']
+    variants={role:300+index for index,role in enumerate(roles)}
+    slots=[make_slot(index+1,role,variants[role],definition['components'][role]) for index,role in enumerate(roles)]
+    slots.append({'slot_id':99,'slot_type':'fan','variants_by_tier':{'mid':[]}})
+    slots.append({'slot_id':100,'slot_type':'gpu','variants_by_tier':{'mid':[]}})
+    segment=SimpleNamespace(is_live=True,selling_price=1000,components=variants)
+    result=publication_snapshot(definition,segment,slots,[{'id':301,'name':'Corsair 4000D','rrp_gbp':100}])
+    assert 'fan' not in result['components'] and 'gpu' not in result['components']
+
+
+def test_dual_boot_allows_only_explicit_official_free_software_at_zero():
+    import pytest
+    from app.services.curated_publication import PublicationError
+    definition=base_definition('1TB NVMe SSD')
+    definition['components']['os']='Windows 11 Pro + Ubuntu 24.04 LTS'
+    roles=[*definition['components'],'os_secondary']
+    variants={role:400+i for i,role in enumerate(roles)}
+    slots=[make_slot(i+1,role,variants[role],definition['components'].get(role,'Ubuntu 24.04 LTS'),
+        price=0 if role=='os_secondary' else 10) for i,role in enumerate(roles)]
+    segment=SimpleNamespace(is_live=True,selling_price=1000,components=variants)
+    cases=[{'id':301,'name':'Corsair 4000D','rrp_gbp':100}]
+    with pytest.raises(PublicationError,match='priced os_secondary'):
+        publication_snapshot(definition,segment,slots,cases)
+    slots[-1]['variants_by_tier']['mid'][0]['official_free_software']=True
+    assert publication_snapshot(definition,segment,slots,cases)['components']['os_secondary']=='Ubuntu 24.04 LTS'

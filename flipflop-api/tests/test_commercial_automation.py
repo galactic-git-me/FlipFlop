@@ -14,7 +14,9 @@ class AutomationTests(unittest.TestCase):
     def setUp(self):
         self.now=datetime.now(timezone.utc)
         self.listing=SimpleNamespace(extracted_at=self.now,stock_status='available',stock_evidence='In stock',
-            url='https://www.amazon.co.uk/dp/EXACT',item_price=100.12,postage_price=0)
+            url='https://www.amazon.co.uk/dp/EXACT',item_price=100.12,postage_price=0,
+            listing_type='buy_it_now',source_currency='GBP',source_item_price=100.12,
+            exchange_rate=None,exchange_rate_date=None,exchange_rate_source=None)
         self.previous=SimpleNamespace(part_key='cpu',condition='new',fees_gbp=Decimal('0'),
             risk_gbp=Decimal('2'),supplier_confidence=Decimal('0.9'))
         self.source=dict(condition='new',source='amazon',url=self.listing.url,active_listing=True,
@@ -30,7 +32,7 @@ class AutomationTests(unittest.TestCase):
         self.assertEqual(draft['returns_rate'],'0.02')
         self.assertEqual(draft['vat_rate'],'0.00')
         self.assertEqual(draft['modes']['standard']['costs']['build_labour'],'0.00')
-        self.assertEqual(draft['modes']['standard']['costs']['packaging'],'10.00')
+        self.assertEqual(draft['modes']['standard']['costs']['packaging'],'6.00')
         self.assertEqual(draft['modes']['standard']['costs']['insurance'],'15.00')
         self.assertEqual(draft['modes']['standard']['costs']['payment_fixed'],'0.20')
         self.assertEqual(draft['payment_rate'],'0.0315')
@@ -45,10 +47,10 @@ class AutomationTests(unittest.TestCase):
     def test_capture_requires_explicit_stock_evidence_and_timezone(self):
         self.assertEqual(commercial_capture(self.listing)['stock_status'],'available')
         self.listing.stock_evidence=None
-        self.assertEqual(commercial_capture(self.listing)['stock_status'],'unknown')
+        self.assertTrue(commercial_capture(self.listing)['availability_assumed'])
         self.listing.stock_evidence='In stock';self.listing.extracted_at=self.now.replace(tzinfo=None)
         self.assertIsNone(commercial_capture(self.listing)['observed_at'])
-        self.assertEqual(commercial_capture(self.listing)['stock_status'],'unknown')
+        self.assertEqual(commercial_capture(self.listing)['stock_status'],'available')
 
     def test_available_refresh_preserves_allowances_and_timestamp(self):
         values=refresh_values(self.previous,self.source)
@@ -92,10 +94,12 @@ class AutomationTests(unittest.TestCase):
         observation.delivery_text='Currently unavailable'
         self.assertEqual(observation_data(listing,observation,None,None)['stock_status'],'unavailable')
         observation.commercial_source_evidence={**capture,'url':'https://www.amazon.co.uk/dp/OTHER'}
-        self.assertEqual(observation_data(listing,observation,None,None)['stock_status'],'unknown')
+        mismatched=observation_data(listing,observation,None,None)
+        self.assertTrue(mismatched['availability_assumed'])
+        self.assertFalse(mismatched['commercial_capture_verified'])
         observation.commercial_source_evidence={**capture,'url':'https://www.overclockers.co.uk/search?sSearch=EXACT'}
         observation.source='overclockers';listing.url=observation.commercial_source_evidence['url']
-        self.assertEqual(observation_data(listing,observation,None,None)['stock_status'],'unknown')
+        self.assertTrue(observation_data(listing,observation,None,None)['availability_assumed'])
 
     def test_stock_text_does_not_turn_a_search_result_into_inventory(self):
         from app.services.commercial_readiness import _retailer_stock_from_text
@@ -240,4 +244,6 @@ class ProductPageSourcePreviewTests(unittest.IsolatedAsyncioTestCase):
             status='active',price=100,source_name='Amazon UK',raw_specs={'playbook_product_capture':capture})
         self.assertIsNone(await _product_page_source_preview(None,listing))
         capture['url']=listing.url
-        self.assertIsNone(await _product_page_source_preview(None,listing))
+        preview=await _product_page_source_preview(None,listing)
+        self.assertEqual(preview['item_gbp'],'99.99')
+        self.assertEqual(listing.price,100)  # Reading a current capture does not mutate the catalogue snapshot.

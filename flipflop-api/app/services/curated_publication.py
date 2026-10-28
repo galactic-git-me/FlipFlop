@@ -26,6 +26,8 @@ def publication_snapshot(definition, segment, catalogue_slots, cases, *, require
     slots = curated_slots(catalogue_slots, definition, chosen_ids)
     required = {'cpu', 'motherboard', 'ram', 'storage', 'cooling', 'psu'}
     required.update(set(definition.get('components', {})) - {'case'})
+    if 'integrated' in str(definition.get('components',{}).get('gpu','')).casefold():
+        required.discard('gpu')
     storage_items=[item.strip() for item in str(definition.get('components',{}).get('storage') or '').split('+') if item.strip()]
     if len(storage_items)>1:
         required.add('storage_secondary')
@@ -37,8 +39,7 @@ def publication_snapshot(definition, segment, catalogue_slots, cases, *, require
         required.add('wireless_adapter')
     # The shared Playbook may contain role aliases for other cells in its
     # segment. Keep this cell's publication and checkout contract exact.
-    slots=[slot for slot in slots if slot['slot_type'] not in {'storage_secondary','os_secondary','wireless_adapter'}
-        or slot['slot_type'] in required]
+    slots=[slot for slot in slots if slot['slot_type'] in required | {'case'}]
     present = {slot['slot_type'] for slot in slots}
     if required - present:
         raise PublicationError('The Playbook is missing required component slots')
@@ -49,7 +50,9 @@ def publication_snapshot(definition, segment, catalogue_slots, cases, *, require
             continue
         default = next((part for values in slot['variants_by_tier'].values() for part in values
                         if part['id'] == slot.get('default_variant_id')), None)
-        if not default or default.get('availability') != 'active' or not positive_price(default.get('display_price')):
+        free_official=bool(default and slot['slot_type']=='os_secondary'
+            and default.get('official_free_software') is True and default.get('display_price')==0)
+        if not default or default.get('availability') != 'active' or not (positive_price(default.get('display_price')) or free_official):
             raise PublicationError(f"Select an available, priced {slot['slot_type']} in this Playbook cell")
         selections[int(slot['slot_id'])] = int(default['id'])
         components[slot['slot_type']] = default['title']

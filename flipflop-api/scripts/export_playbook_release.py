@@ -11,6 +11,7 @@ from app.models.catalogue import CatalogueVariant, PlaybookSlot, CaseCatalogue
 from app.models.listing import Listing
 from app.models.component_3d_asset import Component3DAsset
 from app.models.commerce_evidence import SupplierOfferEvidence
+from app.models.motherboard_spec import MotherboardSpec
 from app.services.playbook_service import current_proposals
 
 def record(obj):
@@ -38,6 +39,19 @@ async def main(output):
         for key, rows in [('parents',parents),('slots',slots),('cases',cases),('listings',listings),('variants',variants),('assets',assets),('supplier_evidence',evidence),('proposals',proposal_rows)]:
             bundle[key] = [record(row) for row in rows]
         bundle['benchmarks'] = [dict(r) for r in (await db.execute(text('SELECT * FROM hardware_benchmarks'))).mappings()]
+        bundle['motherboards'] = [record(row) for row in (await db.execute(select(MotherboardSpec))).scalars()]
+        external_ids={str(row.id) for row in listings}|{row.external_id for row in listings}
+        selected_cpks=set()
+        for proposal in proposal_rows:
+            for part in proposal.proposed_data['components']:
+                if part.get('cpk'):selected_cpks.add(part['cpk'])
+                for source in [part.get('source_observation') or {},part.get('suggested_supplier_offer') or {},*(part.get('supplier_offers') or [])]:
+                    if source.get('listing_id') is not None:external_ids.add(str(source['listing_id']))
+        bundle['cpks']=[dict(r) for r in (await db.execute(text('SELECT * FROM gem_radar_listing_cpk WHERE listing_id=ANY(:ids) OR cpk=ANY(:cpks)'),
+            {'ids':list(external_ids),'cpks':list(selected_cpks)})).mappings()]
+        external_ids.update(row['listing_id'] for row in bundle['cpks'])
+        bundle['observations']=[dict(r) for r in (await db.execute(text('SELECT * FROM gem_radar_listing_observations WHERE listing_id=ANY(:ids)'),
+            {'ids':list(external_ids)})).mappings()]
         Path(output).write_text(json.dumps(bundle, default=lambda v: getattr(v,'value',str(v)), ensure_ascii=False), encoding='utf8')
         print({k:len(v) for k,v in bundle.items() if isinstance(v,list)})
     await engine.dispose()

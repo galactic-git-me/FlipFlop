@@ -284,6 +284,8 @@ def _candidate_source_prices(_catalogue_price, source):
     item = current if current is not None and current > 0 else _decimal(_catalogue_price)
     if source and source.get('evidence_kind')=='official_free_software':
         item = current
+    elif item == 0:
+        item = None
     postage = _decimal(source.get('delivery_gbp')) if source and source.get('postage_verified') else None
     if postage is None:
         # Missing inbound delivery is a costing assumption, never proof that the
@@ -308,6 +310,8 @@ def _apply_exact_source_core_engineering(role,listing,source,engineering):
     if not selected:
         return engineering
     current=dict(engineering or {})
+    if current.get('reference_conflicts'):
+        return current
     actor=str(current.get('reviewed_by') or '')
     conflicts={key:{'existing':current[key],'captured':value}
         for key,value in selected.items() if key in current and current[key]!=value}
@@ -326,6 +330,8 @@ def _current_suggested_supplier_source(part):
     the normal publication checks remain required. Unknown inbound postage
     uses the owner's £0 costing fallback and stays labelled as an assumption.
     """
+    if str(part.get('role') or '').startswith('os'):
+        return None  # Windows stays with its original licence supplier and terms review.
     offer=part.get('suggested_supplier_offer') or {}
     url=str(offer.get('url') or '')
     from app.services.playbook_product_capture import supported_product_url
@@ -1137,7 +1143,7 @@ def automatic_policy(parts, definition, parent, settings, *, definition_sha256_o
     target=max(floor,_decimal((parent.profit_strategy or {}).get('target_profit_gbp')) or floor)
     courier=_decimal(getattr(settings,'opportunity_delivery_fallback_gbp',None))
     if courier is None:
-        courier = Decimal('15.00')
+        courier = Decimal('20.00')
     if not parts:
         return None
     source_days=max((days for part in parts.values()
@@ -1399,11 +1405,10 @@ async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None,*,varia
     bestseller_cpks={str(row[4].get('cpk')) for row in selected
         if isinstance(row[4],dict) and row[4].get('cpk') and not str(row[4].get('cpk')).startswith('asin:')}
     if external_ids:
-        identity_rows=(await db.execute(text("""
-            SELECT listing_id,cpk,cpk_data,cpk_confidence
-            FROM gem_radar_listing_cpk
-            WHERE listing_id=ANY(:listing_ids) OR cpk=ANY(:cpks)
-        """),{'listing_ids':list(external_ids),'cpks':list(bestseller_cpks)})).mappings().all()
+        from app.models.gem_radar_listing_cpk import GemRadarListingCpk
+        identity_rows=(await db.execute(select(GemRadarListingCpk.listing_id,
+            GemRadarListingCpk.cpk,GemRadarListingCpk.cpk_data,GemRadarListingCpk.cpk_confidence).where(
+                GemRadarListingCpk.listing_id.in_(external_ids) | GemRadarListingCpk.cpk.in_(bestseller_cpks)))).mappings().all()
         catalogue_identities={row['listing_id']:dict(row) for row in identity_rows}
         for identity_row in identity_rows:
             if identity_row['cpk']:
@@ -1448,16 +1453,26 @@ async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None,*,varia
                 mismatches={key for key,value in reference.items() if key!='reviewed' and value is not None
                     and (key in engineering and engineering[key]!=value
                         or key in source_values and source_values[key]!=value)}
-                if not source_conflicts and not mismatches and not invalidation:
-                    engineering={**engineering,**{key:value for key,value in reference.items() if value is not None},
+                invalidated_facts=set(invalidation.get('conflicted_fields') or []) | (
+                    set(invalidation.get('reviewed_value_changes') or {})-{'source_url'})
+                if not source_conflicts and not mismatches and not invalidated_facts:
+                    # Changing supplier invalidates that retailer's review,
+                    # not the independently reviewed exact-model reference.
+                    # Certify only the reference fields when the old retailer
+                    # review is invalid; never promote its unrelated facts.
+                    engineering={**(engineering if engineering.get('reviewed') is True else {}),
+                        **{key:value for key,value in reference.items() if value is not None},
+                        'source_url':capture.get('source_url'),
+                        'reviewed_by':board.reviewed_by or 'reviewed:motherboard-reference',
                         'engineering_reference':f'motherboard_specs:{board.canonical_model}'}
                 else:
                     engineering={**engineering,'reviewed':False,
                         'reference_conflicts':sorted(source_conflicts|mismatches
                             |set(invalidation.get('conflicted_fields') or []))}
         from app.services.playbook_component_facts import resolve_primary_engineering
-        engineering=resolve_primary_engineering({'role':role,'title':listing.title,
-            'engineering':engineering})
+        if not engineering.get('reference_conflicts'):
+            engineering=resolve_primary_engineering({'role':role,'title':listing.title,
+                'engineering':engineering})
         engineering=_apply_exact_source_core_engineering(role,listing,source,engineering)
         identity=catalogue_identities.get(listing.external_id) or {}
         identity_data=identity.get('cpk_data') or {}
@@ -1521,11 +1536,13 @@ async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None,*,varia
             'source_observation':source,'engineering':engineering,
             'playbook_verified_specs':raw.get('playbook_verified_specs') if isinstance(raw.get('playbook_verified_specs'),dict) else {},
             'case_catalogue_id':listing.case_catalogue_id})
+    if not candidates:
+        return []
     from app.services.playbook_stored_offers import stored_offers, suggested_offer, offers_for_part
     from app.services.playbook_component_facts import manufacturer_facts
     offers=await stored_offers(db,{part.get('cpk') for part in candidates})
     for part in candidates:
-        matched_offers=offers_for_part(part,offers)
+        matched_offers=[] if part['role'].startswith('os') else offers_for_part(part,offers)
         part['suggested_supplier_offer']=suggested_offer(part,matched_offers)
         from app.services.playbook_stored_offers import same_product
         valid_supplier_offers=[offer for offer in matched_offers if same_product(part,offer)]
@@ -2765,7 +2782,10 @@ def invalidate_conflicting_product_engineering(listing,role):
     """Retain the operator's old review in history, but stop certifying changed facts."""
     raw=dict(listing.raw_specs or {});current=raw.get('configurator') or {}
     if current.get('reviewed') is not True:return False
-    if current.get('source_url') and current['source_url']!=listing.url:
+    independent_product_review=(current.get('source_reference_kind')=='owner_reviewed_exact_product'
+        and current.get('reviewed_by')=='owner:approved-release-supplier'
+        and current.get('reviewed_product_title')==listing.title)
+    if current.get('source_url') and current['source_url']!=listing.url and not independent_product_review:
         changes={'source_url':{'reviewed':current['source_url'],'captured':listing.url}}
         conflicting=set()
         source_fingerprint=fingerprint({'listing_id':listing.id,'changed_source_url':changes})

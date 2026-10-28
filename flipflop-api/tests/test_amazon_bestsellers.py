@@ -12,7 +12,7 @@ from app.services.amazon_bestsellers import (
 
 def test_component_lists_cover_requested_categories_only():
     assert set(COMPONENT_BESTSELLER_LISTS) == {
-        "cpu", "gpu", "ram", "storage", "storage_sata", "motherboard", "psu", "case", "cooler", "os",
+        "cpu", "gpu", "ram", "storage", "motherboard", "psu", "case", "cooler", "os",
     }
 
 

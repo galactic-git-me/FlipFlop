@@ -6,7 +6,7 @@ import pytest
 
 @pytest.mark.asyncio
 async def test_llm_receives_only_reviewed_engineering_as_reviewed_specs(monkeypatch):
-    from app.services.compatibility_llm_review import review_compatibility_evidence
+    from app.services.compatibility_llm_review import compatibility_review_input
     from app.services.model_selection_service import model_selection_service
 
     captured = {}
@@ -29,15 +29,10 @@ async def test_llm_receives_only_reviewed_engineering_as_reviewed_specs(monkeypa
         'compatibility': {'checks': [{'code': 'CPU_SOCKET', 'severity': 'unknown'}]},
     }
 
-    result = await review_compatibility_evidence(offer)
-
-    parts = captured['evidence']['parts']
-    assert parts[0]['engineering_source_reviewed'] is False
+    parts = compatibility_review_input(offer)['parts']
     assert parts[0]['reviewed_specs'] == {}
-    assert parts[0]['source_properties'] == {'CPU socket': 'AM5'}
-    assert parts[1]['engineering_source_reviewed'] is True
-    assert parts[1]['reviewed_specs'] == {'reviewed': True, 'socket': 'AM5'}
-    assert result['authority'] == 'advisory_only'
+    assert parts[0]['captured_product_properties'] == {'CPU socket': 'AM5'}
+    assert parts[1]['reviewed_specs'] == {'socket': 'AM5'}
 
 
 @pytest.mark.asyncio

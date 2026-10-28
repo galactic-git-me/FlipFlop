@@ -14,6 +14,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from app.database import AsyncSessionLocal, engine
 import app.models
 from app.database import Base
+from app.services.playbook_release_bundle import materialize_reviewed_sources
 
 MAPS = {}
 JSON_ID_KEYS = {'variant_id':'variants','target_variant_id':'variants','base_variant_id':'variants',
@@ -69,6 +70,7 @@ async def upsert(db,table,row,identity):
 async def main(bundle_path,apply=False):
     bundle=json.loads(Path(bundle_path).read_text(encoding='utf8'))
     assert bundle['schema_version']==1 and len(bundle['proposals'])==24
+    bundle=materialize_reviewed_sources(bundle)
     assert engine.url.database in {'pcflipper','flipflop_release_20261027_test'}
     assert engine.url.host in {'postgres','127.0.0.1','localhost'}
     async with AsyncSessionLocal() as db:
@@ -96,6 +98,25 @@ async def main(bundle_path,apply=False):
             for key in ('glb_ref','preview_image_ref'):
                 if isinstance(row.get(key),str):row[key]=row[key].replace('http://127.0.0.1:4311','https://www.theflipflop.shop')
             await upsert(db,tables['component_3d_assets'],row,['subject_type','subject_id','category','family_key','version','glb_ref'])
+        for proposal in bundle['proposals']:
+            for part in proposal['proposed_data']['components']:
+                engineering=part.get('engineering') or {}
+                if engineering.get('reviewed') is not True:continue
+                listing_id=MAPS['listings'][part['listing_id']]
+                raw=(await db.execute(select(tables['listings'].c.raw_specs).where(tables['listings'].c.id==listing_id))).scalar_one() or {}
+                # Exact supplier rows already carry the owner's product-bound
+                # review and its original source attribution.
+                if not (raw.get('configurator') or {}).get('source_reference_kind'):
+                    await db.execute(tables['listings'].update().where(tables['listings'].c.id==listing_id).values(raw_specs={**raw,'configurator':engineering}))
+        for original in bundle.get('observations',[]):
+            await upsert(db,tables['gem_radar_listing_observations'],original,['listing_id','source','observed_at'])
+        for original in bundle.get('motherboards',[]):
+            await upsert(db,tables['motherboard_specs'],original,['canonical_model'])
+        for original in bundle.get('cpks',[]):
+            table=tables['gem_radar_listing_cpk'];data=values(table,original)
+            found=(await db.execute(select(table.c.listing_id).where(table.c.listing_id==original['listing_id']))).scalar_one_or_none()
+            if found is None:await db.execute(table.insert().values(**data))
+            else:await db.execute(table.update().where(table.c.listing_id==found).values(**data))
         for original in bundle['supplier_evidence']:
             row=deepcopy(original);kind,old=row['part_key'].split(':',1)
             mapping=MAPS['variants' if kind=='variant' else 'cases'];row['part_key']=f'{kind}:{mapping[int(old)]}'

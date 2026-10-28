@@ -404,6 +404,9 @@ async def _published_playbook_slots(playbook_id: int, db: AsyncSession, *, full_
             "id": v.id,
             "title": l.title,
             "display_price": v.display_price,
+            "official_free_software": bool(v.slot_id in free_software_slots and v.display_price==0
+                and isinstance(l.raw_specs,dict) and isinstance(l.raw_specs.get('playbook_free_software'),dict)
+                and l.raw_specs['playbook_free_software'].get('kind')=='official_free_os_download'),
             "gem_score": l.gem_score,
             "images": included_media(v, l, "images"),
             "videos": included_media(v, l, "videos"),
