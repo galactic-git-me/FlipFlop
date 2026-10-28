@@ -372,6 +372,7 @@ class AIBuildCreateInput(BaseModel):
 class GemSpotlightDraftInput(BaseModel):
     listing_ids: list[int] = Field(min_length=8, max_length=8)
     build_name: str = Field(min_length=2, max_length=300)
+    concept: Literal["best", "cheapest", "highest_end", "most_profitable", "most_popular"] = "best"
 
 
 _AI_BUILD_CATEGORY_SLOTS = {
@@ -1289,8 +1290,9 @@ async def create_gem_spotlight_draft(body: GemSpotlightDraftInput, db: AsyncSess
 
     active_listing_ids = await get_active_buy_it_now_listing_ids(db)
     spotlight = await get_compatible_gem_spotlight(db, active_listing_ids)
-    if (spotlight.get("_compatibility", {}).get("status") != "compatible"
-            or {spotlight.get(category, {}).get("id") for category in required_categories} != set(body.listing_ids)):
+    selected_concept = (spotlight.get("builds", {}).get(body.concept) or {})
+    if (selected_concept.get("compatibility", {}).get("status") != "compatible"
+            or {(selected_concept.get("gems", {}).get(category) or {}).get("id") for category in required_categories} != set(body.listing_ids)):
         raise HTTPException(409, "The compatible Gem selection has changed or could not be verified. Refresh the Sourcing page before creating the draft.")
     rows = (await db.execute(
         select(GemRadarScoredListing).where(
@@ -1330,10 +1332,11 @@ async def create_gem_spotlight_draft(body: GemSpotlightDraftInput, db: AsyncSess
         evidence_data={
             "sourcing_spotlight": {
                 "created_at": datetime.utcnow().isoformat(),
+                "concept": body.concept,
                 "candidate_listing_ids": [by_category[category].listing_id for category in required_categories],
                 "estimated_parts_cost_gbp": estimated_parts_cost,
                 "compatibility_status": "ai_reviewed",
-                "compatibility_review": spotlight.get("_compatibility"),
+                "compatibility_review": selected_concept.get("compatibility"),
             }
         },
         warranty_reserve_pct=5.0,

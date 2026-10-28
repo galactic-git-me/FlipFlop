@@ -2350,8 +2350,8 @@ async def _fetch_best_gem_for_category(
     }
 
 
-async def _gem_spotlight_candidates(db: AsyncSession, category: str, actionable_ids: set[str], limit: int = 8) -> list[dict]:
-    """Return the highest-scoring active image-ready Gems for compatibility selection."""
+async def _gem_spotlight_candidates(db: AsyncSession, category: str, actionable_ids: set[str], benchmark_context=None) -> list[dict]:
+    """Return a bounded, image-ready candidate pool covering all five build objectives."""
     from app.services.curated_media import media_urls
 
     if not actionable_ids:
@@ -2379,12 +2379,45 @@ async def _gem_spotlight_candidates(db: AsyncSession, category: str, actionable_
             continue
         if category != "ram" and not _is_current_gen(row.title, category):
             continue
+        reference_price = next((float(value) for value in (row.conservative_resale_price, row.market_median_price,
+            row.market_new_price, row.market_used_price) if value is not None and float(value) > 0), None)
+        if row.expected_profit is not None:
+            expected_profit = float(row.expected_profit)
+        else:
+            expected_profit = round(reference_price - float(row.delivered_price), 2) if reference_price is not None else None
+        performance_percentile = None
+        if category in {"cpu", "gpu"} and benchmark_context:
+            from app.services.hardware_performance import enrich_listing_performance
+            benchmark_index, peer_scores = benchmark_context
+            performance = enrich_listing_performance(category=category, title=row.title,
+                canonical_model_id=row.canonical_model_id, release_year=row.release_year,
+                delivered_price=row.delivered_price, benchmark_index=benchmark_index, peer_scores=peer_scores)
+            performance_percentile = performance.get("performance_percentile")
+        popularity_score = float(row.desirability_score or 0) + float(row.liquidity_score or 0)
+        popularity_score += float(row.watch_count or 0) + float(row.bid_count or 0)
         candidates.append({"id": row.id, "title": row.title, "category": category,
             "classification": row.classification, "deal_score": float(row.deal_score or 0),
-            "price": float(row.delivered_price), "image_url": media_urls([row.image_url, *(row.image_urls or [])])[0]})
-        if len(candidates) >= limit:
-            break
-    return candidates
+            "price": float(row.delivered_price), "image_url": media_urls([row.image_url, *(row.image_urls or [])])[0],
+            "market_reference": reference_price, "expected_profit": expected_profit,
+            "performance_percentile": performance_percentile,
+            "desirability_score": float(row.desirability_score or 0),
+            "sell_through_rate_pct": float(row.sell_through_rate_pct or 0),
+            "watch_count": int(row.watch_count or 0), "bid_count": int(row.bid_count or 0),
+            "popularity_score": popularity_score})
+
+    if not candidates:
+        return []
+    selected: dict[int, dict] = {}
+    rankings = (
+        sorted(candidates, key=lambda item: item["deal_score"], reverse=True)[:8],
+        sorted(candidates, key=lambda item: item["price"])[:5],
+        sorted(candidates, key=lambda item: (item["performance_percentile"] if item["performance_percentile"] is not None else (item["market_reference"] or 0)), reverse=True)[:5],
+        sorted(candidates, key=lambda item: (item["expected_profit"] if item["expected_profit"] is not None else -1e9), reverse=True)[:5],
+        sorted(candidates, key=lambda item: item["popularity_score"], reverse=True)[:5],
+    )
+    for ranked in rankings:
+        selected.update((item["id"], item) for item in ranked)
+    return list(selected.values())
 
 
 def _spotlight_titles_have_hard_mismatch(selected: dict[str, dict]) -> str | None:
@@ -2411,75 +2444,125 @@ def _spotlight_titles_have_hard_mismatch(selected: dict[str, dict]) -> str | Non
 
 
 async def get_compatible_gem_spotlight(db: AsyncSession, actionable_ids: set[str] | None = None) -> dict:
-    """Choose the best available active Gem set after an LLM compatibility review."""
+    """Select five objective-specific Gem builds, each checked by the configured LLM."""
     from datetime import datetime
+    from app.services.hardware_performance import load_benchmark_context
     from app.services.model_selection_service import model_selection_service, ModelSelectionError
 
-    categories = ("cpu", "motherboard", "ram", "gpu", "case")
+    constrained_categories = ("cpu", "motherboard", "ram", "gpu", "case")
+    all_categories = ("motherboard", "cpu", "cooler", "ram", "gpu", "ssd", "psu", "case")
+    objectives = ("best", "cheapest", "highest_end", "most_profitable", "most_popular")
+    titles = {"best": "The Best Gem Build", "cheapest": "The Cheapest Gem Build",
+        "highest_end": "The Highest-end Gem Build", "most_profitable": "The Most Profitable Gem Build",
+        "most_popular": "The Most Popular Gem Build"}
     actionable_ids = actionable_ids if actionable_ids is not None else await get_active_buy_it_now_listing_ids(db)
-    pools = {category: await _gem_spotlight_candidates(db, category, actionable_ids) for category in categories}
-    pool_key = hashlib.sha256(repr(tuple((category, tuple(item["id"] for item in pools[category])) for category in categories)).encode()).hexdigest()
+    benchmark_context = await load_benchmark_context(db)
+    pools = {category: await _gem_spotlight_candidates(db, category, actionable_ids, benchmark_context)
+        for category in constrained_categories}
+    cache_facts = {category: [{key: item[key] for key in ("id", "deal_score", "price", "market_reference",
+        "expected_profit", "performance_percentile", "popularity_score")} for item in pools[category]]
+        for category in constrained_categories}
+    pool_key = hashlib.sha256(json.dumps(cache_facts, sort_keys=True).encode()).hexdigest()
     cached = _GEM_SPOTLIGHT_COMPATIBILITY_CACHE.get(pool_key)
     if cached and time.monotonic() - cached[0] < 300:
         return cached[1]
 
-    all_categories = ("motherboard", "cpu", "cooler", "ram", "gpu", "ssd", "psu", "case")
-    gems = {}
-    for category in all_categories:
-        if category in pools:
-            gems[category] = pools[category][0] if pools[category] else None
-        else:
-            gems[category] = await _fetch_best_gem_for_category(db, category, datetime.min,
-                require_modern=True, actionable_ids=actionable_ids, require_image=True)
+    gem_index = {category: {item["id"]: item for item in pools[category]} for category in constrained_categories}
+    ranked: dict[str, dict[str, list[int]]] = {}
+    for objective in objectives:
+        ranked[objective] = {}
+        for category in constrained_categories:
+            values = pools[category]
+            if objective == "best":
+                ordered = sorted(values, key=lambda item: item["deal_score"], reverse=True)
+            elif objective == "cheapest":
+                ordered = sorted(values, key=lambda item: item["price"])
+            elif objective == "highest_end":
+                ordered = sorted(values, key=lambda item: (item["performance_percentile"] if item["performance_percentile"] is not None else (item["market_reference"] or 0)), reverse=True)
+            elif objective == "most_profitable":
+                ordered = sorted(values, key=lambda item: item["expected_profit"] if item["expected_profit"] is not None else -1e9, reverse=True)
+            else:
+                ordered = sorted(values, key=lambda item: item["popularity_score"], reverse=True)
+            ranked[objective][category] = [item["id"] for item in ordered]
 
-    compatibility = {"status": "unavailable", "summary": "Compatibility has not been confirmed; no build draft can be created.",
-        "model": None, "checks": []}
-    if all(pools[category] for category in categories):
-        candidate_payload = {category: [{"id": item["id"], "title": item["title"],
-                "classification": item["classification"], "deal_score": item["deal_score"]}
-                for item in pools[category]] for category in categories}
+    builds = {}
+    for objective in objectives:
+        builds[objective] = {"title": titles[objective], "gems": {},
+            "compatibility": {"status": "unavailable", "summary": "No compatible candidate set has been confirmed.", "model": None, "checks": []},
+            "metrics": {}}
+        for category in all_categories:
+            builds[objective]["gems"][category] = None
+            if category in gem_index and gem_index[category]:
+                builds[objective]["gems"][category] = next(iter(gem_index[category].values()))
+            elif category not in gem_index:
+                builds[objective]["gems"][category] = await _fetch_best_gem_for_category(db, category, datetime.min,
+                    require_modern=True, actionable_ids=actionable_ids, require_image=True)
+
+    if all(pools[category] for category in constrained_categories):
+        candidate_payload = {category: [{key: item[key] for key in ("id", "title", "classification", "deal_score", "price",
+            "market_reference", "expected_profit", "performance_percentile", "desirability_score", "sell_through_rate_pct",
+            "watch_count", "bid_count")} for item in pools[category]] for category in constrained_categories}
         try:
             response = await model_selection_service.complete(
-                task="Gem Radar pre-built component compatibility",
-                messages=[{"role": "user", "content": json.dumps({"candidates": candidate_payload})}],
+                task="Gem Radar five compatible build concepts",
+                messages=[{"role": "user", "content": json.dumps({"candidates": candidate_payload, "ranked_ids_by_objective": ranked})}],
                 system_prompt=(
-                    "You are checking exact PC component listings for a draft pre-built concept. Choose the highest-ranked compatible "
-                    "candidate set (rank is array order; use the next candidate when the top candidate conflicts). Check CPU socket with "
-                    "motherboard, GPU interface with motherboard, RAM generation with motherboard, and motherboard form factor with case. "
-                    "Use only supplied IDs and product knowledge reliably supported by those exact model names. If any check is uncertain, "
-                    "treat it as unknown and do not claim compatibility. Return strict JSON: {\"compatible\":true,"
-                    "\"selected\":{\"cpu\":id,\"motherboard\":id,\"ram\":id,\"gpu\":id,\"case\":id},"
+                    "Create five compatible sets for a draft pre-built PC, using only the supplied active GEM/SUPER_GEM listing IDs. "
+                    "For each objective, choose the earliest-ranked compatible combination from ranked_ids_by_objective, replacing a conflicting "
+                    "part with the next candidate in that category. Check CPU/motherboard socket, GPU/motherboard interface, RAM/motherboard "
+                    "memory generation, and motherboard/case size. Objectives: best=highest Gem deal score; cheapest=lowest component prices; "
+                    "highest_end=highest known CPU/GPU benchmark percentile, then strongest component specs from title/reference; most_profitable="
+                    "highest sum of per-listing expected_profit (market reference less asking cost when available); most_popular=highest observed "
+                    "desirability/liquidity plus listing watch and bid signals. If any pair is uncertain, mark that objective unavailable. "
+                    "Return strict JSON with builds object keyed by best, cheapest, highest_end, most_profitable, most_popular. Each value must be "
+                    "{\"compatible\":true,\"selected\":{\"cpu\":id,\"motherboard\":id,\"ram\":id,\"gpu\":id,\"case\":id},"
                     "\"checks\":[{\"pair\":\"CPU/motherboard\",\"status\":\"compatible\",\"reason\":\"...\"},"
                     "{\"pair\":\"GPU/motherboard\",\"status\":\"compatible\",\"reason\":\"...\"},"
                     "{\"pair\":\"RAM/motherboard\",\"status\":\"compatible\",\"reason\":\"...\"},"
-                    "{\"pair\":\"motherboard/case\",\"status\":\"compatible\",\"reason\":\"...\"}],"
-                    "\"summary\":\"short explanation\"}. Set compatible=false if no supplied set passes every check. Never invent specifications or IDs."
-                ), max_tokens=900, timeout=45, json_mode=True)
+                    "{\"pair\":\"motherboard/case\",\"status\":\"compatible\",\"reason\":\"...\"}],\"summary\":\"...\"}. "
+                    "Use only supplied IDs. Never invent specifications or claim compatibility without evidence."
+                ), max_tokens=1800, timeout=30, json_mode=True)
             proposal = json.loads(response.text)
-            selected_ids = proposal.get("selected") or {}
-            pool_by_id = {category: {item["id"]: item for item in pools[category]} for category in categories}
-            chosen = {category: pool_by_id[category].get(selected_ids.get(category)) for category in categories}
+            proposed_builds = proposal.get("builds") or {}
             expected_pairs = {"CPU/motherboard", "GPU/motherboard", "RAM/motherboard", "motherboard/case"}
-            checks = proposal.get("checks") or []
-            checks_ok = (len(checks) == 4 and {str(check.get("pair")) for check in checks} == expected_pairs
-                and all(check.get("status") == "compatible" and isinstance(check.get("reason"), str) and check["reason"].strip() for check in checks))
-            hard_mismatch = _spotlight_titles_have_hard_mismatch(chosen) if all(chosen.values()) else "The AI selected a candidate outside the supplied lists."
-            if proposal.get("compatible") is True and all(chosen.values()) and checks_ok and not hard_mismatch:
+            for objective in objectives:
+                proposed = proposed_builds.get(objective) or {}
+                selected_ids = proposed.get("selected") or {}
+                chosen = {category: gem_index[category].get(selected_ids.get(category)) for category in constrained_categories}
+                checks = proposed.get("checks") or []
+                checks_ok = (len(checks) == 4 and {check.get("pair") for check in checks} == expected_pairs
+                    and all(check.get("status") == "compatible" and isinstance(check.get("reason"), str) and check["reason"].strip() for check in checks))
+                hard_mismatch = _spotlight_titles_have_hard_mismatch(chosen) if all(chosen.values()) else "The AI did not select supplied candidate IDs for every required part."
+                if proposed.get("compatible") is not True or not all(chosen.values()) or not checks_ok or hard_mismatch:
+                    builds[objective]["compatibility"]["summary"] = str(hard_mismatch or proposed.get("summary") or "No fully supported compatible set was found for this concept.")[:300]
+                    continue
                 for category, item in chosen.items():
-                    gems[category] = item
-                compatibility = {"status": "compatible", "summary": str(proposal.get("summary") or "AI checked all four compatibility pairs.")[:300],
+                    builds[objective]["gems"][category] = item
+                compatibility = {"status": "compatible", "summary": str(proposed.get("summary") or "AI checked all four component compatibility pairs.")[:300],
                     "model": response.model, "checks": [{"pair": check["pair"], "status": "compatible", "reason": str(check["reason"])[:250]} for check in checks]}
-            else:
-                compatibility = {"status": "unavailable", "summary": str(hard_mismatch or proposal.get("summary") or "No fully supported compatible candidate set was found.")[:300],
-                    "model": response.model, "checks": [{"pair": str(check.get("pair", ""))[:80], "status": str(check.get("status", "unknown"))[:30], "reason": str(check.get("reason", ""))[:250]} for check in checks[:4]]}
+                builds[objective]["compatibility"] = compatibility
         except (ModelSelectionError, json.JSONDecodeError, TypeError, ValueError, AttributeError) as exc:
             structlog.get_logger(__name__).warning("gem_spotlight.compatibility_failed", error=str(exc))
-            compatibility["summary"] = "The AI compatibility review could not be completed. Refresh to try again."
+            for build in builds.values():
+                build["compatibility"]["summary"] = "The AI compatibility review could not be completed. Refresh to try again."
 
-    if compatibility["status"] != "compatible":
-        for category in categories:
-            gems[category] = None
-    result = {**gems, "_compatibility": compatibility}
+    for objective, build in builds.items():
+        if build["compatibility"]["status"] != "compatible":
+            for category in constrained_categories:
+                build["gems"][category] = None
+            continue
+        selected = [build["gems"][category] for category in all_categories]
+        priced = [item for item in selected if item]
+        build["metrics"] = {
+            "parts_total": round(sum(float(item["price"]) for item in priced), 2),
+            "component_profit_signal": round(sum(float(item.get("expected_profit") or 0) for item in priced), 2),
+            "popularity_signal": round(sum(float(item.get("popularity_score") or 0) for item in priced), 2),
+            "listing_watch_count": sum(int(item.get("watch_count") or 0) for item in priced),
+            "listing_bid_count": sum(int(item.get("bid_count") or 0) for item in priced),
+            "performance_percentile": round(sum(float(item["performance_percentile"]) for item in priced if item.get("performance_percentile") is not None)
+                / max(1, sum(item.get("performance_percentile") is not None for item in priced)), 1),
+        }
+    result = {"builds": builds}
     _GEM_SPOTLIGHT_COMPATIBILITY_CACHE[pool_key] = (time.monotonic(), result)
     return result
 
