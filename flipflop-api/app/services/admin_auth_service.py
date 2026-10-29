@@ -119,3 +119,4 @@ __all__ = [
     "admin_login",
     "get_admin_by_token",
 ]
+# Admin sessions use a dedicated signing key.
