@@ -56,6 +56,11 @@ def verify_admin_token(token: str) -> int | None:
         if admin_id_str is None:
             return None
         return int(admin_id_str)
+    except RuntimeError:
+        # A missing production key is a server configuration error. Preserve
+        # that distinction so requests fail loudly instead of looking like a
+        # bad user token; login token creation uses the same fail-closed path.
+        raise
     except JWTError as e:
         log.warning("admin_auth.token_verify_failed", error=str(e))
         return None
