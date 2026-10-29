@@ -272,6 +272,9 @@ class Settings(BaseSettings):
     # Those remain on the GPU workstation and publish completed results to the
     # production database through the worker integration path.
     web_only: bool = False
+    # Allow the web tier to persist scan submissions for a separate
+    # Gem Radar worker to consume. This does not start any background work.
+    external_gem_radar_worker_enabled: bool = False
 
     class Config:
         env_file = (".env", ".env.local")
