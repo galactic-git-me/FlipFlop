@@ -56,7 +56,7 @@ class BuildPhoto(BaseModel):
 class ManualBuildOut(BaseModel):
     id: int
     name: str
-    creation_method: Literal["manual", "ai"] = "manual"
+    creation_method: Literal["manual", "ai", "gem_spotlight"] = "manual"
     components: list[BuildComponent]
     total_cost: Optional[float]
     last_evaluation: Optional[dict]
@@ -163,7 +163,7 @@ class ManualBuildOut(BaseModel):
 class ManualBuildSummary(BaseModel):
     id: int
     name: str
-    creation_method: Literal["manual", "ai"] = "manual"
+    creation_method: Literal["manual", "ai", "gem_spotlight"] = "manual"
     total_cost: Optional[float]
     ebay_price: Optional[float] = None
     component_count: int

@@ -107,7 +107,7 @@ class PlaybookBookTests(TestCase):
             'required_part_keys':['variant:1'],'condition':'new','vat_rate':'0.20',
             'payment_rate':'0.03','warranty_rate':'0.05','returns_rate':'0.02',
             'modes':{name:mode for name in ('fast_track','standard','flexible')}})
-        part={'role':'cpu','listing_price_gbp':'100.00','supplier_postage_gbp':'0.00','landed_gbp':'100.00',
+        part={'listing_price_gbp':'100.00','supplier_postage_gbp':'0.00','landed_gbp':'100.00',
               'source_observation':{'delivery_working_days':0}}
         with patch('app.services.playbook_service.required_parts',return_value={'cpu':1}), \
              patch('app.services.playbook_service.automatic_policy',return_value=policy), \
