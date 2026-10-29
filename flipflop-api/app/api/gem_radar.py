@@ -3442,7 +3442,8 @@ async def submit_scan_queued(
     from app.gem_radar.schema_guard import require_scan_schema
     from fastapi import HTTPException
     from app.config import get_settings
-    if get_settings().web_only:
+    settings = get_settings()
+    if settings.web_only and not settings.external_gem_radar_worker_enabled:
         raise HTTPException(status_code=503, detail="Sourcing workers are disabled in WEB_ONLY mode. Start normal DEV mode before submitting scans.")
     try:
         await require_scan_schema(db)
