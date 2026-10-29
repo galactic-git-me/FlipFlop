@@ -24,6 +24,19 @@ const accents: Record<string, string> = {
   gpu: "text-purple-300", ssd: "text-blue-300", psu: "text-orange-300", case: "text-amber-300",
 };
 
+function spotlightImageUrl(value: string) {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:") return null;
+    if (["www.scan.co.uk", "computerorbit.com", "www.computerorbit.com", "www.overclockers.co.uk", "i.ebayimg.com", "m.media-amazon.com", "images-eu.ssl-images-amazon.com", "images-na.ssl-images-amazon.com"].includes(url.hostname)) {
+      return `/api/proxy-image?url=${encodeURIComponent(url.toString())}`;
+    }
+    return value;
+  } catch {
+    return null;
+  }
+}
+
 export default function GemSpotlightRow() {
   const [gems, setGems] = useState<GemSpotlights | null>(null);
 
@@ -49,8 +62,10 @@ export default function GemSpotlightRow() {
         <span className={`truncate text-[10px] font-semibold uppercase tracking-wide ${accents[category]}`}>{labels[category]}</span>
         <p className="text-xs text-slate-500">No qualifying Gem</p>
       </div>;
+      const imageSrc = gem.image_url ? spotlightImageUrl(gem.image_url) : null;
       return <a key={category} href={gem.url} target="_blank" rel="noopener noreferrer" className="group relative block aspect-square min-w-0 overflow-hidden rounded-xl ring-1 ring-white/15 shadow-lg shadow-black/30">
-        {gem.image_url ? <img src={gem.image_url} alt={gem.title} className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" onError={event => { event.currentTarget.style.display = "none"; }} /> : <div className="absolute inset-0 bg-slate-800" />}
+        {imageSrc ? <img src={imageSrc} alt={gem.title} className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" onError={event => { event.currentTarget.style.display = "none"; event.currentTarget.nextElementSibling?.classList.remove("hidden"); }} /> : null}
+        <div className={`absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-800 via-slate-900 to-indigo-950 ${imageSrc ? "hidden" : ""}`} aria-hidden="true"><span className="text-5xl font-black text-white/10">{labels[category].replace("Gem ", "").slice(0, 2).toUpperCase()}</span></div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-black/45" />
         <span className={`absolute left-2 top-2 max-w-[calc(100%-1rem)] truncate rounded-full bg-black/50 px-2 py-1 text-[9px] font-semibold uppercase tracking-wide ${accents[category]}`}>{labels[category]}</span>
         <div className="absolute inset-x-0 bottom-0 min-w-0 border-t border-white/10 bg-black/35 p-2 backdrop-blur-sm">

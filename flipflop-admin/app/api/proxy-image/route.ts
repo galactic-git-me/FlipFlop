@@ -1,4 +1,7 @@
 const ALLOWED_IMAGE_HOSTS = new Set([
+  "computerorbit.com",
+  "www.computerorbit.com",
+  "i.ebayimg.com",
   "www.overclockers.co.uk",
   "www.scan.co.uk",
   "m.media-amazon.com",
