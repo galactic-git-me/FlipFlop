@@ -13,42 +13,6 @@ import pytest
 from fastapi import HTTPException
 
 
-@pytest.fixture(autouse=True)
-def isolate_supplier_pool(monkeypatch):
-    # These tests exercise exact board-reference boundaries. Supplier-offer
-    # collection is covered separately against PostgreSQL.
-    monkeypatch.setattr('app.services.playbook_stored_offers.stored_offers', AsyncMock(return_value={}))
-
-
-async def test_supplier_change_retains_independent_board_reference_without_certifying_old_retailer_fields(db):
-    from app.models.listing import Listing
-    from app.models.playbook import Playbook
-    from app.models.catalogue import PlaybookSlot, CatalogueVariant
-    from app.services.playbook_service import _catalogue_candidates
-    parent=Playbook(name='Independent manufacturer reference')
-    db.add(parent); await db.flush()
-    slot=PlaybookSlot(playbook_id=parent.id,slot_type='motherboard')
-    url='https://www.overclockers.co.uk/asus-tuf-b850/MOT-ASU-03844.html'
-    listing=Listing(external_id='reviewed-supplier:board',source_id=0,source_name='overclockers',
-        title='ASUS TUF GAMING B850-PLUS WIFI AMD ATX Motherboard',price=200,url=url,status='active',
-        raw_specs={'configurator':{'reviewed':True,'socket':'am5','ram_type':'ddr5',
-            'source_url':'https://www.amazon.co.uk/dp/B0DP5DQPRC','bios_cpu_ids':['old-retailer-only']}})
-    reference=MotherboardSpec(canonical_model='ASUS TUF GAMING B850-PLUS WIFI',reviewed=True,
-        socket='am5',ram_type='ddr5',ram_slots=4,form_factor='atx',m2_slots=3,wifi=True,
-        raw_ai_response={'manufacturer_source_capture':{
-            'source_url':'https://www.asus.com/motherboards-components/motherboards/tuf-gaming/tuf-gaming-b850-plus-wifi/techspec/',
-            'field_evidence':{'wifi':'Wi-Fi 7 and Bluetooth 5.4'}}})
-    db.add_all([slot,listing,reference]);await db.flush()
-    db.add(CatalogueVariant(listing_id=listing.id,slot_id=slot.id,status='active',display_price=200,
-        tier='mid',curated_for_builds=True));await db.flush()
-    rows=await _catalogue_candidates(db,parent.id,'curated',source_cache={listing.id:None})
-    specs=rows[0]['engineering']
-    assert specs['reviewed'] is True
-    assert specs['wifi'] is True and specs['bluetooth'] is True
-    assert 'bios_cpu_ids' not in specs
-    assert listing.raw_specs['configurator']['reviewed'] is False
-
-
 def board(model, *, reviewed=True):
     return MotherboardSpec(canonical_model=model, socket='am4', ram_type='ddr4',
         ram_slots=4, form_factor='matx', reviewed=reviewed)
@@ -207,7 +171,7 @@ async def test_conflicting_approved_board_records_cannot_silently_certify_fit(db
     assert candidates[0]['engineering']['reference_conflicts']==['socket']
 
 
-async def test_hidden_catalogue_variants_remain_draft_candidates_without_catalogue_approval(db):
+async def test_hidden_catalogue_variants_are_never_playbook_candidates(db):
     from app.models.listing import Listing
     from app.models.playbook import Playbook
     from app.models.catalogue import PlaybookSlot,CatalogueVariant
@@ -233,8 +197,7 @@ async def test_hidden_catalogue_variants_remain_draft_candidates_without_catalog
 
     candidates=await _catalogue_candidates(db,parent.id,'curated',source_cache={hidden.id:None,pending.id:None})
 
-    assert {candidate['listing_id'] for candidate in candidates}=={hidden.id,pending.id}
-    assert all(candidate['catalogue_approved'] is False for candidate in candidates)
+    assert [candidate['listing_id'] for candidate in candidates]==[pending.id]
 
 
 async def test_product_spec_suggestion_requires_exact_unchanged_capture_and_explicit_approval(db):

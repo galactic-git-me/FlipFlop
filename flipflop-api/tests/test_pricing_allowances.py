@@ -29,10 +29,9 @@ class ProposalOnlyRefreshTests(IsolatedAsyncioTestCase):
         db.execute.return_value = rows
         with patch('app.services.playbook_service.definitions', return_value={'builds': []}), \
              patch('app.services.playbook_service.paid_component_sales', AsyncMock(return_value={})), \
-             patch('app.services.catalogue_cpk.reconcile_active_catalogue_cpks', AsyncMock(return_value={})), \
              patch('app.services.hardware_performance.load_benchmark_context', AsyncMock(return_value=({}, {}))), \
              patch('app.services.playbook_mvp.maintain_offers', AsyncMock()) as maintain:
-            result = await refresh_playbooks(db, catalogue_sync={}, maintain_live_offers=False,resolve_missing=False)
+            result = await refresh_playbooks(db, catalogue_sync={}, maintain_live_offers=False)
         maintain.assert_not_awaited()
         self.assertEqual(result['maintenance']['published'], [])
         self.assertEqual(result['maintenance']['paused'], [])

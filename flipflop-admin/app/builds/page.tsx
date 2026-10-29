@@ -226,7 +226,7 @@ function BuildCard({
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 min-w-0">
           <p className="text-sm font-semibold text-slate-100 truncate">{build.name}</p>
-          <span className={`shrink-0 rounded border px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide ${build.creation_method === "ai" ? "border-[#00dc82]/30 bg-[#00dc82]/10 text-[#00dc82]" : "border-slate-500/30 bg-slate-500/10 text-slate-400"}`}>{build.creation_method === "ai" ? "AI-built" : "Manual"}</span>
+          <span className={`shrink-0 rounded border px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide ${build.creation_method === "ai" || build.creation_method === "gem_spotlight" ? "border-[#00dc82]/30 bg-[#00dc82]/10 text-[#00dc82]" : "border-slate-500/30 bg-slate-500/10 text-slate-400"}`}>{build.creation_method === "ai" ? "AI-built" : build.creation_method === "gem_spotlight" ? "Gem spotlight" : "Manual"}</span>
         </div>
         <p className="text-[11px] text-slate-500 mt-0.5">
           {build.component_count} component{build.component_count === 1 ? "" : "s"} · updated {formatDate(build.updated_at)}
@@ -256,7 +256,7 @@ function BuildCard({
       <div className="grid grid-cols-3 gap-4 text-right shrink-0">
         <div>
           <p className="text-xs text-slate-500">Total paid</p>
-          <p className="text-sm font-semibold">{build.creation_method === "ai" && build.total_cost === 0 ? "—" : build.total_cost != null ? formatCurrency(build.total_cost) : "—"}</p>
+          <p className="text-sm font-semibold">{(build.creation_method === "ai" || build.creation_method === "gem_spotlight") && build.total_cost === 0 ? "—" : build.total_cost != null ? formatCurrency(build.total_cost) : "—"}</p>
         </div>
         <div>
           <p className="text-xs text-slate-500">Listing price</p>

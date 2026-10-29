@@ -14,13 +14,11 @@ to a developer workstation:
 ```bash
 mkdir -p runtime
 python3 - <<'PY'
-import os
 from pathlib import Path
 import secrets
 path = Path("runtime/admin-auth.env")
-fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-with os.fdopen(fd, "w") as secret_file:
-    secret_file.write(f"ADMIN_JWT_SECRET={secrets.token_urlsafe(48)}\n")
+path.write_text(f"ADMIN_JWT_SECRET={secrets.token_urlsafe(48)}\n")
+path.chmod(0o600)
 PY
 ```
 

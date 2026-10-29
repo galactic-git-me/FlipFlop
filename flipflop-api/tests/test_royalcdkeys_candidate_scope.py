@@ -68,7 +68,6 @@ async def test_royalcdkeys_review_candidates_resolve_source_preview(monkeypatch)
 
     listing = SimpleNamespace(
         id=19,
-        source_name="RoyalCDKeys",
         title="Windows 11 Home Retail",
         url="https://royalcdkeys.com/en-gb/products/windows-11-home-retail",
         image_urls=[],

@@ -53,7 +53,6 @@ from app.schemas.manual_build import (
     BookShipmentResult, ShipmentBookingReconciliationRequest, UpdateEvidenceDataRequest, UpdateListingTitleRequest,
 )
 from app.services import ai_service
-from app.services.glb_optimizer import GlbOptimizationError, persist_optimized_glb, validate_glb
 from app.services.model_selection_service import model_selection_service, ModelSelectionError
 from app.services.getting_started_service import (
     invalidate_ready_to_ship_reviewed_package,
@@ -370,6 +369,12 @@ class AIBuildCreateInput(BaseModel):
     playbook_rationale: str = Field(default="", max_length=1200)
 
 
+class GemSpotlightDraftInput(BaseModel):
+    listing_ids: list[int] = Field(min_length=8, max_length=8)
+    build_name: str = Field(min_length=2, max_length=300)
+    concept: Literal["best", "cheapest", "highest_end", "most_profitable", "most_popular"] = "best"
+
+
 _AI_BUILD_CATEGORY_SLOTS = {
     "cpu": "cpu",
     "motherboard": "motherboard",
@@ -567,11 +572,7 @@ async def _run_build_3d_generation(
                 async with httpx.AsyncClient(timeout=120, follow_redirects=True) as client:
                     response = await client.get(result.glb_url)
                     response.raise_for_status()
-                optimized = await persist_optimized_glb(
-                    response.content,
-                    local_path,
-                    _BUILD_GLB_ORIGINALS_ROOT / str(build_id),
-                )
+                local_path.write_bytes(response.content)
                 if not local_path.is_file() or local_path.stat().st_size == 0:
                     raise RuntimeError(f"Downloaded GLB was not persisted at {local_path}")
                 _persist_build_model_download(build_id, filename, local_path)
@@ -580,8 +581,6 @@ async def _run_build_3d_generation(
                     progress=result.progress,
                     task_id=result.task_id,
                     glb_url=public_url,
-                    original_file_size_bytes=optimized.original_bytes,
-                    file_size_bytes=optimized.output_bytes,
                     preview_url=result.thumbnail_url,
                     completed_at=datetime.utcnow().isoformat(),
                 )
@@ -894,7 +893,6 @@ _UPLOADS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "upload
 _PUBLIC_MEDIA_ROOT = Path(__file__).resolve().parents[3].parent / "FlipFlop.shop" / "public" / "media"
 _MODELS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "uploads" / "models"
 _BUILD_ASSETS_ROOT = Path(__file__).resolve().parents[3] / "builds"
-_BUILD_GLB_ORIGINALS_ROOT = _BUILD_ASSETS_ROOT.parent / "runtime" / "glb-originals" / "build-models"
 _BUILD_3D_SUBDIR = "3D Build"
 _BUILD_ASSET_SUBDIRS = {"Media", "Performance", "Registration", "Specifications"}
 # Served directly by this process (see app.mount("/api/uploads", ...) in
@@ -1274,6 +1272,73 @@ async def create_ai_ready_to_ship_build(body: AIBuildCreateInput, db: AsyncSessi
     evidence_data["ai_sourcing"]["build_rationale"] = body.rationale
     build = ManualBuild(name=body.build_name, creation_method="ai", components=components, total_cost=0,
                         evidence_data=evidence_data, warranty_reserve_pct=5.0)
+    db.add(build)
+    await db.flush()
+    await db.refresh(build)
+    return build
+
+
+@router.post("/gem-spotlight-draft", response_model=ManualBuildOut, status_code=201)
+async def create_gem_spotlight_draft(body: GemSpotlightDraftInput, db: AsyncSession = Depends(get_db)):
+    """Save the exact eight current component Gems as an unpaid, editable build draft."""
+    from app.gem_radar.observations import get_active_buy_it_now_listing_ids
+    from app.api.gem_radar import get_gem_spotlight
+
+    required_categories = ("cpu", "motherboard", "ram", "gpu", "ssd", "psu", "cooler", "case")
+    if len(set(body.listing_ids)) != len(required_categories):
+        raise HTTPException(422, "Choose one distinct Gem for each required component")
+
+    active_listing_ids = await get_active_buy_it_now_listing_ids(db)
+    spotlight = await get_gem_spotlight(db, active_listing_ids)
+    selected_concept = (spotlight.get("builds", {}).get(body.concept) or {})
+    if {(selected_concept.get("gems", {}).get(category) or {}).get("id") for category in required_categories} != set(body.listing_ids):
+        raise HTTPException(409, "The Gem selection has changed. Refresh the Gem-based pre-builds page before creating the draft.")
+    rows = (await db.execute(
+        select(GemRadarScoredListing).where(
+            GemRadarScoredListing.id.in_(body.listing_ids),
+            GemRadarScoredListing.listing_id.in_(active_listing_ids),
+            GemRadarScoredListing.classification.in_(("SUPER_GEM", "GEM")),
+        )
+    )).scalars().all()
+    by_category = {item.category: item for item in rows}
+    if len(rows) != len(body.listing_ids) or len(by_category) != len(rows) or set(by_category) != set(required_categories):
+        raise HTTPException(409, "One or more displayed Gems are no longer active. Refresh the Sourcing page and try again.")
+    if any(float(item.delivered_price or 0) <= 0 for item in rows):
+        raise HTTPException(409, "A selected Gem no longer has a valid delivered price. Refresh the Sourcing page and try again.")
+
+    components = [
+        {
+            "slot": category,
+            "name": by_category[category].title,
+            "price_paid": round(float(by_category[category].delivered_price), 2),
+            "source": "manual",
+            "listing_url": by_category[category].url,
+            "image_url": by_category[category].image_url,
+            "purchased": False,
+            "condition": by_category[category].condition or "unknown",
+            "sourcing_candidate": True,
+            "gem_classification": by_category[category].classification,
+            "gem_radar_listing_id": by_category[category].id,
+        }
+        for category in required_categories
+    ]
+    estimated_parts_cost = round(sum(component["price_paid"] for component in components), 2)
+    build = ManualBuild(
+        name=body.build_name.strip(),
+        creation_method="gem_spotlight",
+        components=components,
+        total_cost=0,
+        evidence_data={
+            "sourcing_spotlight": {
+                "created_at": datetime.utcnow().isoformat(),
+                "concept": body.concept,
+                "candidate_listing_ids": [by_category[category].listing_id for category in required_categories],
+                "estimated_parts_cost_gbp": estimated_parts_cost,
+                "compatibility_status": "not_checked",
+            }
+        },
+        warranty_reserve_pct=5.0,
+    )
     db.add(build)
     await db.flush()
     await db.refresh(build)
@@ -2876,7 +2941,7 @@ async def patch_build(build_id: int, body: ManualBuildPatch, db: AsyncSession = 
     if body.name is not None:
         build.name = body.name
     if body.components is not None:
-        if build.creation_method == "ai":
+        if build.creation_method in {"ai", "gem_spotlight"}:
             existing_components = list(build.components or [])
             if len(body.components) != len(existing_components):
                 raise HTTPException(422, "AI sourcing draft component slots cannot be added or removed through manual editing")
@@ -2928,7 +2993,11 @@ async def purchase_build_component(
         component["sourcing_candidate"] = False
         components[index] = component
         build.components = components
-        build.total_cost = sum(float(item.get("price_paid") or 0) for item in components)
+        build.total_cost = sum(
+            float(item.get("price_paid") or 0)
+            for item in components
+            if item.get("purchased")
+        )
         await db.flush()
         await db.refresh(build)
         return build
@@ -2979,7 +3048,7 @@ async def purchase_build_component(
     build.total_cost = sum(
         float(existing.get("price_paid") or 0)
         for existing in components
-        if build.creation_method != "ai" or existing.get("purchased")
+        if build.creation_method not in {"ai", "gem_spotlight"} or existing.get("purchased")
     )
     add_event(db, inventory_item_id=item.id, manual_build_id=build.id, event_type="purchased", quantity=1,
               detail={"source": item.source, "listing_url": item.listing_url})
@@ -5403,11 +5472,10 @@ async def upload_build_3d_model(
         raise HTTPException(400, "The GLB file is empty")
     if len(model_bytes) > 100 * 1024 * 1024:
         raise HTTPException(413, "The GLB must be 100 MB or smaller")
-    # Reject malformed GLB containers before optimizer or filesystem writes.
-    try:
-        validate_glb(model_bytes)
-    except GlbOptimizationError as exc:
-        raise HTTPException(400, f"The uploaded file is not a valid binary GLB: {exc}") from exc
+    # Binary glTF begins with the ASCII magic bytes 'glTF'. This rejects a
+    # renamed ZIP/OBJ before it can reach the public storefront.
+    if model_bytes[:4] != b"glTF":
+        raise HTTPException(400, "The uploaded file is not a valid binary GLB")
 
     build = (await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
     if not build:
@@ -5415,14 +5483,7 @@ async def upload_build_3d_model(
 
     filename = f"model-3d-{uuid.uuid4().hex}.glb"
     local_path, public_url = _build_3d_asset_path(build_id, filename)
-    try:
-        await persist_optimized_glb(
-            model_bytes,
-            local_path,
-            _BUILD_GLB_ORIGINALS_ROOT / str(build_id),
-        )
-    except GlbOptimizationError as exc:
-        raise HTTPException(status_code=422, detail=f"The GLB could not be safely optimized: {exc}") from exc
+    local_path.write_bytes(model_bytes)
     _persist_build_model_download(build_id, filename, local_path)
     build.model_3d_url = public_url
     build.updated_at = datetime.utcnow()

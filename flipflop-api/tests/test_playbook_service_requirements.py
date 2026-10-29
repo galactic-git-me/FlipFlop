@@ -4,7 +4,7 @@ from app.services.playbook_service import (assemble_components, required_parts,
 
 
 def _candidate_title(role):
-    return {'cpu':'AMD Ryzen 5 5600G Processor with integrated Radeon graphics', 'motherboard':'MSI B550M motherboard AM4',
+    return {'cpu':'AMD Ryzen 5 5600X Processor', 'motherboard':'MSI B550M motherboard AM4',
         'ram':'DDR4 32GB RAM memory kit', 'gpu':'NVIDIA GeForce RTX 4060 Graphics Card',
         'storage':'1TB NVMe SSD', 'psu':'650W ATX PC power supply',
         'cooling':'CPU air cooler', 'case':'ATX mid-tower PC case'}.get(role,role)
@@ -29,8 +29,8 @@ def test_non_compute_upsells_require_a_measured_improvement_and_preserve_memory_
         {'engineering':{'reviewed':True,'wattage':850}})
     assert not _upgrade_quality_verified('cooling',{'engineering':{'reviewed':True}},
         {'engineering':{'reviewed':True}})
-    assert not _distinct_storage_devices({'storage':{'variant_id':1},'storage_secondary':{'variant_id':1}})
-    assert _distinct_storage_devices({'storage':{'variant_id':1,'listing_id':7},'storage_secondary':{'variant_id':2,'listing_id':7}})
+    assert not _distinct_storage_devices({'storage':{'listing_id':1},'storage_secondary':{'listing_id':1}})
+    assert _distinct_storage_devices({'storage':{'listing_id':1},'storage_secondary':{'listing_id':2}})
 
 
 def test_publication_rechecks_benefit_instead_of_trusting_a_quality_flag(monkeypatch):
@@ -157,8 +157,7 @@ def test_draft_delivery_exposes_proposed_workshop_allowance_and_failed_fast_dead
         standard_curated_custom_days=14,flexible_curated_custom_days=28,speedy_delivery_price_gbp=40)
     modes=estimate_delivery_products(parts,{'id':'TEST','tier':'Budget','components':{'gpu':'Integrated'}},
         SimpleNamespace(profit_strategy={}, pricing_model={}),settings)
-    assert modes['fast_track']['available'] is False
-    assert modes['fast_track']['recommended_price_gbp'] is not None
+    assert modes['fast_track']['recommended_price_gbp'] is None
     assert modes['fast_track']['estimated_delivery_working_days']==9
     assert modes['fast_track']['maximum_delivery_working_days']==7
     standard=modes['standard']
@@ -185,8 +184,8 @@ def test_high_end_price_requires_reviewed_p75_and_keeps_margin_floor_below_cap()
     parent=SimpleNamespace(profit_strategy={},pricing_model={})
     definition={'id':'HIGH','tier':'High-end','components':{role:role for role in roles}}
     without_market=estimate_delivery_products(parts,definition,parent,settings)
-    assert without_market['standard']['recommended_price_gbp'] is not None
-    assert without_market['standard'].get('market_cap_gbp') is None
+    assert without_market['standard']['recommended_price_gbp'] is None
+    assert 'eight sold comparable' in without_market['standard']['reason']
     from app.schemas.commercial_quote import CellCommercialPolicy
     from tests.test_playbook_commercial_quote import policy_data
     from app.services.playbook_commercial_quote import supplier_meets_delivery_commitment
@@ -239,19 +238,17 @@ def test_compatible_assembly_backtracks_from_incompatible_first_board_and_respec
 
 
 def test_assembly_prefers_exact_supplier_offer_with_fresh_stock_postage_and_short_eta():
-    definition={'components':{'cpu':'AMD Ryzen 5 5600G','gpu':'Integrated'}}
+    definition={'components':{'cpu':'AMD Ryzen 5 5600X','gpu':'Integrated'}}
     candidates=[]
     for role in ('motherboard','ram','storage','psu','cooling','case'):
         candidates.append({'role':role,'title':_candidate_title(role),'variant_id':len(candidates)+1,
             'listing_id':len(candidates)+100,'listing_price_gbp':'10.00'})
-    exact='AMD Ryzen 5 5600G Processor with integrated Radeon graphics'
+    exact='AMD Ryzen 5 5600X Processor'
     candidates.extend([
         {'role':'cpu','title':exact,'variant_id':80,'listing_id':180,'listing_price_gbp':'89.00',
-         'price_observed_at':__import__('datetime').datetime.now(__import__('datetime').timezone.utc).isoformat(),
          'source_price_verified':True,'rank':1,'source_observation':{'fresh':True,'commercial_capture_verified':True,
             'active_listing':True,'stock_status':'unknown','delivery_working_days':7,'postage_verified':False}},
         {'role':'cpu','title':exact,'variant_id':81,'listing_id':181,'listing_price_gbp':'94.00',
-         'price_observed_at':__import__('datetime').datetime.now(__import__('datetime').timezone.utc).isoformat(),
          'source_price_verified':True,'rank':8,'source_observation':{'fresh':True,'commercial_capture_verified':True,
             'active_listing':True,'stock_status':'available','stock_evidence':'In stock','delivery_working_days':1,
             'postage_verified':True}},
@@ -280,14 +277,14 @@ def test_multi_device_assembly_never_uses_one_listing_for_both_drives():
             'listing_id':len(candidates)+100,'listing_price_gbp':'10.00'})
     candidates.extend([
         {'role':'storage','title':'4TB PCIe NVMe SSD','variant_id':20,'listing_id':120,'listing_price_gbp':'10.00'},
-        {'role':'storage_secondary','title':'4TB Project NVMe SSD','variant_id':21,'listing_id':120,'listing_price_gbp':'10.00'},
-        {'role':'storage_secondary','title':'4TB Project NVMe SSD','variant_id':22,'listing_id':122,'listing_price_gbp':'11.00'},
+        {'role':'storage_secondary','title':'4TB Project SSD','variant_id':21,'listing_id':120,'listing_price_gbp':'10.00'},
+        {'role':'storage_secondary','title':'4TB Project SSD','variant_id':22,'listing_id':122,'listing_price_gbp':'11.00'},
     ])
 
     parts,blockers=assemble_components(definition,candidates)
 
     assert not [blocker for blocker in blockers if 'storage' in blocker]
-    assert parts['storage']['variant_id'] != parts['storage_secondary']['variant_id']
+    assert parts['storage']['listing_id'] != parts['storage_secondary']['listing_id']
     assert parts['storage_secondary']['variant_id']==22
 
 
@@ -385,7 +382,7 @@ def test_only_verified_official_free_software_can_use_a_zero_cost_candidate_pric
         'delivery_gbp':'0.00','postage_verified':True,'evidence_kind':'official_free_software'}
 
     assert _candidate_source_prices(0,source)==(0,0,True)
-    assert _candidate_source_prices(0,{**source,'evidence_kind':'supplier_listing'})==(None,0,False)
+    assert _candidate_source_prices(0,{**source,'evidence_kind':'supplier_listing'})==(None,None,False)
 
 
 def test_unverified_catalogue_snapshot_never_falls_back_as_a_current_supplier_price():
@@ -395,11 +392,9 @@ def test_unverified_catalogue_snapshot_never_falls_back_as_a_current_supplier_pr
     current={'fresh':True,'commercial_capture_verified':True,'item_gbp':'91.49',
         'delivery_gbp':'0.00','postage_verified':False}
 
-    # Draft estimates retain snapshots while explicitly marking them unverified.
-    # Unknown inbound postage uses the owner's labelled zero-cost fallback.
-    assert _candidate_source_prices(74.99,None)==(Decimal('74.99'),0,False)
-    assert _candidate_source_prices(74.99,stale)==(Decimal('89.99'),0,False)
-    assert _candidate_source_prices(74.99,current)==(Decimal('91.49'),0,True)
+    assert _candidate_source_prices(74.99,None)==(None,None,False)
+    assert _candidate_source_prices(74.99,stale)==(None,None,False)
+    assert _candidate_source_prices(74.99,current)==(Decimal('91.49'),None,True)
 
 
 def test_official_free_software_preview_has_download_availability_not_supplier_stock():

@@ -284,8 +284,6 @@ def _candidate_source_prices(_catalogue_price, source):
     item = current if current is not None and current > 0 else _decimal(_catalogue_price)
     if source and source.get('evidence_kind')=='official_free_software':
         item = current
-    elif item == 0:
-        item = None
     postage = _decimal(source.get('delivery_gbp')) if source and source.get('postage_verified') else None
     if postage is None:
         # Missing inbound delivery is a costing assumption, never proof that the
@@ -310,8 +308,6 @@ def _apply_exact_source_core_engineering(role,listing,source,engineering):
     if not selected:
         return engineering
     current=dict(engineering or {})
-    if current.get('reference_conflicts'):
-        return current
     actor=str(current.get('reviewed_by') or '')
     conflicts={key:{'existing':current[key],'captured':value}
         for key,value in selected.items() if key in current and current[key]!=value}
@@ -330,8 +326,6 @@ def _current_suggested_supplier_source(part):
     the normal publication checks remain required. Unknown inbound postage
     uses the owner's £0 costing fallback and stays labelled as an assumption.
     """
-    if str(part.get('role') or '').startswith('os'):
-        return None  # Windows stays with its original licence supplier and terms review.
     offer=part.get('suggested_supplier_offer') or {}
     url=str(offer.get('url') or '')
     from app.services.playbook_product_capture import supported_product_url
@@ -1143,7 +1137,7 @@ def automatic_policy(parts, definition, parent, settings, *, definition_sha256_o
     target=max(floor,_decimal((parent.profit_strategy or {}).get('target_profit_gbp')) or floor)
     courier=_decimal(getattr(settings,'opportunity_delivery_fallback_gbp',None))
     if courier is None:
-        courier = Decimal('20.00')
+        courier = Decimal('15.00')
     if not parts:
         return None
     source_days=max((days for part in parts.values()
@@ -1355,7 +1349,7 @@ def estimate_delivery_products(parts, definition, parent, settings):
     return outputs
 
 
-async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None,*,variant_ids=None):
+async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None):
     source_cache={} if source_cache is None else source_cache
     from sqlalchemy import or_
     rows=(await db.execute(select(CatalogueVariant,Listing,PlaybookSlot).join(Listing,Listing.id==CatalogueVariant.listing_id)
@@ -1363,8 +1357,7 @@ async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None,*,varia
             PlaybookSlot.playbook_id==parent_id,CatalogueVariant.curated_for_builds.is_(True),
             CatalogueVariant.status.in_(('active','pending_review','hidden')),
             or_(Listing.price.is_(None),Listing.price>0,(PlaybookSlot.slot_type=='os_secondary')&(Listing.price==0)),
-            Listing.status=='active',
-            CatalogueVariant.id.in_(variant_ids) if variant_ids is not None else True))).all()
+            Listing.status=='active'))).all()
     # Reuse only exact, human-reviewed reference-board evidence. Fuzzy board
     # matches are useful for exploratory configurator warnings, but cannot
     # certify a Playbook component for sale.
@@ -1405,10 +1398,11 @@ async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None,*,varia
     bestseller_cpks={str(row[4].get('cpk')) for row in selected
         if isinstance(row[4],dict) and row[4].get('cpk') and not str(row[4].get('cpk')).startswith('asin:')}
     if external_ids:
-        from app.models.gem_radar_listing_cpk import GemRadarListingCpk
-        identity_rows=(await db.execute(select(GemRadarListingCpk.listing_id,
-            GemRadarListingCpk.cpk,GemRadarListingCpk.cpk_data,GemRadarListingCpk.cpk_confidence).where(
-                GemRadarListingCpk.listing_id.in_(external_ids) | GemRadarListingCpk.cpk.in_(bestseller_cpks)))).mappings().all()
+        identity_rows=(await db.execute(text("""
+            SELECT listing_id,cpk,cpk_data,cpk_confidence
+            FROM gem_radar_listing_cpk
+            WHERE listing_id=ANY(:listing_ids) OR cpk=ANY(:cpks)
+        """),{'listing_ids':list(external_ids),'cpks':list(bestseller_cpks)})).mappings().all()
         catalogue_identities={row['listing_id']:dict(row) for row in identity_rows}
         for identity_row in identity_rows:
             if identity_row['cpk']:
@@ -1453,26 +1447,16 @@ async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None,*,varia
                 mismatches={key for key,value in reference.items() if key!='reviewed' and value is not None
                     and (key in engineering and engineering[key]!=value
                         or key in source_values and source_values[key]!=value)}
-                invalidated_facts=set(invalidation.get('conflicted_fields') or []) | (
-                    set(invalidation.get('reviewed_value_changes') or {})-{'source_url'})
-                if not source_conflicts and not mismatches and not invalidated_facts:
-                    # Changing supplier invalidates that retailer's review,
-                    # not the independently reviewed exact-model reference.
-                    # Certify only the reference fields when the old retailer
-                    # review is invalid; never promote its unrelated facts.
-                    engineering={**(engineering if engineering.get('reviewed') is True else {}),
-                        **{key:value for key,value in reference.items() if value is not None},
-                        'source_url':capture.get('source_url'),
-                        'reviewed_by':board.reviewed_by or 'reviewed:motherboard-reference',
+                if not source_conflicts and not mismatches and not invalidation:
+                    engineering={**engineering,**{key:value for key,value in reference.items() if value is not None},
                         'engineering_reference':f'motherboard_specs:{board.canonical_model}'}
                 else:
                     engineering={**engineering,'reviewed':False,
                         'reference_conflicts':sorted(source_conflicts|mismatches
                             |set(invalidation.get('conflicted_fields') or []))}
         from app.services.playbook_component_facts import resolve_primary_engineering
-        if not engineering.get('reference_conflicts'):
-            engineering=resolve_primary_engineering({'role':role,'title':listing.title,
-                'engineering':engineering})
+        engineering=resolve_primary_engineering({'role':role,'title':listing.title,
+            'engineering':engineering})
         engineering=_apply_exact_source_core_engineering(role,listing,source,engineering)
         identity=catalogue_identities.get(listing.external_id) or {}
         identity_data=identity.get('cpk_data') or {}
@@ -1536,13 +1520,11 @@ async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None,*,varia
             'source_observation':source,'engineering':engineering,
             'playbook_verified_specs':raw.get('playbook_verified_specs') if isinstance(raw.get('playbook_verified_specs'),dict) else {},
             'case_catalogue_id':listing.case_catalogue_id})
-    if not candidates:
-        return []
     from app.services.playbook_stored_offers import stored_offers, suggested_offer, offers_for_part
     from app.services.playbook_component_facts import manufacturer_facts
     offers=await stored_offers(db,{part.get('cpk') for part in candidates})
     for part in candidates:
-        matched_offers=[] if part['role'].startswith('os') else offers_for_part(part,offers)
+        matched_offers=offers_for_part(part,offers)
         part['suggested_supplier_offer']=suggested_offer(part,matched_offers)
         from app.services.playbook_stored_offers import same_product
         valid_supplier_offers=[offer for offer in matched_offers if same_product(part,offer)]
@@ -1929,7 +1911,7 @@ async def build_cell_offer(db,definition,parent,settings,candidates,benchmark_in
     return offer
 
 
-async def approve_proposal(db,proposal_id,revision,actor_id,*,exact_reviewed_bom=False):
+async def approve_proposal(db,proposal_id,revision,actor_id):
     """Rebuild the exact reviewed offer before enabling any sale."""
     await db.execute(text('SELECT pg_advisory_xact_lock(61311, 1)'))
     proposal=(await db.execute(select(PlaybookProposal).where(PlaybookProposal.id==proposal_id)
@@ -1945,9 +1927,7 @@ async def approve_proposal(db,proposal_id,revision,actor_id,*,exact_reviewed_bom
         raise HTTPException(409,'The active segment definition changed; refresh the proposal')
     from app.services.hardware_performance import load_benchmark_context
     benchmark_index,_=await load_benchmark_context(db)
-    selected_ids=({part['variant_id'] for part in proposal.proposed_data['components']}
-        if exact_reviewed_bom else None)
-    candidates=await _catalogue_candidates(db,parent.id,'curated',variant_ids=selected_ids)
+    candidates=await _catalogue_candidates(db,parent.id,'curated')
     # Proposal refresh normalizes exact source/manufacturer engineering facts
     # before it selects the BOM. Repeat that same non-price-mutating step here
     # before comparing revisions; using raw candidates selected a different
@@ -1996,12 +1976,7 @@ async def approve_proposal(db,proposal_id,revision,actor_id,*,exact_reviewed_bom
     for mode,quote in assessment['modes'].items():
         if mode not in policy.enabled_modes:
             continue
-        reviewed=current['delivery_products'][mode]
-        if mode!='standard' and not reviewed.get('available'):
-            if quote['offerable']:
-                raise HTTPException(409,'Delivery eligibility changed; review the new pace quote')
-            continue
-        if not quote['offerable'] or Decimal(quote['price_gbp'])!=Decimal(reviewed['recommended_price_gbp']):
+        if not quote['offerable'] or Decimal(quote['price_gbp'])!=Decimal(current['delivery_products'][mode]['recommended_price_gbp']):
             raise HTTPException(409,'Current source and workshop evidence must support the exact three reviewed prices')
 
     # The exact proposal approval is also the Playbook publication approval.
@@ -2782,10 +2757,7 @@ def invalidate_conflicting_product_engineering(listing,role):
     """Retain the operator's old review in history, but stop certifying changed facts."""
     raw=dict(listing.raw_specs or {});current=raw.get('configurator') or {}
     if current.get('reviewed') is not True:return False
-    independent_product_review=(current.get('source_reference_kind')=='owner_reviewed_exact_product'
-        and current.get('reviewed_by')=='owner:approved-release-supplier'
-        and current.get('reviewed_product_title')==listing.title)
-    if current.get('source_url') and current['source_url']!=listing.url and not independent_product_review:
+    if current.get('source_url') and current['source_url']!=listing.url:
         changes={'source_url':{'reviewed':current['source_url'],'captured':listing.url}}
         conflicting=set()
         source_fingerprint=fingerprint({'listing_id':listing.id,'changed_source_url':changes})

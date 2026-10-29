@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-10-27T22:30:45.652225+00:00",
+  "generated_at": "2026-10-29T09:36:08.018617+00:00",
   "builds": [
     {
       "components": [
         {
-          "id": 77815303,
+          "id": 83030167,
           "listing_id": "bargain_hardware:6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in",
           "category": "cpu",
           "title": "6-Pin PCIe Female to 6-Pin PCIe Male GPU Power Cable Extension 15in",
@@ -18,35 +18,35 @@
           "url": "https://www.bargainhardware.co.uk/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in"
         },
         {
-          "id": 77827613,
-          "listing_id": "google-shopping:Micron%202200%20M.2%20PCI%20Express%203.0%203D%20TLC%20NVMe:22:CeX",
+          "id": 82990064,
+          "listing_id": "198104577873",
           "category": "motherboard",
-          "title": "Micron 2200 M.2 PCI Express 3.0 3D TLC NVMe",
-          "seller": "CeX",
-          "image_url": null,
-          "delivered_price": 22.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -22.0,
-          "url": "https://www.google.com/search?tbm=shop&q=Micron+2200+M.2+PCI+Express+3.0+3D+TLC+NVMe"
-        },
-        {
-          "id": 77772507,
-          "listing_id": "167698982261",
-          "category": "gpu",
-          "title": "XFX Play Hard, AMD Radeon HD6970  GPU Graphics Video Game Card",
+          "title": "Intel LGA 1151 CPU  cooler - Alpenf\u00f6hn CPU Cooler Silver- Excellent condition",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/CiYAAeSwEA5ok9Fw/s-l225.jpg",
-          "delivered_price": 24.99,
+          "image_url": "https://i.ebayimg.com/images/g/AoIAAeSw1mxpj7fZ/s-l225.jpg",
+          "delivered_price": 21.49,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -24.99,
-          "url": "https://www.ebay.co.uk/itm/167698982261"
+          "estimated_profit": -21.49,
+          "url": "https://www.ebay.co.uk/itm/198104577873"
         },
         {
-          "id": 77780808,
+          "id": 83034059,
+          "listing_id": "COO-CRS-08299",
+          "category": "gpu",
+          "title": "CORSAIR iCUE LINK RX120 II RGB 120mm PWM Fan",
+          "seller": null,
+          "image_url": "https://www.overclockers.co.uk/dw/image/v2/BLRM_PRD/on/demandware.static/-/Sites-master-catalog-ocuk/default/dw61e1f7d5/images/data/product/62/9aca82/90f7e71e990b26c57ca0e3ebd99f37fdde5d0152.jpg?sw=200",
+          "delivered_price": 24.95,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -24.95,
+          "url": "https://www.overclockers.co.uk/corsair-icue-link-rx120-ii-rgb-120mm-pwm-fan/COO-CRS-08299.html"
+        },
+        {
+          "id": 82994411,
           "listing_id": "227554962106",
           "category": "ram",
           "title": "Crucial 8GB DDR4-3200 UDIMM desktop memory module CT8G4DFRA32A - Brand New",
@@ -60,7 +60,7 @@
           "url": "https://www.ebay.co.uk/itm/227554962106"
         },
         {
-          "id": 77816029,
+          "id": 83030899,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -74,7 +74,7 @@
           "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
         },
         {
-          "id": 77819566,
+          "id": 83034858,
           "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
           "category": "ssd",
           "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
@@ -88,7 +88,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
         },
         {
-          "id": 77820534,
+          "id": 83035826,
           "listing_id": "google-shopping:AMD%20Wraith%20Stealth%20Stock%20AM4%20CPU%20Cooler%20with%2096mm%20Fan%20OEM:6:eBay",
           "category": "cooler",
           "title": "AMD Wraith Stealth Stock AM4 CPU Cooler with 96mm Fan OEM",
@@ -102,7 +102,7 @@
           "url": "https://www.google.com/search?q=used+Computer+Components+AMD+Wraith+Stealth&udm=28&hl=en-GB&gl=GB#:~:text=AMD%20Wraith%20Stealth%20Stock%20AM4%20CPU%20Cooler%20with%2096mm%20Fan%20OEM"
         },
         {
-          "id": 77805905,
+          "id": 83020580,
           "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
           "category": "case",
           "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
@@ -118,9 +118,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 116.82,
+      "build_cost": 116.27,
       "market": {
-        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Radeon HD6970 8gb",
+        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI RX120 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -137,13 +137,13 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -116.82,
+      "estimated_profit": -116.27,
       "rank": 1
     },
     {
       "components": [
         {
-          "id": 77815303,
+          "id": 83030167,
           "listing_id": "bargain_hardware:6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in",
           "category": "cpu",
           "title": "6-Pin PCIe Female to 6-Pin PCIe Male GPU Power Cable Extension 15in",
@@ -157,35 +157,35 @@
           "url": "https://www.bargainhardware.co.uk/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in"
         },
         {
-          "id": 77828048,
-          "listing_id": "google-shopping:Nvidia%20GeForce%20GTX%20770%202GB%20GDDR5%20PCI%20Express%203.0%20Graphics%20Card:22:CeX",
+          "id": 82990064,
+          "listing_id": "198104577873",
           "category": "motherboard",
-          "title": "Nvidia GeForce GTX 770 2GB GDDR5 PCI Express 3.0 Graphics Card",
-          "seller": "CeX",
-          "image_url": null,
-          "delivered_price": 22.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -22.0,
-          "url": "https://www.google.com/search?q=used+Graphics+Cards+NVIDIA+GPU&udm=28&hl=en-GB&gl=GB#:~:text=Nvidia%20GeForce%20GTX%20770%202GB%20GDDR5%20PCI%20Express%203.0%20Graphics%20Card"
-        },
-        {
-          "id": 77772507,
-          "listing_id": "167698982261",
-          "category": "gpu",
-          "title": "XFX Play Hard, AMD Radeon HD6970  GPU Graphics Video Game Card",
+          "title": "Intel LGA 1151 CPU  cooler - Alpenf\u00f6hn CPU Cooler Silver- Excellent condition",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/CiYAAeSwEA5ok9Fw/s-l225.jpg",
-          "delivered_price": 24.99,
+          "image_url": "https://i.ebayimg.com/images/g/AoIAAeSw1mxpj7fZ/s-l225.jpg",
+          "delivered_price": 21.49,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -24.99,
-          "url": "https://www.ebay.co.uk/itm/167698982261"
+          "estimated_profit": -21.49,
+          "url": "https://www.ebay.co.uk/itm/198104577873"
         },
         {
-          "id": 77780808,
+          "id": 83034060,
+          "listing_id": "COO-CRS-08300",
+          "category": "gpu",
+          "title": "CORSAIR iCUE LINK RX120 II RGB White 120mm PWM Fan",
+          "seller": null,
+          "image_url": "https://www.overclockers.co.uk/dw/image/v2/BLRM_PRD/on/demandware.static/-/Sites-master-catalog-ocuk/default/dwc86f5284/images/data/product/85/d2ab5a/0527baac0e28e6cc99d2fcf27557c96981186379.jpg?sw=200",
+          "delivered_price": 24.95,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -24.95,
+          "url": "https://www.overclockers.co.uk/corsair-icue-link-rx120-ii-rgb-white-120mm-pwm-fan/COO-CRS-08300.html"
+        },
+        {
+          "id": 82994411,
           "listing_id": "227554962106",
           "category": "ram",
           "title": "Crucial 8GB DDR4-3200 UDIMM desktop memory module CT8G4DFRA32A - Brand New",
@@ -199,7 +199,7 @@
           "url": "https://www.ebay.co.uk/itm/227554962106"
         },
         {
-          "id": 77816029,
+          "id": 83030899,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -213,7 +213,7 @@
           "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
         },
         {
-          "id": 77819566,
+          "id": 83034858,
           "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
           "category": "ssd",
           "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
@@ -227,7 +227,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
         },
         {
-          "id": 77820534,
+          "id": 83035826,
           "listing_id": "google-shopping:AMD%20Wraith%20Stealth%20Stock%20AM4%20CPU%20Cooler%20with%2096mm%20Fan%20OEM:6:eBay",
           "category": "cooler",
           "title": "AMD Wraith Stealth Stock AM4 CPU Cooler with 96mm Fan OEM",
@@ -241,7 +241,7 @@
           "url": "https://www.google.com/search?q=used+Computer+Components+AMD+Wraith+Stealth&udm=28&hl=en-GB&gl=GB#:~:text=AMD%20Wraith%20Stealth%20Stock%20AM4%20CPU%20Cooler%20with%2096mm%20Fan%20OEM"
         },
         {
-          "id": 77805905,
+          "id": 83020580,
           "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
           "category": "case",
           "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
@@ -257,9 +257,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 116.82,
+      "build_cost": 116.27,
       "market": {
-        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Radeon HD6970 8gb",
+        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI RX120 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -276,13 +276,13 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -116.82,
+      "estimated_profit": -116.27,
       "rank": 2
     },
     {
       "components": [
         {
-          "id": 77815303,
+          "id": 83030167,
           "listing_id": "bargain_hardware:6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in",
           "category": "cpu",
           "title": "6-Pin PCIe Female to 6-Pin PCIe Male GPU Power Cable Extension 15in",
@@ -296,35 +296,35 @@
           "url": "https://www.bargainhardware.co.uk/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in"
         },
         {
-          "id": 77827613,
-          "listing_id": "google-shopping:Micron%202200%20M.2%20PCI%20Express%203.0%203D%20TLC%20NVMe:22:CeX",
+          "id": 82990064,
+          "listing_id": "198104577873",
           "category": "motherboard",
-          "title": "Micron 2200 M.2 PCI Express 3.0 3D TLC NVMe",
-          "seller": "CeX",
-          "image_url": null,
-          "delivered_price": 22.0,
+          "title": "Intel LGA 1151 CPU  cooler - Alpenf\u00f6hn CPU Cooler Silver- Excellent condition",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/AoIAAeSw1mxpj7fZ/s-l225.jpg",
+          "delivered_price": 21.49,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -22.0,
-          "url": "https://www.google.com/search?tbm=shop&q=Micron+2200+M.2+PCI+Express+3.0+3D+TLC+NVMe"
+          "estimated_profit": -21.49,
+          "url": "https://www.ebay.co.uk/itm/198104577873"
         },
         {
-          "id": 77828136,
-          "listing_id": "google-shopping:NVIDIA%20GRID%20K2%20graphics%20card:26.25:eBay%20-%20rp-resale",
+          "id": 83048084,
+          "listing_id": "LN173834",
           "category": "gpu",
-          "title": "NVIDIA GRID K2 graphics card",
-          "seller": "eBay - rp-resale",
-          "image_url": null,
-          "delivered_price": 26.25,
+          "title": "Quick view120mm CORSAIR iCUE LINK RX120 II RGB, Black, 7 Blade, 2100RPM, 64.72CFM, Magnetic Dome, PWM, iCUE LinkCORSAIR iCUE LINK RX120 II RGB Black PWM Fan",
+          "seller": "Scan.co.uk",
+          "image_url": "https://www.scan.co.uk/images/products/to/3828350.jpg",
+          "delivered_price": 24.98,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -26.25,
-          "url": "https://www.google.com/search?tbm=shop&q=NVIDIA+GRID+K2+graphics+card"
+          "estimated_profit": -24.98,
+          "url": "https://www.scan.co.uk/products/120mm-corsair-icue-link-rx120-ii-rgb-black-7-blade-2100rpm-6472cfm-magnetic-dome-pwm-icue-link"
         },
         {
-          "id": 77780808,
+          "id": 82994411,
           "listing_id": "227554962106",
           "category": "ram",
           "title": "Crucial 8GB DDR4-3200 UDIMM desktop memory module CT8G4DFRA32A - Brand New",
@@ -338,7 +338,7 @@
           "url": "https://www.ebay.co.uk/itm/227554962106"
         },
         {
-          "id": 77816029,
+          "id": 83030899,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -352,7 +352,7 @@
           "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
         },
         {
-          "id": 77819566,
+          "id": 83034858,
           "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
           "category": "ssd",
           "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
@@ -366,7 +366,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
         },
         {
-          "id": 77820534,
+          "id": 83035826,
           "listing_id": "google-shopping:AMD%20Wraith%20Stealth%20Stock%20AM4%20CPU%20Cooler%20with%2096mm%20Fan%20OEM:6:eBay",
           "category": "cooler",
           "title": "AMD Wraith Stealth Stock AM4 CPU Cooler with 96mm Fan OEM",
@@ -380,7 +380,7 @@
           "url": "https://www.google.com/search?q=used+Computer+Components+AMD+Wraith+Stealth&udm=28&hl=en-GB&gl=GB#:~:text=AMD%20Wraith%20Stealth%20Stock%20AM4%20CPU%20Cooler%20with%2096mm%20Fan%20OEM"
         },
         {
-          "id": 77805905,
+          "id": 83020580,
           "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
           "category": "case",
           "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
@@ -396,9 +396,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 118.08,
+      "build_cost": 116.3,
       "market": {
-        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI NVIDIA GRID K2 graphics card 8gb",
+        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI RX120 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -415,13 +415,13 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -118.08,
+      "estimated_profit": -116.3,
       "rank": 3
     },
     {
       "components": [
         {
-          "id": 77815303,
+          "id": 83030167,
           "listing_id": "bargain_hardware:6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in",
           "category": "cpu",
           "title": "6-Pin PCIe Female to 6-Pin PCIe Male GPU Power Cable Extension 15in",
@@ -435,35 +435,35 @@
           "url": "https://www.bargainhardware.co.uk/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in"
         },
         {
-          "id": 77828048,
-          "listing_id": "google-shopping:Nvidia%20GeForce%20GTX%20770%202GB%20GDDR5%20PCI%20Express%203.0%20Graphics%20Card:22:CeX",
+          "id": 82990064,
+          "listing_id": "198104577873",
           "category": "motherboard",
-          "title": "Nvidia GeForce GTX 770 2GB GDDR5 PCI Express 3.0 Graphics Card",
-          "seller": "CeX",
-          "image_url": null,
-          "delivered_price": 22.0,
+          "title": "Intel LGA 1151 CPU  cooler - Alpenf\u00f6hn CPU Cooler Silver- Excellent condition",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/AoIAAeSw1mxpj7fZ/s-l225.jpg",
+          "delivered_price": 21.49,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -22.0,
-          "url": "https://www.google.com/search?q=used+Graphics+Cards+NVIDIA+GPU&udm=28&hl=en-GB&gl=GB#:~:text=Nvidia%20GeForce%20GTX%20770%202GB%20GDDR5%20PCI%20Express%203.0%20Graphics%20Card"
+          "estimated_profit": -21.49,
+          "url": "https://www.ebay.co.uk/itm/198104577873"
         },
         {
-          "id": 77828136,
-          "listing_id": "google-shopping:NVIDIA%20GRID%20K2%20graphics%20card:26.25:eBay%20-%20rp-resale",
+          "id": 82985812,
+          "listing_id": "167698982261",
           "category": "gpu",
-          "title": "NVIDIA GRID K2 graphics card",
-          "seller": "eBay - rp-resale",
-          "image_url": null,
-          "delivered_price": 26.25,
+          "title": "XFX Play Hard, AMD Radeon HD6970  GPU Graphics Video Game Card",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/CiYAAeSwEA5ok9Fw/s-l225.jpg",
+          "delivered_price": 24.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -26.25,
-          "url": "https://www.google.com/search?tbm=shop&q=NVIDIA+GRID+K2+graphics+card"
+          "estimated_profit": -24.99,
+          "url": "https://www.ebay.co.uk/itm/167698982261"
         },
         {
-          "id": 77780808,
+          "id": 82994411,
           "listing_id": "227554962106",
           "category": "ram",
           "title": "Crucial 8GB DDR4-3200 UDIMM desktop memory module CT8G4DFRA32A - Brand New",
@@ -477,7 +477,7 @@
           "url": "https://www.ebay.co.uk/itm/227554962106"
         },
         {
-          "id": 77816029,
+          "id": 83030899,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -491,7 +491,7 @@
           "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
         },
         {
-          "id": 77819566,
+          "id": 83034858,
           "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
           "category": "ssd",
           "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
@@ -505,7 +505,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
         },
         {
-          "id": 77820534,
+          "id": 83035826,
           "listing_id": "google-shopping:AMD%20Wraith%20Stealth%20Stock%20AM4%20CPU%20Cooler%20with%2096mm%20Fan%20OEM:6:eBay",
           "category": "cooler",
           "title": "AMD Wraith Stealth Stock AM4 CPU Cooler with 96mm Fan OEM",
@@ -519,7 +519,7 @@
           "url": "https://www.google.com/search?q=used+Computer+Components+AMD+Wraith+Stealth&udm=28&hl=en-GB&gl=GB#:~:text=AMD%20Wraith%20Stealth%20Stock%20AM4%20CPU%20Cooler%20with%2096mm%20Fan%20OEM"
         },
         {
-          "id": 77805905,
+          "id": 83020580,
           "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
           "category": "case",
           "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
@@ -535,9 +535,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 118.08,
+      "build_cost": 116.31,
       "market": {
-        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI NVIDIA GRID K2 graphics card 8gb",
+        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Radeon HD6970 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -554,13 +554,13 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -118.08,
+      "estimated_profit": -116.31,
       "rank": 4
     },
     {
       "components": [
         {
-          "id": 77815303,
+          "id": 83030167,
           "listing_id": "bargain_hardware:6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in",
           "category": "cpu",
           "title": "6-Pin PCIe Female to 6-Pin PCIe Male GPU Power Cable Extension 15in",
@@ -574,7 +574,7 @@
           "url": "https://www.bargainhardware.co.uk/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in"
         },
         {
-          "id": 77827613,
+          "id": 83043627,
           "listing_id": "google-shopping:Micron%202200%20M.2%20PCI%20Express%203.0%203D%20TLC%20NVMe:22:CeX",
           "category": "motherboard",
           "title": "Micron 2200 M.2 PCI Express 3.0 3D TLC NVMe",
@@ -588,35 +588,35 @@
           "url": "https://www.google.com/search?tbm=shop&q=Micron+2200+M.2+PCI+Express+3.0+3D+TLC+NVMe"
         },
         {
-          "id": 77772507,
-          "listing_id": "167698982261",
+          "id": 83034059,
+          "listing_id": "COO-CRS-08299",
           "category": "gpu",
-          "title": "XFX Play Hard, AMD Radeon HD6970  GPU Graphics Video Game Card",
+          "title": "CORSAIR iCUE LINK RX120 II RGB 120mm PWM Fan",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/CiYAAeSwEA5ok9Fw/s-l225.jpg",
-          "delivered_price": 24.99,
+          "image_url": "https://www.overclockers.co.uk/dw/image/v2/BLRM_PRD/on/demandware.static/-/Sites-master-catalog-ocuk/default/dw61e1f7d5/images/data/product/62/9aca82/90f7e71e990b26c57ca0e3ebd99f37fdde5d0152.jpg?sw=200",
+          "delivered_price": 24.95,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -24.99,
-          "url": "https://www.ebay.co.uk/itm/167698982261"
+          "estimated_profit": -24.95,
+          "url": "https://www.overclockers.co.uk/corsair-icue-link-rx120-ii-rgb-120mm-pwm-fan/COO-CRS-08299.html"
         },
         {
-          "id": 77794916,
-          "listing_id": "376937990275",
+          "id": 82994411,
+          "listing_id": "227554962106",
           "category": "ram",
-          "title": "Corsair Vengeance LPX DDR4-3200 8GB Memory Module (1x8GB)",
+          "title": "Crucial 8GB DDR4-3200 UDIMM desktop memory module CT8G4DFRA32A - Brand New",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/wFEAAeSwgTFphdOg/s-l225.jpg",
-          "delivered_price": 37.96,
+          "image_url": "https://i.ebayimg.com/images/g/XY4AAeSwoyJqxNW0/s-l225.jpg",
+          "delivered_price": 34.839999999999996,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -37.96,
-          "url": "https://www.ebay.co.uk/itm/376937990275?_skw=%E3%80%90DDR4+RAM%E3%80%91GIGASTONE+Game+PRO+32GB+Kit+%282x16GB%29+DDR4+3200MHz+PC4-25600+CL+16-18-18-40+Intel+XMP+2.0+AMD+Ryzen+1.35V+UDIMM+288&hash=item57c3414883:g:wFEAAeSwgTFphdOg"
+          "estimated_profit": -34.84,
+          "url": "https://www.ebay.co.uk/itm/227554962106"
         },
         {
-          "id": 77816029,
+          "id": 83030899,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -630,7 +630,7 @@
           "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
         },
         {
-          "id": 77819566,
+          "id": 83034858,
           "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
           "category": "ssd",
           "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
@@ -644,7 +644,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
         },
         {
-          "id": 77820534,
+          "id": 83035826,
           "listing_id": "google-shopping:AMD%20Wraith%20Stealth%20Stock%20AM4%20CPU%20Cooler%20with%2096mm%20Fan%20OEM:6:eBay",
           "category": "cooler",
           "title": "AMD Wraith Stealth Stock AM4 CPU Cooler with 96mm Fan OEM",
@@ -658,7 +658,7 @@
           "url": "https://www.google.com/search?q=used+Computer+Components+AMD+Wraith+Stealth&udm=28&hl=en-GB&gl=GB#:~:text=AMD%20Wraith%20Stealth%20Stock%20AM4%20CPU%20Cooler%20with%2096mm%20Fan%20OEM"
         },
         {
-          "id": 77805905,
+          "id": 83020580,
           "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
           "category": "case",
           "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
@@ -674,9 +674,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 119.94,
+      "build_cost": 116.78,
       "market": {
-        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Radeon HD6970 8gb",
+        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI RX120 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -693,13 +693,13 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -119.94,
+      "estimated_profit": -116.78,
       "rank": 5
     },
     {
       "components": [
         {
-          "id": 77815303,
+          "id": 83030167,
           "listing_id": "bargain_hardware:6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in",
           "category": "cpu",
           "title": "6-Pin PCIe Female to 6-Pin PCIe Male GPU Power Cable Extension 15in",
@@ -713,10 +713,10 @@
           "url": "https://www.bargainhardware.co.uk/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in"
         },
         {
-          "id": 77828048,
-          "listing_id": "google-shopping:Nvidia%20GeForce%20GTX%20770%202GB%20GDDR5%20PCI%20Express%203.0%20Graphics%20Card:22:CeX",
+          "id": 83043627,
+          "listing_id": "google-shopping:Micron%202200%20M.2%20PCI%20Express%203.0%203D%20TLC%20NVMe:22:CeX",
           "category": "motherboard",
-          "title": "Nvidia GeForce GTX 770 2GB GDDR5 PCI Express 3.0 Graphics Card",
+          "title": "Micron 2200 M.2 PCI Express 3.0 3D TLC NVMe",
           "seller": "CeX",
           "image_url": null,
           "delivered_price": 22.0,
@@ -724,38 +724,38 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -22.0,
-          "url": "https://www.google.com/search?q=used+Graphics+Cards+NVIDIA+GPU&udm=28&hl=en-GB&gl=GB#:~:text=Nvidia%20GeForce%20GTX%20770%202GB%20GDDR5%20PCI%20Express%203.0%20Graphics%20Card"
+          "url": "https://www.google.com/search?tbm=shop&q=Micron+2200+M.2+PCI+Express+3.0+3D+TLC+NVMe"
         },
         {
-          "id": 77772507,
-          "listing_id": "167698982261",
+          "id": 83034060,
+          "listing_id": "COO-CRS-08300",
           "category": "gpu",
-          "title": "XFX Play Hard, AMD Radeon HD6970  GPU Graphics Video Game Card",
+          "title": "CORSAIR iCUE LINK RX120 II RGB White 120mm PWM Fan",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/CiYAAeSwEA5ok9Fw/s-l225.jpg",
-          "delivered_price": 24.99,
+          "image_url": "https://www.overclockers.co.uk/dw/image/v2/BLRM_PRD/on/demandware.static/-/Sites-master-catalog-ocuk/default/dwc86f5284/images/data/product/85/d2ab5a/0527baac0e28e6cc99d2fcf27557c96981186379.jpg?sw=200",
+          "delivered_price": 24.95,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -24.99,
-          "url": "https://www.ebay.co.uk/itm/167698982261"
+          "estimated_profit": -24.95,
+          "url": "https://www.overclockers.co.uk/corsair-icue-link-rx120-ii-rgb-white-120mm-pwm-fan/COO-CRS-08300.html"
         },
         {
-          "id": 77794916,
-          "listing_id": "376937990275",
+          "id": 82994411,
+          "listing_id": "227554962106",
           "category": "ram",
-          "title": "Corsair Vengeance LPX DDR4-3200 8GB Memory Module (1x8GB)",
+          "title": "Crucial 8GB DDR4-3200 UDIMM desktop memory module CT8G4DFRA32A - Brand New",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/wFEAAeSwgTFphdOg/s-l225.jpg",
-          "delivered_price": 37.96,
+          "image_url": "https://i.ebayimg.com/images/g/XY4AAeSwoyJqxNW0/s-l225.jpg",
+          "delivered_price": 34.839999999999996,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -37.96,
-          "url": "https://www.ebay.co.uk/itm/376937990275?_skw=%E3%80%90DDR4+RAM%E3%80%91GIGASTONE+Game+PRO+32GB+Kit+%282x16GB%29+DDR4+3200MHz+PC4-25600+CL+16-18-18-40+Intel+XMP+2.0+AMD+Ryzen+1.35V+UDIMM+288&hash=item57c3414883:g:wFEAAeSwgTFphdOg"
+          "estimated_profit": -34.84,
+          "url": "https://www.ebay.co.uk/itm/227554962106"
         },
         {
-          "id": 77816029,
+          "id": 83030899,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -769,7 +769,7 @@
           "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
         },
         {
-          "id": 77819566,
+          "id": 83034858,
           "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
           "category": "ssd",
           "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
@@ -783,7 +783,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
         },
         {
-          "id": 77820534,
+          "id": 83035826,
           "listing_id": "google-shopping:AMD%20Wraith%20Stealth%20Stock%20AM4%20CPU%20Cooler%20with%2096mm%20Fan%20OEM:6:eBay",
           "category": "cooler",
           "title": "AMD Wraith Stealth Stock AM4 CPU Cooler with 96mm Fan OEM",
@@ -797,7 +797,7 @@
           "url": "https://www.google.com/search?q=used+Computer+Components+AMD+Wraith+Stealth&udm=28&hl=en-GB&gl=GB#:~:text=AMD%20Wraith%20Stealth%20Stock%20AM4%20CPU%20Cooler%20with%2096mm%20Fan%20OEM"
         },
         {
-          "id": 77805905,
+          "id": 83020580,
           "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
           "category": "case",
           "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
@@ -813,9 +813,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 119.94,
+      "build_cost": 116.78,
       "market": {
-        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Radeon HD6970 8gb",
+        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI RX120 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -832,10 +832,10 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -119.94,
+      "estimated_profit": -116.78,
       "rank": 6
     }
   ],
   "candidates_evaluated": 10,
-  "total_compatible_combinations": 3150
+  "total_compatible_combinations": 3330
 }
