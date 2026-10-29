@@ -2217,8 +2217,9 @@ async def _fetch_best_gem_for_category(
     require_modern: bool = False,
     actionable_ids: set[str] | None = None,
 ) -> dict | None:
-    """Best gem for a specific component category, sorted by deal_score.
-    If no qualifying GEM/SUPER_GEM exists, falls back to the highest-scoring listing."""
+    """Best image-backed gem for a component category, sorted by deal_score.
+    If no qualifying GEM/SUPER_GEM exists, falls back to the highest-scoring
+    image-backed listing so the dashboard spotlight remains photo-led."""
     from sqlalchemy import select
 
     if actionable_ids is None:
@@ -2232,6 +2233,8 @@ async def _fetch_best_gem_for_category(
             GemRadarScoredListing.listing_id == any_(active_ids_param),
             GemRadarScoredListing.listing_observed_at >= since,
             GemRadarScoredListing.category == category,
+            GemRadarScoredListing.image_url.is_not(None),
+            GemRadarScoredListing.image_url != "",
             GemRadarScoredListing.classification.in_(("GEM", "SUPER_GEM")),
         )
         .order_by(GemRadarScoredListing.deal_score.desc())
@@ -2306,6 +2309,8 @@ async def _fetch_best_gem_for_category(
                 GemRadarScoredListing.listing_id == any_(active_ids_param),
                 GemRadarScoredListing.listing_observed_at >= since,
                 GemRadarScoredListing.category == category,
+                GemRadarScoredListing.image_url.is_not(None),
+                GemRadarScoredListing.image_url != "",
             )
             .order_by(GemRadarScoredListing.deal_score.desc())
             .limit(1)
@@ -2344,13 +2349,16 @@ async def get_gem_by_component(
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
 ) -> dict:
-    """Best active fixed-price gem in each major component category."""
+    """Best active fixed-price gem in each PC build component category."""
     from datetime import datetime, timedelta, timezone
 
     # Lifecycle state determines whether a listing is active. A failed sweep
     # must not erase every spotlight simply because its score is >24h old.
     active_cutoff = datetime.min
-    categories = ["cpu", "gpu", "motherboard", "ssd", "psu"]
+    # Keep this list aligned with the sourcing dashboard's ordered spotlight
+    # cards. The database uses "ssd" for storage, "ram" for memory, and
+    # "cooler" / "case" for those component types.
+    categories = ["motherboard", "cpu", "cooler", "ram", "gpu", "ssd", "psu", "case"]
 
     actionable_ids = await get_active_buy_it_now_listing_ids(db)
     gems = {}
