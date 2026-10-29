@@ -58,6 +58,8 @@ services:
     env_file:
       - path: ../.env.local
         required: true
+      - path: ../runtime/admin-auth.env
+        required: true
       # Developer-local API overrides are gitignored and are not present in
       # the production checkout. Production secrets live in ../.env.local.
       - path: ../flipflop-api/.env
@@ -203,6 +205,9 @@ services:
         NEXT_PUBLIC_API_URL: /api
     container_name: flipflop-production-admin
     restart: unless-stopped
+    env_file:
+      - path: ../runtime/admin-auth.env
+        required: true
     depends_on:
       api:
         condition: service_healthy

@@ -245,6 +245,9 @@ class Settings(BaseSettings):
 
     # Auth
     secret_key: str = "dev-secret-key-change-in-production"  # MUST be set via environment in production
+    # Admin JWTs use a dedicated key so enabling admin sessions does not reuse
+    # the customer/portal signing key or its licence-encryption dependency.
+    admin_jwt_secret: str = ""
     jwt_algorithm: str = "HS256"
     jwt_expiration_hours: int = 168  # 1 week
 
