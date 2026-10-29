@@ -55,15 +55,16 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+    # Docker Compose applies explicit environment values first, then env files
+    # in listed order. Keep the validated, dedicated admin key last so local
+    # API overrides cannot replace it.
     env_file:
       - path: ../.env.local
         required: true
-      - path: ../runtime/admin-auth.env
-        required: true
-      # Developer-local API overrides are gitignored and are not present in
-      # the production checkout. Production secrets live in ../.env.local.
       - path: ../flipflop-api/.env
         required: false
+      - path: ../runtime/admin-auth.env
+        required: true
     environment:
       APP_ENV: production
       FLIPFLOP_RUNTIME_ENV: live
