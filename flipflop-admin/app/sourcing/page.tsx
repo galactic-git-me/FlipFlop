@@ -1394,17 +1394,20 @@ function GemSpotlightCard({
 }
 
 function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | null> }) {
-  const componentLabels: Record<string, { label: string; emoji: string }> = {
-    cpu: { label: "Gem CPU", emoji: "⚡" },
-    gpu: { label: "Gem GPU", emoji: "🎮" },
-    motherboard: { label: "Gem Motherboard", emoji: "🔧" },
-    ssd: { label: "Gem SSD", emoji: "💿" },
-    psu: { label: "Gem PSU", emoji: "🔌" },
+  const componentLabels: Record<string, { label: string; emoji: string; accent: keyof typeof GEM_SPOTLIGHT_ACCENTS }> = {
+    motherboard: { label: "Gem Motherboard", emoji: "🔧", accent: "emerald" },
+    cpu: { label: "Gem CPU", emoji: "⚡", accent: "cyan" },
+    cooler: { label: "Gem CPU Cooler", emoji: "❄️", accent: "blue" },
+    ram: { label: "Gem Memory", emoji: "🧠", accent: "purple" },
+    gpu: { label: "Gem GPU", emoji: "🎮", accent: "purple" },
+    ssd: { label: "Gem Storage", emoji: "💾", accent: "blue" },
+    psu: { label: "Gem PSU", emoji: "🔌", accent: "amber" },
+    case: { label: "Gem PC Case", emoji: "🖥️", accent: "orange" },
   };
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6 mt-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3 mb-6 mt-6">
         {Object.keys(componentLabels).map((category) => {
           const gem = componentGems?.[category];
           return gem ? (
@@ -1412,10 +1415,10 @@ function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | 
               key={category}
               gem={gem}
               label={componentLabels[category].label}
-              accent={category === "cpu" ? "cyan" : category === "gpu" ? "purple" : category === "motherboard" ? "emerald" : category === "ssd" ? "blue" : "orange"}
+              accent={componentLabels[category].accent}
             />
           ) : (
-            <div key={category} className="min-h-48 rounded-2xl border border-white/10 bg-white/[0.03] p-5 flex flex-col justify-between">
+            <div key={category} className="aspect-square min-w-0 rounded-2xl border border-white/10 bg-white/[0.03] p-3 flex flex-col justify-between">
               <span className="text-[10px] uppercase tracking-wide font-semibold text-slate-400">{componentLabels[category].label}</span>
               <p className="text-sm text-slate-500">No qualifying gem in the current snapshot</p>
             </div>
