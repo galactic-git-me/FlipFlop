@@ -55,7 +55,7 @@ async def test_web_only_mode_rejects_scans_instead_of_silently_queueing():
     from fastapi import HTTPException
     from app.api.gem_radar import submit_scan_queued
     enqueue = AsyncMock()
-    with patch("app.config.get_settings", return_value=Mock(web_only=True)), \
+    with patch("app.config.get_settings", return_value=Mock(web_only=True, external_gem_radar_worker_enabled=False)), \
          patch("app.api.gem_radar.SubmissionQueueService.enqueue_submission", enqueue):
         with pytest.raises(HTTPException) as error:
             await submit_scan_queued(Mock(), AsyncMock(), None)
