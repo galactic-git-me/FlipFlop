@@ -17,6 +17,17 @@ settings = get_settings()
 ADMIN_TOKEN_AUDIENCE = "flipflop-admin"
 
 
+def _admin_jwt_secret() -> str:
+    configured = settings.admin_jwt_secret.strip()
+    if configured:
+        if len(configured) < 32:
+            raise RuntimeError("ADMIN_JWT_SECRET must contain at least 32 characters")
+        return configured
+    if settings.app_env.casefold() in {"dev", "development", "test"}:
+        return settings.secret_key
+    raise RuntimeError("ADMIN_JWT_SECRET must be configured for admin authentication")
+
+
 def create_admin_access_token(admin_id: int) -> str:
     now = datetime.now(timezone.utc)
     expires_at = now + timedelta(hours=12)  # shorter-lived than customer tokens
@@ -28,7 +39,7 @@ def create_admin_access_token(admin_id: int) -> str:
         "exp": expires_at,
     }
 
-    token = jwt.encode(payload, settings.secret_key, algorithm=settings.jwt_algorithm)
+    token = jwt.encode(payload, _admin_jwt_secret(), algorithm=settings.jwt_algorithm)
     log.debug("admin_auth.token_created", admin_id=admin_id, expires_at=expires_at.isoformat())
     return token
 
@@ -37,7 +48,7 @@ def verify_admin_token(token: str) -> int | None:
     try:
         payload = jwt.decode(
             token,
-            settings.secret_key,
+            _admin_jwt_secret(),
             algorithms=[settings.jwt_algorithm],
             audience=ADMIN_TOKEN_AUDIENCE,
         )
@@ -45,6 +56,11 @@ def verify_admin_token(token: str) -> int | None:
         if admin_id_str is None:
             return None
         return int(admin_id_str)
+    except RuntimeError:
+        # A missing production key is a server configuration error. Preserve
+        # that distinction so requests fail loudly instead of looking like a
+        # bad user token; login token creation uses the same fail-closed path.
+        raise
     except JWTError as e:
         log.warning("admin_auth.token_verify_failed", error=str(e))
         return None
@@ -103,3 +119,4 @@ __all__ = [
     "admin_login",
     "get_admin_by_token",
 ]
+# Admin sessions use a dedicated signing key.

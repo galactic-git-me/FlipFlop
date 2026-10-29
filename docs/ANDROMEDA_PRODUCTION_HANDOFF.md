@@ -7,6 +7,27 @@ authentication.
 
 ## One-time server preparation
 
+Create the dedicated admin JWT secret file on Andromeda before deploying. It
+is shared only with the API and admin containers; do not commit it or copy it
+to a developer workstation:
+
+```bash
+mkdir -p runtime
+python3 - <<'PY'
+import os
+from pathlib import Path
+import secrets
+path = Path("runtime/admin-auth.env")
+fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+with os.fdopen(fd, "w") as secret_file:
+    secret_file.write(f"ADMIN_JWT_SECRET={secrets.token_urlsafe(48)}\n")
+PY
+```
+
+Keep this file stable across deploys. Admin JWTs expire after 12 hours; existing
+admin sessions must sign in again after changing this key. Customer and guest
+portal token signing and licence-key encryption use the separate `SECRET_KEY`.
+
 The production checkout must contain the storefront repository at either:
 
 ```text

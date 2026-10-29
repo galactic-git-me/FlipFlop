@@ -53,6 +53,8 @@ flipflop-api/data/term_cycle_state.json
 
 # env files
 .env*
+# Production-only runtime secrets live outside the repository history.
+/runtime/admin-auth.env
 
 # vercel
 .vercel
