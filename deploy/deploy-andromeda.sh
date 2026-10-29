@@ -3,6 +3,7 @@ set -Eeuo pipefail
 
 REPO_DIR="${FLIPFLOP_REPO_DIR:-/home/mac/CODING/FlipFlop-production}"
 COMPOSE_FILE="$REPO_DIR/deploy/andromeda-api.compose.yml"
+ADMIN_AUTH_ENV="$REPO_DIR/runtime/admin-auth.env"
 # Production is deliberately pinned to the promotion branch. A deployment
 # may never follow the development branch implicitly.
 BRANCH="${FLIPFLOP_DEPLOY_BRANCH:-main}"
@@ -17,6 +18,11 @@ exec 9>"$LOCK_FILE"
 flock -n 9 || { log "Another production deployment is running."; exit 1; }
 
 cd "$REPO_DIR"
+
+if [[ ! -s "$ADMIN_AUTH_ENV" ]] || ! grep -Eq '^ADMIN_JWT_SECRET=.{32,}$' "$ADMIN_AUTH_ENV"; then
+  log "Missing runtime/admin-auth.env with a stable ADMIN_JWT_SECRET of at least 32 characters."
+  exit 1
+fi
 
 if [[ -n "$(git status --porcelain)" ]]; then
   log "Refusing to deploy over uncommitted changes in $REPO_DIR."
