@@ -23,7 +23,7 @@ deploy_if_needed() {
   target_sha="$(git -C "$repo" rev-parse "origin/$branch")"
   if [[ "$current_sha" != "$target_sha" ]]; then
     echo "Deploying $repo from ${current_sha:0:9} to ${target_sha:0:9} before startup."
-    "$deploy_script" "$target_sha"
+    bash "$deploy_script" "$target_sha"
   fi
   [[ "$(git -C "$repo" rev-parse HEAD)" == "$target_sha" ]] || {
     echo "Deployment did not reach origin/$branch: $repo"; exit 1;
