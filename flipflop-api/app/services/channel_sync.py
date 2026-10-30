@@ -8,7 +8,7 @@ from app.models.browser_listing_job import BrowserListingJob
 from app.models.channel_listing import ChannelListing
 from app.models.listing_publish_event import ListingPublishEvent
 from app.models.manual_build import ManualBuild
-from app.models.product import Product, ProductStatus, WithdrawalReason
+from app.models.product import Product, ProductStatus, WithdrawalReason, SoldChannel
 
 ALIASES = {"ebay": "ebay_uk", "storefront": "flipflop_shop", "facebook": "facebook_catalog", "facebook_marketplace": "facebook_catalog"}
 PENDING = ("queued", "running", "blocked", "needs_review")
@@ -79,6 +79,8 @@ async def withdraw_other_channels(db, build, source_channel=None):
         if product and product.status not in {ProductStatus.SOLD, ProductStatus.WITHDRAWN}:
             product.status, product.withdrawn_at = ProductStatus.WITHDRAWN, now
             product.withdrawal_reason = WithdrawalReason.SOLD_OTHER_CHANNEL
+            if source_channel == "ebay_uk":
+                product.sold_via_channel = SoldChannel.EBAY
     for row in rows:
         row.recreate_enabled, row.next_recreate_at = False, None
         channel = ALIASES.get(row.channel, row.channel)

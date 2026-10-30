@@ -159,6 +159,17 @@ async def execute_api_job(db, job, row, build):
 async def run_channel_sync_job():
     planned = succeeded = failed = 0
     async with AsyncSessionLocal() as db:
+        # A process may die after a vendor accepted a request. Reads and
+        # withdrawals can reconcile safely; writes require operator review.
+        expired = (await db.execute(select(BrowserListingJob).where(
+            BrowserListingJob.status == "running", BrowserListingJob.lease_until < datetime.utcnow(),
+            BrowserListingJob.payload["channel"].as_string().not_in(BROWSER_CHANNELS)).with_for_update(skip_locked=True))).scalars().all()
+        for job in expired:
+            job.status = "queued" if job.operation in {"inspect", "sale_check", "withdraw"} else "needs_review"
+            job.message = "Interrupted vendor operation; reconcile before retrying."
+            job.lease_token, job.lease_until = None, None
+            job.available_at = datetime.utcnow()
+        await db.flush()
         planned = await plan_sync(db)
         await db.commit()
         queued = (await db.execute(select(BrowserListingJob.id, BrowserListingJob.payload).where(

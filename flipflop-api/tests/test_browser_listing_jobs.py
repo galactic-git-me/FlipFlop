@@ -181,3 +181,32 @@ async def test_api_identity_updates_one_channel_and_retains_other_vendor_links(d
     links = {row.channel: row.listing_url for row in rows}
     assert links["ebay_uk"] == "https://www.ebay.co.uk/itm/456"
     assert links["flipflop_shop"] == "https://www.theflipflop.shop/ready-to-ship/5"
+
+@pytest.mark.asyncio
+async def test_sale_fanout_cancels_update_and_queues_withdrawal(db):
+    from app.services.channel_sync import enqueue_operation, withdraw_other_channels
+    build = await make_build(db)
+    build.relist_enabled = True
+    source = ChannelListing(manual_build_id=build.id, channel="vinted", status="published", external_listing_id="123")
+    other = ChannelListing(manual_build_id=build.id, channel="ebay_uk", status="published", external_listing_id="456")
+    db.add_all([source, other]); await db.flush()
+    update = await enqueue_operation(db, build, other, "update")
+    build.status = "sold"
+    await withdraw_other_channels(db, build, "vinted")
+    jobs = (await db.execute(select(BrowserListingJob).where(BrowserListingJob.channel_listing_id == other.id))).scalars().all()
+    assert source.status == "sold" and other.status == "withdrawal_pending"
+    assert not build.relist_enabled and update.status == "cancelled"
+    assert any(job.operation == "withdraw" and job.status == "queued" for job in jobs)
+
+
+@pytest.mark.asyncio
+async def test_legacy_id_is_reconciled_before_updates(db):
+    from app.workers.channel_sync import plan_sync
+    build = await make_build(db)
+    build.ebay_listing_id = "123456"
+    await db.flush()
+    await plan_sync(db)
+    row = (await db.execute(select(ChannelListing).where(ChannelListing.manual_build_id == build.id))).scalar_one()
+    jobs = (await db.execute(select(BrowserListingJob).where(BrowserListingJob.channel_listing_id == row.id))).scalars().all()
+    assert row.status == "submitted"
+    assert {job.operation for job in jobs} == {"inspect"}
