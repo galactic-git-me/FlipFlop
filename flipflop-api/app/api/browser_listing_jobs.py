@@ -120,7 +120,7 @@ async def claim(db: AsyncSession = Depends(get_db)):
     from app.services.browser_listing_jobs import BROWSER_CHANNELS
     job = (await db.execute(select(BrowserListingJob).where(BrowserListingJob.status == "queued",
         BrowserListingJob.available_at <= now, BrowserListingJob.payload["channel"].as_string().in_(BROWSER_CHANNELS))
-        .order_by(case((BrowserListingJob.operation == "withdraw", 0), (BrowserListingJob.operation == "sale_check", 1), else_=2), BrowserListingJob.id)
+        .order_by(case((BrowserListingJob.operation == "withdraw", 0), (BrowserListingJob.operation == "sale_check", 1), (BrowserListingJob.operation == "inspect", 3), else_=2), BrowserListingJob.id)
         .with_for_update(skip_locked=True).limit(1))).scalar_one_or_none()
     if not job:
         await db.commit()
@@ -128,6 +128,9 @@ async def claim(db: AsyncSession = Depends(get_db)):
     row = await db.get(ChannelListing, job.channel_listing_id)
     build = await db.get(ManualBuild, row.manual_build_id)
     try:
+        from app.services.channel_sync import build_is_unavailable
+        if job.operation not in {"inspect", "sale_check", "withdraw"} and await build_is_unavailable(db, build):
+            raise ValueError("Build is sold or archived; no listing write is permitted")
         # Refresh saved copy/price but retain the reviewed image selection.
         job.payload = seller_pack(build, row, job.payload["listing"]["images"], operation=job.operation)
     except ValueError as exc:
@@ -154,6 +157,9 @@ async def preflight(job_id: int, body: LeaseIn, db: AsyncSession = Depends(get_d
     row = await db.get(ChannelListing, job.channel_listing_id)
     build = await db.get(ManualBuild, row.manual_build_id)
     try:
+        from app.services.channel_sync import build_is_unavailable
+        if job.operation not in {"inspect", "sale_check", "withdraw"} and await build_is_unavailable(db, build):
+            raise ValueError("Build is sold or archived; no listing write is permitted")
         current = seller_pack(build, row, job.payload["listing"]["images"], operation=job.operation)
     except ValueError as exc:
         raise HTTPException(409, str(exc)) from exc

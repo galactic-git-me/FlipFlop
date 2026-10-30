@@ -90,7 +90,7 @@ async def execute_api_job(db, job, row, build):
             from app.services.ebay_listing_reconciliation import reconcile_manual_build_listing
             state = await reconcile_manual_build_listing(build, db, force=True)
             row.status = {"active": "published", "sold": "sold", "ended": "ended", "missing": "ended"}.get(state, row.status)
-            if state == "unknown":
+            if state not in {"active", "sold", "ended", "missing"}:
                 raise ValueError("eBay state is unverified; sale and availability were not inferred")
             if state == "sold":
                 await withdraw_other_channels(db, build, channel)
@@ -142,6 +142,10 @@ async def execute_api_job(db, job, row, build):
             result = await publish_amazon(build.id, AmazonPublishIn(title=build.generated_title or build.name,
                 description=build.generated_description or "", bullet_points=[], price=build.ebay_price or 0, quantity=1,
                 condition=build.ebay_condition or "used_like_new", images=[p["url"] for p in build.photos or [] if isinstance(p, dict) and p.get("url") and p.get("kind", "photo") == "photo"]), db)
+            if result.get("status") == "submitted":
+                job.status, job.message, job.lease_token, job.lease_until = "succeeded", "Amazon accepted the canonical update; live availability remains pending verification.", None, None
+                row.last_checked_at = now
+                return
             if result.get("status") != "published":
                 raise ValueError("Amazon canonical update is not yet confirmed live")
         row.last_payload_hash, row.last_checked_at = canonical_hash(build), now
