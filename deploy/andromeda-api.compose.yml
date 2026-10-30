@@ -55,6 +55,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+      ollama-tunnel:
+        condition: service_started
     env_file:
       - path: ../.env.local
         required: true
@@ -67,9 +69,9 @@ services:
     environment:
       APP_ENV: production
       FLIPFLOP_RUNTIME_ENV: live
-      WEB_ONLY: "true"
-      # The dedicated gemradar-worker consumes this API's durable scan queue.
-      # Allow queue intake without starting the API's own scheduler/workers.
+      # This API owns production background jobs, including manual-build relists.
+      WEB_ONLY: "false"
+      # Keep Gem Radar scan intake enabled while the standalone endpoint remains web-only.
       EXTERNAL_GEM_RADAR_WORKER_ENABLED: "true"
       DATABASE_URL: postgresql+asyncpg://flipper:flipper@postgres:5432/pcflipper
       SYNC_DATABASE_URL: postgresql://flipper:flipper@postgres:5432/pcflipper
@@ -77,10 +79,14 @@ services:
       # The SSH reverse tunnel exposes Prometheus' Ollama on Andromeda's host
       # port 11434. Containers must use the host gateway rather than their own
       # localhost namespace.
-      # The web tier does not run CPK/scoring; Ollama is connected only to the
-      # GemRadar worker through the tunnel sidecar below.
-      OLLAMA_BASE_URL: ""
-      OLLAMA_MODEL: disabled-on-web-tier
+      OLLAMA_BASE_URL: http://ollama-tunnel:11434
+      OLLAMA_MODEL: qwen2.5:7b-instruct
+      LLM_PRIMARY_PROVIDER: ollama
+      LLM_PRIMARY_MODEL: qwen2.5:7b-instruct
+      LLM_SECONDARY_PROVIDER: openrouter-free
+      LLM_SECONDARY_MODEL: google/gemma-4-31b-it:free
+      LLM_TERTIARY_PROVIDER: openrouter
+      LLM_TERTIARY_MODEL: auto:cheapest
       FRONTEND_URL: https://www.theflipflop.shop
       # Live listings must never silently fall back to the eBay sandbox when
       # the host env file omits this optional setting.
@@ -110,9 +116,9 @@ services:
       retries: 12
       start_period: 30s
 
-  # Keep queue processing separate from the web tier. The API intentionally
-  # runs WEB_ONLY=true, so this service is the process that claims and drains
-  # extension submissions from submission_queue.
+  # Keep the standalone Gem Radar API endpoint available, but web-only. The
+  # main API owns scheduled jobs and queue processing so background work runs
+  # once rather than being duplicated across both containers.
   gemradar-worker:
     build:
       context: ../flipflop-api
@@ -135,7 +141,8 @@ services:
     environment:
       APP_ENV: production
       FLIPFLOP_RUNTIME_ENV: live
-      WEB_ONLY: "false"
+      WEB_ONLY: "true"
+      EXTERNAL_GEM_RADAR_WORKER_ENABLED: "true"
       DATABASE_URL: postgresql+asyncpg://flipper:flipper@postgres:5432/pcflipper
       SYNC_DATABASE_URL: postgresql://flipper:flipper@postgres:5432/pcflipper
       REDIS_URL: redis://redis:6379/0
