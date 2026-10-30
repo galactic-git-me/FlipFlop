@@ -84,6 +84,7 @@ jobs:
         run: >-
           python scripts/run_isolated_tests.py -- -q
           tests/test_ebay_oauth.py
+          tests/test_browser_listing_jobs.py
           tests/test_component_price_alert_matching.py
 
   deploy:

@@ -139,7 +139,10 @@ async def reconcile_manual_build_listing(
     build.ebay_listing_status = state
     build.ebay_listing_status_checked_at = checked_at
     if state == "active":
-        build.status = "listed"
+        # An active eBay offer may be awaiting withdrawal after another
+        # channel sold the unique build. Never make that build sellable again.
+        if build.status != "sold" and not build.is_archived:
+            build.status = "listed"
         build.ebay_listing_end_reason = None
     elif state == "sold":
         build.status = "sold"

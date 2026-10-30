@@ -62,6 +62,8 @@ services:
         required: true
       - path: ../runtime/admin-auth.env
         required: true
+      - path: ../runtime/browser-worker.env
+        required: false
       # Developer-local API overrides are gitignored and are not present in
       # the production checkout. Production secrets live in ../.env.local.
       - path: ../flipflop-api/.env

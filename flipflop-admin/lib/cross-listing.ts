@@ -6,7 +6,8 @@ export type CrossListingChannel =
   | "onbuy"
   | "amazon"
   | "facebook_catalog"
-  | "vinted";
+  | "vinted"
+  | "google_shopping";
 
 export type CrossListingStatus =
   | "draft"
@@ -269,7 +270,7 @@ export function capabilities(
       canPublish: false,
       canUpdate: false,
       canEnd: false,
-      note: "Seller API/feed onboarding is not configured in this app. Manual listing pack only.",
+      note: "Codex publishes through Chrome using local credentials and the saved seller pack, then saves the confirmed vendor URL.",
       officialReference: "https://www.onbuy.com/gb/sell/",
     },
     {
@@ -290,14 +291,14 @@ export function capabilities(
     },
     {
       channel: "facebook_catalog",
-      label: "Facebook catalog",
+      label: "Facebook Marketplace",
       maxImages: 10,
       mode: "manual",
       connected: false,
       canPublish: false,
       canUpdate: false,
       canEnd: false,
-      note: "Catalog/feed route must be configured; personal Marketplace automation is not supported.",
+      note: "Codex completes the seller workflow in Chrome using the seller pack. Account, category and delivery eligibility are checked before publication.",
       officialReference: "https://www.facebook.com/business/help/",
     },
     {
@@ -309,8 +310,14 @@ export function capabilities(
       canPublish: false,
       canUpdate: false,
       canEnd: false,
-      note: "No approved seller integration is configured. Manual-assist export only; no consumer-account automation.",
+      note: "Codex completes the seller workflow in Chrome. Seller and product eligibility must permit the listing; restrictions are reported as blocked jobs.",
       officialReference: "https://www.vinted.co.uk/help",
+    },
+    {
+      channel: "google_shopping", label: "Google Shopping", maxImages: 10,
+      mode: "manual", connected: false, canPublish: false, canUpdate: false, canEnd: false,
+      note: "Codex uses Merchant Center in Chrome. A verified merchant account and approved products are required; submissions are not marked live while awaiting approval.",
+      officialReference: "https://merchants.google.com/",
     },
   ];
 }

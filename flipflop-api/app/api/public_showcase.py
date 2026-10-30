@@ -545,6 +545,8 @@ async def confirm_checkout(
         manual_build.customer_id = customer.id
         manual_build.customer_email = customer.email
         manual_build.sale_price_actual = payment_data["amount"]
+        from app.services.channel_sync import withdraw_other_channels
+        await withdraw_other_channels(db, manual_build, "flipflop_shop")
 
     # Deliberately NOT setting manual_build.status = "sold" here — that must
     # stay unset until after withdraw_ebay_for_sold_build runs below, because

@@ -14,7 +14,7 @@ from app.services.amazon_sp_api import AmazonSPAPI, AmazonSPAPIError
 from app.models.manual_build import ManualBuild
 
 router = APIRouter(prefix="/cross-listing", tags=["cross-listing"], dependencies=[Depends(require_operator)])
-INDIRECT_CHANNELS = {"onbuy", "amazon", "facebook_catalog", "vinted"}
+INDIRECT_CHANNELS = {"onbuy", "amazon", "facebook_catalog", "vinted", "google_shopping"}
 
 
 class ChannelImagesIn(BaseModel):
@@ -206,10 +206,12 @@ async def publish_amazon(build_id: int, body: AmazonPublishIn, db: AsyncSession 
                 pass
         issues = result.get("issues") or []
         accepted = str(result.get("status", "")).upper() in {"ACCEPTED", "VALID"} and not issues
-        channel_listing.status = "published" if accepted else "failed"
+        live = accepted and any("BUYABLE" in (item.get("status") or [])
+            for item in (result.get("listing_item") or {}).get("summaries", []) if isinstance(item, dict))
+        channel_listing.status = "published" if live else "submitted" if accepted else "failed"
         channel_listing.external_listing_id = sku
-        channel_listing.published_at = datetime.utcnow() if accepted else None
-        if accepted:
+        channel_listing.published_at = datetime.utcnow() if live else None
+        if live:
             settings = await _app_settings(db)
             channel_listing.recreate_enabled = settings.relist_enabled_default
             channel_listing.recreate_interval_days = settings.relist_interval_days or 7
@@ -219,11 +221,13 @@ async def publish_amazon(build_id: int, body: AmazonPublishIn, db: AsyncSession 
                 if channel_listing.recreate_enabled
                 else None
             )
-        message = "Amazon accepted the listing submission." if accepted else "Amazon returned listing requirements or validation issues."
-        db.add(ListingPublishEvent(channel_listing_id=channel_listing.id, event_type="published" if accepted else "publish_failed", message=message, event_metadata={"sku": sku, "response": result}))
+        message = "Amazon confirmed the listing is buyable." if live else "Amazon accepted the submission; live availability is not yet confirmed." if accepted else "Amazon returned listing requirements or validation issues."
+        db.add(ListingPublishEvent(channel_listing_id=channel_listing.id, event_type="published" if live else "submitted" if accepted else "publish_failed", message=message, event_metadata={"sku": sku, "response": result}))
         await db.commit()
         asin = _amazon_asin(result)
-        listing_url = f"https://www.amazon.co.uk/dp/{asin}" if accepted and asin else None
+        listing_url = f"https://www.amazon.co.uk/dp/{asin}" if live and asin else None
+        channel_listing.listing_url = listing_url
+        await db.commit()
         return {"success": accepted, "status": channel_listing.status, "sku": sku, "asin": asin, "listing_url": listing_url, "response": result, "message": message}
     except AmazonSPAPIError as exc:
         channel_listing.status = "failed"
@@ -250,7 +254,7 @@ async def save_cross_listing_settings(body: IndirectChannelSettingsIn, db: Async
 
 @router.get("/schedules")
 async def list_schedules(build_id: int | None = Query(None), db: AsyncSession = Depends(get_db)):
-    query = select(ChannelListing).order_by(ChannelListing.channel)
+    query = select(ChannelListing).order_by(ChannelListing.channel, ChannelListing.updated_at.desc(), ChannelListing.id.desc())
     if build_id is not None:
         query = query.where(ChannelListing.manual_build_id == build_id)
     rows = (await db.execute(query)).scalars().all()
@@ -264,12 +268,14 @@ async def save_schedule(body: RecreateScheduleIn, db: AsyncSession = Depends(get
     build = await db.get(ManualBuild, body.build_id)
     if not build:
         raise HTTPException(status_code=404, detail="Build not found")
+    if build.status == "sold" or build.is_archived:
+        raise HTTPException(status_code=409, detail="Sold or archived builds cannot be scheduled for relisting")
     row = (await db.execute(select(ChannelListing).where(ChannelListing.manual_build_id == body.build_id, ChannelListing.channel == body.channel).order_by(ChannelListing.created_at.desc()))).scalars().first()
     if not row:
         row = ChannelListing(
             manual_build_id=body.build_id,
             channel=body.channel,
-            status="published",
+            status="draft",
             published_at=build.listed_at or datetime.utcnow(),
         )
         db.add(row)
@@ -301,6 +307,8 @@ async def list_actions(build_id: int | None = Query(None), limit: int = Query(10
 
 @router.post("/actions/{event_id}/codex-result")
 async def record_codex_result(event_id: int, body: CodexHandoffResultIn, db: AsyncSession = Depends(get_db)):
+    if body.success:
+        raise HTTPException(409, "Complete the leased Chrome job with verified vendor ID, URL and browser evidence instead")
     event = await db.get(ListingPublishEvent, event_id)
     if not event or event.event_type != "recreate_handoff_required":
         raise HTTPException(status_code=404, detail="Codex relisting handoff not found")
@@ -308,17 +316,17 @@ async def record_codex_result(event_id: int, body: CodexHandoffResultIn, db: Asy
     if not row:
         raise HTTPException(status_code=404, detail="Channel listing not found")
     now = datetime.utcnow()
-    row.last_recreate_at = now
+    if body.success:
+        row.last_recreate_at = now
     row.last_recreate_status = "success" if body.success else "failed"
     row.last_recreate_message = body.message
-    row.status = "published" if body.success else "withdrawn"
+    if body.success:
+        row.status = "published"
     if body.success:
         row.external_listing_id = body.external_listing_id
         row.published_at = now
         row.withdrawn_at = None
         row.next_recreate_at = now + timedelta(days=row.recreate_interval_days or 7) if row.recreate_enabled else None
-    else:
-        row.next_recreate_at = None
     db.add(ListingPublishEvent(
         channel_listing_id=row.id,
         event_type="recreate_created" if body.success else "recreate_failed",
@@ -339,6 +347,7 @@ async def record_codex_result(event_id: int, body: CodexHandoffResultIn, db: Asy
 def _schedule(row: ChannelListing) -> dict:
     return {"id": row.id, "build_id": row.manual_build_id, "channel": row.channel, "status": row.status,
             "external_listing_id": row.external_listing_id,
+            "listing_url": row.listing_url,
             "published_at": row.published_at.isoformat() if row.published_at else None,
             "withdrawn_at": row.withdrawn_at.isoformat() if row.withdrawn_at else None,
             "updated_at": row.updated_at.isoformat() if row.updated_at else None,
