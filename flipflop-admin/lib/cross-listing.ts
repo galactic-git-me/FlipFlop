@@ -270,7 +270,7 @@ export function capabilities(
       canPublish: false,
       canUpdate: false,
       canEnd: false,
-      note: "Codex publishes through Chrome using Bitwarden and the saved seller pack, then saves the confirmed vendor URL.",
+      note: "Codex publishes through Chrome using local credentials and the saved seller pack, then saves the confirmed vendor URL.",
       officialReference: "https://www.onbuy.com/gb/sell/",
     },
     {

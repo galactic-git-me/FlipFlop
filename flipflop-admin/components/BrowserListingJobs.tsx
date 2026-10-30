@@ -39,7 +39,7 @@ export default function BrowserListingJobs({ onChanged }: { onChanged: () => Pro
   return (
     <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4" aria-label="Codex Chrome listing jobs">
       <h2 className="text-sm font-semibold text-emerald-300">Codex Chrome jobs</h2>
-      <p className="mt-1 text-xs text-slate-400">Publishing and auto-relisting use the saved seller pack. The desktop worker checks the vendor, fills credentials from Bitwarden and saves the confirmed listing URL. Queued jobs wait until the worker is available.</p>
+      <p className="mt-1 text-xs text-slate-400">Publishing and auto-relisting use the saved seller pack. The desktop worker checks the vendor, fills credentials from .env.local and saves the confirmed listing URL. Queued jobs wait until the worker is available.</p>
       {error && <p role="alert" className="mt-3 text-xs text-red-300">{error}</p>}
       {!jobs.length && !error && <p className="py-5 text-center text-xs text-slate-500">No Chrome listing jobs yet.</p>}
       <div className="mt-3 space-y-2">

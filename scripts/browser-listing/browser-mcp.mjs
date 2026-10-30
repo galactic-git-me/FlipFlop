@@ -1,12 +1,10 @@
-// Narrow, domain-scoped Chrome tools. Vault secrets never enter tool responses.
+// Narrow, domain-scoped Chrome tools. Credentials never enter tool responses.
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import readline from 'node:readline';
 import { createRequire } from 'node:module';
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
+import { parseEnv } from 'node:util';
 
-const exec = promisify(execFile);
 const job = JSON.parse(await fs.readFile(process.env.FF_BROWSER_JOB_FILE, 'utf8'));
 const pack = job.payload;
 const require = createRequire(path.join(process.env.FF_ADMIN_DIR, 'package.json'));
@@ -49,37 +47,28 @@ function element(ref) {
   if (!/^\d+-\d+$/.test(String(ref)) || !String(ref).startsWith(`${revision}-`)) throw new Error('Observe the page again; the element reference is stale');
   return page.locator(`[data-ff-ref="${ref}"]`);
 }
-async function vaultLogin(args) {
+async function envLogin(args) {
   await browser();
   const username = args.username_ref ? element(args.username_ref) : null, password = args.password_ref ? element(args.password_ref) : null;
   if (!username && !password) throw new Error('Select the username or password field from the current observation');
   if (password && await password.getAttribute('type') !== 'password') throw new Error('Choose the actual password field');
-  const host = new URL(page.url()).hostname;
-  const domain = domains.find(d => host === d || host.endsWith('.' + d));
-  const options = { timeout: 30000, maxBuffer: 4 * 1024 * 1024, windowsHide: true };
-  const vault = async args => {
-    // .cmd needs cmd.exe on Windows; all variable arguments are fixed domains or UUIDs.
-    return process.platform === 'win32'
-      ? exec(process.env.ComSpec || 'cmd.exe', ['/d', '/s', '/c', `bw.cmd ${args.map(x => `"${x}"`).join(' ')}`], options)
-      : exec('bw', args, options);
-  };
-  const status = JSON.parse((await vault(['status'])).stdout);
-  if (status.status !== 'unlocked') throw new Error('Bitwarden CLI is locked in the desktop worker session');
-  const items = JSON.parse((await vault(['list', 'items', '--search', domain])).stdout);
-  const configured = JSON.parse(process.env.FF_VAULT_ITEMS || '{}')[pack.channel];
-  const matches = items.filter(i => !i.deletedDate && (!configured || i.id === configured) && i.login?.username && i.login?.password &&
-    (i.login.uris || []).some(u => { try { const h = new URL(u.uri).hostname; return h === domain || h.endsWith('.' + domain); } catch { return false; } }));
-  if (matches.length !== 1) throw new Error('Choose one matching vendor Bitwarden item in FF_VAULT_ITEMS; never guess between accounts');
-  if (username) await username.fill(matches[0].login.username);
-  if (password) await password.fill(matches[0].login.password);
+  const prefix = { onbuy: 'FF_ONBUY', facebook_catalog: 'FF_FACEBOOK_MARKETPLACE', vinted: 'FF_VINTED', google_shopping: 'FF_GOOGLE_MERCHANT' }[pack.channel];
+  let values;
+  try { values = parseEnv(await fs.readFile(process.env.FF_CREDENTIALS_FILE, 'utf8')); }
+  catch { throw new Error('The local seller credentials file is unavailable; configure FF_CREDENTIALS_FILE'); }
+  const login = values[prefix + '_USERNAME'], secret = values[prefix + '_PASSWORD'];
+  if (!login || !secret) throw new Error(`Set ${prefix}_USERNAME and ${prefix}_PASSWORD in the local .env.local file`);
+  if (username) await username.fill(login);
+  if (password) await password.fill(secret);
   return { filled: true, message: 'Credentials filled locally; submit the observed sign-in form.' };
 }
+
 async function run(name, args) {
   if (name === 'seller_pack') return { ...pack, operation: job.operation,
-    instructions: 'Check seller listings for this exact build before writing. Update active; relist ended; create only after confirming missing. No duplicate listings. Google requires Merchant Center onboarding and approval; do not treat a feed submission as a live listing. Delivery only: never enable pickup. Stop for fees, account creation, MFA, CAPTCHA or a vendor restriction. Use vault_login; never request, print or copy secrets.' };
+    instructions: 'Check seller listings for this exact build before writing. Update active; relist ended; create only after confirming missing. No duplicate listings. Google requires Merchant Center onboarding and approval; do not treat a feed submission as a live listing. Delivery only: never enable pickup. Stop for fees, account creation, MFA, CAPTCHA or a vendor restriction. Use env_login; never request, print or copy secrets.' };
   if (name === 'browser_observe') return snapshot();
   if (name === 'browser_navigate') { await browser(); if (!allowed(args.url)) throw new Error('URL outside this vendor'); await page.goto(args.url); return snapshot(); }
-  if (name === 'vault_login') return vaultLogin(args);
+  if (name === 'env_login') return envLogin(args);
   if (name === 'remote_state') { inspected = true; remoteState = args.state; return { recorded: true, state: args.state, note: args.note }; }
   if (name === 'browser_click') {
     await browser();
@@ -95,7 +84,7 @@ async function run(name, args) {
   }
   if (name === 'browser_fill') {
     await browser(); const el = element(args.ref);
-    if (await el.getAttribute('type') === 'password') throw new Error('Use vault_login for passwords');
+    if (await el.getAttribute('type') === 'password') throw new Error('Use env_login for passwords');
     await el.fill(args.value); return { filled: true };
   }
   if (name === 'browser_select') { await browser(); await element(args.ref).selectOption({ label: args.label }); return snapshot(); }
@@ -139,9 +128,9 @@ const definitions = [
   ['browser_fill', 'Fill a listing field. Use saved pack data; never put passwords here.', schema({ ref: str, value: str })],
   ['browser_select', 'Select an option by its observed label.', schema({ ref: str, label: str })],
   ['browser_upload', 'Upload only seller-pack photographs by index.', schema({ ref: str, image_indexes: { type: 'array', items: { type: 'integer' } } })],
-  ['vault_login', 'Fill a matching Bitwarden login locally without exposing credentials. For two-stage forms provide the currently visible field only.', schema({ username_ref: str, password_ref: str }, [])],
+  ['env_login', 'Fill the selected vendor login from the configured local .env.local file without exposing credentials. For two-stage forms provide the currently visible field only.', schema({ username_ref: str, password_ref: str }, [])],
   ['confirm_listing', 'Read back the item page, verify canonical title and price, and persist the real item URL/ID. Call only after remote live state is confirmed.', schema({ url: str, external_id: str })],
-  ['block_job', 'Stop with a precise MFA, CAPTCHA, vault, seller-policy, account or uncertain-publication blocker.', schema({ reason: str })],
+  ['block_job', 'Stop with a precise MFA, CAPTCHA, credentials, seller-policy, account or uncertain-publication blocker.', schema({ reason: str })],
 ].map(([name, description, inputSchema]) => ({ name, description, inputSchema }));
 const lines = readline.createInterface({ input: process.stdin });
 // Serialize calls: each element reference belongs to one page observation.
@@ -157,7 +146,7 @@ for await (const line of lines) {
       try { result = { content: [{ type: 'text', text: JSON.stringify(await run(msg.params.name, msg.params.arguments || {})) }] }; }
       catch (e) {
         // CLI exceptions may contain the credential-bearing subprocess result.
-        const message = e.code || e.stdout || e.stderr ? 'Vault/browser command failed; check local authentication without printing secrets.' : String(e.message);
+        const message = e.code || e.stdout || e.stderr ? 'Browser command failed; check local authentication without printing secrets.' : String(e.message);
         result = { isError: true, content: [{ type: 'text', text: message }] };
       }
     } else if (msg.method === 'ping') result = {};
