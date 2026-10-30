@@ -4925,6 +4925,9 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
     build = result.scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
+    from app.services.channel_sync import build_is_unavailable
+    if await build_is_unavailable(db, build):
+        raise HTTPException(409, "Sold or archived builds cannot be published")
 
     # A draft is a real eBay offer, so don't create a second offer for the
     # same build when the user clicks the draft button more than once. Live
@@ -5606,7 +5609,8 @@ async def list_on_storefront(
     build = result.scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
-    if build.status == "sold" or build.is_archived:
+    from app.services.channel_sync import build_is_unavailable
+    if await build_is_unavailable(db, build):
         raise HTTPException(409, "Sold or archived builds cannot be published")
     if build.status not in ("built", "listed", "sold"):
         raise HTTPException(400, "Mark this build as built before listing it on the storefront")

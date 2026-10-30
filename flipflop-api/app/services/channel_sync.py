@@ -14,6 +14,15 @@ ALIASES = {"ebay": "ebay_uk", "storefront": "flipflop_shop", "facebook": "facebo
 PENDING = ("queued", "running", "blocked", "needs_review")
 
 
+async def build_is_unavailable(db, build):
+    if build.status == "sold" or build.is_archived:
+        return True
+    if build.storefront_product_id:
+        product = (await db.execute(select(Product).where(Product.id == build.storefront_product_id).with_for_update())).scalar_one_or_none()
+        return bool(product and product.status == ProductStatus.SOLD)
+    return False
+
+
 def canonical_hash(build):
     fields = ("name", "generated_title", "generated_description", "ebay_price", "ebay_condition", "generated_aspects",
         "components", "photos", "hero_photo_url", "shipping_cost", "shipping_method", "return_days", "selected_faq_ids", "selected_faq_answer_overrides")

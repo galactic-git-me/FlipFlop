@@ -9,6 +9,8 @@ when a category or approval requirement still needs seller action.
 from __future__ import annotations
 
 import re
+from datetime import datetime, timedelta, timezone
+from urllib.parse import quote
 from typing import Any
 
 import httpx
@@ -102,6 +104,45 @@ class AmazonSPAPI:
             },
         )
         return _json(response) or {}
+
+    async def withdraw_listing(self, *, sku: str) -> bool:
+        """Request deletion, then require a read-back before claiming withdrawal."""
+        try:
+            current = await self.get_listing(sku=sku)
+        except AmazonSPAPIError as exc:
+            if exc.status_code == 404:
+                return True
+            raise
+        if not any("BUYABLE" in (s.get("status") or []) for s in current.get("summaries", [])):
+            return True
+        await self._request("DELETE", f"/listings/2021-08-01/items/{quote(self.seller_id, safe='')}/{quote(sku, safe='')}", params={"marketplaceIds": self.marketplace_id})
+        try:
+            current = await self.get_listing(sku=sku)
+        except AmazonSPAPIError as exc:
+            if exc.status_code == 404:
+                return True
+            raise
+        return not any("BUYABLE" in (s.get("status") or []) for s in current.get("summaries", []))
+
+    async def paid_orders_by_sku(self) -> dict[str, str]:
+        """Orders v2026-01-01: exact SKU/order identity, without buyer PII."""
+        params = {"marketplaceIds": self.marketplace_id, "createdAfter": (datetime.now(timezone.utc) - timedelta(days=30)).isoformat(),
+            "fulfillmentStatuses": "UNSHIPPED,PARTIALLY_SHIPPED,SHIPPED", "includedData": "FULFILLMENT", "maxResultsPerPage": 100}
+        found = {}
+        for _ in range(5):
+            data = _json(await self._request("GET", "/orders/2026-01-01/orders", params=params)) or {}
+            for order in data.get("orders", []):
+                if (order.get("fulfillment") or {}).get("fulfillmentStatus") not in {"UNSHIPPED", "PARTIALLY_SHIPPED", "SHIPPED"}:
+                    continue
+                for item in order.get("orderItems", []):
+                    sku = (item.get("product") or {}).get("sellerSku")
+                    if sku and order.get("orderId") and item.get("quantityOrdered", 0) > 0:
+                        found[sku] = order["orderId"]
+            token = (data.get("pagination") or {}).get("nextToken")
+            if not token:
+                return found
+            params["paginationToken"] = token
+        raise AmazonSPAPIError("Amazon order scan exceeded its bounded history window; review the account before inferring sale status")
 
     async def search_catalog_items_by_asin(self, asins: list[str]) -> dict[str, Any]:
         """Read exact Amazon catalogue attributes for up to 20 ASINs.
