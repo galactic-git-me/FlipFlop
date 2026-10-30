@@ -20,6 +20,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 log = structlog.get_logger(__name__)
 
 
+def is_orphaned_local_manual_build(build) -> bool:
+    """True only when no local eBay ID or legacy URL references a listing."""
+    return (
+        build.status == "listed"
+        and not build.ebay_listing_id
+        and not build.ebay_listing_url
+    )
+
+
 class eBaySalesTracker:
     """
     Tracks sold items from eBay and updates flip records.
@@ -129,6 +138,10 @@ class eBaySalesTracker:
                     ManualBuild.status == "listed",
                     ManualBuild.ebay_listing_id.is_(None),
                 ))).scalars().all()
+                orphaned_local_rows = [
+                    build for build in orphaned_local_rows
+                    if is_orphaned_local_manual_build(build)
+                ]
                 for build in orphaned_local_rows:
                     build.status = "built"
                     build.ebay_listing_status = "never_listed"
