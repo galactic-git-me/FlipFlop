@@ -14,7 +14,7 @@ from app.services.amazon_sp_api import AmazonSPAPI, AmazonSPAPIError
 from app.models.manual_build import ManualBuild
 
 router = APIRouter(prefix="/cross-listing", tags=["cross-listing"], dependencies=[Depends(require_operator)])
-INDIRECT_CHANNELS = {"onbuy", "amazon", "facebook_catalog", "vinted"}
+INDIRECT_CHANNELS = {"onbuy", "amazon", "facebook_catalog", "vinted", "google_shopping"}
 
 
 class ChannelImagesIn(BaseModel):
@@ -224,6 +224,8 @@ async def publish_amazon(build_id: int, body: AmazonPublishIn, db: AsyncSession 
         await db.commit()
         asin = _amazon_asin(result)
         listing_url = f"https://www.amazon.co.uk/dp/{asin}" if accepted and asin else None
+        channel_listing.listing_url = listing_url
+        await db.commit()
         return {"success": accepted, "status": channel_listing.status, "sku": sku, "asin": asin, "listing_url": listing_url, "response": result, "message": message}
     except AmazonSPAPIError as exc:
         channel_listing.status = "failed"
@@ -339,6 +341,7 @@ async def record_codex_result(event_id: int, body: CodexHandoffResultIn, db: Asy
 def _schedule(row: ChannelListing) -> dict:
     return {"id": row.id, "build_id": row.manual_build_id, "channel": row.channel, "status": row.status,
             "external_listing_id": row.external_listing_id,
+            "listing_url": row.listing_url,
             "published_at": row.published_at.isoformat() if row.published_at else None,
             "withdrawn_at": row.withdrawn_at.isoformat() if row.withdrawn_at else None,
             "updated_at": row.updated_at.isoformat() if row.updated_at else None,
