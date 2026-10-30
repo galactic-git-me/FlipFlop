@@ -65,7 +65,8 @@ log "Running API tests"
       tests/test_curated_build_policy.py \
       tests/test_curated_upgrade_benchmarks.py \
       tests/test_public_playbook_fit.py \
-      tests/test_public_catalogue_api.py::test_analytics_event_does_not_trust_caller_customer_id
+      tests/test_public_catalogue_api.py::test_analytics_event_does_not_trust_caller_customer_id \
+      tests/test_production_scheduler_runtime.py
   fi
 )
 
