@@ -12,6 +12,7 @@ type ChannelListingSummary = {
   channel: string;
   status: string;
   external_listing_id?: string | null;
+  listing_url?: string | null;
 };
 
 const CHANNEL_LABELS: Record<string, string> = {
@@ -21,7 +22,8 @@ const CHANNEL_LABELS: Record<string, string> = {
   storefront: "FlipFlop.shop",
   flipflop_shop: "FlipFlop.shop",
   facebook_marketplace: "Facebook Marketplace",
-  facebook_catalog: "Facebook catalog",
+  facebook_catalog: "Facebook Marketplace",
+  google_shopping: "Google Shopping",
   vinted: "Vinted",
   onbuy: "OnBuy",
 };
@@ -95,12 +97,14 @@ function BuildsPageInner() {
           channel: "ebay_uk",
           status: build.ebay_listing_status === "active" ? "published" : build.ebay_listing_status ?? "ended",
           external_listing_id: build.ebay_listing_id,
+          listing_url: build.ebay_listing_status === "active" ? build.ebay_listing_url : null,
         });
         if (build.storefront_product_id) channelRows.push({
           build_id: build.id,
           channel: "flipflop_shop",
           status: build.storefront_live === false ? "withdrawn" : "published",
           external_listing_id: String(build.storefront_product_id),
+          listing_url: `https://www.theflipflop.shop/ready-to-ship/${build.storefront_product_id}`,
         });
       });
       const byBuildAndChannel = new Map<string, ChannelListingSummary>();
@@ -240,9 +244,13 @@ function BuildCard({
             const active = state === "published" || state === "scheduled";
             const description = `${channelLabel}: ${state}${listing.external_listing_id ? ` · listing ${listing.external_listing_id}` : ""}`;
             return (
-              <span key={`${listing.channel}-${listing.build_id}`} title={description} aria-label={description} className={`inline-flex items-center gap-1.5 rounded-md border px-1.5 py-1 ${active ? "border-emerald-400/25 bg-emerald-400/[.06]" : "border-slate-600/40 bg-slate-800/40 opacity-60"}`}>
-                <VendorLogo vendor={vendorKeyForChannel(listing.channel)} />
-                <span className="text-[10px] font-medium text-slate-300">{channelLabel}</span>
+              <span key={`${listing.channel}-${listing.build_id}`} title={description} className={`inline-flex items-center gap-1.5 rounded-md border px-1.5 py-1 ${active ? "border-emerald-400/25 bg-emerald-400/[.06]" : "border-slate-600/40 bg-slate-800/40 opacity-60"}`}>
+                {listing.listing_url && /^https:\/\//.test(listing.listing_url) ? (
+                  <a href={listing.listing_url} target="_blank" rel="noopener noreferrer" aria-label={`Open ${channelLabel} listing in a new tab`} onClick={(event) => event.stopPropagation()} onKeyDown={(event) => event.stopPropagation()} className="inline-flex items-center gap-1.5 hover:text-white focus-visible:outline focus-visible:outline-cyan-300">
+                    <VendorLogo vendor={vendorKeyForChannel(listing.channel)} />
+                    <span className="text-[10px] font-medium">{channelLabel}</span>
+                  </a>
+                ) : <><VendorLogo vendor={vendorKeyForChannel(listing.channel)} /><span className="text-[10px] font-medium text-slate-300">{channelLabel}</span></>}
               </span>
             );
           })}

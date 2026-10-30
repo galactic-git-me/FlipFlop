@@ -55,15 +55,17 @@ def summary(job):
 @router.post("")
 async def queue(body: QueueIn, db: AsyncSession = Depends(get_db)):
     try:
-        from app.services.channel_images import prepare_channel_urls
+        from app.services.channel_images import prepare_channel_urls, cached_variant_url
         build = await db.get(ManualBuild, body.build_id)
         if not build:
             raise ValueError("Build not found")
         originals = [p["url"] for p in build.photos or [] if isinstance(p, dict) and p.get("kind", "photo") == "photo" and p.get("url")]
         # Client may choose only original photographs saved on this build.
-        if any(url not in originals for url in body.image_urls):
+        variants = {cached_variant_url(url, body.channel): url for url in originals}
+        chosen = [url if url in originals else variants.get(url) for url in body.image_urls]
+        if any(url is None for url in chosen):
             raise ValueError("Choose product photographs saved on this build")
-        images = await prepare_channel_urls(body.image_urls or originals, body.channel)
+        images = await prepare_channel_urls(chosen or originals, body.channel)
         job = await enqueue_browser_job(db, body.build_id, body.channel, operation=body.operation, image_urls=images)
         await db.commit()
         return summary(job)

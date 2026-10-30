@@ -10,6 +10,7 @@ export const dynamic = "force-dynamic";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import JSZip from "jszip";
 import DOMPurify from "dompurify";
+import BrowserListingJobs from "@/components/BrowserListingJobs";
 import ChannelImageReview, { type ImageReviewRequest } from "@/components/ChannelImageReview";
 import {
   AlertTriangle,
@@ -151,7 +152,8 @@ function VendorLogo({ channel }: { channel: CrossListingChannel }) {
     flipflop_shop: "FlipFlop.shop",
     onbuy: "OnBuy",
     amazon: "Amazon",
-    facebook_catalog: "Facebook catalog",
+    facebook_catalog: "Facebook Marketplace",
+    google_shopping: "Google Shopping",
     vinted: "Vinted",
   };
   return <span>{labels[channel]}</span>;
@@ -1182,7 +1184,7 @@ export default function CrossListingPage() {
           source: "flipflop_shop",
           externalId: schedule.external_listing_id || "not-created",
           status,
-          url: null,
+          url: schedule.listing_url ?? null,
           updatedAt: schedule.updated_at || base.updatedAt,
           error:
             status === "failed"
@@ -1400,7 +1402,7 @@ export default function CrossListingPage() {
       ["update", "active listings updated"],
       ["relist", "ended listings relisted"],
       ["create", "new listings created for drafts or missing listings"],
-      ["manual", "manual listing steps prepared"],
+      ["manual", "Codex Chrome jobs queued"],
       ["approval", "destinations requiring approval"],
       ["unavailable", "unavailable destinations"],
       ["verify", "eBay listings that need a status refresh first"],
@@ -1573,33 +1575,21 @@ export default function CrossListingPage() {
           continue;
         }
         if (capability.mode !== "api") {
-          if (destination === "amazon") {
-            addResult({
-              buildId: item.buildId,
-              channel: capability.label,
-              status: "failed",
-              message: capability.note,
-            });
-          } else if (isDevelopmentMode()) {
-            addResult({
-              buildId: item.buildId,
-              channel: capability.label,
-              status: "published",
-              message: `${capability.label} fake listing created for development. No external marketplace was contacted.`,
-              url: devListingUrl(channelItem, capability),
-            });
+          if (capability.mode !== "manual") {
+            addResult({ buildId: item.buildId, channel: capability.label, status: "failed", message: capability.note });
           } else {
-            addResult({
-              buildId: item.buildId,
-              channel: capability.label,
-              status: "manual_action_required",
-              message: `${capability.note} Use browser assist to have Codex create the listing with the complete payload and media assets.`,
-              assist: {
-                source: channelItem,
-                channel: capability,
-                build: builds[item.buildId],
-              },
-            });
+            try {
+              const queued = await api.crossListing.queueBrowserJob({
+                build_id: item.buildId, channel: destination,
+                operation: group?.byChannel[destination]?.status === "ended" ? "relist" : "publish",
+                image_urls: channelItem.listing.images.map((image) => image.url),
+              });
+              addResult({ buildId: item.buildId, channel: capability.label, status: "queued",
+                message: `Codex Chrome job ${queued.id}: ${queued.status}. The vendor URL appears after verified publication.` });
+            } catch (cause) {
+              addResult({ buildId: item.buildId, channel: capability.label, status: "failed",
+                message: cause instanceof Error ? cause.message : "Could not queue the Chrome job." });
+            }
           }
           continue;
         }
@@ -1995,7 +1985,7 @@ export default function CrossListingPage() {
                         >
                           {channel.mode === "api"
                             ? "API"
-                            : labelForStatus(channel.mode)}
+                            : channel.mode === "manual" ? "CODEX · CHROME" : labelForStatus(channel.mode)}
                         </span>
                       </div>
                       {listingStatus && (
@@ -2441,6 +2431,8 @@ export default function CrossListingPage() {
           </div>
         </section>
       )}
+
+      <BrowserListingJobs onChanged={refresh} />
 
       <ActivityLog
         actions={actions}
