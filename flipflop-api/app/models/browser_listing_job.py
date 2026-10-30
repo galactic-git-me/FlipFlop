@@ -11,6 +11,7 @@ class BrowserListingJob(Base):
     channel_listing_id: Mapped[int] = mapped_column(ForeignKey("channel_listings.id"), nullable=False)
     status: Mapped[str] = mapped_column(String(30), default="queued", nullable=False)
     operation: Mapped[str] = mapped_column(String(20), nullable=False)
+    lane: Mapped[str] = mapped_column(String(10), default="write", nullable=False)
     payload: Mapped[dict] = mapped_column(JSON, nullable=False)
     lease_token: Mapped[str | None] = mapped_column(String(64))
     lease_until: Mapped[datetime | None] = mapped_column(DateTime)
@@ -19,6 +20,6 @@ class BrowserListingJob(Base):
     message: Mapped[str | None] = mapped_column(String(500))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
-    __table_args__ = (Index("uq_browser_listing_job_pending", "channel_listing_id", unique=True,
+    __table_args__ = (Index("uq_browser_listing_job_pending", "channel_listing_id", "lane", unique=True,
         postgresql_where=text("status IN ('queued', 'running', 'blocked', 'needs_review')"),
         sqlite_where=text("status IN ('queued', 'running', 'blocked', 'needs_review')")),)

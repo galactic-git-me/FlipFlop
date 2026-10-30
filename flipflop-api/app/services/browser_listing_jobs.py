@@ -19,8 +19,9 @@ SELLER_URLS = {
 HOSTS = {"onbuy": {"onbuy.com"}, "facebook_catalog": {"facebook.com"},
          "vinted": {"vinted.co.uk"}, "google_shopping": {"google.com"}}
 PENDING = ("queued", "running", "blocked", "needs_review")
-ITEM_PATHS = {"onbuy": r"~p\d+|/p/", "facebook_catalog": r"/marketplace/item/\d+",
-              "vinted": r"/items/\d+", "google_shopping": r"/shopping/product/"}
+ITEM_PATHS = {"onbuy": r"~p(\d+)(?:/|$)|/p/(\d+)(?:/|$)",
+              "facebook_catalog": r"/marketplace/item/(\d+)(?:/|$)",
+              "vinted": r"/items/(\d+)(?:[-/]|$)", "google_shopping": r"/shopping/product/(\d+)(?:/|$)"}
 
 
 def validate_listing_url(channel: str, value: str) -> str:
@@ -32,6 +33,12 @@ def validate_listing_url(channel: str, value: str) -> str:
             or not re.search(ITEM_PATHS.get(channel, r"(?!)"), url.path)):
         raise ValueError("A confirmed HTTPS listing URL on the selected vendor is required")
     return value
+
+
+def listing_id_from_url(channel: str, value: str) -> str:
+    validate_listing_url(channel, value)
+    match = re.search(ITEM_PATHS[channel], urlparse(value).path)
+    return next(group for group in match.groups() if group is not None)
 
 
 def seller_pack(build: ManualBuild, row: ChannelListing, image_urls: list[str] | None = None, *, operation="publish") -> dict:
@@ -76,8 +83,9 @@ async def enqueue_browser_job(db, build_id: int, channel: str, *, operation="pub
             recreate_interval_days=(settings.indirect_channel_recreate_interval_days or 7) if settings else 7)
         db.add(row)
         await db.flush()
+    lane = "read" if operation in {"inspect", "sale_check"} else "write"
     pending = (await db.execute(select(BrowserListingJob).where(
-        BrowserListingJob.channel_listing_id == row.id, BrowserListingJob.status.in_(PENDING)))).scalar_one_or_none()
+        BrowserListingJob.channel_listing_id == row.id, BrowserListingJob.lane == lane, BrowserListingJob.status.in_(PENDING)))).scalar_one_or_none()
     if pending:
         return pending
     if image_urls is None and operation not in {"inspect", "sale_check", "withdraw"}:
@@ -85,7 +93,7 @@ async def enqueue_browser_job(db, build_id: int, channel: str, *, operation="pub
         image_urls = await prepare_channel_urls([p["url"] for p in build.photos or []
             if isinstance(p, dict) and p.get("url") and p.get("kind", "photo") == "photo"], channel)
     pack = seller_pack(build, row, image_urls, operation=operation)
-    job = BrowserListingJob(channel_listing_id=row.id, operation=operation, status="queued", payload=pack)
+    job = BrowserListingJob(channel_listing_id=row.id, operation=operation, lane=lane, status="queued", payload=pack)
     db.add(job)
     row.last_recreate_status = "queued"
     row.last_recreate_message = f"Queued for Codex Chrome: {operation}."
@@ -104,7 +112,7 @@ async def complete_browser_job(db, job, *, status, message, listing_url=None, ex
         if not external_id or not evidence or not evidence.get("verified_at") or not evidence.get("title"):
             raise ValueError("Confirmed vendor ID, URL and browser read-back evidence are required")
         validate_listing_url(row.channel, listing_url or "")
-        if external_id not in (listing_url or ""):
+        if listing_id_from_url(row.channel, listing_url or "") != external_id:
             raise ValueError("Vendor identity must match the confirmed item URL")
         if evidence.get("url") != listing_url or evidence.get("title") != job.payload["listing"]["title"] or evidence.get("price") != job.payload["listing"]["price"]:
             raise ValueError("Browser evidence must match the canonical title, price and confirmed URL")
@@ -126,6 +134,8 @@ async def complete_browser_job(db, job, *, status, message, listing_url=None, ex
         row.last_recreate_status = status
     row.last_recreate_message = message[:500]
     job.status, job.message = status, message[:500]
+    if status in {"blocked", "needs_review"} and job.operation in {"inspect", "sale_check", "withdraw"}:
+        job.available_at = datetime.utcnow() + timedelta(minutes=15)
     job.lease_token, job.lease_until = None, None
     db.add(ListingPublishEvent(channel_listing_id=row.id, event_type="browser_job_" + status,
         message=message[:500], event_metadata={"job_id": job.id, "build_id": row.manual_build_id,

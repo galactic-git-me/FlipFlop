@@ -47,14 +47,16 @@ async def plan_sync(db):
                 check_minutes = max(15, int(os.getenv("CROSS_LISTING_BROWSER_POLL_MINUTES", "15")))
             else:
                 check_minutes = max(5, int(os.getenv("CROSS_LISTING_BROWSER_POLL_MINUTES", "15"))) if channel in BROWSER_CHANNELS else 5
-            operation = "update" if row.last_payload_hash != fingerprint and row.status == "published" else "inspect"
-            if operation == "inspect" and row.last_checked_at and row.last_checked_at > now - timedelta(minutes=check_minutes):
-                continue
-            try:
-                await enqueue_operation(db, build, row, operation)
-                planned += 1
-            except ValueError as exc:
-                row.last_recreate_status, row.last_recreate_message = "blocked", str(exc)[:500]
+            for operation in ("inspect", "update"):
+                if operation == "inspect" and row.last_checked_at and row.last_checked_at > now - timedelta(minutes=check_minutes):
+                    continue
+                if operation == "update" and (row.last_payload_hash == fingerprint or row.status != "published"):
+                    continue
+                try:
+                    await enqueue_operation(db, build, row, operation)
+                    planned += 1
+                except ValueError as exc:
+                    row.last_recreate_status, row.last_recreate_message = "blocked", str(exc)[:500]
         await db.flush()
     return planned
 
@@ -186,7 +188,8 @@ async def run_channel_sync_job():
                     continue
                 job.attempt_count = (job.attempt_count or 0) + 1
                 job.status = "queued" if job.operation == "withdraw" and job.attempt_count < 10 else "blocked"
-                job.available_at = datetime.utcnow() + timedelta(minutes=min(60, 2 ** job.attempt_count))
+                delay = min(60, 2 ** job.attempt_count) if job.operation == "withdraw" else 5
+                job.available_at = datetime.utcnow() + timedelta(minutes=delay)
                 job.lease_token, job.lease_until = None, None
                 job.message = "Vendor operation failed or is unverified. Withdrawal will retry with backoff." if job.status == "queued" else "Vendor operation requires review; no remote success was assumed."
                 await db.commit()

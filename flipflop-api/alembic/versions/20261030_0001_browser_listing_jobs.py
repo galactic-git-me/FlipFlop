@@ -17,13 +17,14 @@ def upgrade():
         sa.Column("channel_listing_id", sa.Integer(), sa.ForeignKey("channel_listings.id"), nullable=False),
         sa.Column("status", sa.String(30), nullable=False),
         sa.Column("operation", sa.String(20), nullable=False),
+        sa.Column("lane", sa.String(10), nullable=False),
         sa.Column("payload", sa.JSON(), nullable=False),
         sa.Column("lease_token", sa.String(64)), sa.Column("lease_until", sa.DateTime()),
         sa.Column("attempt_count", sa.Integer(), nullable=False, server_default="0"),
         sa.Column("available_at", sa.DateTime(), nullable=False),
         sa.Column("message", sa.String(500)),
         sa.Column("created_at", sa.DateTime(), nullable=False), sa.Column("updated_at", sa.DateTime(), nullable=False))
-    op.create_index("uq_browser_listing_job_pending", "browser_listing_jobs", ["channel_listing_id"], unique=True,
+    op.create_index("uq_browser_listing_job_pending", "browser_listing_jobs", ["channel_listing_id", "lane"], unique=True,
         postgresql_where=sa.text("status IN ('queued', 'running', 'blocked', 'needs_review')"))
 
 

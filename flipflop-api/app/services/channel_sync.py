@@ -32,9 +32,15 @@ def canonical_hash(build):
 
 async def enqueue_operation(db, build, row, operation):
     from app.services.browser_listing_jobs import BROWSER_CHANNELS, enqueue_browser_job
+    lane = "read" if operation in {"inspect", "sale_check"} else "write"
     pending = (await db.execute(select(BrowserListingJob).where(BrowserListingJob.channel_listing_id == row.id,
-        BrowserListingJob.status.in_(PENDING)).with_for_update())).scalar_one_or_none()
+        BrowserListingJob.lane == lane, BrowserListingJob.status.in_(PENDING)).with_for_update())).scalar_one_or_none()
     if pending:
+        if pending.status in {"blocked", "needs_review"} and pending.operation in {"inspect", "sale_check", "withdraw"} and pending.available_at <= datetime.utcnow():
+            pending.status = "queued"
+            pending.message = "Retrying with seller-state reconciliation."
+        if operation == "sale_check" and pending.operation == "inspect":
+            pending.operation = "sale_check"
         if pending.operation == "withdraw" or operation != "withdraw":
             return pending
         # A confirmed sale invalidates an in-flight publish/update lease.
@@ -44,7 +50,7 @@ async def enqueue_operation(db, build, row, operation):
     if row.channel in BROWSER_CHANNELS:
         job = await enqueue_browser_job(db, build.id, row.channel, operation=operation)
     else:
-        job = BrowserListingJob(channel_listing_id=row.id, operation=operation, status="queued",
+        job = BrowserListingJob(channel_listing_id=row.id, operation=operation, lane=lane, status="queued",
             payload={"build_id": build.id, "channel": row.channel, "canonical_hash": canonical_hash(build)})
         db.add(job)
         await db.flush()
@@ -105,6 +111,8 @@ async def confirm_browser_observation(db, job, *, state, external_id=None, listi
     build = (await db.execute(select(ManualBuild).where(ManualBuild.id == row.manual_build_id).with_for_update())).scalar_one()
     if not evidence or not evidence.get("verified_at") or not evidence.get("url") or not evidence.get("note"):
         raise ValueError("An observed seller-page result is required")
+    if job.operation == "withdraw" and state not in {"ended", "missing", "sold"}:
+        raise ValueError("The seller account must confirm the item is no longer offered for sale")
     if state == "sold" and (row.channel == "google_shopping" or not order_id or not external_id or external_id != row.external_listing_id
             or evidence.get("verification_kind") != "seller_order" or evidence.get("order_id") != order_id):
         raise ValueError("A confirmed seller order and the exact saved vendor item ID are required for a sale")
@@ -113,8 +121,6 @@ async def confirm_browser_observation(db, job, *, state, external_id=None, listi
     job.status, job.message, job.lease_token, job.lease_until = "succeeded", f"Seller account confirmed {state}.", None, None
     await db.flush()  # Release the pending index before scheduling follow-up work.
     if job.operation == "withdraw":
-        if state not in {"ended", "missing", "sold"}:
-            raise ValueError("The seller account must confirm the item is no longer offered for sale")
         row.status, row.withdrawn_at = "withdrawn", now
         row.recreate_enabled, row.next_recreate_at = False, None
     elif state == "sold":

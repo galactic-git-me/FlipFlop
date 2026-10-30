@@ -132,6 +132,8 @@ async def test_ebay_schedule_uses_saved_canonical_data_and_only_advances_on_succ
 async def test_concurrent_submits_and_claims_cannot_duplicate_a_job():
     import asyncio
     from app.database import AsyncSessionLocal
+    from sqlalchemy import delete
+    from app.models.listing_publish_event import ListingPublishEvent
     async with AsyncSessionLocal() as db:
         build = await make_build(db)
         await db.commit()
@@ -141,13 +143,24 @@ async def test_concurrent_submits_and_claims_cannot_duplicate_a_job():
             job = await enqueue_browser_job(db, build_id, "vinted")
             await db.commit()
             return job.id
-    ids = await asyncio.gather(submit(), submit())
-    assert ids[0] == ids[1]
-    async def take():
+    try:
+        ids = await asyncio.gather(submit(), submit())
+        assert ids[0] == ids[1]
+        async def take():
+            async with AsyncSessionLocal() as db:
+                return await claim(db)
+        claims = await asyncio.gather(take(), take())
+        assert sum(item is not None for item in claims) == 1
+    finally:
+        # This test uses the disposable PostgreSQL database rather than the
+        # per-test SQLite fixture, so remove its dependent rows explicitly.
         async with AsyncSessionLocal() as db:
-            return await claim(db)
-    claims = await asyncio.gather(take(), take())
-    assert sum(item is not None for item in claims) == 1
+            listing_ids = select(ChannelListing.id).where(ChannelListing.manual_build_id == build_id)
+            await db.execute(delete(BrowserListingJob).where(BrowserListingJob.channel_listing_id.in_(listing_ids)))
+            await db.execute(delete(ListingPublishEvent).where(ListingPublishEvent.channel_listing_id.in_(listing_ids)))
+            await db.execute(delete(ChannelListing).where(ChannelListing.manual_build_id == build_id))
+            await db.execute(delete(ManualBuild).where(ManualBuild.id == build_id))
+            await db.commit()
 
 
 @pytest.mark.asyncio
