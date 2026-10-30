@@ -109,6 +109,12 @@ function channelPublishIntent(
   return "create";
 }
 
+function shouldAutoSelectDestination(
+  status: CrossListingSource["status"] | "unavailable"
+) {
+  return ["draft", "ended", "unavailable", "failed"].includes(status);
+}
+
 function groupListings(sources: CrossListingSource[]): GroupedListing[] {
   const groups = new Map<string, GroupedListing>();
   sources.forEach((source) => {
@@ -246,11 +252,14 @@ function ChannelCell({ source }: { source?: CrossListingSource }) {
   }
   const isLive = source.status === "live";
   const isFailed = source.status === "failed";
+  const isDraft = source.status === "draft";
   const statusLabel = isFailed
     ? "Listing failed"
     : isLive
     ? "Listed live"
-    : "Listed as draft";
+    : isDraft
+    ? "Unpublished draft — not live"
+    : "Listing status unavailable";
   const statusClass = isFailed
     ? "text-red-400"
     : isLive
@@ -267,10 +276,16 @@ function ChannelCell({ source }: { source?: CrossListingSource }) {
       } ${statusClass}`}
       aria-label={statusLabel}
     >
-      {isFailed ? <X className="h-4 w-4" strokeWidth={3} /> : "✓"}
+      {isFailed ? (
+        <X className="h-4 w-4" strokeWidth={3} />
+      ) : isLive ? (
+        "✓"
+      ) : (
+        <Clock3 className="h-4 w-4" />
+      )}
     </span>
   );
-  const url = listingUrlFor(source);
+  const url = isLive ? listingUrlFor(source) : null;
   const cell = (
     <div
       className="flex min-h-8 min-w-[76px] items-center justify-center"
@@ -1263,7 +1278,7 @@ export default function CrossListingPage() {
       const needsListing = [...new Set(filtered.flatMap((item) => channelCapabilities
         .filter((channel) => {
           const status = item.byChannel[channel.channel]?.status ?? "unavailable";
-          return status === "unavailable" || status === "failed";
+          return shouldAutoSelectDestination(status);
         })
         .map((channel) => channel.channel)))];
       setDestinations(needsListing);
@@ -1288,7 +1303,7 @@ export default function CrossListingPage() {
         .filter((channel) => {
           const status =
             item.byChannel[channel.channel]?.status ?? "unavailable";
-          return status === "unavailable" || status === "failed";
+          return shouldAutoSelectDestination(status);
         })
         .map((channel) => channel.channel);
       setDestinations(needsListing);
@@ -1993,12 +2008,15 @@ export default function CrossListingPage() {
                               : "text-yellow-200"
                           }`}
                         >
-                          {listingStatus === "live" ? "✓ " : ""}
-                          {labelForStatus(listingStatus)} for selected listing
+                          {channel.channel === "ebay_uk" && listingStatus === "draft"
+                            ? "No live eBay listing recorded"
+                            : `${listingStatus === "live" ? "✓ " : ""}${labelForStatus(listingStatus)} for selected listing`}
                         </div>
                       )}
                       <p className="mt-2 min-h-[60px] text-xs leading-5 text-slate-400">
-                        {channel.note}
+                        {channel.channel === "ebay_uk" && listingStatus === "draft"
+                          ? "This saved draft is not live. Select eBay to check the seller account and create a new listing if the old item is missing."
+                          : channel.note}
                       </p>
                     </div>
                     <span
