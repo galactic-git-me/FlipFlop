@@ -4834,6 +4834,13 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
         # Reconcile before choosing create vs revise. An ID by itself only
         # proves this build was listed historically; it does not prove that
         # the offer is still live.
+        if not build.ebay_listing_id and build.ebay_listing_url:
+            legacy_id_match = re.search(
+                r"/(?:itm/)?(\d{9,15})(?:[/?#]|$)",
+                urlparse(build.ebay_listing_url).path,
+            ) or re.search(r"/itm/[^/]+/(\d{9,15})(?:[/?#]|$)", build.ebay_listing_url)
+            if legacy_id_match:
+                build.ebay_listing_id = legacy_id_match.group(1)
         if build.ebay_listing_id:
             from app.services.ebay_listing_reconciliation import reconcile_manual_build_listing
             remote_state = await reconcile_manual_build_listing(
@@ -4850,6 +4857,10 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
                 503,
                 "eBay listing status could not be verified. No listing was created or updated; retry when eBay is reachable.",
             )
+        if remote_state == "sold":
+            raise HTTPException(409, "eBay confirms this build has sold; it cannot be relisted.")
+        if remote_state not in {"active", "ended", "missing", "never_listed"}:
+            raise HTTPException(503, "eBay listing state is not safe to relist. Refresh the listing status and retry.")
         is_relisting = remote_state == "active"
 
         if is_relisting:

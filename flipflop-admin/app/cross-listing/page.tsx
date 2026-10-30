@@ -900,6 +900,7 @@ export default function CrossListingPage() {
     enabledDefault: true,
   });
   const [relistSaving, setRelistSaving] = useState<number | null>(null);
+  const [relistNowBuild, setRelistNowBuild] = useState<number | null>(null);
 
   const channelCapabilities = useMemo(
     () => capabilities(connected, amazonConnected, amazonMessage),
@@ -1291,6 +1292,33 @@ export default function CrossListingPage() {
       )
     );
     setReviewId(null);
+  };
+
+  const relistNow = async (item: GroupedListing) => {
+    const build = builds[item.buildId];
+    if (!build) return;
+    const price = item.listing.price ?? build.ebay_price ?? 0;
+    if (!price || !Number.isFinite(price)) {
+      setError("Set a valid eBay price before relisting this build.");
+      return;
+    }
+    if (!window.confirm(`Create a new live eBay listing for ${item.title} at £${price.toFixed(2)}?`)) return;
+    setRelistNowBuild(item.buildId);
+    setError(null);
+    try {
+      const result = await api.manualBuilds.postToEbay(item.buildId, {
+        price,
+        condition: build.ebay_condition || item.condition || "USED_EXCELLENT",
+        publish: true,
+        images: (build.photos ?? []).filter((photo) => photo.kind === "photo").map((photo) => photo.url),
+      });
+      if (!result.success) throw new Error(result.error || "eBay did not accept the listing.");
+      await refresh();
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Could not relist this build on eBay.");
+    } finally {
+      setRelistNowBuild(null);
+    }
   };
 
   const downloadSelectedPacks = async () => {
@@ -2185,14 +2213,23 @@ export default function CrossListingPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <button
-                      onClick={() =>
-                        openReview(item.byChannel.flipflop_shop ?? item.primary)
-                      }
-                      className="cursor-pointer rounded border border-slate-700 px-2.5 py-1.5 text-xs text-slate-300 transition-colors hover:border-emerald-400/50 hover:text-emerald-300"
-                    >
-                      Review
-                    </button>
+                    <div className="flex justify-end gap-2">
+                      {(["ended", "unavailable"].includes(item.byChannel.ebay_uk?.status ?? "") || !item.byChannel.ebay_uk) &&
+                        ["ended", "missing", "never_listed"].includes(builds[item.buildId]?.ebay_listing_status ?? "never_listed") &&
+                        relistEnabledByBuild.get(item.buildId) !== false && (
+                          <button
+                            onClick={() => void relistNow(item)}
+                            disabled={relistNowBuild === item.buildId || publishing}
+                            className="cursor-pointer rounded border border-emerald-500/50 px-2.5 py-1.5 text-xs text-emerald-300 transition-colors hover:bg-emerald-500/10 disabled:opacity-50"
+                          >
+                            {relistNowBuild === item.buildId ? "Relisting…" : "Relist eBay"}
+                          </button>
+                        )}
+                      <button
+                        onClick={() => openReview(item.byChannel.flipflop_shop ?? item.primary)}
+                        className="cursor-pointer rounded border border-slate-700 px-2.5 py-1.5 text-xs text-slate-300 transition-colors hover:border-emerald-400/50 hover:text-emerald-300"
+                      >Review</button>
+                    </div>
                   </td>
                 </tr>
               ))}
