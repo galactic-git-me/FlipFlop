@@ -15,7 +15,16 @@ const lockPath = path.join(stateDir, 'worker.lock');
 // One desktop worker owns this Chrome profile. No concurrent browser jobs.
 let lock;
 try { lock = await fs.open(lockPath, 'wx', 0o600); }
-catch { throw new Error('Another worker owns this profile; if it crashed, check the process and reconcile before removing worker.lock'); }
+catch {
+  const previousPid = Number(await fs.readFile(lockPath, 'utf8'));
+  if (!Number.isSafeInteger(previousPid) || previousPid < 1) throw new Error('Worker lock is invalid; inspect the local worker before restarting');
+  let alive = true;
+  try { process.kill(previousPid, 0); } catch (e) { if (e.code === 'ESRCH') alive = false; }
+  if (alive) throw new Error('Another worker already owns this Chrome profile');
+  // Its API lease will be marked needs_review, never silently requeued.
+  await fs.unlink(lockPath);
+  lock = await fs.open(lockPath, 'wx', 0o600);
+}
 await lock.writeFile(String(process.pid));
 async function request(route, body) {
   const r = await fetch(`${api}${route}`, { method: 'POST', headers: { 'content-type': 'application/json', 'x-worker-key': key },

@@ -108,7 +108,7 @@ async function run(name, args) {
   }
   if (name === 'confirm_listing') {
     await browser(); await preflight();
-    if (!allowed(args.url) || args.url === pack.seller_url || !args.external_id || !inspected) throw new Error('A real item URL and vendor identity are required');
+    if (!allowed(args.url) || args.url === pack.seller_url || !args.external_id || !inspected || remoteState !== 'active') throw new Error('Record the confirmed live remote state, item URL and vendor identity before saving');
     await page.goto(args.url);
     const text = await page.locator('body').innerText();
     const title = pack.listing.title.toLowerCase();

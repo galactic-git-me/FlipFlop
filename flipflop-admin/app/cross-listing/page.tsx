@@ -123,7 +123,7 @@ function groupListings(sources: CrossListingSource[]): GroupedListing[] {
     const channel = source.channel ?? source.source;
     const existing = groups.get(key);
     if (existing) {
-      existing.byChannel[channel] = source;
+      if (!existing.byChannel[channel] || source.updatedAt > existing.byChannel[channel]!.updatedAt) existing.byChannel[channel] = source;
       if (source.updatedAt > existing.updatedAt) {
         existing.updatedAt = source.updatedAt;
         existing.primary = source;

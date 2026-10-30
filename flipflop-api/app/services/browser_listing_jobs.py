@@ -98,6 +98,8 @@ async def complete_browser_job(db, job, *, status, message, listing_url=None, ex
         if not external_id or not evidence or not evidence.get("verified_at") or not evidence.get("title"):
             raise ValueError("Confirmed vendor ID, URL and browser read-back evidence are required")
         validate_listing_url(row.channel, listing_url or "")
+        if external_id not in (listing_url or ""):
+            raise ValueError("Vendor identity must match the confirmed item URL")
         if evidence.get("url") != listing_url or evidence.get("title") != job.payload["listing"]["title"] or evidence.get("price") != job.payload["listing"]["price"]:
             raise ValueError("Browser evidence must match the canonical title, price and confirmed URL")
         if seller_pack(build, row, job.payload["listing"]["images"]) != job.payload:
