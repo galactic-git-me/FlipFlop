@@ -34,6 +34,7 @@ describe("cross-listing normalisation", () => {
     expect(matrix.find((item) => item.channel === "ebay_uk")?.mode).toBe("api");
     expect(matrix.find((item) => item.channel === "onbuy")?.mode).toBe("manual");
     expect(matrix.find((item) => item.channel === "vinted")?.canPublish).toBe(false);
+    expect(matrix.find((item) => item.channel === "google_shopping")?.canPublish).toBe(false);
   });
 
   it("exposes a submitted canonical build before any channel listing exists", () => {

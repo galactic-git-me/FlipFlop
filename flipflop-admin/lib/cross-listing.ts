@@ -6,7 +6,8 @@ export type CrossListingChannel =
   | "onbuy"
   | "amazon"
   | "facebook_catalog"
-  | "vinted";
+  | "vinted"
+  | "google_shopping";
 
 export type CrossListingStatus =
   | "draft"
@@ -311,6 +312,19 @@ export function capabilities(
       canEnd: false,
       note: "No approved seller integration is configured. Manual-assist export only; no consumer-account automation.",
       officialReference: "https://www.vinted.co.uk/help",
+    },
+    {
+      channel: "google_shopping",
+      label: "Google Shopping",
+      maxImages: 10,
+      mode: "manual",
+      connected: false,
+      canPublish: false,
+      canUpdate: false,
+      canEnd: false,
+      note: "Merchant Center is not connected. Manual product-data handoff only; nothing is uploaded and Google controls free-listing eligibility.",
+      officialReference:
+        "https://developers.google.com/merchant/api/guides/products/add-manage",
     },
   ];
 }
