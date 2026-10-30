@@ -10,7 +10,6 @@ import {
   Warehouse, Undo2,
 } from "lucide-react";
 import { Toaster, toast } from "sonner";
-import confetti from "canvas-confetti";
 import JSZip from "jszip";
 import { api, API_BASE_URL, ManualBuild, ComponentRating, ProductFaq } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
@@ -136,7 +135,6 @@ export default function BuildDetailPage() {
   const [inventoryChoice, setInventoryChoice] = useState<Record<string, string>>({});
   const [markingBuilt, setMarkingBuilt] = useState(false);
   const [generating, setGenerating] = useState(false);
-  const [posting, setPosting] = useState(false);
   const [uploadingPhotos, setUploadingPhotos] = useState(false);
   const [uploading3dModel, setUploading3dModel] = useState(false);
   const [queueing3dModels, setQueueing3dModels] = useState(false);
@@ -581,42 +579,6 @@ export default function BuildDetailPage() {
     })();
   }, [build, generateBrandedCard]);
 
-  const postToEbay = async () => {
-    if (!build?.generated_title || !build?.generated_description) return;
-    const priceNum = parseFloat(price);
-    if (!priceNum || priceNum <= 0) {
-      toast.error("Enter an asking price before listing.");
-      return;
-    }
-
-    setPosting(true);
-    try {
-      const result = await api.manualBuilds.postToEbay(buildId, { price: priceNum, condition });
-      if (result.success) {
-        // 🎉 Confetti celebration
-        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-
-        // ✅ Success toast
-        toast.success("Listing posted to eBay!");
-
-        // 🔗 Open the listing in a new tab if URL is available
-        if (result.url) {
-          setTimeout(() => window.open(result.url, "_blank"), 300);
-        }
-
-        const refreshed = await api.manualBuilds.get(buildId);
-        setBuild(refreshed);
-      } else {
-        toast.error(`eBay rejected the listing: ${result.error ?? "Unknown error"}`);
-      }
-    } catch (error) {
-      const msg = error instanceof Error ? error.message : "Unknown error";
-      toast.error(`Couldn't post to eBay: ${msg}`);
-    } finally {
-      setPosting(false);
-    }
-  };
-
   const submitCanonicalListing = async () => {
     if (!build) return;
     const priceNum = parseFloat(price) || build.ebay_price || build.last_evaluation?.mid || 0;
@@ -636,6 +598,11 @@ export default function BuildDetailPage() {
         ebay_price: priceNum,
         ebay_condition: condition,
       });
+      if (build.status === "listed") {
+        setActiveTab("channels");
+        toast.success("This build is already canonical and available in Cross-listing.");
+        return;
+      }
       const saved = await api.manualBuilds.markBuilt(buildId);
       setBuild(saved);
       setActiveTab("channels");
@@ -850,9 +817,9 @@ export default function BuildDetailPage() {
             onGenerateDescription={() => generateListing(false)}
             onGenerateTitle={() => generateListing(false)}
             onPreviewDraft={build.generated_title && build.generated_description ? () => setShowEbayPreview(true) : undefined}
-            onPublishChannels={canPublish ? () => void submitCanonicalListing() : undefined}
+            onPublishChannels={canPublish && build.status !== "sold" ? () => void submitCanonicalListing() : undefined}
             onDeleteEbay={() => setShowEndEbayConfirm(true)}
-            isLoading={generating || posting || markingBuilt}
+            isLoading={generating || markingBuilt}
             isDeletingEbay={endingEbayListing}
           />
         )}
@@ -1751,7 +1718,7 @@ export default function BuildDetailPage() {
               ) : (
                 <div className="flex flex-col gap-3">
                   <p className="text-xs text-slate-400 italic">
-                    Configure condition and scheduling below. Use the actions in the side menu to publish or update the listing on eBay.
+                    Submit the canonical build from the vertical side menu, then choose eBay in Cross-listing to review and publish it.
                   </p>
                   {!build.hero_photo_url && (
                     <p className="text-[11px] text-amber-400">Upload at least one photo and choose a hero image first.</p>
