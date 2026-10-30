@@ -221,6 +221,7 @@ async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, t
         status="listed",
         ebay_listing_id="188805793027",
         ebay_listing_url="https://ebay.co.uk/itm/item-123",
+        ebay_listing_status="ended",
         ebay_price=400.0,
         price_floor=352.0,
         sold_comp_target=310.0,
@@ -239,7 +240,10 @@ async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, t
         "app.services.ebay_browse.get_component_prices",
         new=AsyncMock(return_value={"used_prices": [300, 310], "new_prices": [], "used_median": 310}),
     ), patch(
-        "app.workers.manual_build_lifecycle.post_build_to_ebay", new=AsyncMock(return_value="not_ready")
+        "app.services.ebay_listing_reconciliation.reconcile_manual_build_listing",
+        new=AsyncMock(return_value="ended"),
+    ), patch(
+        "app.workers.manual_build_lifecycle.post_build_to_ebay", new=AsyncMock(return_value="published")
     ), patch(
         "app.api.manual_builds.generate_listing",
         new=AsyncMock(return_value=SimpleNamespace(titles=["New Title 1", "Alternative Title"])),
@@ -258,6 +262,50 @@ async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, t
         assert refreshed.generated_title == "New Title 1"
         # Main photo swapped to the second one.
         assert refreshed.photos[0]["url"] == "https://x/2.jpg"
+
+
+@pytest.mark.asyncio
+async def test_manual_build_recreate_failure_does_not_advance_or_mutate_cycle(client, test_db):
+    build_id = await _real_db_build(
+        status="listed",
+        ebay_listing_id="188805793028",
+        ebay_listing_url="https://ebay.co.uk/itm/item-124",
+        ebay_listing_status="ended",
+        ebay_price=400.0,
+        generated_title="Stable Title",
+        generated_description="<p>description</p>",
+        generated_aspects={"Brand": ["FlipFlop"], "Type": ["Desktop"]},
+        photos=[{"url": "https://x/1.jpg", "kind": "photo"}],
+        listed_at=datetime.utcnow() - timedelta(days=8),
+        next_recreate_at=datetime.utcnow() - timedelta(minutes=5),
+        relist_enabled=True,
+    )
+
+    from app.workers.manual_build_lifecycle import run_manual_build_recreate_cycle_job
+
+    with patch(
+        "app.services.ebay_browse.get_component_prices",
+        new=AsyncMock(return_value={"used_prices": [300, 310], "new_prices": [], "used_median": 310}),
+    ), patch(
+        "app.services.ebay_listing_reconciliation.reconcile_manual_build_listing",
+        new=AsyncMock(return_value="ended"),
+    ), patch(
+        "app.workers.manual_build_lifecycle.post_build_to_ebay", new=AsyncMock(return_value="no_token")
+    ), patch(
+        "app.api.manual_builds.generate_listing",
+        new=AsyncMock(return_value=SimpleNamespace(titles=["Changed Title"])),
+    ):
+        result = await run_manual_build_recreate_cycle_job()
+
+    assert result["recreated"] == 0
+    assert result["pending"] == 1
+    from app.database import AsyncSessionLocal
+    async with AsyncSessionLocal() as db:
+        refreshed = await db.get(ManualBuild, build_id)
+        assert refreshed.recreate_cycle_count == 0
+        assert refreshed.ebay_price == pytest.approx(400.0)
+        assert refreshed.generated_title == "Stable Title"
+        assert refreshed.next_recreate_at < datetime.utcnow()
 
 
 @pytest.mark.asyncio
@@ -331,6 +379,40 @@ async def test_post_to_ebay_starts_recreate_clock(client, test_db):
         refreshed = await db.get(ManualBuild, build_id)
         assert refreshed.listed_at is not None
         assert refreshed.next_recreate_at is not None
+
+
+@pytest.mark.asyncio
+async def test_post_to_ebay_relist_recovers_legacy_item_id_from_saved_url(client, test_db):
+    build_id = await _built_build(client, test_db)
+    async with test_db() as db:
+        build = await db.get(ManualBuild, build_id)
+        build.generated_title = "Title"
+        build.generated_description = "<p>desc</p>"
+        build.generated_aspects = {"Brand": ["FlipFlop"], "Type": ["Desktop"]}
+        build.photos = [{"url": "https://x/1.jpg", "kind": "photo"}]
+        build.ebay_listing_url = "https://www.ebay.co.uk/itm/188817313509"
+        await db.commit()
+
+    async def assert_legacy_id_and_confirm_ended(build, db, **kwargs):
+        assert build.ebay_listing_id == "188817313509"
+        return "ended"
+
+    with patch(
+        "app.services.ebay_token_manager.get_valid_ebay_access_token", new=AsyncMock(return_value="TOKEN")
+    ), patch(
+        "app.services.ebay_listing_reconciliation.reconcile_manual_build_listing",
+        new=AsyncMock(side_effect=assert_legacy_id_and_confirm_ended),
+    ) as mock_reconcile, patch(
+        "app.api.manual_builds.post_flip_to_ebay",
+        new=AsyncMock(return_value={"success": True, "listing_id": "188817313510", "url": "https://ebay.co.uk/itm/188817313510", "sku": "sku-2"}),
+    ):
+        resp = client.post(
+            f"/api/manual-builds/{build_id}/post-to-ebay",
+            json={"price": 320.0, "condition": "USED_EXCELLENT"},
+        )
+
+    assert resp.status_code == 200
+    mock_reconcile.assert_awaited_once()
 
 
 @pytest.mark.asyncio

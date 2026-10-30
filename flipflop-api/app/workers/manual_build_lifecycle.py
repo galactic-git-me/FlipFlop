@@ -10,9 +10,13 @@ All registered on the APScheduler instance in app/workers/scheduler.py.
 from __future__ import annotations
 
 from datetime import datetime, timedelta
+import re
+from urllib.parse import urlparse
 
 import structlog
 from sqlalchemy import select
+from urllib.parse import urlparse
+import re
 
 from app.config import get_settings
 from app.services import ebay_trading_api, ebay_negotiation, offer_engine, pricing_engine
@@ -155,40 +159,85 @@ async def run_manual_build_recreate_cycle_job() -> dict:
     from app.database import AsyncSessionLocal
     from app.models.manual_build import ManualBuild
 
-    recreated, floor_hit, errors = 0, 0, 0
+    recreated, floor_hit, errors, pending = 0, 0, 0, 0
     now = datetime.utcnow()
 
     async with AsyncSessionLocal() as db:
         result = await db.execute(
-            select(ManualBuild).where(
+            select(ManualBuild.id).where(
                 ManualBuild.status == "listed",
                 ManualBuild.relist_enabled.is_(True),
-                ManualBuild.listed_at.isnot(None),
-                ManualBuild.next_recreate_at.isnot(None),
-                ManualBuild.next_recreate_at <= now,
+                (
+                    ManualBuild.next_recreate_at.isnot(None)
+                    & (ManualBuild.next_recreate_at <= now)
+                )
+                | (
+                    ManualBuild.next_recreate_at.is_(None)
+                    & (ManualBuild.listed_at.isnot(None))
+                    & (ManualBuild.listed_at <= now - timedelta(days=7))
+                )
+                | (
+                    ManualBuild.next_recreate_at.is_(None)
+                    & ManualBuild.listed_at.is_(None)
+                    & (ManualBuild.updated_at <= now - timedelta(days=7))
+                    & ManualBuild.ebay_listing_url.isnot(None)
+                ),
             )
         )
-        due = result.scalars().all()
+        due_ids = result.scalars().all()
 
-        for build in due:
+        for build_id in due_ids:
+            build = await db.get(ManualBuild, build_id)
+            if build is None:
+                continue
             try:
-                await _recreate_manual_build(build, db)
-                recreated += 1
-                if build.price_floor_hit_review_needed:
-                    floor_hit += 1
+                outcome = await _recreate_manual_build(build, db)
+                if outcome == "published":
+                    # The remote create succeeded. Persist immediately so a
+                    # later row failure cannot make the next hourly run post it again.
+                    await db.commit()
+                    recreated += 1
+                    if build.price_floor_hit_review_needed:
+                        floor_hit += 1
+                else:
+                    pending += 1
+                    log.warning("manual_build_recreate_cycle.not_published", build_id=build_id, outcome=outcome)
+                    await db.rollback()
             except Exception as exc:
                 errors += 1
-                log.warning("manual_build_recreate_cycle.failed", build_id=build.id, error=str(exc))
+                log.warning("manual_build_recreate_cycle.failed", build_id=build_id, error=str(exc))
+                await db.rollback()
 
-        await db.commit()
-
-    return {"recreated": recreated, "floor_hit_review_needed": floor_hit, "errors": errors}
+    return {"recreated": recreated, "floor_hit_review_needed": floor_hit, "pending": pending, "errors": errors}
 
 
-async def _recreate_manual_build(build, db) -> None:
+async def _recreate_manual_build(build, db) -> str:
     """Rows 1/2/5/6/9: end current listing, generate a fresh title/swap main
     photo, step price down, republish, reschedule."""
     from app.api.manual_builds import generate_listing as _generate_listing_endpoint
+
+    # Legacy builds may retain only the old eBay URL. Recover its numeric item
+    # ID, then require eBay to confirm the old offer ended before creating anew.
+    if not build.ebay_listing_id and build.ebay_listing_url:
+        match = re.search(
+            r"/(?:itm/)?(\d{9,15})(?:[/?#]|$)",
+            urlparse(build.ebay_listing_url).path,
+        )
+        if not match:
+            match = re.search(r"/itm/[^/]+/(\d{9,15})(?:[/?#]|$)", build.ebay_listing_url)
+        if match:
+            build.ebay_listing_id = match.group(1)
+    if build.ebay_listing_id:
+        from app.services.ebay_listing_reconciliation import reconcile_manual_build_listing
+        try:
+            state = await reconcile_manual_build_listing(build, db, force=True)
+        except Exception as exc:
+            log.warning("manual_build_recreate_cycle.reconcile_failed", build_id=build.id, error=str(exc))
+            return "not_ready"
+        if state not in {"ended", "missing"}:
+            return "not_ready"
+    elif not build.ebay_listing_url:
+        return "not_ready"
 
     # Row 19/20 re-anchor: always fresh sold-comp data, never carried forward stale.
     await pricing_engine.recalculate_manual_build_pricing(build, db)
@@ -219,10 +268,11 @@ async def _recreate_manual_build(build, db) -> None:
         # Swap main image: rotate so a different photo leads.
         build.photos = photos[1:] + photos[:1]
 
-    # End + republish on eBay if a token is available; otherwise this
-    # cycle's state (price/title/schedule) still advances so the app stays
-    # internally consistent, and gets applied on the next successful publish.
-    await post_build_to_ebay(build, db=db)
+    # eBay's prior state was confirmed ended above. Only advance cycle state
+    # after the replacement listing is accepted; failures remain due to retry.
+    outcome = await post_build_to_ebay(build, db=db)
+    if outcome != "published":
+        return outcome
 
     build.last_recreate_at = datetime.utcnow()
     build.recreate_cycle_count += 1
@@ -234,3 +284,5 @@ async def _recreate_manual_build(build, db) -> None:
     ).scalar_one_or_none()
     interval_days = policy.relist_interval_days if policy else 7
     build.next_recreate_at = build.last_recreate_at + timedelta(days=interval_days or 7)
+    build.listed_at = build.last_recreate_at
+    return outcome
