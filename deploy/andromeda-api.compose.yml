@@ -142,6 +142,7 @@ services:
       APP_ENV: production
       FLIPFLOP_RUNTIME_ENV: live
       WEB_ONLY: "true"
+      # Accept queue submissions; the main API is the sole queue processor.
       EXTERNAL_GEM_RADAR_WORKER_ENABLED: "true"
       DATABASE_URL: postgresql+asyncpg://flipper:flipper@postgres:5432/pcflipper
       SYNC_DATABASE_URL: postgresql://flipper:flipper@postgres:5432/pcflipper
