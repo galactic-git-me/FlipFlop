@@ -4649,13 +4649,15 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
     build.updated_at = datetime.utcnow()
     await db.flush()
 
-    if not build.generated_title or not build.generated_description:
+    listing_title = (body.title or build.generated_title or "").strip()
+    listing_description = body.description or build.generated_description or ""
+    if not listing_title or not listing_description:
         raise HTTPException(400, "Generate the listing content before posting to eBay")
 
     # FAQ choices can be changed after the description was generated. Always
     # refresh the deterministic FAQ block immediately before publication.
     build.generated_description = prepare_ebay_listing_description(
-        _description_with_selected_faqs(build.generated_description, build)
+        _description_with_selected_faqs(listing_description, build)
     )
 
     # Do not allow an older generated description to bypass the customer-facing
@@ -4799,7 +4801,7 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
         if not body.publish:
             poster = EbayListingPoster(environment=listing_environment, access_token=oauth_token)
             draft_result = await poster.create_item_draft(
-                title=build.generated_title,
+                title=listing_title,
                 description=build.generated_description,
                 price=body.price,
                 image_urls=image_urls,
@@ -4866,7 +4868,7 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
         if is_relisting:
             # Update existing eBay listing
             result = await post_flip_to_ebay(
-                title=build.generated_title,
+                title=listing_title,
                 description=build.generated_description,
                 price=body.price,
                 image_urls=image_urls,
@@ -4883,7 +4885,7 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
         else:
             # Create new eBay listing
             result = await post_flip_to_ebay(
-                title=build.generated_title,
+                title=listing_title,
                 description=build.generated_description,
                 price=body.price,
                 image_urls=image_urls,
@@ -4912,6 +4914,11 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
 
             build.ebay_listing_id = result["listing_id"]
             build.ebay_offer_id = None
+            # A fresh published listing supersedes the saved pointer to an
+            # earlier Seller Hub draft. The external draft is not deleted;
+            # Seller Hub has no draft-delete action in this API flow.
+            build.ebay_draft_id = None
+            build.ebay_draft_url = None
             build.ebay_listing_url = result["url"]
             build.ebay_sku = result.get("sku")
             build.status = "listed"

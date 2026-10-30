@@ -191,6 +191,8 @@ class PostToEbayRequest(BaseModel):
     condition: str = "USED_EXCELLENT"
     publish: bool = True
     images: Optional[list[str]] = None
+    title: Optional[str] = Field(default=None, max_length=80)
+    description: Optional[str] = None
 
 
 class PostToEbayResult(BaseModel):
