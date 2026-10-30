@@ -30,7 +30,7 @@ control unrelated tabs. The machine must be awake and the Windows user logged in
 The worker uses the existing admin Playwright dependency and installed Google
 Chrome; no third-party aggregator, browser extension or marketplace SDK is added.
 Codex reuses its installed CLI authentication. Each job disables shell execution,
-unrelated user MCP configuration, web search and local-image tools; its only
+unrelated user MCP configuration and web search; its only
 browser/vault tools come from the scoped `browser-mcp.mjs` server.
 
 ## Credentials and browser boundaries
