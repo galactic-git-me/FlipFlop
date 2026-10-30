@@ -162,6 +162,22 @@ test("publishes a selected build to eBay and reports the accepted listing", asyn
   await expect(page.getByRole("link", { name: "View listing" })).toHaveAttribute("href", /EBAY-42-published/);
 });
 
+test("treats an eBay draft as unpublished and selects eBay for a new listing", async ({ page, context }) => {
+  await authenticate(context);
+  await installCrossListingMocks(page);
+  await page.goto("/cross-listing");
+
+  const ebayRow = page.locator("tr", { hasText: "Borealis Workstation" });
+  await ebayRow.getByRole("button", { name: "Select Borealis Workstation" }).click();
+
+  await expect(ebayRow.getByLabel("Unpublished draft — not live")).toBeVisible();
+  await expect(ebayRow.locator("a[href*='EBAY-43-draft']")).toHaveCount(0);
+  await expect(
+    page.locator("section.grid").getByRole("button", { name: /eBay UK/ })
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: "Review & submit" })).toBeEnabled();
+});
+
 test("keeps manual-only destinations manual and links storefront without duplicating its product", async ({ page, context }) => {
   await authenticate(context);
   await installCrossListingMocks(page);
