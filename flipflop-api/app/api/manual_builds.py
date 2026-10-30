@@ -4870,10 +4870,10 @@ async def end_ebay_listing(build_id: int, db: AsyncSession = Depends(get_db)):
         raise HTTPException(404, "Build not found")
     if not build.ebay_listing_id:
         raise HTTPException(409, "This build does not have a live eBay listing to end")
-    if not build.ebay_sku:
+    if not build.ebay_sku and not re.fullmatch(r"\d{9,15}", build.ebay_listing_id):
         raise HTTPException(
             409,
-            "This listing has no saved eBay SKU, so it cannot be ended safely from FlipFlop",
+            "This listing has neither a saved eBay SKU nor a valid numeric item ID",
         )
 
     listing_id = build.ebay_listing_id
@@ -4882,14 +4882,20 @@ async def end_ebay_listing(build_id: int, db: AsyncSession = Depends(get_db)):
     log = structlog.get_logger(__name__)
 
     try:
-        await withdraw_listing_by_sku(sku, environment=settings.ebay_listing_environment)
-    except EbayListingWithdrawError as exc:
+        if sku:
+            await withdraw_listing_by_sku(sku, environment=settings.ebay_listing_environment)
+        else:
+            from app.services.ebay_token_manager import get_valid_ebay_access_token
+            from app.services.ebay_trading_api import end_fixed_price_item
+            token = await get_valid_ebay_access_token(settings.ebay_listing_environment, db=db)
+            await end_fixed_price_item(listing_id, token, settings.ebay_listing_environment)
+    except (EbayListingWithdrawError, RuntimeError, ValueError) as exc:
         log.error(
             "manual_build.ebay_listing_end_failed",
             build_id=build_id,
             listing_id=listing_id,
             sku=sku,
-            ebay_status=exc.status_code,
+            ebay_status=getattr(exc, "status_code", None),
         )
         raise HTTPException(
             502,

@@ -113,7 +113,10 @@ class AmazonSPAPI:
             if exc.status_code == 404:
                 return True
             raise
-        if not any("BUYABLE" in (s.get("status") or []) for s in current.get("summaries", [])):
+        summaries = current.get("summaries") or []
+        if not summaries or any("status" not in summary for summary in summaries):
+            return False
+        if not any("BUYABLE" in (s.get("status") or []) for s in summaries):
             return True
         await self._request("DELETE", f"/listings/2021-08-01/items/{quote(self.seller_id, safe='')}/{quote(sku, safe='')}", params={"marketplaceIds": self.marketplace_id})
         try:
@@ -122,9 +125,10 @@ class AmazonSPAPI:
             if exc.status_code == 404:
                 return True
             raise
-        return not any("BUYABLE" in (s.get("status") or []) for s in current.get("summaries", []))
+        summaries = current.get("summaries") or []
+        return bool(summaries) and all("status" in summary for summary in summaries) and not any("BUYABLE" in (summary.get("status") or []) for summary in summaries)
 
-    async def paid_orders_by_sku(self) -> dict[str, str]:
+    async def paid_orders_by_sku(self) -> dict[str, dict]:
         """Orders v2026-01-01: exact SKU/order identity, without buyer PII."""
         params = {"marketplaceIds": self.marketplace_id, "createdAfter": (datetime.now(timezone.utc) - timedelta(days=30)).isoformat(),
             "fulfillmentStatuses": "UNSHIPPED,PARTIALLY_SHIPPED,SHIPPED", "includedData": "FULFILLMENT", "maxResultsPerPage": 100}
@@ -137,7 +141,15 @@ class AmazonSPAPI:
                 for item in order.get("orderItems", []):
                     sku = (item.get("product") or {}).get("sellerSku")
                     if sku and order.get("orderId") and item.get("quantityOrdered", 0) > 0:
-                        found[sku] = order["orderId"]
+                        created = order.get("createdTime")
+                        if not created:
+                            continue
+                        try:
+                            created_at = datetime.fromisoformat(created.replace("Z", "+00:00")).astimezone(timezone.utc).replace(tzinfo=None)
+                        except (TypeError, ValueError):
+                            continue
+                        if sku not in found or created_at > found[sku]["created_at"]:
+                            found[sku] = {"order_id": order["orderId"], "created_at": created_at}
             token = (data.get("pagination") or {}).get("nextToken")
             if not token:
                 return found

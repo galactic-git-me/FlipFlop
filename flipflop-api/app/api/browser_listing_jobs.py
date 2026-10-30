@@ -95,7 +95,7 @@ async def retry(job_id: int, db: AsyncSession = Depends(get_db)):
     if not job or job.status not in {"blocked", "needs_review"}:
         raise HTTPException(409, "Only a blocked or interrupted job can be resumed")
     # Resume must reconcile the seller account before any write; no blind retry.
-    job.status, job.message = "queued", "Resuming: verify remote state before publishing."
+    job.status, job.message, job.available_at = "queued", "Resuming: verify remote state before publishing.", datetime.utcnow()
     await db.commit()
     return summary(job)
 

@@ -13,6 +13,7 @@ eBay's documented Trading API XML contract.
 from __future__ import annotations
 
 from datetime import datetime
+import re
 from typing import Optional
 from xml.etree import ElementTree as ET
 
@@ -81,6 +82,13 @@ async def _call(
         errors = tree.findall(f"{{{_NS}}}Errors")
         raise EbayTradingApiError(call_name, errors, ack)
     return tree
+
+
+async def end_fixed_price_item(item_id: str, token: str, environment: str = "production") -> None:
+    """End a fixed-price listing by eBay item ID when no Inventory SKU exists."""
+    if not re.fullmatch(r"\d{9,15}", item_id):
+        raise ValueError("A valid numeric eBay item ID is required")
+    await _call("EndFixedPriceItem", f"<ItemID>{item_id}</ItemID><EndingReason>NotAvailable</EndingReason>", token, environment)
 
 
 async def revise_fixed_price_item(

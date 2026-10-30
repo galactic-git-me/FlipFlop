@@ -30,7 +30,7 @@ async def plan_sync(db):
         for channel, external_id, url in [("ebay_uk", build.ebay_listing_id, build.ebay_listing_url),
                 ("flipflop_shop", build.storefront_product_id, f"https://www.theflipflop.shop/ready-to-ship/{build.storefront_product_id}")]:
             if external_id and not any(ALIASES.get(r.channel, r.channel) == channel for r in rows):
-                row = ChannelListing(manual_build_id=build.id, channel=channel, external_listing_id=str(external_id), listing_url=url, status="published")
+                row = ChannelListing(manual_build_id=build.id, channel=channel, external_listing_id=str(external_id), listing_url=url, status="submitted")
                 db.add(row)
                 await db.flush()
                 rows.append(row)
@@ -50,7 +50,7 @@ async def plan_sync(db):
             for operation in ("inspect", "update"):
                 if operation == "inspect" and row.last_checked_at and row.last_checked_at > now - timedelta(minutes=check_minutes):
                     continue
-                if operation == "update" and (row.last_payload_hash == fingerprint or row.status != "published"):
+                if operation == "update" and (row.last_payload_hash is None or row.last_payload_hash == fingerprint or row.status != "published"):
                     continue
                 try:
                     await enqueue_operation(db, build, row, operation)
@@ -105,10 +105,10 @@ async def execute_api_job(db, job, row, build):
                 orders = await client.paid_orders_by_sku()
                 _amazon_order_cache = (now, orders)
             sku = row.external_listing_id or f"FF-BUILD-{build.id}"
-            if sku in orders:
+            if sku in orders and row.published_at and orders[sku]["created_at"] >= row.published_at:
                 build.status, build.dispatch_status, row.status = "sold", "awaiting_dispatch", "sold"
                 await withdraw_other_channels(db, build, channel)
-                db.add(ListingPublishEvent(channel_listing_id=row.id, event_type="sale_confirmed", message="Amazon confirmed a paid order for the exact seller SKU.", event_metadata={"order_id": orders[sku]}))
+                db.add(ListingPublishEvent(channel_listing_id=row.id, event_type="sale_confirmed", message="Amazon confirmed a paid order for the exact seller SKU.", event_metadata={"order_id": orders[sku]["order_id"]}))
             else:
                 item = await client.get_listing(sku=sku)
                 if any("BUYABLE" in (s.get("status") or []) for s in item.get("summaries", [])):

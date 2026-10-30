@@ -48,6 +48,23 @@ function element(ref) {
   if (!/^\d+-\d+$/.test(String(ref)) || !String(ref).startsWith(`${revision}-`)) throw new Error('Observe the page again; the element reference is stale');
   return page.locator(`[data-ff-ref="${ref}"]`);
 }
+function sellerAccountPage(url) {
+  return (pack.channel === 'onbuy' && url.hostname === 'seller.onbuy.com') ||
+    (pack.channel === 'facebook_catalog' && /\/marketplace\/you|\/commerce/.test(url.pathname)) ||
+    (pack.channel === 'vinted' && /\/member|\/my_orders|\/my-orders|\/orders|\/transactions/.test(url.pathname)) ||
+    (pack.channel === 'google_shopping' && url.hostname === 'merchants.google.com');
+}
+async function pageIdentity(itemId) {
+  const text = await page.locator('body').innerText();
+  const hrefs = await page.locator('a[href]').evaluateAll(nodes => nodes.map(n => n.href));
+  const values = await page.locator('input:not([type="password"])').evaluateAll(nodes => nodes
+    .filter(n => /search|find|keyword/i.test(`${n.type} ${n.name} ${n.placeholder} ${n.getAttribute('aria-label') || ''}`))
+    .map(n => n.value || ''));
+  const identified = Boolean(itemId) && (page.url().includes(itemId) || text.includes(itemId) || hrefs.some(h => h.includes(itemId)));
+  const candidates = [itemId, pack.listing.sku, pack.listing.title].filter(Boolean);
+  const searched = values.some(value => value && candidates.includes(value));
+  return { text, identified, searched };
+}
 async function envLogin(args) {
   await browser();
   const username = args.username_ref ? element(args.username_ref) : null, password = args.password_ref ? element(args.password_ref) : null;
@@ -71,7 +88,19 @@ async function run(name, args) {
   if (name === 'browser_observe') return snapshot();
   if (name === 'browser_navigate') { await browser(); if (!allowed(args.url)) throw new Error('URL outside this vendor'); await page.goto(args.url); return snapshot(); }
   if (name === 'env_login') return envLogin(args);
-  if (name === 'remote_state') { inspected = true; remoteState = args.state; return { recorded: true, state: args.state, note: args.note }; }
+  if (name === 'remote_state') {
+    await browser();
+    if (!revision) throw new Error('Observe the seller page before recording its state');
+    if (!['unknown', 'sign_in_required'].includes(args.state)) {
+      const { identified, searched } = await pageIdentity(String(args.external_id || pack.previous_listing_id || ''));
+      if (args.state === 'missing' && (!sellerAccountPage(new URL(page.url())) || !searched))
+        throw new Error('Search the seller account for the exact saved SKU or item ID before confirming a missing listing');
+      if (['active', 'ended', 'sold'].includes(args.state) && !identified)
+        throw new Error('Observe the exact vendor item ID before recording its state');
+    }
+    inspected = true; remoteState = args.state;
+    return { recorded: true, state: args.state, note: args.note };
+  }
   if (name === 'browser_click') {
     await browser();
     if (!inspected) throw new Error('First inspect seller listings and record the remote state');
@@ -80,7 +109,7 @@ async function run(name, args) {
     const el = element(args.ref);
     const text = ((await el.innerText()) || await el.getAttribute('aria-label') || '').toLowerCase();
     if (['inspect', 'sale_check'].includes(job.operation) && /publish|save listing|delete|end listing|mark as sold|deactivate/.test(text)) throw new Error('Status checks cannot change or withdraw listings');
-    if (/pay|purchase|subscribe|boost|promote|delete account|create account|grant access/.test(text)) throw new Error('Paid service or account change requires separate operator review');
+    if (/pay|purchase|subscribe|boost|promote|delete account|create account|grant access|change password|save password|change email/.test(text)) throw new Error('Paid service or account change requires separate operator review');
     await preflight();
     if (args.writes_listing) mayHaveWritten = true;
     await el.click();
@@ -89,17 +118,34 @@ async function run(name, args) {
   if (name === 'browser_press') {
     await browser();
     if (!['Enter', 'Tab', 'Escape', 'ArrowDown', 'ArrowUp', 'Space'].includes(args.key)) throw new Error('Unsupported page key');
+    const el = element(args.ref);
+    if (['inspect', 'sale_check'].includes(job.operation) && ['Enter', 'Space'].includes(args.key)) {
+      const descriptor = `${await el.getAttribute('type') || ''} ${await el.getAttribute('name') || ''} ${await el.getAttribute('placeholder') || ''} ${await el.getAttribute('aria-label') || ''}`;
+      if (!/password|user|email|search|find|keyword/i.test(descriptor)) throw new Error('Status checks may submit only login or search fields');
+    }
     await preflight();
-    await element(args.ref).press(args.key);
+    await el.press(args.key);
     return snapshot();
   }
   if (name === 'browser_fill') {
     await browser(); const el = element(args.ref);
     if (await el.getAttribute('type') === 'password') throw new Error('Use env_login for passwords');
+    if (['inspect', 'sale_check'].includes(job.operation)) {
+      const descriptor = `${await el.getAttribute('type') || ''} ${await el.getAttribute('name') || ''} ${await el.getAttribute('placeholder') || ''} ${await el.getAttribute('aria-label') || ''}`;
+      if (!/search|find|keyword/i.test(descriptor)) throw new Error('Status checks may fill only seller-inventory search fields');
+    }
     await el.fill(args.value); return { filled: true };
   }
-  if (name === 'browser_select') { await browser(); await element(args.ref).selectOption({ label: args.label }); return snapshot(); }
+  if (name === 'browser_select') {
+    await browser(); const el = element(args.ref);
+    if (['inspect', 'sale_check'].includes(job.operation)) {
+      const descriptor = `${await el.getAttribute('name') || ''} ${await el.getAttribute('aria-label') || ''}`;
+      if (!/filter|sort|search/i.test(descriptor)) throw new Error('Status checks may change only search or filter controls');
+    }
+    await el.selectOption({ label: args.label }); return snapshot();
+  }
   if (name === 'browser_upload') {
+    if (['inspect', 'sale_check', 'withdraw'].includes(job.operation)) throw new Error('This job cannot upload photographs');
     await browser(); const files = args.image_indexes.map(i => {
       if (!Number.isInteger(i) || i < 0 || i >= pack.listing.images.length) throw new Error('Choose photographs from the seller pack');
       return path.join(path.dirname(process.env.FF_BROWSER_JOB_FILE), `photo-${i}.jpg`);
@@ -109,23 +155,16 @@ async function run(name, args) {
   if (name === 'report_status') {
     await browser(); await preflight();
     const url = new URL(page.url());
-    const sellerContext = (pack.channel === 'onbuy' && url.hostname === 'seller.onbuy.com') ||
-      (pack.channel === 'facebook_catalog' && /\/marketplace\/you|\/commerce/.test(url.pathname)) ||
-      (pack.channel === 'vinted' && /\/member|\/my_orders|\/my-orders|\/orders|\/transactions/.test(url.pathname)) ||
-      (pack.channel === 'google_shopping' && url.hostname === 'merchants.google.com');
+    const sellerContext = sellerAccountPage(url);
     const state = args.state;
     if (!['active', 'ended', 'missing', 'sold', 'unknown'].includes(state)) throw new Error('Unknown observed state');
     if (state !== 'active' && state !== 'unknown' && !sellerContext) throw new Error('Confirm this state inside the authenticated seller account, not from a public missing page');
     if (await page.locator('input[type="password"]:visible').count()) throw new Error('Seller sign-in is not complete');
-    const text = await page.locator('body').innerText();
     const itemId = String(args.external_id || pack.previous_listing_id || '');
-    const hrefs = await page.locator('a[href]').evaluateAll(nodes => nodes.map(n => n.href));
-    const values = await page.locator('input:not([type="password"])').evaluateAll(nodes => nodes.map(n => n.value || ''));
-    const identified = itemId && (page.url().includes(itemId) || text.includes(itemId) || hrefs.some(h => h.includes(itemId)));
-    const searched = values.some(v => v === itemId || v === pack.listing.sku || v === pack.listing.title);
+    const { text, identified, searched } = await pageIdentity(itemId);
     if (state !== 'unknown' && state !== 'missing' && !identified) throw new Error('The exact vendor item identity must be visible in the observed page');
     if (state === 'missing' && !searched) throw new Error('Search the seller inventory for the exact saved item ID or build SKU before confirming it is missing');
-    if (state === 'sold' && (pack.channel === 'google_shopping' || !args.order_id || !text.includes(args.order_id) || !/sold|paid|payment received|completed order/i.test(text))) throw new Error('A confirmed seller order reference and exact item ID are required; missing stock is not proof of sale');
+    if (state === 'sold' && (pack.channel === 'google_shopping' || !args.order_id || !page.url().includes(args.order_id) || !text.includes(args.order_id) || !/paid|payment received|completed order|ready to ship/i.test(text))) throw new Error('Open the exact paid order detail showing the item ID and order reference; a sold label alone is not proof of sale');
     if (job.operation === 'withdraw' && !['ended', 'missing', 'sold'].includes(state)) throw new Error('Withdrawal must be confirmed before completing this job');
     const result = { status: 'observed', remote_state: state, external_id: itemId || null,
       listing_url: args.listing_url || pack.previous_listing_url || null, order_id: args.order_id || null,
@@ -165,7 +204,7 @@ const definitions = [
   ['seller_pack', 'Read the canonical seller pack and job instructions.', schema()],
   ['browser_observe', 'Observe Chrome with fresh element references.', schema()],
   ['browser_navigate', 'Navigate within the selected vendor only.', schema({ url: str })],
-  ['remote_state', 'Record the remotely inspected state before any clicking. Inspect the seller account first, including matching SKU/title and old listing.', schema({ state: { type: 'string', enum: ['active', 'ended', 'missing', 'sold', 'unknown', 'sign_in_required'] }, note: str })],
+  ['remote_state', 'Record the observed remote state. Search exact SKU/item ID in the seller account before declaring a listing missing.', schema({ state: { type: 'string', enum: ['active', 'ended', 'missing', 'sold', 'unknown', 'sign_in_required'] }, note: str, external_id: str }, ['state', 'note'])],
   ['browser_click', 'Click an observed Chrome element; flag listing writes. Paid/account actions are blocked.', schema({ ref: str, writes_listing: bool })],
   ['browser_fill', 'Fill a listing field. Use saved pack data; never put passwords here.', schema({ ref: str, value: str })],
   ['browser_press', 'Press a scoped page key on an observed element.', schema({ ref: str, key: { type: 'string', enum: ['Enter', 'Tab', 'Escape', 'ArrowDown', 'ArrowUp', 'Space'] } })],

@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from unittest.mock import AsyncMock
 import pytest
 from fastapi import HTTPException
 from sqlalchemy import select
@@ -7,6 +8,11 @@ from app.models.channel_listing import ChannelListing
 from app.models.browser_listing_job import BrowserListingJob
 from app.services.browser_listing_jobs import enqueue_browser_job, complete_browser_job, validate_listing_url
 from app.api.browser_listing_jobs import claim, heartbeat, preflight, LeaseIn, require_worker
+
+
+@pytest.fixture(autouse=True)
+def mock_image_preparation(monkeypatch):
+    monkeypatch.setattr("app.services.channel_images.prepare_channel_urls", AsyncMock(side_effect=lambda urls, channel: urls))
 
 
 async def make_build(db):

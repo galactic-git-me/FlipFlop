@@ -22,7 +22,7 @@ export default function BrowserListingJobs({ onChanged }: { onChanged: () => Pro
         previous.current = signature;
         setJobs(rows);
         setError(null);
-      } catch { if (!cancelled) setError("Could not load Codex Chrome jobs. Refresh to retry."); }
+      } catch { if (!cancelled) setError("Could not load channel synchronisation jobs. Refresh to retry."); }
     };
     void load();
     const interval = window.setInterval(() => void load(), 10000);
@@ -37,15 +37,15 @@ export default function BrowserListingJobs({ onChanged }: { onChanged: () => Pro
     finally { setSaving(null); }
   };
   return (
-    <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4" aria-label="Codex Chrome listing jobs">
-      <h2 className="text-sm font-semibold text-emerald-300">Codex Chrome jobs</h2>
-      <p className="mt-1 text-xs text-slate-400">Publishing and auto-relisting use the saved seller pack. The desktop worker checks the vendor, fills credentials from .env.local and saves the confirmed listing URL. Queued jobs wait until the worker is available.</p>
+    <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4" aria-label="Channel synchronisation jobs">
+      <h2 className="text-sm font-semibold text-emerald-300">Channel synchronisation</h2>
+      <p className="mt-1 text-xs text-slate-400">Listings, updates, sale checks and withdrawals are tracked here. Browser channels need the desktop worker; queued work waits until it is available.</p>
       {error && <p role="alert" className="mt-3 text-xs text-red-300">{error}</p>}
-      {!jobs.length && !error && <p className="py-5 text-center text-xs text-slate-500">No Chrome listing jobs yet.</p>}
+      {!jobs.length && !error && <p className="py-5 text-center text-xs text-slate-500">No channel jobs yet.</p>}
       <div className="mt-3 space-y-2">
         {jobs.slice(0, 30).map((job) => (
           <div key={job.id} className="flex flex-wrap items-center gap-3 rounded border border-slate-800 p-3 text-xs">
-            <span className="text-slate-300">Build {job.build_id} · {VENDOR_META[job.channel]?.label ?? job.channel}</span>
+            <span className="text-slate-300">Build {job.build_id} · {VENDOR_META[job.channel]?.label ?? job.channel} � {job.operation.replaceAll("_", " ")}</span>
             <span className={job.status === "succeeded" ? "text-emerald-300" : job.status === "blocked" || job.status === "needs_review" ? "text-yellow-300" : "text-sky-300"}>{job.status.replaceAll("_", " ")}</span>
             <span className="min-w-0 flex-1 text-slate-400">{job.message}</span>
             <a href={`/proxy-api/cross-listing/browser-jobs/${job.id}/seller-pack`} download={`seller-pack-${job.id}.json`} className="text-sky-300 underline">Seller pack</a>
