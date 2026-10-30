@@ -2334,7 +2334,7 @@ export default function CrossListingPage() {
                             disabled={relistNowBuild === item.buildId || publishing}
                             className="cursor-pointer rounded border border-emerald-500/50 px-2.5 py-1.5 text-xs text-emerald-300 transition-colors hover:bg-emerald-500/10 disabled:opacity-50"
                           >
-                            {relistNowBuild === item.buildId ? "Publishing…" : "Publish / relist eBay"}
+                            {relistNowBuild === item.buildId ? "Publishing…" : "Cross-list"}
                           </button>
                         )}
                       <button
