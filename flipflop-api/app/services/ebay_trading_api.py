@@ -31,6 +31,22 @@ _TRADING_API_BASE = {
 _NS = "urn:ebay:apis:eBLBaseComponents"
 
 
+class EbayTradingApiError(RuntimeError):
+    """Trading API failure retaining machine-readable eBay error codes."""
+
+    def __init__(self, call_name: str, errors: list[ET.Element], ack: str | None):
+        self.error_codes = {
+            code
+            for error in errors
+            if (code := error.findtext(f"{{{_NS}}}ErrorCode"))
+        }
+        messages = [error.findtext(f"{{{_NS}}}LongMessage") for error in errors]
+        super().__init__(
+            f"eBay Trading API {call_name} failed: "
+            f"{'; '.join(filter(None, messages)) or ack}"
+        )
+
+
 def _headers(call_name: str, token: str) -> dict:
     settings = get_settings()
     return {
@@ -62,8 +78,8 @@ async def _call(
     tree = ET.fromstring(resp.text)
     ack = tree.findtext(f"{{{_NS}}}Ack")
     if ack not in ("Success", "Warning"):
-        errors = [e.findtext(f"{{{_NS}}}LongMessage") for e in tree.findall(f"{{{_NS}}}Errors")]
-        raise RuntimeError(f"eBay Trading API {call_name} failed: {'; '.join(filter(None, errors)) or ack}")
+        errors = tree.findall(f"{{{_NS}}}Errors")
+        raise EbayTradingApiError(call_name, errors, ack)
     return tree
 
 

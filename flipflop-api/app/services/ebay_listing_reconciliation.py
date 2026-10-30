@@ -10,7 +10,12 @@ from app.models.manual_build import ManualBuild
 log = structlog.get_logger(__name__)
 
 
-def classify_ebay_listing_state(remote: dict | None, *, order_found: bool) -> str:
+def classify_ebay_listing_state(
+    remote: dict | None,
+    *,
+    order_found: bool,
+    confirmed_unavailable: bool = False,
+) -> str:
     """Pure lifecycle decision used by reconciliation and unit tests."""
     remote_status = str((remote or {}).get("listing_status") or "").lower()
     quantity_sold = int((remote or {}).get("quantity_sold") or 0)
@@ -18,6 +23,8 @@ def classify_ebay_listing_state(remote: dict | None, *, order_found: bool) -> st
         return "active"
     if order_found or quantity_sold > 0:
         return "sold"
+    if confirmed_unavailable:
+        return "missing"
     if remote_status in {"completed", "ended"}:
         return "ended"
     if remote is not None:
@@ -60,7 +67,7 @@ async def reconcile_manual_build_listing(
     from app.config import get_settings
     from app.services.ebay_order_sync import find_order_for_listing, EbayOrderSyncError
     from app.services.ebay_token_manager import get_valid_ebay_access_token
-    from app.services.ebay_trading_api import get_item_status
+    from app.services.ebay_trading_api import EbayTradingApiError, get_item_status
 
     settings = get_settings()
     target_environment = environment or settings.ebay_listing_environment
@@ -93,6 +100,7 @@ async def reconcile_manual_build_listing(
         # A completed/vanished listing is sold only when eBay's order API or
         # QuantitySold proves it. Mere disappearance is an early/manual end.
         order = None
+        order_lookup_failed = False
         try:
             order = await find_order_for_listing(
                 build.ebay_listing_id,
@@ -101,8 +109,28 @@ async def reconcile_manual_build_listing(
                 db=db,
             )
         except EbayOrderSyncError as exc:
+            order_lookup_failed = True
             log.warning("manual_build.ebay_order_reconcile_failed", build_id=build.id, error=str(exc))
-        state = classify_ebay_listing_state(remote, order_found=order is not None)
+        # Error 17 means this seller cannot access the old item. After eBay's
+        # order lookup succeeds and finds no sale, let the relist cycle create
+        # a fresh listing with a new ID. Network/auth errors remain unknown.
+        confirmed_unavailable = (
+            not order_lookup_failed
+            and isinstance(remote_error, EbayTradingApiError)
+            and "17" in remote_error.error_codes
+        )
+        state = classify_ebay_listing_state(
+            remote,
+            order_found=order is not None,
+            confirmed_unavailable=confirmed_unavailable,
+        )
+        if confirmed_unavailable and state == "missing":
+            log.info(
+                "manual_build.ebay_listing_missing_confirmed",
+                build_id=build.id,
+                listing_id=build.ebay_listing_id,
+                next_action="create_new_listing",
+            )
         if state == "sold":
             if order is not None:
                 build.ebay_order_id = order.order_id
