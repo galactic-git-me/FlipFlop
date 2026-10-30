@@ -92,6 +92,23 @@ function listingWithImages(item: CrossListingSource, imageUrls: string[]) {
   };
 }
 
+function channelPublishIntent(
+  item: GroupedListing,
+  capability: ChannelCapability,
+  build?: ManualBuild
+): "update" | "relist" | "create" | "manual" | "approval" | "unavailable" | "verify" | "blocked" {
+  if (item.listing.quantity <= 0) return "blocked";
+  if (capability.mode === "requires_approval") return "approval";
+  if (capability.mode === "not_connected") return "unavailable";
+  if (capability.mode === "manual") return "manual";
+  if (capability.mode !== "api") return "unavailable";
+  if (capability.channel === "ebay_uk" && build?.ebay_listing_status === "unknown") return "verify";
+  const status = item.byChannel[capability.channel]?.status;
+  if (status === "live") return "update";
+  if (status === "ended") return "relist";
+  return "create";
+}
+
 function groupListings(sources: CrossListingSource[]): GroupedListing[] {
   const groups = new Map<string, GroupedListing>();
   sources.forEach((source) => {
@@ -1315,7 +1332,15 @@ export default function CrossListingPage() {
       setError("Set a valid eBay price before relisting this build.");
       return;
     }
-    if (!window.confirm(`Create a new live eBay listing for ${item.title} at £${price.toFixed(2)}?`)) return;
+    const oldListingEnded =
+      build.ebay_listing_status === "ended" || item.byChannel.ebay_uk?.status === "ended";
+    const intendedAction = oldListingEnded
+      ? "relist the ended item as a new eBay listing with a fresh item ID"
+      : "create a new eBay listing if the saved item is missing or ended";
+    const draftNote = build.ebay_draft_id
+      ? " The earlier incomplete Seller Hub draft will remain in eBay and may be deleted there after the new listing is confirmed."
+      : "";
+    if (!window.confirm(`Publish ${item.listing.title} on eBay at £${price.toFixed(2)}? FlipFlop will verify the saved item first, then ${intendedAction}. If eBay still sees it as active, FlipFlop updates it instead.${draftNote}`)) return;
     setRelistNowBuild(item.buildId);
     setError(null);
     try {
@@ -1323,12 +1348,14 @@ export default function CrossListingPage() {
         price,
         condition: build.ebay_condition || item.condition || "USED_EXCELLENT",
         publish: true,
-        images: (build.photos ?? []).filter((photo) => photo.kind === "photo").map((photo) => photo.url),
+        images: item.listing.images.map((image) => image.url),
+        title: item.listing.title,
+        description: item.listing.description,
       });
       if (!result.success) throw new Error(result.error || "eBay did not accept the listing.");
       await refresh();
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Could not relist this build on eBay.");
+      setError(cause instanceof Error ? cause.message : "Could not publish this build on eBay.");
     } finally {
       setRelistNowBuild(null);
     }
@@ -1344,16 +1371,39 @@ export default function CrossListingPage() {
   };
 
   const submitSelected = () => {
-    if (
-      selectedItems.length &&
-      destinations.length &&
-      window.confirm(
-        `Confirm ${
-          selectedItems.length * destinations.length
-        } cross-listing job(s)? API destinations may create or update live listings.`
-      )
-    )
-      void publish();
+    if (!selectedItems.length || !destinations.length) return;
+    const counts = new Map<string, number>();
+    for (const item of selectedGroups) {
+      for (const destination of destinations) {
+        const capability = channelCapabilities.find((entry) => entry.channel === destination);
+        if (!capability) continue;
+        const intent = channelPublishIntent(item, capability, builds[item.buildId]);
+        counts.set(intent, (counts.get(intent) ?? 0) + 1);
+      }
+    }
+    const summary = [
+      ["update", "active listings updated"],
+      ["relist", "ended listings relisted"],
+      ["create", "new listings created for drafts or missing listings"],
+      ["manual", "manual listing steps prepared"],
+      ["approval", "destinations requiring approval"],
+      ["unavailable", "unavailable destinations"],
+      ["verify", "eBay listings that need a status refresh first"],
+      ["blocked", "sold or unavailable builds skipped"],
+    ] as const;
+    const actions = summary
+      .filter(([intent]) => counts.has(intent))
+      .map(([intent, label]) => `${counts.get(intent)} ${label}`)
+      .join("; ");
+    const incompleteDrafts = selectedGroups.filter(
+      (item) => destinations.includes("ebay_uk") && Boolean(builds[item.buildId]?.ebay_draft_id)
+    ).length;
+    const draftNote = incompleteDrafts
+      ? ` ${incompleteDrafts} earlier incomplete eBay draft(s) will remain in Seller Hub for manual cleanup.`
+      : "";
+    if (window.confirm(
+      `Confirm ${selectedItems.length * destinations.length} cross-listing job(s)? ${actions}. Based on the saved status, ended listings use the vendor's relist path, drafts or missing listings use its create path, and active listings use update. eBay rechecks its remote listing state before writing; an unverified eBay state is blocked.${draftNote}`
+    )) void publish();
   };
 
   const reviewedBuild = review ? builds[review.buildId] : undefined;
@@ -1486,6 +1536,27 @@ export default function CrossListingPage() {
               : job
           )
         );
+        const build = builds[item.buildId];
+        const group = selectedGroups.find((candidate) => candidate.buildId === item.buildId);
+        const intent = group ? channelPublishIntent(group, capability, build) : "verify";
+        if (intent === "blocked") {
+          addResult({
+            buildId: item.buildId,
+            channel: capability.label,
+            status: "failed",
+            message: "Sold or zero-quantity builds cannot be published.",
+          });
+          continue;
+        }
+        if (intent === "verify") {
+          addResult({
+            buildId: item.buildId,
+            channel: capability.label,
+            status: "failed",
+            message: "eBay listing state is unverified. Refresh the listing status before publishing to avoid creating a duplicate.",
+          });
+          continue;
+        }
         if (capability.mode !== "api") {
           if (destination === "amazon") {
             addResult({
@@ -1517,7 +1588,6 @@ export default function CrossListingPage() {
           }
           continue;
         }
-        const build = builds[item.buildId];
         try {
           if (destination === "ebay_uk") {
             const result = await api.manualBuilds.postToEbay(item.buildId, {
@@ -1525,13 +1595,15 @@ export default function CrossListingPage() {
               condition: item.listing.condition,
               publish: true,
               images: channelItem.listing.images.map((image) => image.url),
+              title: channelItem.listing.title,
+              description: channelItem.listing.description,
             });
             addResult({
               buildId: item.buildId,
               channel: capability.label,
               status: result.success ? "published" : "failed",
               message: result.success
-                ? "eBay Sandbox accepted the publish request."
+                ? result.action === "updated" ? "The active eBay listing was updated." : "A new eBay listing was published."
                 : result.error ?? "eBay did not publish the listing.",
               url: result.url,
             });
@@ -2236,15 +2308,15 @@ export default function CrossListingPage() {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex justify-end gap-2">
-                      {(["ended", "unavailable"].includes(item.byChannel.ebay_uk?.status ?? "") || !item.byChannel.ebay_uk) &&
-                        ["ended", "missing", "never_listed"].includes(builds[item.buildId]?.ebay_listing_status ?? "never_listed") &&
-                        relistEnabledByBuild.get(item.buildId) !== false && (
+                      {(["ended", "unavailable", "draft"].includes(item.byChannel.ebay_uk?.status ?? "") || !item.byChannel.ebay_uk) &&
+                        ["ended", "missing", "never_listed", "draft"].includes(builds[item.buildId]?.ebay_listing_status ?? "never_listed") &&
+                        (
                           <button
                             onClick={() => void relistNow(item)}
                             disabled={relistNowBuild === item.buildId || publishing}
                             className="cursor-pointer rounded border border-emerald-500/50 px-2.5 py-1.5 text-xs text-emerald-300 transition-colors hover:bg-emerald-500/10 disabled:opacity-50"
                           >
-                            {relistNowBuild === item.buildId ? "Relisting…" : "Relist eBay"}
+                            {relistNowBuild === item.buildId ? "Publishing…" : "Publish / relist eBay"}
                           </button>
                         )}
                       <button

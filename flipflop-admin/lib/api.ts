@@ -1462,13 +1462,14 @@ export const api = {
       }),
     postToEbay: (
       id: number,
-      data: { price: number; condition: string; publish?: boolean; images?: string[] }
+      data: { price: number; condition: string; publish?: boolean; images?: string[]; title?: string; description?: string }
     ) =>
       request<{
         success: boolean;
         listing_id?: string;
         url?: string;
         error?: string;
+        action?: "posted" | "updated";
         draft_id?: string;
         draft_url?: string;
       }>(`/manual-builds/${id}/post-to-ebay`, {
