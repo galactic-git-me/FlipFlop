@@ -106,3 +106,23 @@ def test_worker_auth_fails_closed_and_is_separate_from_operator(monkeypatch):
     monkeypatch.setenv("CROSS_LISTING_WORKER_KEY", "worker-secret")
     with pytest.raises(HTTPException): require_worker("operator-secret")
     require_worker("worker-secret")
+
+
+@pytest.mark.asyncio
+async def test_ebay_schedule_uses_saved_canonical_data_and_only_advances_on_success(db, monkeypatch):
+    from types import SimpleNamespace
+    from unittest.mock import AsyncMock
+    from app.workers.manual_build_lifecycle import _recreate_manual_build
+    build = await make_build(db)
+    build.ebay_price, build.generated_title = 1400, "PROMETHEUS Gaming PC"
+    old_due = build.next_recreate_at = datetime.utcnow() - timedelta(days=1)
+    post = AsyncMock(return_value=SimpleNamespace(success=False))
+    monkeypatch.setattr("app.api.manual_builds.post_to_ebay", post)
+    assert await _recreate_manual_build(build, db) == "not_ready"
+    assert build.next_recreate_at == old_due and build.ebay_price == 1400
+    post.return_value = SimpleNamespace(success=True)
+    assert await _recreate_manual_build(build, db) == "published"
+    assert build.next_recreate_at > old_due
+    assert post.call_args.args[1].price == 1400
+    assert post.call_args.args[1].title == "PROMETHEUS Gaming PC"
+    assert build.generated_title == "PROMETHEUS Gaming PC" and build.ebay_price == 1400
