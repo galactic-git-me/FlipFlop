@@ -33,6 +33,11 @@ _MAX_POLL_ATTEMPTS = 10
 _POLL_INTERVAL_SECONDS = 3
 
 
+def _image_api_root(environment: str) -> str:
+    """The Media image resource uses apim.ebay.com in production."""
+    return "https://api.sandbox.ebay.com" if environment == "sandbox" else "https://apim.ebay.com"
+
+
 async def prepare_listing_images(image_urls: list[str], token: str, environment: str) -> list[str]:
     """Upload reviewed local derivatives through the current Media image API.
 
@@ -42,7 +47,7 @@ async def prepare_listing_images(image_urls: list[str], token: str, environment:
     from app.services.channel_images import load_original
     if environment not in {"sandbox", "production"} or not token:
         raise ValueError("A valid eBay listing environment and seller token are required")
-    root = "https://api.sandbox.ebay.com" if environment == "sandbox" else "https://api.ebay.com"
+    root = _image_api_root(environment)
     cache_dir = Path(__file__).resolve().parents[3] / ".run-logs" / "ebay-image-cache"
     cache_dir.mkdir(parents=True, exist_ok=True)
     hosted = []
