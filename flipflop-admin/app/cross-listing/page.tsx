@@ -327,6 +327,8 @@ function normalizeScheduleChannel(channel: string): CrossListingChannel | null {
     facebook_catalog: "facebook_catalog",
     facebook: "facebook_catalog",
     vinted: "vinted",
+    google_shopping: "google_shopping",
+    facebook_marketplace: "facebook_catalog",
   };
   return aliases[normalized] ?? null;
 }
@@ -338,6 +340,7 @@ function scheduleStatus(status: string): CrossListingSource["status"] {
       "draft",
       "scheduled",
       "publishing",
+      "submitted",
       "queued",
       "validating",
       "ready",

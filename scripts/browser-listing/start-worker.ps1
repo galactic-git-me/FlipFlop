@@ -11,6 +11,11 @@ if ($config.vaultItems) { $env:FF_VAULT_ITEMS = $config.vaultItems | ConvertTo-J
 # Read an explicitly configured session from this user's environment only.
 # An unlocked desktop app does not automatically unlock the Bitwarden CLI.
 if (-not $env:BW_SESSION) { $env:BW_SESSION = [Environment]::GetEnvironmentVariable('BW_SESSION', 'User') }
+$vaultSessionFile = Join-Path $workerState 'vault-session.xml'
+if (-not $env:BW_SESSION -and (Test-Path -LiteralPath $vaultSessionFile)) {
+    $vaultSession = Import-Clixml -LiteralPath $vaultSessionFile
+    $env:BW_SESSION = [PSCredential]::new('vault-session', $vaultSession).GetNetworkCredential().Password
+}
 try {
     $workerArgs = @((Join-Path $PSScriptRoot 'worker.mjs'))
     if ($Once) { $workerArgs += '--once' }
