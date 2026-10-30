@@ -4629,7 +4629,7 @@ async def end_ebay_listing(build_id: int, db: AsyncSession = Depends(get_db)):
 
 @router.post("/{build_id}/post-to-ebay", response_model=PostToEbayResult)
 async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
+    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id).with_for_update())
     build = result.scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
@@ -4967,6 +4967,8 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
 
             await db.flush()
             action = "updated" if is_relisting else "posted"
+            from app.services.channel_listing_identity import save_confirmed_identity
+            await save_confirmed_identity(db, build, "ebay_uk", result["listing_id"], result["url"])
             return PostToEbayResult(success=True, listing_id=result["listing_id"], url=result["url"], action=action, offer_id=result.get("offer_id"))
 
         return PostToEbayResult(success=False, error=result.get("error", f"Failed to {'update' if is_relisting else 'post'} listing"))
@@ -5021,6 +5023,8 @@ async def publish_ebay_draft(build_id: int, db: AsyncSession = Depends(get_db)):
     build.status = "listed"
     build.updated_at = datetime.utcnow()
     await db.flush()
+    from app.services.channel_listing_identity import save_confirmed_identity
+    await save_confirmed_identity(db, build, "ebay_uk", published["listing_id"], published["url"])
     return PostToEbayResult(success=True, listing_id=published["listing_id"], url=published["url"], action="posted")
 
 
@@ -5297,10 +5301,12 @@ async def list_on_storefront(
     code path in this codebase that actually creates a Product row (Build →
     Product has been a schema-only relationship until now).
     """
-    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
+    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id).with_for_update())
     build = result.scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
+    if build.status == "sold" or build.is_archived:
+        raise HTTPException(409, "Sold or archived builds cannot be published")
     if build.status not in ("built", "listed", "sold"):
         raise HTTPException(400, "Mark this build as built before listing it on the storefront")
     if not build.hero_photo_url:
@@ -5330,6 +5336,8 @@ async def list_on_storefront(
             product.delivery_min_days = 1
             product.delivery_max_days = 2
             await db.flush()
+            from app.services.channel_listing_identity import save_confirmed_identity
+            await save_confirmed_identity(db, build, "flipflop_shop", product.id, f"https://www.theflipflop.shop/ready-to-ship/{product.id}")
             return ListOnStorefrontResult(product_id=product.id, build_id=product.build_id, storefront_url=f"/ready-to-ship/{product.id}")
 
     orchestration_build = Build(
@@ -5370,4 +5378,6 @@ async def list_on_storefront(
     build.updated_at = datetime.utcnow()
     await db.flush()
 
+    from app.services.channel_listing_identity import save_confirmed_identity
+    await save_confirmed_identity(db, build, "flipflop_shop", product.id, f"https://www.theflipflop.shop/ready-to-ship/{product.id}")
     return ListOnStorefrontResult(product_id=product.id, build_id=orchestration_build.id, storefront_url=f"/ready-to-ship/{product.id}")

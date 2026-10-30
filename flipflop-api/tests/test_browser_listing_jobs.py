@@ -148,3 +148,17 @@ async def test_concurrent_submits_and_claims_cannot_duplicate_a_job():
             return await claim(db)
     claims = await asyncio.gather(take(), take())
     assert sum(item is not None for item in claims) == 1
+
+
+@pytest.mark.asyncio
+async def test_api_identity_updates_one_channel_and_retains_other_vendor_links(db):
+    from app.services.channel_listing_identity import save_confirmed_identity
+    build = await make_build(db)
+    await save_confirmed_identity(db, build, "ebay_uk", "123", "https://www.ebay.co.uk/itm/123")
+    await save_confirmed_identity(db, build, "flipflop_shop", "5", "https://www.theflipflop.shop/ready-to-ship/5")
+    await save_confirmed_identity(db, build, "ebay_uk", "456", "https://www.ebay.co.uk/itm/456")
+    rows = (await db.execute(select(ChannelListing).where(ChannelListing.manual_build_id == build.id))).scalars().all()
+    assert len(rows) == 2
+    links = {row.channel: row.listing_url for row in rows}
+    assert links["ebay_uk"] == "https://www.ebay.co.uk/itm/456"
+    assert links["flipflop_shop"] == "https://www.theflipflop.shop/ready-to-ship/5"
