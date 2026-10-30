@@ -152,10 +152,10 @@ export function canonicalFromBuild(build: ManualBuild): CanonicalListing {
       .flat()
       .slice(0, 8),
     faqs: [],
-    // Cross-listing uses the canonical build valuation. ebay_price may be an
-    // old marketplace-specific anchor (including an offer ceiling), which can
-    // be substantially higher than the saved canonical price.
-    price: build.last_evaluation?.mid ?? build.ebay_price ?? null,
+    // ebay_price is the explicit listing price saved for the build. The latest
+    // evaluation is a market valuation and is only a fallback when no listing
+    // price has been set.
+    price: build.ebay_price ?? build.last_evaluation?.mid ?? null,
     currency: "GBP",
     quantity: build.status === "sold" ? 0 : 1,
     condition: build.ebay_condition || "Used",
