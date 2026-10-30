@@ -268,12 +268,14 @@ async def save_schedule(body: RecreateScheduleIn, db: AsyncSession = Depends(get
     build = await db.get(ManualBuild, body.build_id)
     if not build:
         raise HTTPException(status_code=404, detail="Build not found")
+    if build.status == "sold" or build.is_archived:
+        raise HTTPException(status_code=409, detail="Sold or archived builds cannot be scheduled for relisting")
     row = (await db.execute(select(ChannelListing).where(ChannelListing.manual_build_id == body.build_id, ChannelListing.channel == body.channel).order_by(ChannelListing.created_at.desc()))).scalars().first()
     if not row:
         row = ChannelListing(
             manual_build_id=body.build_id,
             channel=body.channel,
-            status="published",
+            status="draft",
             published_at=build.listed_at or datetime.utcnow(),
         )
         db.add(row)
@@ -314,17 +316,17 @@ async def record_codex_result(event_id: int, body: CodexHandoffResultIn, db: Asy
     if not row:
         raise HTTPException(status_code=404, detail="Channel listing not found")
     now = datetime.utcnow()
-    row.last_recreate_at = now
+    if body.success:
+        row.last_recreate_at = now
     row.last_recreate_status = "success" if body.success else "failed"
     row.last_recreate_message = body.message
-    row.status = "published" if body.success else "withdrawn"
+    if body.success:
+        row.status = "published"
     if body.success:
         row.external_listing_id = body.external_listing_id
         row.published_at = now
         row.withdrawn_at = None
         row.next_recreate_at = now + timedelta(days=row.recreate_interval_days or 7) if row.recreate_enabled else None
-    else:
-        row.next_recreate_at = None
     db.add(ListingPublishEvent(
         channel_listing_id=row.id,
         event_type="recreate_created" if body.success else "recreate_failed",

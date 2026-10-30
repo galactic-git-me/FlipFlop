@@ -39,7 +39,7 @@ async function preflight() {
 async function snapshot() {
   await browser();
   revision += 1;
-  const elements = await page.locator('a,button,input,textarea,select,[role="button"],[contenteditable="true"]').evaluateAll((nodes, rev) => nodes.filter(n => n.getClientRects().length).slice(0, 200).map((n, i) => {
+  const elements = await page.locator('a,button,input,textarea,select,[role="button"],[role="combobox"],[role="option"],[role="checkbox"],[role="radio"],[contenteditable="true"]').evaluateAll((nodes, rev) => nodes.filter(n => n.getClientRects().length || n.matches('input[type="file"]')).slice(0, 200).map((n, i) => {
     n.setAttribute('data-ff-ref', `${rev}-${i}`);
     return { ref: `${rev}-${i}`, tag: n.tagName, type: n.getAttribute('type'), text: (n.getAttribute('aria-label') || n.innerText || n.getAttribute('placeholder') || n.getAttribute('name') || '').slice(0, 160) };
   }), revision);

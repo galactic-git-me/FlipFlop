@@ -1,7 +1,7 @@
 """Run persisted schedules through real channel APIs or durable Chrome jobs."""
 from datetime import datetime, timedelta
 import structlog
-from sqlalchemy import select
+from sqlalchemy import select, or_
 from app.database import AsyncSessionLocal
 from app.models.channel_listing import ChannelListing
 from app.models.listing_publish_event import ListingPublishEvent
@@ -17,13 +17,13 @@ async def run_cross_listing_recreate_job() -> dict:
     recreated = failed = queued = 0
     async with AsyncSessionLocal() as db:
         ids = (await db.execute(select(ChannelListing.id).where(
-            ChannelListing.recreate_enabled.is_(True), ChannelListing.next_recreate_at <= now,
+            ChannelListing.recreate_enabled.is_(True), or_(ChannelListing.next_recreate_at <= now, ChannelListing.last_recreate_status == "awaiting_codex"),
             ChannelListing.status.in_(["published", "ended", "withdrawn", "submitted"])))) .scalars().all()
         for listing_id in ids:
             try:
                 row = (await db.execute(select(ChannelListing).where(ChannelListing.id == listing_id)
                     .with_for_update(skip_locked=True))).scalar_one_or_none()
-                if not row or not row.next_recreate_at or row.next_recreate_at > now:
+                if not row or (row.last_recreate_status != "awaiting_codex" and (not row.next_recreate_at or row.next_recreate_at > now)):
                     continue
                 build = await db.get(ManualBuild, row.manual_build_id)
                 if not build or build.status == "sold" or build.is_archived:

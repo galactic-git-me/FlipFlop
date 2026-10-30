@@ -126,3 +126,25 @@ async def test_ebay_schedule_uses_saved_canonical_data_and_only_advances_on_succ
     assert post.call_args.args[1].price == 1400
     assert post.call_args.args[1].title == "PROMETHEUS Gaming PC"
     assert build.generated_title == "PROMETHEUS Gaming PC" and build.ebay_price == 1400
+
+
+@pytest.mark.asyncio
+async def test_concurrent_submits_and_claims_cannot_duplicate_a_job():
+    import asyncio
+    from app.database import AsyncSessionLocal
+    async with AsyncSessionLocal() as db:
+        build = await make_build(db)
+        await db.commit()
+        build_id = build.id
+    async def submit():
+        async with AsyncSessionLocal() as db:
+            job = await enqueue_browser_job(db, build_id, "vinted")
+            await db.commit()
+            return job.id
+    ids = await asyncio.gather(submit(), submit())
+    assert ids[0] == ids[1]
+    async def take():
+        async with AsyncSessionLocal() as db:
+            return await claim(db)
+    claims = await asyncio.gather(take(), take())
+    assert sum(item is not None for item in claims) == 1
