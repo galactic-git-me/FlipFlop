@@ -125,9 +125,19 @@ function specifications(build: ManualBuild): Record<string, string> {
 }
 
 export function canonicalFromBuild(build: ManualBuild): CanonicalListing {
-  const photos = (build.photos ?? [])
-    .filter((photo) => photo.kind === "photo")
-    .map((photo, index) => ({
+  const buildName = build.name.trim();
+  const generatedTitle = (build.generated_title || build.name).trim();
+  const title = generatedTitle.toLowerCase().includes(buildName.toLowerCase())
+    ? generatedTitle
+    : `${buildName} | ${generatedTitle}`.slice(0, 80);
+  const buildPhotos = (build.photos ?? []).filter((photo) => photo.kind === "photo");
+  const orderedPhotos = build.hero_photo_url
+    ? [
+        { url: build.hero_photo_url },
+        ...buildPhotos.filter((photo) => photo.url !== build.hero_photo_url),
+      ]
+    : buildPhotos;
+  const photos = orderedPhotos.map((photo, index) => ({
       url: photo.url,
       alt: `${build.name} product photo ${index + 1}`,
       order: index,
@@ -135,7 +145,7 @@ export function canonicalFromBuild(build: ManualBuild): CanonicalListing {
   return {
     productId: String(build.id),
     sku: `FF-BUILD-${build.id}`,
-    title: build.generated_title || build.name,
+    title,
     description:
       build.generated_description || "Listing copy has not been generated yet.",
     bulletPoints: Object.values(build.generated_aspects ?? {})
