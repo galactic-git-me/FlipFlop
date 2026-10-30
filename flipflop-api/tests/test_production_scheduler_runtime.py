@@ -19,6 +19,11 @@ def test_production_api_starts_scheduler_without_duplicate_background_worker():
 
     assert re.search(r'^      WEB_ONLY: "false"$', api, re.MULTILINE)
     assert re.search(r'^      WEB_ONLY: "true"$', gem_radar_endpoint, re.MULTILINE)
+    assert re.search(
+        r'^      EXTERNAL_GEM_RADAR_WORKER_ENABLED: "true"$',
+        gem_radar_endpoint,
+        re.MULTILINE,
+    )
     assert "OLLAMA_BASE_URL: http://ollama-tunnel:11434" in api
     assert "app.gem_radar_standalone:app" in gem_radar_endpoint
     assert re.search(r"if not settings\.web_only:[\s\S]{0,1200}start_scheduler\(\)", main_source)
