@@ -19,6 +19,8 @@ class ChannelListing(Base):
     status: Mapped[str] = mapped_column(String(30), nullable=False, default="draft")  # draft, scheduled, published, withdrawn
     external_listing_id: Mapped[str | None] = mapped_column(String(100))  # eBay item ID or Storefront SKU
     listing_url: Mapped[str | None] = mapped_column(String(1000))
+    last_payload_hash: Mapped[str | None] = mapped_column(String(64))
+    last_checked_at: Mapped[datetime | None] = mapped_column(DateTime)
     published_at: Mapped[datetime | None] = mapped_column(DateTime)
     withdrawn_at: Mapped[datetime | None] = mapped_column(DateTime)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)

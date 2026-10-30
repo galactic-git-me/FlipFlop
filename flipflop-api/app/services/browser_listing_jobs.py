@@ -34,18 +34,20 @@ def validate_listing_url(channel: str, value: str) -> str:
     return value
 
 
-def seller_pack(build: ManualBuild, row: ChannelListing, image_urls: list[str] | None = None) -> dict:
-    if build.status == "sold" or build.is_archived:
+def seller_pack(build: ManualBuild, row: ChannelListing, image_urls: list[str] | None = None, *, operation="publish") -> dict:
+    read_only = operation in {"inspect", "sale_check", "withdraw"}
+    if not read_only and (build.status == "sold" or build.is_archived):
         raise ValueError("Sold or archived builds cannot be listed")
     originals = [p["url"] for p in build.photos or [] if isinstance(p, dict) and p.get("url") and p.get("kind", "photo") == "photo"]
-    if not build.generated_description or not build.generated_title or not build.ebay_price or build.ebay_price <= 0 or not originals:
+    if not read_only and (not build.generated_description or not build.generated_title or not build.ebay_price or build.ebay_price <= 0 or not originals):
         raise ValueError("Save the canonical title, description, listing price and product photographs first")
     from app.services.product_faqs import selected_faqs
     faqs = selected_faqs(build.id, build.selected_faq_ids, build.selected_faq_answer_overrides)
-    title = build.generated_title.strip()
+    title = (build.generated_title or build.name).strip()
     if build.name.strip().lower() not in title.lower():
         title = f"{build.name.strip()} | {title}"[:80]
-    return {"schema": "flipflop.seller-pack.v1", "build_id": build.id, "channel": row.channel,
+    from app.services.channel_sync import canonical_hash
+    return {"schema": "flipflop.seller-pack.v1", "build_id": build.id, "channel": row.channel, "canonical_hash": canonical_hash(build),
         "seller_url": SELLER_URLS[row.channel], "previous_listing_id": row.external_listing_id,
         "previous_listing_url": row.listing_url,
         "listing": {"title": title, "description": build.generated_description, "faqs": faqs,
@@ -78,11 +80,15 @@ async def enqueue_browser_job(db, build_id: int, channel: str, *, operation="pub
         BrowserListingJob.channel_listing_id == row.id, BrowserListingJob.status.in_(PENDING)))).scalar_one_or_none()
     if pending:
         return pending
-    pack = seller_pack(build, row, image_urls)
+    if image_urls is None and operation not in {"inspect", "sale_check", "withdraw"}:
+        from app.services.channel_images import prepare_channel_urls
+        image_urls = await prepare_channel_urls([p["url"] for p in build.photos or []
+            if isinstance(p, dict) and p.get("url") and p.get("kind", "photo") == "photo"], channel)
+    pack = seller_pack(build, row, image_urls, operation=operation)
     job = BrowserListingJob(channel_listing_id=row.id, operation=operation, status="queued", payload=pack)
     db.add(job)
     row.last_recreate_status = "queued"
-    row.last_recreate_message = "Queued for Codex to publish through Chrome."
+    row.last_recreate_message = f"Queued for Codex Chrome: {operation}."
     # Retain the due clock until verified completion. The pending-job index
     # prevents repeated scheduler ticks from producing duplicate work.
     db.add(ListingPublishEvent(channel_listing_id=row.id, event_type="browser_job_queued",
@@ -102,13 +108,14 @@ async def complete_browser_job(db, job, *, status, message, listing_url=None, ex
             raise ValueError("Vendor identity must match the confirmed item URL")
         if evidence.get("url") != listing_url or evidence.get("title") != job.payload["listing"]["title"] or evidence.get("price") != job.payload["listing"]["price"]:
             raise ValueError("Browser evidence must match the canonical title, price and confirmed URL")
-        if seller_pack(build, row, job.payload["listing"]["images"]) != job.payload:
+        if seller_pack(build, row, job.payload["listing"]["images"], operation=job.operation) != job.payload:
             raise ValueError("Saved listing changed; reconcile before confirming this job")
         if build.status == "sold" or build.is_archived:
             raise ValueError("Build is no longer sellable; reconcile the vendor listing before completion")
         now = datetime.utcnow()
         row.external_listing_id, row.listing_url = external_id, listing_url
         row.status, row.published_at, row.withdrawn_at = "published", now, None
+        row.last_payload_hash, row.last_checked_at = job.payload.get("canonical_hash"), now
         row.last_recreate_at = now
         row.last_recreate_status = "success"
         if job.operation == "relist":
