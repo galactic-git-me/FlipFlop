@@ -53,8 +53,8 @@ describe("cross-listing normalisation", () => {
     expect(sources[0]?.status).toBe("draft");
   });
 
-  it("prefers the canonical evaluation price over a marketplace price anchor", () => {
+  it("prefers the saved listing price over the canonical evaluation price", () => {
     const priced = { ...build, ebay_price: 2878.65, last_evaluation: { mid: 1450 } } as unknown as ManualBuild;
-    expect(canonicalFromBuild(priced).price).toBe(1450);
+    expect(canonicalFromBuild(priced).price).toBe(2878.65);
   });
 });
