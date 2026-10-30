@@ -1,4 +1,5 @@
 from base64 import b64encode
+from datetime import datetime, timezone
 import hashlib
 from pathlib import Path
 import re
@@ -8,6 +9,8 @@ import pytest
 from fastapi import HTTPException
 from xml.etree import ElementTree
 from zipfile import ZipFile
+
+_RECENT_INSPECTION_TIMESTAMP = datetime.now(timezone.utc).isoformat()
 
 from app.api.orders import _customer_package_archive_response, _read_customer_package_document
 from app.services import getting_ready_package
@@ -88,7 +91,7 @@ def _assemble_test_package(tmp_path, monkeypatch, purchases):
         portal_url=None,
         target_drive_model="Test NVMe 2TB",
         target_drive_serial="TEST-SERIAL-9001",
-        target_drive_inspected_at_utc="2026-09-29T12:00:00+00:00",
+        target_drive_inspected_at_utc=_RECENT_INSPECTION_TIMESTAMP,
     )
     return tmp_path / "packages" / "9001" / artifact["workshop_filename"]
 
@@ -179,7 +182,7 @@ def test_user_scope_app_is_deferred_to_customer_profile_and_disclosed(tmp_path, 
         portal_url="https://theflipflop.shop/my-builds/9002",
         target_drive_model="Test NVMe 2TB",
         target_drive_serial="TEST-SERIAL-9002",
-        target_drive_inspected_at_utc="2026-09-29T12:00:00+00:00",
+        target_drive_inspected_at_utc=_RECENT_INSPECTION_TIMESTAMP,
     )
 
     archive_path = tmp_path / "packages" / "9002" / artifact["filename"]
@@ -188,7 +191,7 @@ def test_user_scope_app_is_deferred_to_customer_profile_and_disclosed(tmp_path, 
         deployment_script = archive.read("06-windows-setup/Deploy-Windows11-Pro.ps1").decode("utf-8-sig")
         assert b64encode(b"Test NVMe 2TB").decode("ascii") in deployment_script
         assert b64encode(b"TEST-SERIAL-9002").decode("ascii") in deployment_script
-        assert b64encode(b"2026-09-29T12:00:00+00:00").decode("ascii") in deployment_script
+        assert b64encode(_RECENT_INSPECTION_TIMESTAMP.encode("utf-8")).decode("ascii") in deployment_script
         assert "targetInspectionAge.TotalDays -gt 30" in deployment_script
         assert "ExpectedDiskModel" not in deployment_script
         assert "ExpectedDiskSerial" not in deployment_script
@@ -229,7 +232,7 @@ def test_customer_package_contains_customer_documents_only(tmp_path, monkeypatch
         portal_url="https://theflipflop.shop/my-builds/9003",
         target_drive_model="Test NVMe 2TB",
         target_drive_serial="TEST-SERIAL-9003",
-        target_drive_inspected_at_utc="2026-09-29T12:00:00+00:00",
+        target_drive_inspected_at_utc=_RECENT_INSPECTION_TIMESTAMP,
     )
 
     customer_path = tmp_path / "packages" / "9003" / artifact["filename"]
@@ -271,7 +274,7 @@ def test_customer_safe_flag_does_not_allow_workshop_zip_to_be_downloaded(
         portal_url=None,
         target_drive_model="Test NVMe 2TB",
         target_drive_serial="TEST-SERIAL-9005",
-        target_drive_inspected_at_utc="2026-09-29T12:00:00+00:00",
+        target_drive_inspected_at_utc=_RECENT_INSPECTION_TIMESTAMP,
     )
     mislinked_artifact = {
         **artifact,
@@ -334,7 +337,7 @@ def test_package_assembly_rejects_changed_getting_started_guide_before_creating_
             portal_url=None,
             target_drive_model="Test NVMe 2TB",
             target_drive_serial="TEST-SERIAL-9010",
-            target_drive_inspected_at_utc="2026-09-29T12:00:00+00:00",
+            target_drive_inspected_at_utc=_RECENT_INSPECTION_TIMESTAMP,
         )
 
     assert not (tmp_path / "packages" / "9010").exists()
@@ -378,7 +381,7 @@ def test_customer_safe_archive_rejects_duplicate_allowlisted_members(tmp_path, m
         portal_url=None,
         target_drive_model="Test NVMe 2TB",
         target_drive_serial="TEST-SERIAL-9006",
-        target_drive_inspected_at_utc="2026-09-29T12:00:00+00:00",
+        target_drive_inspected_at_utc=_RECENT_INSPECTION_TIMESTAMP,
     )
     archive_path = tmp_path / "packages" / "9006" / artifact["filename"]
     with ZipFile(archive_path) as source:
@@ -457,7 +460,7 @@ def test_customer_downloads_reject_package_bytes_changed_after_review(tmp_path, 
         portal_url=None,
         target_drive_model="Test NVMe 2TB",
         target_drive_serial="TEST-SERIAL-9004",
-        target_drive_inspected_at_utc="2026-09-29T12:00:00+00:00",
+        target_drive_inspected_at_utc=_RECENT_INSPECTION_TIMESTAMP,
     )
     archive_path = tmp_path / "packages" / "9004" / artifact["filename"]
     archive_path.write_bytes(archive_path.read_bytes() + b"changed after review")
@@ -521,7 +524,7 @@ def test_windows_deployment_script_is_bound_to_exact_drive_and_requires_two_expl
         build_name="Atlas 'Pro' Build",
         target_drive_model="FlipFlop NVMe 2TB",
         target_drive_serial="FF-SERIAL-001",
-        target_drive_inspected_at_utc="2026-09-29T12:00:00+00:00",
+        target_drive_inspected_at_utc=_RECENT_INSPECTION_TIMESTAMP,
     )
 
     assert "$buildId = 774" in script
@@ -531,7 +534,7 @@ def test_windows_deployment_script_is_bound_to_exact_drive_and_requires_two_expl
     assert "ExpectedDiskModel" not in script and "ExpectedDiskSerial" not in script
     assert b64encode(b"FlipFlop NVMe 2TB").decode("ascii") in script
     assert b64encode(b"FF-SERIAL-001").decode("ascii") in script
-    assert b64encode(b"2026-09-29T12:00:00+00:00").decode("ascii") in script
+    assert b64encode(_RECENT_INSPECTION_TIMESTAMP.encode("utf-8")).decode("ascii") in script
     assert "targetInspectionAge.TotalDays -gt 30" in script
     assert "No reviewed target drive identity" not in script
     assert "Windows 11 Pro" in script
