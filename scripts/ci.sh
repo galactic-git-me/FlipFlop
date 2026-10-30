@@ -23,6 +23,9 @@ require_test_database DATABASE_URL
 require_test_database SYNC_DATABASE_URL
 require_test_database TEST_DATABASE_URL
 
+log "Checking Codex browser tools"
+node --test "$ROOT_DIR/scripts/browser-listing/browser-mcp.test.mjs"
+
 log "Installing API dependencies"
 python -m pip install --disable-pip-version-check -q \
   -r "$ROOT_DIR/flipflop-api/requirements.txt" \
@@ -61,6 +64,7 @@ log "Running API tests"
     python -m pytest -q tests
   else
     python -m pytest -q \
+      tests/test_browser_listing_jobs.py \
       tests/test_curated_availability_public.py \
       tests/test_curated_build_policy.py \
       tests/test_curated_upgrade_benchmarks.py \

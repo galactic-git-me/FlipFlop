@@ -40,6 +40,7 @@ from app.api import intel, settings_router, debug, logs as logs_api, playbooks, 
 from app.api import alerts, reselling, ebay_listings, favourites
 from app.api import email_events
 from app.api import cross_listing
+from app.api import browser_listing_jobs
 from app.api import price_alerts
 from app.api import cases_bulk_import
 from app.routes.cases import router as cases_router
@@ -719,6 +720,8 @@ app.include_router(build_wizard_router, prefix="/api")
 app.include_router(alerts.router, prefix="/api")
 app.include_router(email_events.router, prefix="/api")
 app.include_router(cross_listing.router, prefix="/api")
+app.include_router(browser_listing_jobs.router, prefix="/api")
+app.include_router(browser_listing_jobs.worker_router, prefix="/api")
 app.include_router(price_alerts.router, prefix="/api")
 app.include_router(favourites.router, prefix="/api")
 app.include_router(reselling.router, prefix="/api")

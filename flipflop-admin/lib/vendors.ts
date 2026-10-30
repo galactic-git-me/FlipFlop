@@ -11,6 +11,11 @@ export interface VendorMeta {
 
 export const VENDOR_META: Record<string, VendorMeta> = {
   ebay: { label: "eBay", mark: "eb", color: "#e53238", domain: "ebay.co.uk" },
+  ebay_uk: { label: "eBay UK", mark: "eb", color: "#e53238", domain: "ebay.co.uk" },
+  flipflop_shop: { label: "FlipFlop.shop", mark: "FF", color: "#0099ff", domain: "theflipflop.shop" },
+  facebook_catalog: { label: "Facebook Marketplace", mark: "f", color: "#1877f2", domain: "facebook.com" },
+  vinted: { label: "Vinted", mark: "V", color: "#09b1ba", domain: "vinted.co.uk" },
+  onbuy: { label: "OnBuy", mark: "O", color: "#652cb3", domain: "onbuy.com" },
   amazon: { label: "Amazon", mark: "a", color: "#ff9900", domain: "amazon.co.uk" },
   overclockers: { label: "Overclockers", mark: "OC", color: "#f7941d", domain: "overclockers.co.uk" },
   temu: { label: "Temu", mark: "T", color: "#fb7701", domain: "temu.com" },
