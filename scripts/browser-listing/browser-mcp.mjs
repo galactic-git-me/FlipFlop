@@ -12,7 +12,7 @@ const pack = job.payload;
 const require = createRequire(path.join(process.env.FF_ADMIN_DIR, 'package.json'));
 const { chromium } = require('playwright');
 const domains = { onbuy: ['onbuy.com'], facebook_catalog: ['facebook.com'], vinted: ['vinted.co.uk'], google_shopping: ['google.com'] }[pack.channel];
-let context, page, revision = 0, inspected = false, mayHaveWritten = false;
+let context, page, revision = 0, inspected = false, remoteState = 'unknown', mayHaveWritten = false;
 const allowed = value => {
   const u = new URL(value);
   return u.protocol === 'https:' && !u.username && !u.password && (!u.port || u.port === '443') && domains.some(d => u.hostname === d || u.hostname.endsWith('.' + d));
@@ -46,12 +46,13 @@ async function snapshot() {
   return { url: page.url(), title: await page.title(), text: (await page.locator('body').innerText()).slice(0, 18000), elements };
 }
 function element(ref) {
-  if (!String(ref).startsWith(`${revision}-`)) throw new Error('Observe the page again; the element reference is stale');
+  if (!/^\d+-\d+$/.test(String(ref)) || !String(ref).startsWith(`${revision}-`)) throw new Error('Observe the page again; the element reference is stale');
   return page.locator(`[data-ff-ref="${ref}"]`);
 }
 async function vaultLogin(args) {
   await browser();
-  const username = element(args.username_ref), password = args.password_ref ? element(args.password_ref) : null;
+  const username = args.username_ref ? element(args.username_ref) : null, password = args.password_ref ? element(args.password_ref) : null;
+  if (!username && !password) throw new Error('Select the username or password field from the current observation');
   if (password && await password.getAttribute('type') !== 'password') throw new Error('Choose the actual password field');
   const host = new URL(page.url()).hostname;
   const domain = domains.find(d => host === d || host.endsWith('.' + d));
@@ -69,7 +70,7 @@ async function vaultLogin(args) {
   const matches = items.filter(i => !i.deletedDate && (!configured || i.id === configured) && i.login?.username && i.login?.password &&
     (i.login.uris || []).some(u => { try { const h = new URL(u.uri).hostname; return h === domain || h.endsWith('.' + domain); } catch { return false; } }));
   if (matches.length !== 1) throw new Error('Choose one matching vendor Bitwarden item in FF_VAULT_ITEMS; never guess between accounts');
-  await username.fill(matches[0].login.username);
+  if (username) await username.fill(matches[0].login.username);
   if (password) await password.fill(matches[0].login.password);
   return { filled: true, message: 'Credentials filled locally; submit the observed sign-in form.' };
 }
@@ -79,10 +80,11 @@ async function run(name, args) {
   if (name === 'browser_observe') return snapshot();
   if (name === 'browser_navigate') { await browser(); if (!allowed(args.url)) throw new Error('URL outside this vendor'); await page.goto(args.url); return snapshot(); }
   if (name === 'vault_login') return vaultLogin(args);
-  if (name === 'remote_state') { inspected = true; return { recorded: true, state: args.state, note: args.note }; }
+  if (name === 'remote_state') { inspected = true; remoteState = args.state; return { recorded: true, state: args.state, note: args.note }; }
   if (name === 'browser_click') {
     await browser();
     if (!inspected) throw new Error('First inspect seller listings and record the remote state');
+    if (args.writes_listing && !['active', 'ended', 'missing'].includes(remoteState)) throw new Error('Remote listing state must be verified before a listing write');
     const el = element(args.ref);
     const text = ((await el.innerText()) || await el.getAttribute('aria-label') || '').toLowerCase();
     if (/pay|purchase|subscribe|boost|promote|delete account|create account|grant access/.test(text)) throw new Error('Paid service or account change requires separate operator review');
@@ -137,7 +139,7 @@ const definitions = [
   ['browser_fill', 'Fill a listing field. Use saved pack data; never put passwords here.', schema({ ref: str, value: str })],
   ['browser_select', 'Select an option by its observed label.', schema({ ref: str, label: str })],
   ['browser_upload', 'Upload only seller-pack photographs by index.', schema({ ref: str, image_indexes: { type: 'array', items: { type: 'integer' } } })],
-  ['vault_login', 'Fill a matching Bitwarden login locally without exposing credentials. For two-stage forms, omit password_ref on the username step.', schema({ username_ref: str, password_ref: str }, ['username_ref'])],
+  ['vault_login', 'Fill a matching Bitwarden login locally without exposing credentials. For two-stage forms provide the currently visible field only.', schema({ username_ref: str, password_ref: str }, [])],
   ['confirm_listing', 'Read back the item page, verify canonical title and price, and persist the real item URL/ID. Call only after remote live state is confirmed.', schema({ url: str, external_id: str })],
   ['block_job', 'Stop with a precise MFA, CAPTCHA, vault, seller-policy, account or uncertain-publication blocker.', schema({ reason: str })],
 ].map(([name, description, inputSchema]) => ({ name, description, inputSchema }));

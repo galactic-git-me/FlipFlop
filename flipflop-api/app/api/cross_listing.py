@@ -206,10 +206,12 @@ async def publish_amazon(build_id: int, body: AmazonPublishIn, db: AsyncSession 
                 pass
         issues = result.get("issues") or []
         accepted = str(result.get("status", "")).upper() in {"ACCEPTED", "VALID"} and not issues
-        channel_listing.status = "published" if accepted else "failed"
+        live = accepted and any("BUYABLE" in (item.get("status") or [])
+            for item in (result.get("listing_item") or {}).get("summaries", []) if isinstance(item, dict))
+        channel_listing.status = "published" if live else "submitted" if accepted else "failed"
         channel_listing.external_listing_id = sku
-        channel_listing.published_at = datetime.utcnow() if accepted else None
-        if accepted:
+        channel_listing.published_at = datetime.utcnow() if live else None
+        if live:
             settings = await _app_settings(db)
             channel_listing.recreate_enabled = settings.relist_enabled_default
             channel_listing.recreate_interval_days = settings.relist_interval_days or 7
@@ -219,11 +221,11 @@ async def publish_amazon(build_id: int, body: AmazonPublishIn, db: AsyncSession 
                 if channel_listing.recreate_enabled
                 else None
             )
-        message = "Amazon accepted the listing submission." if accepted else "Amazon returned listing requirements or validation issues."
-        db.add(ListingPublishEvent(channel_listing_id=channel_listing.id, event_type="published" if accepted else "publish_failed", message=message, event_metadata={"sku": sku, "response": result}))
+        message = "Amazon confirmed the listing is buyable." if live else "Amazon accepted the submission; live availability is not yet confirmed." if accepted else "Amazon returned listing requirements or validation issues."
+        db.add(ListingPublishEvent(channel_listing_id=channel_listing.id, event_type="published" if live else "submitted" if accepted else "publish_failed", message=message, event_metadata={"sku": sku, "response": result}))
         await db.commit()
         asin = _amazon_asin(result)
-        listing_url = f"https://www.amazon.co.uk/dp/{asin}" if accepted and asin else None
+        listing_url = f"https://www.amazon.co.uk/dp/{asin}" if live and asin else None
         channel_listing.listing_url = listing_url
         await db.commit()
         return {"success": accepted, "status": channel_listing.status, "sku": sku, "asin": asin, "listing_url": listing_url, "response": result, "message": message}
@@ -252,7 +254,7 @@ async def save_cross_listing_settings(body: IndirectChannelSettingsIn, db: Async
 
 @router.get("/schedules")
 async def list_schedules(build_id: int | None = Query(None), db: AsyncSession = Depends(get_db)):
-    query = select(ChannelListing).order_by(ChannelListing.channel)
+    query = select(ChannelListing).order_by(ChannelListing.channel, ChannelListing.updated_at.desc(), ChannelListing.id.desc())
     if build_id is not None:
         query = query.where(ChannelListing.manual_build_id == build_id)
     rows = (await db.execute(query)).scalars().all()
@@ -303,6 +305,8 @@ async def list_actions(build_id: int | None = Query(None), limit: int = Query(10
 
 @router.post("/actions/{event_id}/codex-result")
 async def record_codex_result(event_id: int, body: CodexHandoffResultIn, db: AsyncSession = Depends(get_db)):
+    if body.success:
+        raise HTTPException(409, "Complete the leased Chrome job with verified vendor ID, URL and browser evidence instead")
     event = await db.get(ListingPublishEvent, event_id)
     if not event or event.event_type != "recreate_handoff_required":
         raise HTTPException(status_code=404, detail="Codex relisting handoff not found")

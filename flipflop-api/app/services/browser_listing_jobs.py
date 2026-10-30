@@ -1,6 +1,7 @@
 """Shared queue for operator publishing and scheduled Chrome relisting."""
 from datetime import datetime, timedelta
 from urllib.parse import urlparse
+import re
 from sqlalchemy import select
 from app.models.browser_listing_job import BrowserListingJob
 from app.models.channel_listing import ChannelListing
@@ -18,6 +19,8 @@ SELLER_URLS = {
 HOSTS = {"onbuy": {"onbuy.com"}, "facebook_catalog": {"facebook.com"},
          "vinted": {"vinted.co.uk"}, "google_shopping": {"google.com"}}
 PENDING = ("queued", "running", "blocked", "needs_review")
+ITEM_PATHS = {"onbuy": r"~p\d+|/p/", "facebook_catalog": r"/marketplace/item/\d+",
+              "vinted": r"/items/\d+", "google_shopping": r"/shopping/product/"}
 
 
 def validate_listing_url(channel: str, value: str) -> str:
@@ -26,7 +29,7 @@ def validate_listing_url(channel: str, value: str) -> str:
     domains = HOSTS.get(channel, set())
     if (url.scheme != "https" or url.username or url.password or url.port not in (None, 443)
             or not any(host == d or host.endswith("." + d) for d in domains)
-            or url.path in ("", "/") or any(part in url.path.lower() for part in ("/login", "/signin", "/sign-in"))):
+            or not re.search(ITEM_PATHS.get(channel, r"(?!)"), url.path)):
         raise ValueError("A confirmed HTTPS listing URL on the selected vendor is required")
     return value
 
@@ -37,10 +40,15 @@ def seller_pack(build: ManualBuild, row: ChannelListing, image_urls: list[str] |
     originals = [p["url"] for p in build.photos or [] if isinstance(p, dict) and p.get("url") and p.get("kind", "photo") == "photo"]
     if not build.generated_description or not build.generated_title or not build.ebay_price or build.ebay_price <= 0 or not originals:
         raise ValueError("Save the canonical title, description, listing price and product photographs first")
+    from app.services.product_faqs import selected_faqs
+    faqs = selected_faqs(build.id, build.selected_faq_ids, build.selected_faq_answer_overrides)
+    title = build.generated_title.strip()
+    if build.name.strip().lower() not in title.lower():
+        title = f"{build.name.strip()} | {title}"[:80]
     return {"schema": "flipflop.seller-pack.v1", "build_id": build.id, "channel": row.channel,
         "seller_url": SELLER_URLS[row.channel], "previous_listing_id": row.external_listing_id,
         "previous_listing_url": row.listing_url,
-        "listing": {"title": build.generated_title, "description": build.generated_description,
+        "listing": {"title": title, "description": build.generated_description, "faqs": faqs,
             "price": build.ebay_price, "currency": "GBP", "quantity": 1,
             "sku": f"FF-BUILD-{build.id}", "condition": build.ebay_condition or "Used",
             "specifications": build.generated_aspects or {}, "components": build.components or [],
@@ -90,6 +98,10 @@ async def complete_browser_job(db, job, *, status, message, listing_url=None, ex
         if not external_id or not evidence or not evidence.get("verified_at") or not evidence.get("title"):
             raise ValueError("Confirmed vendor ID, URL and browser read-back evidence are required")
         validate_listing_url(row.channel, listing_url or "")
+        if evidence.get("url") != listing_url or evidence.get("title") != job.payload["listing"]["title"] or evidence.get("price") != job.payload["listing"]["price"]:
+            raise ValueError("Browser evidence must match the canonical title, price and confirmed URL")
+        if seller_pack(build, row, job.payload["listing"]["images"]) != job.payload:
+            raise ValueError("Saved listing changed; reconcile before confirming this job")
         if build.status == "sold" or build.is_archived:
             raise ValueError("Build is no longer sellable; reconcile the vendor listing before completion")
         now = datetime.utcnow()

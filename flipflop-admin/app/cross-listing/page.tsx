@@ -872,12 +872,6 @@ function ActivityLog({
                   for Codex
                 </button>
                 <button
-                  onClick={() => onResult(action.id, true)}
-                  className="cursor-pointer rounded border border-emerald-400/40 px-2 py-1 text-[10px] text-emerald-200 hover:bg-emerald-400/10"
-                >
-                  Mark successful
-                </button>
-                <button
                   onClick={() => onResult(action.id, false)}
                   className="cursor-pointer rounded border border-red-400/40 px-2 py-1 text-[10px] text-red-200 hover:bg-red-400/10"
                 >
@@ -1626,7 +1620,7 @@ export default function CrossListingPage() {
             addResult({
               buildId: item.buildId,
               channel: capability.label,
-              status: result.success ? "published" : "failed",
+              status: result.success ? result.status : "failed",
               message: result.message,
               url: result.listing_url ?? undefined,
             });

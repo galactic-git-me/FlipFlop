@@ -50,7 +50,7 @@ async def run_cross_listing_recreate_job() -> dict:
                         bullet_points=[], price=build.ebay_price or 0, quantity=1,
                         condition=build.ebay_condition or "used_like_new", images=[p["url"] for p in build.photos or []
                             if isinstance(p, dict) and p.get("url") and p.get("kind", "photo") == "photo"]), db)
-                    if not result.get("success"):
+                    if not result.get("success") or result.get("status") != "published":
                         raise ValueError(result.get("message", "Amazon did not confirm publishing"))
                     row.listing_url = result.get("listing_url")
                 elif row.channel in {"storefront", "flipflop_shop"}:

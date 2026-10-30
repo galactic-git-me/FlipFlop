@@ -110,7 +110,8 @@ function BuildsPageInner() {
       const byBuildAndChannel = new Map<string, ChannelListingSummary>();
       for (const listing of channelRows) {
         const normalizedChannel = vendorKeyForChannel(listing.channel);
-        byBuildAndChannel.set(`${listing.build_id}:${normalizedChannel}`, { ...listing, channel: normalizedChannel });
+        const key = `${listing.build_id}:${normalizedChannel}`;
+        if (!byBuildAndChannel.has(key)) byBuildAndChannel.set(key, { ...listing, channel: normalizedChannel });
       }
       setChannelListings([...byBuildAndChannel.values()]);
     }).catch(console.error).finally(() => setLoading(false));
