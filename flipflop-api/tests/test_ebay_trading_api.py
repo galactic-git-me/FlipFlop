@@ -71,6 +71,21 @@ async def test_get_best_offers_raises_on_failure_ack():
         patcher.stop()
 
 
+async def test_trading_api_failure_preserves_error_codes():
+    body = """
+    <Errors><ErrorCode>17</ErrorCode><LongMessage>This item cannot be accessed.</LongMessage></Errors>"""
+    patcher = _mock_httpx(200, _xml_response("Failure", body))
+    try:
+        with patch("app.services.ebay_trading_api.get_settings") as mock_settings:
+            mock_settings.return_value.ebay_environment = "production"
+            with pytest.raises(trading.EbayTradingApiError, match="cannot be accessed") as exc:
+                await trading.get_item_status("188817313509", "token-1")
+    finally:
+        patcher.stop()
+
+    assert exc.value.error_codes == {"17"}
+
+
 async def test_respond_to_best_offer_counter():
     patcher = _mock_httpx(200, _xml_response("Success", ""))
     try:
