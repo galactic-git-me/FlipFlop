@@ -11,10 +11,63 @@ from app.models.listing_publish_event import ListingPublishEvent
 from app.models.app_settings import AppSettings
 from app.services.alerts import emit_alert
 from app.services.amazon_sp_api import AmazonSPAPI, AmazonSPAPIError
+from app.services.google_merchant_api import GoogleMerchantAPI, GoogleMerchantError
 from app.models.manual_build import ManualBuild
+from app.models.product import Product, ProductStatus
 
 router = APIRouter(prefix="/cross-listing", tags=["cross-listing"], dependencies=[Depends(require_operator)])
-INDIRECT_CHANNELS = {"onbuy", "amazon", "facebook_catalog", "vinted"}
+INDIRECT_CHANNELS = {"onbuy", "amazon", "facebook_catalog", "vinted", "google_shopping"}
+
+
+class ChannelImagesIn(BaseModel):
+    build_id: int
+    channel: str = Field(min_length=1, max_length=40)
+    urls: list[str] = Field(default_factory=list, max_length=24)
+    white_background: bool = False
+    clean_photographs: bool = False
+    image_ids: list[str] = Field(default_factory=list, max_length=24)
+    policy_version: int | None = None
+
+
+async def _channel_image_previews(body: ChannelImagesIn, db: AsyncSession):
+    from app.services.channel_images import image_manifest, profile_for
+    build = await db.get(ManualBuild, body.build_id)
+    if not build:
+        raise HTTPException(404, "Build not found")
+    allowed = {p.get("url") for p in build.photos or [] if isinstance(p, dict) and p.get("kind", "photo") == "photo"}
+    urls = body.urls or [p["url"] for p in build.photos or [] if isinstance(p, dict) and p.get("url") in allowed]
+    if not urls or any(url not in allowed for url in urls):
+        raise HTTPException(422, "Choose original product photographs from this build; promotional cards belong on the website separately")
+    try:
+        profile = profile_for(body.channel)
+        images = []
+        for url in urls:
+            manifest = await image_manifest(url)
+            images.append({"id": manifest["id"], "policy_version": manifest["policy_version"], "source_url": url, "original_url": manifest["original_url"], **manifest["variants"][profile]})
+        return images
+    except (ValueError, OSError) as exc:
+        raise HTTPException(422, str(exc)) from exc
+
+
+@router.post("/images/preview")
+async def preview_channel_images(body: ChannelImagesIn, db: AsyncSession = Depends(get_db)):
+    return {"channel": body.channel, "images": await _channel_image_previews(body, db)}
+
+
+@router.post("/images/approve")
+async def approve_channel_images(body: ChannelImagesIn, db: AsyncSession = Depends(get_db)):
+    from app.services.channel_images import approve_variant, POLICY_VERSION
+    images = await _channel_image_previews(body, db)
+    if body.image_ids != [image["id"] for image in images] or body.policy_version != POLICY_VERSION:
+        raise HTTPException(409, "The source photographs or format policy changed. Preview the current images before approving.")
+    if not body.clean_photographs:
+        raise HTTPException(422, "Confirm these are clean product photographs without promotional stickers, branding overlays or watermarks")
+    try:
+        for image in images:
+            approve_variant(image["id"], body.channel, white_background=body.white_background)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    return {"approved": True, "channel": body.channel, "images": [image["url"] for image in images]}
 
 
 class RecreateScheduleIn(BaseModel):
@@ -44,6 +97,10 @@ class AmazonPublishIn(BaseModel):
     condition: str = Field(min_length=1, max_length=60)
     images: list[str] = Field(min_length=1, max_length=12)
     sku: str | None = Field(default=None, max_length=80)
+
+
+class GoogleMerchantPublishIn(BaseModel):
+    images: list[str] = Field(default_factory=list, max_length=10)
 
 
 async def _app_settings(db: AsyncSession) -> AppSettings:
@@ -83,6 +140,143 @@ async def amazon_status():
             "message": f"{str(exc)} The production Amazon account or app authorization does not currently permit marketplace {client.marketplace_id}.",
             "status_code": exc.status_code,
         }
+
+
+@router.get("/google/status")
+async def google_merchant_status():
+    """Expose connection health without returning credentials or tokens."""
+    return await GoogleMerchantAPI().verify_connection()
+
+
+@router.post("/google/register-project")
+async def register_google_merchant_project():
+    """Perform Google's one-time project registration after account access is granted."""
+    runtime = os.getenv("FLIPFLOP_RUNTIME_ENV", "development").strip().lower()
+    if runtime not in {"development", "dev", "staging", "stage"}:
+        raise HTTPException(409, "Run the initial Merchant Center project registration from DEV or STAGING.")
+    client = GoogleMerchantAPI()
+    if not client.account_id or not (client.key_json or client.key_file):
+        raise HTTPException(503, "Configure GOOGLE_MERCHANT_ACCOUNT_ID and the service-account credentials first.")
+    try:
+        result = await client.register_gcp()
+    except GoogleMerchantError as exc:
+        raise HTTPException(502, str(exc)) from exc
+    return {
+        "name": result.get("name"),
+        "gcp_ids": result.get("gcpIds", []),
+        "message": "Google Cloud project registration completed. Assign API Developer access to the service account in Merchant Center before checking the connection.",
+    }
+
+
+@router.post("/google/data-source")
+async def create_google_merchant_data_source():
+    """Create the primary API source after Google setup and registration."""
+    runtime = os.getenv("FLIPFLOP_RUNTIME_ENV", "development").strip().lower()
+    if runtime not in {"live", "production", "prod"}:
+        raise HTTPException(409, "Merchant Center account changes are disabled outside LIVE mode.")
+    client = GoogleMerchantAPI()
+    if not client.account_id or not (client.key_json or client.key_file):
+        raise HTTPException(503, "Configure GOOGLE_MERCHANT_ACCOUNT_ID and the service-account credentials first.")
+    try:
+        result = await client.create_primary_data_source()
+    except GoogleMerchantError as exc:
+        raise HTTPException(502, str(exc)) from exc
+    return {
+        "name": result.get("name"),
+        "data_source_id": result.get("dataSourceId"),
+        "message": "Primary product data source created. Set GOOGLE_MERCHANT_DATA_SOURCE_ID on the API service to finish the connection.",
+    }
+
+
+@router.post("/google/publish/{build_id}")
+async def publish_google_merchant(build_id: int, body: GoogleMerchantPublishIn, db: AsyncSession = Depends(get_db)):
+    """Submit or replace one build's product input in Merchant Center."""
+    runtime = os.getenv("FLIPFLOP_RUNTIME_ENV", "development").strip().lower()
+    if runtime not in {"live", "production", "prod"}:
+        raise HTTPException(409, "Merchant Center product writes are disabled outside LIVE mode.")
+    build = await db.get(ManualBuild, build_id)
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if build.status == "sold":
+        raise HTTPException(409, "Sold builds cannot be submitted to Merchant Center.")
+    if not build.storefront_product_id:
+        raise HTTPException(409, "Publish the FlipFlop.shop product first so Google has a live product page to link to.")
+    product = await db.get(Product, build.storefront_product_id)
+    if not product or product.status != ProductStatus.LISTED:
+        raise HTTPException(409, "The FlipFlop.shop product must be live and available before publishing to Google Shopping.")
+
+    client = GoogleMerchantAPI()
+    if not client.configured:
+        raise HTTPException(503, "Google Merchant Center account, API data source, and service-account credentials are not fully configured.")
+    if not client.enabled_for_writes:
+        raise HTTPException(503, "Google Merchant product writes are disabled for this runtime.")
+    row = (await db.execute(
+        select(ChannelListing)
+        .where(ChannelListing.manual_build_id == build_id, ChannelListing.channel == "google_shopping")
+        .order_by(ChannelListing.created_at.desc())
+    )).scalars().first()
+    if not row:
+        row = ChannelListing(manual_build_id=build_id, channel="google_shopping", status="publishing")
+        db.add(row)
+        await db.flush()
+    row.status = "publishing"
+    try:
+        submission = await client.upsert_build(build, body.images or None)
+        row.external_listing_id = submission.offer_id
+        row.status = "published"
+        row.published_at = row.published_at or datetime.utcnow()
+        row.withdrawn_at = None
+        row.last_recreate_status = "success"
+        row.last_recreate_message = "Submitted to Merchant Center; Google eligibility and visibility are still processing."
+        db.add(ListingPublishEvent(
+            channel_listing_id=row.id,
+            event_type="google_product_submitted",
+            message=row.last_recreate_message,
+            event_metadata={
+                "offer_id": submission.offer_id,
+                "input_name": submission.input_name,
+                "listing_url": submission.product_url,
+                "payload_hash": submission.payload_hash,
+                "selected_images": submission.selected_images,
+                "google_response_name": submission.response.get("name"),
+            },
+        ))
+        await db.commit()
+        return {
+            "success": True,
+            "status": "published",
+            "external_id": submission.offer_id,
+            "listing_url": submission.product_url,
+            "message": row.last_recreate_message,
+        }
+    except GoogleMerchantError as exc:
+        row.status = "failed"
+        row.last_recreate_status = "failed"
+        row.last_recreate_message = str(exc)[:500]
+        db.add(ListingPublishEvent(
+            channel_listing_id=row.id,
+            event_type="google_product_submit_failed",
+            message=row.last_recreate_message,
+            event_metadata={"status_code": exc.status_code},
+        ))
+        await db.commit()
+        raise HTTPException(502, {"message": str(exc), "status_code": exc.status_code}) from exc
+@router.get("/ebay/status")
+async def ebay_listing_status(db: AsyncSession = Depends(get_db)):
+    """Verify credentials for the actual listing target, not sourcing OAuth."""
+    import httpx
+    from app.config import get_settings
+    from app.services.ebay_token_manager import get_valid_ebay_access_token
+    environment = get_settings().ebay_listing_environment
+    root = "https://api.sandbox.ebay.com" if environment == "sandbox" else "https://api.ebay.com"
+    try:
+        token = await get_valid_ebay_access_token(environment, db=db)
+        async with httpx.AsyncClient(timeout=20) as client:
+            response = await client.get(f"{root}/sell/inventory/v1/location", params={"limit": 1}, headers={"Authorization": f"Bearer {token}"})
+        return {"connected": response.status_code == 200, "environment": environment,
+                "message": f"eBay {environment} listing connection {'verified' if response.status_code == 200 else 'returned HTTP ' + str(response.status_code)}"}
+    except (ValueError, httpx.HTTPError):
+        return {"connected": False, "environment": environment, "message": f"eBay {environment} listing credentials could not be verified"}
 
 
 @router.post("/amazon/publish/{build_id}")
@@ -137,10 +331,12 @@ async def publish_amazon(build_id: int, body: AmazonPublishIn, db: AsyncSession 
                 pass
         issues = result.get("issues") or []
         accepted = str(result.get("status", "")).upper() in {"ACCEPTED", "VALID"} and not issues
-        channel_listing.status = "published" if accepted else "failed"
+        live = accepted and any("BUYABLE" in (item.get("status") or [])
+            for item in (result.get("listing_item") or {}).get("summaries", []) if isinstance(item, dict))
+        channel_listing.status = "published" if live else "submitted" if accepted else "failed"
         channel_listing.external_listing_id = sku
-        channel_listing.published_at = datetime.utcnow() if accepted else None
-        if accepted:
+        channel_listing.published_at = datetime.utcnow() if live else None
+        if live:
             settings = await _app_settings(db)
             channel_listing.recreate_enabled = settings.relist_enabled_default
             channel_listing.recreate_interval_days = settings.relist_interval_days or 7
@@ -150,11 +346,13 @@ async def publish_amazon(build_id: int, body: AmazonPublishIn, db: AsyncSession 
                 if channel_listing.recreate_enabled
                 else None
             )
-        message = "Amazon accepted the listing submission." if accepted else "Amazon returned listing requirements or validation issues."
-        db.add(ListingPublishEvent(channel_listing_id=channel_listing.id, event_type="published" if accepted else "publish_failed", message=message, event_metadata={"sku": sku, "response": result}))
+        message = "Amazon confirmed the listing is buyable." if live else "Amazon accepted the submission; live availability is not yet confirmed." if accepted else "Amazon returned listing requirements or validation issues."
+        db.add(ListingPublishEvent(channel_listing_id=channel_listing.id, event_type="published" if live else "submitted" if accepted else "publish_failed", message=message, event_metadata={"sku": sku, "response": result}))
         await db.commit()
         asin = _amazon_asin(result)
-        listing_url = f"https://www.amazon.co.uk/dp/{asin}" if accepted and asin else None
+        listing_url = f"https://www.amazon.co.uk/dp/{asin}" if live and asin else None
+        channel_listing.listing_url = listing_url
+        await db.commit()
         return {"success": accepted, "status": channel_listing.status, "sku": sku, "asin": asin, "listing_url": listing_url, "response": result, "message": message}
     except AmazonSPAPIError as exc:
         channel_listing.status = "failed"
@@ -181,7 +379,7 @@ async def save_cross_listing_settings(body: IndirectChannelSettingsIn, db: Async
 
 @router.get("/schedules")
 async def list_schedules(build_id: int | None = Query(None), db: AsyncSession = Depends(get_db)):
-    query = select(ChannelListing).order_by(ChannelListing.channel)
+    query = select(ChannelListing).order_by(ChannelListing.channel, ChannelListing.updated_at.desc(), ChannelListing.id.desc())
     if build_id is not None:
         query = query.where(ChannelListing.manual_build_id == build_id)
     rows = (await db.execute(query)).scalars().all()
@@ -195,12 +393,14 @@ async def save_schedule(body: RecreateScheduleIn, db: AsyncSession = Depends(get
     build = await db.get(ManualBuild, body.build_id)
     if not build:
         raise HTTPException(status_code=404, detail="Build not found")
+    if build.status == "sold" or build.is_archived:
+        raise HTTPException(status_code=409, detail="Sold or archived builds cannot be scheduled for relisting")
     row = (await db.execute(select(ChannelListing).where(ChannelListing.manual_build_id == body.build_id, ChannelListing.channel == body.channel).order_by(ChannelListing.created_at.desc()))).scalars().first()
     if not row:
         row = ChannelListing(
             manual_build_id=body.build_id,
             channel=body.channel,
-            status="published",
+            status="draft",
             published_at=build.listed_at or datetime.utcnow(),
         )
         db.add(row)
@@ -232,6 +432,8 @@ async def list_actions(build_id: int | None = Query(None), limit: int = Query(10
 
 @router.post("/actions/{event_id}/codex-result")
 async def record_codex_result(event_id: int, body: CodexHandoffResultIn, db: AsyncSession = Depends(get_db)):
+    if body.success:
+        raise HTTPException(409, "Complete the leased Chrome job with verified vendor ID, URL and browser evidence instead")
     event = await db.get(ListingPublishEvent, event_id)
     if not event or event.event_type != "recreate_handoff_required":
         raise HTTPException(status_code=404, detail="Codex relisting handoff not found")
@@ -239,17 +441,17 @@ async def record_codex_result(event_id: int, body: CodexHandoffResultIn, db: Asy
     if not row:
         raise HTTPException(status_code=404, detail="Channel listing not found")
     now = datetime.utcnow()
-    row.last_recreate_at = now
+    if body.success:
+        row.last_recreate_at = now
     row.last_recreate_status = "success" if body.success else "failed"
     row.last_recreate_message = body.message
-    row.status = "published" if body.success else "withdrawn"
+    if body.success:
+        row.status = "published"
     if body.success:
         row.external_listing_id = body.external_listing_id
         row.published_at = now
         row.withdrawn_at = None
         row.next_recreate_at = now + timedelta(days=row.recreate_interval_days or 7) if row.recreate_enabled else None
-    else:
-        row.next_recreate_at = None
     db.add(ListingPublishEvent(
         channel_listing_id=row.id,
         event_type="recreate_created" if body.success else "recreate_failed",
@@ -270,6 +472,7 @@ async def record_codex_result(event_id: int, body: CodexHandoffResultIn, db: Asy
 def _schedule(row: ChannelListing) -> dict:
     return {"id": row.id, "build_id": row.manual_build_id, "channel": row.channel, "status": row.status,
             "external_listing_id": row.external_listing_id,
+            "listing_url": row.listing_url,
             "published_at": row.published_at.isoformat() if row.published_at else None,
             "withdrawn_at": row.withdrawn_at.isoformat() if row.withdrawn_at else None,
             "updated_at": row.updated_at.isoformat() if row.updated_at else None,

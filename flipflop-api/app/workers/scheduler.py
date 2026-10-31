@@ -36,6 +36,7 @@ from app.workers.manual_build_lifecycle import (
     run_manual_build_recreate_cycle_job,
 )
 from app.workers.cross_listing_recreate import run_cross_listing_recreate_job
+from app.workers.google_merchant_sync import run_google_merchant_sync_job
 from app.workers.delivery_followup import run_delivery_followup_job
 from app.workers.warranty_reserve import run_warranty_reserve_job
 from app.services.shipment_notifications import retry_pending_dispatch_notifications
@@ -576,6 +577,16 @@ def start_scheduler():
         replace_existing=True,
         max_instances=1,
         next_run_time=now + timedelta(seconds=30),
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=2),
+        id="google_merchant_sync",
+        name="Google Merchant inventory reconciliation",
+        kwargs={"job_id": "google_merchant_sync", "fn": run_google_merchant_sync_job},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(seconds=60),
     )
     scheduler.add_job(
         _run_job_with_history,

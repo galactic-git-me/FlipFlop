@@ -601,6 +601,8 @@ class EmailMonitor:
         for listing in listings:
             listing.status = "withdrawn"
             listing.withdrawn_at = datetime.utcnow()
+        from app.services.cross_channel_guard import withdraw_google_for_sold_build
+        await withdraw_google_for_sold_build(build, db)
         if sale.get("marketplace") != "ebay" and build.ebay_sku:
             from app.config import get_settings
             from app.services.cross_channel_guard import withdraw_ebay_for_sold_build

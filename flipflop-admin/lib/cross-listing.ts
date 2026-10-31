@@ -6,7 +6,8 @@ export type CrossListingChannel =
   | "onbuy"
   | "amazon"
   | "facebook_catalog"
-  | "vinted";
+  | "vinted"
+  | "google_shopping";
 
 export type CrossListingStatus =
   | "draft"
@@ -230,7 +231,9 @@ export function sourcesFromBuild(build: ManualBuild): CrossListingSource[] {
 export function capabilities(
   ebayConnected: boolean,
   amazonConnected = false,
-  amazonMessage?: string
+  amazonMessage?: string,
+  googleConnected = false,
+  googleMessage?: string
 ): ChannelCapability[] {
   return [
     {
@@ -266,10 +269,10 @@ export function capabilities(
       maxImages: 12,
       mode: "manual",
       connected: false,
-      canPublish: false,
-      canUpdate: false,
-      canEnd: false,
-      note: "Seller API/feed onboarding is not configured in this app. Manual listing pack only.",
+      canPublish: true,
+      canUpdate: true,
+      canEnd: true,
+      note: "Codex uses Chrome and the local seller credentials to create, update, relist or end the listing, then saves the confirmed vendor URL.",
       officialReference: "https://www.onbuy.com/gb/sell/",
     },
     {
@@ -290,14 +293,14 @@ export function capabilities(
     },
     {
       channel: "facebook_catalog",
-      label: "Facebook catalog",
+      label: "Facebook Marketplace",
       maxImages: 10,
       mode: "manual",
       connected: false,
-      canPublish: false,
-      canUpdate: false,
-      canEnd: false,
-      note: "Catalog/feed route must be configured; personal Marketplace automation is not supported.",
+      canPublish: true,
+      canUpdate: true,
+      canEnd: true,
+      note: "Codex uses Chrome and the local seller credentials to create, update, relist or end the listing. Account, category and delivery eligibility are checked before publication.",
       officialReference: "https://www.facebook.com/business/help/",
     },
     {
@@ -306,11 +309,26 @@ export function capabilities(
       maxImages: 20,
       mode: "manual",
       connected: false,
-      canPublish: false,
-      canUpdate: false,
-      canEnd: false,
-      note: "No approved seller integration is configured. Manual-assist export only; no consumer-account automation.",
+      canPublish: true,
+      canUpdate: true,
+      canEnd: true,
+      note: "Codex uses Chrome and the local seller credentials to create, update, relist or end the listing. Seller and product eligibility must permit it; restrictions are reported as blocked jobs.",
       officialReference: "https://www.vinted.co.uk/help",
+    },
+    {
+      channel: "google_shopping",
+      label: "Google Shopping",
+      maxImages: 10,
+      mode: googleConnected ? "api" : "not_connected",
+      connected: googleConnected,
+      canPublish: googleConnected,
+      canUpdate: googleConnected,
+      canEnd: googleConnected,
+      note: googleConnected
+        ? "Submits and synchronizes the live FlipFlop.shop product through Merchant API. Google processes approval asynchronously."
+        : googleMessage || "Connect a verified Google Merchant Center account and Merchant API service account. Google controls free-listing eligibility.",
+      officialReference:
+        "https://developers.google.com/merchant/api/guides/products/add-manage",
     },
   ];
 }

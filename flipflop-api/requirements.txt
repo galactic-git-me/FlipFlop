@@ -13,6 +13,7 @@ aiosqlite>=0.20.0
 
 # HTTP / Scraping
 httpx>=0.27.0,<0.28.0
+google-auth[requests]>=2.40.0,<3.0.0
 beautifulsoup4==4.12.3
 # Keep Playwright and Patchright on the same release: both share pyee and a
 # mismatched pair makes one of the browser engines uninstallable at runtime.
