@@ -201,6 +201,7 @@ from .portal_access_grant import PortalAccessGrant
 from .component_manual import ComponentManual
 from .order_checkout_snapshot import OrderCheckoutSnapshot
 from .ai_setup_purchase import AISetupPurchase
+from .newsletter_subscription import NewsletterSubscription
 
 __all__ = [
     "Customer",
@@ -252,6 +253,7 @@ __all__ = [
     "ComponentManual",
     "OrderCheckoutSnapshot",
     "AISetupPurchase",
+    "NewsletterSubscription",
     "SupplierOfferEvidence", "PriceQuoteSnapshot", "WorkshopCapacityEvidence",
     "WorkshopCapacityReservation", "WorkshopCapacityReservationEvent",
 ]
