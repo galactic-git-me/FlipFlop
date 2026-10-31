@@ -182,8 +182,14 @@ async def _real_db_build(**overrides) -> int:
 @pytest.fixture(autouse=True)
 async def _clean_real_manual_builds():
     from app.database import AsyncSessionLocal
+    from app.models.browser_listing_job import BrowserListingJob
+    from app.models.channel_listing import ChannelListing
 
     async with AsyncSessionLocal() as db:
+        # These records now reference builds and the worker jobs reference the
+        # channel listings, so clear dependants before the legacy build reset.
+        await db.execute(BrowserListingJob.__table__.delete())
+        await db.execute(ChannelListing.__table__.delete())
         await db.execute(ManualBuild.__table__.delete())
         await db.commit()
     yield
