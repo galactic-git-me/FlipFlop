@@ -97,6 +97,26 @@ async def google_merchant_status():
     return await GoogleMerchantAPI().verify_connection()
 
 
+@router.post("/google/register-project")
+async def register_google_merchant_project():
+    """Perform Google's one-time project registration after account access is granted."""
+    runtime = os.getenv("FLIPFLOP_RUNTIME_ENV", "development").strip().lower()
+    if runtime not in {"development", "dev", "staging", "stage"}:
+        raise HTTPException(409, "Run the initial Merchant Center project registration from DEV or STAGING.")
+    client = GoogleMerchantAPI()
+    if not client.account_id or not (client.key_json or client.key_file):
+        raise HTTPException(503, "Configure GOOGLE_MERCHANT_ACCOUNT_ID and the service-account credentials first.")
+    try:
+        result = await client.register_gcp()
+    except GoogleMerchantError as exc:
+        raise HTTPException(502, str(exc)) from exc
+    return {
+        "name": result.get("name"),
+        "gcp_ids": result.get("gcpIds", []),
+        "message": "Google Cloud project registration completed. Assign API Developer access to the service account in Merchant Center before checking the connection.",
+    }
+
+
 @router.post("/google/data-source")
 async def create_google_merchant_data_source():
     """Create the primary API source after Google setup and registration."""

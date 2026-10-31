@@ -244,6 +244,21 @@ class GoogleMerchantAPI:
         except GoogleMerchantError as exc:
             return {"configured": True, "connected": False, "writes_enabled": False, "account_id": self.account_id, "message": str(exc), "status_code": exc.status_code}
 
+    async def register_gcp(self) -> dict[str, Any]:
+        """Link this credential's Google Cloud project to the Merchant account.
+
+        Google requires the authenticating identity to have Merchant Center
+        Admin access for this one-time operation. The API Developer contact is
+        assigned separately in Merchant Center when no email is supplied.
+        """
+        if not self.account_id:
+            raise GoogleMerchantError("Set GOOGLE_MERCHANT_ACCOUNT_ID before registering the Google Cloud project.")
+        return await self._request(
+            "POST",
+            f"/accounts/v1/accounts/{self.account_id}/developerRegistration:registerGcp",
+            body={},
+        )
+
     async def create_primary_data_source(self) -> dict[str, Any]:
         if not self.account_id:
             raise GoogleMerchantError("Set GOOGLE_MERCHANT_ACCOUNT_ID before creating the Merchant Center data source.")
