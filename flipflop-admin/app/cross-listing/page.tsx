@@ -155,7 +155,6 @@ function VendorLogo({ channel }: { channel: CrossListingChannel }) {
     facebook_catalog: "Facebook Marketplace",
     google_shopping: "Google Shopping",
     vinted: "Vinted",
-    google_shopping: "Google Shopping",
   };
   return <span>{labels[channel]}</span>;
 }
