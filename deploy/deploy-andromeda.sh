@@ -47,23 +47,6 @@ if [[ -z "$MERGE_BASE" ]]; then
   exit 1
 fi
 
-if ! git merge-base --is-ancestor "$CURRENT_SHA" "$TARGET_SHA"; then
-  local_history_changes="$(git diff --name-only "$MERGE_BASE" "$CURRENT_SHA" | awk '
-    $0 !~ /^runtime\// && $0 != "deploy/deploy-andromeda.sh" && $0 != "deploy/github-deploy-command.sh" { print }
-  ')"
-  if [[ -n "$local_history_changes" ]]; then
-    log "Refusing divergent production history that includes changes outside runtime data and the deploy script."
-    exit 1
-  fi
-fi
-
-# Production writes mutable data under runtime/ while source updates arrive on
-# the promotion branch. Keep every tracked runtime file in the worktree across
-# release merges, including seller-pack media and stable authentication data.
-while IFS= read -r -d '' runtime_path; do
-  git update-index --skip-worktree -- "$runtime_path"
-done < <(git ls-files -z -- runtime)
-
 # A bootstrap deployment may already have installed these reviewed release
 # scripts directly. Accept only bytes that exactly match the tagged commit.
 for deploy_path in deploy/github-deploy-command.sh deploy/deploy-andromeda.sh; do
@@ -78,16 +61,47 @@ for deploy_path in deploy/github-deploy-command.sh deploy/deploy-andromeda.sh; d
       exit 1
     fi
     # Bootstrap copies are safe only when their bytes match the exact release.
-    # Stage those bytes so the incoming merge sees identical local and remote
-    # content instead of rejecting an otherwise verified deployment script.
     git add -- "$deploy_path"
   fi
 done
 
+# Git merge refuses to overwrite staged bootstrap copies even when their
+# content is identical to the incoming commit. Record only those exact tagged
+# scripts as a local preparation commit, then merge the tagged release.
+if ! git diff --cached --quiet -- deploy/github-deploy-command.sh deploy/deploy-andromeda.sh; then
+  git -c user.name="FlipFlop Production Deploy" \
+      -c user.email="deploy@theflipflop.shop" \
+      commit -m "chore: prepare verified deployment scripts ${TARGET_SHA:0:12}"
+fi
+
+CURRENT_SHA="$(git rev-parse HEAD)"
+MERGE_BASE="$(git merge-base "$CURRENT_SHA" "$TARGET_SHA" || true)"
+if [[ -z "$MERGE_BASE" ]]; then
+  log "Refusing release $TARGET_SHA because it has no history in common with production HEAD $CURRENT_SHA."
+  exit 1
+fi
+
+if ! git merge-base --is-ancestor "$CURRENT_SHA" "$TARGET_SHA"; then
+  local_history_changes="$(git diff --name-only "$MERGE_BASE" "$CURRENT_SHA" | awk '
+    $0 !~ /^runtime\// && $0 != "deploy/deploy-andromeda.sh" && $0 != "deploy/github-deploy-command.sh" { print }
+  ')"
+  if [[ -n "$local_history_changes" ]]; then
+    log "Refusing divergent production history that includes changes outside runtime data and deployment scripts."
+    exit 1
+  fi
+fi
+
+# Production writes mutable data under runtime/ while source updates arrive on
+# the promotion branch. Keep every tracked runtime file in the worktree across
+# release merges, including seller-pack media and stable authentication data.
+while IFS= read -r -d '' runtime_path; do
+  git update-index --skip-worktree -- "$runtime_path"
+done < <(git ls-files -z -- runtime)
+
 unexpected_changes="$(git status --porcelain --untracked-files=all | awk '
   {
     path = substr($0, 4)
-    if (path !~ /^runtime\// && path != "deploy/github-deploy-command.sh" && path != "deploy/deploy-andromeda.sh") print
+    if (path !~ /^runtime\//) print
   }
 ')"
 if [[ -n "$unexpected_changes" ]]; then
