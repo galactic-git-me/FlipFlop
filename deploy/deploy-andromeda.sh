@@ -105,4 +105,11 @@ for public_url in https://www.theflipflop.shop/ https://admin.theflipflop.shop/;
   fi
 done
 
+google_merchant_status="$(docker compose -f "$COMPOSE_FILE" exec -T api python -c 'import asyncio; from app.services.google_merchant_api import GoogleMerchantAPI; print(asyncio.run(GoogleMerchantAPI().verify_connection()))')"
+log "Google Merchant connection: $google_merchant_status"
+python -c 'import json,sys; result=json.loads(sys.argv[1]); sys.exit(0 if result.get("connected") and result.get("writes_enabled") else 1)' "$google_merchant_status" || {
+  log "Google Merchant connection or live-write verification failed."
+  exit 1
+}
+
 log "Deployment completed at $(git rev-parse --short HEAD)."
