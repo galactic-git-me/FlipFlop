@@ -29,6 +29,11 @@ def run_migrations_offline() -> None:
 
 def do_run_migrations(connection: Connection) -> None:
     existing_tables = set(inspect(connection).get_table_names())
+    # Inspection autobegins a SQLAlchemy transaction. Alembic treats an
+    # already-open transaction as externally managed, so close this read-only
+    # inspection transaction before letting Alembic own the migration one.
+    if connection.in_transaction():
+        connection.commit()
     bootstrap_empty_database = existing_tables.issubset({"flipflop_test_run_marker"})
     if bootstrap_empty_database:
         # The migration chain starts from a pre-Alembic application schema.
