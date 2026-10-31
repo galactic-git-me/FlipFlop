@@ -69,7 +69,8 @@ done
 # content is identical to the incoming commit. Record only those exact tagged
 # scripts as a local preparation commit, then merge the tagged release.
 if ! git diff --cached --quiet -- deploy/github-deploy-command.sh deploy/deploy-andromeda.sh; then
-  git -c user.name="FlipFlop Production Deploy" \
+  git -c core.hooksPath=/dev/null \
+      -c user.name="FlipFlop Production Deploy" \
       -c user.email="deploy@theflipflop.shop" \
       commit -m "chore: prepare verified deployment scripts ${TARGET_SHA:0:12}"
 fi
@@ -117,7 +118,8 @@ else
   git merge --no-ff --no-commit -X ours "$TARGET_SHA"
   git checkout "$TARGET_SHA" -- deploy/github-deploy-command.sh deploy/deploy-andromeda.sh
   git add -- deploy/github-deploy-command.sh deploy/deploy-andromeda.sh
-  git -c user.name="FlipFlop Production Deploy" \
+  git -c core.hooksPath=/dev/null \
+      -c user.name="FlipFlop Production Deploy" \
       -c user.email="deploy@theflipflop.shop" \
       commit -m "chore: merge tagged production release ${TARGET_SHA:0:12}"
 fi
