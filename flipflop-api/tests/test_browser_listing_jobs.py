@@ -9,6 +9,17 @@ from app.services.browser_listing_jobs import enqueue_browser_job, complete_brow
 from app.api.browser_listing_jobs import claim, heartbeat, preflight, LeaseIn, require_worker
 
 
+@pytest.fixture(autouse=True)
+def stub_image_derivative(monkeypatch):
+    """Keep queue tests offline; derivative rendering has its own tests."""
+    from app.services import channel_images
+
+    async def prepare(urls, channel, *, require_review=True):
+        return urls
+
+    monkeypatch.setattr(channel_images, "prepare_channel_urls", prepare)
+
+
 async def make_build(db):
     build = ManualBuild(name="PROMETHEUS", status="built", generated_title="PROMETHEUS Gaming PC",
         generated_description="A tested PC with its saved specification.", ebay_price=1400,
