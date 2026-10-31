@@ -35,6 +35,7 @@ import { RailButton } from "@/components/builds/CommandPanel";
 import { Build3DViewer } from "@/components/builds/Build3DViewer";
 import {
   capabilities,
+  manualChannelOutcome,
   sourcesFromBuild,
   type ChannelCapability,
   type CrossListingChannel,
@@ -44,6 +45,7 @@ import {
 const statusStyles: Record<CrossListingSource["status"], string> = {
   live: "text-emerald-300 bg-emerald-400/10 border-emerald-400/25",
   draft: "text-sky-300 bg-sky-400/10 border-sky-400/25",
+  preview: "text-violet-300 bg-violet-400/10 border-violet-400/25",
   sold: "text-orange-300 bg-orange-400/10 border-orange-400/25",
   ended: "text-slate-300 bg-slate-400/10 border-slate-400/25",
   unavailable: "text-yellow-300 bg-yellow-400/10 border-yellow-400/25",
@@ -113,7 +115,7 @@ function channelPublishIntent(
 function shouldAutoSelectDestination(
   status: CrossListingSource["status"] | "unavailable"
 ) {
-  return ["draft", "ended", "unavailable", "failed"].includes(status);
+  return ["draft", "preview", "ended", "unavailable", "failed"].includes(status);
 }
 
 function groupListings(sources: CrossListingSource[]): GroupedListing[] {
@@ -253,12 +255,15 @@ function ChannelCell({ source }: { source?: CrossListingSource }) {
     );
   }
   const isLive = source.status === "live";
+  const isPreview = source.status === "preview";
   const isFailed = source.status === "failed";
   const isDraft = source.status === "draft";
   const statusLabel = isFailed
     ? "Listing failed"
     : isLive
     ? "Listed live"
+    : isPreview
+    ? "Development preview — not live"
     : isDraft
     ? "Unpublished draft — not live"
     : "Listing status unavailable";
@@ -266,6 +271,8 @@ function ChannelCell({ source }: { source?: CrossListingSource }) {
     ? "text-red-400"
     : isLive
     ? "text-emerald-400"
+    : isPreview
+    ? "text-violet-300"
     : "text-amber-300";
   const statusContent = (
     <span
@@ -274,6 +281,8 @@ function ChannelCell({ source }: { source?: CrossListingSource }) {
           ? "border-red-400/40 bg-red-400/10"
           : isLive
           ? "border-emerald-400/40 bg-emerald-400/10"
+          : isPreview
+          ? "border-violet-400/40 bg-violet-400/10"
           : "border-amber-300/40 bg-amber-300/10"
       } ${statusClass}`}
       aria-label={statusLabel}
@@ -282,12 +291,14 @@ function ChannelCell({ source }: { source?: CrossListingSource }) {
         <X className="h-4 w-4" strokeWidth={3} />
       ) : isLive ? (
         "✓"
+      ) : isPreview ? (
+        <ExternalLink className="h-4 w-4" />
       ) : (
         <Clock3 className="h-4 w-4" />
       )}
     </span>
   );
-  const url = isLive ? listingUrlFor(source) : null;
+  const url = isLive || isPreview ? listingUrlFor(source) : null;
   const cell = (
     <div
       className="flex min-h-8 min-w-[76px] items-center justify-center"
@@ -356,6 +367,7 @@ function scheduleStatus(status: string): CrossListingSource["status"] {
 }
 
 function batchResultStatus(status: string): CrossListingSource["status"] {
+  if (status === "preview") return "preview";
   if (["published", "active", "updated", "success"].includes(status)) {
     return "live";
   }
@@ -697,7 +709,7 @@ type ListingResult = {
 type ProgressJob = {
   buildId: number;
   channel: string;
-  status: "pending" | "running" | "success" | "failed";
+  status: "pending" | "running" | "success" | "manual_action_required" | "failed";
   message?: string;
 };
 type BatchRun = { completedAt: string; results: ListingResult[] };
@@ -772,9 +784,9 @@ function openBrowserAssist({
         ? `This is a scheduled relisting for ${escapeHtml(
             channel.label
           )}. First end the existing listing, then create a brand-new listing using this complete payload.`
-        : `Use this complete payload to create the ${escapeHtml(
+        : `Codex: take control of the open Chrome seller tab and create the ${escapeHtml(
             channel.label
-          )} listing.`
+          )} listing as a new listing using this complete payload. Upload the supplied photos, set the saved price and description, keep delivery only, submit the listing, then return its new listing URL and ID.`
     } The seller window is open separately.</p><p>If the seller asks you to sign in, complete sign-in in that seller window, then ask Codex to continue. FlipFlop never handles or stores your credentials.</p>
     <p class="safe">Delivery only is enforced. Collection and pickup must remain disabled.</p>
     <section><h2>${escapeHtml(
@@ -1543,7 +1555,12 @@ export default function CrossListingPage() {
           job.buildId === result.buildId && job.channel === result.channel
             ? {
                 ...job,
-                status: result.status === "failed" ? "failed" : "success",
+                status:
+                  result.status === "failed"
+                    ? "failed"
+                    : result.status === "manual_action_required"
+                    ? "manual_action_required"
+                    : "success",
                 message: result.message,
               }
             : job
@@ -1593,6 +1610,17 @@ export default function CrossListingPage() {
         if (capability.mode !== "api") {
           if (capability.mode !== "manual") {
             addResult({ buildId: item.buildId, channel: capability.label, status: "failed", message: capability.note });
+          } else if (isDevelopmentMode()) {
+            addResult({
+              buildId: item.buildId,
+              channel: capability.label,
+              ...manualChannelOutcome(
+                true,
+                capability.label,
+                capability.note,
+                devListingUrl(channelItem, capability)
+              ),
+            });
           } else {
             try {
               const queued = await api.crossListing.queueBrowserJob({
@@ -1605,8 +1633,22 @@ export default function CrossListingPage() {
               addResult({ buildId: item.buildId, channel: capability.label, status: "queued",
                 message: `Codex Chrome job ${queued.id}: ${queued.status}. The vendor URL appears after verified publication.` });
             } catch (cause) {
-              addResult({ buildId: item.buildId, channel: capability.label, status: "failed",
-                message: cause instanceof Error ? cause.message : "Could not queue the Chrome job." });
+              const outcome = manualChannelOutcome(
+                false,
+                capability.label,
+                capability.note
+              );
+              addResult({
+                buildId: item.buildId,
+                channel: capability.label,
+                ...outcome,
+                message: `${cause instanceof Error ? cause.message : "Could not queue the Chrome job."} ${outcome.message}`,
+                assist: {
+                  source: channelItem,
+                  channel: capability,
+                  build: builds[item.buildId],
+                },
+              });
             }
           }
           continue;
@@ -1873,7 +1915,7 @@ export default function CrossListingPage() {
               <span className="text-xs text-slate-400">
                 {
                   progressJobs.filter(
-                    (job) => job.status === "success" || job.status === "failed"
+                    (job) => ["success", "manual_action_required", "failed"].includes(job.status)
                   ).length
                 }
                 /{progressJobs.length} complete
@@ -1889,6 +1931,8 @@ export default function CrossListingPage() {
                     className={`h-2.5 w-2.5 shrink-0 rounded-full ${
                       job.status === "success"
                         ? "bg-emerald-400"
+                        : job.status === "manual_action_required"
+                        ? "bg-violet-400"
                         : job.status === "failed"
                         ? "bg-red-400"
                         : job.status === "running"
@@ -1906,6 +1950,8 @@ export default function CrossListingPage() {
                     className={
                       job.status === "failed"
                         ? "text-red-300"
+                        : job.status === "manual_action_required"
+                        ? "text-violet-200"
                         : job.status === "success"
                         ? "text-emerald-300"
                         : job.status === "running"
@@ -1915,6 +1961,8 @@ export default function CrossListingPage() {
                   >
                     {job.status === "success"
                       ? "Succeeded"
+                      : job.status === "manual_action_required"
+                      ? "Awaiting Codex"
                       : job.status === "failed"
                       ? "Failed"
                       : job.status === "running"
@@ -1952,6 +2000,45 @@ export default function CrossListingPage() {
           {refreshing ? "Refreshing…" : "Refresh listings"}
         </button>
       </header>
+
+      {results.length > 0 && (
+        <section aria-label="Cross-listing results" className="space-y-3 rounded-xl border border-slate-700 bg-slate-900/70 p-4">
+          <h2 className="text-sm font-semibold text-white">Latest cross-listing results</h2>
+          <div className="space-y-2">
+            {results.map((result, index) => (
+              <div key={`${result.buildId}-${result.channel}-${index}`} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-slate-800 bg-slate-950/60 px-3 py-3">
+                <div className="min-w-0">
+                  <div className="text-sm font-medium text-slate-100">Build {result.buildId} · {result.channel}</div>
+                  <p className="mt-1 text-xs text-slate-400">{result.message}</p>
+                </div>
+                {result.assist && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      openBrowserAssist(result.assist!);
+                      void downloadCanonicalListingPack(
+                        createCanonicalListingPackResource(
+                          result.assist!.source,
+                          result.assist!.build
+                        )
+                      );
+                    }}
+                    className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-emerald-400/50 bg-emerald-400/10 px-3 py-2 text-xs font-semibold text-emerald-200 hover:bg-emerald-400/20"
+                  >
+                    <ExternalLink className="h-4 w-4" /> Open Codex handoff and download listing pack
+                  </button>
+                )}
+                {result.status === "preview" && result.url && (
+                  <a href={result.url} target="_blank" rel="noreferrer" className="rounded-md border border-violet-400/40 px-3 py-2 text-xs font-semibold text-violet-200 hover:bg-violet-400/10">View development preview</a>
+                )}
+                {result.url && result.status === "published" && (
+                  <a href={result.url} target="_blank" rel="noreferrer" className="rounded-md border border-emerald-400/40 px-3 py-2 text-xs font-semibold text-emerald-200 hover:bg-emerald-400/10">View listing</a>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       <div className="fixed right-4 top-1/3 z-50 flex flex-col items-center gap-2">
         <div

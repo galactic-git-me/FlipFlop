@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { capabilities, canonicalFromBuild, sourcesFromBuild } from "@/lib/cross-listing";
+import { capabilities, canonicalFromBuild, manualChannelOutcome, sourcesFromBuild } from "@/lib/cross-listing";
 import type { ManualBuild } from "@/lib/api";
 
 const build = {
@@ -29,17 +29,36 @@ describe("cross-listing normalisation", () => {
     expect(canonicalFromBuild(build).images[0]?.url).toBe("https://cdn.example.test/pc.jpg");
   });
 
-  it("exposes automatic publishing only for connected API channels", () => {
+  it("keeps Codex-operated manual channels selectable alongside API channels", () => {
     const matrix = capabilities(true);
     expect(matrix.find((item) => item.channel === "ebay_uk")?.mode).toBe("api");
     expect(matrix.find((item) => item.channel === "flipflop_shop")?.canPublish).toBe(true);
-    expect(matrix.find((item) => item.channel === "onbuy")?.canPublish).toBe(false);
-    expect(matrix.find((item) => item.channel === "onbuy")?.mode).toBe("not_connected");
+    expect(matrix.find((item) => item.channel === "onbuy")?.canPublish).toBe(true);
+    expect(matrix.find((item) => item.channel === "onbuy")?.mode).toBe("manual");
     expect(matrix.find((item) => item.channel === "amazon")?.canPublish).toBe(false);
-    expect(matrix.find((item) => item.channel === "facebook_catalog")?.mode).toBe("not_connected");
-    expect(matrix.find((item) => item.channel === "vinted")?.canPublish).toBe(false);
+    expect(matrix.find((item) => item.channel === "facebook_catalog")?.canPublish).toBe(true);
+    expect(matrix.find((item) => item.channel === "vinted")?.canPublish).toBe(true);
     expect(matrix.find((item) => item.channel === "google_shopping")?.canPublish).toBe(false);
-    expect(matrix.filter((item) => item.mode === "manual")).toHaveLength(0);
+    expect(matrix.filter((item) => item.mode === "manual").map((item) => item.channel)).toEqual([
+      "onbuy",
+      "facebook_catalog",
+      "vinted",
+    ]);
+    expect(matrix.filter((item) => item.mode === "manual").every((item) => item.note.includes("Codex Chrome"))).toBe(true);
+  });
+
+  it("keeps unsupported channels as previews in development and launches a Codex listing handoff in production", () => {
+    const preview = manualChannelOutcome(true, "OnBuy", "Synthetic note", "/dev-listings/onbuy/42");
+    expect(preview).toEqual({
+      status: "preview",
+      message: "OnBuy development preview prepared. No external marketplace was contacted.",
+      url: "/dev-listings/onbuy/42",
+    });
+    const production = manualChannelOutcome(false, "OnBuy", "No seller API is connected.");
+    expect(production.status).toBe("manual_action_required");
+    expect(production.message).toContain("Codex handoff");
+    expect(production.message).toContain("Chrome");
+    expect(() => manualChannelOutcome(true, "OnBuy", "note")).toThrow("A development preview URL is required.");
   });
 
   it("exposes a submitted canonical build before any channel listing exists", () => {
