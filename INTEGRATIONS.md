@@ -16,10 +16,16 @@ approved or visible yet. The API worker reconciles price, content, images, and
 reservation stock every two minutes, and deletes the input after a confirmed
 sale or withdrawal. Failed withdrawals remain queued for retry.
 
-Before enabling writes, configure and verify the Merchant Center account,
-verified shop domain and account policies, Merchant API developer registration,
-Google Cloud project/API access, and a service account added to the Merchant
-Center account. Store the account ID, data source ID, and service-account key in
+Before enabling writes, verify the shop domain and account policies, enable
+Merchant API in the dedicated Google Cloud project, create a service account,
+and add that identity to the Merchant Center account. The one-time
+`POST /cross-listing/google/register-project` operator endpoint links the
+authenticating GCP project to the production Merchant Center account; Google
+requires the service account to have Merchant Center Admin access for this
+call. Then assign that service account the API Developer access right and
+reduce its account access type to Standard if available. The endpoint does not
+accept a developer email, avoiding an implicit contact change. Store the
+account ID, data source ID, and service-account key in
 the API runtime secret environment (`GOOGLE_MERCHANT_ACCOUNT_ID`,
 `GOOGLE_MERCHANT_DATA_SOURCE_ID`, and either
 `GOOGLE_MERCHANT_SERVICE_ACCOUNT_JSON` or
