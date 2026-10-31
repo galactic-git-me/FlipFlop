@@ -49,7 +49,7 @@ fi
 
 if ! git merge-base --is-ancestor "$CURRENT_SHA" "$TARGET_SHA"; then
   local_history_changes="$(git diff --name-only "$MERGE_BASE" "$CURRENT_SHA" | awk '
-    $0 !~ /^runtime\// && $0 != "deploy/deploy-andromeda.sh" { print }
+    $0 !~ /^runtime\// && $0 != "deploy/deploy-andromeda.sh" && $0 != "deploy/github-deploy-command.sh" { print }
   ')"
   if [[ -n "$local_history_changes" ]]; then
     log "Refusing divergent production history that includes changes outside runtime data and the deploy script."
@@ -71,20 +71,23 @@ for deploy_path in deploy/github-deploy-command.sh deploy/deploy-andromeda.sh; d
   worktree_blob="$(git hash-object "$deploy_path")"
   index_blob="$(git rev-parse ":$deploy_path")"
   head_blob="$(git rev-parse "HEAD:$deploy_path")"
+  git update-index --no-skip-worktree -- "$deploy_path" 2>/dev/null || true
   if [[ "$worktree_blob" != "$index_blob" || "$index_blob" != "$head_blob" ]]; then
     if [[ "$worktree_blob" != "$target_blob" ]]; then
       log "Refusing an uncommitted deployment script that differs from release $TARGET_SHA ($deploy_path)."
       exit 1
     fi
-    git reset -q HEAD -- "$deploy_path"
-    git update-index --skip-worktree -- "$deploy_path"
+    # Bootstrap copies are safe only when their bytes match the exact release.
+    # Stage those bytes so the incoming merge sees identical local and remote
+    # content instead of rejecting an otherwise verified deployment script.
+    git add -- "$deploy_path"
   fi
 done
 
 unexpected_changes="$(git status --porcelain --untracked-files=all | awk '
   {
     path = substr($0, 4)
-    if (path !~ /^runtime\//) print
+    if (path !~ /^runtime\// && path != "deploy/github-deploy-command.sh" && path != "deploy/deploy-andromeda.sh") print
   }
 ')"
 if [[ -n "$unexpected_changes" ]]; then
