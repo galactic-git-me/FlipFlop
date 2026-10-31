@@ -137,7 +137,7 @@ log "Building production API, Gem Radar, and admin"
 docker compose -f "$COMPOSE_FILE" build api gemradar-worker admin
 
 log "Applying database migrations"
-docker compose -f "$COMPOSE_FILE" run --rm api alembic upgrade head
+docker compose -f "$COMPOSE_FILE" run --rm api alembic -x reconcile_existing=true upgrade head
 
 log "Starting production stack"
 docker compose -f "$COMPOSE_FILE" up -d api gemradar-worker admin
