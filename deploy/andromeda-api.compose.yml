@@ -115,7 +115,7 @@ services:
       - ../runtime/fb-profile:/app/.fb-profile
       - ../runtime/fb_cookies.json:/app/fb_cookies.json
       - ../runtime/public-media:/FlipFlop.shop/public/media
-      - /home/mac/.secrets/flipflop/google-merchant-service-account.json:/run/secrets/google-merchant-service-account.json:ro
+      - /home/mac/.local/share/flipflop/google-merchant-service-account.json:/run/secrets/google-merchant-service-account.json:ro
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4311/health"]
       interval: 10s
