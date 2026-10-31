@@ -110,7 +110,9 @@ if [[ -n "$unexpected_changes" ]]; then
   exit 1
 fi
 
-if git merge-base --is-ancestor "$CURRENT_SHA" "$TARGET_SHA"; then
+if git merge-base --is-ancestor "$TARGET_SHA" "$CURRENT_SHA"; then
+  log "Release $TARGET_SHA is already merged; continuing with deployment"
+elif git merge-base --is-ancestor "$CURRENT_SHA" "$TARGET_SHA"; then
   log "Fast-forwarding to $TARGET_SHA"
   git merge --ff-only "$TARGET_SHA"
 else
