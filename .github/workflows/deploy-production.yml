@@ -118,7 +118,7 @@ jobs:
           printf '%s' "$GOOGLE_MERCHANT_SERVICE_ACCOUNT_JSON" | ssh -i ~/.ssh/andromeda \
             -p "${ANDROMEDA_PORT:-22}" \
             "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
-            'install -d -m 700 /home/mac/.secrets/flipflop && umask 077 && cat > /home/mac/.secrets/flipflop/google-merchant-service-account.json.tmp && chmod 600 /home/mac/.secrets/flipflop/google-merchant-service-account.json.tmp && mv /home/mac/.secrets/flipflop/google-merchant-service-account.json.tmp /home/mac/.secrets/flipflop/google-merchant-service-account.json'
+            provision-google-merchant-key
       - name: Provision Chrome worker authentication key
         env:
           CROSS_LISTING_WORKER_KEY: ${{ secrets.CROSS_LISTING_WORKER_KEY }}
@@ -134,7 +134,7 @@ jobs:
             ssh -i ~/.ssh/andromeda \
               -p "${ANDROMEDA_PORT:-22}" \
               "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
-              'install -d -m 700 /home/mac/CODING/FlipFlop-production/runtime && umask 077 && cat > /home/mac/CODING/FlipFlop-production/runtime/browser-worker.env && chmod 600 /home/mac/CODING/FlipFlop-production/runtime/browser-worker.env'
+              provision-browser-worker-key
       - name: Deploy tagged Andromeda services
         env:
           ANDROMEDA_HOST: ${{ secrets.ANDROMEDA_HOST }}
