@@ -212,77 +212,24 @@ async def run_manual_build_recreate_cycle_job() -> dict:
 
 
 async def _recreate_manual_build(build, db) -> str:
-    """Rows 1/2/5/6/9: end current listing, generate a fresh title/swap main
-    photo, step price down, republish, reschedule."""
-    from app.api.manual_builds import generate_listing as _generate_listing_endpoint
-
-    # Legacy builds may retain only the old eBay URL. Recover its numeric item
-    # ID, then require eBay to confirm the old offer ended before creating anew.
-    if not build.ebay_listing_id and build.ebay_listing_url:
-        match = re.search(
-            r"/(?:itm/)?(\d{9,15})(?:[/?#]|$)",
-            urlparse(build.ebay_listing_url).path,
-        )
-        if not match:
-            match = re.search(r"/itm/[^/]+/(\d{9,15})(?:[/?#]|$)", build.ebay_listing_url)
-        if match:
-            build.ebay_listing_id = match.group(1)
-    if build.ebay_listing_id:
-        from app.services.ebay_listing_reconciliation import reconcile_manual_build_listing
-        try:
-            state = await reconcile_manual_build_listing(build, db, force=True)
-        except Exception as exc:
-            log.warning("manual_build_recreate_cycle.reconcile_failed", build_id=build.id, error=str(exc))
-            return "not_ready"
-        if state not in {"ended", "missing"}:
-            return "not_ready"
-    elif not build.ebay_listing_url:
+    """Refresh the saved canonical listing through the reconciled eBay path."""
+    from app.api.manual_builds import post_to_ebay
+    from app.schemas.manual_build import PostToEbayRequest
+    if build.status == "sold" or build.is_archived or not build.ebay_price:
         return "not_ready"
-
-    # Row 19/20 re-anchor: always fresh sold-comp data, never carried forward stale.
-    await pricing_engine.recalculate_manual_build_pricing(build, db)
-
-    current_price = build.ebay_price or build.total_cost
-    new_price, floor_hit = pricing_engine.compute_next_drop_price(
-        current_price=current_price,
-        sold_comp_target=build.sold_comp_target,
-        price_floor=build.price_floor or pricing_engine.compute_price_floor(build.total_cost or 0.0),
-        step_pct=build.recreate_price_step_pct,
-    )
-    build.ebay_price = new_price
-    build.price_floor_hit_review_needed = floor_hit
-
-    # Row 5: reword title (pick a different generated option than the
-    # current one), regenerate description to match.
-    try:
-        previous_title = build.generated_title
-        result = await _generate_listing_endpoint(build.id, db)
-        if result.titles:
-            reworded = next((t for t in result.titles if t != previous_title), result.titles[0])
-            build.generated_title = reworded[:80]
-    except Exception as exc:
-        log.warning("manual_build_recreate_cycle.reword_failed", build_id=build.id, error=str(exc))
-
-    photos = build.photos or []
-    if len(photos) > 1:
-        # Swap main image: rotate so a different photo leads.
-        build.photos = photos[1:] + photos[:1]
-
-    # eBay's prior state was confirmed ended above. Only advance cycle state
-    # after the replacement listing is accepted; failures remain due to retry.
-    outcome = await post_build_to_ebay(build, db=db)
-    if outcome != "published":
-        return outcome
-
+    result = await post_to_ebay(build.id, PostToEbayRequest(
+        price=build.ebay_price, condition=build.ebay_condition or "USED_EXCELLENT", publish=True,
+        title=build.generated_title, description=build.generated_description,
+        images=[photo["url"] for photo in build.photos or [] if isinstance(photo, dict)
+            and photo.get("url") and photo.get("kind", "photo") == "photo"],
+    ), db)
+    if not result.success:
+        return "not_ready"
     build.last_recreate_at = datetime.utcnow()
-    build.recreate_cycle_count += 1
+    build.recreate_cycle_count = (build.recreate_cycle_count or 0) + 1
     from app.models.app_settings import AppSettings
-    policy = (
-        await db.execute(
-            select(AppSettings).where(AppSettings.name == "default")
-        )
-    ).scalar_one_or_none()
+    policy = (await db.execute(select(AppSettings).where(AppSettings.name == "default"))).scalar_one_or_none()
     interval_days = policy.relist_interval_days if policy else 7
     build.next_recreate_at = build.last_recreate_at + timedelta(days=interval_days or 7)
     build.listed_at = build.last_recreate_at
-    return outcome
+    return "published"

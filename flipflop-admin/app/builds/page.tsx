@@ -5,6 +5,38 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Package, Plus, Trash2, ArrowRight, Layers } from "lucide-react";
 import { api, ManualBuildSummary } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
+import { VendorLogo } from "@/components/VendorLogo";
+
+type ChannelListingSummary = {
+  build_id: number;
+  channel: string;
+  status: string;
+  external_listing_id?: string | null;
+  listing_url?: string | null;
+};
+
+const CHANNEL_LABELS: Record<string, string> = {
+  ebay: "eBay UK",
+  ebay_uk: "eBay UK",
+  amazon: "Amazon",
+  storefront: "FlipFlop.shop",
+  flipflop_shop: "FlipFlop.shop",
+  facebook_marketplace: "Facebook Marketplace",
+  facebook_catalog: "Facebook Marketplace",
+  google_shopping: "Google Shopping",
+  vinted: "Vinted",
+  onbuy: "OnBuy",
+};
+
+function vendorKeyForChannel(channel: string): string {
+  if (channel === "ebay") return "ebay_uk";
+  if (channel === "storefront") return "flipflop_shop";
+  return channel;
+}
+
+function listedStatus(status: string): boolean {
+  return ["published", "scheduled", "withdrawn", "ended", "sold"].includes(status.toLowerCase());
+}
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
@@ -37,16 +69,52 @@ function BuildsPageInner() {
   const searchParams = useSearchParams();
   const highlightId = searchParams.get("new") ? Number(searchParams.get("new")) : null;
 
+  const [channelListings, setChannelListings] = useState<ChannelListingSummary[]>([]);
   const [builds, setBuilds] = useState<ManualBuildSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
   useEffect(() => {
-    api.manualBuilds
-      .list()
-      .then(setBuilds)
-      .catch(console.error)
-      .finally(() => setLoading(false));
+    Promise.allSettled([api.manualBuilds.list(), api.crossListing.schedules()]).then(async ([buildResult, listingResult]) => {
+      if (buildResult.status !== "fulfilled") {
+        console.error("Could not load builds:", buildResult.reason);
+        return;
+      }
+      const summaries = buildResult.value;
+      setBuilds(summaries);
+      const channelRows: ChannelListingSummary[] = listingResult.status === "fulfilled" ? listingResult.value : [];
+      if (listingResult.status === "rejected") console.error("Could not load channel listings:", listingResult.reason);
+
+      // Older eBay and storefront listings are stored on the build itself;
+      // newer cross-listings are represented by channel_listings records.
+      const legacyBuilds = summaries.filter((build) => build.status === "listed" || build.status === "sold");
+      const details = await Promise.allSettled(legacyBuilds.map((build) => api.manualBuilds.get(build.id)));
+      details.forEach((result) => {
+        if (result.status !== "fulfilled") return;
+        const build = result.value;
+        if (build.ebay_listing_id) channelRows.push({
+          build_id: build.id,
+          channel: "ebay_uk",
+          status: build.ebay_listing_status === "active" ? "published" : build.ebay_listing_status ?? "ended",
+          external_listing_id: build.ebay_listing_id,
+          listing_url: build.ebay_listing_status === "active" ? build.ebay_listing_url : null,
+        });
+        if (build.storefront_product_id) channelRows.push({
+          build_id: build.id,
+          channel: "flipflop_shop",
+          status: build.storefront_live === false ? "withdrawn" : "published",
+          external_listing_id: String(build.storefront_product_id),
+          listing_url: `https://www.theflipflop.shop/ready-to-ship/${build.storefront_product_id}`,
+        });
+      });
+      const byBuildAndChannel = new Map<string, ChannelListingSummary>();
+      for (const listing of channelRows) {
+        const normalizedChannel = vendorKeyForChannel(listing.channel);
+        const key = `${listing.build_id}:${normalizedChannel}`;
+        if (!byBuildAndChannel.has(key)) byBuildAndChannel.set(key, { ...listing, channel: normalizedChannel });
+      }
+      setChannelListings([...byBuildAndChannel.values()]);
+    }).catch(console.error).finally(() => setLoading(false));
   }, []);
 
   const handleDelete = async (id: number, e: React.MouseEvent) => {
@@ -117,6 +185,7 @@ function BuildsPageInner() {
             <BuildCard
               key={b.id}
               build={b}
+              channels={channelListings.filter((listing) => listing.build_id === b.id && listedStatus(listing.status))}
               highlighted={b.id === highlightId}
               deleting={deletingId === b.id}
               onDelete={(e) => handleDelete(b.id, e)}
@@ -131,12 +200,14 @@ function BuildsPageInner() {
 
 function BuildCard({
   build,
+  channels,
   highlighted,
   deleting,
   onDelete,
   onClick,
 }: {
   build: ManualBuildSummary;
+  channels: ChannelListingSummary[];
   highlighted: boolean;
   deleting: boolean;
   onDelete: (e: React.MouseEvent) => void;
@@ -163,6 +234,26 @@ function BuildCard({
         <p className="text-[11px] text-slate-500 mt-0.5">
           {build.component_count} component{build.component_count === 1 ? "" : "s"} · updated {formatDate(build.updated_at)}
         </p>
+        <div className="mt-2 flex flex-wrap items-center gap-1.5" aria-label="Listing channels">
+          {channels.length === 0 ? (
+            <span className="text-[10px] text-slate-500">Not listed on any channel</span>
+          ) : channels.map((listing) => {
+            const channelLabel = CHANNEL_LABELS[listing.channel] ?? listing.channel.replaceAll("_", " ");
+            const state = listing.status.toLowerCase();
+            const active = state === "published" || state === "scheduled";
+            const description = `${channelLabel}: ${state}${listing.external_listing_id ? ` · listing ${listing.external_listing_id}` : ""}`;
+            return (
+              <span key={`${listing.channel}-${listing.build_id}`} title={description} className={`inline-flex items-center gap-1.5 rounded-md border px-1.5 py-1 ${active ? "border-emerald-400/25 bg-emerald-400/[.06]" : "border-slate-600/40 bg-slate-800/40 opacity-60"}`}>
+                {listing.listing_url && /^https:\/\//.test(listing.listing_url) ? (
+                  <a href={listing.listing_url} target="_blank" rel="noopener noreferrer" aria-label={`Open ${channelLabel} listing in a new tab`} onClick={(event) => event.stopPropagation()} onKeyDown={(event) => event.stopPropagation()} className="inline-flex items-center gap-1.5 hover:text-white focus-visible:outline focus-visible:outline-cyan-300">
+                    <VendorLogo vendor={vendorKeyForChannel(listing.channel)} />
+                    <span className="text-[10px] font-medium">{channelLabel}</span>
+                  </a>
+                ) : <><VendorLogo vendor={vendorKeyForChannel(listing.channel)} /><span className="text-[10px] font-medium text-slate-300">{channelLabel}</span></>}
+              </span>
+            );
+          })}
+        </div>
       </div>
 
       <div className={`px-2 py-1 rounded-lg border text-[10px] font-bold uppercase tracking-wider shrink-0 ${STATUS_COLOR[build.status] ?? STATUS_COLOR.in_progress}`}>

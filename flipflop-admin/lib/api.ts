@@ -908,6 +908,10 @@ export const api = {
         method: "POST",
         body: JSON.stringify({ images }),
       }),
+    browserJobs: () => request<Array<{ id: number; build_id: number; channel: string; status: string; operation: string; message?: string | null; updated_at?: string | null }>>("/cross-listing/browser-jobs"),
+    queueBrowserJob: (data: { build_id: number; channel: string; operation: "publish" | "update" | "relist" | "withdraw"; image_urls: string[] }) =>
+      request<{ id: number; status: string }>("/cross-listing/browser-jobs", { method: "POST", body: JSON.stringify(data) }),
+    retryBrowserJob: (id: number) => request<unknown>(`/cross-listing/browser-jobs/${id}/retry`, { method: "POST" }),
     amazonStatus: () =>
       request<{
         connected: boolean;
@@ -962,6 +966,7 @@ export const api = {
           channel: string;
           status: string;
           external_listing_id?: string | null;
+          listing_url?: string | null;
           published_at?: string | null;
           withdrawn_at?: string | null;
           updated_at?: string | null;
