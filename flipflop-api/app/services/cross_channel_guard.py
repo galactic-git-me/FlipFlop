@@ -15,6 +15,7 @@ but a much smaller one than losing a confirmed sale.
 """
 from __future__ import annotations
 
+import asyncio
 from datetime import datetime
 
 import structlog
@@ -22,8 +23,11 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.manual_build import ManualBuild
+from app.models.channel_listing import ChannelListing
+from app.models.listing_publish_event import ListingPublishEvent
 from app.models.product import Product, ProductStatus, SoldChannel, WithdrawalReason
 from app.services.ebay_listing_withdraw import withdraw_listing_by_sku, EbayListingWithdrawError
+from app.services.google_merchant_api import GoogleMerchantAPI, GoogleMerchantError
 
 log = structlog.get_logger(__name__)
 
@@ -47,6 +51,8 @@ async def withdraw_storefront_for_sold_build(build: ManualBuild, db: AsyncSessio
     """Call once a build's eBay sale is confirmed (see sync_ebay_order) —
     withdraws the matching storefront Product listing, if any, so it can't
     also sell there."""
+    from app.services.channel_sync import withdraw_other_channels
+    await withdraw_other_channels(db, build, "ebay_uk")
     if not build.storefront_product_id:
         return
 
@@ -68,3 +74,44 @@ async def withdraw_storefront_for_sold_build(build: ManualBuild, db: AsyncSessio
     product.updated_at = datetime.utcnow()
     await db.flush()
     log.info("cross_channel_guard.storefront_withdrawn", build_id=build.id, product_id=product.id)
+
+
+async def withdraw_google_for_sold_build(build: ManualBuild, db: AsyncSession) -> None:
+    """Immediately remove the Merchant Center input and preserve retry state.
+
+    The caller is already handling a confirmed sale, so provider failures must
+    not unwind it. A pending row is reconciled by the periodic Merchant sync.
+    """
+    rows = (await db.execute(
+        select(ChannelListing).where(
+            ChannelListing.manual_build_id == build.id,
+            ChannelListing.channel == "google_shopping",
+            ChannelListing.external_listing_id.is_not(None),
+        )
+    )).scalars().all()
+    if not rows:
+        return
+    client = GoogleMerchantAPI()
+    for row in rows:
+        now = datetime.utcnow()
+        row.status = "withdrawal_pending"
+        row.withdrawn_at = now
+        try:
+            await asyncio.wait_for(client.delete_build(build), timeout=6)
+            row.status = "withdrawn"
+            row.last_recreate_status = "success"
+            row.last_recreate_message = "Google Merchant product input deleted after the build sold."
+            event_type = "google_product_withdrawn"
+            log.info("cross_channel_guard.google_merchant_withdrawn", build_id=build.id)
+        except (GoogleMerchantError, asyncio.TimeoutError) as exc:
+            row.last_recreate_status = "failed"
+            row.last_recreate_message = f"Google Merchant withdrawal pending retry: {str(exc)[:420]}"
+            event_type = "google_product_withdrawal_failed"
+            log.error("cross_channel_guard.google_merchant_withdraw_failed", build_id=build.id, error=str(exc))
+        db.add(ListingPublishEvent(
+            channel_listing_id=row.id,
+            event_type=event_type,
+            message=row.last_recreate_message,
+            event_metadata={"build_id": build.id, "channel": "google_shopping", "at": now.isoformat()},
+        ))
+    await db.flush()

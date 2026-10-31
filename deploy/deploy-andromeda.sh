@@ -90,6 +90,9 @@ if [[ "$healthy" -ne 1 ]]; then
   exit 1
 fi
 
+log "Verifying browser worker authentication and live Merchant API writes"
+docker compose -f "$COMPOSE_FILE" exec -T api python -c 'import asyncio, os; from app.services.google_merchant_api import GoogleMerchantAPI; assert len(os.getenv("CROSS_LISTING_WORKER_KEY", "")) >= 48, "Chrome worker key is not configured"; status = asyncio.run(GoogleMerchantAPI().verify_connection()); assert status.get("connected") and status.get("writes_enabled"), "Merchant API is not connected with writes enabled"; print("Browser worker and Merchant API write configuration verified")'
+
 callback_status="$(curl --silent --output /dev/null --write-out '%{http_code}' \
   https://www.theflipflop.shop/api/ebay/oauth/callback)"
 if [[ "$callback_status" != "307" && "$callback_status" != "302" ]]; then
@@ -104,5 +107,12 @@ for public_url in https://www.theflipflop.shop/ https://admin.theflipflop.shop/;
     exit 1
   fi
 done
+
+google_merchant_status="$(docker compose -f "$COMPOSE_FILE" exec -T api python -c 'import asyncio; from app.services.google_merchant_api import GoogleMerchantAPI; print(asyncio.run(GoogleMerchantAPI().verify_connection()))')"
+log "Google Merchant connection: $google_merchant_status"
+python -c 'import json,sys; result=json.loads(sys.argv[1]); sys.exit(0 if result.get("connected") and result.get("writes_enabled") else 1)' "$google_merchant_status" || {
+  log "Google Merchant connection or live-write verification failed."
+  exit 1
+}
 
 log "Deployment completed at $(git rev-parse --short HEAD)."

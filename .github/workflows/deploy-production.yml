@@ -84,6 +84,7 @@ jobs:
         run: >-
           python scripts/run_isolated_tests.py -- -q
           tests/test_ebay_oauth.py
+          tests/test_browser_listing_jobs.py
           tests/test_component_price_alert_matching.py
 
   deploy:
@@ -103,6 +104,45 @@ jobs:
           chmod 600 ~/.ssh/andromeda
           printf '%s\n' "$SSH_HOST_KEY" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
+      - name: Provision Google Merchant service-account key
+        env:
+          GOOGLE_MERCHANT_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_MERCHANT_SERVICE_ACCOUNT_JSON }}
+          ANDROMEDA_HOST: ${{ secrets.ANDROMEDA_HOST }}
+          ANDROMEDA_USER: ${{ secrets.ANDROMEDA_USER }}
+          ANDROMEDA_PORT: ${{ secrets.ANDROMEDA_PORT }}
+        run: |
+          test -n "$GOOGLE_MERCHANT_SERVICE_ACCOUNT_JSON" || {
+            echo "Missing GOOGLE_MERCHANT_SERVICE_ACCOUNT_JSON production environment secret." >&2
+            exit 1
+          }
+          key_file="$(mktemp)"
+          trap 'rm -f "$key_file"' EXIT
+          chmod 600 "$key_file"
+          printf '%s' "$GOOGLE_MERCHANT_SERVICE_ACCOUNT_JSON" > "$key_file"
+          scp -i ~/.ssh/andromeda \
+            -P "${ANDROMEDA_PORT:-22}" \
+            "$key_file" \
+            "$ANDROMEDA_USER@$ANDROMEDA_HOST:/tmp/flipflop-google-merchant-service-account.json"
+          ssh -i ~/.ssh/andromeda \
+            -p "${ANDROMEDA_PORT:-22}" \
+            "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
+            "install -d -m 700 /home/mac/.secrets/flipflop && install -m 600 /tmp/flipflop-google-merchant-service-account.json /home/mac/.secrets/flipflop/google-merchant-service-account.json && rm -f /tmp/flipflop-google-merchant-service-account.json"
+      - name: Provision Chrome worker authentication key
+        env:
+          CROSS_LISTING_WORKER_KEY: ${{ secrets.CROSS_LISTING_WORKER_KEY }}
+          ANDROMEDA_HOST: ${{ secrets.ANDROMEDA_HOST }}
+          ANDROMEDA_USER: ${{ secrets.ANDROMEDA_USER }}
+          ANDROMEDA_PORT: ${{ secrets.ANDROMEDA_PORT }}
+        run: |
+          test "${#CROSS_LISTING_WORKER_KEY}" -ge 48 || {
+            echo "Missing or invalid CROSS_LISTING_WORKER_KEY production environment secret." >&2
+            exit 1
+          }
+          printf 'CROSS_LISTING_WORKER_KEY=%s\n' "$CROSS_LISTING_WORKER_KEY" | \
+            ssh -i ~/.ssh/andromeda \
+              -p "${ANDROMEDA_PORT:-22}" \
+              "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
+              'install -d -m 700 /home/mac/CODING/FlipFlop-production/runtime && umask 077 && cat > /home/mac/CODING/FlipFlop-production/runtime/browser-worker.env && chmod 600 /home/mac/CODING/FlipFlop-production/runtime/browser-worker.env'
       - name: Deploy tagged Andromeda services
         env:
           ANDROMEDA_HOST: ${{ secrets.ANDROMEDA_HOST }}

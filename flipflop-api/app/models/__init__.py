@@ -1,4 +1,5 @@
 from app.models.listing import Listing, ListingStatus
+from app.models.browser_listing_job import BrowserListingJob
 from app.models.flip import Flip, FlipStage
 from app.models.part import Part, PartCategory
 from app.models.inventory import InventoryItem

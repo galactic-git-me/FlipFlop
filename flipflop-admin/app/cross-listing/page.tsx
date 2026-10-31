@@ -10,6 +10,7 @@ export const dynamic = "force-dynamic";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import JSZip from "jszip";
 import DOMPurify from "dompurify";
+import BrowserListingJobs from "@/components/BrowserListingJobs";
 import ChannelImageReview, { type ImageReviewRequest } from "@/components/ChannelImageReview";
 import {
   AlertTriangle,
@@ -122,7 +123,7 @@ function groupListings(sources: CrossListingSource[]): GroupedListing[] {
     const channel = source.channel ?? source.source;
     const existing = groups.get(key);
     if (existing) {
-      existing.byChannel[channel] = source;
+      if (!existing.byChannel[channel] || source.updatedAt > existing.byChannel[channel]!.updatedAt) existing.byChannel[channel] = source;
       if (source.updatedAt > existing.updatedAt) {
         existing.updatedAt = source.updatedAt;
         existing.primary = source;
@@ -151,8 +152,10 @@ function VendorLogo({ channel }: { channel: CrossListingChannel }) {
     flipflop_shop: "FlipFlop.shop",
     onbuy: "OnBuy",
     amazon: "Amazon",
-    facebook_catalog: "Facebook catalog",
+    facebook_catalog: "Facebook Marketplace",
+    google_shopping: "Google Shopping",
     vinted: "Vinted",
+    google_shopping: "Google Shopping",
   };
   return <span>{labels[channel]}</span>;
 }
@@ -325,6 +328,8 @@ function normalizeScheduleChannel(channel: string): CrossListingChannel | null {
     facebook_catalog: "facebook_catalog",
     facebook: "facebook_catalog",
     vinted: "vinted",
+    google_shopping: "google_shopping",
+    facebook_marketplace: "facebook_catalog",
   };
   return aliases[normalized] ?? null;
 }
@@ -336,10 +341,13 @@ function scheduleStatus(status: string): CrossListingSource["status"] {
       "draft",
       "scheduled",
       "publishing",
+      "submitted",
       "queued",
       "validating",
       "ready",
       "manual_action_required",
+      "sync_pending",
+      "withdrawal_pending",
     ].includes(status)
   )
     return "draft";
@@ -870,12 +878,6 @@ function ActivityLog({
                   for Codex
                 </button>
                 <button
-                  onClick={() => onResult(action.id, true)}
-                  className="cursor-pointer rounded border border-emerald-400/40 px-2 py-1 text-[10px] text-emerald-200 hover:bg-emerald-400/10"
-                >
-                  Mark successful
-                </button>
-                <button
                   onClick={() => onResult(action.id, false)}
                   className="cursor-pointer rounded border border-red-400/40 px-2 py-1 text-[10px] text-red-200 hover:bg-red-400/10"
                 >
@@ -906,6 +908,8 @@ export default function CrossListingPage() {
   const [connected, setConnected] = useState(false);
   const [amazonConnected, setAmazonConnected] = useState(false);
   const [amazonMessage, setAmazonMessage] = useState<string | undefined>();
+  const [googleConnected, setGoogleConnected] = useState(false);
+  const [googleMessage, setGoogleMessage] = useState<string | undefined>();
   const [warnings, setWarnings] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -948,8 +952,8 @@ export default function CrossListingPage() {
   const [relistNowBuild, setRelistNowBuild] = useState<number | null>(null);
 
   const channelCapabilities = useMemo(
-    () => capabilities(connected, amazonConnected, amazonMessage),
-    [connected, amazonConnected, amazonMessage]
+    () => capabilities(connected, amazonConnected, amazonMessage, googleConnected, googleMessage),
+    [connected, amazonConnected, amazonMessage, googleConnected, googleMessage]
   );
   const tableChannels = channelCapabilities.map((channel) => channel.channel);
   const displayItems = useMemo(() => {
@@ -1115,13 +1119,19 @@ export default function CrossListingPage() {
     setRefreshing(true);
     setError(null);
     try {
-      const [summary, ebay, amazon, scheduleRows, actionRows, settings] =
+      const [summary, ebay, amazon, google, scheduleRows, actionRows, settings] =
         await Promise.all([
           api.manualBuilds.list(),
           fetch("/proxy-api/cross-listing/ebay/status", { cache: "no-store" }).then(async (response) => response.ok ? response.json() : { connected: false }).catch(() => ({ connected: false })),
           api.crossListing.amazonStatus().catch(() => ({
             connected: false,
             message: "Amazon connection could not be checked.",
+          })),
+          api.crossListing.googleStatus().catch(() => ({
+            configured: false,
+            connected: false,
+            writes_enabled: false,
+            message: "Google Merchant Center connection could not be checked.",
           })),
           api.crossListing.schedules(),
           api.crossListing.actions(),
@@ -1151,11 +1161,14 @@ export default function CrossListingPage() {
           );
       });
       const failedActionMessages = new Map<string, string>();
+      const actionUrls = new Map<string, string>();
       for (const action of actionRows) {
+        const actionKey = `${action.build_id}:${normalizeScheduleChannel(action.channel) ?? action.channel}`;
+        const listingUrl = action.metadata?.listing_url;
+        if (typeof listingUrl === "string" && listingUrl && !actionUrls.has(actionKey))
+          actionUrls.set(actionKey, listingUrl);
         if (!action.message || !action.event_type.includes("failed")) continue;
-        const key = `${action.build_id}:${
-          normalizeScheduleChannel(action.channel) ?? action.channel
-        }`;
+        const key = actionKey;
         if (!failedActionMessages.has(key))
           failedActionMessages.set(key, action.message);
       }
@@ -1182,7 +1195,7 @@ export default function CrossListingPage() {
           source: "flipflop_shop",
           externalId: schedule.external_listing_id || "not-created",
           status,
-          url: null,
+          url: schedule.listing_url ?? actionUrls.get(key) ?? null,
           updatedAt: schedule.updated_at || base.updatedAt,
           error:
             status === "failed"
@@ -1198,6 +1211,8 @@ export default function CrossListingPage() {
       setConnected(ebay.connected);
       setAmazonConnected(amazon.connected);
       setAmazonMessage(amazon.message);
+      setGoogleConnected(Boolean(google.connected && google.writes_enabled));
+      setGoogleMessage(google.message);
       setRefreshedAt(new Date().toISOString());
       setActions(actionRows);
       setSchedules(scheduleRows);
@@ -1277,6 +1292,7 @@ export default function CrossListingPage() {
     } else {
       const needsListing = [...new Set(filtered.flatMap((item) => channelCapabilities
         .filter((channel) => {
+          if (!channel.canPublish) return false;
           const status = item.byChannel[channel.channel]?.status ?? "unavailable";
           return shouldAutoSelectDestination(status);
         })
@@ -1284,12 +1300,14 @@ export default function CrossListingPage() {
       setDestinations(needsListing);
     }
   };
-  const toggleDestination = (channel: CrossListingChannel) =>
+  const toggleDestination = (channel: CrossListingChannel) => {
+    if (!channelCapabilities.find((item) => item.channel === channel)?.canPublish) return;
     setDestinations((current) =>
       current.includes(channel)
         ? current.filter((item) => item !== channel)
         : [...current, channel]
     );
+  };
   const selectListing = (item: GroupedListing) => {
     const wasSelected = selected.has(item.id);
     setSelected((current) => {
@@ -1301,6 +1319,7 @@ export default function CrossListingPage() {
     if (!wasSelected) {
       const needsListing = channelCapabilities
         .filter((channel) => {
+          if (!channel.canPublish) return false;
           const status =
             item.byChannel[channel.channel]?.status ?? "unavailable";
           return shouldAutoSelectDestination(status);
@@ -1400,7 +1419,7 @@ export default function CrossListingPage() {
       ["update", "active listings updated"],
       ["relist", "ended listings relisted"],
       ["create", "new listings created for drafts or missing listings"],
-      ["manual", "manual listing steps prepared"],
+      ["manual", "Codex Chrome jobs queued"],
       ["approval", "destinations requiring approval"],
       ["unavailable", "unavailable destinations"],
       ["verify", "eBay listings that need a status refresh first"],
@@ -1573,33 +1592,23 @@ export default function CrossListingPage() {
           continue;
         }
         if (capability.mode !== "api") {
-          if (destination === "amazon") {
-            addResult({
-              buildId: item.buildId,
-              channel: capability.label,
-              status: "failed",
-              message: capability.note,
-            });
-          } else if (isDevelopmentMode()) {
-            addResult({
-              buildId: item.buildId,
-              channel: capability.label,
-              status: "published",
-              message: `${capability.label} fake listing created for development. No external marketplace was contacted.`,
-              url: devListingUrl(channelItem, capability),
-            });
+          if (capability.mode !== "manual") {
+            addResult({ buildId: item.buildId, channel: capability.label, status: "failed", message: capability.note });
           } else {
-            addResult({
-              buildId: item.buildId,
-              channel: capability.label,
-              status: "manual_action_required",
-              message: `${capability.note} Use browser assist to have Codex create the listing with the complete payload and media assets.`,
-              assist: {
-                source: channelItem,
-                channel: capability,
-                build: builds[item.buildId],
-              },
-            });
+            try {
+              const queued = await api.crossListing.queueBrowserJob({
+                build_id: item.buildId, channel: destination,
+                operation: group?.byChannel[destination]?.status === "ended"
+                  ? "relist"
+                  : group?.byChannel[destination]?.status === "live" ? "update" : "publish",
+                image_urls: channelItem.listing.images.map((image) => image.url),
+              });
+              addResult({ buildId: item.buildId, channel: capability.label, status: "queued",
+                message: `Codex Chrome job ${queued.id}: ${queued.status}. The vendor URL appears after verified publication.` });
+            } catch (cause) {
+              addResult({ buildId: item.buildId, channel: capability.label, status: "failed",
+                message: cause instanceof Error ? cause.message : "Could not queue the Chrome job." });
+            }
           }
           continue;
         }
@@ -1633,6 +1642,18 @@ export default function CrossListingPage() {
               images: channelItem.listing.images.map((image) => image.url),
               sku: channelItem.listing.sku,
             });
+            addResult({
+              buildId: item.buildId,
+              channel: capability.label,
+              status: result.success ? result.status : "failed",
+              message: result.message,
+              url: result.listing_url ?? undefined,
+            });
+          } else if (destination === "google_shopping") {
+            const result = await api.crossListing.publishGoogle(
+              channelItem.buildId,
+              channelItem.listing.images.map((image) => image.url)
+            );
             addResult({
               buildId: item.buildId,
               channel: capability.label,
@@ -1970,12 +1991,16 @@ export default function CrossListingPage() {
                 <button
                   type="button"
                   aria-pressed={active}
+                  aria-disabled={!channel.canPublish}
                   key={channel.channel}
                   onClick={() => toggleDestination(channel.channel)}
-                  className={`cursor-pointer rounded-lg border p-3 text-left transition-colors ${
+                  disabled={!channel.canPublish}
+                  className={`${channel.canPublish ? "cursor-pointer" : "cursor-not-allowed"} rounded-lg border p-3 text-left transition-colors ${
                     active
                       ? "border-emerald-400/60 bg-emerald-400/[0.07] shadow-[0_0_18px_rgba(52,211,153,0.08)]"
-                      : "border-slate-700/80 bg-[#0d1521]/90 opacity-60 hover:border-slate-500 hover:opacity-90"
+                      : channel.canPublish
+                      ? "border-slate-700/80 bg-[#0d1521]/90 opacity-60 hover:border-slate-500 hover:opacity-90"
+                      : "border-slate-700/80 bg-[#0d1521]/90 opacity-50"
                   }`}
                 >
                   <div className="flex items-start gap-3">
@@ -1994,8 +2019,8 @@ export default function CrossListingPage() {
                           }`}
                         >
                           {channel.mode === "api"
-                            ? "API"
-                            : labelForStatus(channel.mode)}
+                            ? "AUTOMATIC"
+                            : channel.mode === "manual" ? "CODEX · CHROME" : labelForStatus(channel.mode)}
                         </span>
                       </div>
                       {listingStatus && (
@@ -2018,6 +2043,11 @@ export default function CrossListingPage() {
                           ? "This saved draft is not live. Select eBay to check the seller account and create a new listing if the old item is missing."
                           : channel.note}
                       </p>
+                      {!channel.canPublish && (
+                        <span className="mt-2 inline-block text-[10px] font-semibold uppercase tracking-wide text-yellow-300">
+                          Automatic setup required
+                        </span>
+                      )}
                     </div>
                     <span
                       className={`shrink-0 text-lg leading-6 ${
@@ -2400,7 +2430,7 @@ export default function CrossListingPage() {
                 destination{destinations.length === 1 ? "" : "s"} ={" "}
                 {selectedItems.length * destinations.length} job
                 {selectedItems.length * destinations.length === 1 ? "" : "s"}.
-                Manual-only destinations remain manual_action_required.
+                Chrome-managed destinations run through the authenticated Codex desktop worker.
               </div>
               <ManualPackContents />
             </div>
@@ -2441,6 +2471,8 @@ export default function CrossListingPage() {
           </div>
         </section>
       )}
+
+      <BrowserListingJobs onChanged={refresh} />
 
       <ActivityLog
         actions={actions}

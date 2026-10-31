@@ -31,7 +31,10 @@ from app.schemas.product_checkout import (
 from app.services.payment_service import PaymentService
 from app.services.email_service import send_order_confirmation_email
 from app.services.alerts import emit_alert
-from app.services.cross_channel_guard import withdraw_ebay_for_sold_build
+from app.services.cross_channel_guard import (
+    withdraw_ebay_for_sold_build,
+    withdraw_google_for_sold_build,
+)
 from app.config import get_settings
 from app.services.storefront_delivery import delivery_choice, checkout_metadata, load_delivery_settings, add_working_days
 from app.models.app_settings import AppSettings
@@ -545,6 +548,8 @@ async def confirm_checkout(
         manual_build.customer_id = customer.id
         manual_build.customer_email = customer.email
         manual_build.sale_price_actual = payment_data["amount"]
+        from app.services.channel_sync import withdraw_other_channels
+        await withdraw_other_channels(db, manual_build, "flipflop_shop")
 
     # Deliberately NOT setting manual_build.status = "sold" here — that must
     # stay unset until after withdraw_ebay_for_sold_build runs below, because
@@ -586,6 +591,9 @@ async def confirm_checkout(
         )
 
     ebay_withdrawn = None
+    if manual_build:
+        await withdraw_google_for_sold_build(manual_build, db)
+        await db.commit()
     if will_withdraw_ebay:
         settings = get_settings()
         await withdraw_ebay_for_sold_build(manual_build, settings.ebay_listing_environment)
