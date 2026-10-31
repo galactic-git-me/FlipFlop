@@ -194,6 +194,7 @@ from app.api.glb_proxy import router as glb_proxy_router
 from app.api.gem_radar import router as gem_radar_router
 from app.api.margin_verification import router as margin_verification_router
 from app.api.builds_pricing import router as builds_pricing_router
+from app.api.newsletter import router as newsletter_router
 from app.routes.auth import router as auth_router
 from app.routes.oauth import router as oauth_router
 from app.routes.quotes import router as quotes_router
@@ -840,6 +841,7 @@ app.include_router(pc_builder_router, prefix="")
 app.include_router(build_stage_items_router, prefix="")
 app.include_router(builds_pricing_router, prefix="")
 app.include_router(auth_router, prefix="/api")
+app.include_router(newsletter_router, prefix="/api")
 app.include_router(oauth_router, prefix="/api")
 app.include_router(admin_auth_router, prefix="/api")
 app.include_router(motherboard_specs_router, prefix="/api")
