@@ -29,12 +29,17 @@ describe("cross-listing normalisation", () => {
     expect(canonicalFromBuild(build).images[0]?.url).toBe("https://cdn.example.test/pc.jpg");
   });
 
-  it("does not claim unsupported marketplace APIs", () => {
+  it("exposes automatic publishing only for connected API channels", () => {
     const matrix = capabilities(true);
     expect(matrix.find((item) => item.channel === "ebay_uk")?.mode).toBe("api");
-    expect(matrix.find((item) => item.channel === "onbuy")?.mode).toBe("manual");
+    expect(matrix.find((item) => item.channel === "flipflop_shop")?.canPublish).toBe(true);
+    expect(matrix.find((item) => item.channel === "onbuy")?.canPublish).toBe(false);
+    expect(matrix.find((item) => item.channel === "onbuy")?.mode).toBe("not_connected");
+    expect(matrix.find((item) => item.channel === "amazon")?.canPublish).toBe(false);
+    expect(matrix.find((item) => item.channel === "facebook_catalog")?.mode).toBe("not_connected");
     expect(matrix.find((item) => item.channel === "vinted")?.canPublish).toBe(false);
     expect(matrix.find((item) => item.channel === "google_shopping")?.canPublish).toBe(false);
+    expect(matrix.filter((item) => item.mode === "manual")).toHaveLength(0);
   });
 
   it("exposes a submitted canonical build before any channel listing exists", () => {

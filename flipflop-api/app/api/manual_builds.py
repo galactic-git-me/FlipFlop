@@ -110,7 +110,10 @@ from app.services.parcel2go_booking import (
 )
 from app.services.ebay_shipping_fulfillment import mark_order_shipped, EbayShippingFulfillmentError
 from app.services.ebay_listing_withdraw import withdraw_listing_by_sku, EbayListingWithdrawError
-from app.services.cross_channel_guard import withdraw_storefront_for_sold_build
+from app.services.cross_channel_guard import (
+    withdraw_storefront_for_sold_build,
+    withdraw_google_for_sold_build,
+)
 from app.services.meshy_generation import generate_multi_image_asset
 from app.services.product_faqs import FAQ_BANK, FAQ_BY_ID, selected_faqs, render_ebay_faq_html
 from app.services import pricing_engine
@@ -4121,6 +4124,7 @@ async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
     # taken above, then takes the Product lock — ManualBuild-before-Product,
     # matching the global order.
     await withdraw_storefront_for_sold_build(build, db)
+    await withdraw_google_for_sold_build(build, db)
     await db.commit()
 
     return SyncEbayOrderResult(

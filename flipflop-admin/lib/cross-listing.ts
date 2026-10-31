@@ -231,7 +231,9 @@ export function sourcesFromBuild(build: ManualBuild): CrossListingSource[] {
 export function capabilities(
   ebayConnected: boolean,
   amazonConnected = false,
-  amazonMessage?: string
+  amazonMessage?: string,
+  googleConnected = false,
+  googleMessage?: string
 ): ChannelCapability[] {
   return [
     {
@@ -265,12 +267,12 @@ export function capabilities(
       channel: "onbuy",
       label: "OnBuy",
       maxImages: 12,
-      mode: "manual",
+      mode: "not_connected",
       connected: false,
       canPublish: false,
       canUpdate: false,
       canEnd: false,
-      note: "Seller API/feed onboarding is not configured in this app. Manual listing pack only.",
+      note: "Automatic publishing is unavailable until an OnBuy seller account and API access are approved and connected.",
       officialReference: "https://www.onbuy.com/gb/sell/",
     },
     {
@@ -293,36 +295,38 @@ export function capabilities(
       channel: "facebook_catalog",
       label: "Facebook catalog",
       maxImages: 10,
-      mode: "manual",
+      mode: "not_connected",
       connected: false,
       canPublish: false,
       canUpdate: false,
       canEnd: false,
-      note: "Catalog/feed route must be configured; personal Marketplace automation is not supported.",
+      note: "Automatic personal Marketplace publishing is not supported. A connected Meta business catalog supports catalog sync, not Marketplace listings.",
       officialReference: "https://www.facebook.com/business/help/",
     },
     {
       channel: "vinted",
       label: "Vinted",
       maxImages: 20,
-      mode: "manual",
+      mode: "not_connected",
       connected: false,
       canPublish: false,
       canUpdate: false,
       canEnd: false,
-      note: "No approved seller integration is configured. Manual-assist export only; no consumer-account automation.",
+      note: "Automatic publishing requires an approved Vinted Pro seller integration. Consumer-account automation is not supported.",
       officialReference: "https://www.vinted.co.uk/help",
     },
     {
       channel: "google_shopping",
       label: "Google Shopping",
       maxImages: 10,
-      mode: "manual",
-      connected: false,
-      canPublish: false,
-      canUpdate: false,
-      canEnd: false,
-      note: "Merchant Center is not connected. Manual product-data handoff only; nothing is uploaded and Google controls free-listing eligibility.",
+      mode: googleConnected ? "api" : "not_connected",
+      connected: googleConnected,
+      canPublish: googleConnected,
+      canUpdate: googleConnected,
+      canEnd: googleConnected,
+      note: googleConnected
+        ? "Submits and synchronizes the live FlipFlop.shop product through Merchant API. Google processes approval asynchronously."
+        : googleMessage || "Connect a verified Google Merchant Center account and Merchant API service account. Google controls free-listing eligibility.",
       officialReference:
         "https://developers.google.com/merchant/api/guides/products/add-manage",
     },

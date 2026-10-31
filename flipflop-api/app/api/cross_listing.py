@@ -11,7 +11,9 @@ from app.models.listing_publish_event import ListingPublishEvent
 from app.models.app_settings import AppSettings
 from app.services.alerts import emit_alert
 from app.services.amazon_sp_api import AmazonSPAPI, AmazonSPAPIError
+from app.services.google_merchant_api import GoogleMerchantAPI, GoogleMerchantError
 from app.models.manual_build import ManualBuild
+from app.models.product import Product, ProductStatus
 
 router = APIRouter(prefix="/cross-listing", tags=["cross-listing"], dependencies=[Depends(require_operator)])
 INDIRECT_CHANNELS = {"onbuy", "amazon", "facebook_catalog", "vinted"}
@@ -97,6 +99,10 @@ class AmazonPublishIn(BaseModel):
     sku: str | None = Field(default=None, max_length=80)
 
 
+class GoogleMerchantPublishIn(BaseModel):
+    images: list[str] = Field(default_factory=list, max_length=10)
+
+
 async def _app_settings(db: AsyncSession) -> AppSettings:
     settings = (await db.execute(select(AppSettings).where(AppSettings.name == "default"))).scalar_one_or_none()
     if not settings:
@@ -152,6 +158,105 @@ async def ebay_listing_status(db: AsyncSession = Depends(get_db)):
                 "message": f"eBay {environment} listing connection {'verified' if response.status_code == 200 else 'returned HTTP ' + str(response.status_code)}"}
     except (ValueError, httpx.HTTPError):
         return {"connected": False, "environment": environment, "message": f"eBay {environment} listing credentials could not be verified"}
+@router.get("/google/status")
+async def google_merchant_status():
+    """Expose connection health without returning credentials or tokens."""
+    return await GoogleMerchantAPI().verify_connection()
+
+
+@router.post("/google/data-source")
+async def create_google_merchant_data_source():
+    """Create the primary API source after Google setup and registration."""
+    runtime = os.getenv("FLIPFLOP_RUNTIME_ENV", "development").strip().lower()
+    if runtime not in {"live", "production", "prod"}:
+        raise HTTPException(409, "Merchant Center account changes are disabled outside LIVE mode.")
+    client = GoogleMerchantAPI()
+    if not client.account_id or not (client.key_json or client.key_file):
+        raise HTTPException(503, "Configure GOOGLE_MERCHANT_ACCOUNT_ID and the service-account credentials first.")
+    try:
+        result = await client.create_primary_data_source()
+    except GoogleMerchantError as exc:
+        raise HTTPException(502, str(exc)) from exc
+    return {
+        "name": result.get("name"),
+        "data_source_id": result.get("dataSourceId"),
+        "message": "Primary product data source created. Set GOOGLE_MERCHANT_DATA_SOURCE_ID on the API service to finish the connection.",
+    }
+
+
+@router.post("/google/publish/{build_id}")
+async def publish_google_merchant(build_id: int, body: GoogleMerchantPublishIn, db: AsyncSession = Depends(get_db)):
+    """Submit or replace one build's product input in Merchant Center."""
+    runtime = os.getenv("FLIPFLOP_RUNTIME_ENV", "development").strip().lower()
+    if runtime not in {"live", "production", "prod"}:
+        raise HTTPException(409, "Merchant Center product writes are disabled outside LIVE mode.")
+    build = await db.get(ManualBuild, build_id)
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if build.status == "sold":
+        raise HTTPException(409, "Sold builds cannot be submitted to Merchant Center.")
+    if not build.storefront_product_id:
+        raise HTTPException(409, "Publish the FlipFlop.shop product first so Google has a live product page to link to.")
+    product = await db.get(Product, build.storefront_product_id)
+    if not product or product.status != ProductStatus.LISTED:
+        raise HTTPException(409, "The FlipFlop.shop product must be live and available before publishing to Google Shopping.")
+
+    client = GoogleMerchantAPI()
+    if not client.configured:
+        raise HTTPException(503, "Google Merchant Center account, API data source, and service-account credentials are not fully configured.")
+    if not client.enabled_for_writes:
+        raise HTTPException(503, "Google Merchant product writes are disabled for this runtime.")
+    row = (await db.execute(
+        select(ChannelListing)
+        .where(ChannelListing.manual_build_id == build_id, ChannelListing.channel == "google_shopping")
+        .order_by(ChannelListing.created_at.desc())
+    )).scalars().first()
+    if not row:
+        row = ChannelListing(manual_build_id=build_id, channel="google_shopping", status="publishing")
+        db.add(row)
+        await db.flush()
+    row.status = "publishing"
+    try:
+        submission = await client.upsert_build(build, body.images or None)
+        row.external_listing_id = submission.offer_id
+        row.status = "published"
+        row.published_at = row.published_at or datetime.utcnow()
+        row.withdrawn_at = None
+        row.last_recreate_status = "success"
+        row.last_recreate_message = "Submitted to Merchant Center; Google eligibility and visibility are still processing."
+        db.add(ListingPublishEvent(
+            channel_listing_id=row.id,
+            event_type="google_product_submitted",
+            message=row.last_recreate_message,
+            event_metadata={
+                "offer_id": submission.offer_id,
+                "input_name": submission.input_name,
+                "listing_url": submission.product_url,
+                "payload_hash": submission.payload_hash,
+                "selected_images": submission.selected_images,
+                "google_response_name": submission.response.get("name"),
+            },
+        ))
+        await db.commit()
+        return {
+            "success": True,
+            "status": "published",
+            "external_id": submission.offer_id,
+            "listing_url": submission.product_url,
+            "message": row.last_recreate_message,
+        }
+    except GoogleMerchantError as exc:
+        row.status = "failed"
+        row.last_recreate_status = "failed"
+        row.last_recreate_message = str(exc)[:500]
+        db.add(ListingPublishEvent(
+            channel_listing_id=row.id,
+            event_type="google_product_submit_failed",
+            message=row.last_recreate_message,
+            event_metadata={"status_code": exc.status_code},
+        ))
+        await db.commit()
+        raise HTTPException(502, {"message": str(exc), "status_code": exc.status_code}) from exc
 
 
 @router.post("/amazon/publish/{build_id}")
