@@ -46,6 +46,20 @@ function Get-ApiEnvironmentValue([string]$Name) {
     throw "$Name must be set in the process environment or flipflop-api/.env.local/.env."
 }
 
+function Get-ApiLocalEnvironmentValue([string]$Name) {
+    $filePath = Join-Path $apiRoot '.env.local'
+    if (-not (Test-Path -LiteralPath $filePath)) {
+        throw "Development-only $Name must be set in flipflop-api/.env.local."
+    }
+    foreach ($line in Get-Content -LiteralPath $filePath) {
+        if ($line -match "^\s*$([regex]::Escape($Name))\s*=\s*(.*?)\s*$") {
+            $value = $Matches[1].Trim().Trim('"').Trim("'")
+            if (-not [string]::IsNullOrWhiteSpace($value)) { return $value }
+        }
+    }
+    throw "Development-only $Name must be set in flipflop-api/.env.local; refusing to fall back to .env."
+}
+
 function Assert-DevelopmentPrerequisites {
     $required = @()
     if (-not $NoBackend) { $required += Join-Path $projectRoot 'flipflop-api\.venv\Scripts\python.exe' }
@@ -79,37 +93,57 @@ function Test-ListeningPort([int]$Port) {
     return [bool](Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue)
 }
 
+function Get-OllamaServiceFailures {
+    $failures = @()
+    try {
+        $engine = Invoke-RestMethod -Uri 'http://127.0.0.1:11433/api/version' -TimeoutSec 2
+        if ([string]::IsNullOrWhiteSpace([string]$engine.version)) { $failures += 'engine:11433' }
+    } catch {
+        $failures += 'engine:11433'
+    }
+
+    foreach ($gateway in @(
+        @{ Port = 11434; Priority = 'other' },
+        @{ Port = 11435; Priority = 'dev' },
+        @{ Port = 11436; Priority = 'production' }
+    )) {
+        try {
+            $health = Invoke-RestMethod -Uri "http://127.0.0.1:$($gateway.Port)/health" -TimeoutSec 2
+            if ($health.status -ne 'ok' -or
+                $health.priority -ne $gateway.Priority -or
+                $health.generation_concurrency -ne 4 -or
+                $health.ollama_num_parallel -ne 4) {
+                $failures += "gateway:$($gateway.Port)"
+            }
+        } catch {
+            $failures += "gateway:$($gateway.Port)"
+        }
+    }
+    return $failures
+}
+
 function Ensure-OllamaPriorityGateway {
     if ($NoOllamaGateway) {
         Write-Host '[SKIP] Ollama priority gateway check disabled.' -ForegroundColor Yellow
         return
     }
 
-    $requiredPorts = @(11433, 11434, 11435, 11436)
-    $missingPorts = @($requiredPorts | Where-Object { -not (Test-ListeningPort $_) })
-    $needsRestart = $missingPorts.Count -gt 0
-    if (-not $needsRestart) {
-        try {
-            $health = Invoke-RestMethod -Uri 'http://127.0.0.1:11435/health' -TimeoutSec 3
-            $needsRestart = $health.generation_concurrency -ne 4 -or $health.ollama_num_parallel -ne 4
-        } catch {
-            $needsRestart = $true
-        }
-    }
+    $failures = @(Get-OllamaServiceFailures)
+    $needsRestart = $failures.Count -gt 0
     if ($needsRestart) {
-        Write-Host "[*] Starting/reconfiguring Ollama for four concurrent requests (missing ports: $($missingPorts -join ', '))..." -ForegroundColor Cyan
+        Write-Host "[*] Starting/reconfiguring Ollama for four concurrent requests (unhealthy services: $($failures -join ', '))..." -ForegroundColor Cyan
         & (Join-Path $projectRoot 'services\ollama-priority-gateway\start-prometheus-services.ps1') -ForceRestart
     }
 
     $deadline = [DateTime]::UtcNow.AddSeconds(20)
     do {
-        $missingPorts = @($requiredPorts | Where-Object { -not (Test-ListeningPort $_) })
-        if ($missingPorts.Count -eq 0) { break }
+        $failures = @(Get-OllamaServiceFailures)
+        if ($failures.Count -eq 0) { break }
         Start-Sleep -Milliseconds 500
     } while ([DateTime]::UtcNow -lt $deadline)
 
-    if ($missingPorts.Count -gt 0) {
-        throw "Ollama priority services did not become ready. Missing ports: $($missingPorts -join ', ')"
+    if ($failures.Count -gt 0) {
+        throw "Ollama priority services did not become healthy. Check: $($failures -join ', ')"
     }
     Write-Host '[OK] Ollama: engine 11433; DEV gateway and Ollama each allow four concurrent generations.' -ForegroundColor Green
 }
@@ -188,8 +222,19 @@ foreach ($port in $portsToClean) { Stop-PortListener $port }
 $env:FLIPFLOP_RUNTIME_ENV = 'development'
 $env:EBAY_ENVIRONMENT = 'production'
 $env:EBAY_LISTING_ENVIRONMENT = 'sandbox'
-$env:AMAZON_SP_API_ENVIRONMENT = 'production'
-$env:AMAZON_SP_API_ENDPOINT = 'https://sellingpartnerapi-eu.amazon.com'
+$env:AMAZON_SP_API_ENVIRONMENT = 'sandbox'
+$env:AMAZON_SP_API_ENDPOINT = 'https://sandbox.sellingpartnerapi-eu.amazon.com'
+$env:AMAZON_SP_API_SELLER_ID = 'SANDBOX_SELLER_ID'
+if (-not $NoBackend) {
+    foreach ($name in @(
+        'AMAZON_SP_API_CLIENT_ID',
+        'AMAZON_SP_API_CLIENT_SECRET',
+        'AMAZON_SP_API_REFRESH_TOKEN',
+        'AMAZON_SP_API_MARKETPLACE_ID'
+    )) {
+        [Environment]::SetEnvironmentVariable($name, (Get-ApiLocalEnvironmentValue $name), 'Process')
+    }
+}
 $ollamaBaseUrl = Get-ApiEnvironmentValue 'OLLAMA_BASE_URL'
 $ollamaModel = Get-ApiEnvironmentValue 'OLLAMA_MODEL'
 $env:OLLAMA_BASE_URL = $ollamaBaseUrl
@@ -200,7 +245,7 @@ $servers = @()
 $apiUrl = 'http://127.0.0.1:4311'
 
 if (-not $NoBackend) {
-    $command = "set `"FLIPFLOP_RUNTIME_ENV=development`" && set `"OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"OLLAMA_MODEL=$ollamaModel`" && set `"EBAY_ENVIRONMENT=production`" && set `"EBAY_LISTING_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENVIRONMENT=production`" && set `"AMAZON_SP_API_ENDPOINT=https://sellingpartnerapi-eu.amazon.com`" && set `"ADMIN_FRONTEND_URL=http://localhost:4312`" && set `"FRONTEND_URL=http://localhost:4313`" && .venv\Scripts\python.exe run_dev.py --host 127.0.0.1 --port 4311"
+    $command = "set `"FLIPFLOP_RUNTIME_ENV=development`" && set `"OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"OLLAMA_MODEL=$ollamaModel`" && set `"EBAY_ENVIRONMENT=production`" && set `"EBAY_LISTING_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENDPOINT=https://sandbox.sellingpartnerapi-eu.amazon.com`" && set `"AMAZON_SP_API_SELLER_ID=SANDBOX_SELLER_ID`" && set `"ADMIN_FRONTEND_URL=http://localhost:4312`" && set `"FRONTEND_URL=http://localhost:4313`" && .venv\Scripts\python.exe run_dev.py --host 127.0.0.1 --port 4311"
     $servers += Start-DevelopmentServer -Name 'backend' -WorkingDirectory (Join-Path $projectRoot 'flipflop-api') -Command $command -Port 4311 -Color Yellow
 }
 

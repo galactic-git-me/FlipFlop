@@ -85,7 +85,7 @@ function summary(build: Build) {
   return { id: build.id, name: build.name, total_cost: 300, component_count: build.components.length, updated_at: build.updated_at };
 }
 
-async function installCrossListingMocks(page: Page, ebayConnected = true) {
+async function installCrossListingMocks(page: Page, ebayConnected = true, amazonConnected = false) {
   await page.route("**/*", async (route) => {
     const request = route.request();
     const path = new URL(request.url()).pathname.replace(/\/+$/, "");
@@ -103,6 +103,12 @@ async function installCrossListingMocks(page: Page, ebayConnected = true) {
     }
     const ebayStatus = apiPath === "/ebay/oauth/status" || apiPath === "/ebay/oauth/status/";
     if (ebayStatus && method === "GET") return json(route, 200, { connected: ebayConnected });
+    if (apiPath === "/cross-listing/amazon/status" && method === "GET") {
+      return json(route, 200, { connected: amazonConnected, message: amazonConnected ? "Sandbox provider is connected." : "Amazon test connection unavailable." });
+    }
+    if (/^\/cross-listing\/amazon\/publish\/\d+$/.test(apiPath) && method === "POST") {
+      return json(route, 200, { success: true, status: "published", sku: "FF-BUILD-42", listing_url: "https://www.amazon.co.uk/dp/SYNTHETIC42", message: "Amazon fake provider accepted the publish request." });
+    }
     if (apiPath.match(/^\/manual-builds\/\d+\/post-to-ebay$/) && method === "POST") {
       const id = Number(apiPath.split("/")[2]);
       const build = builds.find((item) => item.id === id)!;
@@ -158,9 +164,37 @@ test("publishes a selected build to eBay and reports the accepted listing", asyn
   page.on("dialog", (dialog) => void dialog.accept());
   await page.getByRole("button", { name: "Review & submit" }).click();
 
-  await expect(page.getByText("eBay Sandbox accepted the publish request.")).toBeVisible();
-  await expect(page.getByText("Published", { exact: true }).last()).toBeVisible();
+  await expect(page.getByText("A new eBay listing was published.")).toBeVisible();
+  await expect(page.getByLabel("Listed live")).toBeVisible();
   await expect(page.getByRole("link", { name: "View listing" })).toHaveAttribute("href", /EBAY-42-published/);
+});
+
+test("publishes a selected build through the mocked Amazon API path", async ({ page, context }) => {
+  await authenticate(context);
+  await installCrossListingMocks(page, true, true);
+  await page.goto("/cross-listing");
+  await page.getByRole("button", { name: "Select Atlas Gaming PC RTX 3060" }).click();
+  await page.getByRole("button", { name: "Amazon" }).last().click();
+  page.on("dialog", (dialog) => void dialog.accept());
+  const publishRequest = page.waitForRequest("**/proxy-api/cross-listing/amazon/publish/42");
+  await page.getByRole("button", { name: "Review & submit" }).click();
+  await publishRequest;
+  await expect(page.getByText("Amazon fake provider accepted the publish request.")).toBeVisible();
+  await expect(page.getByRole("link", { name: "View listing" })).toHaveAttribute("href", "https://www.amazon.co.uk/dp/SYNTHETIC42");
+});
+
+test("links the existing canonical storefront product without creating a duplicate", async ({ page, context }) => {
+  await authenticate(context);
+  await installCrossListingMocks(page);
+  await page.goto("/cross-listing");
+  await page.getByRole("button", { name: "Select Borealis Workstation" }).click();
+  await page.getByRole("button", { name: "FlipFlop.shop" }).last().click();
+  page.on("dialog", (dialog) => void dialog.accept());
+  const storefrontRequest = page.waitForRequest("**/proxy-api/manual-builds/43/list-on-storefront");
+  await page.getByRole("button", { name: "Review & submit" }).click();
+  await storefrontRequest;
+  await expect(page.getByText("Linked to the dev storefront product.")).toBeVisible();
+  await expect(page.getByRole("link", { name: "View listing" })).toHaveAttribute("href", /\/builds\/43/);
 });
 
 test("treats an eBay draft as unpublished and selects eBay for a new listing", async ({ page, context }) => {
@@ -179,22 +213,92 @@ test("treats an eBay draft as unpublished and selects eBay for a new listing", a
   await expect(page.getByRole("button", { name: "Review & submit" })).toBeEnabled();
 });
 
-test("keeps manual-only destinations manual and links storefront without duplicating its product", async ({ page, context }) => {
+test("creates development-only previews for manual channels without reporting them live", async ({ page, context }) => {
   await authenticate(context);
   await installCrossListingMocks(page);
   await page.goto("/cross-listing");
   await page.getByRole("button", { name: "Select Borealis Workstation" }).click();
-  await page.getByRole("button", { name: "FlipFlop.shop" }).last().click();
   await page.getByRole("button", { name: "OnBuy" }).last().click();
-  await expect(page.getByText("1 source listing × 2 destinations = 2 jobs.")).toBeVisible();
+  await page.getByRole("button", { name: "Facebook catalog" }).last().click();
+  await page.getByRole("button", { name: "Vinted" }).last().click();
+  await expect(page.getByText("1 source listing × 3 destinations = 3 jobs.")).toBeVisible();
   page.on("dialog", (dialog) => void dialog.accept());
 
-  const storefrontRequest = page.waitForRequest("**/proxy-api/manual-builds/43/list-on-storefront");
   await page.getByRole("button", { name: "Review & submit" }).click();
-  await storefrontRequest;
-  await expect(page.getByText("Linked to the dev storefront product.")).toBeVisible();
-  await expect(page.getByText("OnBuy fake listing created for development. No external marketplace was contacted.")).toBeVisible();
-  await expect(page.getByRole("link", { name: "View listing" })).toHaveAttribute("href", /\/dev-listings\/onbuy\/43/);
+  await expect(page.getByText("OnBuy development preview prepared. No external marketplace was contacted.")).toBeVisible();
+  await expect(page.getByText("Facebook catalog development preview prepared. No external marketplace was contacted.")).toBeVisible();
+  await expect(page.getByText("Vinted development preview prepared. No external marketplace was contacted.")).toBeVisible();
+  await expect(page.getByRole("link", { name: "View development preview" })).toHaveCount(3);
+  await expect(page.getByLabel("Development preview — not live")).toHaveCount(3);
+});
+
+test("creates a pre-built, then prepares development previews for every manual channel", async ({ page, context }) => {
+  await authenticate(context);
+  const build: Build = {
+    id: 99,
+    name: "Synthetic Pre-Built PC",
+    status: "built",
+    updated_at: "2026-10-31T10:00:00Z",
+    ebay_listing_id: null,
+    ebay_listing_url: null,
+    ebay_listing_status: "never_listed",
+    ebay_price: 650,
+    ebay_condition: "Used",
+    storefront_product_id: null,
+    storefront_live: null,
+    generated_title: "Synthetic Pre-Built PC",
+    generated_description: "Synthetic listing copy for deterministic testing.",
+    generated_aspects: { Features: ["Test fixture"] },
+    components: [],
+    photos: [{ url: "https://cdn.example.test/synthetic-pc.jpg", kind: "photo" }],
+    hero_photo_url: "https://cdn.example.test/synthetic-pc.jpg",
+    last_evaluation: { mid: 650 },
+  };
+  await page.route("**/*", async (route) => {
+    const request = route.request();
+    const pathname = new URL(request.url()).pathname;
+    const apiPath = pathname.replace(/^\/proxy-api/, "").replace(/\/+$/, "");
+    const method = request.method().toUpperCase();
+    if (!pathname.includes("/api") && !pathname.startsWith("/proxy-api")) return route.continue();
+    if (method === "OPTIONS") return json(route, 200, {});
+    if (apiPath === "/curated-builds/definitions" && method === "GET") {
+      return json(route, 200, { items: [{ id: "cell-test", name: "Synthetic cell", segment: "Gaming", tier: "Budget", playbook_id: 1 }] });
+    }
+    if (apiPath === "/manual-builds" && method === "POST") return json(route, 200, build);
+    if (apiPath === "/manual-builds/99" && method === "PATCH") {
+      const payload = request.postDataJSON() as { components?: Build["components"] };
+      build.components = payload.components ?? [];
+      return json(route, 200, build);
+    }
+    if (apiPath === "/manual-builds/99/evaluate" && method === "POST") return json(route, 200, { low: 600, mid: 650, high: 700, narrative: "Synthetic evaluation." });
+    if (apiPath === "/manual-builds" && method === "GET") return json(route, 200, [summary(build)]);
+    if (apiPath === "/manual-builds/99" && method === "GET") return json(route, 200, build);
+    if (apiPath === "/ebay/oauth/status" && method === "GET") return json(route, 200, { connected: true });
+    if (apiPath === "/cross-listing/amazon/status" && method === "GET") return json(route, 200, { connected: false, message: "Amazon test connection unavailable." });
+    if (["/cross-listing/schedules", "/cross-listing/actions"].includes(apiPath) && method === "GET") return json(route, 200, []);
+    if (apiPath === "/settings" && method === "GET") return json(route, 200, {});
+    return json(route, 200, {});
+  });
+
+  await page.goto("/add-build");
+  await page.getByPlaceholder("e.g., Gaming PC #1, Office Workstation, Budget Build").fill(build.name);
+  await page.getByLabel("Customer type × budget range").selectOption("cell-test");
+  const componentFields = page.getByPlaceholder("e.g., Intel Core i7-10700K, RTX 3070, 16GB DDR4");
+  for (const [index, name] of ["Synthetic CPU", "Synthetic motherboard", "Synthetic memory", "Synthetic storage", "Synthetic PSU"].entries()) {
+    await componentFields.nth(index).fill(name);
+  }
+  await page.getByRole("button", { name: "Save & Evaluate Build" }).click();
+  await expect(page).toHaveURL(/\/builds\?new=99/, { timeout: 10_000 });
+
+  await page.goto("/cross-listing");
+  await page.getByRole("button", { name: "Select Synthetic Pre-Built PC" }).click();
+  for (const channel of ["OnBuy", "Facebook catalog", "Vinted"]) {
+    await page.getByRole("button", { name: channel }).last().click();
+  }
+  page.on("dialog", (dialog) => void dialog.accept());
+  await page.getByRole("button", { name: "Review & submit" }).click();
+  await expect(page.getByRole("link", { name: "View development preview" })).toHaveCount(3);
+  await expect(page.getByLabel("Development preview — not live")).toHaveCount(3);
 });
 
 test("does not offer an eBay API publish when the seller account is disconnected", async ({ page, context }) => {

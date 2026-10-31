@@ -60,7 +60,7 @@ export interface CrossListingSource {
   currency: "GBP";
   quantity: number;
   condition: string;
-  status: "live" | "draft" | "sold" | "ended" | "unavailable" | "failed";
+  status: "live" | "draft" | "preview" | "sold" | "ended" | "unavailable" | "failed";
   url: string | null;
   updatedAt: string;
   error?: string | null;
@@ -79,6 +79,30 @@ export interface ChannelCapability {
   canEnd: boolean;
   note: string;
   officialReference: string;
+}
+
+export type ManualChannelOutcome =
+  | { status: "preview"; message: string; url: string }
+  | { status: "manual_action_required"; message: string };
+
+export function manualChannelOutcome(
+  development: boolean,
+  label: string,
+  note: string,
+  previewUrl?: string
+): ManualChannelOutcome {
+  if (development) {
+    if (!previewUrl) throw new Error("A development preview URL is required.");
+    return {
+      status: "preview",
+      message: `${label} development preview prepared. No external marketplace was contacted.`,
+      url: previewUrl,
+    };
+  }
+  return {
+    status: "manual_action_required",
+    message: `${note} Open the Codex handoff to create a new listing in Chrome from the canonical listing pack.`,
+  };
 }
 
 export interface CrossListingJobResult {
@@ -272,7 +296,7 @@ export function capabilities(
       canPublish: true,
       canUpdate: true,
       canEnd: true,
-      note: "Codex uses Chrome and the local seller credentials to create, update, relist or end the listing, then saves the confirmed vendor URL.",
+      note: "Codex Chrome handles listing, update, relist and delist jobs when seller and product eligibility permit; confirmed URLs are saved.",
       officialReference: "https://www.onbuy.com/gb/sell/",
     },
     {
@@ -300,7 +324,7 @@ export function capabilities(
       canPublish: true,
       canUpdate: true,
       canEnd: true,
-      note: "Codex uses Chrome and the local seller credentials to create, update, relist or end the listing. Account, category and delivery eligibility are checked before publication.",
+      note: "Codex Chrome handles listing changes when account, category and delivery eligibility permit; restrictions are reported as blocked jobs.",
       officialReference: "https://www.facebook.com/business/help/",
     },
     {
@@ -312,7 +336,7 @@ export function capabilities(
       canPublish: true,
       canUpdate: true,
       canEnd: true,
-      note: "Codex uses Chrome and the local seller credentials to create, update, relist or end the listing. Seller and product eligibility must permit it; restrictions are reported as blocked jobs.",
+      note: "Codex Chrome handles listing changes only where seller-account and product eligibility permit; unsupported account types are blocked.",
       officialReference: "https://www.vinted.co.uk/help",
     },
     {
