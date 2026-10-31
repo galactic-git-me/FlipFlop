@@ -59,7 +59,7 @@ export interface CrossListingSource {
   currency: "GBP";
   quantity: number;
   condition: string;
-  status: "live" | "draft" | "sold" | "ended" | "unavailable" | "failed";
+  status: "live" | "draft" | "preview" | "sold" | "ended" | "unavailable" | "failed";
   url: string | null;
   updatedAt: string;
   error?: string | null;
@@ -78,6 +78,30 @@ export interface ChannelCapability {
   canEnd: boolean;
   note: string;
   officialReference: string;
+}
+
+export type ManualChannelOutcome =
+  | { status: "preview"; message: string; url: string }
+  | { status: "manual_action_required"; message: string };
+
+export function manualChannelOutcome(
+  development: boolean,
+  label: string,
+  note: string,
+  previewUrl?: string
+): ManualChannelOutcome {
+  if (development) {
+    if (!previewUrl) throw new Error("A development preview URL is required.");
+    return {
+      status: "preview",
+      message: `${label} development preview prepared. No external marketplace was contacted.`,
+      url: previewUrl,
+    };
+  }
+  return {
+    status: "manual_action_required",
+    message: `${note} Open the Codex handoff to create a new listing in Chrome from the canonical listing pack.`,
+  };
 }
 
 export interface CrossListingJobResult {
@@ -269,7 +293,7 @@ export function capabilities(
       canPublish: false,
       canUpdate: false,
       canEnd: false,
-      note: "Seller API/feed onboarding is not configured in this app. Manual listing pack only.",
+      note: "No seller API is connected. Production listing is completed by Codex in Chrome from the canonical listing pack.",
       officialReference: "https://www.onbuy.com/gb/sell/",
     },
     {
@@ -297,7 +321,7 @@ export function capabilities(
       canPublish: false,
       canUpdate: false,
       canEnd: false,
-      note: "Catalog/feed route must be configured; personal Marketplace automation is not supported.",
+      note: "No approved catalog API is connected. Production listing is completed by Codex in Chrome from the canonical listing pack.",
       officialReference: "https://www.facebook.com/business/help/",
     },
     {
@@ -309,7 +333,7 @@ export function capabilities(
       canPublish: false,
       canUpdate: false,
       canEnd: false,
-      note: "No approved seller integration is configured. Manual-assist export only; no consumer-account automation.",
+      note: "No approved Vinted Pro integration is connected. Production listing is completed by Codex in Chrome from the canonical listing pack; consumer-account automation is not supported.",
       officialReference: "https://www.vinted.co.uk/help",
     },
   ];
