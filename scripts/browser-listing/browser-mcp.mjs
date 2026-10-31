@@ -8,7 +8,7 @@ const pack = job.payload;
 const require = createRequire(path.join(process.env.FF_ADMIN_DIR, 'package.json'));
 const { chromium } = require('playwright');
 const domains = { onbuy: ['onbuy.com'], facebook_catalog: ['facebook.com'], vinted: ['vinted.co.uk'] }[pack.channel];
-let context, page, revision = 0, inspected = false, remoteState = 'unknown', mayHaveWritten = false;
+let context, page, revision = 0, inspected = false, remoteState = 'unknown', remoteStateNote = '', remoteStateOrderId = null, mayHaveWritten = false;
 const allowed = value => {
   const u = new URL(value);
   return u.protocol === 'https:' && !u.username && !u.password && (!u.port || u.port === '443') && domains.some(d => u.hostname === d || u.hostname.endsWith('.' + d));
@@ -68,7 +68,7 @@ async function run(name, args) {
   if (name === 'browser_observe') return snapshot();
   if (name === 'browser_navigate') { await browser(); if (!allowed(args.url)) throw new Error('URL outside this vendor'); await page.goto(args.url); return snapshot(); }
   if (name === 'env_login') return envLogin(args);
-  if (name === 'remote_state') { inspected = true; remoteState = args.state; return { recorded: true, state: args.state, note: args.note }; }
+  if (name === 'remote_state') { inspected = true; remoteState = args.state; remoteStateNote = args.note; remoteStateOrderId = args.order_id || null; return { recorded: true, state: args.state, order_id_recorded: Boolean(remoteStateOrderId) }; }
   if (name === 'browser_click') {
     await browser();
     if (!inspected) throw new Error('First inspect seller listings and record the remote state');
@@ -120,8 +120,9 @@ async function run(name, args) {
   if (name === 'confirm_reconciliation') {
     await browser(); await preflight();
     if (job.operation !== 'reconcile' || !['active', 'ended', 'missing', 'sold'].includes(remoteState) || args.url !== pack.previous_listing_url || args.external_id !== pack.previous_listing_id || !allowed(args.url)) throw new Error('Confirm the saved vendor item and an observed active, ended, missing or sold seller-side status');
+    if (remoteState === 'sold' && (!remoteStateOrderId || !remoteStateNote)) throw new Error('A seller-side order ID and evidence note are required to confirm a sale');
     const result = { status: 'succeeded', message: `Seller account reconciliation confirmed ${remoteState}.`, listing_url: args.url, external_id: args.external_id,
-      evidence: { title: pack.listing.title, price: pack.listing.price, verified_at: new Date().toISOString(), url: args.url, remote_state: remoteState } };
+      evidence: { title: pack.listing.title, price: pack.listing.price, verified_at: new Date().toISOString(), url: args.url, remote_state: remoteState, order_id: remoteStateOrderId, note: remoteStateNote } };
     await fs.writeFile(process.env.FF_BROWSER_RESULT_FILE, JSON.stringify(result));
     return { confirmed: true, remote_state: remoteState };
   }
@@ -138,7 +139,7 @@ const definitions = [
   ['seller_pack', 'Read the canonical seller pack and job instructions.', schema()],
   ['browser_observe', 'Observe Chrome with fresh element references.', schema()],
   ['browser_navigate', 'Navigate within the selected vendor only.', schema({ url: str })],
-  ['remote_state', 'Record the remotely inspected state before any clicking. Inspect the seller account first, including matching SKU/title and old listing.', schema({ state: { type: 'string', enum: ['active', 'ended', 'missing', 'sold', 'unknown', 'sign_in_required'] }, note: str })],
+  ['remote_state', 'Record the observed seller-listing state. For sold, include an exact seller order ID and evidence note.', schema({ state: { type: 'string', enum: ['active', 'ended', 'missing', 'sold', 'unknown', 'sign_in_required'] }, note: str, order_id: str }, ['state', 'note'])],
   ['browser_click', 'Click an observed Chrome element; flag listing writes. Paid/account actions are blocked.', schema({ ref: str, writes_listing: bool })],
   ['browser_fill', 'Fill a listing field. Use saved pack data; never put passwords here.', schema({ ref: str, value: str })],
   ['browser_select', 'Select an option by its observed label.', schema({ ref: str, label: str })],

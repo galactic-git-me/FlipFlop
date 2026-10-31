@@ -127,6 +127,8 @@ async def complete_browser_job(db, job, *, status, message, listing_url=None, ex
             if remote_state not in {"active", "ended", "missing", "sold"}:
                 raise ValueError("Seller-side reconciliation must confirm active, ended, missing or sold status")
             if remote_state == "sold":
+                if not evidence.get("order_id") or not evidence.get("note") or external_id != row.external_listing_id:
+                    raise ValueError("Confirm a seller order ID and note for the exact saved vendor item before marking it sold")
                 row.status, row.withdrawn_at = "sold", now
                 row.recreate_enabled = False
                 row.next_recreate_at = None
