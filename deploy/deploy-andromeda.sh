@@ -24,18 +24,6 @@ if [[ ! -s "$ADMIN_AUTH_ENV" ]] || ! grep -Eq '^ADMIN_JWT_SECRET=.{32,}$' "$ADMI
   exit 1
 fi
 
-unexpected_changes="$(git status --porcelain --untracked-files=all | awk '
-  {
-    path = substr($0, 4)
-    if (path != "runtime/api-data/ai_generated_builds.json" &&
-        path != "runtime/api-data/scheduler_state.json") print
-  }
-')"
-if [[ -n "$unexpected_changes" ]]; then
-  log "Refusing to deploy over uncommitted changes outside the known live runtime state in $REPO_DIR."
-  exit 1
-fi
-
 log "Fetching origin/$BRANCH"
 # A previous interrupted fetch can leave the remote-tracking ref undeletable.
 # Remove only this branch's local tracking ref, then recreate it from origin.
@@ -53,13 +41,71 @@ if ! git merge-base --is-ancestor "$TARGET_SHA" "origin/$BRANCH"; then
 fi
 
 CURRENT_SHA="$(git rev-parse HEAD)"
-if ! git merge-base --is-ancestor "$CURRENT_SHA" "$TARGET_SHA"; then
-  log "Refusing a non-fast-forward deployment ($CURRENT_SHA -> $TARGET_SHA)."
+MERGE_BASE="$(git merge-base "$CURRENT_SHA" "$TARGET_SHA" || true)"
+if [[ -z "$MERGE_BASE" ]]; then
+  log "Refusing release $TARGET_SHA because it has no history in common with production HEAD $CURRENT_SHA."
   exit 1
 fi
 
-log "Fast-forwarding to $TARGET_SHA"
-git merge --ff-only "$TARGET_SHA"
+if ! git merge-base --is-ancestor "$CURRENT_SHA" "$TARGET_SHA"; then
+  local_history_changes="$(git diff --name-only "$MERGE_BASE" "$CURRENT_SHA" | awk '
+    $0 !~ /^runtime\// && $0 != "deploy/deploy-andromeda.sh" { print }
+  ')"
+  if [[ -n "$local_history_changes" ]]; then
+    log "Refusing divergent production history that includes changes outside runtime data and the deploy script."
+    exit 1
+  fi
+fi
+
+# Production writes mutable data under runtime/ while source updates arrive on
+# the promotion branch. Keep every tracked runtime file in the worktree across
+# release merges, including seller-pack media and stable authentication data.
+while IFS= read -r -d '' runtime_path; do
+  git update-index --skip-worktree -- "$runtime_path"
+done < <(git ls-files -z -- runtime)
+
+# A bootstrap deployment may already have installed these reviewed release
+# scripts directly. Accept only bytes that exactly match the tagged commit.
+for deploy_path in deploy/github-deploy-command.sh deploy/deploy-andromeda.sh; do
+  target_blob="$(git rev-parse "$TARGET_SHA:$deploy_path")"
+  worktree_blob="$(git hash-object "$deploy_path")"
+  index_blob="$(git rev-parse ":$deploy_path")"
+  head_blob="$(git rev-parse "HEAD:$deploy_path")"
+  if [[ "$worktree_blob" != "$index_blob" || "$index_blob" != "$head_blob" ]]; then
+    if [[ "$worktree_blob" != "$target_blob" ]]; then
+      log "Refusing an uncommitted deployment script that differs from release $TARGET_SHA ($deploy_path)."
+      exit 1
+    fi
+    git reset -q HEAD -- "$deploy_path"
+    git update-index --skip-worktree -- "$deploy_path"
+  fi
+done
+
+unexpected_changes="$(git status --porcelain --untracked-files=all | awk '
+  {
+    path = substr($0, 4)
+    if (path !~ /^runtime\//) print
+  }
+')"
+if [[ -n "$unexpected_changes" ]]; then
+  log "Refusing to deploy over uncommitted changes outside production runtime state in $REPO_DIR."
+  exit 1
+fi
+
+if git merge-base --is-ancestor "$CURRENT_SHA" "$TARGET_SHA"; then
+  log "Fast-forwarding to $TARGET_SHA"
+  git merge --ff-only "$TARGET_SHA"
+else
+  log "Merging release $TARGET_SHA while preserving production runtime history"
+  git merge --no-ff --no-commit -X ours "$TARGET_SHA"
+  git checkout "$TARGET_SHA" -- deploy/github-deploy-command.sh deploy/deploy-andromeda.sh
+  git add -- deploy/github-deploy-command.sh deploy/deploy-andromeda.sh
+  git -c user.name="FlipFlop Production Deploy" \
+      -c user.email="deploy@theflipflop.shop" \
+      commit -m "chore: merge tagged production release ${TARGET_SHA:0:12}"
+fi
+
+git update-index --no-skip-worktree -- deploy/github-deploy-command.sh deploy/deploy-andromeda.sh
 
 OLD_IMAGE="$(docker inspect flipflop-production-api --format '{{.Image}}' 2>/dev/null || true)"
 if [[ -n "$OLD_IMAGE" ]]; then
