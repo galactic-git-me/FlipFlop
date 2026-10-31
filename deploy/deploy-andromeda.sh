@@ -24,8 +24,15 @@ if [[ ! -s "$ADMIN_AUTH_ENV" ]] || ! grep -Eq '^ADMIN_JWT_SECRET=.{32,}$' "$ADMI
   exit 1
 fi
 
-if [[ -n "$(git status --porcelain)" ]]; then
-  log "Refusing to deploy over uncommitted changes in $REPO_DIR."
+unexpected_changes="$(git status --porcelain --untracked-files=all | awk '
+  {
+    path = substr($0, 4)
+    if (path != "runtime/api-data/ai_generated_builds.json" &&
+        path != "runtime/api-data/scheduler_state.json") print
+  }
+')"
+if [[ -n "$unexpected_changes" ]]; then
+  log "Refusing to deploy over uncommitted changes outside the known live runtime state in $REPO_DIR."
   exit 1
 fi
 
