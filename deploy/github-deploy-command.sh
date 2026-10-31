@@ -11,9 +11,9 @@ if [[ "$original" =~ ^/home/mac/CODING/FlipFlop-production/deploy/deploy-androme
 fi
 
 provision_google_key() {
-  local destination="/home/mac/.secrets/flipflop/google-merchant-service-account.json"
+  local destination="/home/mac/.local/share/flipflop/google-merchant-service-account.json"
   local temporary="${destination}.tmp.$$"
-  install -d -m 700 /home/mac/.secrets/flipflop
+  install -d -m 700 /home/mac/.local/share/flipflop
   umask 077
   trap 'rm -f "$temporary"' EXIT
   cat > "$temporary"
