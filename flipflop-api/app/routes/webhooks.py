@@ -797,6 +797,8 @@ async def _handle_product_payment_succeeded(intent: dict, db: AsyncSession) -> N
         manual_build.customer_id = customer.id
         manual_build.customer_email = customer.email
         manual_build.sale_price_actual = amount
+        from app.services.channel_sync import withdraw_other_channels
+        await withdraw_other_channels(db, manual_build, "flipflop_shop")
 
     # manual_build.status is deliberately left unset here — withdraw_ebay_for_sold_build's
     # own idempotency guard skips the withdrawal once status == "sold", so it

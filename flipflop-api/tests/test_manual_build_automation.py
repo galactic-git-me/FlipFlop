@@ -216,7 +216,7 @@ async def test_manual_build_offer_poll_counters_and_persists(client, test_db):
 
 
 @pytest.mark.asyncio
-async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, test_db):
+async def test_manual_build_recreate_cycle_preserves_saved_pack_and_reschedules(client, test_db):
     build_id = await _real_db_build(
         status="listed",
         ebay_listing_id="188805793027",
@@ -236,18 +236,7 @@ async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, t
 
     from app.workers.manual_build_lifecycle import run_manual_build_recreate_cycle_job
 
-    with patch(
-        "app.services.ebay_browse.get_component_prices",
-        new=AsyncMock(return_value={"used_prices": [300, 310], "new_prices": [], "used_median": 310}),
-    ), patch(
-        "app.services.ebay_listing_reconciliation.reconcile_manual_build_listing",
-        new=AsyncMock(return_value="ended"),
-    ), patch(
-        "app.workers.manual_build_lifecycle.post_build_to_ebay", new=AsyncMock(return_value="published")
-    ), patch(
-        "app.api.manual_builds.generate_listing",
-        new=AsyncMock(return_value=SimpleNamespace(titles=["New Title 1", "Alternative Title"])),
-    ):
+    with patch("app.api.manual_builds.post_to_ebay", new=AsyncMock(return_value=SimpleNamespace(success=True))):
         result = await run_manual_build_recreate_cycle_job()
 
     assert result["recreated"] == 1
@@ -256,12 +245,12 @@ async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, t
     async with AsyncSessionLocal() as db:
         refreshed = await db.get(ManualBuild, build_id)
         assert refreshed.recreate_cycle_count == 1
-        assert refreshed.ebay_price < 400.0
+        assert refreshed.ebay_price == 400.0
         assert refreshed.next_recreate_at is not None
         assert refreshed.next_recreate_at > datetime.utcnow()
-        assert refreshed.generated_title == "New Title 1"
-        # Main photo swapped to the second one.
-        assert refreshed.photos[0]["url"] == "https://x/2.jpg"
+        assert refreshed.generated_title == "Old Title"
+        # The saved hero/photo order is retained.
+        assert refreshed.photos[0]["url"] == "https://x/1.jpg"
 
 
 @pytest.mark.asyncio
@@ -283,18 +272,7 @@ async def test_manual_build_recreate_failure_does_not_advance_or_mutate_cycle(cl
 
     from app.workers.manual_build_lifecycle import run_manual_build_recreate_cycle_job
 
-    with patch(
-        "app.services.ebay_browse.get_component_prices",
-        new=AsyncMock(return_value={"used_prices": [300, 310], "new_prices": [], "used_median": 310}),
-    ), patch(
-        "app.services.ebay_listing_reconciliation.reconcile_manual_build_listing",
-        new=AsyncMock(return_value="ended"),
-    ), patch(
-        "app.workers.manual_build_lifecycle.post_build_to_ebay", new=AsyncMock(return_value="no_token")
-    ), patch(
-        "app.api.manual_builds.generate_listing",
-        new=AsyncMock(return_value=SimpleNamespace(titles=["Changed Title"])),
-    ):
+    with patch("app.api.manual_builds.post_to_ebay", new=AsyncMock(return_value=SimpleNamespace(success=False))):
         result = await run_manual_build_recreate_cycle_job()
 
     assert result["recreated"] == 0

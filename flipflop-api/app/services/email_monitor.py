@@ -379,6 +379,13 @@ class EmailMonitor:
                     buyer_match = re.search(r"(?:buyer|customer|ship to|deliver to).*?([\w.+-]+@[\w.-]+\.[A-Za-z]{2,})", body, re.I | re.S)
                     sale["customer_name"] = sender_name or "FlipFlop customer"
                     sale["customer_email"] = buyer_match.group(1).lower() if buyer_match else None
+                    from app.services.channel_sync import queue_email_checks
+                    checks = await queue_email_checks(db, sale, body)
+                    if sale.get("marketplace") in {"ebay", "ebay_uk", "vinted", "facebook", "facebook_catalog", "onbuy", "amazon", "flipflop_shop"}:
+                        event.event_type = "sale_verification_queued" if checks else "sale_verification_unmatched"
+                        event.payload = {"verification_job_ids": [job.id for job in checks]}
+                        event.summary = "Sale email queued for seller-account verification; inventory is unchanged until confirmed." if checks else "Sale email could not be uniquely matched; no inventory was changed."
+                        break
                     await self.process_sale_detection(sale, db)
                     build = await self._match_manual_build_sale(sale, db)
                     if build:
@@ -595,24 +602,14 @@ class EmailMonitor:
         buyer_name = str(sale.get("customer_name") or "").strip()
         if buyer_name and buyer_name.lower() != "flipflop customer":
             build.buyer_name = buyer_name[:200]
-        # Mark every local cross-listing withdrawn immediately. Provider API
-        # withdrawal is channel-specific and is retried/handled by its adapter.
-        listings = (await db.execute(select(ChannelListing).where(ChannelListing.manual_build_id == build.id, ChannelListing.status.in_(["published", "scheduled"])))) .scalars().all()
-        for listing in listings:
-            listing.status = "withdrawn"
-            listing.withdrawn_at = datetime.utcnow()
-        from app.services.cross_channel_guard import withdraw_google_for_sold_build
-        await withdraw_google_for_sold_build(build, db)
-        if sale.get("marketplace") != "ebay" and build.ebay_sku:
-            from app.config import get_settings
-            from app.services.cross_channel_guard import withdraw_ebay_for_sold_build
-            await withdraw_ebay_for_sold_build(build, get_settings().ebay_listing_environment)
+        from app.services.channel_sync import withdraw_other_channels
+        await withdraw_other_channels(db, build, sale.get("marketplace"))
         return build
 
     @staticmethod
     def _marketplace_for_email(subject: str, sender: str, body: str) -> str | None:
         text = f"{subject} {sender} {body[:4000]}".lower()
-        for key, names in {"ebay": ("ebay",), "vinted": ("vinted",), "facebook": ("facebook", "marketplace"), "flipflop_shop": ("flipflop", "theflipflop.shop")}.items():
+        for key, names in {"ebay": ("ebay",), "vinted": ("vinted",), "facebook": ("facebook", "marketplace"), "amazon": ("amazon",), "onbuy": ("onbuy",), "flipflop_shop": ("flipflop", "theflipflop.shop")}.items():
             if any(name in text for name in names):
                 return key
         return None

@@ -90,6 +90,9 @@ if [[ "$healthy" -ne 1 ]]; then
   exit 1
 fi
 
+log "Verifying browser worker authentication and live Merchant API writes"
+docker compose -f "$COMPOSE_FILE" exec -T api python -c 'import asyncio, os; from app.services.google_merchant_api import GoogleMerchantAPI; assert len(os.getenv("CROSS_LISTING_WORKER_KEY", "")) >= 48, "Chrome worker key is not configured"; status = asyncio.run(GoogleMerchantAPI().verify_connection()); assert status.get("connected") and status.get("writes_enabled"), "Merchant API is not connected with writes enabled"; print("Browser worker and Merchant API write configuration verified")'
+
 callback_status="$(curl --silent --output /dev/null --write-out '%{http_code}' \
   https://www.theflipflop.shop/api/ebay/oauth/callback)"
 if [[ "$callback_status" != "307" && "$callback_status" != "302" ]]; then

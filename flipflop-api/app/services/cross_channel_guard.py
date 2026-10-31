@@ -51,6 +51,8 @@ async def withdraw_storefront_for_sold_build(build: ManualBuild, db: AsyncSessio
     """Call once a build's eBay sale is confirmed (see sync_ebay_order) —
     withdraws the matching storefront Product listing, if any, so it can't
     also sell there."""
+    from app.services.channel_sync import withdraw_other_channels
+    await withdraw_other_channels(db, build, "ebay_uk")
     if not build.storefront_product_id:
         return
 
