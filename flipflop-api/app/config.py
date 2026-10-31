@@ -101,6 +101,18 @@ class Settings(BaseSettings):
     amazon_sp_api_seller_id: str = ""
     amazon_sp_api_marketplace_id: str = "A1F83G8C2ARO7P"  # Amazon UK
     amazon_sp_api_environment: str = "production"
+
+    # Google Merchant Center v1 Merchant API. A service account is used for
+    # this single-business integration; API keys are not accepted by Google.
+    # Keep the service-account file in the runtime secret store, outside git.
+    google_merchant_account_id: str = ""
+    google_merchant_data_source_id: str = ""
+    google_merchant_service_account_file: str = ""
+    google_merchant_service_account_json: str = ""
+    google_merchant_feed_label: str = "GB"
+    google_merchant_content_language: str = "en"
+    google_merchant_store_url: str = "https://www.theflipflop.shop"
+    google_merchant_writes_enabled: bool = False
     amazon_sp_api_endpoint: str = "https://sellingpartnerapi-eu.amazon.com"
     amazon_sp_api_sandbox_endpoint: str = "https://sandbox.sellingpartnerapi-eu.amazon.com"
     amazon_sp_api_product_type: str = "COMPUTER"

@@ -883,6 +883,31 @@ export const api = {
       ),
   },
   crossListing: {
+    googleStatus: () =>
+      request<{
+        configured: boolean;
+        connected: boolean;
+        writes_enabled?: boolean;
+        account_id?: string;
+        data_source_id?: string;
+        message?: string;
+      }>("/cross-listing/google/status"),
+    createGoogleDataSource: () =>
+      request<{ name?: string; data_source_id?: string; message: string }>(
+        "/cross-listing/google/data-source",
+        { method: "POST" }
+      ),
+    publishGoogle: (buildId: number, images: string[]) =>
+      request<{
+        success: boolean;
+        status: string;
+        external_id?: string;
+        listing_url?: string | null;
+        message: string;
+      }>(`/cross-listing/google/publish/${buildId}`, {
+        method: "POST",
+        body: JSON.stringify({ images }),
+      }),
     amazonStatus: () =>
       request<{
         connected: boolean;

@@ -314,6 +314,7 @@ function normalizeScheduleChannel(channel: string): CrossListingChannel | null {
     facebook_catalog: "facebook_catalog",
     facebook: "facebook_catalog",
     vinted: "vinted",
+    google_shopping: "google_shopping",
   };
   return aliases[normalized] ?? null;
 }
@@ -329,6 +330,8 @@ function scheduleStatus(status: string): CrossListingSource["status"] {
       "validating",
       "ready",
       "manual_action_required",
+      "sync_pending",
+      "withdrawal_pending",
     ].includes(status)
   )
     return "draft";
@@ -895,6 +898,8 @@ export default function CrossListingPage() {
   const [connected, setConnected] = useState(false);
   const [amazonConnected, setAmazonConnected] = useState(false);
   const [amazonMessage, setAmazonMessage] = useState<string | undefined>();
+  const [googleConnected, setGoogleConnected] = useState(false);
+  const [googleMessage, setGoogleMessage] = useState<string | undefined>();
   const [warnings, setWarnings] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -936,8 +941,8 @@ export default function CrossListingPage() {
   const [relistNowBuild, setRelistNowBuild] = useState<number | null>(null);
 
   const channelCapabilities = useMemo(
-    () => capabilities(connected, amazonConnected, amazonMessage),
-    [connected, amazonConnected, amazonMessage]
+    () => capabilities(connected, amazonConnected, amazonMessage, googleConnected, googleMessage),
+    [connected, amazonConnected, amazonMessage, googleConnected, googleMessage]
   );
   const tableChannels = channelCapabilities.map((channel) => channel.channel);
   const displayItems = useMemo(() => {
@@ -1103,13 +1108,19 @@ export default function CrossListingPage() {
     setRefreshing(true);
     setError(null);
     try {
-      const [summary, ebay, amazon, scheduleRows, actionRows, settings] =
+      const [summary, ebay, amazon, google, scheduleRows, actionRows, settings] =
         await Promise.all([
           api.manualBuilds.list(),
           api.ebayOAuth.status().catch(() => ({ connected: false })),
           api.crossListing.amazonStatus().catch(() => ({
             connected: false,
             message: "Amazon connection could not be checked.",
+          })),
+          api.crossListing.googleStatus().catch(() => ({
+            configured: false,
+            connected: false,
+            writes_enabled: false,
+            message: "Google Merchant Center connection could not be checked.",
           })),
           api.crossListing.schedules(),
           api.crossListing.actions(),
@@ -1139,11 +1150,14 @@ export default function CrossListingPage() {
           );
       });
       const failedActionMessages = new Map<string, string>();
+      const actionUrls = new Map<string, string>();
       for (const action of actionRows) {
+        const actionKey = `${action.build_id}:${normalizeScheduleChannel(action.channel) ?? action.channel}`;
+        const listingUrl = action.metadata?.listing_url;
+        if (typeof listingUrl === "string" && listingUrl && !actionUrls.has(actionKey))
+          actionUrls.set(actionKey, listingUrl);
         if (!action.message || !action.event_type.includes("failed")) continue;
-        const key = `${action.build_id}:${
-          normalizeScheduleChannel(action.channel) ?? action.channel
-        }`;
+        const key = actionKey;
         if (!failedActionMessages.has(key))
           failedActionMessages.set(key, action.message);
       }
@@ -1170,7 +1184,7 @@ export default function CrossListingPage() {
           source: "flipflop_shop",
           externalId: schedule.external_listing_id || "not-created",
           status,
-          url: null,
+          url: actionUrls.get(key) ?? null,
           updatedAt: schedule.updated_at || base.updatedAt,
           error:
             status === "failed"
@@ -1186,6 +1200,8 @@ export default function CrossListingPage() {
       setConnected(ebay.connected);
       setAmazonConnected(amazon.connected);
       setAmazonMessage(amazon.message);
+      setGoogleConnected(Boolean(google.connected && google.writes_enabled));
+      setGoogleMessage(google.message);
       setRefreshedAt(new Date().toISOString());
       setActions(actionRows);
       setSchedules(scheduleRows);
@@ -1265,6 +1281,7 @@ export default function CrossListingPage() {
     } else {
       const needsListing = [...new Set(filtered.flatMap((item) => channelCapabilities
         .filter((channel) => {
+          if (!channel.canPublish) return false;
           const status = item.byChannel[channel.channel]?.status ?? "unavailable";
           return shouldAutoSelectDestination(status);
         })
@@ -1272,12 +1289,14 @@ export default function CrossListingPage() {
       setDestinations(needsListing);
     }
   };
-  const toggleDestination = (channel: CrossListingChannel) =>
+  const toggleDestination = (channel: CrossListingChannel) => {
+    if (!channelCapabilities.find((item) => item.channel === channel)?.canPublish) return;
     setDestinations((current) =>
       current.includes(channel)
         ? current.filter((item) => item !== channel)
         : [...current, channel]
     );
+  };
   const selectListing = (item: GroupedListing) => {
     const wasSelected = selected.has(item.id);
     setSelected((current) => {
@@ -1289,6 +1308,7 @@ export default function CrossListingPage() {
     if (!wasSelected) {
       const needsListing = channelCapabilities
         .filter((channel) => {
+          if (!channel.canPublish) return false;
           const status =
             item.byChannel[channel.channel]?.status ?? "unavailable";
           return shouldAutoSelectDestination(status);
@@ -1612,6 +1632,18 @@ export default function CrossListingPage() {
               images: channelItem.listing.images.map((image) => image.url),
               sku: channelItem.listing.sku,
             });
+            addResult({
+              buildId: item.buildId,
+              channel: capability.label,
+              status: result.success ? "published" : "failed",
+              message: result.message,
+              url: result.listing_url ?? undefined,
+            });
+          } else if (destination === "google_shopping") {
+            const result = await api.crossListing.publishGoogle(
+              channelItem.buildId,
+              channelItem.listing.images.map((image) => image.url)
+            );
             addResult({
               buildId: item.buildId,
               channel: capability.label,
@@ -1949,12 +1981,16 @@ export default function CrossListingPage() {
                 <button
                   type="button"
                   aria-pressed={active}
+                  aria-disabled={!channel.canPublish}
                   key={channel.channel}
                   onClick={() => toggleDestination(channel.channel)}
-                  className={`cursor-pointer rounded-lg border p-3 text-left transition-colors ${
+                  disabled={!channel.canPublish}
+                  className={`${channel.canPublish ? "cursor-pointer" : "cursor-not-allowed"} rounded-lg border p-3 text-left transition-colors ${
                     active
                       ? "border-emerald-400/60 bg-emerald-400/[0.07] shadow-[0_0_18px_rgba(52,211,153,0.08)]"
-                      : "border-slate-700/80 bg-[#0d1521]/90 opacity-60 hover:border-slate-500 hover:opacity-90"
+                      : channel.canPublish
+                      ? "border-slate-700/80 bg-[#0d1521]/90 opacity-60 hover:border-slate-500 hover:opacity-90"
+                      : "border-slate-700/80 bg-[#0d1521]/90 opacity-50"
                   }`}
                 >
                   <div className="flex items-start gap-3">
@@ -1973,7 +2009,7 @@ export default function CrossListingPage() {
                           }`}
                         >
                           {channel.mode === "api"
-                            ? "API"
+                            ? "AUTOMATIC"
                             : labelForStatus(channel.mode)}
                         </span>
                       </div>
@@ -1997,6 +2033,11 @@ export default function CrossListingPage() {
                           ? "This saved draft is not live. Select eBay to check the seller account and create a new listing if the old item is missing."
                           : channel.note}
                       </p>
+                      {!channel.canPublish && (
+                        <span className="mt-2 inline-block text-[10px] font-semibold uppercase tracking-wide text-yellow-300">
+                          Automatic setup required
+                        </span>
+                      )}
                     </div>
                     <span
                       className={`shrink-0 text-lg leading-6 ${
