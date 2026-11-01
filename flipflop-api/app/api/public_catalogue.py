@@ -21,10 +21,30 @@ from app.models.case import Case
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
 from app.models.component_3d_asset import AssetSubjectType, Component3DAsset, Component3DAssetStatus
 from app.models.gem_radar_intelligence import PreferredComponent
+from app.schemas.payment import PlaybookBuildConfig
 from app.services.playbook_pricing import LABOUR_COST, OVERHEAD_RATE
 from app.services.studio_fit import engineering_specs
 
 router = APIRouter(prefix="/public", tags=["public"])
+
+
+@router.post("/playbooks/{playbook_id}/delivery-quotes")
+async def playbook_delivery_quotes(playbook_id: int, build_config: PlaybookBuildConfig):
+    """Keep the current storefront compatible while commercial quotes are unavailable.
+
+    The storefront supports this legacy response and continues to use its
+    existing server-validated build quote for checkout eligibility. Do not
+    fabricate delivery prices or promises when no reviewed commercial quote
+    is available on this API version.
+    """
+    if playbook_id != build_config.playbook_id:
+        raise HTTPException(status_code=422, detail="The selected build belongs to a different Playbook")
+    return {
+        "pricing_mode": "legacy",
+        "quote_snapshot_id": None,
+        "review_required": False,
+        "modes": {},
+    }
 
 _TIER_ORDER = ("budget", "mid", "high")
 _TIER_LABELS = {"budget": "Value", "mid": "Balanced", "high": "Performance"}
