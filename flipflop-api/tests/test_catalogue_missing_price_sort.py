@@ -11,6 +11,7 @@ class CatalogueMissingPriceTests(IsolatedAsyncioTestCase):
         result=Mock();result.all.return_value=rows
         boards=Mock();boards.scalars.return_value.all.return_value=[]
         db=AsyncMock();db.execute.side_effect=[result,boards]
-        with patch('app.services.playbook_service._plausible_role_candidate',return_value=False), \
+        with patch('app.services.playbook_stored_offers.stored_offers',AsyncMock(return_value={})), \
+             patch('app.services.playbook_service._plausible_role_candidate',return_value=False), \
              patch('app.services.shared_variant_assets.final_assets_by_variant',AsyncMock(return_value={})): 
             self.assertEqual(await _catalogue_candidates(db,1,'curated'),[])

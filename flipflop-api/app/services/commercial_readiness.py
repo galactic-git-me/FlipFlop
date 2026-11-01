@@ -601,6 +601,11 @@ async def _product_page_source_preview(db, listing, archived=None):
                 or (delivery_days is not None and (not isinstance(delivery_days, int)
                     or isinstance(delivery_days, bool) or delivery_days < 0))):
             return None
+        # The captured offer may enrich a catalogue row only while its price
+        # still agrees with the saved listing price.
+        catalogue_price = Decimal(str(listing.price)) if listing.price is not None else None
+        if catalogue_price is None or not catalogue_price.is_finite() or catalogue_price != item:
+            return None
         from app.services.playbook_product_capture import supported_product_url
         if not supported_product_url(listing.url):
             return None

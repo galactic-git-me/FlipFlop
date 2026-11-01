@@ -49,6 +49,7 @@ async def test_generation_api_rejects_unapproved_photos_before_meshy(monkeypatch
     db = SimpleNamespace(execute=AsyncMock(return_value=SimpleNamespace(one_or_none=lambda: (variant, SimpleNamespace(slot_type="cpu")))))
     meshy = AsyncMock()
     monkeypatch.setattr(assets_admin, "generate_multi_image_asset", meshy)
+    monkeypatch.setattr(assets_admin, "media_members", AsyncMock(return_value=("cpu", "cpu_amd_am4_am5", [variant])))
 
     with pytest.raises(HTTPException) as error:
         await assets_admin.generate_variant_asset(12, assets_admin.VariantMeshyGenerate(), BackgroundTasks(), SimpleNamespace(email="admin"), db)
@@ -69,12 +70,12 @@ async def test_generation_api_accepts_job_and_schedules_background_generation(mo
     execute = AsyncMock()
     execute.side_effect = [
         SimpleNamespace(one_or_none=lambda: (variant, slot)),
-        SimpleNamespace(scalars=lambda: SimpleNamespace(all=lambda: [sibling])),
         SimpleNamespace(scalar_one_or_none=lambda: None),
         SimpleNamespace(scalar_one_or_none=lambda: None),
     ]
     db = SimpleNamespace(execute=execute)
     db.commit = AsyncMock()
+    monkeypatch.setattr(assets_admin, "media_members", AsyncMock(return_value=("case", "case", [sibling])))
     monkeypatch.setattr(assets_admin, "_run_variant_generation", AsyncMock())
     background_tasks = BackgroundTasks()
 

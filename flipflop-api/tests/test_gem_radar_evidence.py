@@ -27,7 +27,7 @@ def _scored_listing(listing_id: str, classification: str, deal_score: float) -> 
         listingId=listing_id, url=f"https://www.ebay.co.uk/itm/{listing_id}", title="Test item", seller="s",
         sellerFeedbackPercent=99.0, sellerFeedbackCount=10, conditionRaw="Used", conditionNormalised="used",
         itemPrice=50, postagePrice=0, currentDeliveredPrice=50, listingType="buy_it_now", bestOfferEnabled=False,
-        bidCount=None, auctionEndAt=None, imageUrl=None, sponsored=False, extractedAt=datetime.now(timezone.utc),
+        bidCount=None, auctionEndAt=None, imageUrl="https://example.test/listing.jpg", sponsored=False, extractedAt=datetime.now(timezone.utc),
     )
     prices = PriceBundle(
         actualListing=50, ebayNewBin=_unavailable(), ebayUsedBin=_unavailable(),
