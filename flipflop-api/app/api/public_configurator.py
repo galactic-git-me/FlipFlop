@@ -127,6 +127,31 @@ async def resolve_assets(body: AssetResolveRequest, db: AsyncSession = Depends(g
             )
         ).scalar_one_or_none()
 
+        # Some exact PC case GLBs are approved against the catalogue variant
+        # that supplied their source photos, rather than a ``Case`` row. A
+        # storefront case selection carries the ``case_catalogue`` ID, so only
+        # bridge it through the listing's explicit case_catalogue_id link. If
+        # that link points to multiple distinct case models, leave it unresolved
+        # instead of silently choosing a different chassis.
+        if exact is None and subject.subject_type == "case":
+            linked_case_assets = (
+                await db.execute(
+                    select(Component3DAsset)
+                    .join(CatalogueVariant, Component3DAsset.subject_id == CatalogueVariant.id)
+                    .join(Listing, CatalogueVariant.listing_id == Listing.id)
+                    .where(
+                        Listing.case_catalogue_id == subject.subject_id,
+                        CatalogueVariant.status == "active",
+                        Component3DAsset.subject_type == AssetSubjectType.VARIANT,
+                        Component3DAsset.category == "case",
+                        Component3DAsset.is_active == True,  # noqa: E712
+                        Component3DAsset.status.in_(_SERVABLE),
+                    )
+                )
+            ).scalars().all()
+            if len(linked_case_assets) == 1 and linked_case_assets[0].glb_ref:
+                exact = linked_case_assets[0]
+
         if exact and exact.glb_ref:
             results.append(
                 {"query": subject.model_dump(), "asset": _asset_payload(exact, "exact")}
