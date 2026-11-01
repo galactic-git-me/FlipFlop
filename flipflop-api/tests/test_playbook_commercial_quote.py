@@ -28,7 +28,7 @@ def policy_data():
     return dict(version=1, definition_sha256="a" * 64, required_part_keys=["cpu", "case"],
                 condition="new", vat_rate="0.20", payment_rate="0.02", warranty_rate="0.05",
                 returns_rate="0.01", market_tolerance_fraction="0.10",
-            market=dict(condition="new", sold_median_gbp="2000", sold_p75_gbp="2200", sold_sample_size=10,
+            market=dict(condition="new", sold_median_gbp="10000", sold_p75_gbp="12000", sold_sample_size=10,
                         minimum_sold_sample_size=8, cap_method="sold_p75_linear_interpolation",
                             observed_at=NOW.isoformat(), evidence_source="reviewed_sold_sample",
                             evidence_ref="sample:1"), modes=modes)

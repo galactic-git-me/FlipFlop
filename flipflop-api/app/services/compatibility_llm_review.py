@@ -264,7 +264,7 @@ async def review_compatibility_evidence(offer):
         'Return only one pair and verdict for each check. Do not explain or cite; the application attaches source evidence. '
         f'Use these exact pair identifiers: {", ".join(sorted(expected_pairs))}. '
         'Return JSON only: {"checks":[{"pair":"motherboard_case","verdict":"compatible|incompatible|insufficient_evidence"}]}.\n'
-        + json.dumps(model_input, ensure_ascii=True, separators=(',', ':'))
+        + '\n\n' + json.dumps(model_input, ensure_ascii=True, separators=(',', ':'))
     )
     result = await model_selection_service.complete(
         task='Scheduled Playbook build compatibility assessment',

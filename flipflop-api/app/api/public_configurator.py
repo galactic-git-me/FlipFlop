@@ -27,9 +27,9 @@ from app.services.component_family_classifier import classify_family
 router = APIRouter(prefix="/public", tags=["public-configurator"])
 
 
-@router.get("/curated-builds")
+@router.get("/configurator/curated-builds")
 async def public_curated_builds(db: AsyncSession = Depends(get_db)):
-    """Only serve published build segments with a complete, currently active component set."""
+    """Serve published component segments through a path distinct from the curated-build catalogue."""
     segments = (await db.execute(
         select(CuratedBuildSegment).where(CuratedBuildSegment.is_live.is_(True)).order_by(
             CuratedBuildSegment.customer_type, CuratedBuildSegment.budget_min,
@@ -75,8 +75,6 @@ _SERVABLE = (Component3DAssetStatus.VALIDATED, Component3DAssetStatus.FINAL)
 
 
 def _variant_asset_is_publishable(variant: CatalogueVariant | None, asset: Component3DAsset | None) -> bool:
-    if variant and variant.status == "active" and asset and asset.category != "case":
-        return bool(asset.is_active and asset.status == Component3DAssetStatus.FINAL and asset.glb_ref)
     """A component model is public only for its exact owner-selected model photo set."""
     approval = (variant.asset_media_review or {}) if variant else {}
     model_image_urls = approval.get("model_image_urls") or (
@@ -162,6 +160,31 @@ async def resolve_assets(body: AssetResolveRequest, db: AsyncSession = Depends(g
             if not _variant_asset_is_publishable(variant, exact):
                 results.append({"query": subject.model_dump(), "asset": None})
                 continue
+
+        # Some exact PC case GLBs are approved against the catalogue variant
+        # that supplied their source photos, rather than a ``Case`` row. A
+        # storefront case selection carries the ``case_catalogue`` ID, so only
+        # bridge it through the listing's explicit case_catalogue_id link. If
+        # that link points to multiple distinct case models, leave it unresolved
+        # instead of silently choosing a different chassis.
+        if exact is None and subject.subject_type == "case":
+            linked_case_assets = (
+                await db.execute(
+                    select(Component3DAsset)
+                    .join(CatalogueVariant, Component3DAsset.subject_id == CatalogueVariant.id)
+                    .join(Listing, CatalogueVariant.listing_id == Listing.id)
+                    .where(
+                        Listing.case_catalogue_id == subject.subject_id,
+                        CatalogueVariant.status == "active",
+                        Component3DAsset.subject_type == AssetSubjectType.VARIANT,
+                        Component3DAsset.category == "case",
+                        Component3DAsset.is_active == True,  # noqa: E712
+                        Component3DAsset.status.in_(_SERVABLE),
+                    )
+                )
+            ).scalars().all()
+            if len(linked_case_assets) == 1 and linked_case_assets[0].glb_ref:
+                exact = linked_case_assets[0]
 
         if exact and exact.glb_ref:
             results.append(

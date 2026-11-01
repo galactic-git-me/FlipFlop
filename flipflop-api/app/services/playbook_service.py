@@ -11,7 +11,7 @@ import json
 import re
 from urllib.parse import urlsplit
 from uuid import uuid4
-from sqlalchemy import select, text
+from sqlalchemy import bindparam, select, text
 from fastapi import HTTPException
 from app.models.catalogue import CatalogueVariant, PlaybookSlot, CaseCatalogue
 from app.models.configurator import ConfiguratorCatalogueVisibility
@@ -281,14 +281,9 @@ def _candidate_source_prices(_catalogue_price, source):
     verified = bool(source and source.get('fresh') and source.get('commercial_capture_verified')
         and current is not None and (current > 0 or source.get('evidence_kind')=='official_free_software'
             and current==0))
-    item = current if current is not None and current > 0 else _decimal(_catalogue_price)
-    if source and source.get('evidence_kind')=='official_free_software':
-        item = current
-    postage = _decimal(source.get('delivery_gbp')) if source and source.get('postage_verified') else None
-    if postage is None:
-        # Missing inbound delivery is a costing assumption, never proof that the
-        # retailer ships free. Keep the source observation's proof flag intact.
-        postage = Decimal('0.00')
+    item = current if verified else None
+    postage = (_decimal(source.get('delivery_gbp'))
+        if verified and source and source.get('postage_verified') else None)
     return item, postage, verified
 
 
@@ -328,6 +323,11 @@ def _current_suggested_supplier_source(part):
     """
     offer=part.get('suggested_supplier_offer') or {}
     url=str(offer.get('url') or '')
+    if str(part.get('role') or '').startswith('os'):
+        from app.services.commercial_quote_evidence import supplier_identity
+        if supplier_identity(offer.get('source'), url) != supplier_identity(
+                part.get('source'), part.get('source_url')):
+            return None
     from app.services.playbook_product_capture import supported_product_url
     if (not supported_product_url(url) or offer.get('commercial_capture_verified') is not True
             or offer.get('condition')!='new' or offer.get('listing_type')!='buy_it_now'
@@ -733,9 +733,10 @@ def _upgrade_quality_verified(role,base,target,metric='overall_score'):
 
 
 def _distinct_storage_devices(parts):
-    # Each storage slot represents a separately costed unit. Two units may use
-    # the same SKU/listing; they must occupy their own catalogue slot variants.
-    drives=[part.get('variant_id') for role,part in parts.items() if role in {'storage','storage_secondary'}]
+    # Both storage roles must resolve to distinct supplier listings. A second
+    # catalogue variant for the same listing is not a second sourcing option.
+    drives=[part.get('listing_id') or part.get('variant_id')
+        for role,part in parts.items() if role in {'storage','storage_secondary'}]
     return len(drives)<2 or all(drives) and len(set(drives))==len(drives)
 
 
@@ -830,7 +831,8 @@ def _planning_integrated_graphics(candidate):
     title = candidate.get('title') or ''
     # Explicit source wording is enough to retain a planning candidate; it does
     # not turn unreviewed engineering into verified compatibility.
-    return bool(re.search(r'\bintegrated\s+(?:radeon\s+)?graphics\b|\bradeon graphics (?:included|built[- ]in)\b', title, re.I))
+    return bool(re.search(r'\bintegrated\s+(?:radeon\s+)?graphics\b|\bradeon graphics (?:included|built[- ]in)\b', title, re.I)
+        or re.search(r'\bryzen\s+[3579]\s+\d{4,5}g\b', title, re.I))
 
 
 def _planning_socket(candidate):
@@ -1137,7 +1139,7 @@ def automatic_policy(parts, definition, parent, settings, *, definition_sha256_o
     target=max(floor,_decimal((parent.profit_strategy or {}).get('target_profit_gbp')) or floor)
     courier=_decimal(getattr(settings,'opportunity_delivery_fallback_gbp',None))
     if courier is None:
-        courier = Decimal('15.00')
+        courier = Decimal('20.00')
     if not parts:
         return None
     source_days=max((days for part in parts.values()
@@ -1279,18 +1281,18 @@ def estimate_delivery_products(parts, definition, parent, settings):
             _decimal(part.get('supplier_postage_gbp')) is not None
             and bool((part.get('source_observation') or {}).get('postage_verified'))
             for part in parts.values())
-        postage_assumptions=[f"{part['role']}: £0.00 fallback" for part in parts.values()
+        postage_assumptions=[f"{part.get('role') or role}: £0.00 fallback" for role,part in parts.items()
             if (part.get('supplier_postage_assumption')=='owner-approved-zero-fallback'
                 or (part.get('source_observation') or {}).get('postage_verified') is not True)]
         if ineligible:
             economics=mode_economics(policy,policy.modes[mode],landed)
-            outputs[mode]={'available':False,'recommended_price_gbp':_money(economics['price']),
+            outputs[mode]={'available':False,'recommended_price_gbp':None,
                 'estimated_profit_gbp':_money(economics['contribution']),
                 'profit_floor_gbp':_money(economics['floor']),
                 'estimated_total_cost_gbp':_money(economics['true_cost']),
                 'maximum_delivery_working_days':policy.modes[mode].maximum_delivery_working_days,
                 'ineligible_component_roles':ineligible,
-                'reason':'Price uses current part costs and the £0.00 fallback for unknown buying postage; this delivery option is unavailable because: '+', '.join(ineligible_details),
+                'reason':'This delivery option is unavailable because: '+', '.join(ineligible_details),
                 'postage_assumptions':postage_assumptions,
                 'cost_basis':'owner_approved_pilot_and_current_application_delivery_allowance'}
             continue
@@ -1298,6 +1300,13 @@ def estimate_delivery_products(parts, definition, parent, settings):
         price=economics['price'];profit=economics['contribution']
         market_cap=(policy.market.sold_p75_gbp if policy.market and policy.market.sold_p75_gbp is not None
                     else policy.market.sold_median_gbp if policy.market else None)
+        if (definition.get('tier') == 'High-end' and mode == 'standard'
+                and (policy.market is None or policy.market.sold_p75_gbp is None)):
+            outputs[mode]={'available':False,'recommended_price_gbp':None,'estimated_profit_gbp':None,
+                'profit_floor_gbp':_money(economics['floor']),
+                'estimated_total_cost_gbp':_money(economics['true_cost']),
+                'reason':'At least eight sold comparable complete-PC records and a reviewed P75 are required for High-end pricing.'}
+            continue
         if definition.get('tier') == 'High-end' and mode == 'standard' and (
                 policy.market is not None and policy.market.sold_p75_gbp is not None
                 and price > policy.market.sold_p75_gbp):
@@ -1355,7 +1364,7 @@ async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None):
     rows=(await db.execute(select(CatalogueVariant,Listing,PlaybookSlot).join(Listing,Listing.id==CatalogueVariant.listing_id)
         .join(PlaybookSlot,PlaybookSlot.id==CatalogueVariant.slot_id).where(
             PlaybookSlot.playbook_id==parent_id,CatalogueVariant.curated_for_builds.is_(True),
-            CatalogueVariant.status.in_(('active','pending_review','hidden')),
+            CatalogueVariant.status.in_(('active','pending_review')),
             or_(Listing.price.is_(None),Listing.price>0,(PlaybookSlot.slot_type=='os_secondary')&(Listing.price==0)),
             Listing.status=='active'))).all()
     # Reuse only exact, human-reviewed reference-board evidence. Fuzzy board
@@ -1398,11 +1407,13 @@ async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None):
     bestseller_cpks={str(row[4].get('cpk')) for row in selected
         if isinstance(row[4],dict) and row[4].get('cpk') and not str(row[4].get('cpk')).startswith('asin:')}
     if external_ids:
-        identity_rows=(await db.execute(text("""
+        identity_query=text("""
             SELECT listing_id,cpk,cpk_data,cpk_confidence
             FROM gem_radar_listing_cpk
-            WHERE listing_id=ANY(:listing_ids) OR cpk=ANY(:cpks)
-        """),{'listing_ids':list(external_ids),'cpks':list(bestseller_cpks)})).mappings().all()
+            WHERE listing_id IN :listing_ids OR cpk IN :cpks
+        """).bindparams(bindparam('listing_ids', expanding=True), bindparam('cpks', expanding=True))
+        identity_rows=(await db.execute(identity_query,
+            {'listing_ids':list(external_ids),'cpks':list(bestseller_cpks)})).mappings().all()
         catalogue_identities={row['listing_id']:dict(row) for row in identity_rows}
         for identity_row in identity_rows:
             if identity_row['cpk']:
@@ -1457,6 +1468,11 @@ async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None):
         from app.services.playbook_component_facts import resolve_primary_engineering
         engineering=resolve_primary_engineering({'role':role,'title':listing.title,
             'engineering':engineering})
+        invalidation=((listing.raw_specs or {}).get('configurator') or {}).get('review_invalidation') or {}
+        if invalidation:
+            engineering={**engineering,'reviewed':False,
+                'reference_conflicts':sorted(set(engineering.get('reference_conflicts') or [])
+                    |set(invalidation.get('conflicted_fields') or []))}
         engineering=_apply_exact_source_core_engineering(role,listing,source,engineering)
         identity=catalogue_identities.get(listing.external_id) or {}
         identity_data=identity.get('cpk_data') or {}
@@ -2757,7 +2773,10 @@ def invalidate_conflicting_product_engineering(listing,role):
     """Retain the operator's old review in history, but stop certifying changed facts."""
     raw=dict(listing.raw_specs or {});current=raw.get('configurator') or {}
     if current.get('reviewed') is not True:return False
-    if current.get('source_url') and current['source_url']!=listing.url:
+    reviewed_title=str(current.get('reviewed_product_title') or '').strip().casefold()
+    current_title=str(listing.title or '').strip().casefold()
+    same_reviewed_product=bool(reviewed_title and reviewed_title==current_title)
+    if current.get('source_url') and current['source_url']!=listing.url and not same_reviewed_product:
         changes={'source_url':{'reviewed':current['source_url'],'captured':listing.url}}
         conflicting=set()
         source_fingerprint=fingerprint({'listing_id':listing.id,'changed_source_url':changes})
@@ -2767,6 +2786,7 @@ def invalidate_conflicting_product_engineering(listing,role):
         conflicting=set(suggestion['conflicted_fields']).intersection(current)
         changes=suggestion['reviewed_value_changes']
         if not conflicting and not changes:return False
+        conflicting.update(changes)
         source_fingerprint=suggestion['fingerprint']
     history=list(raw.get('configurator_review_history') or [])
     history.append({'review':deepcopy(current),'superseded_by_source_fingerprint':source_fingerprint,
@@ -3179,6 +3199,9 @@ async def run_playbook_refresh(actor_id=0,progress=None):
         try:
             # Amazon remains the hardware demand/catalogue source. OS licence
             # costs are sourced from the selected specialist key catalogue.
+            from app.services.royalcdkeys_catalogue_sync import refresh_royalcdkeys_os_catalogue
+            await timed_stage('royalcdkeys_seconds',lambda:refresh_royalcdkeys_os_catalogue(db))
+            await db.commit()
             bestseller_refresh=await timed_stage('amazon_bestsellers_seconds',lambda:
                 scrape_amazon_component_bestsellers(
                     categories=['cpu','gpu','ram','storage','motherboard','psu','cooler','case'], reconcile_catalogue=False))

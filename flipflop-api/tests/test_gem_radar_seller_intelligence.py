@@ -26,7 +26,7 @@ def _listing(seller="teesside_tek", feedback_pct=99.0, feedback_count=100) -> Ex
         listingId="1", url="https://www.ebay.co.uk/itm/1", title="Ryzen 7 5700X", seller=seller,
         sellerFeedbackPercent=feedback_pct, sellerFeedbackCount=feedback_count, conditionRaw="used",
         conditionNormalised="used", itemPrice=50, postagePrice=0, currentDeliveredPrice=50,
-        listingType="buy_it_now", bestOfferEnabled=False, bidCount=None, auctionEndAt=None, imageUrl=None,
+        listingType="buy_it_now", bestOfferEnabled=False, bidCount=None, auctionEndAt=None, imageUrl="https://example.test/listing.jpg",
         sponsored=False, extractedAt=datetime.now(timezone.utc),
     )
 

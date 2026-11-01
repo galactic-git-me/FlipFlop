@@ -68,7 +68,11 @@ async def test_active_spotlights_do_not_expire_at_twenty_four_hours():
     from datetime import datetime
     from app.api.gem_radar import get_gem_by_component
     fetch = AsyncMock(return_value={"title": "Active gem", "image_url": "https://example.com/photo.jpg"})
+    from types import SimpleNamespace
+    from unittest.mock import Mock
+    db = AsyncMock()
+    db.execute.return_value = SimpleNamespace(all=Mock(return_value=[]))
     with patch("app.api.gem_radar._fetch_best_gem_for_category", fetch):
-        result = await get_gem_by_component(AsyncMock(), None)
-    assert len(result) == 5
+        result = await get_gem_by_component(db, None)
+    assert len(result) == 8
     assert all(call.args[2] == datetime.min for call in fetch.await_args_list)
