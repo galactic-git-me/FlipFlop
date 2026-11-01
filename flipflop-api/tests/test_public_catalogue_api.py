@@ -28,6 +28,36 @@ def test_public_playbook_slots_nonexistent_returns_not_200(client):
     assert resp.status_code == 404
 
 
+def test_public_playbook_delivery_quotes_uses_supported_legacy_fallback(client):
+    resp = client.post("/api/public/playbooks/1/delivery-quotes", json={
+        "playbook_id": 1,
+        "slot_selections": {},
+        "case_id": None,
+        "validation_mode": "curated",
+        "curated_build_id": "FF-GVG-01",
+    })
+
+    assert resp.status_code == 200
+    assert resp.json() == {
+        "pricing_mode": "legacy",
+        "quote_snapshot_id": None,
+        "review_required": False,
+        "modes": {},
+    }
+
+
+def test_public_playbook_delivery_quotes_rejects_mismatched_playbook(client):
+    resp = client.post("/api/public/playbooks/2/delivery-quotes", json={
+        "playbook_id": 1,
+        "slot_selections": {},
+        "case_id": None,
+        "validation_mode": "curated",
+        "curated_build_id": "FF-GVG-01",
+    })
+
+    assert resp.status_code == 422
+
+
 def test_budget_recommendation_validates_budget(client):
     resp = client.post("/api/public/recommendation", json={"purpose": "Great-value Gaming", "budget_gbp": 0})
     assert resp.status_code == 422
