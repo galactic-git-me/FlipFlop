@@ -1,5 +1,0 @@
-- generic [active] [ref=e1]:
-  - heading "Access Denied" [level=1] [ref=e2]
-  - text: You don't have permission to access "http://www.tesco.com/shop/en-GB/products/326150100" on this server.
-  - paragraph [ref=e3]: "Reference #18.db0f0317.1792551581.c50b51f4"
-  - paragraph [ref=e4]: https://errors.edgesuite.net/18.db0f0317.1792551581.c50b51f4
