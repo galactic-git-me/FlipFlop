@@ -59,4 +59,3 @@ class TextureArtifactChecks(unittest.TestCase):
         self.assertEqual(original_image_url("https://i.ebayimg.com/images/g/key/s-l64.jpg"),"https://i.ebayimg.com/images/g/key/s-l1600.jpg")
 
 if __name__=="__main__":unittest.main()
-

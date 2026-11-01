@@ -17,7 +17,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ var
     const response = await fetch(`${API_URL}/api/assets-3d/catalogue/components/${variantId}/image-search${suffix}`, {
       method: "GET", cache: "no-store",
       headers: { "content-type": "application/json", cookie: request.headers.get("cookie") || "", authorization: request.headers.get("authorization") || "" },
-      
+
     });
     return await relayJson(response);
   } catch (error) {

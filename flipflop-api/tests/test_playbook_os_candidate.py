@@ -44,4 +44,3 @@ def test_royalcdkeys_exact_reviewed_windows_offer_is_a_candidate_for_review():
     assert _verified_windows_licence_listing(listing)
     listing.raw_specs["playbook_product_capture"]["supplier_product_handle"]="wrong-handle"
     assert not _verified_windows_licence_listing(listing)
-

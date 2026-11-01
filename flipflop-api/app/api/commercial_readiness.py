@@ -92,5 +92,3 @@ async def store_reviewed_sources(db, pending, admin_id):
 async def approve_catalogue_delivery_prices(playbook_id: int, cell_id: str,
     db: AsyncSession = Depends(get_db), admin: AdminUser = Depends(get_current_admin)):
     raise HTTPException(409, "Review the calculated Playbook proposal; manual price-policy payloads are disabled.")
-
-

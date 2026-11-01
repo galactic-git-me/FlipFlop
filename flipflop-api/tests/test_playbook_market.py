@@ -166,4 +166,3 @@ class MarketPersistenceTests(IsolatedAsyncioTestCase):
                 self.assertEqual(len(audits),1)
         finally:
             await engine.dispose()
-
