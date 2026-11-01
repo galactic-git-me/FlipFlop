@@ -71,7 +71,6 @@ function BuildsPageInner() {
 
   const [channelListings, setChannelListings] = useState<ChannelListingSummary[]>([]);
   const [builds, setBuilds] = useState<ManualBuildSummary[]>([]);
-  const [channelListings, setChannelListings] = useState<ChannelListingSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
