@@ -113,4 +113,3 @@ class OwnerPhotoChecks(unittest.TestCase):
         self.assertEqual(approved_model_photos(variant),[])
 
 if __name__=="__main__":unittest.main()
-

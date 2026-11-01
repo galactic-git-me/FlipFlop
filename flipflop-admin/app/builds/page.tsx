@@ -69,8 +69,8 @@ function BuildsPageInner() {
   const searchParams = useSearchParams();
   const highlightId = searchParams.get("new") ? Number(searchParams.get("new")) : null;
 
-  const [builds, setBuilds] = useState<ManualBuildSummary[]>([]);
   const [channelListings, setChannelListings] = useState<ChannelListingSummary[]>([]);
+  const [builds, setBuilds] = useState<ManualBuildSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
 

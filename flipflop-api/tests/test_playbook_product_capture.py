@@ -218,5 +218,3 @@ def test_overclockers_exact_product_urls_allow_decimal_points_in_the_slug():
         'https://www.overclockers.co.uk/tp-link-archer-tx3000e-dual-band-wireless-ax3000-wifi-6-bluetooth-5.0-pci-e-adapter/NW-21U-TP.html')
     assert not supported_product_url(
         'https://www.overclockers.co.uk/search/tp-link-wifi-6-bluetooth-5.0.html')
-
-
