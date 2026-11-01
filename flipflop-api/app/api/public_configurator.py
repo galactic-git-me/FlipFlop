@@ -27,9 +27,9 @@ from app.services.component_family_classifier import classify_family
 router = APIRouter(prefix="/public", tags=["public-configurator"])
 
 
-@router.get("/curated-builds")
+@router.get("/configurator/curated-builds")
 async def public_curated_builds(db: AsyncSession = Depends(get_db)):
-    """Only serve published build segments with a complete, currently active component set."""
+    """Serve published component segments through a path distinct from the curated-build catalogue."""
     segments = (await db.execute(
         select(CuratedBuildSegment).where(CuratedBuildSegment.is_live.is_(True)).order_by(
             CuratedBuildSegment.customer_type, CuratedBuildSegment.budget_min,
