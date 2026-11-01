@@ -4,7 +4,7 @@ from app.services.playbook_service import (assemble_components, required_parts,
 
 
 def _candidate_title(role):
-    return {'cpu':'AMD Ryzen 5 5600X Processor', 'motherboard':'MSI B550M motherboard AM4',
+    return {'cpu':'AMD Ryzen 5 5600G Processor', 'motherboard':'MSI B550M motherboard AM4',
         'ram':'DDR4 32GB RAM memory kit', 'gpu':'NVIDIA GeForce RTX 4060 Graphics Card',
         'storage':'1TB NVMe SSD', 'psu':'650W ATX PC power supply',
         'cooling':'CPU air cooler', 'case':'ATX mid-tower PC case'}.get(role,role)
@@ -238,20 +238,23 @@ def test_compatible_assembly_backtracks_from_incompatible_first_board_and_respec
 
 
 def test_assembly_prefers_exact_supplier_offer_with_fresh_stock_postage_and_short_eta():
-    definition={'components':{'cpu':'AMD Ryzen 5 5600X','gpu':'Integrated'}}
+    from datetime import datetime, timezone
+    definition={'components':{'cpu':'AMD Ryzen 5 5600G','gpu':'Integrated'}}
+    captured_at=datetime.now(timezone.utc).isoformat()
     candidates=[]
     for role in ('motherboard','ram','storage','psu','cooling','case'):
         candidates.append({'role':role,'title':_candidate_title(role),'variant_id':len(candidates)+1,
             'listing_id':len(candidates)+100,'listing_price_gbp':'10.00'})
-    exact='AMD Ryzen 5 5600X Processor'
+    exact='AMD Ryzen 5 5600G Processor'
     candidates.extend([
         {'role':'cpu','title':exact,'variant_id':80,'listing_id':180,'listing_price_gbp':'89.00',
          'source_price_verified':True,'rank':1,'source_observation':{'fresh':True,'commercial_capture_verified':True,
-            'active_listing':True,'stock_status':'unknown','delivery_working_days':7,'postage_verified':False}},
+            'active_listing':True,'stock_status':'unknown','delivery_working_days':7,'postage_verified':False,
+            'condition':'new','observed_at':captured_at},'price_observed_at':captured_at},
         {'role':'cpu','title':exact,'variant_id':81,'listing_id':181,'listing_price_gbp':'94.00',
          'source_price_verified':True,'rank':8,'source_observation':{'fresh':True,'commercial_capture_verified':True,
             'active_listing':True,'stock_status':'available','stock_evidence':'In stock','delivery_working_days':1,
-            'postage_verified':True}},
+            'postage_verified':True,'condition':'new','observed_at':captured_at},'price_observed_at':captured_at},
     ])
 
     parts,blockers=assemble_components(definition,candidates)
@@ -277,8 +280,8 @@ def test_multi_device_assembly_never_uses_one_listing_for_both_drives():
             'listing_id':len(candidates)+100,'listing_price_gbp':'10.00'})
     candidates.extend([
         {'role':'storage','title':'4TB PCIe NVMe SSD','variant_id':20,'listing_id':120,'listing_price_gbp':'10.00'},
-        {'role':'storage_secondary','title':'4TB Project SSD','variant_id':21,'listing_id':120,'listing_price_gbp':'10.00'},
-        {'role':'storage_secondary','title':'4TB Project SSD','variant_id':22,'listing_id':122,'listing_price_gbp':'11.00'},
+        {'role':'storage_secondary','title':'4TB SATA SSD','variant_id':21,'listing_id':120,'listing_price_gbp':'10.00'},
+        {'role':'storage_secondary','title':'4TB SATA SSD','variant_id':22,'listing_id':122,'listing_price_gbp':'11.00'},
     ])
 
     parts,blockers=assemble_components(definition,candidates)

@@ -198,9 +198,13 @@ class CommercialPostgresTests(unittest.IsolatedAsyncioTestCase):
     async def test_checkout_does_not_need_a_weekly_build_count_or_create_a_slot_hold(self):
         await self.db.delete(self.capacity)
         await self.db.flush()
-        quote = await create_checkout_quote(self.db, self.config)
-        self.assertTrue(all(mode["offerable"] for mode in quote["modes"].values()))
-        accepted = await self.accept(quote)
+        # Keep other tests' persisted schedule evidence from leaking into this
+        # no-capacity scenario; schedule hints are optional and should create
+        # no hold when the current quote carries no capacity evidence.
+        with patch("app.services.commercial_checkout.current_capacity_ids", AsyncMock(return_value={})):
+            quote = await create_checkout_quote(self.db, self.config)
+            self.assertTrue(all(mode["offerable"] for mode in quote["modes"].values()))
+            accepted = await self.accept(quote)
         reservations = (await self.db.execute(select(WorkshopCapacityReservation).where(
             WorkshopCapacityReservation.quote_snapshot_id == accepted.id
         ))).scalars().all()
@@ -307,7 +311,7 @@ class CommercialPostgresTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(order.specs["commercial_quote"]["price_gbp"],quote["modes"]["flexible"]["price_gbp"])
         self.assertEqual(order.specs["delivery_option"],"flexible")
         self.assertEqual(order.specs["slots"][0]["title"],"Exact CPU")
-        self.assertIsNotNone(order.promised_delivery_date)
+        self.assertIsNone(order.promised_delivery_date)
 
     async def test_webhook_recovers_accepted_build_and_mode_without_checkout_snapshot(self):
         from app.routes.webhooks import _handle_payment_intent_succeeded

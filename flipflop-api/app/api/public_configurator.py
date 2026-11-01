@@ -75,8 +75,6 @@ _SERVABLE = (Component3DAssetStatus.VALIDATED, Component3DAssetStatus.FINAL)
 
 
 def _variant_asset_is_publishable(variant: CatalogueVariant | None, asset: Component3DAsset | None) -> bool:
-    if variant and variant.status == "active" and asset and asset.category != "case":
-        return bool(asset.is_active and asset.status == Component3DAssetStatus.FINAL and asset.glb_ref)
     """A component model is public only for its exact owner-selected model photo set."""
     approval = (variant.asset_media_review or {}) if variant else {}
     model_image_urls = approval.get("model_image_urls") or (

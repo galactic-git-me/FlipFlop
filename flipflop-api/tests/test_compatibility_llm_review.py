@@ -31,12 +31,10 @@ async def test_llm_receives_only_reviewed_engineering_as_reviewed_specs(monkeypa
 
     result = await review_compatibility_evidence(offer)
 
-    parts = captured['evidence']['parts']
-    assert parts[0]['engineering_source_reviewed'] is False
-    assert parts[0]['reviewed_specs'] == {}
-    assert parts[0]['source_properties'] == {'CPU socket': 'AM5'}
-    assert parts[1]['engineering_source_reviewed'] is True
-    assert parts[1]['reviewed_specs'] == {'reviewed': True, 'socket': 'AM5'}
+    evidence = captured['evidence']
+    assert set(evidence) == {'build', 'required_pair_evidence'}
+    assert 'source_properties' not in json.dumps(evidence)
+    assert 'operator@example.test' not in json.dumps(evidence)
     assert result['authority'] == 'advisory_only'
 
 

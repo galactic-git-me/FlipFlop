@@ -27,7 +27,7 @@ def apply_pilot_rules(draft, tier):
         if floor:
             mode['minimum_contribution_gbp'],mode['minimum_margin_fraction'] = floor
         mode['maximum_delivery_working_days'] = None if name=='flexible' else DELIVERY_CEILINGS[name]
-        mode['costs'].update(build_labour='0.00', packaging='6.00',
+        mode['costs'].update(build_labour='0.00', packaging='10.00',
                              insurance='15.00', payment_fixed='0.20')
         # Fast premium depends on an assessed Standard total; no invented total.
         if name != 'fast_track':

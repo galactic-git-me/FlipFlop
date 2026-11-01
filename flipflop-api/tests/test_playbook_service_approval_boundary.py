@@ -15,13 +15,15 @@ async def test_refresh_releases_catalogue_locks_before_browser_collection_and_re
         async def __aenter__(self):return self
         async def __aexit__(self,*_args):return False
         async def commit(self):events.append('commit')
+        async def execute(self,*_args,**_kwargs):
+            return SimpleNamespace(scalar_one_or_none=lambda:None,scalars=lambda:SimpleNamespace(all=lambda:[]))
     monkeypatch.setattr(database,'AsyncSessionLocal',Session)
     async def ranks(**_kwargs):return {}
     async def royal(_db):events.append('royal');return {}
     async def sync(_db,*,check_free_software=True):
         events.append('catalogue' if check_free_software else 'catalogue_after_capture');return {}
     async def capture(_db):
-        assert events==['royal','commit','catalogue','commit','discovery','commit']
+        assert events==['royal','commit','commit','catalogue','commit','discovery','commit']
         events.append('capture');return {}
     async def discovery(_db):events.append('discovery');return {}
     monkeypatch.setattr('app.services.playbook_requirement_sources.discover_missing_requirement_sources',discovery)
@@ -35,7 +37,7 @@ async def test_refresh_releases_catalogue_locks_before_browser_collection_and_re
     monkeypatch.setattr(playbook_service,'refresh_playbooks',failed_build)
     with pytest.raises(RuntimeError,match='build failed'):
         await playbook_service.run_playbook_refresh(0)
-    assert events==['royal','commit','catalogue','commit','discovery','commit','capture','commit',
+    assert events==['royal','commit','commit','catalogue','commit','discovery','commit','capture','commit',
         'catalogue_after_capture','commit']
 
 
@@ -53,8 +55,10 @@ async def test_build_offer_assesses_approved_evidence_without_importing_supplier
                 "fresh": True,
                 "active_listing": True,
                 "stock_status": "available",
+                "condition": "new",
             },
             "catalogue_approved": True,
+            "photo_ready": True,
             "engineering": {},
         }
         for index, role in enumerate(roles, start=1)
@@ -72,6 +76,7 @@ async def test_build_offer_assesses_approved_evidence_without_importing_supplier
         lambda *_args: {"fast_track": True, "standard": True, "flexible": True},
     )
     monkeypatch.setattr(playbook_service, "evaluate_fit", lambda *_args, **_kwargs: [])
+    monkeypatch.setattr("app.services.playbook_planning_checks.wireless_extra_required", lambda *_args: [])
     monkeypatch.setattr(
         playbook_service,
         "estimate_delivery_products",
@@ -114,7 +119,7 @@ async def test_build_offer_assesses_approved_evidence_without_importing_supplier
 
     importer.assert_not_awaited()
     assert offer["purchasable"] is False
-    assert any("Supplier evidence awaits operator approval" in blocker for blocker in offer["blockers"])
+    assert any("Supplier evidence awaits operator approval" in blocker for blocker in offer["blockers"]), offer["blockers"]
 
 
 @pytest.mark.asyncio
@@ -128,6 +133,7 @@ async def test_build_offer_selects_standard_eligible_benchmark_qualified_shared_
     })
     monkeypatch.setattr(playbook_service, "_candidate_performance", lambda *_args: None)
     monkeypatch.setattr(playbook_service, "evaluate_fit", lambda *_args, **_kwargs: [])
+    monkeypatch.setattr("app.services.playbook_planning_checks.wireless_extra_required", lambda *_args: [])
 
     def policy(*_args):
         return SimpleNamespace(modes={mode: object() for mode in playbook_service.MODES})
@@ -144,7 +150,7 @@ async def test_build_offer_selects_standard_eligible_benchmark_qualified_shared_
 
     def source(days):
         return {"fresh": True, "commercial_capture_verified": True, "active_listing": True,
-            "stock_status": "available", "stock_evidence": "In stock", "postage_verified": True,
+            "stock_status": "available", "stock_evidence": "In stock", "condition": "new", "postage_verified": True,
             "delivery_working_days": days}
 
     candidates = [
@@ -153,18 +159,18 @@ async def test_build_offer_selects_standard_eligible_benchmark_qualified_shared_
             "landed_gbp": "100.00", "source_price_verified": True,
             "performance_evidence": {"benchmark_source": "passmark", "confidence_score": 0.9,
                 "overall_score": 100}, "engineering": {"reviewed": True},
-            "source_observation": source(9), "catalogue_approved": True},
+            "source_observation": source(9), "catalogue_approved": True, "photo_ready": True},
         {"role": "cpu", "title": "AMD Ryzen 5 5600X Processor", "variant_id": 11, "listing_id": 111,
             "slot_id": 1, "listing_price_gbp": "120.00", "supplier_postage_gbp": "0.00",
             "landed_gbp": "120.00", "source_price_verified": True,
             "performance_evidence": {"benchmark_source": "passmark", "confidence_score": 0.9,
                 "overall_score": 110}, "engineering": {"reviewed": True},
-            "source_observation": source(3), "catalogue_approved": True},
+            "source_observation": source(3), "catalogue_approved": True, "photo_ready": True},
         {"role": "gpu", "title": "NVIDIA GeForce RTX 4060 Graphics Card", "variant_id": 20,
             "listing_id": 120, "slot_id": 2, "listing_price_gbp": "200.00",
             "supplier_postage_gbp": "0.00", "landed_gbp": "200.00", "source_price_verified": True,
             "engineering": {"reviewed": True}, "source_observation": source(3),
-            "catalogue_approved": True},
+            "catalogue_approved": True, "photo_ready": True},
     ]
 
     definition = {"id": "TEST-DELIVERY", "segment": "Gaming", "tier": "Budget", "name": "Test build",
@@ -176,7 +182,7 @@ async def test_build_offer_selects_standard_eligible_benchmark_qualified_shared_
     assert selected["cpu"]["variant_id"] == 11
     assert selected["cpu"]["delivery_eligibility"]["standard"] is True
     assert offer["purchasable"] is False
-    assert any("Awaiting reviewed exact supplier costs" in blocker for blocker in offer["blockers"])
+    assert any("Awaiting reviewed exact supplier costs" in blocker for blocker in offer["blockers"]), offer["blockers"]
 
 
 @pytest.mark.asyncio

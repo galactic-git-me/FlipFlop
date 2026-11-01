@@ -4,7 +4,7 @@ from decimal import Decimal, InvalidOperation
 from urllib.parse import urlsplit
 import re
 
-from sqlalchemy import text
+from sqlalchemy import bindparam, text
 from app.gem_radar.identity import is_full_system_listing
 
 
@@ -118,17 +118,18 @@ async def stored_offers(db, cpks):
     """Latest capture per listing, never an old low price from that listing's history."""
     if 'simple_playbook_supplier_offers' not in db.info:
         rows = (await db.execute(text('''
-          WITH latest_ids AS MATERIALIZED (
-            SELECT DISTINCT ON (o.listing_id) o.id
+          WITH ranked_ids AS (
+            SELECT o.id, ROW_NUMBER() OVER (
+              PARTITION BY o.listing_id ORDER BY o.observed_at DESC,o.id DESC
+            ) AS listing_rank
             FROM gem_radar_listing_observations o
             WHERE o.observed_at >= :since
               AND o.source IN ('amazon','scan','overclockers','ebuyer','computer_orbit','awd_it','ccl')
-            ORDER BY o.listing_id,o.observed_at DESC,o.id DESC
           ) SELECT o.id,o.listing_id,c.cpk,c.cpk_data,o.title,o.source,o.item_price,o.mpn,
                    o.commercial_source_evidence,o.observed_at,o.category
-            FROM latest_ids ids JOIN gem_radar_listing_observations o ON o.id=ids.id
+            FROM ranked_ids ids JOIN gem_radar_listing_observations o ON o.id=ids.id
             LEFT JOIN gem_radar_listing_cpk c ON c.listing_id=o.listing_id
-            WHERE o.condition_normalised='new' AND o.listing_type='buy_it_now'
+            WHERE ids.listing_rank=1 AND o.condition_normalised='new' AND o.listing_type='buy_it_now'
               AND COALESCE(c.cpk_data->>'identity_status','') <> 'conflict'
           '''), {'since': datetime.utcnow()-timedelta(days=30)})).mappings().all()
         # Recover URLs only for relevant current listings, not by sorting the
@@ -137,25 +138,29 @@ async def stored_offers(db, cpks):
                  and (row['cpk'] in cpks or row['category']=='gpu')]
         urls={}
         if missing:
-            prior=(await db.execute(text('''
-              SELECT DISTINCT ON (source,listing_id) source,listing_id,
+            prior_query=text('''
+              WITH ranked_urls AS (
+              SELECT source,listing_id,
                      commercial_source_evidence->>'url' AS url
+                     ,ROW_NUMBER() OVER (PARTITION BY source,listing_id ORDER BY observed_at DESC,id DESC) AS row_rank
               FROM gem_radar_listing_observations
-              WHERE listing_id=ANY(:ids) AND observed_at>=:since
+              WHERE listing_id IN :ids AND observed_at>=:since
                 AND commercial_source_evidence->>'url' IS NOT NULL
-              ORDER BY source,listing_id,observed_at DESC,id DESC
-            '''),{'ids':missing,'since':datetime.utcnow()-timedelta(days=30)})).all()
+              ) SELECT source,listing_id,url FROM ranked_urls WHERE row_rank=1
+            ''').bindparams(bindparam('ids', expanding=True))
+            prior=(await db.execute(prior_query,{'ids':missing,'since':datetime.utcnow()-timedelta(days=30)})).all()
             urls={(row.source,row.listing_id):row.url for row in prior}
         # Some extension/import observations keep the exact retailer product
         # URL on the canonical listing instead of duplicating it into every
         # observation's evidence JSON. Recover that URL for the link only;
         # recorded_offer still marks the capture unverified and stock unknown
         # unless a product-page capture provides those facts.
-        canonical=(await db.execute(text('''
+        canonical_query=text('''
           SELECT external_id,url
           FROM listings
-          WHERE external_id=ANY(:ids) AND status='active' AND url IS NOT NULL
-        '''),{'ids':missing})).all()
+          WHERE external_id IN :ids AND status='active' AND url IS NOT NULL
+        ''').bindparams(bindparam('ids', expanding=True))
+        canonical=(await db.execute(canonical_query,{'ids':missing})).all()
         canonical_urls={listing_id:url for listing_id,url in canonical
             if urlsplit(url).hostname in UK_HOSTS}
         for row in rows:
