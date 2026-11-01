@@ -59,3 +59,18 @@ async def test_discovery_is_topic_scoped_and_returns_drafts_not_approval():
     assert results[0]["source_url"] == "https://support.example.com/downloads"
     assert "operator_approved" not in results[0]
     assert "claim" not in results[0]
+
+
+@pytest.mark.asyncio
+async def test_discovery_can_restrict_search_to_official_manufacturer_domain():
+    client = FakeSearchClient()
+
+    await discover_component_sources(
+        "MSI X870 GAMING PLUS WIFI",
+        "compatibility",
+        publisher_domains=("msi.com",),
+        client=client,
+    )
+
+    assert "site:msi.com" in client.params["q"]
+    assert '"MSI X870 GAMING PLUS WIFI"' in client.params["q"]

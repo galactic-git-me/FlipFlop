@@ -5,7 +5,7 @@ $api = Join-Path $repo 'flipflop-api'
 $statePath = Join-Path $env:LOCALAPPDATA 'FlipFlop\refresh-services.json'
 if ($Action -eq 'Stop') {
     $running = @()
-    foreach ($port in @(4311,18000)) {
+    foreach ($port in @(4314,18000)) {
         $listener = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
         if (-not $listener) { continue }
         $proc = Get-CimInstance Win32_Process -Filter "ProcessId=$($listener.OwningProcess)"
@@ -29,7 +29,7 @@ if ($Action -eq 'Stop') {
     $env:WEB_ONLY='true'
     foreach ($proc in $running) {
         if (Get-NetTCPConnection -LocalPort $proc.port -State Listen -ErrorAction SilentlyContinue) { continue }
-        $launchArgs = if ($proc.port -eq 4311) { @('run_dev.py','--host','0.0.0.0','--port','4311') } else { @('-m','uvicorn','app.gem_radar_standalone:app','--host','0.0.0.0','--port','18000') }
+        $launchArgs = if ($proc.port -eq 4314) { @('run_dev.py','--host','0.0.0.0','--port','4314') } else { @('-m','uvicorn','app.gem_radar_standalone:app','--host','0.0.0.0','--port','18000') }
         Start-Process -FilePath (Join-Path $api '.venv\Scripts\python.exe') -ArgumentList $launchArgs -WorkingDirectory $api -WindowStyle Hidden -RedirectStandardOutput (Join-Path $repo "logs\refresh-service-$($proc.port).log") -RedirectStandardError (Join-Path $repo "logs\refresh-service-$($proc.port).err")
     }
 }

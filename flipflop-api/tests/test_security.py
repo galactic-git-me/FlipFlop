@@ -415,7 +415,7 @@ class TestStripeWebhookSecurity:
     """Test Stripe webhook signature verification."""
 
     @patch("app.services.payment_service.stripe.Webhook.construct_event")
-    def test_webhook_signature_validation(self, mock_construct, client):
+    def test_webhook_signature_validation(self, mock_construct, client, monkeypatch):
         """Test that webhook signatures are validated."""
         webhook_event = {
             "id": "evt_test",
@@ -423,13 +423,15 @@ class TestStripeWebhookSecurity:
             "data": {"object": {}},
         }
         mock_construct.return_value = webhook_event
-
-        # Valid signature
-        response = client.post(
-            "/api/webhooks/stripe",
-            json=webhook_event,
-            headers={"stripe-signature": "valid_signature"},
-        )
+        monkeypatch.setenv("STRIPE_SECRET_KEY", "sk_test_isolated")
+        monkeypatch.setenv("STRIPE_WEBHOOK_SECRET", "whsec_isolated")
+        with patch("app.routes.webhooks.PaymentService") as payment_service:
+            payment_service.return_value.verify_webhook_signature.return_value = webhook_event
+            response = client.post(
+                "/api/webhooks/stripe",
+                json=webhook_event,
+                headers={"stripe-signature": "valid_signature"},
+            )
 
         # Should handle valid signature
         assert response.status_code == 200

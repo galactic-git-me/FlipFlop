@@ -55,6 +55,7 @@ _DOMAIN_TO_MARKETPLACE: dict[str, str] = {
     "bargainhardware.co.uk": "bargain_hardware",
     "newegg.com": "newegg_uk",
     "ebuyer.com": "ebuyer",
+    "gamers-outlet.net": "gamers_outlet",
     "google.com": "google_shopping",
     "google.co.uk": "google_shopping",
 }

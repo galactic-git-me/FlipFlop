@@ -279,10 +279,14 @@ class SubmissionQueueService:
         db: AsyncSession,
         limit: int = 100,
         search_run_id_prefix: str | None = None,
-    ) -> list[SubmissionQueue]:
+    ) -> list:
         """Return lightweight metadata for work still visible to operators."""
         stmt = (
-            select(SubmissionQueue)
+            select(SubmissionQueue.id, SubmissionQueue.search_run_id,
+                   SubmissionQueue.search_id, SubmissionQueue.query,
+                   SubmissionQueue.status, SubmissionQueue.last_attempt_at,
+                   SubmissionQueue.first_attempt_at, SubmissionQueue.ingested_new_count,
+                   func.coalesce(func.json_array_length(SubmissionQueue.listings_json), 0).label('listings_count'))
             .where(SubmissionQueue.status.in_(("pending", "processing")))
             .order_by(SubmissionQueue.status.desc(), SubmissionQueue.last_attempt_at)
             .limit(limit)
@@ -290,4 +294,4 @@ class SubmissionQueueService:
         if search_run_id_prefix:
             stmt = stmt.where(SubmissionQueue.search_run_id.like(search_run_id_prefix))
         result = await db.execute(stmt)
-        return list(result.scalars().all())
+        return list(result.all())

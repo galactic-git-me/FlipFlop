@@ -32,7 +32,7 @@ type Product = {
 };
 type Response = { categories: Category[]; selected_category: string; products: Product[] };
 
-const CATEGORY_KEYS = ["cpu", "gpu", "ram", "storage", "motherboard", "psu", "cooler", "case"];
+const CATEGORY_KEYS = ["cpu", "gpu", "ram", "storage", "motherboard", "psu", "cooler", "case", "os"];
 const IMAGE_TONES = ["from-cyan-950 via-slate-800 to-blue-900", "from-violet-950 via-slate-800 to-indigo-900", "from-emerald-950 via-slate-800 to-teal-900", "from-amber-950 via-slate-800 to-orange-900"];
 
 function vendorKeys(sources: string[] = []) {
@@ -151,7 +151,7 @@ export default function BestSellersPage() {
   const matchedCount = visible.filter(product => product.cpk).length;
 
   return <div className="catalogue-page min-h-full overflow-x-clip bg-[#05080d] p-4 text-slate-100 sm:p-6"><div className="mx-auto max-w-[1500px]">
-    <div className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between"><div><p className="mb-1 font-mono text-[10px] uppercase tracking-[0.24em] text-cyan-400">FlipFlop / Product discovery</p><h1 className="flex items-center gap-2 text-2xl font-bold tracking-tight text-white"><Trophy className="h-5 w-5 text-amber-300" />Amazon Best Sellers</h1><p className="mt-1 text-sm text-slate-400">Browse Amazon’s latest component bestseller lists and their matched marketplace coverage.</p></div><button type="button" onClick={() => setRefreshKey(value => value + 1)} className="inline-flex h-9 items-center gap-2 self-start rounded-md border border-white/10 bg-white/5 px-3 text-xs text-slate-300 transition hover:border-cyan-400/40 hover:text-white xl:self-auto"><RefreshCw className={loading ? "h-3.5 w-3.5 animate-spin" : "h-3.5 w-3.5"} />Refresh</button></div>
+    <div className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between"><div><p className="mb-1 font-mono text-[10px] uppercase tracking-[0.24em] text-cyan-400">FlipFlop / Product discovery</p><h1 className="flex items-center gap-2 text-2xl font-bold tracking-tight text-white"><Trophy className="h-5 w-5 text-amber-300" />Amazon Best Sellers</h1><p className="mt-1 text-sm text-slate-400">Browse Amazon’s latest component and physical operating-system bestseller lists with matched marketplace coverage.</p></div><button type="button" onClick={() => setRefreshKey(value => value + 1)} className="inline-flex h-9 items-center gap-2 self-start rounded-md border border-white/10 bg-white/5 px-3 text-xs text-slate-300 transition hover:border-cyan-400/40 hover:text-white xl:self-auto"><RefreshCw className={loading ? "h-3.5 w-3.5 animate-spin" : "h-3.5 w-3.5"} />Refresh</button></div>
 
     <div className="grid items-start gap-3 lg:grid-cols-[150px_minmax(0,1fr)]">
       <aside className="rounded-lg border border-white/10 bg-[#0b1119] p-3 lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto"><div className="mb-3 flex items-center justify-between"><span className="text-xs font-bold uppercase tracking-wider text-white">Category</span></div><div className="space-y-1">

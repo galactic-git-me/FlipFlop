@@ -1,8 +1,10 @@
-// Narrow, domain-scoped Chrome tools. Local credentials never enter tool responses.
+// Narrow, domain-scoped Chrome tools. Credentials never enter tool responses.
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import readline from 'node:readline';
 import { createRequire } from 'node:module';
+import { parseEnv } from 'node:util';
+
 const job = JSON.parse(await fs.readFile(process.env.FF_BROWSER_JOB_FILE, 'utf8'));
 const pack = job.payload;
 const require = createRequire(path.join(process.env.FF_ADMIN_DIR, 'package.json'));
@@ -51,24 +53,27 @@ async function envLogin(args) {
   if (!username && !password) throw new Error('Select the username or password field from the current observation');
   if (password && await password.getAttribute('type') !== 'password') throw new Error('Choose the actual password field');
   const prefix = { onbuy: 'FF_ONBUY', facebook_catalog: 'FF_FACEBOOK_MARKETPLACE', vinted: 'FF_VINTED' }[pack.channel];
-  if (!prefix) throw new Error('This channel does not use browser-stored seller credentials');
-  const login = process.env[`${prefix}_USERNAME`], secret = process.env[`${prefix}_PASSWORD`];
-  if ((username && !login) || (password && !secret)) throw new Error(`Set ${prefix}_USERNAME and ${prefix}_PASSWORD in the local .env.local file`);
+  let values;
+  try { values = parseEnv(await fs.readFile(process.env.FF_CREDENTIALS_FILE, 'utf8')); }
+  catch { throw new Error('The local seller credentials file is unavailable; configure FF_CREDENTIALS_FILE'); }
+  const login = values[prefix + '_USERNAME'], secret = values[prefix + '_PASSWORD'];
+  if (!login || !secret) throw new Error(`Set ${prefix}_USERNAME and ${prefix}_PASSWORD in the local .env.local file`);
   if (username) await username.fill(login);
   if (password) await password.fill(secret);
-  return { filled: true, message: 'Local credentials filled into the observed vendor sign-in form.' };
+  return { filled: true, message: 'Credentials filled locally; submit the observed sign-in form.' };
 }
+
 async function run(name, args) {
   if (name === 'seller_pack') return { ...pack, operation: job.operation,
-    instructions: job.operation === 'withdraw'
-      ? 'Open the saved previous listing in seller management and end it. Never delete the account or pay a fee. Verify the listing is ended, sold, or missing, then call confirm_withdrawal with the saved listing URL and ID. If its state is uncertain, block the job.'
-      : job.operation === 'reconcile'
-        ? 'Inspect the seller account order/listing status for this exact saved vendor item. Record active only if still buyable, ended only if ended without sale, missing only after searching the account, and sold only when seller-side order/sold evidence confirms the sale. Call confirm_reconciliation with the saved listing URL, item ID and observed state. Never edit the listing during a status check.'
-      : 'Check seller listings for this exact build before writing. Update active; relist ended; create only after confirming missing. No duplicate listings. Google Shopping is handled separately through Merchant API. Delivery only: never enable pickup. Stop for fees, account creation, MFA, CAPTCHA or a vendor restriction. Use env_login only for local .env.local credentials; never request, print or copy them.' };
+    instructions: ['inspect', 'sale_check'].includes(job.operation)
+      ? 'Read-only status check. Inspect this exact vendor listing and seller orders; mark sold only with an exact seller order and preserve its order ID. Call confirm_observation.'
+      : job.operation === 'withdraw'
+        ? 'End the exact previous listing in seller tools. Verify it is ended, missing, or sold and call confirm_observation. Do not delete accounts or pay fees.'
+        : 'Inspect seller listings first. Update active; relist ended; create only after confirming missing. No duplicates. Google Shopping is handled through Merchant API. Delivery only; no pickup. Stop for fees, account creation, MFA, CAPTCHA or vendor restrictions. Use env_login for local credentials without revealing them.' };
   if (name === 'browser_observe') return snapshot();
   if (name === 'browser_navigate') { await browser(); if (!allowed(args.url)) throw new Error('URL outside this vendor'); await page.goto(args.url); return snapshot(); }
   if (name === 'env_login') return envLogin(args);
-  if (name === 'remote_state') { inspected = true; remoteState = args.state; remoteStateNote = args.note; remoteStateOrderId = args.order_id || null; return { recorded: true, state: args.state, order_id_recorded: Boolean(remoteStateOrderId) }; }
+  if (name === 'remote_state') { inspected = true; remoteState = args.state; remoteStateNote = args.note; remoteStateOrderId = args.order_id || null; return { recorded: true, state: args.state, note: args.note, order_id_recorded: Boolean(remoteStateOrderId) }; }
   if (name === 'browser_click') {
     await browser();
     if (!inspected) throw new Error('First inspect seller listings and record the remote state');
@@ -109,21 +114,13 @@ async function run(name, args) {
     await fs.writeFile(process.env.FF_BROWSER_RESULT_FILE, JSON.stringify(result));
     return { confirmed: true, listing_url: page.url() };
   }
-  if (name === 'confirm_withdrawal') {
+  if (name === 'confirm_observation') {
     await browser(); await preflight();
-    if (job.operation !== 'withdraw' || !['ended', 'missing'].includes(remoteState) || args.url !== pack.previous_listing_url || args.external_id !== pack.previous_listing_id || !allowed(args.url)) throw new Error('Verify the saved vendor listing is ended or missing before confirming withdrawal');
-    const result = { status: 'succeeded', message: 'Codex confirmed the vendor listing is no longer active.', listing_url: args.url, external_id: args.external_id,
-      evidence: { title: pack.listing.title, price: pack.listing.price, verified_at: new Date().toISOString(), url: args.url } };
-    await fs.writeFile(process.env.FF_BROWSER_RESULT_FILE, JSON.stringify(result));
-    return { confirmed: true, withdrawn: true };
-  }
-  if (name === 'confirm_reconciliation') {
-    await browser(); await preflight();
-    if (job.operation !== 'reconcile' || !['active', 'ended', 'missing', 'sold'].includes(remoteState) || args.url !== pack.previous_listing_url || args.external_id !== pack.previous_listing_id || !allowed(args.url)) throw new Error('Confirm the saved vendor item and an observed active, ended, missing or sold seller-side status');
-    if (remoteState === 'sold' && (!remoteStateOrderId || !remoteStateNote)) throw new Error('A seller-side order ID and evidence note are required to confirm a sale');
-    const result = { status: 'succeeded', message: `Seller account reconciliation confirmed ${remoteState}.`, listing_url: args.url, external_id: args.external_id,
-      evidence: { title: pack.listing.title, price: pack.listing.price, verified_at: new Date().toISOString(), url: args.url, remote_state: remoteState, order_id: remoteStateOrderId, note: remoteStateNote } };
-    await fs.writeFile(process.env.FF_BROWSER_RESULT_FILE, JSON.stringify(result));
+    if (!['inspect', 'sale_check', 'withdraw'].includes(job.operation) || !inspected || !['active', 'ended', 'missing', 'sold', 'unknown'].includes(remoteState)) throw new Error('This job requires an observed seller listing status before completion');
+    if (remoteState === 'sold' && (!remoteStateOrderId || !remoteStateNote)) throw new Error('A seller order ID and evidence note are required to confirm a sale');
+    await fs.writeFile(process.env.FF_BROWSER_RESULT_FILE, JSON.stringify({ status: 'observed', message: `Seller-side status checked: ${remoteState}.`, remote_state: remoteState,
+      order_id: remoteStateOrderId, external_id: pack.previous_listing_id, listing_url: pack.previous_listing_url,
+      evidence: { verified_at: new Date().toISOString(), url: page.url(), note: remoteStateNote } }));
     return { confirmed: true, remote_state: remoteState };
   }
   if (name === 'block_job') {
@@ -139,16 +136,15 @@ const definitions = [
   ['seller_pack', 'Read the canonical seller pack and job instructions.', schema()],
   ['browser_observe', 'Observe Chrome with fresh element references.', schema()],
   ['browser_navigate', 'Navigate within the selected vendor only.', schema({ url: str })],
-  ['remote_state', 'Record the observed seller-listing state. For sold, include an exact seller order ID and evidence note.', schema({ state: { type: 'string', enum: ['active', 'ended', 'missing', 'sold', 'unknown', 'sign_in_required'] }, note: str, order_id: str }, ['state', 'note'])],
+  ['remote_state', 'Record the observed seller-listing state. For sold, provide the seller order ID and exact evidence note.', schema({ state: { type: 'string', enum: ['active', 'ended', 'missing', 'sold', 'unknown', 'sign_in_required'] }, note: str, order_id: str }, ['state', 'note'])],
   ['browser_click', 'Click an observed Chrome element; flag listing writes. Paid/account actions are blocked.', schema({ ref: str, writes_listing: bool })],
   ['browser_fill', 'Fill a listing field. Use saved pack data; never put passwords here.', schema({ ref: str, value: str })],
   ['browser_select', 'Select an option by its observed label.', schema({ ref: str, label: str })],
   ['browser_upload', 'Upload only seller-pack photographs by index.', schema({ ref: str, image_indexes: { type: 'array', items: { type: 'integer' } } })],
-  ['env_login', 'Fill configured local seller credentials into observed fields without returning either value. For two-stage forms provide the currently visible field only.', schema({ username_ref: str, password_ref: str }, [])],
+  ['env_login', 'Fill the selected vendor login from the configured local .env.local file without exposing credentials. For two-stage forms provide the currently visible field only.', schema({ username_ref: str, password_ref: str }, [])],
   ['confirm_listing', 'Read back the item page, verify canonical title and price, and persist the real item URL/ID. Call only after remote live state is confirmed.', schema({ url: str, external_id: str })],
-  ['confirm_withdrawal', 'Persist a confirmed seller-side listing withdrawal after observing its ended or missing state.', schema({ url: str, external_id: str })],
-  ['confirm_reconciliation', 'Persist a confirmed read-only seller-account status, including sale evidence.', schema({ url: str, external_id: str })],
-  ['block_job', 'Stop with a precise MFA, CAPTCHA, credential, seller-policy, account or uncertain-publication blocker.', schema({ reason: str })],
+  ['confirm_observation', 'Record a verified seller-side listing observation. A sold state requires an order ID.', schema()],
+  ['block_job', 'Stop with a precise MFA, CAPTCHA, credentials, seller-policy, account or uncertain-publication blocker.', schema({ reason: str })],
 ].map(([name, description, inputSchema]) => ({ name, description, inputSchema }));
 const lines = readline.createInterface({ input: process.stdin });
 // Serialize calls: each element reference belongs to one page observation.
@@ -163,7 +159,9 @@ for await (const line of lines) {
     else if (msg.method === 'tools/call') {
       try { result = { content: [{ type: 'text', text: JSON.stringify(await run(msg.params.name, msg.params.arguments || {})) }] }; }
       catch (e) {
-        result = { isError: true, content: [{ type: 'text', text: String(e.message).slice(0, 500) }] };
+        // CLI exceptions may contain the credential-bearing subprocess result.
+        const message = e.code || e.stdout || e.stderr ? 'Browser command failed; check local authentication without printing secrets.' : String(e.message);
+        result = { isError: true, content: [{ type: 'text', text: message }] };
       }
     } else if (msg.method === 'ping') result = {};
     else { process.stdout.write(JSON.stringify({ jsonrpc: '2.0', id: msg.id, error: { code: -32601, message: 'Method not found' } }) + '\n'); continue; }

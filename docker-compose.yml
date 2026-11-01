@@ -21,7 +21,7 @@ services:
       retries: 5
       start_period: 60s
     entrypoint: /bin/sh
-    command: -c "ollama serve & sleep 10 && ollama pull qwen2:7b && wait"
+    command: -c "ollama serve & sleep 10 && ollama pull qwen3.5:4b && wait"
 
 volumes:
   ollama_data:

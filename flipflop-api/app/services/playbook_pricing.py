@@ -133,6 +133,15 @@ async def price_playbook_build(
             catalogue_name = "curated" if mode == "curated" else "custom"
             raise InvalidBuildError(f"Variant {variant_id} is not available in the {catalogue_name} catalogue for slot {slot_id}")
 
+    storage_slot_ids={int(slot['slot_id']) for slot in selectable
+        if slot.get('slot_type')=='storage' or str(slot.get('slot_type','')).startswith('storage_')}
+    selected_storage_ids=[slot_selections[slot_id] for slot_id in storage_slot_ids if slot_id in slot_selections]
+    if len(selected_storage_ids)>1:
+        listing_rows=(await db.execute(select(CatalogueVariant.id,CatalogueVariant.listing_id).where(
+            CatalogueVariant.id.in_(selected_storage_ids)))).all()
+        if len({listing_id for _,listing_id in listing_rows})!=len(selected_storage_ids):
+            raise InvalidBuildError('Each required storage slot must use a different catalogue listing')
+
     curated_budget_ceiling = None
     if mode == "curated":
         defaults = {int(slot["slot_id"]): slot.get("default_variant_id") for slot in selectable}
@@ -245,6 +254,15 @@ async def price_playbook_build(
     subtotal = build.parts_total + LABOUR_COST
     build.overhead = subtotal * OVERHEAD_RATE
     build.total = round(subtotal + build.overhead, 2)
+    if mode == 'curated':
+        from app.services.curated_publication import curated_total, PublicationError
+        baseline = next((slot for slot in selectable if slot.get('approved_build_price') is not None), {})
+        try:
+            build.total = curated_total(baseline.get('approved_build_price'),
+                baseline.get('baseline_parts_total'), build.parts_total, OVERHEAD_RATE)
+        except PublicationError as exc:
+            raise InvalidBuildError(str(exc)) from exc
+        build.overhead = round(build.total - subtotal, 2)
     if curated_budget_ceiling is not None and build.total > curated_budget_ceiling:
         raise InvalidBuildError(
             f"This upgrade would take the build above the segment budget limit of £{curated_budget_ceiling:,.2f}"

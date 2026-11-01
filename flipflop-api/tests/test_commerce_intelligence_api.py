@@ -10,7 +10,8 @@ def test_admin_assessment_returns_non_offer_when_market_is_missing():
             "outbound_delivery": "20", "payment_cost": "20", "warranty_reserve": "20",
             "returns_reserve": "10", "expected_failure_cost": "10", "allocated_overhead": "30",
         },
-        market={"condition": "new", "sold_median_gbp": None, "sold_sample_size": 0},
+        market={"condition": "new", "sold_median_gbp": None, "sold_p75_gbp": None,
+                "sold_sample_size": 0, "minimum_sold_sample_size": None, "cap_method": None},
         condition="new", minimum_contribution_gbp="100", minimum_margin_fraction="0.15",
     )
     result = price_assessment(body)

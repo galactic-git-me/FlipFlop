@@ -89,10 +89,10 @@ function sseUrl(path: string): string {
   if (typeof window === "undefined") return "";
   const direct = process.env.NEXT_PUBLIC_SSE_URL;
   if (direct) return `${direct}${path}`;
-  // Derive from current hostname + backend port (4311 in dev, same as API_BASE_URL host in prod)
+  // Derive from current hostname + backend port (4314 in dev, same as API_BASE_URL host in prod)
   const apiBase = process.env.NEXT_PUBLIC_API_URL ?? "";
   if (apiBase.startsWith("http")) return `${apiBase}${path}`;
-  return `${window.location.protocol}//${window.location.hostname}:4311${path}`;
+  return `${window.location.protocol}//${window.location.hostname}:4314${path}`;
 }
 
 function useLogStream() {

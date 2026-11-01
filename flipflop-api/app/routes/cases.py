@@ -172,7 +172,10 @@ class CaseReferenceImage(BaseModel):
 
 
 class CaseReferenceApproval(BaseModel):
-    selected_images: list[CaseReferenceImage] = Field(min_length=4, max_length=4)
+    # Keep the old field for clients that still submit the original four-photo set.
+    selected_images: list[CaseReferenceImage] = Field(default_factory=list)
+    listing_images: list[CaseReferenceImage] | None = None
+    model_images: list[CaseReferenceImage] | None = None
 
 
 def _candidate_source(url: str, fallback: str = "manual") -> str:
@@ -306,6 +309,12 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
 def _priority_source_filter(source_site: str | None):
     if source_site == "Campaign":
         return Case.priority_3d_rank.isnot(None)
+    if source_site == "Amazon Top 100":
+        return and_(
+            Case.source_site == "Amazon",
+            Case.bestseller_rank.isnot(None),
+            Case.bestseller_rank <= 100,
+        )
     if source_site == "Retailers":
         return or_(Case.source_site == "Amazon", Case.source_site.ilike("%overclockers%"))
     if source_site == "Overclockers":
@@ -606,22 +615,25 @@ async def upload_3d_reference_candidates(
 
 @router.post("/{case_id}/3d-reference-selection")
 async def approve_3d_reference_selection(case_id: int, body: CaseReferenceApproval, db: AsyncSession = Depends(get_db)):
-    """Persist the owner's one-to-four-photo approval as a gate separate from generation."""
+    """Approve any number of listing photos and optionally a separate 1-4 photo model set."""
     case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
-    urls = [str(item.url) for item in body.selected_images]
-    if len(set(urls)) != len(urls):
-        raise HTTPException(status_code=422, detail="Choose different reference pictures")
+    listing_images = body.listing_images if body.listing_images is not None else body.selected_images
+    model_images = body.model_images if body.model_images is not None else body.selected_images
+    if not listing_images:
+        raise HTTPException(status_code=422, detail="Approve at least one listing photo")
+    if len(model_images) > 4:
+        raise HTTPException(status_code=422, detail="Choose no more than four photos for 3D generation")
+    for images, label in ((listing_images, "listing"), (model_images, "3D model")):
+        urls = [str(item.url) for item in images]
+        if len(set(urls)) != len(urls):
+            raise HTTPException(status_code=422, detail=f"Choose different {label} pictures")
 
     evidence = dict(case.sourcing_3d_evidence or {"schema_version": 1, "stages": {}})
     stages = dict(evidence.get("stages") or {})
-    if (stages.get("manufacturer_3d") or {}).get("status") not in ("not_found", "complete"):
-        raise HTTPException(status_code=409, detail="Finish the official/manufacturer 3D-model search before approving fallback photos")
-    if (stages.get("third_party_3d") or {}).get("status") != "not_found":
-        raise HTTPException(status_code=409, detail="Finish the licensed third-party 3D-model search before approving fallback photos")
-
-    selected = [item.model_dump(mode="json") for item in body.selected_images]
+    selected = [item.model_dump(mode="json") for item in listing_images]
+    model_selected = [item.model_dump(mode="json") for item in model_images]
     now = datetime.utcnow().isoformat()
     product_stage = dict(stages.get("product_images") or {"attempts": []})
     existing = {item.get("url"): item for item in product_stage.get("candidate_images") or [] if isinstance(item, dict)}
@@ -633,9 +645,10 @@ async def approve_3d_reference_selection(case_id: int, body: CaseReferenceApprov
         "approved_selection": {
             "status": "approved",
             "images": selected,
+            "model_images": model_selected,
             "approved_at": now,
-            "texture_reference_url": urls[0],
-            "generation_mode": "image-to-3d" if len(urls) == 1 else "multi-image-to-3d",
+            "texture_reference_url": str(model_images[0].url) if model_images else None,
+            "generation_mode": "image-to-3d" if len(model_images) == 1 else "multi-image-to-3d" if model_images else None,
             "requires_separate_model_approval": True,
         },
         "updated_at": now,
@@ -704,7 +717,7 @@ async def get_cases_priority_for_3d(
     """
     from sqlalchemy import case as sql_case
 
-    if source_site not in (None, "Campaign", "Retailers", "Amazon", "Overclockers"):
+    if source_site not in (None, "Campaign", "Retailers", "Amazon", "Amazon Top 100", "Overclockers"):
         raise HTTPException(status_code=400, detail="Unsupported case source")
     if limit < 1 or limit > 101 or offset < 0:
         raise HTTPException(status_code=400, detail="Invalid case page")

@@ -1,0 +1,38 @@
+{
+  "listing_ids": [
+    16011,
+    16023,
+    16161,
+    16177,
+    16417,
+    16429
+  ],
+  "attempted": 6,
+  "captured": 5,
+  "retained": 0,
+  "unresolved": 1,
+  "by_host": {
+    "www.amazon.co.uk": {
+      "attempted": 6,
+      "captured": 5,
+      "retained": 0,
+      "unresolved": 1,
+      "capture_seconds_total": 33.218,
+      "capture_seconds_max": 17.439,
+      "queue_wait_seconds_total": 8.114,
+      "queue_wait_seconds_max": 3.107,
+      "unresolved_reasons": {
+        "The exact Amazon ASIN page did not expose one selected GBP price": 1
+      }
+    }
+  },
+  "amazon_catalogue_attributes": {
+    "attempted": 2,
+    "captured": 0,
+    "unresolved": 0,
+    "unavailable": 6,
+    "cached_unavailable": 4,
+    "status": "partial"
+  },
+  "published": false
+}

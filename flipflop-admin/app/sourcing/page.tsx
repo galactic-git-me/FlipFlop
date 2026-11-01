@@ -9,6 +9,7 @@ import { VendorLogo } from "../../components/VendorLogo";
 import { PriceHistorySparkline } from "../../components/listings/PriceHistorySparkline";
 import { api, MarketSnapshot } from "@/lib/api";
 import { normalizeScoredListingsResponse } from "@/lib/scored-listings-response";
+import { loadSourcingRefresh } from "@/lib/sourcing-refresh";
 import { fuzzyMatches } from "@/lib/fuzzy";
 import { VENDOR_ORDER, VENDOR_META, canonicalVendorKey } from "@/lib/vendors";
 import {
@@ -556,6 +557,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
   const runFirstSeenAt = useRef(0);
   const observedPendingSweepAt = useRef<string | null>(null);
   const runWasCompleted = useRef(false);
+  const statusRequestInFlight = useRef(false);
   const runMaxima = useRef({
     binPricesCount: 0,
     soldPricesCount: 0,
@@ -590,14 +592,26 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
 
   useEffect(() => {
     const fetchStatus = async () => {
+      if (statusRequestInFlight.current) return;
+      statusRequestInFlight.current = true;
       try {
+        const readStatus = async (path: string) => {
+          try {
+            const response = await fetch(path, { cache: "no-store", signal: AbortSignal.timeout(15_000) });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.json();
+          } catch (error) {
+            console.warn(`Pipeline refresh failed: ${path}`, error);
+            return null;
+          }
+        };
         const [res, queueRes, lockRes] = await Promise.all([
-          fetch("/api/gem-radar/pipeline-status", { cache: "no-store" }),
-          fetch("/api/gem-radar/queue-items", { cache: "no-store" }),
-          fetch("/api/gem-radar/scan-lock", { cache: "no-store" }),
+          readStatus("/api/gem-radar/pipeline-status"),
+          readStatus("/api/gem-radar/queue-items"),
+          readStatus("/api/gem-radar/scan-lock"),
         ]);
-        if (res.ok) {
-          const data = await res.json();
+        if (res) {
+          const data = res;
           const activeScans = data.activeScans ?? [];
           const queueIsRunning = Boolean(
             queueStatus && (queueStatus.pending > 0 || queueStatus.processing > 0),
@@ -806,18 +820,19 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             setClientElapsed(0);
           }
         }
-        if (queueRes.ok) {
-          const queueData = await queueRes.json();
-          setQueueItems(queueData.items ?? []);
+        if (queueRes) {
+          setQueueItems(queueRes.items ?? []);
         }
-        if (lockRes.ok) setScanLock((await lockRes.json()) as PipelineStatusResponse["scanLock"]);
+        if (lockRes) setScanLock(lockRes as PipelineStatusResponse["scanLock"]);
       } catch (error) {
-        console.error("Error fetching pipeline status:", error);
+        console.warn("Pipeline refresh failed; retaining the last snapshot:", error);
+      } finally {
+        statusRequestInFlight.current = false;
       }
     };
 
     fetchStatus();
-    const interval = setInterval(fetchStatus, 1000); // Update every second
+    const interval = setInterval(fetchStatus, 5000); // Avoid competing with active ingestion.
     return () => clearInterval(interval);
   }, [displayedScans.length, queueStatus]);
 
@@ -848,13 +863,17 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
   const avgSuperGemScore = status?.avgSuperGemScore ?? 0;
   const avgGemScore = status?.avgGemScore ?? 0;
   const hasActiveRun = displayedScans.length > 0 || Boolean(status?.activeScans?.length);
-  const displayedListingCount = hasActiveRun ? (status?.totalsAcrossActive.ingestedCount ?? 0) : 0;
-  const displayedSuperGemCount = hasActiveRun ? superGemCount : 0;
-  const displayedAvgSuperGemScore = hasActiveRun ? avgSuperGemScore : 0;
-  const displayedGemCount = hasActiveRun ? gemCount : 0;
-  const displayedAvgGemScore = hasActiveRun ? avgGemScore : 0;
-  const displayedBinPricesCount = hasActiveRun ? (status?.binPricesCount ?? 0) : 0;
-  const displayedSoldPricesCount = hasActiveRun ? (status?.soldPricesCount ?? 0) : 0;
+  const displayedListingCount = hasActiveRun
+    ? (status?.totalsAcrossActive.ingestedCount ?? 0)
+    : latestRun?.metricsKnown
+      ? (latestRun.ingestedCount || latestRun.totalListingsFound)
+      : latestRun?.totalListingsFound ?? 0;
+  const displayedSuperGemCount = hasActiveRun ? superGemCount : latestRun?.superGemCount ?? 0;
+  const displayedAvgSuperGemScore = hasActiveRun ? avgSuperGemScore : latestRun?.avgSuperGemScore ?? 0;
+  const displayedGemCount = hasActiveRun ? gemCount : latestRun?.gemCount ?? 0;
+  const displayedAvgGemScore = hasActiveRun ? avgGemScore : latestRun?.avgGemScore ?? 0;
+  const displayedBinPricesCount = hasActiveRun ? (status?.binPricesCount ?? 0) : latestRun?.binPricesCount ?? 0;
+  const displayedSoldPricesCount = hasActiveRun ? (status?.soldPricesCount ?? 0) : latestRun?.soldPricesCount ?? 0;
 
   return (
     <div className="mb-6 p-4 rounded-lg glass-panel">
@@ -1109,7 +1128,7 @@ function MarketSnapshotPanel({ snapshot }: { snapshot: MarketSnapshot | null }) 
   );
 }
 
- 
+
 // thumbnails; next/image's domain allowlist isn't worth configuring for a
 // scraper whose image hosts vary listing to listing.
 function ListingThumbnail({ src, alt, size = 40 }: { src?: string | null; alt: string; size?: number }) {
@@ -1375,17 +1394,20 @@ function GemSpotlightCard({
 }
 
 function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | null> }) {
-  const componentLabels: Record<string, { label: string; emoji: string }> = {
-    cpu: { label: "Gem CPU", emoji: "⚡" },
-    gpu: { label: "Gem GPU", emoji: "🎮" },
-    motherboard: { label: "Gem Motherboard", emoji: "🔧" },
-    ssd: { label: "Gem SSD", emoji: "💿" },
-    psu: { label: "Gem PSU", emoji: "🔌" },
+  const componentLabels: Record<string, { label: string; emoji: string; accent: keyof typeof GEM_SPOTLIGHT_ACCENTS }> = {
+    motherboard: { label: "Gem Motherboard", emoji: "🔧", accent: "emerald" },
+    cpu: { label: "Gem CPU", emoji: "⚡", accent: "cyan" },
+    cooler: { label: "Gem CPU Cooler", emoji: "❄️", accent: "blue" },
+    ram: { label: "Gem Memory", emoji: "🧠", accent: "purple" },
+    gpu: { label: "Gem GPU", emoji: "🎮", accent: "purple" },
+    ssd: { label: "Gem Storage", emoji: "💾", accent: "blue" },
+    psu: { label: "Gem PSU", emoji: "🔌", accent: "amber" },
+    case: { label: "Gem PC Case", emoji: "🖥️", accent: "orange" },
   };
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6 mt-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3 mb-6 mt-6">
         {Object.keys(componentLabels).map((category) => {
           const gem = componentGems?.[category];
           return gem ? (
@@ -1393,10 +1415,10 @@ function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | 
               key={category}
               gem={gem}
               label={componentLabels[category].label}
-              accent={category === "cpu" ? "cyan" : category === "gpu" ? "purple" : category === "motherboard" ? "emerald" : category === "ssd" ? "blue" : "orange"}
+              accent={componentLabels[category].accent}
             />
           ) : (
-            <div key={category} className="min-h-48 rounded-2xl border border-white/10 bg-white/[0.03] p-5 flex flex-col justify-between">
+            <div key={category} className="aspect-square min-w-0 rounded-2xl border border-white/10 bg-white/[0.03] p-3 flex flex-col justify-between">
               <span className="text-[10px] uppercase tracking-wide font-semibold text-slate-400">{componentLabels[category].label}</span>
               <p className="text-sm text-slate-500">No qualifying gem in the current snapshot</p>
             </div>
@@ -1447,7 +1469,7 @@ function SourceBadge({ source }: { source: string }) {
   return (
     <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs font-semibold whitespace-nowrap ${SOURCE_COLORS[source] || "bg-slate-600 text-slate-200"}`}>
       {domain && (
-         
+
         <img
           src={`https://www.google.com/s2/favicons?domain=${domain}&sz=32`}
           alt=""
@@ -2686,6 +2708,17 @@ interface ScanRunHistory {
   runBy: string;
   durationSeconds: number;
   occurredAt: string;
+  metricsKnown?: boolean;
+  ingestedCount?: number;
+  cpkAssignedCount?: number;
+  marketPricedCount?: number;
+  classifiedCount?: number;
+  gemCount?: number;
+  superGemCount?: number;
+  avgGemScore?: number;
+  avgSuperGemScore?: number;
+  binPricesCount?: number;
+  soldPricesCount?: number;
 }
 
 type ScanChartMetric = "processed" | "observations";
@@ -2900,34 +2933,50 @@ const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
   );
 });
 
+interface SourcingAnalytics {
+  total: number;
+  classification_counts: Record<string, number>;
+  items: AnalyticsListing[];
+}
+
 const AnalyticsTab = memo(function AnalyticsTab() {
-  const [analytics, setAnalytics] = useState<{ items: AnalyticsListing[]; total: number; classification_counts: Record<string, number> } | null>(null);
+  const [analytics, setAnalytics] = useState<SourcingAnalytics | null>(null);
   const [analyticsError, setAnalyticsError] = useState<string | null>(null);
+
   useEffect(() => {
-    const controller = new AbortController();
-    fetch("/api/gem-radar/sourcing-analytics", { cache: "no-store", signal: controller.signal })
-      .then(async response => {
-        if (!response.ok) throw new Error(`Analytics API returned ${response.status}`);
-        return response.json();
+    let cancelled = false;
+    fetch("/api/gem-radar/sourcing-analytics", {
+      cache: "no-store",
+      signal: AbortSignal.timeout(30_000),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error(`Analytics request failed (${response.status})`);
+        return response.json() as Promise<SourcingAnalytics>;
       })
-      .then(data => { setAnalytics(data); setAnalyticsError(null); })
-      .catch(error => { if (!controller.signal.aborted) setAnalyticsError(String(error)); });
-    return () => controller.abort();
+      .then((data) => {
+        if (!cancelled) setAnalytics(data);
+      })
+      .catch((error: unknown) => {
+        if (!cancelled) setAnalyticsError(error instanceof Error ? error.message : "Could not load sourcing analytics");
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
-  const listings = analytics?.items ?? [];
+
   return (
     <div className="space-y-6">
       <ScanRunsOverTimeChart />
-      {analyticsError ? <p role="alert" className="rounded-lg border border-red-700 bg-red-950/30 p-3 text-sm text-red-200">{analyticsError}. Restart the local API if the new analytics endpoint is not active.</p> : !analytics ? <p role="status" className="text-sm text-slate-400">Loading full-population analytics…</p> : <p className="text-sm text-slate-400">Charts use {listings.length.toLocaleString()} stratified points from {analytics.total.toLocaleString()} active listings, independent of Listings filters. Every BSR-linked listing is included.</p>}
+      {analyticsError ? <p role="alert" className="rounded-lg border border-red-700 bg-red-950/30 p-3 text-sm text-red-200">{analyticsError}. Restart the local API if the new analytics endpoint is not active.</p> : !analytics ? <p role="status" className="text-sm text-slate-400">Loading full-population analytics…</p> : <p className="text-sm text-slate-400">Charts use {analytics.items.length.toLocaleString()} stratified points from {analytics.total.toLocaleString()} active listings, independent of Listings filters. Every BSR-linked listing is included.</p>}
       {analytics && <div className="flex flex-wrap gap-2 text-xs text-slate-300">{CLASSIFICATION_ORDER.map(c => <span key={c} className="rounded border border-slate-700 px-2 py-1">{c.replaceAll("_", " ")}: {(analytics.classification_counts[c] ?? 0).toLocaleString()}</span>)}</div>}
       {analytics && <>
       <div className="grid items-stretch gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-        <DealScoreRoiChart listings={listings} />
-        <InsightScatterChart listings={listings} kind="sellThrough" title="Price Variance vs Sell-through" description="Discount opportunity against observed market liquidity; bubble size is sold comparable count." insight="Upper-right points combine a meaningful discount with proven demand. A large discount with weak sell-through is a warning, not automatically a bargain." />
-        <InsightScatterChart listings={listings} kind="profitRoi" title="Expected Profit vs Model ROI" description="Absolute return against percentage return; bubble size is the listing price." insight="Top-right points are strongest on both measures. High ROI with tiny profit is a small-ticket opportunity; high profit with low ROI ties up more capital." />
-        <InsightScatterChart listings={listings} kind="confidenceVariance" title="Market Confidence vs Price Variance" description="How much the market supports the price gap; bubble size is comparable sample size." insight="Look for positive variance with high confidence. Large gaps supported by small samples or low confidence are the most likely false gems." />
-        <InsightScatterChart listings={listings} kind="amazonBestsellerVariance" title="Amazon Best Seller Rank vs Price Variance" description="Amazon category position against the gap to market; lower rank numbers are better. Bubble size is the listing price." insight="Look for a positive price gap with a low Amazon rank. Amazon rank is a product-level signal, not a measure of this marketplace listing's demand." />
-        <InsightScatterChart listings={listings} kind="priceMedian" title="Listing Price vs Market Median" description="Direct price positioning; the dashed diagonal marks parity with the market median." insight="Points above the diagonal have a listing price below market. The farther above, the larger the discount; use classification colour and bubble profit to judge quality." diagonal />
+        <DealScoreRoiChart listings={analytics.items} />
+        <InsightScatterChart listings={analytics.items} kind="sellThrough" title="Price Variance vs Sell-through" description="Discount opportunity against observed market liquidity; bubble size is sold comparable count." insight="Upper-right points combine a meaningful discount with proven demand. A large discount with weak sell-through is a warning, not automatically a bargain." />
+        <InsightScatterChart listings={analytics.items} kind="profitRoi" title="Expected Profit vs Model ROI" description="Absolute return against percentage return; bubble size is the listing price." insight="Top-right points are strongest on both measures. High ROI with tiny profit is a small-ticket opportunity; high profit with low ROI ties up more capital." />
+        <InsightScatterChart listings={analytics.items} kind="confidenceVariance" title="Market Confidence vs Price Variance" description="How much the market supports the price gap; bubble size is comparable sample size." insight="Look for positive variance with high confidence. Large gaps supported by small samples or low confidence are the most likely false gems." />
+        <InsightScatterChart listings={analytics.items} kind="amazonBestsellerVariance" title="Amazon Best Seller Rank vs Price Variance" description="Amazon category position against the gap to market; lower rank numbers are better. Bubble size is the listing price." insight="Look for a positive price gap with a low Amazon rank. Amazon rank is a product-level signal, not a measure of this marketplace listing's demand." />
+        <InsightScatterChart listings={analytics.items} kind="priceMedian" title="Listing Price vs Market Median" description="Direct price positioning; the dashed diagonal marks parity with the market median." insight="Points above the diagonal have a listing price below market. The farther above, the larger the discount; use classification colour and bubble profit to judge quality." diagonal />
       </div>
       <ClassificationLegend classifications={[...CLASSIFICATION_ORDER]} />
       </>}
@@ -3036,7 +3085,11 @@ function SourcingPageInner() {
   const [scanIntervalMinutes, setScanIntervalMinutes] = useState<number | null>(null);
   const [nowTick, setNowTick] = useState(() => Date.now());
   const [marketSnapshot, setMarketSnapshot] = useState<MarketSnapshot | null>(null);
+  const [refreshError, setRefreshError] = useState("");
   const dataRequestInFlight = useRef(false);
+  const currentTab = useRef(mainTab);
+  currentTab.current = mainTab;
+  const refreshSeconds = mainTab === "listings" ? 15 : 5;
 
   useEffect(() => {
     if (highlightListingId) setMainTab("listings");
@@ -3057,7 +3110,7 @@ function SourcingPageInner() {
       setNextScanAt(status.next_scan_at ? new Date(status.next_scan_at) : null);
       setScanIntervalMinutes(status.scan_interval_minutes);
     } catch (error) {
-      console.error("Error fetching scan schedule:", error);
+      console.warn("Scan schedule refresh failed; retaining the last snapshot:", error);
     }
   };
 
@@ -3065,7 +3118,7 @@ function SourcingPageInner() {
     try {
       setMarketSnapshot(await api.gemRadar.marketSnapshot());
     } catch (error) {
-      console.error("Error fetching market snapshot:", error);
+      console.warn("Market snapshot refresh failed; retaining the last snapshot:", error);
     }
   };
 
@@ -3076,23 +3129,31 @@ function SourcingPageInner() {
       // Do not let one unhealthy Gem Radar endpoint leave the whole page in
       // its initial loading state forever. Each poll gets a bounded lifetime;
       // the next scheduled refresh can recover normally.
-      const signal = AbortSignal.timeout(15_000);
-      const fetchCritical = async (url: string) => {
+      // Allow headroom for active sweeps; the in-flight guard prevents overlap.
+      const fetchCritical = async <T,>(url: string): Promise<T | null> => {
         try {
-          return await fetch(url, { cache: "no-store", signal });
+          const response = await fetch(url, { cache: "no-store", signal: AbortSignal.timeout(url.includes("scored-listings-latest-run") ? 30_000 : 15_000) });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          // The timeout also covers the body. Parse inside this request's
+          // catch so a slow listing body cannot discard a successful queue read.
+          return await response.json();
         } catch (error) {
           console.warn(`Gem Radar request failed: ${url}`, error);
           return null;
         }
       };
-      const [listingsRes, queueRes] = await Promise.all([
-        fetchCritical(`/api/gem-radar/scored-listings-latest-run?environment=${process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live" ? "LIVE" : "DEV"}&limit=100&offset=${(listingPage - 1) * 100}&paged=true&category=${listingFilters.component.toLowerCase()}&classification=${listingFilters.classification}&stock_lane=${listingFilters.stockLane}&title_query=${encodeURIComponent(listingFilters.title)}&sort_key=${listingFilters.sortKey}&sort_dir=${listingFilters.sortDir}`),
-        fetchCritical(`/api/gem-radar/queue-status`),
-      ]);
-      setBackendConnected(Boolean(listingsRes?.ok || queueRes?.ok));
+      const { listingsData, queueData, failedEndpoints } = await loadSourcingRefresh<unknown, QueueStatus>(
+        mainTab,
+        `/api/gem-radar/scored-listings-latest-run?environment=${process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live" ? "LIVE" : "DEV"}&limit=100&offset=${(listingPage - 1) * 100}&paged=true&category=${listingFilters.component.toLowerCase()}&classification=${listingFilters.classification}&stock_lane=${listingFilters.stockLane}&title_query=${encodeURIComponent(listingFilters.title)}&sort_key=${listingFilters.sortKey}&sort_dir=${listingFilters.sortDir}`,
+        fetchCritical,
+      );
+      // A slow request from a previous tab must not restore its warning here.
+      if (currentTab.current !== mainTab) return;
+      setBackendConnected(Boolean(listingsData || queueData));
+      setRefreshError(failedEndpoints.length ? `${failedEndpoints.join(" and ")} could not refresh. Showing the last available values; retrying automatically.` : "");
 
-      if (listingsRes?.ok) {
-        const data = normalizeScoredListingsResponse<Listing>(await listingsRes.json());
+      if (listingsData) {
+        const data = normalizeScoredListingsResponse<Listing>(listingsData);
         setListings(data.items);
         setListingHasMore(data.hasMore);
         setListingTotal(data.total);
@@ -3104,18 +3165,16 @@ function SourcingPageInner() {
           const superGems = data.items.filter((l: Listing) => l.classification === "SUPER_GEM").length;
           console.debug(`scored-listings page ${listingPage}: ${data.items.length} rows, ${superGems} SUPER_GEM, ${gems} GEM`);
         }
-      } else if (listingsRes) {
-        console.warn(`scored-listings returned ${listingsRes.status}`);
       }
-      if (queueRes?.ok) {
-        const data = await queueRes.json();
-        setQueueStatus(data);
+      if (queueData) {
+        setQueueStatus(queueData);
       }
 
-      if (listingsRes?.ok || queueRes?.ok) setLastUpdate(new Date());
-      setNextRefreshIn(5);
+      if (listingsData || queueData) setLastUpdate(new Date());
+      setNextRefreshIn(refreshSeconds);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      setRefreshError("Sourcing data could not refresh. Showing the last available values; retrying automatically.");
+      console.warn("Sourcing refresh failed:", error);
     } finally {
       dataRequestInFlight.current = false;
       setLoading(false);
@@ -3124,18 +3183,18 @@ function SourcingPageInner() {
 
   useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, 5000);
+    const interval = setInterval(fetchData, refreshSeconds * 1000);
 
     // Countdown timer for next refresh
     const countdown = setInterval(() => {
-      setNextRefreshIn((prev) => (prev > 0 ? prev - 1 : 5));
+      setNextRefreshIn((prev) => (prev > 0 ? prev - 1 : refreshSeconds));
     }, 1000);
 
     return () => {
       clearInterval(interval);
       clearInterval(countdown);
     };
-  }, [listingPage, listingFilters]);
+  }, [mainTab, listingPage, listingFilters]);
 
   useEffect(() => {
     let active = true;
@@ -3262,6 +3321,8 @@ function SourcingPageInner() {
           </button>
         </div>
       </div>
+
+      {refreshError && <p role="status" className="relative text-sm text-amber-300">{refreshError}</p>}
 
       {/* Main Tabs */}
       <div className="relative flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl px-3 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.35)]">

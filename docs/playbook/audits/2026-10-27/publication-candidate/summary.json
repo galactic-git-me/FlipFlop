@@ -1,0 +1,20 @@
+{
+  "cells": 24,
+  "ready_for_approval": 24,
+  "complete_hardware": 24,
+  "compatibility_verified": 24,
+  "standard_priced": 24,
+  "windows_vendor": "Gamers Outlet",
+  "published": false,
+  "pace_offerable": {
+    "fast_track": 0,
+    "standard": 24,
+    "flexible": 1
+  },
+  "component_pace_coverage": {
+    "fast_track": 27,
+    "standard": 219,
+    "flexible": 219
+  },
+  "flexible_delivery_promised": false
+}

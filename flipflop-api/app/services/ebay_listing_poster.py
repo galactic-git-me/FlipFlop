@@ -368,7 +368,10 @@ class EbayListingPoster:
     ) -> dict:
         """Create an eBay-native draft for the seller's eBay listing UX."""
         try:
-            image_urls = _normalise_ebay_image_urls(image_urls)
+            from app.services.channel_images import prepare_channel_urls
+            image_urls = _normalise_ebay_image_urls(await prepare_channel_urls(_normalise_ebay_image_urls(image_urls), "ebay"))
+            from app.services.ebay_media import prepare_listing_images
+            image_urls = await prepare_listing_images(image_urls, self.access_token, self.environment)
         except ValueError as exc:
             return {"success": False, "error": str(exc)}
 
@@ -605,7 +608,10 @@ class EbayListingPoster:
         }
         """
         try:
-            image_urls = _normalise_ebay_image_urls(image_urls)
+            from app.services.channel_images import prepare_channel_urls
+            image_urls = _normalise_ebay_image_urls(await prepare_channel_urls(_normalise_ebay_image_urls(image_urls), "ebay"))
+            from app.services.ebay_media import prepare_listing_images
+            image_urls = await prepare_listing_images(image_urls, self.access_token, self.environment)
         except ValueError as exc:
             return {"success": False, "error": str(exc)}
 
@@ -976,7 +982,10 @@ class EbayListingPoster:
         if not all((payment_policy_id, return_policy_id, fulfillment_policy_id)):
             return {"success": False, "error": "eBay business policy IDs are required (payment, returns and fulfilment)."}
         try:
-            image_urls = _normalise_ebay_image_urls(image_urls)
+            from app.services.channel_images import prepare_channel_urls
+            image_urls = _normalise_ebay_image_urls(await prepare_channel_urls(_normalise_ebay_image_urls(image_urls), "ebay"))
+            from app.services.ebay_media import prepare_listing_images
+            image_urls = await prepare_listing_images(image_urls, self.access_token, self.environment)
         except ValueError as exc:
             return {"success": False, "error": str(exc)}
 

@@ -11,7 +11,7 @@ Write-Host ""
 try {
     $process = Start-Process `
         -FilePath "cmd.exe" `
-        -ArgumentList @("/c", "cd flipflop-api && .venv\Scripts\python.exe run_dev.py --host 0.0.0.0 --port 4311") `
+        -ArgumentList @("/c", "cd flipflop-api && .venv\Scripts\python.exe run_dev.py --host 0.0.0.0 --port 4314") `
         -WorkingDirectory $projectRoot `
         -RedirectStandardOutput "$logFile.out" `
         -RedirectStandardError "$logFile.err" `

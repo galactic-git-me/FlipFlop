@@ -7,7 +7,7 @@ from app.database import get_db
 from app.models.app_settings import AppSettings
 from app.models.channel_listing import ChannelListing
 from app.models.manual_build import ManualBuild
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from hashlib import sha256
 from pathlib import Path
 from app.routes.admin_auth import get_current_admin
@@ -17,8 +17,68 @@ import hashlib
 from app.services.component_manual_library import normalize_manual_key
 from app.services.ai_setup_offers import normalise_ai_setup_offers, validate_ai_setup_offers
 from app.services.getting_started_guide import normalize_guide_text
+from app.services.business_details import BusinessDetails, read_business_details, save_business_details
 
 router = APIRouter(prefix="/settings", tags=["settings"])
+public_router = APIRouter(prefix="/public", tags=["public-business-details"])
+storefront_public_router = APIRouter(prefix="/public", tags=["public-storefront-settings"])
+
+DEFAULT_TRUST_MESSAGES = [
+    {"title": "🛡️ Trust & Protection 🛡️", "text": "Buy with confidence! Free UK delivery, 28-day returns, 12-month flipflop warranty and insured shipping. We've got you covered!", "audience": "all", "expires_at": None, "enabled": True, "priority": False},
+    {"title": "🖥️ Three Ways to Buy 🖥️", "text": "Your PC. Your rules! Choose Ready-to-Go, Curated-for-You or Built-by-You. Your perfect machine starts here!", "audience": "all", "expires_at": None, "enabled": True},
+    {"title": "⚡ Delivery Flexibility ⚡", "text": "Need speed or want savings? Fast Track, Standard or Flexible delivery. You choose the pace, we'll handle the rest!", "audience": "all", "expires_at": None, "enabled": True},
+    {"title": "🎨 Personalisation & 3D Builder 🎨", "text": "Don't just buy a PC. Make it yours! Customise every detail and see your dream machine come alive in our 3D builder!", "audience": "all", "expires_at": None, "enabled": True},
+    {"title": "🔧 Upgrade Your Existing PC 🔧", "text": "Love your PC but crave more power? Keep the good bits, upgrade what matters and give it a stunning new look!", "audience": "all", "expires_at": None, "enabled": True},
+    {"title": "💳 Flexible Payments 💳", "text": "Big performance. Smaller payments! Spread the cost or pay later with eligible checkout options.", "audience": "all", "expires_at": None, "enabled": True},
+    {"title": "🔍 Transparency & Value 🔍", "text": "No mystery parts. No nasty surprises! Know exactly what's inside, what it costs and why it's worth every penny!", "audience": "all", "expires_at": None, "enabled": True},
+    {"title": "❤️ After-Sales Support ❤️", "text": "Our commitment doesn't end at checkout! Real support, a 12-month warranty and help long after the unboxing!", "audience": "all", "expires_at": None, "enabled": True},
+    {"title": "🔥 Buy Today & Save 50% 🔥", "text": "Save 50% when you buy today!", "audience": "all", "expires_at": None, "enabled": True},
+]
+
+
+def _parse_expiry_datetime(value: str) -> datetime | None:
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except (TypeError, ValueError):
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+@storefront_public_router.get("/storefront-messages")
+async def public_storefront_messages(db: AsyncSession = Depends(get_db)):
+    settings = await _get_or_create(db)
+    messages = settings.storefront_trust_messages or DEFAULT_TRUST_MESSAGES
+    return {
+        "messages": [
+            {
+                **message,
+                "enabled": message.get("enabled", True),
+                "priority": message.get("priority", False),
+                "display_mode": "fixed" if message.get("priority", False) else "rotating",
+            }
+            for message in messages[:10]
+            if message.get("enabled", True)
+            and (message.get("expires_at") is None or (_parse_expiry_datetime(message["expires_at"]) or datetime.min.replace(tzinfo=timezone.utc)) > datetime.now(timezone.utc))
+        ],
+    }
+
+
+@router.get('/business-details', dependencies=[Depends(get_current_admin)])
+async def business_details_settings():
+    return read_business_details().model_dump()
+
+
+@router.put('/business-details', dependencies=[Depends(get_current_admin)])
+async def update_business_details_settings(body: BusinessDetails):
+    return save_business_details(body).model_dump()
+
+
+@public_router.get('/business-details')
+async def public_business_details():
+    return read_business_details().model_dump()
+
 GETTING_STARTED_GUIDE_PATH = Path(__file__).resolve().parents[2] / "data" / "getting-started-guide.md"
 GETTING_STARTED_GUIDE_LIMIT = 1_000_000
 COMPONENT_MANUAL_LIMIT = 25_000_000
@@ -99,6 +159,8 @@ async def upload_component_manual(
         db.add(item)
     await db.flush()
     return {
+        "storefront_trust_messages": s.storefront_trust_messages or DEFAULT_TRUST_MESSAGES,
+        "storefront_trust_message_seconds": s.storefront_trust_message_seconds or 6,
         "id": item.id, "component_key": item.component_key, "component_name": item.component_name,
         "source_url": item.source_url, "filename": item.filename, "sha256": item.sha256,
         "size_bytes": item.size_bytes, "is_active": item.is_active,
@@ -146,7 +208,8 @@ async def upload_getting_started_guide(file: UploadFile = File(...)):
         raise HTTPException(422, "Guide cannot be empty")
     GETTING_STARTED_GUIDE_PATH.parent.mkdir(parents=True, exist_ok=True)
     temporary_path = GETTING_STARTED_GUIDE_PATH.with_suffix(".md.tmp")
-    temporary_path.write_text(normalized, encoding="utf-8")
+    with temporary_path.open("w", encoding="utf-8", newline="\n") as guide_file:
+        guide_file.write(normalized)
     temporary_path.replace(GETTING_STARTED_GUIDE_PATH)
     saved = GETTING_STARTED_GUIDE_PATH.read_bytes()
     return {
@@ -169,6 +232,8 @@ ENV_BACKED_SETTINGS = {
 
 
 class SettingsUpdate(BaseModel):
+    storefront_trust_messages: list[dict] | None = None
+    storefront_trust_message_seconds: int | None = Field(default=None, ge=2, le=30)
     max_concurrent_flips: int | None = None
     default_sell_platform: str | None = None
     auto_buy_autonomous: bool | None = None
@@ -284,7 +349,14 @@ async def update_settings(body: SettingsUpdate, db: AsyncSession = Depends(get_d
     settings = await _get_or_create(db)
     # API credentials, providers and model endpoints are runtime configuration,
     # never user preferences. Ignore legacy fields so DB rows cannot shadow env.
-    for field, value in body.model_dump(exclude_none=True, exclude=ENV_BACKED_SETTINGS).items():
+    values = body.model_dump(exclude_none=True, exclude=ENV_BACKED_SETTINGS)
+    if "storefront_trust_messages" in values:
+        messages = values["storefront_trust_messages"]
+        allowed_audiences = {"all", "new_users", "returning_users"}
+        if not isinstance(messages, list) or len(messages) > 10 or any(not isinstance(item, dict) or not isinstance(item.get("title", ""), str) or len(item.get("title", "")) > 100 or not isinstance(item.get("text"), str) or not item["text"].strip() or len(item["text"]) > 240 or item.get("audience") not in allowed_audiences or ("enabled" in item and not isinstance(item["enabled"], bool)) or ("priority" in item and not isinstance(item["priority"], bool)) or (item.get("expires_at") is not None and (not isinstance(item["expires_at"], str) or _parse_expiry_datetime(item["expires_at"]) is None)) for item in messages):
+            raise HTTPException(422, "Configure up to 10 non-empty messages with audience all, new_users or returning_users")
+        values["storefront_trust_messages"] = [{"title": item.get("title", "").strip(), "text": item["text"].strip(), "audience": item["audience"], "expires_at": item.get("expires_at"), "enabled": item.get("enabled", True), "priority": item.get("priority", False)} for item in messages]
+    for field, value in values.items():
         setattr(settings, field, value)
     if body.relist_interval_days is not None:
         interval = max(1, body.relist_interval_days)

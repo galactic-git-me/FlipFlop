@@ -1,0 +1,56 @@
+{
+  "observed_at": "2026-10-22T20:22:48.535445+00:00",
+  "capture_method": "public retailer page via web fetch; derived observations only, no full source archive",
+  "commercially_approved": false,
+  "purpose": "AM4 source research preserves authored socket; AM5 basket is a separate redesign candidate, not an allowed AM4 substitution",
+  "delivery_policy_url": "https://www.pcupgrade.co.uk/delivery-policy/",
+  "offers": [
+    {
+      "url": "https://www.pcupgrade.co.uk/components/cpu-processors/amd-ryzen-5-5600g-3-9ghz-6-core-socket-am4-cpu/",
+      "mpn": "100-100000252BOX",
+      "title": "AMD Ryzen 5 5600G boxed",
+      "condition": "new",
+      "item_gbp": "164.39",
+      "stock_status": "retailer_states_in_stock",
+      "delivery_gbp": null,
+      "delivery_working_days": null,
+      "cooler_included": "retailer lists Wraith Stealth with pre-applied compound",
+      "blockers": [
+        "Postage amount not displayed",
+        "Generic next-working-day policy is not exact product/destination commitment",
+        "Retailer observation not yet imported through reviewed supplier evidence"
+      ]
+    },
+    {
+      "url": "https://www.awd-it.co.uk/amd-ryzen-5-5600g-six-core-4-4ghz-cpu-radeon-vega-7-graphics-processor-socket-am4.html",
+      "mpn": "100-100000252BOX",
+      "item_gbp": "159.99",
+      "stock_status": "out_of_stock",
+      "blockers": [
+        "Product-specific page says out of stock; navigation stock and search snippet must not qualify it"
+      ]
+    },
+    {
+      "url": "https://box.co.uk/100-100000252box-amd-ryzen-5-5600g-zen-3-processor",
+      "mpn": "100-100000252BOX",
+      "item_gbp": "154.99",
+      "stock_status": "out_of_stock",
+      "blockers": [
+        "Cannot source currently"
+      ]
+    },
+    {
+      "url": "https://www.memoryc.co.uk/59162-amd-ryzen-5-5600gt-3-6-ghz-6-core-socket-am4-16mb-l3-cache-desktop-cpu-processor.html",
+      "mpn": "100-100001488BOX",
+      "item_gbp": "170.24",
+      "delivery_gbp": "5.99",
+      "stock_status": "conflicting_page_claims",
+      "dispatch_estimate": "ships in six days; arrival unverified",
+      "blockers": [
+        "Page also says temporarily unavailable",
+        "Different CPU from authored 5600G, substitution pending review",
+        "Dispatch estimate is not arrival date"
+      ]
+    }
+  ]
+}

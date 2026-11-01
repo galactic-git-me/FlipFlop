@@ -49,8 +49,11 @@ def upgrade() -> None:
           reference_basis='fixed_retailer'
         WHERE component_key='APNX ChromaFlair Iridescent Chassis'
     """)
-    op.drop_index("uq_price_alerts_component_key", table_name="price_alerts")
-    op.execute("CREATE UNIQUE INDEX uq_price_alert_owner_cpk ON price_alerts (owner_admin_id, cpk) WHERE alert_type='component' AND cpk IS NOT NULL")
+    indexes = {item["name"] for item in sa.inspect(op.get_bind()).get_indexes("price_alerts")}
+    if "uq_price_alerts_component_key" in indexes:
+        op.drop_index("uq_price_alerts_component_key", table_name="price_alerts")
+    if "uq_price_alert_owner_cpk" not in indexes:
+        op.execute("CREATE UNIQUE INDEX uq_price_alert_owner_cpk ON price_alerts (owner_admin_id, cpk) WHERE alert_type='component' AND cpk IS NOT NULL")
 
 
 def downgrade() -> None:

@@ -1,0 +1,34 @@
+{
+  "observed_at": "2026-10-22T20:25:24.891174+00:00",
+  "approved_for_publication": false,
+  "files": {
+    "am4-retailer-source-review.json": "458c2c43971ccc7a47ddeee825d3ffc664d9b5feafc6f732943e89dc90a31172",
+    "am5-replacement-board-search.json": "4a38a246f79523f50147ca62874a7a3ee2e45b620c71a0d6160a5d37e04e1a42",
+    "entry-hardware-economics.json": "616a1bac4246f16c417e877cff054fb8ecca3132eaa561c6daf77109b3745d6d",
+    "exact-offer-B0FFVFD58L.json": "c1a1369a667b7b39cb291bc1ada236980a735c0462bb1af5ed7cf0dcaa487910",
+    "exact-offer-B0FQCJSMHC.json": "40ea0b9abc027ca5ffcaaecf428fdf0e4cde7d5f946edee2a94404ee5df114ca",
+    "exact-replacement-board-B0C4CKFV65.json": "29a4dae0f7fc535d40a0129dc9292bee5d5143e8db047d04143c8d15b5ba9280",
+    "exact-replacement-board-B0C6HX977C.json": "0b87cb7e3edefdff5d6672ae4b86b5fab8198f88f725bf77fb625d0669971b3a",
+    "exact-replacement-board-B0C9R3VLW4.json": "948b6c5438b13b6297cde84d2400a39b76f7ce69faffc4a7781dfa7f2bb7f260",
+    "focused-tests-after-identity-fixes.log": "b85535e93704fef5a099e8ebd1690a72b5fa59376d03f33a25d058efe43e67e4",
+    "README.md": "815cfa7ae42fbf83022a92da226ff5b6028d6a9264ed43ec0f2bd34dbcd3c047",
+    "sold-55fcef8566c0-20261022T201410Z.json": "ca0fb9e1eb98d49a9bfd8550cccaf7e791301f99607065c8cd46d83729ee0921",
+    "sold-61b87950af35-20261022T202328Z.json": "79c149ffc8fbda663be719d73c213d0f1e1851b8d501d22c2a96478a40837276",
+    "sold-7600-5060ti-requalified.json": "017b3f070e5fbb7fc7189255c232a2f78304ba6048c71cf6885e19f363c5a3b8",
+    "sold-821b97623fb0-20261022T202240Z.json": "8b9de4c0fec62c55ba3bfa73976410eda9cda88f407c90333feee6c476e8d551",
+    "sold-821b97623fb0-20261022T202318Z.json": "41049a5a634dbd0bf26d12d89a3b73eaa9833ba4c9291001cd7a954808655b0d",
+    "sold-aa55d7d880df-20261022T202236Z.json": "31473f888a107905a03c2ba040a3b39df53a7227b634ff0e611fbc7f775def23",
+    "sold-c67dbda57aec-20261022T202347Z.json": "681b72095a2ab038ff3c91551680a2acb1b6e21688567d6d930d2cbdb0304d45",
+    "sold-c6b08bbb9b1d-20261022T201430Z.json": "221c4b6fe2f98b47da9b96f8788ee7dc9cf49f96dae4c7a0d6f21cc27a8de4f8",
+    "sold-detail-178262455384-review.json": "d8fad206c5b6b22f5e103ce8c88939fb8b8b433631da7dabed0cfb4eee20ad83",
+    "sold-detail-297475566131-review.json": "05afca92014276c45a2f250fce3f3c302328c9d14be29e7b16142ca983ce9c7c",
+    "sold-e7150089df90-20261022T202337Z.json": "d0e514286ab815601bfa3868901db7d5916cde133bcd457b80df065dd4d9946e",
+    "sold-f23c63e358ed-20261022T201418Z.json": "5dfe1a33a4bbcce1e389b38c7a142b9e087ec6212bcef9f1dc30c180a54289d4"
+  },
+  "implementation_files": {
+    "flipflop-api/scripts/collect_playbook_sold_research.py": "386cd9314ac7aae0d622edd1d4b3e7e76b6140680280d1fa735260a8d744b892",
+    "flipflop-api/app/services/playbook_service.py": "2639a69d2005891a736235ba625e2a3bc3ff5b359e5a26dd6644a43567480190",
+    "flipflop-api/app/services/playbook_requirement_sources.py": "b7121ab24abae8db7ba5dc4014c824f222a9f9cd5ec91077909b4d634e8ef5b0",
+    "flipflop-api/tests/playbook_research_identity_contract_check.py": "b5d9efa989ffeb85b73b00e0ec579698962f16039053512a9b28717ac8a3ab74"
+  }
+}

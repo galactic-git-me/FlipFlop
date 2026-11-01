@@ -155,8 +155,8 @@ function VendorLogo({ channel }: { channel: CrossListingChannel }) {
     onbuy: "OnBuy",
     amazon: "Amazon",
     facebook_catalog: "Facebook Marketplace",
-    vinted: "Vinted",
     google_shopping: "Google Shopping",
+    vinted: "Vinted",
   };
   return <span>{labels[channel]}</span>;
 }
@@ -2516,7 +2516,7 @@ export default function CrossListingPage() {
                 destination{destinations.length === 1 ? "" : "s"} ={" "}
                 {selectedItems.length * destinations.length} job
                 {selectedItems.length * destinations.length === 1 ? "" : "s"}.
-                Chrome-managed channels run through the local Codex worker; queued work completes when its authenticated desktop worker is online.
+                Chrome-managed destinations run through the authenticated Codex desktop worker.
               </div>
               <ManualPackContents />
             </div>

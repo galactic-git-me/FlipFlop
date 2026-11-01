@@ -1,0 +1,3 @@
+{
+  "/api/cases/[caseId]/3d-reference-candidates/route": "app/api/cases/[caseId]/3d-reference-candidates/route.js"
+}

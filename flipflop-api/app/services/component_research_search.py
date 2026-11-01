@@ -87,6 +87,7 @@ async def discover_component_sources(
     component_name: str,
     topic: ResearchTopic,
     *,
+    publisher_domains: tuple[str, ...] = (),
     client: httpx.AsyncClient | None = None,
 ) -> list[dict[str, str]]:
     """Search for candidate sources without visiting or trusting result pages."""
@@ -95,7 +96,8 @@ async def discover_component_sources(
         raise ValueError("Enter one exact component name (maximum 240 characters)")
     if topic not in _TOPIC_QUERY:
         raise ValueError("Unsupported research topic")
-    query = f'"{clean_name}" {_TOPIC_QUERY[topic]}'
+    domain_filter = " OR ".join(f"site:{domain}" for domain in publisher_domains)
+    query = f'"{clean_name}" {f"({domain_filter}) " if domain_filter else ""}{_TOPIC_QUERY[topic]}'
     owns_client = client is None
     search_client = client or httpx.AsyncClient(
         headers=_HEADERS,

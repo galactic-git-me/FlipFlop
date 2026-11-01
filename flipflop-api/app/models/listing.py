@@ -38,7 +38,10 @@ class Listing(Base):
     # Raw listing data
     title: Mapped[str] = mapped_column(String(500))
     description: Mapped[str | None] = mapped_column(Text)
-    price: Mapped[float] = mapped_column(Float)
+    # A source candidate can be known by exact product identity before its
+    # retailer offer is captured. Keep the price unknown until that capture;
+    # catalogue variants and Playbook costs remain gated on a positive value.
+    price: Mapped[float | None] = mapped_column(Float, nullable=True)
     url: Mapped[str] = mapped_column(String(1000))
     image_urls: Mapped[list] = mapped_column(JSON, default=list)
     location: Mapped[str | None] = mapped_column(String(200))

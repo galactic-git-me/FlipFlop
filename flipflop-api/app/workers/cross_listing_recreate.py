@@ -6,8 +6,7 @@ from app.database import AsyncSessionLocal
 from app.models.channel_listing import ChannelListing
 from app.models.listing_publish_event import ListingPublishEvent
 from app.models.manual_build import ManualBuild
-from app.models.browser_listing_job import BrowserListingJob
-from app.services.browser_listing_jobs import BROWSER_CHANNELS, enqueue_browser_job, seller_pack
+from app.services.browser_listing_jobs import BROWSER_CHANNELS, enqueue_browser_job
 
 log = structlog.get_logger(__name__)
 MANUAL_CODEX_CHANNELS = BROWSER_CHANNELS
@@ -17,61 +16,6 @@ async def run_cross_listing_recreate_job() -> dict:
     now = datetime.utcnow()
     recreated = failed = queued = 0
     async with AsyncSessionLocal() as db:
-        # Compare the current canonical listing to the last browser-confirmed
-        # payload. Changed copy, price, specs or images become update jobs.
-        active_browser_ids = (await db.execute(select(ChannelListing.id).where(
-            ChannelListing.channel.in_(BROWSER_CHANNELS),
-            ChannelListing.status == "published",
-        ).order_by(ChannelListing.id.desc()).limit(250))).scalars().all()
-        for listing_id in active_browser_ids:
-            try:
-                row = await db.get(ChannelListing, listing_id)
-                if not row:
-                    continue
-                previous = (await db.execute(select(BrowserListingJob).where(
-                    BrowserListingJob.channel_listing_id == row.id,
-                    BrowserListingJob.status == "succeeded",
-                ).order_by(BrowserListingJob.id.desc()).limit(1))).scalars().first()
-                if not previous:
-                    continue
-                build = await db.get(ManualBuild, row.manual_build_id)
-                if not build or build.status == "sold" or build.is_archived:
-                    continue
-                from app.services.channel_images import prepare_channel_urls
-                originals = [p["url"] for p in build.photos or [] if isinstance(p, dict) and p.get("url") and p.get("kind", "photo") == "photo"]
-                images = await prepare_channel_urls(originals, row.channel)
-                current_pack = seller_pack(build, row, images)
-                current_pack["seller_url"] = previous.payload.get("seller_url", current_pack["seller_url"])
-                if current_pack == previous.payload:
-                    continue
-                await enqueue_browser_job(db, build.id, row.channel, operation="update", image_urls=images)
-                await db.commit()
-                queued += 1
-            except Exception:
-                await db.rollback()
-                log.exception("cross_listing_reconcile.update_queue_failed", listing_id=listing_id)
-
-        # A connected desktop worker checks each active seller listing on a
-        # rolling basis. Confirmed sales trigger the same cross-channel guard
-        # used by eBay email and storefront checkout.
-        for listing_id in active_browser_ids:
-            try:
-                row = await db.get(ChannelListing, listing_id)
-                if not row or row.status != "published":
-                    continue
-                build = await db.get(ManualBuild, row.manual_build_id)
-                if not build or build.status == "sold" or build.is_archived:
-                    continue
-                from app.services.channel_images import prepare_channel_urls
-                originals = [p["url"] for p in build.photos or [] if isinstance(p, dict) and p.get("url") and p.get("kind", "photo") == "photo"]
-                images = await prepare_channel_urls(originals, row.channel)
-                await enqueue_browser_job(db, build.id, row.channel, operation="reconcile", image_urls=images)
-                await db.commit()
-                queued += 1
-            except Exception:
-                await db.rollback()
-                log.exception("cross_listing_reconcile.status_queue_failed", listing_id=listing_id)
-
         ids = (await db.execute(select(ChannelListing.id).where(
             ChannelListing.recreate_enabled.is_(True), or_(ChannelListing.next_recreate_at <= now, ChannelListing.last_recreate_status == "awaiting_codex"),
             ChannelListing.status.in_(["published", "ended", "withdrawn", "submitted"])))) .scalars().all()
@@ -87,6 +31,10 @@ async def run_cross_listing_recreate_job() -> dict:
                     row.last_recreate_status = "skipped"
                     row.last_recreate_message = "Build is sold or unavailable."
                     await db.commit()
+                    continue
+                if row.channel == "google_shopping":
+                    # Merchant API refreshes product inputs before Google's
+                    # expiry window; it does not use marketplace relisting.
                     continue
                 if row.channel in BROWSER_CHANNELS:
                     from app.services.channel_images import prepare_channel_urls

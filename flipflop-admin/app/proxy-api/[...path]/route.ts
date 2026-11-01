@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const backendUrl = (process.env.BACKEND_URL ?? "http://localhost:4311").replace(/\/$/, "");
+const backendUrl = (process.env.BACKEND_URL ?? "http://localhost:4314").replace(/\/$/, "");
 const ebayOpsBackendUrl = (process.env.EBAY_OPS_BACKEND_URL ?? "").replace(/\/$/, "");
 
 function backendForPath(path: string[]): string {
@@ -24,7 +24,11 @@ function backendForPath(path: string[]): string {
 // httpOnly admin_session cookie before this handler forwards to FastAPI.
 async function forward(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
   const { path } = await context.params;
-  const target = `${backendForPath(path)}/api/${path.join("/")}${request.nextUrl.search}`;
+  const pathValue = path.join("/");
+  const target = `${backendForPath(path)}/api/${pathValue}${request.nextUrl.search}`;
+  // The Gem build route waits for a local compatibility review that can take
+  // up to 120 seconds. Keep the longer deadline scoped to this one endpoint.
+  const upstreamTimeout = pathValue === "gem-radar/gem-build-concepts" ? 180_000 : 120_000;
   const headers = new Headers();
 
   for (const name of ["authorization", "content-type", "accept", "range"]) {
@@ -51,7 +55,7 @@ async function forward(request: NextRequest, context: { params: Promise<{ path: 
     headers,
     body: ["GET", "HEAD"].includes(request.method) ? undefined : await request.arrayBuffer(),
     redirect: "manual" as const,
-    signal: AbortSignal.timeout(120_000),
+    signal: AbortSignal.timeout(upstreamTimeout),
   };
   // The public production endpoint sits behind Caddy and can occasionally
   // reset an idle HTTP connection. Retry once so a transient reset does not

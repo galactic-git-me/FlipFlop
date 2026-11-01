@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Settings, Save, RefreshCw, Database, Plus, Trash2, Link2, Unlink, Terminal, Circle, Search, Upload } from "lucide-react";
+import { Settings, Save, RefreshCw, Database, Plus, Trash2, Link2, Unlink, Terminal, Circle, Search, Upload, Eye, EyeOff, Star } from "lucide-react";
+import BusinessDetailsSettings from '@/components/settings/BusinessDetailsSettings';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { api, API_BASE_URL } from "@/lib/api";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 interface AppSettings {
+  storefront_trust_messages: { title: string; text: string; audience: 'all' | 'new_users' | 'returning_users'; expires_at?: string | null; enabled?: boolean; priority?: boolean }[];
   max_concurrent_flips: number;
   auto_buy_autonomous: boolean;
   auto_buy_daily_limit: number;
@@ -39,13 +41,13 @@ interface AppSettings {
   opportunity_super_roi_pct: number;
   opportunity_super_confidence: number;
   opportunity_super_liquidity: number;
-  opportunity_super_score: number;
+
   opportunity_super_market_discount_pct: number;
   opportunity_gem_profit_gbp: number;
   opportunity_gem_roi_pct: number;
   opportunity_gem_confidence: number;
   opportunity_gem_liquidity: number;
-  opportunity_gem_score: number;
+
   opportunity_gem_market_discount_pct: number;
   opportunity_delivery_fallback_gbp: number;
   opportunity_ebay_fee_pct: number;
@@ -54,11 +56,6 @@ interface AppSettings {
   opportunity_returns_warranty_pct: number;
   opportunity_minimum_sold_comps: number;
   opportunity_minimum_source_diversity: number;
-  opportunity_weight_economic_pct: number;
-  opportunity_weight_desirability_pct: number;
-  opportunity_weight_market_confidence_pct: number;
-  opportunity_weight_risk_safety_pct: number;
-  opportunity_weight_liquidity_pct: number;
 }
 
 interface DataSource {
@@ -70,17 +67,20 @@ interface DataSource {
   config?: Record<string, unknown>;
 }
 
-const SCORE_COMPONENTS = [
-  { label: "Economic return · 45%", description: "How attractive the resale economics are after purchase and selling costs.", calculation: "Compares the listing price with the median same-condition market price, subtracts delivery, fees, packaging, testing and reserve costs, then normalises expected profit and ROI against the configured GEM and SUPER GEM floors. It contributes 45% of the final score." },
-  { label: "Desirability · 15%", description: "How strongly buyers are likely to want the identified product.", calculation: "Uses product and category demand signals, preferred-product fit and inventory fit. It contributes 15%." },
-  { label: "Market confidence · 15%", description: "How trustworthy the market-price estimate is.", calculation: "Combines comparable sample size, source diversity and identity confidence. It contributes 15%." },
-  { label: "Risk safety · 5%", description: "How few risks or warnings were found for the listing.", calculation: "Starts from a safe score and deducts for identity, condition, seller and evidence risks. It contributes 5%." },
-  { label: "Liquidity · 20%", description: "How likely the item is to sell within a reasonable time.", calculation: "Uses sold volume, active competition and available watch or bid velocity. It contributes 20%." },
-] as const;
-
 const CLASSIFICATION_COLORS = ["#f97316", "#3b82f6", "#a78bfa", "#22c55e", "#eab308", "#ef4444", "#64748b", "#94a3b8"];
 
 const DEFAULTS: AppSettings = {
+  storefront_trust_messages: [
+    { title: '🛡️ Trust & Protection 🛡️', text: "Buy with confidence! Free UK delivery, 28-day returns, 12-month flipflop warranty and insured shipping. We've got you covered!", audience: 'all', expires_at: null, enabled: true, priority: false },
+    { title: '🖥️ Three Ways to Buy 🖥️', text: 'Your PC. Your rules! Choose Ready-to-Go, Curated-for-You or Built-by-You. Your perfect machine starts here!', audience: 'all', expires_at: null, enabled: true },
+    { title: '⚡ Delivery Flexibility ⚡', text: "Need speed or want savings? Fast Track, Standard or Flexible delivery. You choose the pace, we'll handle the rest!", audience: 'all', expires_at: null, enabled: true },
+    { title: '🎨 Personalisation & 3D Builder 🎨', text: "Don't just buy a PC. Make it yours! Customise every detail and see your dream machine come alive in our 3D builder!", audience: 'all', expires_at: null, enabled: true },
+    { title: '🔧 Upgrade Your Existing PC 🔧', text: 'Love your PC but crave more power? Keep the good bits, upgrade what matters and give it a stunning new look!', audience: 'all', expires_at: null, enabled: true },
+    { title: '💳 Flexible Payments 💳', text: 'Big performance. Smaller payments! Spread the cost or pay later with eligible checkout options.', audience: 'all', expires_at: null, enabled: true },
+    { title: '🔍 Transparency & Value 🔍', text: "No mystery parts. No nasty surprises! Know exactly what's inside, what it costs and why it's worth every penny!", audience: 'all', expires_at: null, enabled: true },
+    { title: '❤️ After-Sales Support ❤️', text: "Our commitment doesn't end at checkout! Real support, a 12-month warranty and help long after the unboxing!", audience: 'all', expires_at: null, enabled: true },
+    { title: '🔥 Buy Today & Save 50% 🔥', text: 'Save 50% when you buy today!', audience: 'all', expires_at: null, enabled: true },
+  ],
   max_concurrent_flips: 1,
   auto_buy_autonomous: false,
   auto_buy_daily_limit: 3,
@@ -110,13 +110,13 @@ const DEFAULTS: AppSettings = {
   opportunity_super_roi_pct: 25,
   opportunity_super_confidence: 80,
   opportunity_super_liquidity: 60,
-  opportunity_super_score: 85,
+
   opportunity_super_market_discount_pct: 35,
   opportunity_gem_profit_gbp: 30,
   opportunity_gem_roi_pct: 18,
   opportunity_gem_confidence: 70,
   opportunity_gem_liquidity: 45,
-  opportunity_gem_score: 75,
+
   opportunity_gem_market_discount_pct: 25,
   opportunity_delivery_fallback_gbp: 15,
   opportunity_ebay_fee_pct: 0,
@@ -125,11 +125,6 @@ const DEFAULTS: AppSettings = {
   opportunity_returns_warranty_pct: 5,
   opportunity_minimum_sold_comps: 3,
   opportunity_minimum_source_diversity: 2,
-  opportunity_weight_economic_pct: 45,
-  opportunity_weight_desirability_pct: 15,
-  opportunity_weight_market_confidence_pct: 15,
-  opportunity_weight_risk_safety_pct: 5,
-  opportunity_weight_liquidity_pct: 20,
 };
 
 function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void }) {
@@ -145,7 +140,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
   );
 }
 
-type TabKey = "opportunity" | "seller-policies" | "delivery" | "getting-ready" | "sources" | "extension-logs" | "sold-logs" | "server-logs" | "price-evidence";
+type TabKey = "opportunity" | "seller-policies" | "delivery" | "getting-ready" | "sources" | "extension-logs" | "sold-logs" | "server-logs" | "price-evidence" | "business" | "storefront";
 type ComponentManual = {id: number; component_key: string; component_name: string; source_url: string; filename: string; sha256: string; size_bytes: number; is_active: boolean};
 type AISetupOffer = {id: string; name: string; description: string; requires_vram_gb: number | null; enabled: boolean; price_gbp: number | null; commercial_scope_reviewed: boolean};
 
@@ -250,7 +245,25 @@ export default function SettingsPage() {
       ]);
 
       if (s.status === "fulfilled" && s.value) {
-        setSettings(prev => ({ ...prev, ...(s.value as Partial<AppSettings>) }));
+        setSettings(prev => {
+          const loaded = s.value as Partial<AppSettings>;
+          return {
+            ...prev,
+            ...loaded,
+            // Fill the empty/legacy three-message defaults with the supplied
+            // eight-message set, without overwriting any customized saved list.
+            storefront_trust_messages: loaded.storefront_trust_messages?.length === 3
+              && loaded.storefront_trust_messages.every(message => message.audience === 'all' && (
+                message.text === 'Every complete PC includes a 12-month FlipFlop warranty.'
+                || message.text === 'Tracked UK delivery with delivery insurance arranged by FlipFlop is included unless checkout says otherwise.'
+                || message.text === 'Clear returns terms before you buy. Change-of-mind return postage is normally paid by the customer.'
+              )) ? DEFAULTS.storefront_trust_messages : (loaded.storefront_trust_messages ?? prev.storefront_trust_messages).map((message, index) => ({
+                ...message,
+                title: message.title ?? DEFAULTS.storefront_trust_messages[index]?.title ?? `Message ${index + 1}`,
+                expires_at: message.expires_at ?? null,
+              })),
+          };
+        });
       }
       if (src.status === "fulfilled") {
         setSources(src.value ?? []);
@@ -269,7 +282,7 @@ export default function SettingsPage() {
       void loadEbayStatus();
     }, 0);
     return () => clearTimeout(t);
-     
+
   }, []);
 
   useEffect(() => {
@@ -391,7 +404,7 @@ export default function SettingsPage() {
     params.delete("reason");
     const query = params.toString();
     window.history.replaceState({}, "", `${window.location.pathname}${query ? `?${query}` : ""}`);
-     
+
   }, []);
 
   const saveSettings = async () => {
@@ -516,7 +529,7 @@ export default function SettingsPage() {
           variant="primary"
           size="sm"
           onClick={saveSettings}
-          disabled={saving || (tab !== "opportunity" && tab !== "seller-policies" && tab !== "delivery")}
+          disabled={saving || (tab !== "opportunity" && tab !== "seller-policies" && tab !== "delivery" && tab !== "storefront")}
         >
           <Save className="w-3.5 h-3.5" />
           {saving ? "Saving…" : saved ? "Saved ✓" : "Save"}
@@ -554,6 +567,8 @@ export default function SettingsPage() {
           { key: "opportunity", label: "Opportunity Scoring" },
           { key: "seller-policies", label: "Seller Policies" },
           { key: "delivery", label: "Delivery" },
+          { key: "business", label: "Business & recycling" },
+          { key: "storefront", label: "Storefront messages" },
           { key: "getting-ready", label: "Getting Ready" },
           { key: "sources", label: "Data Sources" },
           { key: "extension-logs", label: "Extension Logs" },
@@ -573,6 +588,28 @@ export default function SettingsPage() {
         ))}
       </div>
 
+      {tab === 'business' && <BusinessDetailsSettings />}
+      {tab === 'storefront' && (
+        <Card>
+          <CardHeader><CardTitle>Customer trust carousel</CardTitle><p className="text-xs text-slate-400">Add up to 10 messages. Starred priority messages stay visible as fixed calls to action beside the storefront; other messages rotate in the banner. Set an expiry date only when you want a message to stop appearing.</p><p className="text-xs text-slate-500">{settings.storefront_trust_messages.length} of 10 messages · Star = fixed priority message</p></CardHeader>
+          <CardContent className="space-y-4">
+            {settings.storefront_trust_messages.map((message, index) => <div key={index} className={`grid gap-3 rounded-xl border border-[#1e2d45] p-3 ${message.enabled === false ? 'opacity-60' : ''} md:grid-cols-[minmax(0,1fr)_12rem_12rem_auto_auto]`}>
+              <div className="space-y-2">
+                <label className="block text-xs text-slate-400">Title<input maxLength={100} value={message.title ?? ''} onChange={event => setSettings(current => ({ ...current, storefront_trust_messages: current.storefront_trust_messages.map((item, itemIndex) => itemIndex === index ? { ...item, title: event.target.value } : item) }))} className="mt-1 w-full rounded-lg border border-[#1e2d45] bg-[#0a1119] px-3 py-2 text-2xl font-semibold text-slate-100" /></label>
+                <label className="block text-xs text-slate-400">Message<textarea maxLength={240} rows={2} value={message.text} onChange={event => setSettings(current => ({ ...current, storefront_trust_messages: current.storefront_trust_messages.map((item, itemIndex) => itemIndex === index ? { ...item, text: event.target.value } : item) }))} className="mt-1 w-full resize-y rounded-lg border border-[#1e2d45] bg-[#0a1119] px-3 py-2 text-sm text-slate-100" /></label>
+              </div>
+              <label className="text-xs text-slate-400 md:self-end">Audience<select value={message.audience} onChange={event => setSettings(current => ({ ...current, storefront_trust_messages: current.storefront_trust_messages.map((item, itemIndex) => itemIndex === index ? { ...item, audience: event.target.value as typeof item.audience } : item) }))} className="mt-1 w-full rounded-lg border border-[#1e2d45] bg-[#0a1119] px-3 py-2 text-sm text-slate-100"><option value="all">All visitors</option><option value="new_users">New visitors only</option><option value="returning_users">Returning visitors only</option></select></label>
+              <label className="text-xs text-slate-400 md:self-end">Expires<input type="datetime-local" value={message.expires_at ? new Date(message.expires_at).toISOString().slice(0, 16) : ''} onClick={event => { const input = event.currentTarget; if ('showPicker' in input) input.showPicker(); }} onChange={event => setSettings(current => ({ ...current, storefront_trust_messages: current.storefront_trust_messages.map((item, itemIndex) => itemIndex === index ? { ...item, expires_at: event.target.value ? new Date(event.target.value).toISOString() : null } : item) }))} className="mt-1 w-full cursor-pointer rounded-lg border border-[#1e2d45] bg-[#0a1119] px-3 py-2 text-sm text-slate-100" /></label>
+              <div className="flex items-center gap-2 md:self-end">
+                <Button variant="secondary" size="sm" aria-label={message.priority ? 'Remove priority placement' : 'Set as priority call to action'} title={message.priority ? 'Priority call to action (fixed)' : 'Set as priority call to action'} onClick={() => setSettings(current => ({ ...current, storefront_trust_messages: current.storefront_trust_messages.map((item, itemIndex) => itemIndex === index ? { ...item, priority: !item.priority } : item) }))} className={message.priority ? 'text-amber-300 hover:text-amber-200' : 'text-slate-500 hover:text-amber-300'}><Star className="h-4 w-4" fill={message.priority ? 'currentColor' : 'none'} /></Button>
+                <Button variant="secondary" size="sm" aria-label={message.enabled === false ? 'Enable message' : 'Disable message'} title={message.enabled === false ? 'Enable message' : 'Disable message'} onClick={() => setSettings(current => ({ ...current, storefront_trust_messages: current.storefront_trust_messages.map((item, itemIndex) => itemIndex === index ? { ...item, enabled: item.enabled === false } : item) }))} className={message.enabled === false ? 'text-red-400 hover:text-red-300' : 'text-emerald-400 hover:text-emerald-300'}>{message.enabled === false ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}</Button>
+                <Button variant="secondary" size="sm" aria-label={`Remove ${message.title || `message ${index + 1}`}`} title="Remove message" onClick={() => setSettings(current => ({ ...current, storefront_trust_messages: current.storefront_trust_messages.filter((_, itemIndex) => itemIndex !== index) }))}><Trash2 className="h-4 w-4" /></Button>
+              </div>
+            </div>)}
+            {settings.storefront_trust_messages.length < 10 && <Button variant="secondary" size="sm" onClick={() => setSettings(current => ({ ...current, storefront_trust_messages: [...current.storefront_trust_messages, { title: '', text: '', audience: 'all', expires_at: null, enabled: true, priority: false }] }))}>Add message</Button>}
+          </CardContent>
+        </Card>
+      )}
       {tab === "getting-ready" && (
         <div className="space-y-4">
           <Card>
@@ -633,27 +670,7 @@ export default function SettingsPage() {
 
       {tab === "opportunity" && (
         <div className="space-y-6">
-          <div className="rounded-lg border border-sky-500/20 bg-sky-500/5 p-4 text-sm font-semibold text-slate-200">
-            This view shows the actual inputs used by Gem Radar. Identity and evidence gates run first; eligible listings then combine economics, desirability, market confidence, risk and liquidity into the deal score.
-          </div>
-          <Card>
-            <CardHeader><CardTitle>How the final score is built</CardTitle></CardHeader>
-            <CardContent className="grid grid-cols-2 md:grid-cols-5 gap-3 pt-0">
-              {SCORE_COMPONENTS.map((component, index) => {
-                const values = [100, opportunityAnalysis.average("desirability_score"), opportunityAnalysis.average("market_confidence"), opportunityAnalysis.average("risk_score"), opportunityAnalysis.average("liquidity_score")];
-                const weights = [settings.opportunity_weight_economic_pct, settings.opportunity_weight_desirability_pct, settings.opportunity_weight_market_confidence_pct, settings.opportunity_weight_risk_safety_pct, settings.opportunity_weight_liquidity_pct];
-                const tooltipId = `score-component-${index}`;
-                return <div key={component.label} className="group relative rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3"><div tabIndex={0} aria-describedby={tooltipId} className="rounded outline-none focus-visible:ring-2 focus-visible:ring-[#00dc82]/70"><p className="text-xs font-semibold text-slate-300">{component.label.replace(/ · \d+%$/, "")} · {weights[index]}% <span className="text-[#00dc82]" aria-hidden="true">ℹ</span></p><p className="mt-2 text-lg font-bold text-slate-100">{values[index].toFixed(0)}<span className="text-xs font-semibold text-slate-300">/100 avg</span></p><div className="mt-2 h-1.5 rounded-full bg-slate-800"><div className="h-full rounded-full bg-[#00dc82]" style={{ width: `${Math.max(0, Math.min(100, values[index]))}%` }} /></div></div><div id={tooltipId} role="tooltip" className="pointer-events-none absolute left-2 right-2 top-full z-30 mt-2 rounded-lg border border-[#00dc82]/40 bg-[#07101a] p-3 text-xs text-slate-200 opacity-0 shadow-xl transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"><p className="font-bold text-[#00dc82]">{component.label.replace(/ · \d+%$/, "")} · {weights[index]}%</p><p className="mt-1 font-semibold">{component.description}</p><p className="mt-1 text-slate-300">{component.calculation.replace(/It contributes \d+%/, `It contributes ${weights[index]}%`)}</p></div></div>;
-              })}
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader><CardTitle>Score component weights</CardTitle><p className="text-xs font-semibold text-slate-300">Choose how much each component contributes to the final score. Values are percentages; the scorer normalises them to their total. Set a component to 0 to remove its influence.</p></CardHeader>
-            <CardContent className="grid grid-cols-2 md:grid-cols-5 gap-3 pt-0">
-              {[["opportunity_weight_economic_pct", "Economic return"], ["opportunity_weight_desirability_pct", "Desirability"], ["opportunity_weight_market_confidence_pct", "Market confidence"], ["opportunity_weight_risk_safety_pct", "Risk safety"], ["opportunity_weight_liquidity_pct", "Liquidity"]].map(([field, label]) => { const key = field as keyof AppSettings; return <label key={field} className="text-xs font-semibold text-slate-300">{label}<div className="relative mt-1"><input type="number" min={0} max={100} step="1" aria-label={`${label} weight`} value={settings[key] as number} onChange={e => { setOpportunityPreviewDirty(true); setSettings(p => ({ ...p, [key]: Math.max(0, Math.min(100, Number(e.target.value))) })); }} className="w-full px-3 py-2 pr-8 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm font-bold text-slate-100" /><span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-500">%</span></div></label>; })}
-              <p className="col-span-full text-xs font-semibold text-slate-400">Total weight: <strong className={Math.abs(settings.opportunity_weight_economic_pct + settings.opportunity_weight_desirability_pct + settings.opportunity_weight_market_confidence_pct + settings.opportunity_weight_risk_safety_pct + settings.opportunity_weight_liquidity_pct - 100) < 0.01 ? "text-emerald-400" : "text-amber-300"}>{(settings.opportunity_weight_economic_pct + settings.opportunity_weight_desirability_pct + settings.opportunity_weight_market_confidence_pct + settings.opportunity_weight_risk_safety_pct + settings.opportunity_weight_liquidity_pct).toFixed(0)}%</strong> · the scorer normalises the total automatically.</p>
-            </CardContent>
-          </Card>
+          <div className="rounded-lg border border-sky-500/20 bg-sky-500/5 p-4 text-sm font-semibold text-slate-200">Profit, ROI, and below-market thresholds change GEM and SUPER GEM classifications. Evidence thresholds affect whether a qualifying deal is safe to act on. The chart previews classification changes for currently active scored listings; save to apply the thresholds to future scoring.</div>
           <Card>
             <CardHeader><CardTitle>Current classifications and live preview</CardTitle><p className="text-xs font-semibold text-slate-300">{opportunityLoading ? "Loading active scored listings…" : `Showing ${opportunityCounts.active} active scored listings${opportunityCounts.total > opportunityCounts.active ? ` · ${opportunityCounts.total} scored listings retained in the database (${opportunityCounts.historical} historical)` : ""}`}. Current total: <strong className="text-orange-300">{opportunityAnalysis.currentTotal}</strong> · Preview total: <strong className="text-blue-300">{opportunityAnalysis.previewTotal}</strong>. Change a value below to see the estimated split before saving. Historical rows are retained for evidence and price history but are excluded from this current inventory preview. Below-market price is calculated as <strong className="text-slate-200">(market median − listing price) ÷ market median</strong>.</p></CardHeader>
             <CardContent className="pt-0 space-y-3">
@@ -670,7 +687,7 @@ export default function SettingsPage() {
                   <span className="rounded-full border border-[#1e2d45] px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-400">{marketSnapshotCount == null ? "Market snapshot unavailable" : `Market snapshot: ${marketSnapshotCount.toLocaleString()} listings`}</span>
                 </div>
                 <div className="mt-3 grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-6">
-                  {[["Eligible", opportunityAnalysis.diagnostics.eligible, "Listings without a hard identity or policy veto. These rows are allowed to continue through the opportunity gates."], ["Evidence", opportunityAnalysis.diagnostics.evidence, "Eligible listings with enough same-condition market evidence and sold comparables to calculate a reliable deal."], ["Economics", opportunityAnalysis.diagnostics.economics, "Listings that meet the selected tier's minimum profit and ROI requirements."], ["Market threshold", opportunityAnalysis.diagnostics.market, "Listings that also meet the tier's required percentage below the same-condition market price."], ["Confidence + liquidity", opportunityAnalysis.diagnostics.confidenceLiquidity, "Listings that pass the minimum market-confidence and demand/liquidity requirements."], ["Score gate", opportunityAnalysis.diagnostics.final, "Listings whose weighted final score reaches the Super Gem score threshold. The preview's five weight controls affect this gate."]].map(([label, value, explanation]) => <div key={label as string} title={explanation as string} className="cursor-help rounded border border-[#1e2d45] bg-[#0a1119] p-2"><p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">{label}</p><p className="mt-1 text-lg font-bold text-slate-100">{(value as number).toLocaleString()}</p></div>)}
+                  {[["Eligible", opportunityAnalysis.diagnostics.eligible, "Listings without a hard identity veto."], ["Evidence", opportunityAnalysis.diagnostics.evidence, "Listings with enough recorded sold comparables."], ["Economics", opportunityAnalysis.diagnostics.economics, "Listings meeting the configured profit and ROI floors."], ["Market threshold", opportunityAnalysis.diagnostics.market, "Listings meeting the configured below-market price threshold."]].map(([label, value, explanation]) => <div key={label as string} title={explanation as string} className="cursor-help rounded border border-[#1e2d45] bg-[#0a1119] p-2"><p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">{label}</p><p className="mt-1 text-lg font-bold text-slate-100">{(value as number).toLocaleString()}</p></div>)}
                 </div>
                <p className="mt-2 text-[11px] font-semibold text-slate-500">Identity failed ({opportunityAnalysis.identityFailedCount.toLocaleString()}) and insufficient data ({opportunityAnalysis.insufficientDataCount.toLocaleString()}) are excluded before these gates. Current scored rows: {opportunityAnalysis.currentTotal.toLocaleString()}; market snapshot rows: {marketSnapshotCount?.toLocaleString() ?? "—"}{marketSnapshotCount != null && marketSnapshotCount !== opportunityAnalysis.currentTotal ? ` · ${Math.abs(marketSnapshotCount - opportunityAnalysis.currentTotal).toLocaleString()} snapshot rows are outside the active buy-now scored dataset (for example auctions or rows not scored yet).` : ""}</p>
               </div>
@@ -699,11 +716,11 @@ export default function SettingsPage() {
             </CardHeader>
             <CardContent className="pt-0 overflow-x-auto">
               <div className="min-w-[760px]">
-                <div className="grid grid-cols-[1.35fr_repeat(6,minmax(95px,1fr))] gap-2 px-3 pb-2 text-[10px] font-bold uppercase tracking-wide text-slate-500">
-                  <span>Tier</span><span>Profit</span><span>ROI</span><span className="text-[#00dc82]">Below market</span><span>Confidence</span><span>Liquidity</span><span>Score</span>
+                <div className="grid grid-cols-[1.35fr_repeat(3,minmax(95px,1fr))] gap-2 px-3 pb-2 text-[10px] font-bold uppercase tracking-wide text-slate-500">
+                  <span>Tier</span><span>Profit</span><span>ROI</span><span className="text-[#00dc82]">Below market</span>
                 </div>
-                {[{ title: "SUPER GEM", prefix: "opportunity_super", tone: "text-amber-300", fields: [["profit_gbp", "£"], ["roi_pct", "%"], ["market_discount_pct", "%"], ["confidence", "/100"], ["liquidity", "/100"], ["score", "/100"]] }, { title: "GEM", prefix: "opportunity_gem", tone: "text-cyan-300", fields: [["profit_gbp", "£"], ["roi_pct", "%"], ["market_discount_pct", "%"], ["confidence", "/100"], ["liquidity", "/100"], ["score", "/100"]] }].map(group => (
-                  <div key={group.prefix} className="grid grid-cols-[1.35fr_repeat(6,minmax(95px,1fr))] items-center gap-2 rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3 mb-2">
+                {[{ title: "SUPER GEM", prefix: "opportunity_super", tone: "text-amber-300", fields: [["profit_gbp", "£"], ["roi_pct", "%"], ["market_discount_pct", "%"]] }, { title: "GEM", prefix: "opportunity_gem", tone: "text-cyan-300", fields: [["profit_gbp", "£"], ["roi_pct", "%"], ["market_discount_pct", "%"]] }].map(group => (
+                  <div key={group.prefix} className="grid grid-cols-[1.35fr_repeat(3,minmax(95px,1fr))] items-center gap-2 rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3 mb-2">
                     <div><p className={`text-sm font-bold ${group.tone}`}>{group.title}</p><p className="text-[10px] text-slate-500">All gates required</p></div>
                     {group.fields.map(([suffix, unit]) => { const key = `${group.prefix}_${suffix}` as keyof AppSettings; const fallback = DEFAULTS[key]; return <label key={key} className={`text-xs font-semibold ${suffix === "market_discount_pct" ? "text-[#00dc82]" : "text-slate-300"}`}><span className="sr-only">{group.title} {suffix}</span><div className="relative"><input type="number" min={0} step="0.1" aria-label={`${group.title} ${suffix}`} value={typeof settings[key] === "number" && Number.isFinite(settings[key] as number) ? settings[key] as number : typeof fallback === "number" ? fallback : 0} onChange={e => { setOpportunityPreviewDirty(true); setSettings(p => ({ ...p, [key]: Number(e.target.value) })); }} className="w-full px-2 py-2 pr-9 bg-[#07101a] border border-[#1e2d45] rounded-lg text-sm font-bold text-slate-100" /><span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-500">{unit}</span></div></label>; })}
                   </div>
@@ -922,6 +939,7 @@ export default function SettingsPage() {
         </div>
       )}
 
+
       {tab === "sources" && (
         <Card>
           <CardHeader>
@@ -1052,16 +1070,6 @@ interface OpportunityPolicyItem {
 const COMPONENT_CATEGORIES = new Set(["cpu", "gpu", "motherboard", "ram", "ssd", "psu", "case", "cooler", "fan"]);
 
 function policyEconomics(item: OpportunityPolicyItem, settings: AppSettings) {
-  const category = (item.category ?? "").toLowerCase();
-  if (category === "cpu" || category === "ram" || category === "ssd" || category === "cooler" || category === "fan") {
-    return { superProfit: 8, superRoi: 25, gemProfit: 3, gemRoi: 15 };
-  }
-  if (category === "motherboard" || category === "psu" || category === "case") {
-    return { superProfit: 15, superRoi: 22, gemProfit: 6, gemRoi: 16 };
-  }
-  if (category === "gpu") {
-    return { superProfit: 25, superRoi: 20, gemProfit: 12, gemRoi: 15 };
-  }
   return {
     superProfit: settings.opportunity_super_profit_gbp,
     superRoi: settings.opportunity_super_roi_pct,
@@ -1070,24 +1078,13 @@ function policyEconomics(item: OpportunityPolicyItem, settings: AppSettings) {
   };
 }
 
-function weightedOpportunityScore(item: OpportunityPolicyItem, settings: AppSettings, profit: number, roi: number, economics: ReturnType<typeof policyEconomics>) {
-  const economic = Math.max(0, Math.min(100, (roi / economics.superRoi) * 55 + (profit / economics.superProfit) * 45));
-  const values = [economic, item.desirability_score ?? 0, item.market_confidence ?? 0, item.risk_score ?? 0, item.liquidity_score];
-  const weights = [settings.opportunity_weight_economic_pct, settings.opportunity_weight_desirability_pct, settings.opportunity_weight_market_confidence_pct, settings.opportunity_weight_risk_safety_pct, settings.opportunity_weight_liquidity_pct];
-  const usable = values.map((value, index) => ({ value, weight: weights[index] })).filter(part => part.value != null && part.weight > 0) as Array<{ value: number; weight: number }>;
-  const totalWeight = usable.reduce((sum, part) => sum + part.weight, 0);
-  return totalWeight > 0 ? usable.reduce((sum, part) => sum + part.value * part.weight, 0) / totalWeight : 0;
-}
-
 function superGateDiagnostics(items: OpportunityPolicyItem[], settings: AppSettings) {
-  let eligible = 0, evidence = 0, economics = 0, market = 0, confidenceLiquidity = 0, final = 0;
+  let eligible = 0, evidence = 0, economics = 0, market = 0, final = 0;
   for (const item of items) {
     if (!item.eligible) continue;
     eligible++;
     const resale = item.resale_price ?? 0;
     const purchase = item.listing_price ?? 0;
-    const confidence = item.market_confidence ?? 0;
-    const liquidity = item.liquidity_score ?? 0;
     const sample = item.market_sample_size ?? 0;
     const sold = item.sold_count ?? 0;
     if (!resale || !purchase || sample < settings.opportunity_minimum_sold_comps || sold < settings.opportunity_minimum_sold_comps) continue;
@@ -1105,13 +1102,9 @@ function superGateDiagnostics(items: OpportunityPolicyItem[], settings: AppSetti
     const discount = marketPrice > 0 ? (marketPrice - purchase) / marketPrice * 100 : -Infinity;
     if (discount < settings.opportunity_super_market_discount_pct) continue;
     market++;
-    const confidenceFloor = Math.max(55, settings.opportunity_super_confidence - 25);
-    if (confidence >= confidenceFloor && liquidity >= settings.opportunity_super_liquidity) {
-      confidenceLiquidity++;
-      if (weightedOpportunityScore(item, settings, profit, roi, economicsRule) >= settings.opportunity_super_score) final++;
-    }
+    final++;
   }
-  return { eligible, evidence, economics, market, confidenceLiquidity, final };
+  return { eligible, evidence, economics, market, final };
 }
 
 function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings): { classification: string; profit: number | null; roi: number | null } {
@@ -1148,8 +1141,6 @@ function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings):
   const economics = policyEconomics(item, settings);
   const sample = item.market_sample_size ?? 0;
   const sold = item.sold_count ?? 0;
-  const confidenceFloorSuper = Math.max(55, settings.opportunity_super_confidence - 25);
-  const confidenceFloorGem = Math.max(50, settings.opportunity_gem_confidence - 20);
   if (!item.eligible) return { classification: "INELIGIBLE", profit, roi };
   if (sample < settings.opportunity_minimum_sold_comps || sold < settings.opportunity_minimum_sold_comps) {
     // A threshold what-if cannot recalculate a reliable tier without the
@@ -1157,7 +1148,6 @@ function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings):
     // making the listing disappear into a new preview bucket.
     return { classification: item.classification || "INSUFFICIENT_DATA", profit, roi };
   }
-  const weightedScore = weightedOpportunityScore(item, settings, tierProfit, tierRoi, economics);
   if (item.classification === "SUPER_GEM" && settings.opportunity_super_market_discount_pct <= DEFAULTS.opportunity_super_market_discount_pct && tierProfit >= economics.superProfit && tierRoi >= economics.superRoi) {
     return { classification: "SUPER_GEM", profit, roi };
   }
@@ -1168,13 +1158,12 @@ function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings):
   const superMarketPass = marketDiscount >= settings.opportunity_super_market_discount_pct || (
     item.classification === "SUPER_GEM" && settings.opportunity_super_market_discount_pct <= DEFAULTS.opportunity_super_market_discount_pct
   );
-  if (tierProfit >= economics.superProfit && tierRoi >= economics.superRoi && superMarketPass && item.market_confidence >= confidenceFloorSuper && item.liquidity_score >= settings.opportunity_super_liquidity && weightedScore >= settings.opportunity_super_score) {
+  if (tierProfit >= economics.superProfit && tierRoi >= economics.superRoi && superMarketPass) {
     return { classification: "SUPER_GEM", profit, roi };
   }
-  if (tierProfit >= economics.gemProfit && tierRoi >= economics.gemRoi && marketDiscount >= settings.opportunity_gem_market_discount_pct && item.market_confidence >= confidenceFloorGem && item.liquidity_score >= settings.opportunity_gem_liquidity && weightedScore >= settings.opportunity_gem_score) {
+  if (tierProfit >= economics.gemProfit && tierRoi >= economics.gemRoi && marketDiscount >= settings.opportunity_gem_market_discount_pct) {
     return { classification: "GEM", profit, roi };
   }
-  if (tierProfit >= economics.gemProfit && tierRoi >= economics.gemRoi && marketDiscount >= settings.opportunity_gem_market_discount_pct) return { classification: "EVIDENCE_LIMITED_DEAL", profit, roi };
   if (tierProfit > 0) return { classification: "OK_DEAL", profit, roi };
   return { classification: "POOR_DEAL", profit, roi };
 }

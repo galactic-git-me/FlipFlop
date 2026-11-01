@@ -1,0 +1,242 @@
+{
+  "query": "AMD Ryzen 5 5600GT processor",
+  "observed_at": "2026-10-22T19:53:22.232692+00:00",
+  "source": "amazon_search",
+  "commercially_verified": false,
+  "products": [
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-5600-Processor-12-thread/dp/B09VCHR1VH/ref=sr_1_1",
+      "title": "AMD",
+      "price": 121.98,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-5600-Processor-12-thread/dp/B09VCHR1VH/ref=sr_1_1",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51So7GoGvxL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600GT processor",
+      "estimated_delivery_days": 24
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-5500-Processor-12-thread/dp/B09VCJ171S/ref=sr_1_2",
+      "title": "AMD Ryzen 5 5500 Processor (6 cores/12 threads, 65W DTP, AM4 socket, 19 MB cache, up to 4.2 GHz max boost, wraith stealth cooler)",
+      "price": 79.99,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-5500-Processor-12-thread/dp/B09VCJ171S/ref=sr_1_2",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51So7GoGvxL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600GT processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-5600GT-Threads-Memory/dp/B0D1CHWBK2/ref=sr_1_4",
+      "title": "AMD",
+      "price": 231.54,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-5600GT-Threads-Memory/dp/B0D1CHWBK2/ref=sr_1_4",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/41XFPhdFRqL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600GT processor",
+      "estimated_delivery_days": 5
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-5600X-Processor-Cache/dp/B08166SLDF/ref=sr_1_5",
+      "title": "AMD",
+      "price": 145.99,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-5600X-Processor-Cache/dp/B08166SLDF/ref=sr_1_5",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51ld6RR8IrL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600GT processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-8500G-Retail-Stealth/dp/B0CQ4JV8D5/ref=sr_1_6",
+      "title": "AMD",
+      "price": 129.0,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-8500G-Retail-Stealth/dp/B0CQ4JV8D5/ref=sr_1_6",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51193NWpmHL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600GT processor",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-7600X-Processeur-Architecture-Fr%C3%A9quence/dp/B0BBJDS62N/ref=sr_1_8",
+      "title": "AMD",
+      "price": 135.19,
+      "url": "https://www.amazon.co.uk/AMD-7600X-Processeur-Architecture-Fr%C3%A9quence/dp/B0BBJDS62N/ref=sr_1_8",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51m7L9bQI8L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600GT processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-3400G-Processor-Graphics/dp/B07SXNDKNM/ref=sr_1_10",
+      "title": "AMD",
+      "price": 74.95,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-3400G-Processor-Graphics/dp/B07SXNDKNM/ref=sr_1_10",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71rKDRYq77L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600GT processor",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Processor-3D-V-CacheTM-Technology/dp/B0DVZSG8D5/ref=sr_1_11_mod_primary_new",
+      "title": "AMD",
+      "price": 508.98,
+      "url": "https://www.amazon.co.uk/AMD-Processor-3D-V-CacheTM-Technology/dp/B0DVZSG8D5/ref=sr_1_11_mod_primary_new",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71hZfMZNZuL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600GT processor",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-TM-Desktop-Processor-16-thread/dp/B0DKFMSMYK/ref=sr_1_12",
+      "title": "AMD",
+      "price": 374.99,
+      "url": "https://www.amazon.co.uk/AMD-TM-Desktop-Processor-16-thread/dp/B0DKFMSMYK/ref=sr_1_12",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71NMFO0iUhL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600GT processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Processor-Integrated-RadeonTM-Graphics/dp/B0FQPCWY2C/ref=sr_1_14",
+      "title": "AMD",
+      "price": 86.22,
+      "url": "https://www.amazon.co.uk/AMD-Processor-Integrated-RadeonTM-Graphics/dp/B0FQPCWY2C/ref=sr_1_14",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61Th3HXRxsL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600GT processor",
+      "estimated_delivery_days": 24
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-9850X3D-100-100001973WOF-RYZENTM/dp/B0G8JMLXNQ/ref=sr_1_16",
+      "title": "AMD",
+      "price": 389.99,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-9850X3D-100-100001973WOF-RYZENTM/dp/B0G8JMLXNQ/ref=sr_1_16",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71KDfkysoeL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600GT processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzensets-9950X-Processor-integrated/dp/B0D6NNRBGP/ref=sr_1_17",
+      "title": "AMD",
+      "price": 456.99,
+      "url": "https://www.amazon.co.uk/AMD-Ryzensets-9950X-Processor-integrated/dp/B0D6NNRBGP/ref=sr_1_17",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61dukbEGziL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600GT processor",
+      "estimated_delivery_days": 24
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-RYZEN-5-5500F/dp/B0HGMTDZM7/ref=sr_1_18",
+      "title": "RYZEN 5 5500F",
+      "price": 99.99,
+      "url": "https://www.amazon.co.uk/AMD-RYZEN-5-5500F/dp/B0HGMTDZM7/ref=sr_1_18",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/518SuEZSsuL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600GT processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-5-7500X3D-BOX/dp/B0FT8X951Z/ref=sr_1_19",
+      "title": "AMD",
+      "price": 205.99,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-5-7500X3D-BOX/dp/B0FT8X951Z/ref=sr_1_19",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61C3fZUbFNL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600GT processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-7800X3D-Desk-top-Processor-16-thread/dp/B0BTZB7F88/ref=sr_1_20",
+      "title": "AMD",
+      "price": 317.02,
+      "url": "https://www.amazon.co.uk/AMD-7800X3D-Desk-top-Processor-16-thread/dp/B0BTZB7F88/ref=sr_1_20",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51HqC0rU9HL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600GT processor",
+      "estimated_delivery_days": 24
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-RyzenTM-7600-Processor-12-thread/dp/B0BMQJWBDM/ref=sr_1_21",
+      "title": "AMD",
+      "price": 157.99,
+      "url": "https://www.amazon.co.uk/AMD-RyzenTM-7600-Processor-12-thread/dp/B0BMQJWBDM/ref=sr_1_21",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61h39mKsSBL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600GT processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-5800X3D-Processeur-ANNIVERSARY-Frequency/dp/B0H41D4KFT/ref=sr_1_22",
+      "title": "AMD",
+      "price": 299.99,
+      "url": "https://www.amazon.co.uk/AMD-5800X3D-Processeur-ANNIVERSARY-Frequency/dp/B0H41D4KFT/ref=sr_1_22",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61vkFq7H9tL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600GT processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-7500F-Threads-Memory/dp/B0D1CK42PV/ref=sr_1_23",
+      "title": "AMD",
+      "price": 122.51,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-7500F-Threads-Memory/dp/B0D1CK42PV/ref=sr_1_23",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71SwhaQlpAL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600GT processor",
+      "estimated_delivery_days": 4
+    }
+  ]
+}

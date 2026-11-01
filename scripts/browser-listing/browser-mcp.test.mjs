@@ -7,7 +7,7 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import readline from 'node:readline';
 
-// Protocol regression tests use a fake browser. No vendor or vault is contacted.
+// Protocol regression tests use a fake browser. No vendor or credentials are read.
 async function harness(t) {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'ff-browser-test-'));
   const admin = path.join(dir, 'admin');
@@ -22,12 +22,14 @@ async function harness(t) {
   exports.chromium = { launchPersistentContext: async () => ({ route: async () => {}, pages: () => [page], on: () => {}, close: async () => {} }) };
   `);
   const jobFile = path.join(dir, 'seller-pack.json'), resultFile = path.join(dir, 'result.json');
+  const credentialsFile = path.join(dir, '.env.local');
+  await fs.writeFile(credentialsFile, 'FF_VINTED_USERNAME="fixture-user"\nFF_VINTED_PASSWORD="fixture-private-value"\n');
   await fs.writeFile(jobFile, JSON.stringify({ id: 1, lease_token: 'lease', operation: 'publish', payload: {
     channel: 'vinted', seller_url: 'https://www.vinted.co.uk/member/items', listing: { title: 'PROMETHEUS Gaming PC', price: 1400, images: [] },
   } }));
   const child = spawn(process.execPath, [fileURLToPath(new URL('./browser-mcp.mjs', import.meta.url))], {
     env: { ...process.env, FF_ADMIN_DIR: admin, FF_BROWSER_JOB_FILE: jobFile, FF_BROWSER_RESULT_FILE: resultFile,
-      FF_CHROME_PROFILE: path.join(dir, 'profile'), FF_WORKER_API: 'http://127.0.0.1:1' }, stdio: ['pipe', 'pipe', 'pipe'],
+      FF_CREDENTIALS_FILE: credentialsFile, FF_CHROME_PROFILE: path.join(dir, 'profile'), FF_WORKER_API: 'http://127.0.0.1:1' }, stdio: ['pipe', 'pipe', 'pipe'],
   });
   let seq = 0;
   const pending = new Map();
@@ -51,7 +53,7 @@ test('MCP exposes only scoped browser tools and seller pack data', async t => {
   assert(!tools.some(t => /eval|exec|shell|password|get_item/.test(t)));
   const pack = JSON.parse((await tool('seller_pack', {})).content[0].text);
   assert.equal(pack.listing.price, 1400);
-  assert(!JSON.stringify(pack).includes('FF_ONBUY_PASSWORD'));
+  assert(!JSON.stringify(pack).includes('fixture-private-value'));
 });
 
 test('navigation rejects external and insecure credential destinations', async t => {
@@ -86,4 +88,15 @@ test('arbitrary selectors cannot be injected through element references', async 
   await tool('browser_observe', {});
   const result = await tool('browser_fill', { ref: '1-0"] input[type=password], [x="', value: 'anything' });
   assert.equal(result.isError, true);
+});
+
+
+test('credential fill reads the private local file without returning either value', async t => {
+  const { tool } = await harness(t);
+  await tool('browser_observe', {});
+  const result = await tool('env_login', { username_ref: '1-0' });
+  assert.equal(result.isError, undefined);
+  assert.equal(JSON.parse(result.content[0].text).filled, true);
+  assert(!JSON.stringify(result).includes('fixture-user'));
+  assert(!JSON.stringify(result).includes('fixture-private-value'));
 });

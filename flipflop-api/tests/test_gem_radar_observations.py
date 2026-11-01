@@ -39,7 +39,7 @@ def _listing(
         listingId=listing_id, url=f"https://www.ebay.co.uk/itm/{listing_id}", title=title, seller=seller,
         sellerFeedbackPercent=99.0, sellerFeedbackCount=100, conditionRaw=condition, conditionNormalised=condition,
         itemPrice=price, postagePrice=postage, currentDeliveredPrice=price + postage, listingType="buy_it_now",
-        bestOfferEnabled=best_offer, bidCount=bid_count, auctionEndAt=None, imageUrl=None, sponsored=False,
+        bestOfferEnabled=best_offer, bidCount=bid_count, auctionEndAt=None, imageUrl="https://example.test/listing.jpg", sponsored=False,
         extractedAt=extracted_at or datetime.now(timezone.utc),
     )
 

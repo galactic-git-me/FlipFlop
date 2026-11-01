@@ -83,14 +83,15 @@ async def run_phase2_classification(
         text(
             """
             SELECT DISTINCT ON (lo.listing_id)
-                lo.listing_id, lo.title, lo.seller_name, lo.image_url,
+                lo.listing_id, lo.title, lo.seller_name, lo.image_url, lo.image_urls, lo.video_urls,
                 lo.condition_normalised AS condition, lo.item_price, lo.postage_price,
                 lo.delivered_price, lo.source, lo.observed_at,
                 cpk.cpk, cpk.cpk_data, lo.category AS observed_category, lo.bid_count, lo.watch_count,
                 lo.epid, lo.seller_feedback_percent, lo.seller_feedback_count,
                 lo.delivery_text, lo.delivery_postcode, lo.prime_eligible,
                 lo.delivery_working_days, lo.delivery_estimate_source,
-                lo.review_average_rating, lo.review_count
+                lo.review_average_rating, lo.review_count,
+                lo.commercial_source_evidence->>'url' AS captured_url
             FROM gem_radar_listing_observations lo
             LEFT JOIN gem_radar_listing_cpk cpk ON lo.listing_id = cpk.listing_id
             ORDER BY lo.listing_id, lo.observed_at DESC, lo.id DESC
@@ -187,12 +188,12 @@ async def run_phase2_classification(
 
     for row in listings:
         (
-            listing_id, title, seller_name, image_url, condition,
+            listing_id, title, seller_name, image_url, image_urls, video_urls, condition,
             item_price, postage_price, delivered_price, source, observed_at,
             cpk, cpk_data, observed_category, bid_count, watch_count,
             epid, seller_feedback_percent, seller_feedback_count,
             delivery_text, delivery_postcode, prime_eligible, delivery_working_days,
-            delivery_estimate_source, observed_review_average, observed_review_count,
+            delivery_estimate_source, observed_review_average, observed_review_count, captured_url,
         ) = row
 
         if source == "amazon" and observed_at >= datetime.utcnow() - timedelta(hours=24):
@@ -260,7 +261,7 @@ async def run_phase2_classification(
                 # Search-page fallbacks are evidence discovery, not listings.
                 if source not in {"ebay", "amazon", "vinted"}:
                     continue
-                exact_url = fallback_listing_url(listing_id, source, title)
+                exact_url = captured_url or fallback_listing_url(listing_id, source, title)
                 if not exact_url:
                     continue
                 alert.triggered_at = datetime.utcnow()
@@ -378,10 +379,12 @@ async def run_phase2_classification(
             listing_id=listing_id,
             search_run_id=SEARCH_RUN_ID,
             source=source,
-            url=fallback_listing_url(listing_id, source, title),
+            url=captured_url or fallback_listing_url(listing_id, source, title),
             title=title,
             seller_name=seller_name,
             image_url=image_url,
+            image_urls=image_urls or ([image_url] if image_url else []),
+            video_urls=video_urls or [],
             condition=condition,
             category=category,
             canonical_model_id=(cpk_data or {}).get("model") if category in {"cpu", "gpu"} else None,

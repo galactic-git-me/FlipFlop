@@ -8,6 +8,8 @@ $env:FF_WORKER_KEY = $workerCredential.GetNetworkCredential().Password
 $env:FF_BROWSER_STATE_DIR = $workerState
 $env:FF_ADMIN_DIR = $config.adminDirectory
 $env:FF_CREDENTIALS_FILE = $config.credentialsFile
+if (-not $env:FF_CREDENTIALS_FILE) { throw 'Configure credentialsFile to point to the local .env.local file.' }
+
 try {
     $workerArgs = @((Join-Path $PSScriptRoot 'worker.mjs'))
     if ($Once) { $workerArgs += '--once' }

@@ -3,8 +3,8 @@ FROM node:20-alpine
 WORKDIR /app
 
 ENV NODE_ENV=development
-ENV BACKEND_URL=http://backend:4311
-ENV NEXT_PUBLIC_API_URL=http://localhost:4311
+ENV BACKEND_URL=http://backend:4314
+ENV NEXT_PUBLIC_API_URL=http://localhost:4314
 
 COPY package.json package-lock.json ./
 RUN npm ci

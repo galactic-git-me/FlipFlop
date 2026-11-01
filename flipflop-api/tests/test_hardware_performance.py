@@ -48,6 +48,15 @@ def test_unmatched_hardware_is_explicitly_flagged():
     }
 
 
+def test_benchmark_index_adds_canonical_gpu_alias_for_vendorless_radeon_row():
+    row=benchmark("Radeon AI PRO R9700","radeon_ai_pro_r9700",27320)
+
+    indexed=index_benchmarks([row])
+
+    assert indexed[("gpu","radeon_ai_pro_r9700")] is row
+    assert indexed[("gpu","amd_radeon_ai_pro_r9700")] is row
+
+
 def test_old_release_is_not_presented_as_a_modern_gem():
     row = benchmark("GTX 750", "nvidia_geforce_gtx_750", 2000)
     result = enrich_listing_performance(

@@ -19,7 +19,7 @@ const steps = [
   },
 ];
 
-export function ThreeDWorkflowNav({ compact = false }: { compact?: boolean }) {
+export function ThreeDWorkflowNav({ compact = false, onReloadCurrent }: { compact?: boolean; onReloadCurrent?: () => void }) {
   const pathname = usePathname();
   return (
     <nav aria-label="3D asset workflow" className={`flex flex-wrap gap-2 ${compact ? "" : "rounded-lg border border-slate-700 bg-slate-950/50 p-2"}`}>
@@ -30,6 +30,12 @@ export function ThreeDWorkflowNav({ compact = false }: { compact?: boolean }) {
           <Link
             key={step.href}
             href={step.href}
+            onClick={event => {
+              if (active && onReloadCurrent) {
+                event.preventDefault();
+                onReloadCurrent();
+              }
+            }}
             aria-current={active ? "step" : undefined}
             className={`flex min-w-48 items-center gap-2 rounded-md border px-3 py-2 transition ${active ? "border-orange-400 bg-orange-500/15 text-orange-100" : "border-slate-700 bg-slate-900/70 text-slate-300 hover:border-cyan-500/60 hover:text-white"}`}
           >

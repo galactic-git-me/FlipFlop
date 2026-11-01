@@ -33,6 +33,7 @@ yarn-error.log*
 
 # runtime logs and state (never commit these)
 .run-logs/
+logs/scan-schema-recovery-*.json
 *.log
 *.log.*
 flipflop.db
@@ -47,9 +48,13 @@ flipflop-api/data/ebay_playwright_state.json
 flipflop-api/data/ebay_sandbox_token_cache.json
 tmp/pdfs/
 policies/.~lock.policies.ods#
+flipflop-api/data/scheduler_state.json
+flipflop-api/data/term_cycle_state.json
 
 # env files
 .env*
+# Production-only runtime secrets live outside the repository history.
+/runtime/admin-auth.env
 
 # vercel
 .vercel
@@ -61,3 +66,16 @@ Benchmarking/
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Generated runtime state and release-transfer payloads are not source.
+**/output/
+**/tmp/
+.pytest_cache/
+*.db-shm
+*.db-wal
+flipflop-api/data/3d-media/
+flipflop-api/data/storefront-business-details.json
+flipflop-api/tmp_pricing_diagnosis.py
+# Preserve large diagnostic exports locally; keep authored reports in Git.
+docs/playbook/**/search-matching*before-snapshot.json
+docs/playbook/specifications/2026-10-22/release/reconstructed-readiness-*.json

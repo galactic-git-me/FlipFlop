@@ -1,0 +1,377 @@
+{
+  "sampled_at": "2026-10-26T23:57:44.678783+00:00",
+  "since": "2026-10-26T23:55:00",
+  "distinct_observed_listings": 124,
+  "by_source": {
+    "ebay": {
+      "listings": 12,
+      "mpn_field": 0,
+      "cpk": 10,
+      "validated_v3": 10,
+      "mpn_anchored_identity": 10,
+      "linked_2plus_direct_retailers": 9
+    },
+    "awd_it": {
+      "listings": 10,
+      "mpn_field": 0,
+      "cpk": 10,
+      "validated_v3": 5,
+      "mpn_anchored_identity": 0,
+      "linked_2plus_direct_retailers": 5
+    },
+    "amazon": {
+      "listings": 24,
+      "mpn_field": 0,
+      "cpk": 23,
+      "validated_v3": 13,
+      "mpn_anchored_identity": 13,
+      "linked_2plus_direct_retailers": 18
+    },
+    "bargain_hardware": {
+      "listings": 20,
+      "mpn_field": 0,
+      "cpk": 12,
+      "validated_v3": 11,
+      "mpn_anchored_identity": 0,
+      "linked_2plus_direct_retailers": 1
+    },
+    "overclockers": {
+      "listings": 42,
+      "mpn_field": 0,
+      "cpk": 42,
+      "validated_v3": 42,
+      "mpn_anchored_identity": 15,
+      "linked_2plus_direct_retailers": 35
+    },
+    "computer_orbit": {
+      "listings": 16,
+      "mpn_field": 1,
+      "cpk": 16,
+      "validated_v3": 1,
+      "mpn_anchored_identity": 1,
+      "linked_2plus_direct_retailers": 11
+    }
+  },
+  "examples": [
+    {
+      "title": "AMD Ryzen 5 5600 3.6 GHz None Integrated Graphics Gaming CPU for MSI B550M PRO",
+      "vendors": [
+        "amazon",
+        "awd_it",
+        "computer_orbit",
+        "overclockers"
+      ],
+      "cpk": "1ce1c181be57c022fecf49e7935eb959"
+    },
+    {
+      "title": "AMD 100-100000457BOX CPU II price incl VAT 3 yr warranty* B2B",
+      "vendors": [
+        "amazon",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "overclockers",
+        "scan"
+      ],
+      "cpk": "fd96e8fee4f3f36e9b50c435f6670bb9"
+    },
+    {
+      "title": "ASUS TUF Gaming VG27AQ5F 27\" QHD Gaming Monitor - 2560 x 1440 200Hz Fast IPS G-SYNC Compatible - Black - VG27AQ5F",
+      "vendors": [
+        "awd_it",
+        "overclockers"
+      ],
+      "cpk": "7248ba260c977434"
+    },
+    {
+      "title": "AWD-IT Astraeus AMD Ryzen 5, Radeon RX 9070 GRE, 16GB RAM, 1TB SSD, Windows 11 Prebuilt Gaming PC",
+      "vendors": [
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "scan"
+      ],
+      "cpk": "46c267b25846119b"
+    },
+    {
+      "title": "AWD-IT Hecate AMD Ryzen 5, NVIDIA RTX 5050, 16GB RAM, 512GB SSD, Windows 11, Prebuilt Gaming PC",
+      "vendors": [
+        "awd_it",
+        "overclockers"
+      ],
+      "cpk": "99f5043219340719"
+    },
+    {
+      "title": "Palit GeForce RTX 5080 GamingPro V1 16GB GDDR7 Graphics Card - NE75080019T2-GB2031Y",
+      "vendors": [
+        "awd_it",
+        "overclockers"
+      ],
+      "cpk": "0ff7fa17badaf92a"
+    },
+    {
+      "title": "Seagate BarraCuda 8TB 5400RPM 190MB/s 3.5 Inch SATA Desktop Hard Drive - ST8000DM004",
+      "vendors": [
+        "awd_it",
+        "overclockers"
+      ],
+      "cpk": "b9ad2046c9f3e3b3"
+    },
+    {
+      "title": "AMD Ryzen 5 3400G Processor (4C/8T, 6 MB cache, 4.2 GHz Max Boost) with Radeon RX Vega 11 Graphics",
+      "vendors": [
+        "amazon",
+        "awd_it"
+      ],
+      "cpk": "e589836844d426fd"
+    },
+    {
+      "title": "AMD Ryzensets 7 5800X Processor (8 Cores/16 threads, 105W TDP, AM4 socket, 36 MB Cache, 4,7Ghz max boost frequency, no cooler)",
+      "vendors": [
+        "amazon",
+        "computer_orbit",
+        "overclockers"
+      ],
+      "cpk": "a61e68c5a87512ea"
+    },
+    {
+      "title": "AMD Ryzensets 7 5700X Processor (8 cores/16 threads, 65W DTP, Socket AM4, 36 MB cache, up to 4.6 GHz max boost, no cooler)",
+      "vendors": [
+        "amazon",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "overclockers"
+      ],
+      "cpk": "be3f530cb7eca044c7ac8305b29578da"
+    },
+    {
+      "title": "AMD Ryzensets 3 4100 processor (4 cores/8 threads, 65W DTP, 6 MB cache, up to 4.0 GHz max. Boost, wraith stealth cooler)",
+      "vendors": [
+        "amazon",
+        "overclockers"
+      ],
+      "cpk": "29dbce75b4daeb5dc935d55d763367a2"
+    },
+    {
+      "title": "AMD Ryzensets 7 7700X Processor (integrated Radeon Graphics, 8 cores/16 threads, 105W DTP, AM5 Socket, 40MB cache, up to 5.4 GHz max boost, no cooler)",
+      "vendors": [
+        "amazon",
+        "awd_it",
+        "newegg_uk",
+        "overclockers"
+      ],
+      "cpk": "bbebd433abf5c96a2867af3eb67a1f3f"
+    }
+  ],
+  "missing_identity_examples": [
+    {
+      "source": "ebay",
+      "title": "100-100000927BOX AMD Ryzen 5|560 R5 3 5GHz AM4 ~D~",
+      "mpn": null
+    },
+    {
+      "source": "ebay",
+      "title": "[AMD] Ryzen 5 Burmere 5600 (6-core/12 thread/3.5GHz/cooler) multi pack",
+      "mpn": null
+    },
+    {
+      "source": "amazon",
+      "title": "Intel 24 Core i9 14900KF Raptor Lake Refresh CPU/Processor",
+      "mpn": null
+    },
+    {
+      "source": "bargain_hardware",
+      "title": "AMD EPYC 7443 2.85GHz 24-Core Socket SP3 200W 128MB CPU",
+      "mpn": null
+    },
+    {
+      "source": "bargain_hardware",
+      "title": "AMD EPYC 7642 2.30GHz 48-Core SP3 225W 256MB CPU",
+      "mpn": null
+    },
+    {
+      "source": "bargain_hardware",
+      "title": "AMD EPYC 9684X 2.55GHz 96-Core Socket SP5 400W 1.125GB CPU",
+      "mpn": null
+    },
+    {
+      "source": "bargain_hardware",
+      "title": "Dell Only AMD EPYC 7352 2.30GHz 24-Core SP3 155W 128MB CPU",
+      "mpn": null
+    },
+    {
+      "source": "bargain_hardware",
+      "title": "Gigabyte AMD EPYC 7501 - 32-Core 2.00GHz Socket SP3 64MB 170W CPU",
+      "mpn": null
+    },
+    {
+      "source": "bargain_hardware",
+      "title": "GigaByte AMD EPYC 7H12 - 2.60GHz 64-Core Socket SP3 256MB 280W CPU",
+      "mpn": null
+    },
+    {
+      "source": "bargain_hardware",
+      "title": "AMD Opteron 6212 2.60Ghz Eight (8) Core CPU",
+      "mpn": null
+    },
+    {
+      "source": "bargain_hardware",
+      "title": "AMD Opteron 6378 (OS6378WKTGGHK) 2.40Ghz Sixteen (16) Core CPU",
+      "mpn": null
+    }
+  ],
+  "queue": {
+    "pending": 69,
+    "processing": 4,
+    "completed": 3953,
+    "failed": 0
+  },
+  "pipeline": {
+    "runId": "5e35a2894a454134b70cb84613f4ef89",
+    "activeScans": [
+      {
+        "searchId": "catalogue-component-9d4763b1117c0fc0dd3f",
+        "query": "amd 100-100000927BOX",
+        "elapsedSeconds": 118.5,
+        "activeSubmissions": 1,
+        "totalListings": 28,
+        "discoveredCount": 28,
+        "eligibleCount": 28,
+        "ingestedCount": 28,
+        "ingestedNewCount": 3,
+        "cpkAssignedCount": 10,
+        "cpkFailedCount": 6,
+        "classifiedCount": 8,
+        "eligibleScoreCount": 8,
+        "ineligibleScoreCount": 0,
+        "gemCount": 0,
+        "superGemCount": 0,
+        "marketPricedCount": 9,
+        "processedPercent": 32.1,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "ebay": 12,
+          "computer_orbit": 16
+        },
+        "discoveredByVendor": {
+          "ebay": 12,
+          "computer_orbit": 16
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "amd-cpu",
+        "query": "AMD CPU -bundle -combo -laptop -\"cooler only\" -\"box only\" -\"heatsink only\" -bracket -mount -sticker -keychain -\"cooling fan\" -\"replacement fan\" -\"motherboard set\" -\"processor cooler\"",
+        "elapsedSeconds": 115.7,
+        "activeSubmissions": 1,
+        "totalListings": 20,
+        "discoveredCount": 20,
+        "eligibleCount": 20,
+        "ingestedCount": 20,
+        "ingestedNewCount": 0,
+        "cpkAssignedCount": 11,
+        "cpkFailedCount": 8,
+        "classifiedCount": 11,
+        "eligibleScoreCount": 3,
+        "ineligibleScoreCount": 4,
+        "gemCount": 0,
+        "superGemCount": 0,
+        "marketPricedCount": 7,
+        "processedPercent": 55.0,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "bargain_hardware": 20
+        },
+        "discoveredByVendor": {
+          "bargain_hardware": 20
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "catalogue-component-57c9297d03cfb4548df3",
+        "query": "crucial CP2K64G56C46U5",
+        "elapsedSeconds": 112.9,
+        "activeSubmissions": 1,
+        "totalListings": 23,
+        "discoveredCount": 23,
+        "eligibleCount": 23,
+        "ingestedCount": 15,
+        "ingestedNewCount": 0,
+        "cpkAssignedCount": 10,
+        "cpkFailedCount": 2,
+        "classifiedCount": 10,
+        "eligibleScoreCount": 3,
+        "ineligibleScoreCount": 0,
+        "gemCount": 0,
+        "superGemCount": 0,
+        "marketPricedCount": 3,
+        "processedPercent": 43.5,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "awd_it": 10,
+          "amazon": 3,
+          "overclockers": 2
+        },
+        "discoveredByVendor": {
+          "overclockers": 2,
+          "awd_it": 10,
+          "amazon": 11
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "catalogue-component-dc6e0bd855336f0a90a4",
+        "query": "AMD Ryzensets 5 9600X Processor (radeon graphics included",
+        "elapsedSeconds": 95.7,
+        "activeSubmissions": 1,
+        "totalListings": 75,
+        "discoveredCount": 75,
+        "eligibleCount": 75,
+        "ingestedCount": 69,
+        "ingestedNewCount": 0,
+        "cpkAssignedCount": 64,
+        "cpkFailedCount": 0,
+        "classifiedCount": 64,
+        "eligibleScoreCount": 49,
+        "ineligibleScoreCount": 12,
+        "gemCount": 1,
+        "superGemCount": 2,
+        "marketPricedCount": 61,
+        "processedPercent": 85.3,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "overclockers": 40,
+          "amazon": 24
+        },
+        "discoveredByVendor": {
+          "overclockers": 40,
+          "amazon": 24,
+          "computer_orbit": 11
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      }
+    ],
+    "recentHistory": [],
+    "binPricesCount": 95,
+    "soldPricesCount": 1427,
+    "superGemCount": 2,
+    "gemCount": 1,
+    "avgGemScore": 8.4,
+    "avgSuperGemScore": 9.5,
+    "totalsAcrossActive": {
+      "listings": 146,
+      "ingestedCount": 132,
+      "cpkAssignedCount": 95,
+      "classifiedInternalCount": 93,
+      "marketPricedCount": 80,
+      "processedCount": 215.9
+    },
+    "completedSweepRequestedAt": null,
+    "pendingSweepRequestedAt": "2026-10-26T20:09:54.187841Z"
+  }
+}

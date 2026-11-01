@@ -1,0 +1,308 @@
+{
+  "version": "0.2.0",
+  "sources": [
+    {
+      "id": "POLICY",
+      "path": "docs/product/catalogues-playbooks-and-fulfilment.md",
+      "kind": "canonical_policy",
+      "confidence": "high",
+      "observed_date": "2026-10-22",
+      "sha256": "485854e0b0335f50429348136df788440b086b22ec3126476c210f6c8e6e3ebb",
+      "raw_capture_archived": true,
+      "revision_note": "Source updated for owner-approved capability-led direction; previous register preserved in history/0.1.0.json"
+    },
+    {
+      "id": "FLOORS",
+      "path": "flipflop-api/app/services/commercial_pilot_policy.py",
+      "kind": "inspected_code",
+      "confidence": "high",
+      "observed_date": "2026-10-22",
+      "sha256": "9892af3214899ce8e05683beb103a997477230b1f5e4e35a86a602ea27bcd54a",
+      "raw_capture_archived": true
+    },
+    {
+      "id": "BASE",
+      "path": "flipflop-api/data/curated_build_definitions.json",
+      "kind": "current_definitions_proposal_to_assess",
+      "confidence": "high_identity_only",
+      "observed_date": "2026-10-22",
+      "sha256": "25f748fbf63e1f9b1f02727cebb341f5cdbabcc1ea664ca099284ba22a50c7fc",
+      "raw_capture_archived": true
+    },
+    {
+      "id": "SNAPSHOT",
+      "path": "flipflop-api/tmp/pricing-deep-dive-calculations.json",
+      "kind": "saved_cost_snapshot_not_replacement_cost",
+      "confidence": "provisional",
+      "observed_date": "2026-10-22",
+      "sha256": "bcec381f4b807efb11ecf3b01db56e59581bbd0c94a2c4ce0cc6fefcdc1c2328",
+      "raw_capture_archived": true
+    },
+    {
+      "id": "PRIOR-PRICE",
+      "path": "docs/plans/2026-10-22-playbook-pricing-deep-dive.md",
+      "kind": "earlier_same_date_inspection",
+      "confidence": "bounded",
+      "observed_date": "2026-10-22",
+      "sha256": "f8740802049a1f4b35966beece8be9fd9af66f736781a2fc8fc125e8425c24a4",
+      "raw_capture_archived": true
+    },
+    {
+      "id": "MARKET-AUDIT",
+      "path": "docs/research/2026-10-22-playbook-market-audit.md",
+      "kind": "source_data_audit",
+      "confidence": "high_for_inspected_paths",
+      "observed_date": "2026-10-22",
+      "sha256": "c9bf98bc9e1de14ec466ff86a59170cd7f73880fdd4b75ea81d95b21db0319cd",
+      "raw_capture_archived": true
+    },
+    {
+      "id": "HW",
+      "path": "docs/research/2026-10-22-playbook-hardware-evidence.md",
+      "kind": "primary_source_search_extracts",
+      "confidence": "medium_not_system_benchmark",
+      "observed_date": "2026-10-22",
+      "sha256": "d7940dd62fa627aa597cb4b3b9d14960afe17339c624c2464ad361bdcf838fcf",
+      "raw_capture_archived": false
+    },
+    {
+      "id": "RETAIL",
+      "path": "docs/research/2026-10-22-playbook-sourcing-evidence.md",
+      "kind": "opened_primary_retailer_pages",
+      "confidence": "medium_configuration_gaps",
+      "observed_date": "2026-10-22",
+      "sha256": "9763df38bc2c620776bc394a1306d5fd846d3d5bddf65513dfbb090ed5d16a23",
+      "raw_capture_archived": false
+    },
+    {
+      "id": "DESIGN",
+      "path": "docs/playbook/specifications/2026-10-22/assessment.md",
+      "kind": "architect_recommendation_not_empirical_fact",
+      "confidence": "proposed",
+      "observed_date": "2026-10-23",
+      "sha256": "80a9825da2335496ece363ea313385f921c8d2759c11bd6e7d69e292f1ea2fa5",
+      "raw_capture_archived": true,
+      "revision_note": "Rechecked and refreshed alongside the 23 October read-only readiness assessment."
+    },
+    {
+      "id": "HW-URL-01",
+      "url": "https://www.microsoft.com/en-us/windows/windows-11-specifications",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-hardware-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "HW-URL-02",
+      "url": "https://support.microsoft.com/en-us/office/system-requirements/office-suites-for-enterprise-business-education-and-government",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-hardware-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "HW-URL-03",
+      "url": "https://www.amd.com/en/products/processors/laptop/ryzen/ai-300-series/amd-ryzen-ai-5-340.html",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-hardware-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "HW-URL-04",
+      "url": "https://ir.amd.com/news-events/press-releases/detail/1232/amd-announces-expanded-consumer-and-commercial-ai-pc-portfolio-at-ces",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-hardware-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "HW-URL-05",
+      "url": "https://www.asus.com/uk/displays-desktops/nucs/nuc-mini-pcs/asus-nuc-14-pro/techspec/",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-hardware-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "HW-URL-06",
+      "url": "https://www.amd.com/en/support/downloads/drivers.html/processors/ryzen/ryzen-5000-series/amd-ryzen-5-5600g.html",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-hardware-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "HW-URL-07",
+      "url": "https://helpx.adobe.com/premiere/desktop/get-started/technical-requirements/adobe-premiere-pro-technical-requirements.html",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-hardware-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "HW-URL-08",
+      "url": "https://www.blender.org/download/requirements/",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-hardware-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "HW-URL-09",
+      "url": "https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/System-requirements-for-AutoCAD-2026-including-Specialized-Toolsets.html",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-hardware-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "HW-URL-10",
+      "url": "https://docs.docker.com/desktop/setup/install/windows-install/",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-hardware-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "HW-URL-11",
+      "url": "https://github.com/ollama/ollama/blob/main/docs/faq.mdx",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-hardware-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "HW-URL-12",
+      "url": "https://www.epicgames.com/help/c-37599050/c-32343914/a16548002?lang=en-US",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-hardware-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "HW-URL-13",
+      "url": "https://www.intel.com/content/www/us/en/support/articles/000090831/graphics.html",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-hardware-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "HW-URL-14",
+      "url": "https://cdrdv2-public.intel.com/839907/Intel%20Arc%20B-Series%20Graphics%20Quick%20Reference%20Guide%20V1.1.pdf",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-hardware-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "HW-URL-15",
+      "url": "https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-hardware-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "RETAIL-URL-01",
+      "url": "https://www.palicomp.co.uk/home-office-pcs",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-sourcing-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "RETAIL-URL-02",
+      "url": "https://www.awd-it.co.uk/awd-it-hebe-amd-ryzen-5-5600g-16gb-ddr4-ram-512gb-ssd-windows-11-prebuilt-gaming-pc.html",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-sourcing-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "RETAIL-URL-03",
+      "url": "https://www.palicomp.co.uk/pc-specials",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-sourcing-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "RETAIL-URL-04",
+      "url": "https://www.overclockers.co.uk/pc-components/ram-computer-memory/ram-by-size/32gb-ram",
+      "observed_date": "2026-10-22",
+      "kind": "primary_source_reference",
+      "detail_record": "docs/research/2026-10-22-playbook-sourcing-evidence.md",
+      "confidence": "see_detail_record",
+      "raw_capture_archived": false,
+      "limitations": "No immutable page bytes; see record for search-extract versus opened-page and availability/configuration limits"
+    },
+    {
+      "id": "CAPABILITY-DECISION",
+      "path": "docs/playbook/specifications/2026-10-22/assessment.md",
+      "kind": "owner_approved_direction_with_proposed_profiles",
+      "confidence": "high_for_direction_only",
+      "observed_date": "2026-10-23",
+      "sha256": "80a9825da2335496ece363ea313385f921c8d2759c11bd6e7d69e292f1ea2fa5",
+      "raw_capture_archived": false,
+      "revision_note": "Rechecked and refreshed alongside the 23 October read-only readiness assessment."
+    },
+    {
+      "id": "PUBLICATION-LOOP",
+      "path": "docs/playbook/specifications/2026-10-22/release/publication-readiness.md",
+      "kind": "current_engineering_and_source_readiness_not_offer_approval",
+      "confidence": "verified_software_checks_and_bounded_retailer_captures_only",
+      "observed_date": "2026-10-23",
+      "sha256": "094d9ebc3e1ec77971fed533d175919f63bacaa5e5487ee75b0eebb4268607e4",
+      "raw_capture_archived": true,
+      "revision_note": "Rechecked and refreshed alongside the 23 October read-only readiness assessment."
+    },
+    {
+      "id": "RESEARCH-20261022-2024",
+      "path": "docs/playbook/specifications/2026-10-22/release/research-20261022T202400Z/manifest.json",
+      "kind": "bounded_public_source_observations_and_verification_manifest_not_approval",
+      "confidence": "source_and_identity_qualification_pending",
+      "observed_date": "2026-10-22",
+      "sha256": "5b76ef421d9a3340e54da6c7af617ae14c93e43f12fefcad5f59b187879bd35f",
+      "raw_capture_archived": true,
+      "limitations": "JSON public-card/product observations archived; web-fetch summaries have no immutable full page; no approved cohort, exact BOM or workload result"
+    }
+  ]
+}

@@ -24,16 +24,23 @@ from app.services.alerts import emit_alert
 log = logging.getLogger(__name__)
 
 # Maps classifier output → catalogue slot_type.
-# Deliberately excludes motherboard, psu, accessory — not catalogue slot types.
+# Every purchasable hardware role needed for a complete Playbook BOM.
 _CATEGORY_TO_SLOT: dict[str, str] = {
+    "os": "os",
     "cpu": "cpu",
     "gpu": "gpu",
     "ram": "ram",
     "ssd": "storage",
+    "storage": "storage",
+    "motherboard": "motherboard",
+    "psu": "psu",
+    "cooler": "cooling",
+    "cooling": "cooling",
     "case": "case",
 }
 
 FRESH_WINDOW_HOURS = 2
+CURATED_FRESH_WINDOW_HOURS = 24
 MIN_GEM_SCORE = 40
 
 
@@ -114,7 +121,7 @@ async def sync_gem_radar_catalogue_listings(db: AsyncSession) -> int:
             FROM gem_radar_scored_listings s
             JOIN current_ids i ON i.listing_id = s.listing_id
             WHERE s.classification IN ('GEM', 'SUPER_GEM')
-              AND s.category IN ('cpu', 'gpu', 'ram', 'ssd', 'storage', 'case')
+              AND s.category IN ('cpu', 'gpu', 'ram', 'ssd', 'storage', 'motherboard', 'psu', 'cooler', 'cooling', 'case')
               AND (s.condition IS NULL OR lower(s.condition) NOT IN ('for_parts', 'parts_only', 'untested'))
               AND lower(s.title) NOT LIKE '%for parts%'
               AND lower(s.title) NOT LIKE '%parts only%'
@@ -177,6 +184,7 @@ async def sync_gem_radar_catalogue_listings(db: AsyncSession) -> int:
             db.add(listing)
             existing[external_id] = listing
         else:
+            values["raw_specs"] = {**(listing.raw_specs or {}), **values["raw_specs"]}
             for key, value in values.items():
                 setattr(listing, key, value)
 
@@ -201,7 +209,7 @@ def determine_tier(gem_score: float, slot: PlaybookSlot) -> str:
 def infer_slot_type(title: str, category: str | None = None) -> str | None:
     """
     Derive catalogue slot_type from listing title using the existing classifier.
-    Returns None for complete PCs, PSUs, motherboards, accessories.
+    Returns None for complete PCs and accessories, never for a required BOM role.
     """
     # Gem Radar's resolved identity category is authoritative.  Fall back to
     # the legacy title classifier only for manually-created Listing rows.
@@ -247,6 +255,8 @@ async def auto_publish_gems(db: AsyncSession) -> int:
     now = datetime.utcnow().isoformat()
 
     for listing in gem_listings:
+        if (listing.raw_specs or {}).get("catalogue_deleted"):
+            continue
         slot_type = infer_slot_type(
             listing.title,
             (listing.raw_specs or {}).get("gem_radar_category") if isinstance(listing.raw_specs, dict) else None,
@@ -276,19 +286,21 @@ async def auto_publish_gems(db: AsyncSession) -> int:
     return created
 
 
-async def check_freshness(db: AsyncSession) -> int:
+async def check_freshness(db: AsyncSession, *, curated_only=False) -> int:
     """
     Step B: Increment consecutive_misses for variants whose listing hasn't been
-    seen in the last FRESH_WINDOW_HOURS. Hide at 2 misses. Reinstate within 24h.
+    seen in the last FRESH_WINDOW_HOURS. Hide at 2 misses; reinstate only
+    after a capture is fresh again, preserving pending review status.
     Returns the number of variants hidden.
     """
     cutoff = datetime.utcnow() - timedelta(hours=FRESH_WINDOW_HOURS)
-    reinstate_cutoff = datetime.utcnow() - timedelta(hours=24)
+    curated_cutoff = datetime.utcnow() - timedelta(hours=CURATED_FRESH_WINDOW_HOURS)
 
     result = await db.execute(
         select(CatalogueVariant, Listing)
         .join(Listing, CatalogueVariant.listing_id == Listing.id)
-        .where(CatalogueVariant.status.in_(["active", "pending_review"]))
+        .where(CatalogueVariant.status.in_(["active", "pending_review"]),
+            CatalogueVariant.curated_for_builds.is_(True) if curated_only else True)
     )
     rows = result.all()
 
@@ -298,12 +310,15 @@ async def check_freshness(db: AsyncSession) -> int:
 
     for variant, listing in rows:
         last_seen = listing.last_seen_at  # datetime object from DateTime column
-        if last_seen and last_seen >= cutoff:
+        item_cutoff=curated_cutoff if variant.curated_for_builds else cutoff
+        if last_seen and last_seen >= item_cutoff:
             variant.consecutive_misses = 0
             variant.last_seen_at = now
         else:
             variant.consecutive_misses += 1
             if variant.consecutive_misses >= 2:
+                if not variant.reject_reason:
+                    variant.reject_reason = f'freshness:{variant.status}'
                 variant.status = "hidden"
                 hidden += 1
                 newly_hidden_ids.add(variant.id)
@@ -311,15 +326,28 @@ async def check_freshness(db: AsyncSession) -> int:
     q = (
         select(CatalogueVariant, Listing)
         .join(Listing, CatalogueVariant.listing_id == Listing.id)
-        .where(CatalogueVariant.status == "hidden")
+        .where(CatalogueVariant.status == "hidden",
+            CatalogueVariant.curated_for_builds.is_(True) if curated_only else True)
     )
     if newly_hidden_ids:
         q = q.where(CatalogueVariant.id.notin_(newly_hidden_ids))
     hidden_result = await db.execute(q)
     for variant, listing in hidden_result.all():
         last_seen = listing.last_seen_at  # datetime object
-        if last_seen and last_seen >= reinstate_cutoff:
-            variant.status = "active"
+        reason=variant.reject_reason or ''
+        item_cutoff=curated_cutoff if variant.curated_for_builds else cutoff
+        if (last_seen and last_seen >= item_cutoff and variant.consecutive_misses >= 2
+                and (not reason or reason in {'freshness:active','freshness:pending_review'})):
+            previous=reason.removeprefix('freshness:') if reason else 'active'
+            # Legacy freshness hides did not save the previous status. Never
+            # turn an unreviewed software source into an approved catalogue
+            # product merely because its supplier page was seen again.
+            raw=listing.raw_specs or {}
+            if (raw.get('gamers_outlet') or raw.get('royalcdkeys') or {}).get('operator_approval_required') and not (
+                    raw.get('playbook_licence_source_review') or {}).get('reviewed'):
+                previous='pending_review'
+            variant.status = previous
+            variant.reject_reason = None
             variant.consecutive_misses = 0
             variant.last_seen_at = now
 
@@ -381,6 +409,9 @@ async def approve_variant(
     variant = result.scalar_one_or_none()
     if not variant:
         return None
+    listing = await db.get(Listing, variant.listing_id)
+    if listing and (listing.raw_specs or {}).get("catalogue_deleted"):
+        raise ValueError("Component was permanently deleted from the catalogue")
     variant.status = "active"
     variant.reviewed_at = datetime.utcnow().isoformat()
     variant.reviewed_by = reviewed_by
@@ -414,7 +445,10 @@ async def run_catalogue_pipeline(db: AsyncSession) -> dict:
     created = await auto_publish_gems(db)
     hidden = await check_freshness(db)
     updated = await update_prices(db)
-    return {"listings_synced": synced, "variants_created": created, "variants_hidden": hidden, "prices_updated": updated}
+    from app.services.catalogue_cpk import reconcile_active_catalogue_cpks
+    cpk_reconciliation = await reconcile_active_catalogue_cpks(db)
+    return {"listings_synced": synced, "variants_created": created, "variants_hidden": hidden,
+            "prices_updated": updated, "catalogue_cpk": cpk_reconciliation}
 
 
 async def run_catalogue_pipeline_job() -> dict:

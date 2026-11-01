@@ -1,0 +1,269 @@
+{
+  "query": "16GB DDR5 2x8GB UDIMM desktop RAM",
+  "observed_at": "2026-10-22T20:00:34.178588+00:00",
+  "source": "amazon_search",
+  "commercially_verified": false,
+  "parser": "linked_product_heading",
+  "products": [
+    {
+      "external_id": "https://www.amazon.co.uk/Patriot-Viper-Venom-5600MHz-Memory/dp/B09XY6PBG9/ref=sr_1_4",
+      "title": "Patriot Viper Venom DDR5 16GB (2 x 8GB) 5600MHz UDIMM Desktop Gaming Memory KIT - PVV516G560C40K",
+      "price": 239.99,
+      "url": "https://www.amazon.co.uk/Patriot-Viper-Venom-5600MHz-Memory/dp/B09XY6PBG9/ref=sr_1_4",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/610Hy5HZ00L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/CORSAIR-VENGEANCE-DDR5-6000MHz-INTEL-Grey/dp/B0GQC6MV6C/ref=sr_1_5",
+      "title": "CORSAIR VENGEANCE RGB RS DDR5 16GB (2 x 8GB) Up To 6000MHz AMD INTEL RAM",
+      "price": 259.99,
+      "url": "https://www.amazon.co.uk/CORSAIR-VENGEANCE-DDR5-6000MHz-INTEL-Grey/dp/B0GQC6MV6C/ref=sr_1_5",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71xOTU97xEL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Gigastone-Desktop-DDR4-3200MHz-PC4-25600-Unbuffered-DDR4-3200MHz-2x8GB-White/dp/B0CB2VNFDH/ref=sr_1_7",
+      "title": "\u3010DDR4 RAM\u3011GIGASTONE Game PRO 16GB Kit (2x8GB) DDR4 3200MHz PC4-25600 CL 16-18-18-40 Intel XMP 2.0 AMD Ryzen 1.35V UDIMM 288 Pin Unbuffered Non ECC High Performance Gaming Desktop Memory - White",
+      "price": 109.64,
+      "url": "https://www.amazon.co.uk/Gigastone-Desktop-DDR4-3200MHz-PC4-25600-Unbuffered-DDR4-3200MHz-2x8GB-White/dp/B0CB2VNFDH/ref=sr_1_7",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51BM392zpdL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/CORSAIR-VENGEANCE-DDR5-5200MHz-INTEL/dp/B0GQCJ2D3D/ref=sr_1_10",
+      "title": "CORSAIR VENGEANCE RGB RS DDR5 16GB (2 x 8GB) Up To 5200MHz AMD INTEL RAM",
+      "price": 265.63,
+      "url": "https://www.amazon.co.uk/CORSAIR-VENGEANCE-DDR5-5200MHz-INTEL/dp/B0GQCJ2D3D/ref=sr_1_10",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71xOTU97xEL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 30
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Patriot-6000MT-Desktop-Gaming-Memory/dp/B0D4NLSP87/ref=sr_1_11",
+      "title": "Patriot Viper Venom DDR5 32GB (2 x 16GB) 6000MT/s UDIMM Desktop Gaming Memory KIT - PVV532G600C30K",
+      "price": 407.94,
+      "url": "https://www.amazon.co.uk/Patriot-6000MT-Desktop-Gaming-Memory/dp/B0D4NLSP87/ref=sr_1_11",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/610Hy5HZ00L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Gigastone-Desktop-DDR4-3200MHz-PC4-25600-Unbuffered-DDR4-3200MHz-2x16GB-White/dp/B0CB2TZKCG/ref=sr_1_12",
+      "title": "\u3010DDR4 RAM\u3011GIGASTONE Game PRO 32GB Kit (2x16GB) DDR4 3200MHz PC4-25600 CL 16-18-18-40 Intel XMP 2.0 AMD Ryzen 1.35V UDIMM 288 Pin Unbuffered Non ECC High Performance Gaming Desktop Memory - White",
+      "price": 198.99,
+      "url": "https://www.amazon.co.uk/Gigastone-Desktop-DDR4-3200MHz-PC4-25600-Unbuffered-DDR4-3200MHz-2x16GB-White/dp/B0CB2TZKCG/ref=sr_1_12",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51BM392zpdL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Netac-288-Pin-Desktop-Computer-Memory-Black-D4III/dp/B0GJSRRGKT/ref=sr_1_13",
+      "title": "Netac DDR4 RAM 16GB Kit (2x8GB) 3200 MHz,DRAM 288-Pin UDIMM Desktop Memory,CL16 1.35V Intel XMP 2.0 Computer Memory-Black",
+      "price": 110.99,
+      "url": "https://www.amazon.co.uk/Netac-288-Pin-Desktop-Computer-Memory-Black-D4III/dp/B0GJSRRGKT/ref=sr_1_13",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61wssvjV5qL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/TEAMGROUP-PC5-44800-Unbuffered-Computer-TED516G5600C46DC01-Dual-Channel/dp/B0CS358LZ5/ref=sr_1_15",
+      "title": "TEAMGROUP Elite DDR5 16GB Kit (2x8GB) 5600Mhz PC5-44800 CL46 Non-ECC Unbuffered UDIMM 288 Pin PC Computer Desktop Memory Module Ram Supports Intel & AMD TED516G5600C46DC01",
+      "price": 272.06,
+      "url": "https://www.amazon.co.uk/TEAMGROUP-PC5-44800-Unbuffered-Computer-TED516G5600C46DC01-Dual-Channel/dp/B0CS358LZ5/ref=sr_1_15",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81lamgHwccL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 1
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/G-SKILL-6000MT-CL30-38-38-96-Desktop-Computer-Matte-Black/dp/B0G7PFF5N6/ref=sr_1_16",
+      "title": "G.SKILL Flare X5 Series DDR5 RAM (AMD Expo) 16GB (2x8GB) 6000MT/s CL30-38-38-96 1.35V U-DIMM Desktop Memory - Matte Black (F5-6000J3038F8GH2-FX5)",
+      "price": 323.0,
+      "url": "https://www.amazon.co.uk/G-SKILL-6000MT-CL30-38-38-96-Desktop-Computer-Matte-Black/dp/B0G7PFF5N6/ref=sr_1_16",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61WOrUtjVNL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 30
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/RAM%E3%80%91GIGASTONE-Desktop-DDR4-3200MHz-PC4-25600-Unbuffered-DDR4-3200MHz-RGB-Game-Turbo-Udimm/dp/B0CB2R4GKX/ref=sr_1_17",
+      "title": "\u3010RGB DDR4 RAM\u3011GIGASTONE Game TURBO 16GB Kit (2x8GB) DDR4 3200MHz PC4-25600 CL 16-18-18-40 Intel XMP 2.0 AMD Ryzen 1.35V UDIMM 288 Pin Unbuffered Non ECC High Performance Gaming Desktop Memory - Black",
+      "price": 128.99,
+      "url": "https://www.amazon.co.uk/RAM%E3%80%91GIGASTONE-Desktop-DDR4-3200MHz-PC4-25600-Unbuffered-DDR4-3200MHz-RGB-Game-Turbo-Udimm/dp/B0CB2R4GKX/ref=sr_1_17",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/510V6PbPGrL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Patriot-1X16GB-6000MT-Desktop-Memory-Black/dp/B0DKQ6VH85/ref=sr_1_18",
+      "title": "Patriot Viper Venom DDR5 RAM 16GB (1X16GB) 6000MT/s CL30 UDIMM Desktop Gaming Memory Module - PVV516G60C30",
+      "price": 219.99,
+      "url": "https://www.amazon.co.uk/Patriot-1X16GB-6000MT-Desktop-Memory-Black/dp/B0DKQ6VH85/ref=sr_1_18",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71jHgjCUapL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Viper-Steel-3200MHz-Performance-Memory/dp/B07KXMWHBY/ref=sr_1_19",
+      "title": "Patriot Viper Steel DDR4 RAM 16GB (2X8GB) 3200MHz CL16 UDIMM Desktop Gaming Memory Kit - PVS416G320C6K",
+      "price": 121.99,
+      "url": "https://www.amazon.co.uk/Viper-Steel-3200MHz-Performance-Memory/dp/B07KXMWHBY/ref=sr_1_19",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/917jhv56PSL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Patriot-1X16GB-6000MT-Desktop-Memory-Black/dp/B0DJ1W694Y/ref=sr_1_20",
+      "title": "Patriot Viper Venom RGB DDR5 RAM 16GB (1X16GB) 6000MT/s CL30 UDIMM Desktop Gaming Memory Module - PVVR516G60C30",
+      "price": 222.99,
+      "url": "https://www.amazon.co.uk/Patriot-1X16GB-6000MT-Desktop-Memory-Black/dp/B0DJ1W694Y/ref=sr_1_20",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71yLlt4fVdL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/CORSAIR-VENGEANCE-DDR5-5600MHz-INTEL/dp/B0GQC5LCLY/ref=sr_1_21",
+      "title": "CORSAIR VENGEANCE RGB RS DDR5 16GB (2 x 8GB) Up To 5600MHz AMD INTEL RAM",
+      "price": 282.12,
+      "url": "https://www.amazon.co.uk/CORSAIR-VENGEANCE-DDR5-5600MHz-INTEL/dp/B0GQC5LCLY/ref=sr_1_21",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71xOTU97xEL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 30
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Timetec-2666MHz-PC4-21300-Unbuffered-Non-ECC/dp/B07HFKGQ34/ref=sr_1_22",
+      "title": "Timetec 16GB KIT (2x8GB) DDR4 2666MHz (PC4-2666V) PC4-21300 UDIMM Desktop RAM \u2013 288-Pin 1.2V CL19 Non-ECC Unbuffered DIMM Memory Module Upgrade",
+      "price": 98.99,
+      "url": "https://www.amazon.co.uk/Timetec-2666MHz-PC4-21300-Unbuffered-Non-ECC/dp/B07HFKGQ34/ref=sr_1_22",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81+MvxQt7BL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/PNY-Performance-2x8GB-5600MHz-PC5-44800-Black/dp/B0GZ8KFJKG/ref=sr_1_23",
+      "title": "PNY Performance 16GB (2x8GB) DDR5 RAM 5600MHz (PC5-44800) - CL46, 1.1V - Compatible with 5200MHz, 4800MHz - Desktop Memory Kit - MD16GK2D5560046-TB - Not compatible with Intel 15th Gen",
+      "price": 230.85,
+      "url": "https://www.amazon.co.uk/PNY-Performance-2x8GB-5600MHz-PC5-44800-Black/dp/B0GZ8KFJKG/ref=sr_1_23",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51ria0F3dHL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 1
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Colorful-PC4-25600-Heatsink-Performance-Computer-DDR4-16GB-2x8GB-Grey-purple/dp/B0HBB9PMCS/ref=sr_1_24",
+      "title": "Colorful DDR4 3200MHz 16GB (2x8GB) RAM 1.35V CL16 XMP2.0 Desktop PC Memory",
+      "price": 104.54,
+      "url": "https://www.amazon.co.uk/Colorful-PC4-25600-Heatsink-Performance-Computer-DDR4-16GB-2x8GB-Grey-purple/dp/B0HBB9PMCS/ref=sr_1_24",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61zJaELbNcL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 1
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/CORSAIR-VENGEANCE-6000MHz-Compatible-CML16GX5M2E6000Z36W-White/dp/B0HC824VYR/ref=sr_1_25",
+      "title": "CORSAIR VENGEANCE RS DDR5 16GB (2 x 8GB) Up To 6000MHz AMD INTEL RAM",
+      "price": 301.82,
+      "url": "https://www.amazon.co.uk/CORSAIR-VENGEANCE-6000MHz-Compatible-CML16GX5M2E6000Z36W-White/dp/B0HC824VYR/ref=sr_1_25",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61gWNYLGLCL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 30
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Timetec-Premium-2666MHz-PC4-2666V-PC4-21300/dp/B0G342ZHQJ/ref=sr_1_26",
+      "title": "Timetec Premium 16GB KIT (2x8GB) DDR4 2666MHz (PC4-2666V) PC4-21300 UDIMM Desktop RAM \u2013 288-Pin 1.2V CL19 Non-ECC Unbuffered DIMM Memory Module Upgrade",
+      "price": 98.99,
+      "url": "https://www.amazon.co.uk/Timetec-Premium-2666MHz-PC4-2666V-PC4-21300/dp/B0G342ZHQJ/ref=sr_1_26",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/815Bb0Kk58L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Integral-4800MHz-Desktop-Computer-PC5-38400/dp/B0BGLV4QVM/ref=sr_1_27",
+      "title": "Integral 16GB Kit (2x8GB) DDR5 RAM 4800MHz DIMM PC Desktop Computer Memory Module",
+      "price": 275.95,
+      "url": "https://www.amazon.co.uk/Integral-4800MHz-Desktop-Computer-PC5-38400/dp/B0BGLV4QVM/ref=sr_1_27",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71ryDoQUL6L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "16GB DDR5 2x8GB UDIMM desktop RAM",
+      "estimated_delivery_days": 26
+    }
+  ]
+}

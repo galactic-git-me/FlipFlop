@@ -10,7 +10,7 @@ from datetime import datetime
 from hashlib import sha256
 from typing import Literal, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 def _to_camel(snake: str) -> str:
@@ -31,6 +31,14 @@ ConfidenceBand = Literal["high", "medium", "low"]
 
 
 class ExtractedListing(CamelModel):
+    source_currency: Optional[Literal['EUR', 'GBP']] = None
+    source_item_price: Optional[float] = Field(default=None, gt=0)
+    exchange_rate: Optional[float] = Field(default=None, gt=0)
+    exchange_rate_date: Optional[str] = None
+    exchange_rate_source: Optional[str] = None
+    price_is_range: bool = False
+    stock_status: Literal['available', 'unavailable', 'unknown'] = 'unknown'
+    stock_evidence: Optional[str] = Field(default=None, max_length=1000)
     listing_id: str
     url: str
     title: str
@@ -49,6 +57,8 @@ class ExtractedListing(CamelModel):
     watch_count: Optional[int] = None
     auction_end_at: Optional[datetime]
     image_url: Optional[str]
+    image_urls: Optional[list[str]] = None
+    video_urls: Optional[list[str]] = None
     # Populated by FlipflopXtension only for Amazon PC-case searches. Keeping
     # this optional preserves the existing payload for every other category.
     image_urls: Optional[list[str]] = None
@@ -69,6 +79,7 @@ class ExtractedListing(CamelModel):
     # "Ryzen 9 9800X3D" vs "AMD Ryzen 9 9800X3D" all have the same GTIN).
     # Only populated for listings sourced via eBay Browse API with productSummary.
     gtin: Optional[str] = None
+    brand: Optional[str] = None
     # Manufacturer Part Number — another stable, canonical identifier for the
     # same product across title variants. Used alongside GTIN for consolidating
     # listings into a single price bucket. Only populated via eBay Browse API.
@@ -90,6 +101,9 @@ class ExtractedListing(CamelModel):
     delivery_text: Optional[str] = None
     delivery_postcode: Optional[str] = None
     search_tags: list[str] = Field(default_factory=list)
+    delivery_cost_known: Optional[bool] = None
+    sold_confirmed: Optional[bool] = None
+    sold_date_text: Optional[str] = None
 
     @field_validator("listing_id", mode="before")
     @classmethod
@@ -125,10 +139,28 @@ class ExtractedListing(CamelModel):
         if not isinstance(value, str):
             return None
         image_url = value.strip()
-        if (len(image_url) > 1000 or not image_url.lower().startswith(("https://", "http://"))
-                or image_url.lower().endswith("._rc")):
+        from app.services.curated_media import media_urls
+        if len(image_url) > 1000 or not media_urls([image_url]):
             return None
         return image_url
+
+    @field_validator("image_urls", mode="before")
+    @classmethod
+    def keep_storable_image_urls(cls, value: object) -> list[str]:
+        from app.services.curated_media import media_urls
+        if not isinstance(value, list):
+            return []
+        return media_urls([url for url in value if isinstance(url, str)])[:12]
+
+    @model_validator(mode="after")
+    def require_usable_product_image(self) -> "ExtractedListing":
+        from app.services.curated_media import media_urls
+        images = media_urls([self.image_url, *(self.image_urls or [])])
+        if not images:
+            raise ValueError("A usable product image is required for each scraped listing")
+        self.image_url = images[0]
+        self.image_urls = images[:12]
+        return self
 
 
 class ScanSubmitRequest(CamelModel):
@@ -163,6 +195,20 @@ class ScanRunHistoryOut(CamelModel):
     occurred_at: datetime
     is_legacy: bool = False
     completion_known: bool = True
+    # Optional run-scoped metrics. These are populated for the dashboard's
+    # latest completed run from durable observations; they are deliberately
+    # separate from the market-wide snapshot metrics.
+    metrics_known: bool = False
+    ingested_count: int = 0
+    cpk_assigned_count: int = 0
+    market_priced_count: int = 0
+    classified_count: int = 0
+    gem_count: int = 0
+    super_gem_count: int = 0
+    avg_gem_score: float = 0.0
+    avg_super_gem_score: float = 0.0
+    bin_prices_count: int = 0
+    sold_prices_count: int = 0
 
 
 class SoldCompSubmitRequest(CamelModel):

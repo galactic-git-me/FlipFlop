@@ -1,0 +1,107 @@
+- generic [active] [ref=f3e1]:
+  - complementary [ref=f3e2]:
+    - generic [ref=f3e3]:
+      - img "FlipFlop" [ref=f3e5]
+      - navigation [ref=f3e6]:
+        - link "Sourcing" [ref=f3e7] [cursor=pointer]:
+          - /url: /sourcing
+        - link "Best Sellers" [ref=f3e11] [cursor=pointer]:
+          - /url: /best-sellers
+        - link "Catalogue" [ref=f3e18] [cursor=pointer]:
+          - /url: /catalogue
+        - link "Builds" [ref=f3e21] [cursor=pointer]:
+          - /url: /build-hub
+        - link "Workshop Calendar" [ref=f3e26] [cursor=pointer]:
+          - /url: /orders
+        - link "Upgrade Desk" [ref=f3e29] [cursor=pointer]:
+          - /url: /upgrade-desk
+        - link "Inventory" [ref=f3e32] [cursor=pointer]:
+          - /url: /inventory
+        - link "Demand" [ref=f3e36] [cursor=pointer]:
+          - /url: /demand
+        - link "Cross-listing" [ref=f3e39] [cursor=pointer]:
+          - /url: /cross-listing
+        - link "Dispatch Zone" [ref=f3e45] [cursor=pointer]:
+          - /url: /dispatch-zone
+        - link "Email Events" [ref=f3e51] [cursor=pointer]:
+          - /url: /email-events
+        - link "Advertising & Growth" [ref=f3e55] [cursor=pointer]:
+          - /url: /advertising-growth
+        - link "3D Assets" [ref=f3e59] [cursor=pointer]:
+          - /url: /cases-3d-priority
+        - link "Problems" [ref=f3e63] [cursor=pointer]:
+          - /url: /problems
+      - region "Service health" [ref=f3e66]:
+        - generic [ref=f3e67]:
+          - 'generic "API: checking" [ref=f3e68]': API
+          - 'generic "DB: checking" [ref=f3e72]': DB
+          - 'generic "Gem: checking" [ref=f3e77]': Gem
+          - link "Shop" [ref=f3e81] [cursor=pointer]:
+            - /url: http://localhost:4313
+  - generic [ref=f3e85]:
+    - banner [ref=f3e86]:
+      - textbox "QUERY MARKET DATA..." [ref=f3e91]
+      - generic [ref=f3e92]:
+        - link "DEV · LOCAL" [ref=f3e93] [cursor=pointer]:
+          - /url: http://localhost:4313
+        - img "FlipFlop" [ref=f3e97]
+        - generic [ref=f3e98]:
+          - button "Source activity" [ref=f3e99]
+          - button "Favourites" [ref=f3e106]
+          - button "Notifications" [ref=f3e109]
+          - button "Price alerts" [ref=f3e113] [cursor=pointer]
+          - button "Settings" [ref=f3e119] [cursor=pointer]
+    - main [ref=f3e123]:
+      - main [ref=f3e124]:
+        - generic [ref=f3e125]:
+          - generic [ref=f3e126]:
+            - generic [ref=f3e127]:
+              - paragraph [ref=f3e128]: Build studio
+              - heading "Curated Builds" [level=1] [ref=f3e129]
+              - paragraph [ref=f3e130]: Manage the approved component catalogue, build playbooks, pricing, assets and launch readiness.
+            - button "Refresh" [ref=f3e131]
+          - navigation [ref=f3e137]:
+            - button "The Playbook" [ref=f3e138]
+            - button "Curated Catalogue" [ref=f3e139]
+            - button "Listing Images" [ref=f3e140]
+          - group [ref=f3e141]:
+            - generic "Matrix setup and supporting catalogue tools" [ref=f3e142] [cursor=pointer]
+          - region "The Playbook operational book" [ref=f3e143]:
+            - generic [ref=f3e144]:
+              - generic [ref=f3e145]:
+                - heading "The Playbook" [level=2] [ref=f3e146]
+                - paragraph [ref=f3e147]: One matrix. Every page shows another view of the same customer type × budget cells.
+              - button "Refresh Playbook" [disabled] [ref=f3e148]
+            - generic [ref=f3e154]:
+              - generic [ref=f3e155]:
+                - button "Previous Playbook page" [disabled] [ref=f3e156]
+                - generic [ref=f3e159]:
+                  - text: Page
+                  - combobox "Playbook page" [ref=f3e160]:
+                    - option "1. Recommended build" [selected]
+                    - option "2. Market & target pricing"
+                    - option "3. Costs, profit & delivery"
+                    - option "4. Linked listings & availability"
+                    - option "5. Upsell components"
+                    - option "6. Upsell commercials"
+                    - option "7. Listing media"
+                    - option "8. 3D assets"
+                    - option "9. Performance"
+                    - option "10. Live status"
+                    - option "11. Approvals"
+                    - option "12. History & decisions"
+                    - option "13. Distribution"
+                    - option "14. Compatibility"
+                    - option "15. Software"
+                    - option "16. Automation health"
+                - button "Next Playbook page" [ref=f3e161]
+              - generic [ref=f3e164]:
+                - text: Customer type
+                - combobox "Playbook customer type" [ref=f3e165]:
+                  - option "All customer types" [selected]
+              - group "Matrix detail" [ref=f3e166]:
+                - button "compact" [pressed] [ref=f3e167]
+                - button "detailed" [ref=f3e168]
+            - status [ref=f3e169]: Loading the operational matrix…
+      - button "Chat with Hermes" [ref=f3e170]
+  - button "Open Next.js Dev Tools" [ref=f3e176] [cursor=pointer]

@@ -79,7 +79,7 @@ class CourierQuote:
     protection_warning: str
 
 
-def _parse_tracked_quotes(data: dict) -> list[CourierQuote]:
+def _parse_tracked_quotes(data: dict, *, require_collection: bool = False) -> list[CourierQuote]:
     """Keep malformed or unbookable provider rows out of operator choices."""
     if not isinstance(data, dict):
         return []
@@ -93,6 +93,8 @@ def _parse_tracked_quotes(data: dict) -> list[CourierQuote]:
             continue
         service = quote.get("Service")
         if not isinstance(service, dict):
+            continue
+        if require_collection and service.get("CollectionType") != "Collection":
             continue
         slug = service.get("Slug")
         selected_extras = quote.get("Extras", quote.get("extras", []))
@@ -189,6 +191,9 @@ async def get_tracked_quotes(
     value_gbp: float,
     delivery_country: str = "GBR",
     environment: str | None = None,
+    collection_postcode: str | None = None,
+    delivery_postcode: str | None = None,
+    require_collection: bool = False,
 ) -> list[CourierQuote]:
     """Returns all TRACKED service quotes, cheapest first. An empty list if no tracked
     service is available for these dimensions/destination. Untracked
@@ -197,6 +202,8 @@ async def get_tracked_quotes(
     is always well above the threshold where untracked is a bad idea),
     tracked is the only option worth quoting."""
     settings = get_settings()
+    if require_collection and (not collection_postcode or not delivery_postcode):
+        raise Parcel2GoError("Collection and destination postcodes are required for a home-collection quote")
     env = environment or settings.parcel2go_environment
     token = await _get_access_token(env)
     base_url = _BASE_URLS[env]
@@ -218,6 +225,10 @@ async def get_tracked_quotes(
         # cannot provide the requested extra.
         "Extras": [{"Type": "Signature"}],
     }
+    if collection_postcode:
+        payload["CollectionAddress"]["Postcode"] = collection_postcode
+    if delivery_postcode:
+        payload["DeliveryAddress"]["Postcode"] = delivery_postcode
 
     async with httpx.AsyncClient(timeout=30.0) as client:
         resp = await client.post(
@@ -244,7 +255,7 @@ async def get_tracked_quotes(
     data = resp.json()
     if not isinstance(data, dict):
         return []
-    return _parse_tracked_quotes(data)
+    return _parse_tracked_quotes(data, require_collection=require_collection)
 
 
 async def get_cheapest_tracked_quote(**kwargs) -> CourierQuote | None:

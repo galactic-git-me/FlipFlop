@@ -1,0 +1,3 @@
+{
+  "/api/listings/[listingId]/price-history/route": "app/api/listings/[listingId]/price-history/route.js"
+}

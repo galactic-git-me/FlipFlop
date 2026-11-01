@@ -223,6 +223,12 @@ async def upsert_listing_price(
     counting it, so re-scraping the same still-live listing every scan cycle
     doesn't inflate listing_count.
     """
+    # Serialize reassignment of a listing so both affected aggregates are repaired.
+    await db.execute(text("SELECT pg_advisory_xact_lock(hashtextextended(:key, 61027))"),
+                     {"key": listing_id})
+    previous_cpk = (await db.execute(text(
+        "SELECT cpk FROM gem_radar_cpk_listing_price WHERE listing_id=:listing_id"),
+        {"listing_id": listing_id})).scalar()
     await db.execute(
         text(
             """
@@ -237,6 +243,26 @@ async def upsert_listing_price(
         {"listing_id": listing_id, "cpk": cpk, "price": price},
     )
 
+    await recompute_market_price(db, cpk, category=category, brand=brand, model=model)
+    if previous_cpk and previous_cpk != cpk:
+        await recompute_market_price(db, previous_cpk)
+
+
+async def remove_listing_price(db: AsyncSession, listing_id: str) -> None:
+    """Quarantine a contribution and repair its previous product aggregate."""
+    await db.execute(text("SELECT pg_advisory_xact_lock(hashtextextended(:key, 61027))"),
+                     {"key": listing_id})
+    old_cpk = (await db.execute(text(
+        "DELETE FROM gem_radar_cpk_listing_price WHERE listing_id=:id RETURNING cpk"),
+        {"id": listing_id})).scalar()
+    if old_cpk:
+        await recompute_market_price(db, old_cpk)
+
+
+async def recompute_market_price(db: AsyncSession, cpk: str, *,
+                                 category: str | None = None, brand: str | None = None,
+                                 model: str | None = None) -> None:
+    """Recompute an existing product, including when its last listing moved away."""
     agg_result = await db.execute(
         text(
             f"""

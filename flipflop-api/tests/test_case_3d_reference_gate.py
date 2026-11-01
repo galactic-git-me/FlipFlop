@@ -16,9 +16,9 @@ def _image(index: int) -> dict[str, str]:
     return {"url": f"https://images.example.test/case-{index}.jpg", "source": "manufacturer"}
 
 
-def test_reference_approval_requires_exactly_four_images() -> None:
-    with pytest.raises(ValidationError):
-        CaseReferenceApproval(selected_images=[_image(1), _image(2), _image(3)])
+def test_reference_selection_accepts_one_to_four_model_images() -> None:
+    approved = CaseReferenceApproval(selected_images=[_image(1), _image(2), _image(3)])
+    assert len(approved.selected_images) == 3
 
 
 def test_generation_requires_the_saved_four_images_in_saved_order() -> None:

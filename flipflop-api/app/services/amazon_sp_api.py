@@ -8,6 +8,9 @@ when a category or approval requirement still needs seller action.
 
 from __future__ import annotations
 
+import re
+from datetime import datetime, timedelta, timezone
+from urllib.parse import quote
 from typing import Any
 
 import httpx
@@ -102,6 +105,64 @@ class AmazonSPAPI:
         )
         return _json(response) or {}
 
+    async def withdraw_listing(self, *, sku: str) -> bool:
+        """Request deletion, then require a read-back before claiming withdrawal."""
+        try:
+            current = await self.get_listing(sku=sku)
+        except AmazonSPAPIError as exc:
+            if exc.status_code == 404:
+                return True
+            raise
+        if not any("BUYABLE" in (s.get("status") or []) for s in current.get("summaries", [])):
+            return True
+        await self._request("DELETE", f"/listings/2021-08-01/items/{quote(self.seller_id, safe='')}/{quote(sku, safe='')}", params={"marketplaceIds": self.marketplace_id})
+        try:
+            current = await self.get_listing(sku=sku)
+        except AmazonSPAPIError as exc:
+            if exc.status_code == 404:
+                return True
+            raise
+        return not any("BUYABLE" in (s.get("status") or []) for s in current.get("summaries", []))
+
+    async def paid_orders_by_sku(self) -> dict[str, str]:
+        """Orders v2026-01-01: exact SKU/order identity, without buyer PII."""
+        params = {"marketplaceIds": self.marketplace_id, "createdAfter": (datetime.now(timezone.utc) - timedelta(days=30)).isoformat(),
+            "fulfillmentStatuses": "UNSHIPPED,PARTIALLY_SHIPPED,SHIPPED", "includedData": "FULFILLMENT", "maxResultsPerPage": 100}
+        found = {}
+        for _ in range(5):
+            data = _json(await self._request("GET", "/orders/2026-01-01/orders", params=params)) or {}
+            for order in data.get("orders", []):
+                if (order.get("fulfillment") or {}).get("fulfillmentStatus") not in {"UNSHIPPED", "PARTIALLY_SHIPPED", "SHIPPED"}:
+                    continue
+                for item in order.get("orderItems", []):
+                    sku = (item.get("product") or {}).get("sellerSku")
+                    if sku and order.get("orderId") and item.get("quantityOrdered", 0) > 0:
+                        found[sku] = order["orderId"]
+            token = (data.get("pagination") or {}).get("nextToken")
+            if not token:
+                return found
+            params["paginationToken"] = token
+        raise AmazonSPAPIError("Amazon order scan exceeded its bounded history window; review the account before inferring sale status")
+
+    async def search_catalog_items_by_asin(self, asins: list[str]) -> dict[str, Any]:
+        """Read exact Amazon catalogue attributes for up to 20 ASINs.
+
+        Catalog Items attributes and normalized dimensions are distinct from a
+        seller offer: callers must still capture stock, price and delivery from
+        the selected product page. Amazon requires the Product Listing role.
+        """
+        normalized=list(dict.fromkeys(str(value).strip().upper() for value in asins))
+        if not normalized or len(normalized)>20 or any(not re.fullmatch(r'[A-Z0-9]{10}',value) for value in normalized):
+            raise AmazonSPAPIError("Catalog Items lookup requires one to twenty valid ASINs.")
+        response=await self._request("GET","/catalog/2022-04-01/items",params={
+            "marketplaceIds":self.marketplace_id,
+            "identifiers":",".join(normalized),
+            "identifiersType":"ASIN",
+            "includedData":"attributes,dimensions,identifiers,summaries",
+        })
+        payload=_json(response) or {}
+        return payload if isinstance(payload,dict) else {}
+
     async def upsert_listing(self, *, sku: str, title: str, description: str, bullet_points: list[str], price: float, quantity: int, condition: str, images: list[str]) -> dict[str, Any]:
         if not sku.strip():
             raise AmazonSPAPIError("Amazon listing SKU cannot be empty.")
@@ -109,6 +170,12 @@ class AmazonSPAPI:
             raise AmazonSPAPIError("Amazon listing price must be greater than zero.")
         if not images or any(not url.startswith(("https://", "http://")) for url in images):
             raise AmazonSPAPIError("Amazon requires at least one publicly reachable product image URL.")
+        from app.services.channel_images import prepare_channel_urls, require_public_images
+        try:
+            images = await prepare_channel_urls(images[:10], "amazon")
+            await require_public_images(images, "amazon")
+        except (ValueError, OSError) as exc:
+            raise AmazonSPAPIError(str(exc)) from exc
 
         attributes: dict[str, Any] = {
             "item_name": [{"value": title[:200], "language_tag": "en_GB", "marketplace_id": self.marketplace_id}],

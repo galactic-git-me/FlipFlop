@@ -1,6 +1,6 @@
 # Kill processes holding development ports
 
-$ports = @(4311, 18000, 4312, 4313)
+$ports = @(4314, 18000, 4312, 4313)
 
 Write-Host "Cleaning up development ports..." -ForegroundColor Cyan
 
@@ -10,7 +10,7 @@ foreach ($port in $ports) {
     if ($processes) {
         Write-Host "  Port ${port} is in use:" -ForegroundColor Yellow
 
-        # Extract PID from netstat output (format: "  TCP    0.0.0.0:4311           0.0.0.0:0              LISTENING       12345")
+        # Extract PID from netstat output (format: "  TCP    0.0.0.0:4314           0.0.0.0:0              LISTENING       12345")
         foreach ($line in $processes) {
             $parts = $line -split '\s+' | Where-Object { $_ }
             $processId = $parts[-1]

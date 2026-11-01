@@ -1,9 +1,14 @@
-from pydantic import field_validator
+import os
+from urllib.parse import urlsplit, urlunsplit
+from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings
 from functools import lru_cache
 
 
 class Settings(BaseSettings):
+    # Normal local DEV gets continuous catalogue refresh after the source
+    # migration; customer-testing and production remain opt-in/off by default.
+    commercial_reconciliation_enabled: bool | None = None
     database_url: str = "postgresql+asyncpg://flipper:flipper@127.0.0.1:5432/pcflipper"
     sync_database_url: str = "postgresql://flipper:flipper@127.0.0.1:5432/pcflipper"
     # Optional acceleration cache. Leave blank when Redis is not installed;
@@ -16,7 +21,7 @@ class Settings(BaseSettings):
     # Central model selection order. Ollama's URL is supplied per runtime
     # (dev gateway vs production tunnel); never hard-code its port here.
     llm_primary_provider: str = "ollama"
-    llm_primary_model: str = "qwen2.5:7b-instruct"
+    llm_primary_model: str = "qwen3.5:4b"
     llm_secondary_provider: str = "openrouter-free"
     llm_secondary_model: str = "google/gemma-4-31b-it:free"
     llm_tertiary_provider: str = "openrouter"
@@ -26,7 +31,9 @@ class Settings(BaseSettings):
     # Environment-specific Ollama gateway. Set to the DEV or PROD priority
     # endpoint in each runtime; never infer a direct engine/default port here.
     ollama_base_url: str = ""
-    ollama_model: str = "qwen2.5:7b-instruct"
+    ollama_model: str = "qwen3.5:4b"
+    # Optional DEV-only text extraction model; never changes shared/production tiers.
+    dev_cpk_ollama_model: str = ""
     scrapingbee_api_key: str = ""  # For eBay sold comps scraping
 
     ebay_app_id: str = ""
@@ -250,11 +257,17 @@ class Settings(BaseSettings):
 
     # Auth
     secret_key: str = "dev-secret-key-change-in-production"  # MUST be set via environment in production
+    # Admin JWTs use a dedicated key so enabling admin sessions does not reuse
+    # the customer/portal signing key or its licence-encryption dependency.
+    admin_jwt_secret: str = ""
     jwt_algorithm: str = "HS256"
     jwt_expiration_hours: int = 168  # 1 week
 
     # OAuth2 - Google
     google_client_id: str = ""
+    google_custom_search_api_key: str = ""
+    google_custom_search_engine_id: str = ""
+    serper_api_key: str = ""
     google_client_secret: str = ""
     google_redirect_uri: str = "http://localhost:3000/auth/callback"
 
@@ -271,10 +284,41 @@ class Settings(BaseSettings):
     # Those remain on the GPU workstation and publish completed results to the
     # production database through the worker integration path.
     web_only: bool = False
+    # Allow the web tier to persist scan submissions for a separate
+    # Gem Radar worker to consume. This does not start any background work.
+    external_gem_radar_worker_enabled: bool = False
 
     class Config:
-        env_file = (".env.local", ".env")
+        env_file = (".env", ".env.local")
         extra = "ignore"
+
+    @model_validator(mode="before")
+    @classmethod
+    def default_commercial_reconciliation_for_dev(cls, values):
+        """Enable the existing maintenance loop in local DEV, never implicitly in production."""
+        if not isinstance(values, dict) or values.get("commercial_reconciliation_enabled") is not None:
+            return values
+        app_env = str(values.get("app_env") or os.getenv("APP_ENV") or "dev").strip().casefold()
+        runtime_env = str(values.get("flipflop_runtime_env") or
+            os.getenv("FLIPFLOP_RUNTIME_ENV") or "").strip().casefold()
+        values["commercial_reconciliation_enabled"] = app_env == "dev" and runtime_env in {"", "development"}
+        return values
+
+    @model_validator(mode="after")
+    def use_development_ollama_priority(self):
+        """Keep local DEV inference on its reserved gateway priority port."""
+        if str(self.app_env or "").strip().casefold() != "dev" or not self.ollama_base_url:
+            return self
+        try:
+            parsed = urlsplit(self.ollama_base_url)
+            port = parsed.port
+        except ValueError:
+            return self
+        if parsed.hostname and parsed.hostname.casefold() in {"localhost", "127.0.0.1"} and port == 11434:
+            host = parsed.hostname
+            self.ollama_base_url = urlunsplit((parsed.scheme, f"{host}:11435", parsed.path,
+                parsed.query, parsed.fragment))
+        return self
 
     @field_validator("ebay_environment", "ebay_listing_environment", "parcel2go_environment", mode="before")
     @classmethod
@@ -284,4 +328,6 @@ class Settings(BaseSettings):
 
 @lru_cache
 def get_settings() -> Settings:
+    if os.getenv("APP_ENV", "").strip().casefold() in {"test", "testing"}:
+        return Settings(_env_file=None)
     return Settings()

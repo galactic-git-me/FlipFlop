@@ -12,6 +12,9 @@ class BuildComponent(BaseModel):
     part_id: Optional[int] = None   # set when source == "catalogue"
     listing_url: Optional[str] = None
     image_url: Optional[str] = None
+    sourcing_candidate: bool = False
+    gem_classification: Optional[Literal["SUPER_GEM", "GEM"]] = None
+    gem_radar_listing_id: Optional[int] = None
     purchased: bool = False
     inventory_item_id: int | None = None
     condition: str = "unknown"
@@ -53,6 +56,7 @@ class BuildPhoto(BaseModel):
 class ManualBuildOut(BaseModel):
     id: int
     name: str
+    creation_method: Literal["manual", "ai", "gem_spotlight"] = "manual"
     components: list[BuildComponent]
     total_cost: Optional[float]
     last_evaluation: Optional[dict]
@@ -159,7 +163,9 @@ class ManualBuildOut(BaseModel):
 class ManualBuildSummary(BaseModel):
     id: int
     name: str
+    creation_method: Literal["manual", "ai", "gem_spotlight"] = "manual"
     total_cost: Optional[float]
+    ebay_price: Optional[float] = None
     component_count: int
     status: str
     updated_at: datetime

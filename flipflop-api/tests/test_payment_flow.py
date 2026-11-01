@@ -1,5 +1,7 @@
 """Tests for payment integration and order creation flow."""
 
+import os
+
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 from fastapi import HTTPException
@@ -19,7 +21,14 @@ class TestPaymentService:
     @pytest.fixture
     def payment_service(self):
         """Create PaymentService instance."""
-        return PaymentService()
+        from types import SimpleNamespace
+        from app.services.payment_service import StripeConfig
+        service = PaymentService()
+        service.config = StripeConfig()
+        service.config.api_key = "sk_test_isolated"
+        service.config.webhook_secret = "whsec_isolated"
+        service.config.publishable_key = "pk_test_isolated"
+        return service
 
     @patch("app.services.payment_service.stripe")
     async def test_create_payment_intent_success(self, mock_stripe, payment_service):

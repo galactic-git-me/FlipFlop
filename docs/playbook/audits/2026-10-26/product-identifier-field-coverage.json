@@ -1,0 +1,44 @@
+[
+  {
+    "source": "amazon",
+    "listings": 6885,
+    "gtin": 0,
+    "mpn": 0,
+    "model_number": 0
+  },
+  {
+    "source": "awd_it",
+    "listings": 660,
+    "gtin": 0,
+    "mpn": 0,
+    "model_number": 0
+  },
+  {
+    "source": "computer_orbit",
+    "listings": 1039,
+    "gtin": 0,
+    "mpn": 0,
+    "model_number": 0
+  },
+  {
+    "source": "ebuyer",
+    "listings": 314,
+    "gtin": 0,
+    "mpn": 0,
+    "model_number": 0
+  },
+  {
+    "source": "overclockers",
+    "listings": 2781,
+    "gtin": 0,
+    "mpn": 0,
+    "model_number": 0
+  },
+  {
+    "source": "scan",
+    "listings": 1823,
+    "gtin": 0,
+    "mpn": 0,
+    "model_number": 0
+  }
+]

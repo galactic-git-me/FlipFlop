@@ -1,0 +1,1377 @@
+{
+  "builds": [
+    {
+      "id": "FF-GVG-01",
+      "segment": "Great-value Gaming",
+      "tier": "Budget",
+      "name": "Atlas Essential",
+      "description": "1080p performance without cutting corners.",
+      "use": "1080p gaming, esports and first gaming PC",
+      "components": {
+        "cpu": "AMD Ryzen 5 5600",
+        "motherboard": "MSI B550M PRO-VDH WIFI",
+        "ram": "32GB (2x16GB) DDR4-3200",
+        "gpu": "NVIDIA GeForce RTX 5050 8GB",
+        "storage": "1TB PCIe 4.0 NVMe SSD",
+        "case": "Montech AIR 100 ARGB",
+        "psu": "Corsair CX650 650W 80+ Bronze",
+        "cooling": "Thermalright Assassin X 120 SE",
+        "os": "Windows 11 Home"
+      }
+    },
+    {
+      "id": "FF-GVG-02",
+      "segment": "Great-value Gaming",
+      "tier": "Mid-range",
+      "name": "Atlas Pulse",
+      "description": "High-refresh 1440p, built around real value.",
+      "use": "1440p gaming, streaming and longevity",
+      "components": {
+        "cpu": "AMD Ryzen 5 9600X",
+        "motherboard": "ASRock B850 Steel Legend WiFi",
+        "ram": "32GB (2x16GB) DDR5-6000 CL30",
+        "gpu": "AMD Radeon RX 9060 XT 16GB",
+        "storage": "2TB PCIe 4.0 NVMe SSD",
+        "case": "Montech SKY TWO GX",
+        "psu": "Corsair RM750e 750W 80+ Gold",
+        "cooling": "Thermalright Peerless Assassin 120 SE",
+        "os": "Windows 11 Home"
+      }
+    },
+    {
+      "id": "FF-GVG-03",
+      "segment": "Great-value Gaming",
+      "tier": "High-end",
+      "name": "Atlas Apex",
+      "description": "Premium 1440p and confident 4K value.",
+      "use": "High-refresh 1440p and entry 4K",
+      "components": {
+        "cpu": "AMD Ryzen 7 9800X3D",
+        "motherboard": "ASUS TUF Gaming X870-PLUS WIFI",
+        "ram": "32GB (2x16GB) DDR5-6000 CL30",
+        "gpu": "AMD Radeon RX 9070 16GB",
+        "storage": "2TB PCIe 4.0 NVMe SSD",
+        "case": "Lian Li LANCOOL 207",
+        "psu": "Corsair RM850e 850W 80+ Gold",
+        "cooling": "Arctic Liquid Freezer III 240",
+        "os": "Windows 11 Home"
+      }
+    },
+    {
+      "id": "FF-HPG-01",
+      "segment": "High-performance Gaming",
+      "tier": "Budget",
+      "name": "Vortex Start",
+      "description": "Serious frame rates with a productivity-capable CPU.",
+      "use": "1440p gaming, DLSS 4 and creator side-projects",
+      "components": {
+        "cpu": "Intel Core Ultra 5 250K Plus",
+        "motherboard": "MSI Z890 GAMING PLUS WIFI",
+        "ram": "32GB (2x16GB) DDR5-6400",
+        "gpu": "NVIDIA GeForce RTX 5060 Ti 16GB",
+        "storage": "1TB PCIe 4.0 NVMe SSD",
+        "case": "NZXT H5 Flow",
+        "psu": "Corsair RM750e 750W 80+ Gold",
+        "cooling": "Thermalright Phantom Spirit 120 SE",
+        "os": "Windows 11 Home"
+      }
+    },
+    {
+      "id": "FF-HPG-02",
+      "segment": "High-performance Gaming",
+      "tier": "Mid-range",
+      "name": "Prometheus ChromaFlair",
+      "description": "Beautiful machines, built to be admired.",
+      "use": "Premium 1440p/4K gaming and showcase build",
+      "components": {
+        "cpu": "AMD Ryzen 7 7800X3D",
+        "motherboard": "ASUS PRIME X870-P",
+        "ram": "32GB (2x16GB) Lexar DDR5-6400 CL38",
+        "gpu": "AMD Radeon RX 9070 XT 16GB",
+        "storage": "1TB PCIe 3.0 NVMe SSD",
+        "case": "APNX Creator C1 ChromaFlair",
+        "psu": "Corsair RM750i 750W modular",
+        "cooling": "Thermalright Aqua Elite 240 V3",
+        "os": "Windows 11 Home"
+      }
+    },
+    {
+      "id": "FF-HPG-03",
+      "segment": "High-performance Gaming",
+      "tier": "High-end",
+      "name": "Vortex Titan",
+      "description": "No-compromise 4K performance.",
+      "use": "4K high-refresh gaming, VR and heavy creation",
+      "components": {
+        "cpu": "AMD Ryzen 7 9850X3D",
+        "motherboard": "ASUS ROG Crosshair X870E Hero",
+        "ram": "64GB (2x32GB) DDR5-6000 CL30",
+        "gpu": "NVIDIA GeForce RTX 5090 32GB",
+        "storage": "4TB PCIe 4.0 NVMe SSD",
+        "case": "Fractal Design North XL",
+        "psu": "Corsair HX1200i 1200W 80+ Platinum",
+        "cooling": "Arctic Liquid Freezer III 360",
+        "os": "Windows 11 Pro"
+      }
+    },
+    {
+      "id": "FF-STU-01",
+      "segment": "Student Hybrid",
+      "tier": "Budget",
+      "name": "Campus AI Mini",
+      "description": "Small, quiet and genuinely useful every day.",
+      "use": "Study, office, media, coding and NPU-assisted apps",
+      "components": {
+        "cpu": "AMD Ryzen AI 5 340 (integrated)",
+        "motherboard": "OEM compact APU mainboard (included)",
+        "ram": "32GB LPDDR5X",
+        "gpu": "AMD Radeon 840M integrated",
+        "storage": "1TB PCIe 4.0 NVMe SSD",
+        "case": "ASUS NUC 14 Pro-style compact chassis",
+        "psu": "External 120W power adapter",
+        "cooling": "Integrated low-noise cooling",
+        "os": "Windows 11 Home"
+      }
+    },
+    {
+      "id": "FF-STU-02",
+      "segment": "Student Hybrid",
+      "tier": "Mid-range",
+      "name": "Campus Studio",
+      "description": "Study by day, 1440p play by night.",
+      "use": "University work, coding, media and value gaming",
+      "components": {
+        "cpu": "AMD Ryzen 5 9600X",
+        "motherboard": "MSI B850 GAMING PLUS WIFI",
+        "ram": "32GB (2x16GB) DDR5-6000 CL30",
+        "gpu": "Intel Arc B580 12GB",
+        "storage": "2TB PCIe 4.0 NVMe SSD",
+        "case": "Fractal Design Pop Air",
+        "psu": "Corsair RM650e 650W 80+ Gold",
+        "cooling": "Thermalright Assassin X 120 SE",
+        "os": "Windows 11 Home"
+      }
+    },
+    {
+      "id": "FF-STU-03",
+      "segment": "Student Hybrid",
+      "tier": "High-end",
+      "name": "Campus Pro",
+      "description": "For design courses, code and serious downtime.",
+      "use": "Design, engineering coursework, Adobe and 1440p gaming",
+      "components": {
+        "cpu": "Intel Core Ultra 7 270K Plus",
+        "motherboard": "ASUS TUF GAMING Z890-PLUS WIFI",
+        "ram": "64GB (2x32GB) DDR5-6400",
+        "gpu": "NVIDIA GeForce RTX 5070 Ti 16GB",
+        "storage": "2TB PCIe 4.0 NVMe SSD",
+        "case": "Lian Li LANCOOL 207",
+        "psu": "Corsair RM850e 850W 80+ Gold",
+        "cooling": "Arctic Liquid Freezer III 240",
+        "os": "Windows 11 Home"
+      }
+    },
+    {
+      "id": "FF-BOF-01",
+      "segment": "Business & Office",
+      "tier": "Budget",
+      "name": "Deskwise Essential",
+      "description": "Fast, tidy and ready for work.",
+      "use": "Office, bookkeeping, browsers and multi-monitor work",
+      "components": {
+        "cpu": "AMD Ryzen 5 5600G",
+        "motherboard": "MSI B550M PRO-VDH WIFI",
+        "ram": "32GB (2x16GB) DDR4-3200",
+        "gpu": "Radeon Vega integrated",
+        "storage": "1TB PCIe 4.0 NVMe SSD",
+        "case": "Fractal Design Core 1100",
+        "psu": "Corsair CX550 550W 80+ Bronze",
+        "cooling": "AMD Wraith Stealth",
+        "os": "Windows 11 Pro"
+      }
+    },
+    {
+      "id": "FF-BOF-02",
+      "segment": "Business & Office",
+      "tier": "Mid-range",
+      "name": "Deskwise Pro",
+      "description": "A quiet professional desktop with modern AI capability.",
+      "use": "Teams, Excel, operational systems and dual displays",
+      "components": {
+        "cpu": "Intel Core Ultra 5 250K Plus",
+        "motherboard": "ASUS Pro Q870M-C-CSM",
+        "ram": "32GB (2x16GB) DDR5-6400",
+        "gpu": "Intel integrated graphics",
+        "storage": "2TB PCIe 4.0 NVMe SSD",
+        "case": "Fractal Design Define 7 Compact",
+        "psu": "Corsair RM650e 650W 80+ Gold",
+        "cooling": "Noctua NH-U12S redux",
+        "os": "Windows 11 Pro"
+      }
+    },
+    {
+      "id": "FF-BOF-03",
+      "segment": "Business & Office",
+      "tier": "High-end",
+      "name": "Deskwise Executive",
+      "description": "Power for demanding local workloads without gaming aesthetics.",
+      "use": "Executive office, local NPU features and travel-friendly workspace",
+      "components": {
+        "cpu": "AMD Ryzen AI 7 350 (integrated)",
+        "motherboard": "OEM compact APU mainboard (included)",
+        "ram": "64GB LPDDR5X",
+        "gpu": "AMD Radeon 860M integrated",
+        "storage": "2TB PCIe 4.0 NVMe SSD",
+        "case": "Premium compact aluminium mini-PC chassis",
+        "psu": "External 180W power adapter",
+        "cooling": "Integrated low-noise cooling",
+        "os": "Windows 11 Pro"
+      }
+    },
+    {
+      "id": "FF-CCR-01",
+      "segment": "Content Creation",
+      "tier": "Budget",
+      "name": "Creator Forge",
+      "description": "A practical production desk in one box.",
+      "use": "Photoshop, Premiere, 4K editing and streaming",
+      "components": {
+        "cpu": "Intel Core Ultra 5 250K Plus",
+        "motherboard": "MSI Z890 GAMING PLUS WIFI",
+        "ram": "64GB (2x32GB) DDR5-6400",
+        "gpu": "NVIDIA GeForce RTX 5060 Ti 16GB",
+        "storage": "2TB PCIe 4.0 NVMe SSD",
+        "case": "Corsair 3500X",
+        "psu": "Corsair RM750e 750W 80+ Gold",
+        "cooling": "Arctic Liquid Freezer III 240",
+        "os": "Windows 11 Home"
+      }
+    },
+    {
+      "id": "FF-CCR-02",
+      "segment": "Content Creation",
+      "tier": "Mid-range",
+      "name": "Creator Signal",
+      "description": "Fast timelines, fast renders, no compromises on storage.",
+      "use": "4K/6K editing, After Effects, Blender and client work",
+      "components": {
+        "cpu": "Intel Core Ultra 7 270K Plus",
+        "motherboard": "ASUS ProArt Z890-CREATOR WIFI",
+        "ram": "64GB (2x32GB) DDR5-6400",
+        "gpu": "NVIDIA GeForce RTX 5080 16GB",
+        "storage": "4TB PCIe 4.0 NVMe SSD",
+        "case": "ASUS ProArt PA602",
+        "psu": "Corsair RM1000x 1000W 80+ Gold",
+        "cooling": "Arctic Liquid Freezer III 360",
+        "os": "Windows 11 Pro"
+      }
+    },
+    {
+      "id": "FF-CCR-03",
+      "segment": "Content Creation",
+      "tier": "High-end",
+      "name": "Creator Nova",
+      "description": "Your own post-production workstation.",
+      "use": "8K editing, 3D, VFX, rendering and AI-assisted production",
+      "components": {
+        "cpu": "AMD Ryzen 9 9950X",
+        "motherboard": "ASUS ProArt X870E-Creator WiFi",
+        "ram": "128GB (4x32GB) DDR5-5600",
+        "gpu": "NVIDIA GeForce RTX 5090 32GB",
+        "storage": "4TB PCIe 4.0 NVMe SSD + 4TB project SSD",
+        "case": "Fractal Design Define 7 XL",
+        "psu": "Corsair HX1200i 1200W 80+ Platinum",
+        "cooling": "Arctic Liquid Freezer III 420",
+        "os": "Windows 11 Pro"
+      }
+    },
+    {
+      "id": "FF-AIW-01",
+      "segment": "AI Workstation",
+      "tier": "Budget",
+      "name": "Localhost 16",
+      "description": "Your first genuinely useful private AI machine.",
+      "use": "Ollama, coding assistants and small/quantised local LLMs",
+      "components": {
+        "cpu": "AMD Ryzen 5 9600X",
+        "motherboard": "MSI MAG B850 Tomahawk MAX WiFi",
+        "ram": "64GB (2x32GB) DDR5-6000 CL30",
+        "gpu": "NVIDIA GeForce RTX 5060 Ti 16GB",
+        "storage": "2TB PCIe 4.0 NVMe SSD",
+        "case": "Fractal Design Meshify 2 Compact",
+        "psu": "Corsair RM750e 750W 80+ Gold",
+        "cooling": "Thermalright Peerless Assassin 120 SE",
+        "os": "Windows 11 Pro + Ubuntu option"
+      }
+    },
+    {
+      "id": "FF-AIW-02",
+      "segment": "AI Workstation",
+      "tier": "Mid-range",
+      "name": "Localhost 32",
+      "description": "High-VRAM local AI without workstation-server excess.",
+      "use": "High-VRAM inference, ROCm-compatible workloads and data work",
+      "components": {
+        "cpu": "AMD Ryzen 9 9950X",
+        "motherboard": "ASUS ProArt X870E-Creator WiFi",
+        "ram": "128GB (4x32GB) DDR5-5600",
+        "gpu": "ASRock AMD Radeon AI PRO R9700 Creator 32GB",
+        "storage": "4TB PCIe 4.0 NVMe SSD",
+        "case": "Fractal Design Meshify 2 XL",
+        "psu": "Corsair RM1000x 1000W 80+ Gold",
+        "cooling": "Arctic Liquid Freezer III 360",
+        "os": "Ubuntu 24.04 LTS + Windows 11 Pro dual-boot"
+      }
+    },
+    {
+      "id": "FF-AIW-03",
+      "segment": "AI Workstation",
+      "tier": "High-end",
+      "name": "Localhost 48",
+      "description": "A serious private AI server for continuous work.",
+      "use": "48GB local models, continuous inference and multi-GPU expansion",
+      "components": {
+        "cpu": "AMD Ryzen Threadripper PRO 7975WX",
+        "motherboard": "ASUS Pro WS WRX90E-SAGE SE",
+        "ram": "256GB (8x32GB) DDR5 ECC RDIMM",
+        "gpu": "NVIDIA RTX 6000 Ada 48GB",
+        "storage": "4TB PCIe 4.0 NVMe SSD + 8TB data SSD",
+        "case": "Corsair 9000D Airflow",
+        "psu": "Corsair AX1600i 1600W 80+ Titanium",
+        "cooling": "Noctua NH-U14S TR5-SP6",
+        "os": "Ubuntu 24.04 LTS + Windows 11 Pro"
+      }
+    },
+    {
+      "id": "FF-SWD-01",
+      "segment": "Software Development",
+      "tier": "Budget",
+      "name": "Codebase",
+      "description": "Fast builds, containers and plenty of RAM.",
+      "use": "VS Code, Docker, local databases and occasional GPU work",
+      "components": {
+        "cpu": "AMD Ryzen 5 9600X",
+        "motherboard": "MSI B850 GAMING PLUS WIFI",
+        "ram": "64GB (2x32GB) DDR5-6000 CL30",
+        "gpu": "Intel Arc B580 12GB",
+        "storage": "2TB PCIe 4.0 NVMe SSD",
+        "case": "Fractal Design Pop Air",
+        "psu": "Corsair RM650e 650W 80+ Gold",
+        "cooling": "Thermalright Peerless Assassin 120 SE",
+        "os": "Windows 11 Pro + WSL2"
+      }
+    },
+    {
+      "id": "FF-SWD-02",
+      "segment": "Software Development",
+      "tier": "Mid-range",
+      "name": "Compiler",
+      "description": "A local development lab that still looks sharp.",
+      "use": "Large codebases, containers, local AI assistants and virtual machines",
+      "components": {
+        "cpu": "Intel Core Ultra 7 270K Plus",
+        "motherboard": "ASUS ProArt Z890-CREATOR WIFI",
+        "ram": "96GB (2x48GB) DDR5-6400",
+        "gpu": "NVIDIA GeForce RTX 5060 Ti 16GB",
+        "storage": "4TB PCIe 4.0 NVMe SSD",
+        "case": "Fractal Design North",
+        "psu": "Corsair RM850e 850W 80+ Gold",
+        "cooling": "Noctua NH-D15 G2",
+        "os": "Windows 11 Pro + Ubuntu VM"
+      }
+    },
+    {
+      "id": "FF-SWD-03",
+      "segment": "Software Development",
+      "tier": "High-end",
+      "name": "Shipyard",
+      "description": "Build, test and run locally at scale.",
+      "use": "Compiling, multiple VMs, AI-assisted development and GPU compute",
+      "components": {
+        "cpu": "AMD Ryzen 9 9950X",
+        "motherboard": "ASUS ProArt X870E-Creator WiFi",
+        "ram": "128GB (4x32GB) DDR5-5600",
+        "gpu": "NVIDIA GeForce RTX 5080 16GB",
+        "storage": "4TB PCIe 4.0 NVMe SSD + 4TB build-cache SSD",
+        "case": "Fractal Design Define 7 XL",
+        "psu": "Corsair RM1000x 1000W 80+ Gold",
+        "cooling": "Arctic Liquid Freezer III 360",
+        "os": "Windows 11 Pro + Ubuntu 24.04 dual-boot"
+      }
+    },
+    {
+      "id": "FF-FAM-01",
+      "segment": "Family & Home",
+      "tier": "Budget",
+      "name": "Hearth",
+      "description": "The reliable household computer.",
+      "use": "Homework, video calls, browsing, photos and light games",
+      "components": {
+        "cpu": "AMD Ryzen 5 5600G",
+        "motherboard": "MSI B550M PRO-VDH WIFI",
+        "ram": "32GB (2x16GB) DDR4-3200",
+        "gpu": "Radeon Vega integrated",
+        "storage": "1TB PCIe 4.0 NVMe SSD",
+        "case": "Fractal Design Core 1100",
+        "psu": "Corsair CX550 550W 80+ Bronze",
+        "cooling": "AMD Wraith Stealth",
+        "os": "Windows 11 Home"
+      }
+    },
+    {
+      "id": "FF-FAM-02",
+      "segment": "Family & Home",
+      "tier": "Mid-range",
+      "name": "Haven",
+      "description": "The home computer that also plays properly.",
+      "use": "Family media, school work, photo storage and 1440p gaming",
+      "components": {
+        "cpu": "AMD Ryzen 5 9600X",
+        "motherboard": "ASRock B850 Steel Legend WiFi",
+        "ram": "32GB (2x16GB) DDR5-6000 CL30",
+        "gpu": "AMD Radeon RX 9060 XT 16GB",
+        "storage": "2TB PCIe 4.0 NVMe SSD",
+        "case": "Montech AIR 100 ARGB",
+        "psu": "Corsair RM650e 650W 80+ Gold",
+        "cooling": "Thermalright Assassin X 120 SE",
+        "os": "Windows 11 Home"
+      }
+    },
+    {
+      "id": "FF-FAM-03",
+      "segment": "Family & Home",
+      "tier": "High-end",
+      "name": "Horizon",
+      "description": "A beautiful shared home hub with proper power.",
+      "use": "Family photo/video hub, 4K media, home office and gaming",
+      "components": {
+        "cpu": "AMD Ryzen 7 9700X",
+        "motherboard": "ASUS TUF Gaming X870-PLUS WIFI",
+        "ram": "64GB (2x32GB) DDR5-6000 CL30",
+        "gpu": "AMD Radeon RX 9070 16GB",
+        "storage": "4TB PCIe 4.0 NVMe SSD",
+        "case": "APNX Creator C1 ChromaFlair",
+        "psu": "Corsair RM850e 850W 80+ Gold",
+        "cooling": "Thermalright Aqua Elite 240 V3",
+        "os": "Windows 11 Home"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "name": "NZXT H6 Flow | CC-H61FB-01 | Compact Dual-Chamber Mid-Tower Airflow Case | Panoramic Glass Panels | High-Performance Airflow Panels | Includes 3 x 120mm Fans | Cable Management | Black | Compact dual-",
+      "brand": "nzxt",
+      "model": "h6"
+    },
+    {
+      "name": "CORSAIR FRAME 4000D Mid-Tower PC Case - White",
+      "brand": "corsair",
+      "model": "4000d"
+    },
+    {
+      "name": "NZXT H5 Flow - Compact ATX Mid-Tower PC Case - Black | Compact mid-tower with 2 included 120mm fans, 360mm front radiator support, and tempered glass. A great first airflow build.",
+      "brand": "nzxt",
+      "model": "h5"
+    },
+    {
+      "name": "Phanteks XT Silent ATX Case Closed Panel Black",
+      "brand": "phanteks",
+      "model": "xt"
+    },
+    {
+      "name": "Lian Li LANCOOL 216 RGB Mid-Tower PC Case, Black - High Airflow Design with ARGB Fans | High Cooling Performance, Dual Front 160MM PWM Fans & 1 Rear 140MM PWM Fan, Airflow Focused",
+      "brand": "lian",
+      "model": "216"
+    },
+    {
+      "name": "HYTE Y60 Modern Aesthetic Dual Chamber Panoramic Tempered Glass Mid-Tower ATX Computer Gaming Case with PCIE 4.0 Riser Cable Included, Red (CS-HYTE-Y60-BR)",
+      "brand": "hyte",
+      "model": "y60"
+    },
+    {
+      "name": "CORSAIR 3000D RGB AIRFLOW Mid-Tower PC Case \u2013 3x AR120 RGB Fans \u2013 Three-Slot GPU Support \u2013 Fits up to 8x 120mm Fans \u2013 High-Airflow Design \u2013 Black",
+      "brand": "corsair",
+      "model": "3000d"
+    },
+    {
+      "name": "MSI MAG FORGE 120A AIRFLOW Mid-Tower PC Case - ATX Capacity, up to 330mm RTX 40 GPU Support, 6 x 120mm ARGB Fans, Magnetic Dust Filters, Tempered Glass, 1-6 ARGB Control Board, USB 3.2 Gen 1 Type-A",
+      "brand": "msi",
+      "model": "120a"
+    },
+    {
+      "name": "CORSAIR 3500X RS-R ARGB Tempered Glass Mid-Tower PC Case, White",
+      "brand": "corsair",
+      "model": "3500x"
+    },
+    {
+      "name": "CiT Flash Gaming PC Case Micro ATX, MATX Computer Case with 4 ARGB Fans | Compact micro atx pc case with 4 pre-installed rainbow ARGB fans and 4mm tempered glass on the front and left side panels",
+      "brand": "cit",
+      "model": "flash"
+    },
+    {
+      "name": "Fractal Design Pop Silent Tempered Glass Mid Tower Case - Black",
+      "brand": "fractal",
+      "model": "design"
+    },
+    {
+      "name": "NZXT H3 Flow - Micro-ATX Airflow PC Case - Black | Space-efficient Micro-ATX case with optimized airflow, full-size GPU support, and back-connect motherboard compatibility.",
+      "brand": "nzxt",
+      "model": "h3"
+    },
+    {
+      "name": "Mars Gaming MCV4 Black, Custom XXL E-ATX Gaming Tower, Frameless Front and Side Tempered Glass Window, Modular Dual Chamber Structure",
+      "brand": "mars",
+      "model": "mcv4"
+    },
+    {
+      "name": "MSI MAG FORGE 112R Mid-Tower PC Case - Tempered Glass, ATX, Micro-ATX & Mini-ITX Capacity, Front Mesh Panel, 4 x 120mm ARGB fans with Hub Controller, Magnetic Dust Filter, USB 3.2 Gen 1 Type-A Ports",
+      "brand": "msi",
+      "model": "112r"
+    },
+    {
+      "name": "Lian Li A3 mATX White",
+      "brand": "lian",
+      "model": "a3"
+    },
+    {
+      "name": "Antec C8, RTX 40 Compatible, Dual-Chamber Layout, tooless Design, Type-C, 360mm Radiator Support, Seamless Tempered Glass Front & Side Panels, High Airflow Full-Tower E-ATX PC Case, No Fans | Tempered",
+      "brand": "antec",
+      "model": "c8,"
+    },
+    {
+      "name": "Lian Li O11D EVO RGB Mid Tower PC Case - Black, Tempered Glass, Modular Design, E-ATX Support, Dual Chamber, Custom RGB Lighting | ATX PC case, side tempered glass, support for liquid cooling and vert",
+      "brand": "lian",
+      "model": "o11d"
+    },
+    {
+      "name": "NZXT H9 Flow - Dual-Chamber ATX PC Case - Black | Dual-chamber ATX flagship with 4 included fans, 420mm top and front radiator support, and wraparound tempered glass.",
+      "brand": "nzxt",
+      "model": "h9"
+    },
+    {
+      "name": "Lian Li O11 VISION-M mATX Dual Chamber Case - Black",
+      "brand": "lian",
+      "model": "o11"
+    },
+    {
+      "name": "ASUS TUF Gaming GT301 ATX mid-tower compact case with tempered glass side panel, honeycomb front panel, 120mm AURA Addressable RGB fan, headphone hanger and 360mm radiator support.",
+      "brand": "asus",
+      "model": "gt301"
+    },
+    {
+      "name": "GAMDIAS ZEUS ATX Mid Tower Gaming Computer PC Case with Side Tempered Glass, 4X 120mm ARGB Case Fans and Sync with 5V RGB Motherboard and Excellent Airflow",
+      "brand": "gamdias",
+      "model": "zeus"
+    },
+    {
+      "name": "MSI MAG PANO 100R PZ WHITE ATX PC Case - ATX Capacity, Verical GPU Installation Bracket, GPU Holder, Dust Filters, Swinging Storage Bracket, Dual-chamber, USB 20Gbps Type-C",
+      "brand": "msi",
+      "model": "100r"
+    },
+    {
+      "name": "NZXT H7 Flow RGB (2024) Mid-Tower Case - All White",
+      "brand": "nzxt",
+      "model": "h7"
+    },
+    {
+      "name": "Fractal Design Define 7 Compact Mid-Tower Case - Black",
+      "brand": "fractal",
+      "model": "7"
+    },
+    {
+      "name": "GAMDIAS TALOS E3 MESH WH Gaming pc case, Mid-Tower ATX Case with Side Tempered Glass Panel and a Magnetic Dust Filter & 3 Built-in 120mm ARGB Fans, Tool-Free Installation, Mesh Front Panel",
+      "brand": "gamdias",
+      "model": "e3"
+    },
+    {
+      "name": "Antec C8 White, Fans not Included, RTX 40 Compatible, Dual-Chamber, tooless Design, Type-C, 360mm Radiator Support, Seamless Tempered Glass Front & Side Panels, High Airflow Full-Tower E-ATX PC Case",
+      "brand": "antec",
+      "model": "c8"
+    },
+    {
+      "name": "Lian Li V100 Mid Tower Case \u2013 Black, ATX Support, Mesh Front Panel, Tempered Glass, USB-C, Tool-Free Side Panel",
+      "brand": "lian",
+      "model": "v100"
+    },
+    {
+      "name": "CiT Jet Stream Office PC Case ATX Mid Tower, Computer Case with 500W PSU | Ready-to-build atx mid tower with pre-installed 500W power supply, roomy computer case for home and business office builds",
+      "brand": "cit",
+      "model": "jet"
+    },
+    {
+      "name": "CORSAIR AIR 5400 RS-R ARGB Triple-Chamber Mid-Tower Panoramic PC Case \u2013 3x Pre-Installed Reverse-Rotor RS120-R ARGB Fans, Low-Noise, High Airflow Ducts, Reverse Motherboard Support \u2013 Black | 3 pre-ins",
+      "brand": "corsair",
+      "model": "5400"
+    },
+    {
+      "name": "be quiet! Pure Base 600 Midi Tower Case - Black Window",
+      "brand": "be",
+      "model": "600"
+    },
+    {
+      "name": "Lian Li LANCOOL 217 Infinity Mid-Tower PC Case \u2013 Tempered Glass Infinity Mirror Front Panel, Dual 170mm ARGB Fans, Modular PSU Mount, 380mm GPU Clearance, SSI-EEB Support, Adjustable I/O Black",
+      "brand": "lian",
+      "model": "217"
+    },
+    {
+      "name": "Corsair iCUE 5000D RGB AIRFLOW Mid-Tower Case - White (CC-9011243-WW)",
+      "brand": "corsair",
+      "model": "5000d"
+    },
+    {
+      "name": "FOIFKIN F600 PC Case ATX with 7 PWM ARGB Fans, High Airflow Mid-Tower Computer Case, Gaming PC Case Big Tower, ATX Case Black, with Type-C, 360mm Radiator Computer Case(Black, F600)",
+      "brand": "foifkin",
+      "model": "f600"
+    },
+    {
+      "name": "Lian Li Lancool 207 Mid-Tower Case | Premium ATX/mATX Gaming PC Case | Tempered Glass | Optimal Airflow Black Case",
+      "brand": "lian",
+      "model": "207"
+    },
+    {
+      "name": "FOIFKIN F1 ATX PC Case - Pre-installed 6 PWM ARGB Fans, Mid-Tower Computer Case, Gaming PC Case full tower, 270\u00b0 Panorama Tempered Glass, with Type-C, ATX Case Black(Black, F1)",
+      "brand": "foifkin",
+      "model": "f1"
+    },
+    {
+      "name": "PC CASE ATX 6 PWM ARGB Case Fans Pre-Installed, Mid Tower Computer Case with Tempered Glass,High Airflow Mesh Front,Support 360mm Radiator,Black Gaming Desktop Case",
+      "brand": "pc",
+      "model": "6"
+    },
+    {
+      "name": "FOIFKIN F300 PC Case ATX with 4 Non-RGB Fans, High Airflow Mid-Tower Computer Case, Gaming PC Case Big Tower, ATX Case Black, with Type-C, 360mm Radiator Computer Case (Black, F300)",
+      "brand": "foifkin",
+      "model": "f300"
+    },
+    {
+      "name": "MSI MAG FORGE 321R AIRFLOW Mid-Tower PC Case - ATX Capacity, RTX 40 GPU Support, ARGB Fans, Magnetic Dust Filters, Tempered Glass, 4- ARGB-Fan Control Board, USB 3.2 Gen 2x2 Type-C",
+      "brand": "msi",
+      "model": "321r"
+    },
+    {
+      "name": "Mars Gaming MC-SE2, MicroATX Gaming Case, Frameless Tempered Glass Front and Side, 120mm FRGB Fan, Dual-Chamber Structure, Compact PC Case with Large Internal Capacity, White",
+      "brand": "mars",
+      "model": "mc-se2,"
+    },
+    {
+      "name": "ionz KZ08 V3 PC Gaming Computer Case MID TOWER COMPUTER CASE M-ATX and ATX TEMPERED GLASS (with 1 FRGB Fan, Black)",
+      "brand": "ionz",
+      "model": "kz08"
+    },
+    {
+      "name": "CORSAIR 2500X Small-Tower mATX Dual Chamber PC Case \u2013 Panoramic Tempered Glass \u2013 Reverse Connection Motherboard Compatible \u2013 No Fans Included \u2013 Black",
+      "brand": "corsair",
+      "model": "2500x"
+    },
+    {
+      "name": "CORSAIR FRAME 4500X RS-R ARGB Panoramic Glass Mid-Tower PC Case \u2013 InfiniRail Mounting System, Fits Dual 360mm Radiators, GPU Anti-Sag, 3x RS120R Fans Included \u2013 Black",
+      "brand": "corsair",
+      "model": "4500x"
+    },
+    {
+      "name": "Kolink Citadel Mesh Micro-ATX Case - Black",
+      "brand": "kolink",
+      "model": "citadel"
+    },
+    {
+      "name": "MagniumGear (MG-NE620QI_DBK02) NEO Qube 2 IM, Dual Chamber ATX Mid-Tower, Digital-RGB Infinity Mirror Front Panel, Front I/O USB Type C, Tempered Glass Panels, Black",
+      "brand": "magniumgear",
+      "model": "(mg-ne620qi_dbk02)"
+    },
+    {
+      "name": "LIAN LI High Airflow Micro ATX PC Case, RGB Gaming Computer Case, Mesh Front Panel Mid-Tower Chassis with 2x140mm ARGB PWM Fans Pre-Installed, Tempered Glass Side Panel (LANCOOL 205M MESH, Black)",
+      "brand": "lian",
+      "model": "li"
+    },
+    {
+      "name": "ANSAITE PC Case Pre-Installed 6 \u00d7 120mm PWM ARGB Fan, ATX Mid Tower PC Gaming Case, Computer case with Panoramic View Tempered Glass Front & Side Panel, Type C Port, Black",
+      "brand": "ansaite",
+      "model": "6"
+    },
+    {
+      "name": "Kolink Void Rift ARGB Midi Tower Gaming Case - Black",
+      "brand": "kolink",
+      "model": "void"
+    },
+    {
+      "name": "ATX PC CASE Pre-Installed 7 ARGB Fans, Panoramic Tempered Glass, White desktop Gaming Computer Case,360MM RAD Support,Fits up to 10x 120mm Fans, Reverse Connection Motherboard Compatible",
+      "brand": "atx",
+      "model": "7"
+    },
+    {
+      "name": "ATX Mid Tower PC Gaming Case - Wood Walnut front - Tempered Glass side panel - 5 PWM ARGB fans included - Type C USB - Gaming Desktop Computer Case",
+      "brand": "atx",
+      "model": "mid"
+    },
+    {
+      "name": "PC CASE ATX 5 Fans Pre-Installed, Type-C Mid Tower Computer Case with Full-View Dual Tempered Glass, Gaming PC Case,Black,K4\uff082026 Update Version\uff09",
+      "brand": "pc",
+      "model": "5"
+    },
+    {
+      "name": "ARGB Panoramic Mid-Tower PC Case \u2013 7x Pre-Installed Fans, Mid Tower Computer Case with Full-View Dual Tempered Glass, ATX Gaming PC Case,Black,P4",
+      "brand": "argb",
+      "model": "panoramic"
+    },
+    {
+      "name": "NZXT H2 Flow - Mini-ITX 20.7L Airflow PC Case - White | Compact 20.7L Mini-ITX case with 2 included 120mm top fans and PCIe 5",
+      "brand": "nzxt",
+      "model": "h2"
+    },
+    {
+      "name": "MSI MAG Forge M100R ARGB Tempered Glass Windowed Micro ATX Mid Tower Case - Black",
+      "brand": "msi",
+      "model": "m100r"
+    },
+    {
+      "name": "Antec VSK-4000B-U3/U2 ATX Computer Case - Black",
+      "brand": "antec",
+      "model": "vsk-4000b-u3/u2"
+    },
+    {
+      "name": "CORSAIR 2500D AIRFLOW Small-Tower mATX Dual Chamber PC Case \u2013 Tempered Glass \u2013 Reverse Connection Motherboard Compatible \u2013 No Fans Included \u2013 Black",
+      "brand": "corsair",
+      "model": "2500d"
+    },
+    {
+      "name": "H1 ATX PC Case-Pre-Installed 7 PWM ARGB Fans, Dual Chamber Mid-Tower Gaming PC Case, with Type-C, Simultaneous Installation of 3x 360mm Radiators, Black (Black, H1)",
+      "brand": "h1",
+      "model": "7"
+    },
+    {
+      "name": "MSI MAG PANO 100L PZ WHITE ATX PC Case - ATX Capacity, Verical GPU Installation Bracket, GPU Holder, Dust Filters, Swinging Storage Bracket, Dual-chamber, USB 20Gbps Type-C",
+      "brand": "msi",
+      "model": "100l"
+    },
+    {
+      "name": "ASUS A31 White ATX Mid-Tower Gaming Case, Dual-Sided Tempered Glass, Frameless Design, BTF Hidden Connectors, 360 AIO Support, 8\u00b0 Angled Base, ARGB Ready, Optimized Airflow, Seamless Cable Management",
+      "brand": "asus",
+      "model": "a31"
+    },
+    {
+      "name": "darkFlash ATX Mid-Tower PC Case, Pre-Install 1 PWM Fan Computer Case, Full View Dual Tempered Glass Gaming PC Case, Type C Po",
+      "brand": "darkflash",
+      "model": "atx"
+    },
+    {
+      "name": "Apevia Inspire-PK Inspire Mid Tower ATX Gaming PC Case w/ 4X 120mm ARGB Fans, 366 RGB Light Modes, 1x Metal Mesh Airflow Front Panel, 1x Door Swivel Style Magnetic Glass Side Panel, 2X USB3.0, Pink",
+      "brand": "apevia",
+      "model": "inspire-pk"
+    },
+    {
+      "name": "PC CASE ATX 4 Fans Pre-Installed, Type-C Mid Tower Computer Case with Full-View Dual Tempered Glass, Gaming PC Case,Black,P4",
+      "brand": "pc",
+      "model": "4"
+    },
+    {
+      "name": "CiT Sauron ATX PC Gaming Case With ARGB LED Strip, 1 x 120mm ARGB Three-Sided Infinity Fan & Tempered Glass Side Panel | Black",
+      "brand": "cit",
+      "model": "sauron"
+    },
+    {
+      "name": "FOIFKIN M1 PC Case ATX with 4 PWM ARGB Fans, Front in Walnut Wood,Computer Case Mid-Tower,High Airflow,240mm Radiator Support,ATX Case Black,Gaming PC Case,Type-C(Black, M1)",
+      "brand": "foifkin",
+      "model": "m1"
+    },
+    {
+      "name": "iONZ Gaming PC Computer Mini Tower Case M/ATX Tempered Glass - Performance Series. (KZ27 Inc 4 RGB Fans)",
+      "brand": "ionz",
+      "model": "gaming"
+    },
+    {
+      "name": "HYTE Y70 Dual Chamber Mid-Tower ATX Case - Strawberry Milk",
+      "brand": "hyte",
+      "model": "y70"
+    },
+    {
+      "name": "Magniumgear Neo Qube 2 IM, Dual Chamber ATX Mid-tower, Digital-RGB Infinity Mirror front panel, Tempered Glass Panels, White",
+      "brand": "magniumgear",
+      "model": "2"
+    },
+    {
+      "name": "CiT Level 1 Gaming PC Case, Micro ATX PC Case with 3 RGB Fans, Glass, White | High airflow mesh computer case with 3 RGB rainbow fans, tempered glass side panel and compact small footprint desk fit",
+      "brand": "cit",
+      "model": "1"
+    },
+    {
+      "name": "ANSAITE ATX Mid-Tower PC Gaming Case,High Airflow Computer Case,7 x 120mm Fans Included, 360mm Radiator Support,Cable Management System,Tool-Free Tempered Glass Side Panel,Black",
+      "brand": "ansaite",
+      "model": "atx"
+    },
+    {
+      "name": "ANSAITE ATX PC Case Pre-Installed 9 \u00d7 120mm PWM ARGB Fan,Mid Tower Computer Case with Full-View Dual Tempered Glass, Gaming PC Case With Type-C,420mm Radiator Support,Black,K9",
+      "brand": "ansaite",
+      "model": "9"
+    },
+    {
+      "name": "ANSAITE Mid-Tower PC Case - 7 \u00d7 Pre-Installed 120mm PWM ARGB Fans,Panoramic Tempered Glass Computer Case with Type-C,360mm Radiator Support,Fits up to 10x 120mm Fans,Black",
+      "brand": "ansaite",
+      "model": "7"
+    },
+    {
+      "name": "1st Player MIKU Mi2-A Micro ATX PC Gaming Case, Panoramic Tempered Glass + Mesh Hybrid Panel For Increased Airflow - Black",
+      "brand": "1st",
+      "model": "mi2-a"
+    },
+    {
+      "name": "PHANTEKS XT M3 Micro-ATX Case - Black",
+      "brand": "phanteks",
+      "model": "m3"
+    },
+    {
+      "name": "H3 HYXN ATX PC Case - Pre-Installed with 6 Infinity Mirror PWM ARGB Fans - Compact Dual Cavity Mid-Tower PC Gaming Case - with Type-C 3.2-360mm Radiator Support (Black RGB)",
+      "brand": "h3",
+      "model": "hyxn"
+    },
+    {
+      "name": "ARCTIC Xtender (Black) - PC Case, Tempered Panorama Glass, 2 x 420 mm Radiator Support, Full Tower, Big Tower, E-ATX, 5x A-RGB Fans pre-mounted - Black",
+      "brand": "arctic",
+      "model": "xtender"
+    },
+    {
+      "name": "HYTE Y40 Mid-Tower ATX Case - Red",
+      "brand": "hyte",
+      "model": "y40"
+    },
+    {
+      "name": "CiT Mentor Office PC Case Micro ATX, Compact USB-C Computer Case, Black | Compact professional micro atx case with front USB-C and four security features, a matx computer case for a modern office",
+      "brand": "cit",
+      "model": "mentor"
+    },
+    {
+      "name": "PC Case - Gaming | IONZ APEX Vision - ATX Mid Tower, Dual Chamber with 4 ARGB PWM Fans - LCD Screen | Black",
+      "brand": "pc",
+      "model": "case"
+    },
+    {
+      "name": "IONZ APEX EMBER- PC Gaming Case, M/ATX Mid Tower, Dual Chamber - Front I/O Type C, Tempered Glass With Wood Panel and 6 ARGB PWM Fans",
+      "brand": "ionz",
+      "model": "apex"
+    },
+    {
+      "name": "HYTE X50 AIR Modern Performance Mid-Tower ATX Case - SNOW WHITE",
+      "brand": "hyte",
+      "model": "x50"
+    },
+    {
+      "name": "Antec Flux Pro Noctua Edition, Ultra-Quiet High-Performance ATX PC Case | Includes 4x NF-A14x25 G2 2x NF-A12x25 G2 Fans and N",
+      "brand": "antec",
+      "model": "flux"
+    },
+    {
+      "name": "PCZZOI ATX Gaming PC CASE with 6 PWM ARGB Fans,Full-View Tempered Glass, Mid Tower, Type-C,Printed Walnut Wood Panels,for desktop computer,Black",
+      "brand": "pczzoi",
+      "model": "atx"
+    },
+    {
+      "name": "Phanteks XT V3 Micro-ATX PC Case with Dual Tempered Glass Panels, Front PSU Mount, 360mm Radiator Support, Reverse Airflow Fans Included, 430mm GPU Clearance \u2013 Black",
+      "brand": "phanteks",
+      "model": "v3"
+    },
+    {
+      "name": "iONZ KZ-Z - PC Gaming Case, ATX Mid Tower - Dual Chamber Dynamic Advanced Series, White Tempered Glass (Case only)",
+      "brand": "ionz",
+      "model": "kz-z"
+    },
+    {
+      "name": "Antec C7 ARGB Mid Tower Tempered Glass PC Gaming Case White",
+      "brand": "antec",
+      "model": "c7"
+    },
+    {
+      "name": "MONTECH TG3 High Airflow ATX Mid-Tower PC Case, Back-Connect Ready, Black | 430mm GPU Support, 360mm Radiator Support, Pre-In",
+      "brand": "montech",
+      "model": "tg3"
+    },
+    {
+      "name": "IONZ PC Computer Case - ATX, 7 PWM Fans Pre-Installed - Non RGB, Mid Tower - Full-View Dual Chamber Tempered Glass, Black - KZ12 V3 Ultra",
+      "brand": "ionz",
+      "model": "pc"
+    },
+    {
+      "name": "H2 (2026) HYXN PC Case ATX with 8 Fans (6 x 140 and 2 x 120) Large Dual Chamber Mid-Tower Computer Case Airflow Gaming PC Case, Supports 420 mm Watercooler, Gaming Case (Black-1, H2)",
+      "brand": "h2",
+      "model": "(2026)"
+    },
+    {
+      "name": "GAMDIAS NESO P1 Dual Chamber Full-Tower EATX Computer Gaming Case, 2 Way Setup Modular Design, Full Panoramic Touch-Open Tempered Glass Panel, Excellent Cable Management & Airflow, Type-C Ready, White",
+      "brand": "gamdias",
+      "model": "p1"
+    },
+    {
+      "name": "Mars Gaming MC-VIEW Pink, Micro-ATX Mini Gaming Tower Case, Frameless 90\u00b0 Tempered Glass, Modular Dual-Chamber Frame, Full Liquid Cooling Support",
+      "brand": "mars",
+      "model": "gaming"
+    },
+    {
+      "name": "H3 ATX PC Case - Pre-Installed with 3 ARGB Fans - Compact Dual Cavity Mid-Tower Gaming PC Case,360mm Radiator Support - with Type-C 3.2 (Black-R)",
+      "brand": "h3",
+      "model": "atx"
+    },
+    {
+      "name": "Apevia Eclipse-PK Eclipse Mid Tower Gaming PC Case w/ 5X 120mm ARGB Fans, 366 RGB Light Modes, Minimalistic Honeycomb Design, Tempered Glass Front & Side Panels, 1X USB3.0, 2X USB2.0, Pink",
+      "brand": "apevia",
+      "model": "eclipse-pk"
+    },
+    {
+      "name": "ABK Design Gaming PC Wall Mounted Computer Case - Wall Mount ATX Case for Gaming PC",
+      "brand": "abk",
+      "model": "design"
+    },
+    {
+      "name": "CiT F3 Gaming PC Case Micro ATX, Mesh MATX Computer Case with 3 ARGB Fans | Small footprint micro atx pc case with fans included, a full mesh airflow front and a tempered glass side panel on show",
+      "brand": "cit",
+      "model": "f3"
+    },
+    {
+      "name": "Kolink Observatory HF Glass Core Midi Tower Case - Black No Fans",
+      "brand": "kolink",
+      "model": "observatory"
+    },
+    {
+      "name": "Jectse Magnetic PC LED Light Strip 15.7in, 5V ARGB Aura Sync, Customizable, 365 Light Effects, 16 Million Colors, for Computer Chassis Decoration",
+      "brand": "jectse",
+      "model": "magnetic"
+    },
+    {
+      "name": "FOIFKIN F100 Micro-ATX PC Case with 3 ARGB Fans, Black MicroATX Case, Gaming PC Case, Mini-Tower Computer Case, 240mm Radiator Support, 270\u00b0 Panoramic Tempered Glass",
+      "brand": "foifkin",
+      "model": "f100"
+    },
+    {
+      "name": "CiT Academy Office PC Case Micro ATX, Computer Case with 500W PSU, Black | Ready-to-build office computer case with pre-insta",
+      "brand": "cit",
+      "model": "academy"
+    },
+    {
+      "name": "ANTEC VX-310 ARGB ATX Mid Tower RGB Gaming Case - Black - 4 ARGB Fans",
+      "brand": "antec",
+      "model": "vx-310"
+    },
+    {
+      "name": "CiT Bolt Gaming PC Case, Micro ATX PC Case with 4 ARGB Fans, Mesh, Black | High airflow mesh computer case with 4 ARGB infinity fans, tinted tempered glass and 360mm liquid cooling radiator support",
+      "brand": "cit",
+      "model": "bolt"
+    },
+    {
+      "name": "Fractal Pop 2 Air Solid Mid Tower Case - Black",
+      "brand": "fractal",
+      "model": "2"
+    },
+    {
+      "name": "Phanteks Evolv Series S2 Mid-Tower PC Case \u2013 Silver & Black, Tempered Glass Showcase Design, Integrated D-RGB Lighting, E-ATX/ATX Support",
+      "brand": "phanteks",
+      "model": "s2"
+    },
+    {
+      "name": "DIY Open Frame PC Case \u2013 Test Bench Chassis for ATX/M-ATX/ITX Motherboards, Stackable Mining Rig & Desktop Open Air Computer",
+      "brand": "diy",
+      "model": "open"
+    },
+    {
+      "name": "CiT Celsius Gaming PC Case, Black Micro ATX PC Case with 3 ARGB PWM Fans | Compact panoramic computer case with tempered glass front and side, 3 PWM ARGB Infinity fans and vertical airflow design",
+      "brand": "cit",
+      "model": "celsius"
+    },
+    {
+      "name": "CiT Destroyer Gaming PC Case ATX Mid Tower, PC Case with 6 ARGB Fans, Black | High airflow mid tower computer case with 6 pre-fitted 120mm ARGB fans, 4mm tempered glass panels and a vented PSU shroud",
+      "brand": "cit",
+      "model": "destroyer"
+    },
+    {
+      "name": "CiT Eclipse Mini mATX Gaming PC Case \u2013 Dual Chamber Design - Panoramic Tempered Glass - including 3 x 120mm ARGB Fans, 6-Port PWM Hub, AIO Support, USB 3.0, USB 2.0, HD Audio | White",
+      "brand": "cit",
+      "model": "eclipse"
+    },
+    {
+      "name": "CiT Solar Gaming PC Case, Micro ATX PC Case with 3 ARGB PWM Fans, White | Panoramic tempered glass computer case with 3 PWM ARGB fans, 80 LED modes, a mesh PSU shroud and 360mm radiator support",
+      "brand": "cit",
+      "model": "solar"
+    },
+    {
+      "name": "IONZ KZ-900 PC Gaming Case V3- Dual Dynamic Mini Lite M/ATX | Tempered Glass - Full View | includes 4 x 120mm ARGB PWM Infinity Fans (Black)",
+      "brand": "ionz",
+      "model": "kz-900"
+    },
+    {
+      "name": "1st Player RB-2 - Elegant LED Mesh Front Panel - Tempered Glass Side Panel - ATX Gaming Case - Black",
+      "brand": "1st",
+      "model": "rb-2"
+    },
+    {
+      "name": "GameMax Infinity Mid-Tower ATX PC Gaming Case, Tempered Glass Side Panel | Black",
+      "brand": "gamemax",
+      "model": "infinity"
+    },
+    {
+      "name": "ATX Gaming PC Case,Large Dual-Chamber Mid-Tower Airflow Case Includes 9 x 120mm ARGB Fans,Tempered Glass,420mm Radiator Support,Type-C,for Desktop Gaming Computer,Black",
+      "brand": "atx",
+      "model": "gaming"
+    },
+    {
+      "name": "Phanteks XT V5 Compact ATX Case",
+      "brand": "phanteks",
+      "model": "v5"
+    },
+    {
+      "name": "GAMEON Valkyrie X Mid Tower Gaming PC Case Black with 4 Pre-Installed ARGB Fans, Tempered Glass Side Panel, ATX/M-ATX/ITX Support, 360mm Liquid Cooling Ready, High Airflow Gaming Cabinet",
+      "brand": "gameon",
+      "model": "valkyrie"
+    },
+    {
+      "name": "1st Player IS3 RGB Micro-ATX Gaming Case (IS3 Pink RGB)",
+      "brand": "1st",
+      "model": "is3"
+    },
+    {
+      "name": "Jonsbo D41 Standard ATX PC Case \u2013 White, Tempered Glass",
+      "brand": "jonsbo",
+      "model": "d41"
+    },
+    {
+      "name": "Jonsbo T6 Mini-ITX Case - Silver",
+      "brand": "jonsbo",
+      "model": "t6"
+    },
+    {
+      "name": "Aerocool P500A Mid Tower Case - Black",
+      "brand": "aerocool",
+      "model": "p500a"
+    },
+    {
+      "name": "Kolink KLM-002 Micro-ATX Desktop Case - Black/Grey",
+      "brand": "kolink",
+      "model": "klm-002"
+    },
+    {
+      "name": "Jonsbo TK-1 2.0 Micro-ATX Case, Tempered Glass - Black",
+      "brand": "jonsbo",
+      "model": "tk-1"
+    },
+    {
+      "name": "Jonsbo D31 Standard Micro-ATX PC Case \u2013 White, Tempered Glass",
+      "brand": "jonsbo",
+      "model": "d31"
+    },
+    {
+      "name": "Fractal North Momentum Edition Mid Tower Case - Black",
+      "brand": "fractal",
+      "model": "north"
+    },
+    {
+      "name": "Kolink Unity Nexus ARGB Midi Tower Case - Black",
+      "brand": "kolink",
+      "model": "unity"
+    },
+    {
+      "name": "Phanteks Enthoo Pro Full Tower Case with Window - Black",
+      "brand": "phanteks",
+      "model": "enthoo"
+    },
+    {
+      "name": "Phanteks Evolv Shift 2 Mini-ITX Case Tempered Glass Windows, DRGB, Black",
+      "brand": "phanteks",
+      "model": "2"
+    },
+    {
+      "name": "Jonsbo D32 STD Mesh mATX, Mini Case - Black",
+      "brand": "jonsbo",
+      "model": "d32"
+    },
+    {
+      "name": "Aerocool P500C Mid Tower Case - Black",
+      "brand": "aerocool",
+      "model": "p500c"
+    },
+    {
+      "name": "PHANTEKS Eclipse G370A - ATX Mid-Tower Case - Black",
+      "brand": "phanteks",
+      "model": "g370a"
+    },
+    {
+      "name": "Antec CX600M Wood Gaming Case Glass Side Front Micro-ATX - Black - Wood",
+      "brand": "antec",
+      "model": "cx600m"
+    },
+    {
+      "name": "Corsair 3200D RS Mid-Tower PC Case - Smoke",
+      "brand": "corsair",
+      "model": "3200d"
+    },
+    {
+      "name": "be quiet! Silent Base 802 Midi Tower Case - Black Window",
+      "brand": "be",
+      "model": "802"
+    },
+    {
+      "name": "Jonsbo TK-4 Midi-Tower ATX Curved Tempered Glass Case - White",
+      "brand": "jonsbo",
+      "model": "tk-4"
+    },
+    {
+      "name": "Jonsbo X400 ATX Mid-Tower, Tempered Glass - White",
+      "brand": "jonsbo",
+      "model": "x400"
+    },
+    {
+      "name": "Jonsplus Z20 Mesh, Mini Tower, Micro-ATX - White",
+      "brand": "jonsplus",
+      "model": "z20"
+    },
+    {
+      "name": "Kolink Stronghold Barricade Midi Tower Case - Gunmetal Grey",
+      "brand": "kolink",
+      "model": "stronghold"
+    },
+    {
+      "name": "be quiet! PURE BASE 501 Mid Tower Case - Black",
+      "brand": "be",
+      "model": "501"
+    },
+    {
+      "name": "Lian Li LANCOOL 206 Mid-Tower Case - White",
+      "brand": "lian",
+      "model": "206"
+    },
+    {
+      "name": "Be quiet Dark Base Pro 901 Full Tower Tempered Glass Case - White",
+      "brand": "be",
+      "model": "901"
+    },
+    {
+      "name": "Aerocool D520A Mid Tower Case - Black",
+      "brand": "aerocool",
+      "model": "d520a"
+    },
+    {
+      "name": "HAVN HS 420 Premium Mid Tower Case - Black",
+      "brand": "havn",
+      "model": "420"
+    },
+    {
+      "name": "Jonsbo UMX3 Black/Window MATX Case",
+      "brand": "jonsbo",
+      "model": "umx3"
+    },
+    {
+      "name": "Jonsbo D401 ATX Mid Tower Case",
+      "brand": "jonsbo",
+      "model": "d401"
+    },
+    {
+      "name": "Jonsbo D200 Midi-Tower mATX Gaming Case - White",
+      "brand": "jonsbo",
+      "model": "d200"
+    },
+    {
+      "name": "iONZ KZ02 - Advanced Series 2.0 - PC Mid Tower Case M/ATX ATX Gaming Tempered Glass includes 3 x RGB 120mm Fans (Airflow White)",
+      "brand": "ionz",
+      "model": "kz02"
+    },
+    {
+      "name": "Corsair 6500D AIRFLOW Mid-Tower Dual Chamber PC Case \u2013 White CC-9011260-WW",
+      "brand": "corsair",
+      "model": "6500d"
+    },
+    {
+      "name": "MPG VELOX 300R AIRFLOW PZ WHITE - Mid-tower Gaming PC Case - 160 mm Dual Layer Blades Fan - Supports up to 360 mm radiator - EZ DIY Features - Back-connect ATX Motherboard support",
+      "brand": "mpg",
+      "model": "300r"
+    },
+    {
+      "name": "Jonsbo A4-Silver/window ITX Case",
+      "brand": "jonsbo",
+      "model": "a4-silver/window"
+    },
+    {
+      "name": "be quiet Light Base 500 Midi Tower Case - Black",
+      "brand": "be",
+      "model": "500"
+    },
+    {
+      "name": "Jonsbo MOD-3 Mini Micro-ATX PC Showcase \u2013 White Tempered Glass",
+      "brand": "jonsbo",
+      "model": "mod-3"
+    },
+    {
+      "name": "Kolink Rocket Complex Aluminium Mini-ITX Tower Case - Gunmetal Grey",
+      "brand": "kolink",
+      "model": "rocket"
+    },
+    {
+      "name": "Jonsplus BO400CG Curved Glass ATX Mid-Tower - Gunmetal Grey",
+      "brand": "jonsplus",
+      "model": "bo400cg"
+    },
+    {
+      "name": "Fractal Epoch XL Mid Tower Case - Black Solid",
+      "brand": "fractal",
+      "model": "epoch"
+    },
+    {
+      "name": "Jonsbo RM3-Black/Window Micro-ATX",
+      "brand": "jonsbo",
+      "model": "rm3-black/window"
+    },
+    {
+      "name": "Corsair iCUE 5000T RGB Tempered Glass Mid-Tower Smart Case White (CC-9011231-WW)",
+      "brand": "corsair",
+      "model": "5000t"
+    },
+    {
+      "name": "MSI MAG FORGE 320R Airflow Mid-Tower Case - White",
+      "brand": "msi",
+      "model": "320r"
+    },
+    {
+      "name": "Cooler Master Elite 481 Wood Mini Tower",
+      "brand": "cooler",
+      "model": "481"
+    },
+    {
+      "name": "Jonsbo T9 Mini-ITX SFF Case - PCIe 5.0 - Silver",
+      "brand": "jonsbo",
+      "model": "t9"
+    },
+    {
+      "name": "Kolink Horizon Midi Tower RGB Gaming Case - Black Tempered Glass",
+      "brand": "kolink",
+      "model": "horizon"
+    },
+    {
+      "name": "Kolink Inspire Series K7 ARGB Midi Tower Case - Black",
+      "brand": "kolink",
+      "model": "k7"
+    },
+    {
+      "name": "Aerocool Dryft v2 Midi-Tower ATX Case",
+      "brand": "aerocool",
+      "model": "v2"
+    },
+    {
+      "name": "Lian Li Vector V150 INF Mini ARGB mATX Tower Case - Black",
+      "brand": "lian",
+      "model": "v150"
+    },
+    {
+      "name": "Lian Li Lancool 205M Mesh Micro-ATX PC Case White",
+      "brand": "lian",
+      "model": "205m"
+    },
+    {
+      "name": "Cooler Master Elite 502 Mid-Tower Case - White Tempered Glass",
+      "brand": "cooler",
+      "model": "502"
+    },
+    {
+      "name": "Cooler Master MasterFrame 600 Midi Tower - Silver",
+      "brand": "cooler",
+      "model": "600"
+    },
+    {
+      "name": "Kolink Tranquility Silent Midi Tower Case - Black Noise Dampened",
+      "brand": "kolink",
+      "model": "tranquility"
+    },
+    {
+      "name": "Lian Li A4-H2O PCIe 5.0 Mini-ITX Case - Silver",
+      "brand": "lian",
+      "model": "a4-h2o"
+    },
+    {
+      "name": "be quiet! Dark Base 701 Mid-Tower Case - White",
+      "brand": "be",
+      "model": "701"
+    },
+    {
+      "name": "Aerocool Gladiator ARGB Mid Tower Case",
+      "brand": "aerocool",
+      "model": "gladiator"
+    },
+    {
+      "name": "Jonsbo V12 Micro-ATX Panoramic Mini-Tower Case - White",
+      "brand": "jonsbo",
+      "model": "v12"
+    },
+    {
+      "name": "Aerocool CS-103 Mini Tower Case - Black",
+      "brand": "aerocool",
+      "model": "cs-103"
+    },
+    {
+      "name": "Phanteks Eclipse G500A D-RGB Mid-tower PC case - Matte White",
+      "brand": "phanteks",
+      "model": "g500a"
+    },
+    {
+      "name": "Corsair iCUE 5000X RGB Tempered Glass Mid-Tower ATX PC Smart Case, White",
+      "brand": "corsair",
+      "model": "5000x"
+    },
+    {
+      "name": "HAVN BF 360 Premium Mid Tower Case - White",
+      "brand": "havn",
+      "model": "360"
+    },
+    {
+      "name": "Jonsbo TK-2 2.0 Midi-Tower, Tempered Glass - Black",
+      "brand": "jonsbo",
+      "model": "tk-2"
+    },
+    {
+      "name": "Phanteks NV7 D-RGB with Front and Side Glass Panels Full Tower Case - White",
+      "brand": "phanteks",
+      "model": "nv7"
+    },
+    {
+      "name": "Jonsbo TK-0 Mini-ITX Case Tempered Glass - White",
+      "brand": "jonsbo",
+      "model": "tk-0"
+    },
+    {
+      "name": "Jonsplus BO400 Mid-Tower, ATX, Aluminium Frame, Tempered Glass - Black",
+      "brand": "jonsplus",
+      "model": "bo400"
+    },
+    {
+      "name": "Lian Li PC-TU150A Aluminium Mini-ITX Case - Silver",
+      "brand": "lian",
+      "model": "pc-tu150a"
+    },
+    {
+      "name": "Corsair iCUE LINK 9000D RGB AIRFLOW Super-Tower PC Case - White (CC-9011274-WW)",
+      "brand": "corsair",
+      "model": "9000d"
+    },
+    {
+      "name": "Lian Li PC-TU150WX Aluminium Mini-ITX Case - Black Window",
+      "brand": "lian",
+      "model": "pc-tu150wx"
+    },
+    {
+      "name": "ANSAITE 420mm ATX PC Case- 5x Pre-Installed PWM Fans, Panoramic Mid-Tower Pc Case -USB Type-C,Large Dual Tempered Glass, Black,H9",
+      "brand": "ansaite",
+      "model": "420mm"
+    },
+    {
+      "name": "ANSAITE ARGB Mid-Tower ATX PC Case \u2013 Panoramic Tempered Glass \u2013 7 x 120mm Fans Included, 360mm Radiator Support \u2013 Reverse Connection Motherboard Compatible \u2013 White Gaming desktop Computer",
+      "brand": "ansaite",
+      "model": "argb"
+    },
+    {
+      "name": "Jonsbo TK-5 ATX Mid Tower Case - White",
+      "brand": "jonsbo",
+      "model": "tk-5"
+    },
+    {
+      "name": "CiT Volt Gaming PC Case, Micro ATX PC Case, ARGB Fan, Tempered Glass, Black | Compact micro ATX computer case with pre-installed ARGB fan, Volt light strip, space for 8 fans and 280mm radiator support",
+      "brand": "cit",
+      "model": "volt"
+    },
+    {
+      "name": "Lian Li Lancool 205 Mesh C Mid-Tower Case - White",
+      "brand": "lian",
+      "model": "205"
+    }
+  ]
+}

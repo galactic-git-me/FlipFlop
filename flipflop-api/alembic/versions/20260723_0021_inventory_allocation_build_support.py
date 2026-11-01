@@ -28,11 +28,16 @@ def upgrade():
     op.alter_column("inventory_allocations", "flip_id", existing_type=sa.Integer(), nullable=True)
 
     # Add check constraint: exactly one of flip_id or build_id must be set
-    op.create_check_constraint(
-        "ck_exactly_one_target",
-        "inventory_allocations",
-        "(flip_id IS NOT NULL AND build_id IS NULL) OR (flip_id IS NULL AND build_id IS NOT NULL)",
-    )
+    constraints = {
+        item["name"]
+        for item in sa.inspect(op.get_bind()).get_check_constraints("inventory_allocations")
+    }
+    if "ck_exactly_one_target" not in constraints:
+        op.create_check_constraint(
+            "ck_exactly_one_target",
+            "inventory_allocations",
+            "(flip_id IS NOT NULL AND build_id IS NULL) OR (flip_id IS NULL AND build_id IS NOT NULL)",
+        )
 
 
 def downgrade():

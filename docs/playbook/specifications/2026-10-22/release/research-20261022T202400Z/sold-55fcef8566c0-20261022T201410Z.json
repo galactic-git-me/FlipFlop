@@ -1,0 +1,9 @@
+{
+  "query": "8500G desktop PC",
+  "observed_at": "2026-10-22T20:14:10.931374+00:00",
+  "publishable": false,
+  "provider_available": false,
+  "unavailable_reason": "No comparable sold listings found",
+  "public_cards": [],
+  "fixed_price_matching_condition_candidates": []
+}

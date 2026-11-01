@@ -66,14 +66,14 @@ class OpportunityPolicy:
     super_score: float = 85.0
     # Positive percentage below the median market price. A zero value keeps
     # the price-gap gate disabled for policies created before this setting.
-    super_market_discount_pct: float = 0.0
+    super_market_discount_pct: float = 35.0
     gem_profit: float = 30.0
     gem_roi_pct: float = 18.0
     gem_confidence: float = 70.0
     gem_liquidity: float = 45.0
     gem_score: float = 75.0
-    gem_market_discount_pct: float = 0.0
-    delivery_fallback: float = 15.0
+    gem_market_discount_pct: float = 25.0
+    delivery_fallback: float = 20.0
     ebay_fee_pct: float = 0.0
     packaging_cost: float = 6.0
     testing_refurbishment_cost: float = 10.0
@@ -101,18 +101,7 @@ class CategoryEconomics:
 
 
 def category_economics(category: str, policy: OpportunityPolicy) -> CategoryEconomics:
-    """Cash-profit gates scaled to the capital normally tied up by a part.
-
-    Confidence, liquidity and overall-score gates remain unchanged; these
-    values only prevent a £6 CPU and a £600 GPU being judged by one cash
-    hurdle. Complete systems continue to use the configured global policy.
-    """
-    if category in {"cpu", "ram", "ssd", "cooler", "fan"}:
-        return CategoryEconomics(8.0, 25.0, 3.0, 15.0, 80.0, 60.0)
-    if category in {"motherboard", "psu", "case"}:
-        return CategoryEconomics(15.0, 22.0, 6.0, 16.0, 82.0, 65.0)
-    if category == "gpu":
-        return CategoryEconomics(25.0, 20.0, 12.0, 15.0, 83.0, 70.0)
+    """Use the operator-configured classification floors for every category."""
     return CategoryEconomics(
         policy.super_profit, policy.super_roi_pct, policy.gem_profit,
         policy.gem_roi_pct, policy.super_score, policy.gem_score,
@@ -577,7 +566,15 @@ def score_opportunity(
         score_parts.append((liquidity, weights[4]))
     total_score = sum(value * weight for value, weight in score_parts) / sum(weight for _, weight in score_parts)
     provisional_evidence = "preliminary_sold_cohort" in risk_flags
-    evidence_limited = provisional_evidence or market.sample_size < policy.minimum_sold_comps or evidence_status != "CLASSIFIABLE"
+    evidence_limited = (
+        provisional_evidence
+        or market.sample_size < policy.minimum_sold_comps
+        or evidence_status != "CLASSIFIABLE"
+        or (
+            market.source_diversity < policy.minimum_source_diversity
+            and market.basis != "FIXED_RETAIL_CONTEXT"
+        )
+    )
     hard_identity_vetoes = {
         "identity_incomplete", "accessory_or_parts_listing", "category_identity_conflict",
         "whole_system_misclassified_as_component", "bundle_listing", "specialised_mining_hardware",

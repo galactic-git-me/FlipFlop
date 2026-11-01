@@ -4,6 +4,7 @@ The judge functions are pure (text-in, verdict-out) so they run without a DB;
 route smoke tests follow the pattern in test_public_catalogue_api.py.
 """
 import pytest
+from types import SimpleNamespace
 from fastapi.testclient import TestClient
 
 from app.main import app
@@ -57,6 +58,16 @@ def test_gpu_warns_when_psu_unknown():
     verdict = _judge_variant("gpu", "NVIDIA RTX 3080 10GB", {"cpu": "i7-12700K"}, None)
     assert verdict.is_compatible is True
     assert any("PSU" in w for w in verdict.warnings)
+
+
+def test_secondary_nvme_cannot_exceed_reviewed_motherboard_m2_slots():
+    board=SimpleNamespace(canonical_model='MSI B550M PRO-VDH WIFI',reviewed=True,m2_slots=1)
+    selected={'motherboard':'MSI B550M PRO-VDH WIFI','storage':'Samsung 990 Pro 4TB NVMe'}
+
+    verdict=_judge_variant('storage_secondary','WD 4TB NVMe SSD',selected,None,[board])
+
+    assert verdict.is_compatible is False
+    assert verdict.rule_code=='M2_SLOT_COUNT'
 
 
 # --- _apply_db_rule structured rules --------------------------------------

@@ -5,10 +5,11 @@ Consumed by the customer website (Subsystem 3).
 from collections import defaultdict
 from datetime import datetime, timedelta
 import json
+import re
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import or_, select
+from sqlalchemy import or_, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -19,35 +20,50 @@ from app.models.playbook import Playbook
 from app.models.curated_build_segment import CuratedBuildSegment
 from app.models.case import Case
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
+from app.models.gem_radar_observation import GemRadarListingObservation
 from app.models.component_3d_asset import AssetSubjectType, Component3DAsset, Component3DAssetStatus
 from app.models.gem_radar_intelligence import PreferredComponent
-from app.schemas.payment import PlaybookBuildConfig
+from app.models.growth import AnalyticsEvent
 from app.services.playbook_pricing import LABOUR_COST, OVERHEAD_RATE
+from app.schemas.payment import PlaybookBuildConfig
 from app.services.studio_fit import engineering_specs
 
 router = APIRouter(prefix="/public", tags=["public"])
 
 
 @router.post("/playbooks/{playbook_id}/delivery-quotes")
-async def playbook_delivery_quotes(playbook_id: int, build_config: PlaybookBuildConfig):
-    """Keep the current storefront compatible while commercial quotes are unavailable.
+async def playbook_delivery_quotes(
+    playbook_id: int, build_config: PlaybookBuildConfig,
+    db: AsyncSession = Depends(get_db),
+):
+    """Live, exact-specification Playbook quotes, also accepted by checkout.
 
-    The storefront supports this legacy response and continues to use its
-    existing server-validated build quote for checkout eligibility. Do not
-    fabricate delivery prices or promises when no reviewed commercial quote
-    is available on this API version.
+    Reuse the existing validation and snapshot path so browse and payment
+    cannot acquire different commercial rules.
     """
     if playbook_id != build_config.playbook_id:
-        raise HTTPException(status_code=422, detail="The selected build belongs to a different Playbook")
-    return {
-        "pricing_mode": "legacy",
-        "quote_snapshot_id": None,
-        "review_required": False,
-        "modes": {},
-    }
+        raise HTTPException(422, "The selected build belongs to a different Playbook")
+    from app.services.playbook_delivery import quote_playbook_delivery
+    return await quote_playbook_delivery(db, build_config)
 
 _TIER_ORDER = ("budget", "mid", "high")
 _TIER_LABELS = {"budget": "Value", "mid": "Balanced", "high": "Performance"}
+
+
+def _variant_has_matching_final_model(variant: CatalogueVariant, asset: Component3DAsset | None) -> bool:
+    if variant and variant.status == "active" and asset and asset.category != "case":
+        return bool(asset.is_active and asset.status == Component3DAssetStatus.FINAL and asset.glb_ref)
+    media = variant.asset_media_review or {}
+    model_images = media.get("model_image_urls") or (
+        media.get("image_urls") if len(media.get("image_urls") or []) <= 4 else []
+    )
+    return bool(
+        media.get("status") in {"approved", "auto_included"}
+        and media.get("image_urls")
+        and model_images
+        and asset
+        and asset.source_image_refs == model_images
+    )
 
 
 class BudgetRecommendationRequest(BaseModel):
@@ -106,6 +122,7 @@ async def recommend_by_budget(body: BudgetRecommendationRequest, db: AsyncSessio
             .where(
                 CatalogueVariant.slot_id.in_(slot_ids),
                 variant_status_filter,
+                CatalogueVariant.curated_for_builds.is_(True),
             )
             .order_by(CatalogueVariant.display_price, CatalogueVariant.id)
         )
@@ -231,10 +248,15 @@ async def public_list_playbooks(db: AsyncSession = Depends(get_db)):
 
 @router.get("/playbooks/{playbook_id}/slots")
 async def public_playbook_slots(playbook_id: int, db: AsyncSession = Depends(get_db)):
+    return await _published_playbook_slots(playbook_id, db)
+
+
+async def _published_playbook_slots(playbook_id: int, db: AsyncSession, *, full_curated_range: bool = False):
     """
     Customer-visible slots for a playbook, with active variants grouped by tier.
     Exposes display pricing, product media and whitelisted engineering data.
     """
+    from app.services.curated_media import media_urls
     pb_result = await db.execute(
         select(Playbook).where(Playbook.id == playbook_id, Playbook.status == "active")
     )
@@ -250,6 +272,7 @@ async def public_playbook_slots(playbook_id: int, db: AsyncSession = Depends(get
     )
     slots = slots_result.scalars().all()
     slot_ids = [s.id for s in slots]
+    free_software_slots={slot.id for slot in slots if slot.slot_type=='os_secondary'}
 
     # Load curation before the catalogue query. An explicitly public variant is
     # a fixed configurator choice and must survive the automated marketplace
@@ -270,24 +293,29 @@ async def public_playbook_slots(playbook_id: int, db: AsyncSession = Depends(get
             r.catalogue_variant_id for r in vis_rows if r.is_publicly_visible
         }
 
-    # Active catalogue candidates plus explicitly curated fixed choices.
+    # Visibility grants permission to display a product, never availability.
+    # Hidden, sold or removed offers cannot enter a purchasable catalogue.
     if slot_ids:
         status_filter = CatalogueVariant.status == "active"
-        if visible_variant_ids:
-            status_filter = or_(
-                status_filter,
-                CatalogueVariant.id.in_(visible_variant_ids),
-            )
         variants_result = await db.execute(
             select(CatalogueVariant, Listing)
             .join(Listing, CatalogueVariant.listing_id == Listing.id)
             .where(
                 CatalogueVariant.slot_id.in_(slot_ids),
                 status_filter,
+                CatalogueVariant.curated_for_builds.is_(True),
+                Listing.status == "active",
+                CatalogueVariant.display_price >= 0,
             )
             .order_by(CatalogueVariant.slot_id, CatalogueVariant.display_price)
         )
-        all_rows = variants_result.all()
+        all_rows = [
+            (variant,listing) for variant,listing in variants_result.all()
+            if variant.display_price>0 or (variant.slot_id in free_software_slots
+                and isinstance(listing.raw_specs,dict)
+                and isinstance(listing.raw_specs.get('playbook_free_software'),dict)
+                and listing.raw_specs['playbook_free_software'].get('kind')=='official_free_os_download')
+        ]
     else:
         all_rows = []
 
@@ -301,11 +329,70 @@ async def public_playbook_slots(playbook_id: int, db: AsyncSession = Depends(get
     # rows) silently hid every OTHER slot type in the same playbook that had
     # no visibility rows of its own yet — a real regression caught 2026-08-12
     # (see PC_BUILDER_DISCOVERY_AND_IMPLEMENTATION_PLAN.md).
-    if curated_slot_ids:
+    if curated_slot_ids and not full_curated_range:
         all_rows = [
             (v, l) for v, l in all_rows
             if v.slot_id not in curated_slot_ids or v.id in visible_variant_ids
         ]
+
+    # Storefront components need automatically included listing media and an
+    # exact published model matching the separately selected reference photos.
+    variant_ids = [variant.id for variant, _ in all_rows]
+    if variant_ids:
+        from app.services.shared_variant_assets import final_assets_by_variant, approved_model_photos
+        from app.services.playbook_mvp import mvp_mode
+        ready_asset_by_variant = await final_assets_by_variant(db, [variant for variant, _ in all_rows])
+        all_rows = [
+            (variant, listing) for variant, listing in all_rows
+            if ready_asset_by_variant.get(variant.id) or (mvp_mode(playbook) and (approved_model_photos(variant) or variant.slot_id in {slot.id for slot in slots if slot.slot_type.startswith("os")}))
+        ]
+
+    def source_listing_id(listing: Listing) -> str:
+        external_id = listing.external_id or ""
+        return external_id.split("|", 1)[1] if external_id.startswith("ebay_v1|") and "|" in external_id else external_id
+
+    source_ids = list(dict.fromkeys(source_listing_id(listing) for _, listing in all_rows if source_listing_id(listing)))
+    scored_media = (await db.execute(
+        select(GemRadarScoredListing).where(GemRadarScoredListing.listing_id.in_(source_ids) if source_ids else False)
+        .order_by(GemRadarScoredListing.scored_at.desc(), GemRadarScoredListing.id.desc())
+    )).scalars().all()
+    observation_media = (await db.execute(
+        select(GemRadarListingObservation).where(GemRadarListingObservation.listing_id.in_(source_ids) if source_ids else False)
+        .order_by(GemRadarListingObservation.observed_at.desc(), GemRadarListingObservation.id.desc())
+    )).scalars().all()
+    latest_scored: dict[str, GemRadarScoredListing] = {}
+    latest_observations: dict[str, GemRadarListingObservation] = {}
+    for media in scored_media:
+        latest_scored.setdefault(media.listing_id, media)
+    for media in observation_media:
+        latest_observations.setdefault(media.listing_id, media)
+
+    def included_media(variant: CatalogueVariant, listing: Listing, kind: str) -> list[str]:
+        approved_photo = (variant.asset_media_review or {}).get("main_photo_approved_url")
+        if kind == "images" and approved_photo:
+            return media_urls([approved_photo])
+        if kind == "images" and mvp_mode(playbook):
+            return media_urls(approved_model_photos(variant))
+        listing_id = source_listing_id(listing)
+        specs = listing.raw_specs if isinstance(listing.raw_specs, dict) else {}
+        capture = specs.get("playbook_product_capture") or {}
+        values = []
+        if kind == "images":
+            values.extend(listing.image_urls or [])
+            if capture.get("url") == listing.url:
+                values.extend(capture.get("product_image_urls") or [])
+            for row in (latest_scored.get(listing_id), latest_observations.get(listing_id)):
+                if row:
+                    values.extend(row.image_urls or [])
+                    if row.image_url:
+                        values.append(row.image_url)
+        else:
+            for row in (latest_scored.get(listing_id), latest_observations.get(listing_id)):
+                if row:
+                    values.extend(row.video_urls or [])
+        media = variant.asset_media_review or {}
+        values.extend(media.get("image_urls" if kind == "images" else "video_urls") or [])
+        return media_urls(values)
 
     # Group by slot_id in Python, guarding against unexpected tier values
     variants_by_slot: dict[int, dict[str, list]] = defaultdict(
@@ -317,8 +404,12 @@ async def public_playbook_slots(playbook_id: int, db: AsyncSession = Depends(get
             "id": v.id,
             "title": l.title,
             "display_price": v.display_price,
+            "official_free_software": bool(v.slot_id in free_software_slots and v.display_price==0
+                and isinstance(l.raw_specs,dict) and isinstance(l.raw_specs.get('playbook_free_software'),dict)
+                and l.raw_specs['playbook_free_software'].get('kind')=='official_free_os_download'),
             "gem_score": l.gem_score,
-            "images": l.image_urls or [],
+            "images": included_media(v, l, "images"),
+            "videos": included_media(v, l, "videos"),
             "customer_option": {
                 "capacity_gb": l.ram_gb if v.slot_id in {s.id for s in slots if s.slot_type == 'ram'} else l.storage_gb,
                 "memory_type": l.ram_type,
@@ -438,9 +529,23 @@ async def public_list_cases(db: AsyncSession = Depends(get_db)):
         return [part.lower() for part in (value or "").replace("-", " ").replace("/", " ").split() if len(part) > 3]
 
     by_name = {norm(c.name): c for c in live_cases}
+    # The importer uses ASIN first and CPK only as a fallback. Once reconciled,
+    # retain the exact CaseCatalogue id on the operational case so similar
+    # CPK/title families cannot make unrelated chooser entries inherit a rank.
+    live_by_catalogue_id = {}
+    for row in live_cases:
+        identity = (row.sourcing_3d_evidence or {}).get("amazon_top100_identity") or {}
+        catalogue_id = identity.get("catalogue_id")
+        if catalogue_id:
+            current = live_by_catalogue_id.get(int(catalogue_id))
+            if current is None or (row.bestseller_rank or 10**9) < (current.bestseller_rank or 10**9):
+                live_by_catalogue_id[int(catalogue_id)] = row
     # The operational cases table owns Amazon rank. Match exact names first,
     # then token containment for Amazon titles that include extra marketing copy.
     def live_for(catalogue_case):
+        reconciled = live_by_catalogue_id.get(catalogue_case.id)
+        if reconciled:
+            return reconciled
         exact = by_name.get(norm(catalogue_case.name))
         if exact:
             return exact
@@ -461,6 +566,16 @@ async def public_list_cases(db: AsyncSession = Depends(get_db)):
                 return candidate
         return None
 
+    def stale_offer_fallback_case(live_case, asset_case):
+        if asset_case:
+            return asset_case
+        if (live_case and live_case.source_site == "Amazon"
+                and live_case.bestseller_rank is not None
+                and 1 <= live_case.bestseller_rank <= 100
+                and (live_case.sourcing_3d_evidence or {}).get("amazon_top100_identity")):
+            return live_case
+        return None
+
     output = []
     for c in cases:
         live = live_for(c)
@@ -475,22 +590,24 @@ async def public_list_cases(db: AsyncSession = Depends(get_db)):
                 case_engineering = engineering_specs(notes)
             except (ValueError, TypeError, AttributeError):
                 pass
-        # Supplier availability is deliberately short-lived. A final-model
-        # case may still be selectable when its vendor offer has gone stale,
-        # but only when the operational case record has a sourced price. In
-        # that case hide the stale offer and use the sourced case price.
+        # Supplier availability is deliberately short-lived. A case remains
+        # selectable after its vendor offer expires when its linked operational
+        # Amazon bestseller row has a sourced price; hide the stale offer and
+        # fall back to that price rather than dropping the case from the chooser.
         if supplier_offer:
             try:
                 observed = datetime.fromisoformat(supplier_offer["observed_at"])
                 if datetime.utcnow() - observed > timedelta(hours=8):
-                    live_price = (asset_case.price_new or asset_case.price or asset_case.rrp) if asset_case else None
+                    price_case = stale_offer_fallback_case(live, asset_case)
+                    live_price = (price_case.price_new or price_case.price or price_case.rrp) if price_case else None
                     if live_price and float(live_price) > 0:
                         supplier_offer = None
                         fallback_price = float(live_price)
                     else:
                         continue
             except (KeyError, TypeError, ValueError):
-                live_price = (asset_case.price_new or asset_case.price or asset_case.rrp) if asset_case else None
+                price_case = stale_offer_fallback_case(live, asset_case)
+                live_price = (price_case.price_new or price_case.price or price_case.rrp) if price_case else None
                 if live_price and float(live_price) > 0:
                     supplier_offer = None
                     fallback_price = float(live_price)
@@ -503,6 +620,7 @@ async def public_list_cases(db: AsyncSession = Depends(get_db)):
         output.append({
             "id": c.id,
             "asset_subject_id": asset_case.id if asset_case else None,
+            "asset_subject_name": asset_case.name if asset_case else None,
             "name": c.name,
             "brand": c.brand,
             "form_factor": c.form_factor,
@@ -537,12 +655,23 @@ async def public_curated_slots(playbook_id: int, db: AsyncSession = Depends(get_
         name = (await db.execute(select(Playbook.name).where(Playbook.id == playbook_id))).scalar_one_or_none()
         if not definition or definition['segment'] != name:
             raise HTTPException(404, 'Curated build not found for this user type')
-    slots = curated_slots(await public_playbook_slots(playbook_id, db), definition)
+    segment = None
     if definition:
         segment = (await db.execute(select(CuratedBuildSegment).where(
             CuratedBuildSegment.customer_type == definition["segment"],
             CuratedBuildSegment.budget_level == definition["tier"],
         ))).scalar_one_or_none()
+        from app.services.curated_publication import publication_snapshot, PublicationError
+        try:
+            snapshot = publication_snapshot(definition, segment,
+                await public_playbook_slots(playbook_id, db), await public_list_cases(db))
+        except PublicationError as exc:
+            raise HTTPException(404, str(exc)) from exc
+        slots = snapshot['slots']
+    else:
+        # Unscoped curated catalogues must not bypass the cell publication gate.
+        raise HTTPException(404, 'Choose a published curated Playbook cell')
+    if definition:
         # Automatic upsells are drawn from the active curated catalogue. A
         # candidate must have a current market median above the cell's default
         # component; compatibility and the live build budget are checked again
@@ -597,7 +726,7 @@ async def public_curated_slots(playbook_id: int, db: AsyncSession = Depends(get_
                         "title": listing.title,
                         "display_price": variant.display_price,
                         "gem_score": listing.gem_score,
-                        "images": listing.image_urls or [],
+                        "images": media_urls(listing.image_urls or []),
                         "customer_option": {
                             "capacity_gb": listing.ram_gb if slot["slot_type"] == "ram" else listing.storage_gb,
                             "memory_type": listing.ram_type,
@@ -641,35 +770,122 @@ async def public_product_copy(body: ProductCopyRequest, db: AsyncSession = Depen
 async def public_curated_builds(db: AsyncSession = Depends(get_db)):
     from app.services.curated_build_policy import definitions, curated_slots
     from app.services.ship_naming import enrich_curated_build_with_ship_name
+    from app.services.curated_media import media_urls
     
+    cell_segments = (await db.execute(select(CuratedBuildSegment).where(CuratedBuildSegment.is_live.is_(True)))).scalars().all()
+    if not cell_segments:
+        return []
     playbooks = await public_list_playbooks(db)
     cases = await public_list_cases(db)
     by_name = {p['name']: p for p in playbooks}
     catalogue = {p['id']: await public_playbook_slots(p['id'], db) for p in playbooks}
     result = []
-    cell_segments = (await db.execute(select(CuratedBuildSegment))).scalars().all()
     segment_by_cell = {(row.customer_type.casefold(), row.budget_level.casefold()): row for row in cell_segments}
+    approved_rows = (await db.execute(text("""
+        WITH latest AS (
+            SELECT DISTINCT ON (category, asin) category, asin, title, url,
+                image_url, rank, cpk, captured_at
+            FROM amazon_bestseller_observations
+            ORDER BY category, asin, captured_at DESC
+        )
+        SELECT a.category, COALESCE(a.cpk, 'asin:' || a.asin) AS cpk,
+            a.title, a.url, a.image_url AS reference_image_url, r.selected_media,
+            m.listing_id,
+            COALESCE(m.title, a.title) AS listing_title,
+            COALESCE(m.url, a.url) AS listing_url,
+            COALESCE(m.image_url, a.image_url) AS listing_image_url,
+            COALESCE(m.source, 'amazon') AS listing_source
+        FROM latest a
+        JOIN curated_bestseller_reviews r
+            ON r.category = a.category AND r.cpk = COALESCE(a.cpk, 'asin:' || a.asin)
+            AND r.status = 'approved'
+        LEFT JOIN LATERAL (
+            SELECT s.listing_id, s.source, s.title, s.url, COALESCE(
+                CASE WHEN s.image_url ~* '^https?://' AND s.image_url NOT LIKE '%._RC' THEN s.image_url END,
+                o.image_url
+            ) AS image_url
+            FROM gem_radar_scored_listings s
+            LEFT JOIN LATERAL (
+                SELECT image_url FROM gem_radar_listing_observations
+                WHERE listing_id = s.listing_id
+                  AND image_url ~* '^https?://' AND image_url NOT LIKE '%._RC'
+                ORDER BY observed_at DESC, id DESC LIMIT 1
+            ) o ON true
+            WHERE s.delivered_price > 0 AND s.cpk = a.cpk AND s.category IN (
+                CASE a.category WHEN 'storage' THEN 'ssd'
+                    WHEN 'cooler' THEN 'cooling' ELSE a.category END,
+                a.category
+            )
+            ORDER BY (COALESCE(
+                CASE WHEN s.image_url ~* '^https?://' AND s.image_url NOT LIKE '%._RC' THEN s.image_url END,
+                o.image_url
+            ) IS NOT NULL) DESC, s.scored_at DESC
+            LIMIT 1
+        ) m ON true
+    """))).mappings().all()
+    approved_images_by_match: dict[tuple[str, str], list[dict]] = defaultdict(list)
+    approved_videos_by_match: dict[tuple[str, str], list[dict]] = defaultdict(list)
+    listing_match: dict[str, tuple[str, str]] = {}
+    for row in approved_rows:
+        pair = (str(row["category"]), str(row["cpk"]))
+        if row["listing_id"]:
+            listing_match[str(row["listing_id"])] = pair
+        for url, title, source, href in (
+            (row["reference_image_url"], row["title"], "Amazon product image", row["url"]),
+            (row["listing_image_url"], row["listing_title"], f"Approved {row['listing_source']} listing", row["listing_url"]),
+        ):
+            if not url or any(item["url"] == url for item in approved_images_by_match[pair]):
+                continue
+            approved_images_by_match[pair].append({"url": url, "title": title, "source": source, "href": href})
+    if listing_match:
+        media_rows = (await db.execute(text("""
+            SELECT o.listing_id, o.image_url, o.image_urls, o.video_urls, l.image_urls AS catalogue_image_urls
+            FROM gem_radar_listing_observations o
+            LEFT JOIN listings l ON l.external_id = o.listing_id
+            WHERE o.listing_id = ANY(:listing_ids)
+        """), {"listing_ids": list(listing_match)})).mappings().all()
+        for media_row in media_rows:
+            pair = listing_match.get(str(media_row["listing_id"]))
+            if not pair:
+                continue
+            images = list(media_row["image_urls"] or [])
+            images.extend(media_row["catalogue_image_urls"] or [])
+            if media_row["image_url"]:
+                images.append(media_row["image_url"])
+            for url in dict.fromkeys(images):
+                if isinstance(url, str) and url.startswith(("https://", "http://")) and not any(item["url"] == url for item in approved_images_by_match[pair]):
+                    approved_images_by_match[pair].append({"url": url, "title": "Product listing photo", "source": "Approved marketplace listing", "href": None})
+            for url in dict.fromkeys(media_row["video_urls"] or []):
+                if isinstance(url, str) and url.startswith(("https://", "http://")) and not any(item["url"] == url for item in approved_videos_by_match[pair]):
+                    approved_videos_by_match[pair].append({"url": url, "title": "Product listing video", "source": "Approved marketplace listing", "href": None})
+    # Curated Playbook galleries include every captured photo and video for an
+    # owner-approved exact product match. Per-photo curation is not a gate.
     for definition in definitions()['builds']:
         pb = by_name.get(definition['segment'])
-        slots = curated_slots(catalogue.get(pb['id'], []) if pb else [], definition)
-        chosen = [next((v for values in s['variants_by_tier'].values() for v in values if v['id'] == s['default_variant_id']), None) for s in slots]
-        # Cases are resolved from case_catalogue below, not from component
-        # variants. The playbook slot is retained for the configurator shape,
-        # but an empty case variant list must not make every curated build
-        # appear incomplete.
-        missing = [s['slot_type'] for s, v in zip(slots, chosen) if v is None and s['slot_type'] != 'case']
-        if not cases:
-            missing.append('case')
-        parts = sum(float(v['display_price']) for v in chosen if v) + (min(float(c['rrp_gbp']) for c in cases) if cases else 0)
-        build_data = {
-            **definition, 
-            'playbook_id': pb['id'] if pb else None, 
-            'missing_components': missing,
-            'price_gbp': round((parts + LABOUR_COST) * (1 + OVERHEAD_RATE), 2) if not missing else None
-        }
         cell = segment_by_cell.get((definition['segment'].casefold(), definition['tier'].casefold()))
+        if not pb or not cell:
+            continue
+        from app.services.curated_publication import publication_snapshot, PublicationError
+        try:
+            snapshot = publication_snapshot(definition, cell, catalogue.get(pb['id'], []), cases)
+        except PublicationError:
+            continue
+        build_data = {**definition, 'components': snapshot['components'],
+            'playbook_id': pb['id'], 'missing_components': [],
+            'price_gbp': snapshot['price_gbp'], 'default_case_id': snapshot['default_case_id'],
+            'default_slot_selections': snapshot['default_slot_selections']}
         upgrade_options = (cell.approved_upgrades or []) if cell and cell.is_live else []
         build_data['upgrade_options'] = upgrade_options
+        listing_images = []
+        if cell:
+            for identity in (cell.bestseller_components or {}).values():
+                if not isinstance(identity, dict):
+                    continue
+                listing_images.extend(approved_images_by_match.get((str(identity.get('category') or ''), str(identity.get('cpk') or '')), []))
+        listing_images = [image for image in listing_images if media_urls([image.get('url')])]
+        build_data['listing_images'] = list({image['url']: image for image in listing_images}.values())
+        build_data['listing_videos'] = [video for identity in (cell.bestseller_components or {}).values() if isinstance(identity, dict)
+            for video in approved_videos_by_match.get((str(identity.get('category') or ''), str(identity.get('cpk') or '')), [])] if cell else []
         result.append(enrich_curated_build_with_ship_name(build_data))
     return result
 
@@ -715,52 +931,84 @@ async def public_software_options(
 
 @router.get('/playbooks/{playbook_id}/custom-slots')
 async def public_custom_slots(playbook_id: int, db: AsyncSession = Depends(get_db)):
-    """Full selection from the same published component base as curated builds."""
-    base = await public_playbook_slots(playbook_id, db)
+    """Start empty and select from the one approved Curated component range."""
+    base = await _published_playbook_slots(playbook_id, db, full_curated_range=True)
     playbook = await db.get(Playbook, playbook_id)
     requirements = playbook.requirements if playbook and isinstance(playbook.requirements, dict) else {}
     gpu_optional = requirements.get("gpu_required") is False
     pool = {}
-    for pb in await public_list_playbooks(db):
-        for slot in await public_playbook_slots(pb['id'], db):
-            bucket = pool.setdefault(slot['slot_type'], {})
-            for values in slot['variants_by_tier'].values():
-                for variant in values:
-                    bucket[variant['id']] = variant
+    for slot in base:
+        bucket = pool.setdefault(slot['slot_type'], {})
+        for values in slot['variants_by_tier'].values():
+            for variant in values:
+                bucket[variant['id']] = variant
     return [{
         **slot,
+        'default_variant_id': None,
         'is_required': not (gpu_optional and slot['slot_type'] == 'gpu'),
         'variants_by_tier': {'budget': [], 'mid': list(pool.get(slot['slot_type'], {}).values()), 'high': []},
-    } for slot in base]
+    } for slot in base if slot['slot_type'] not in {'storage_secondary','os_secondary'}]
 
 
 # Analytics endpoints for curated journey
 from app.schemas.buying_flow import SessionAnalyticsEvent
 
+_CURATED_ANALYTICS_FIELDS={
+    'curated_build_view': {'segment','tier'},
+    'case_selected': {'case_id'},
+    'component_selected': {'role','variant_id'},
+    'build_added_to_cart': {'component_count'},
+    'delivery_mode_selected': {'delivery_mode'},
+    'checkout_started': {'delivery_mode'},
+    'budget_chosen': {'budget_min','budget_max'},
+    'customer_type_picked': {'customer_type'},
+    'playbook_tier_shown': {'tier'},
+    'case_chosen': {'case_id'},
+    'rgb_tweaked': {'rgb_value'},
+    'ar_opened': set(),
+    'drop_off': {'step'},
+}
+
+
+def _safe_curated_analytics_metadata(event_type, metadata):
+    """Store only small, non-identifying fields used by the Playbook funnel."""
+    allowed=_CURATED_ANALYTICS_FIELDS.get(event_type,set())
+    result={}
+    for key in allowed:
+        value=metadata.get(key)
+        if isinstance(value,bool):
+            result[key]=value
+        elif isinstance(value,int) and not isinstance(value,bool) and abs(value)<1_000_000:
+            result[key]=value
+        elif isinstance(value,float) and value==value and abs(value)<1_000_000:
+            result[key]=value
+        elif isinstance(value,str) and len(value)<=80 and '@' not in value:
+            result[key]=value
+    return result
+
 @router.post('/analytics/event')
 async def track_analytics_event(
     event: SessionAnalyticsEvent,
+    request: Request,
     db: AsyncSession = Depends(get_db),
 ):
-    """
-    Track an analytics event from the curated journey.
-    
-    Events include: budget_chosen, customer_type_picked, playbook_tier_shown,
-    case_chosen, rgb_tweaked, ar_opened, drop_off.
-    
-    This endpoint logs anonymous journey events for later analysis.
-    """
-    # TODO: Store in analytics table or send to analytics service
-    # For now, just log the event
-    import structlog
-    log = structlog.get_logger(__name__)
-    
-    log.info(
-        "curated_journey.analytics_event",
-        event_type=event.event_type,
-        curated_build_id=event.curated_build_id,
-        metadata=event.metadata,
-        has_buying_flow=event.buying_flow is not None,
-    )
-    
-    return {"status": "tracked", "event_type": event.event_type}
+    """Persist consented, pseudonymous journey signals for cell-level review."""
+    if request.cookies.get('flipflop.cookie-consent.v1')!='accepted':
+        return {'status':'ignored','reason':'analytics_consent_required'}
+    allowed_fields=_CURATED_ANALYTICS_FIELDS.get(event.event_type)
+    if allowed_fields is None:
+        raise HTTPException(422,'Unsupported curated journey event')
+    if not event.session_id or not re.fullmatch(r'[A-Za-z0-9-]{16,120}',event.session_id):
+        raise HTTPException(422,'A valid short-lived analytics session ID is required')
+    build_id=event.curated_build_id
+    from app.services.curated_build_policy import definitions
+    if build_id and build_id not in {row['id'] for row in definitions()['builds']}:
+        raise HTTPException(422,'Unknown curated Playbook cell')
+    if event.event_type in {'curated_build_view','case_selected','component_selected','build_added_to_cart','delivery_mode_selected','checkout_started'} and not build_id:
+        raise HTTPException(422,'This event requires a curated Playbook cell')
+    metadata=_safe_curated_analytics_metadata(event.event_type,event.metadata)
+    db.add(AnalyticsEvent(source='curated_journey',event_name=event.event_type,
+        session_id=event.session_id,path=f'/curated/{build_id}' if build_id else '/curated',
+        utm={},properties={'curated_build_id':build_id,'metadata':metadata}))
+    await db.flush()
+    return {'status':'tracked','event_type':event.event_type}

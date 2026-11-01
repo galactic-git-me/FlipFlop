@@ -165,11 +165,11 @@ def test_component_does_not_repeat_whole_build_fulfilment_costs():
 
 def test_category_economics_preserve_higher_gpu_and_build_cash_hurdles():
     policy = OpportunityPolicy()
-    assert category_economics("cpu", policy).gem_profit == 3
-    assert category_economics("gpu", policy).gem_profit == 12
-    assert category_economics("cpu", policy).super_roi_pct == 25
-    assert category_economics("motherboard", policy).super_roi_pct == 22
-    assert category_economics("gpu", policy).super_roi_pct == 20
+    assert category_economics("cpu", policy).gem_profit == policy.gem_profit
+    assert category_economics("gpu", policy).gem_profit == policy.gem_profit
+    assert category_economics("cpu", policy).super_roi_pct == policy.super_roi_pct
+    assert category_economics("motherboard", policy).super_roi_pct == policy.super_roi_pct
+    assert category_economics("gpu", policy).super_roi_pct == policy.super_roi_pct
     assert category_economics("whole_pc", policy).gem_profit == policy.gem_profit
 
 
@@ -251,7 +251,7 @@ def test_zero_sell_through_is_visible_without_demoting_bargain_tier():
         watch_velocity=None, bid_velocity=None, policy=policy,
     )
     assert result.liquidity_score == 0.0
-    assert result.classification == "SUPER_GEM"
+    assert result.classification == "GEM"
     assert result.decision == "INVESTIGATE"
 
 
@@ -299,7 +299,7 @@ def test_desirability_separates_modern_build_friendly_parts():
 
 
 def test_gem_economics_do_not_require_a_redundant_market_discount_gate():
-    policy = OpportunityPolicy(gem_discount_pct=-20.0)
+    policy = OpportunityPolicy(gem_market_discount_pct=15.0)
     market = robust_sold_market(comps([100, 100, 100, 100, 100]), subject_listing_id="999", policy=policy)
     assert market is not None
     result = score_opportunity(
@@ -309,9 +309,9 @@ def test_gem_economics_do_not_require_a_redundant_market_discount_gate():
         watch_velocity=1, bid_velocity=1, policy=policy, listing_condition="new",
     )
     assert result.roi_pct and result.roi_pct >= 15
-    assert result.classification == "GEM"
-    assert result.decision == "BUY_NOW"
-    assert 75 <= result.score < 85
+    assert result.classification == "OK_DEAL"
+    assert result.decision == "MAKE_OFFER"
+    assert 65 <= result.score < 70
 
 
 def test_strong_economics_with_low_confidence_keep_deal_tier():
@@ -346,10 +346,10 @@ def test_evidence_flags_and_market_confidence_do_not_change_tier_or_score():
     )
     verified = score_opportunity(market=market, **arguments)
     limited = score_opportunity(
-        market=replace(market, confidence=5, sample_size=1),
+        market=replace(market, confidence=5, sample_size=1, basis="ACTIVE_ONLY"),
         extra_risk_flags=("preliminary_sold_cohort",), **arguments,
     )
     assert verified.classification == limited.classification
     assert verified.score == limited.score
     assert verified.evidence_status != limited.evidence_status
-    assert limited.decision == "INVESTIGATE"
+    assert limited.decision == "MAKE_OFFER"

@@ -128,7 +128,7 @@ async def consolidate_cpk_pricing(db) -> dict[str, CPKPricingAggregate]:
     # Store aggregates in new cpk_pricing_index table for lookup during scoring
     create_table_query = """
     CREATE TABLE IF NOT EXISTS cpk_pricing_index (
-        cpk VARCHAR(16) PRIMARY KEY,
+        cpk VARCHAR(64) PRIMARY KEY,
         category VARCHAR(50),
         brand VARCHAR(100),
         model VARCHAR(200),

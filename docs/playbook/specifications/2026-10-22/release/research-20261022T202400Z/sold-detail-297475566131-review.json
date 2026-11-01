@@ -1,0 +1,25 @@
+{
+  "url": "https://www.ebay.co.uk/itm/297475566131",
+  "observed_at": "2026-10-22T20:25:24.877098+00:00",
+  "transaction_date_from_UK_sold_card": "2026-10-21",
+  "UK_sold_card_item_gbp": "2062.92",
+  "UK_sold_card_postage_gbp": "0.00",
+  "detail_displayed_item_gbp": "1719.10",
+  "detail_delivery_context": "Poland; postage varies",
+  "description_static_item_gbp": "1885.95",
+  "price_basis_note": "1719.10 times 1.20 equals 2062.92, but this arithmetic does not prove the tax/region or historical price basis. Keep the three observations separate.",
+  "seller_type": "business",
+  "seller": "laptopsdirectltd",
+  "condition_label": "new",
+  "product_mpn": "7000216",
+  "description_summary": "9800X3D; RX9070XT16GB;32GB DDR5-5600;2TB NV3 NVMe;Cooler Master MasterLiquid240 CoreII ARGB;unspecified850W PSU;AerocoolP500C with fourARGB fans;WiFi6E/Bluetooth5.3;Windows11Home.",
+  "description_url": "https://itm.ebaydesc.com/itmdesc/297475566131",
+  "status": "context_only",
+  "approved": false,
+  "blockers": [
+    "Exact motherboard and PSU identity not evidenced",
+    "Warranty and service equivalence unverified",
+    "UK historical delivered transaction price basis not independently confirmed",
+    "Three sold counter is not three independent verified price records"
+  ]
+}

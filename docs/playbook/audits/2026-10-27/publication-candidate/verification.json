@@ -1,0 +1,30 @@
+{
+  "deterministic_contract_checks": [
+    "playbook_selection_constraints_contract_check.py",
+    "playbook_source_identity_contract_check.py",
+    "playbook_research_identity_contract_check.py",
+    "shared_asset_lookup_contract_check.py"
+  ],
+  "commercial_quote_tests": 20,
+  "commercial_adapter_tests": 10,
+  "existing_no_fixture_requirement_checks": {
+    "passed": 17,
+    "failed": 9,
+    "note": "Broader existing requirement checks have old expectations for source-cost fallback, scope and fixtures; full suite is not claimed green."
+  },
+  "production_deployed": false,
+  "paid_checkout_verified": false,
+  "windows_supplier": "Gamers Outlet; owner instructed to retain original source",
+  "customer_pace_tests": 5,
+  "admin_review_component_tests": 7,
+  "admin_typecheck": "passed",
+  "storefront_typecheck": "passed",
+  "admin_targeted_eslint": "passed",
+  "storefront_targeted_eslint": "0 errors; 2 existing aria-disabled warnings",
+  "browser_checks": [
+    "Customer delivery page: Flexible has no promised date",
+    "Admin: 24/24 priced suggestions and all three per-component pace columns rendered",
+    "Original Gamers Outlet Home key appears in all three OS pace rows"
+  ],
+  "candidate_contract_assertions": "24 cells pass: no blockers, compatibility, all component pace rows, original Windows vendor, no Flexible deadlines"
+}

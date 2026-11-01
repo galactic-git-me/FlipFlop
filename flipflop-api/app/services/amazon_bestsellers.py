@@ -33,9 +33,13 @@ BESTSELLER_URL = (
     "https://www.amazon.co.uk/Best-Sellers-Computers-Accessories-Computer-Cases/"
     "zgbs/computers/430498031/"
 )
+OPERATING_SYSTEM_BESTSELLER_LIST_NAME = "Amazon Operating Systems Best Sellers"
 # Amazon's component bestseller pages.  The list name is stored with every
 # daily observation so the UI can explain exactly what a rank means.
 COMPONENT_BESTSELLER_LISTS = {
+    # Amazon Seller Central permits physical full-retail software; digital
+    # downloads and activation-key listings are filtered below.
+    "os": (OPERATING_SYSTEM_BESTSELLER_LIST_NAME, "https://www.amazon.co.uk/gp/bestsellers/software/599948"),
     "cpu": ("CPUs", "https://www.amazon.co.uk/zgbs/computers/430515031/"),
     "gpu": ("Graphics Cards", "https://www.amazon.co.uk/zgbs/computers/430500031/"),
     "ram": ("Computer Memory", "https://www.amazon.co.uk/zgbs/computers/430511031/"),
@@ -157,6 +161,64 @@ async def _load_bestseller_page(page, url: str, rank_offset: int) -> tuple[list[
             if attempt < 2:
                 await asyncio.sleep(2 * (attempt + 1))
     raise ValueError(f"Amazon bestseller page failed after 3 attempts: {url}: {last_error}")
+
+
+async def _capture_component_bestseller_category(
+    context,
+    category: str,
+    list_name: str,
+    base_url: str,
+    semaphore: asyncio.Semaphore,
+) -> tuple[dict[str, dict], int, Exception | None]:
+    """Fetch one category's pages in its own tab, within the shared page cap."""
+    async with semaphore:
+        page = None
+        try:
+            page = await context.new_page()
+            items: list[dict] = []
+            page_urls: set[str] = set()
+            url: str | None = base_url
+            page_num = 1
+            while url:
+                normalized_url = url.split("#")[0]
+                if normalized_url in page_urls:
+                    raise ValueError(f"Amazon bestseller pagination loop detected at {normalized_url}")
+                page_urls.add(normalized_url)
+                page_items, next_url, page_complete = await _load_bestseller_page(
+                    page, normalized_url, (page_num - 1) * 50
+                )
+                if not page_complete:
+                    raise ValueError(f"Amazon bestseller page {page_num} was not fully traversed")
+                page_title = (await page.title()).lower()
+                if not bestseller_page_matches_title(page_title, list_name, category):
+                    raise ValueError(f"unexpected Amazon list page: {page_title[:100]}")
+                items.extend(page_items)
+                if next_url and next_url in page_urls:
+                    raise ValueError(f"Amazon bestseller next-page link loops to {next_url}")
+                url = next_url
+                page_num += 1
+                if page_num > 100:
+                    raise ValueError(f"Amazon bestseller pagination exceeded 100 pages for {category}")
+
+            if not page_urls:
+                raise ValueError(f"{category} bestseller list had no pages")
+            unique: dict[str, dict] = {}
+            for item in items:
+                asin = (item.get("asin") or "").upper()
+                if asin and (asin not in unique or item["rank"] < unique[asin]["rank"]):
+                    item["asin"] = asin
+                    unique[asin] = item
+            if not unique:
+                raise ValueError(f"{category} bestseller pages yielded no products")
+            return unique, len(page_urls), None
+        except Exception as exc:
+            return {}, 0, exc
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception as exc:
+                    log.debug("bestsellers.category_page_close_failed", category=category, error=str(exc))
 
 
 def extract_asin(url: str | None) -> str | None:
@@ -423,10 +485,21 @@ def _best_scored_match(item: dict, rows: list[dict], category: str) -> dict | No
 def bestseller_item_matches_category(title: str, category: str) -> bool:
     """Reject Amazon redirects/incorrect browse-node lists before ranking them."""
     value = title.lower()
+    if category == "os":
+        # Playbook dual-boot cells explicitly require Ubuntu 24.04 LTS. Keep
+        # older Linux images and unrelated software out of this catalogue.
+        if re.search(r"\bubuntu\s*[-–]?\s*24\.04(?:\.\d+)?(?:\s+lts)?\b", value):
+            return not bool(re.search(r"\b(?:digital|download|activation key|product key|license key|licence key|esd)\b", value))
+        windows = bool(re.search(r"\bwindows\s+11\b", value))
+        edition = bool(re.search(r"\b(?:home|pro)\b", value))
+        physical_retail = bool(re.search(r"\b(?:fpp|full packaged product|retail usb|usb retail|retail dvd)\b", value))
+        exact_microsoft_retail = bool(re.search(r"\bmicrosoft\s+windows\s+11\s+(?:home|pro)\b", value))
+        disallowed_delivery = bool(re.search(r"\b(?:digital|download|activation key|product key|license key|licence key|esd|system builder|oem)\b", value))
+        return windows and edition and (physical_retail or exact_microsoft_retail) and not disallowed_delivery
     if category == "cpu":
         return bool(re.search(r"\b(?:ryzen|threadripper|core\s+i[3579]|core\s+ultra|processor|cpu)\b", value)) and not bool(re.search(r"\b(?:motherboard|cooler|heatsink|laptop)\b", value))
     if category == "gpu":
-        return bool(re.search(r"\b(?:graphics\s+card|geforce|radeon|rtx\s*\d|gtx\s*\d|rx\s*\d)\b", value)) and "laptop" not in value
+        return bool(re.search(r"\b(?:graphics\s+card|geforce|radeon|rtx\s*\d|gtx\s*\d|rx\s*\d|(?:intel\s+)?arc\s+[ab]\d{3,4})\b", value)) and not bool(re.search(r'\b(?:laptop|replacement\s+fan|backplate|riser|water\s*block)\b',value))
     if category == "motherboard":
         return bool(re.search(r"\b(?:motherboard|mainboard)\b", value))
     if category == "storage":
@@ -434,7 +507,7 @@ def bestseller_item_matches_category(title: str, category: str) -> bool:
     if category == "case":
         return bool(re.search(r"\b(?:pc\s+case|computer\s+case|chassis|mid[- ]tower|full[- ]tower)\b", value))
     if category == "ram":
-        return bool(re.search(r"\b(?:ram|memory|dimm|ddr[345])\b", value))
+        return bool(re.search(r"\b(?:ram|memory|dimm|ddr[345])\b", value)) and not bool(re.search(r'\b(?:so[- ]?dimm|sodimm|laptop|notebook|camm)\b',value))
     if category == "psu":
         return bool(re.search(r"\b(?:power\s+supply|psu)\b", value))
     if category == "cooler":
@@ -450,7 +523,12 @@ def bestseller_item_matches_category(title: str, category: str) -> bool:
     return False
 
 
-async def scrape_amazon_component_bestsellers(categories: list[str] | None = None) -> dict:
+def bestseller_page_matches_title(page_title: str, list_name: str, category: str) -> bool:
+    title=page_title.casefold()
+    return list_name.casefold() in title or (category=='os' and 'best sellers' in title and 'operating system' in title)
+
+
+async def scrape_amazon_component_bestsellers(categories: list[str] | None = None, *, reconcile_catalogue: bool = True) -> dict:
     """Capture daily Amazon bestseller ranks for all supported PC components.
 
     Ranks are historical observations.  A current scored listing is matched
@@ -466,7 +544,6 @@ async def scrape_amazon_component_bestsellers(categories: list[str] | None = Non
     results = {"scraped": 0, "matched": 0, "categories": 0, "errors": 0, "category_results": {}}
     async with managed_playwright() as p:
         browser, context = await _make_pw_context(p)
-        page = await context.new_page()
         try:
             async with AsyncSessionLocal() as db:
                 scored_rows = (await db.execute(
@@ -515,48 +592,33 @@ async def scrape_amazon_component_bestsellers(categories: list[str] | None = Non
                         )
                         marketplace_by_asin.setdefault(asin, []).append(amazon_row)
 
-                for category, (list_name, base_url) in selected_lists.items():
+                # Keep one browser process but overlap two independent list
+                # pages. The global browser pool still serializes this scraper
+                # against other app scrapers; this cap only reduces waiting
+                # between the Playbook's own category pages.
+                category_semaphore = asyncio.Semaphore(2)
+                captured_categories = await asyncio.gather(*(
+                    _capture_component_bestseller_category(
+                        context, category, list_name, base_url, category_semaphore
+                    )
+                    for category, (list_name, base_url) in selected_lists.items()
+                ))
+
+                for (category, (list_name, _)), (unique, page_count, capture_error) in zip(
+                    selected_lists.items(), captured_categories
+                ):
+                    if capture_error is not None:
+                        await db.rollback()
+                        log.warning("bestsellers.category_error", category=category, error=str(capture_error))
+                        results["errors"] += 1
+                        results["category_results"][category] = {"status": "failed", "error": str(capture_error)}
+                        continue
                     try:
                         match_categories = {"storage": {"ssd", "storage"}, "cooler": {"cooler", "cooling"}}.get(category, {category})
                         scored_for_category = [
                             row for row in scored
                             if (row.get("category") or "").lower() in match_categories
                         ]
-                        items: list[dict] = []
-                        page_urls: set[str] = set()
-                        url: str | None = base_url
-                        page_num = 1
-                        while url:
-                            normalized_url = url.split("#")[0]
-                            if normalized_url in page_urls:
-                                raise ValueError(f"Amazon bestseller pagination loop detected at {normalized_url}")
-                            page_urls.add(normalized_url)
-                            page_items, next_url, page_complete = await _load_bestseller_page(page, normalized_url, (page_num - 1) * 50)
-                            if not page_complete:
-                                raise ValueError(f"Amazon bestseller page {page_num} was not fully traversed")
-                            page_title = (await page.title()).lower()
-                            if list_name.lower() not in page_title:
-                                raise ValueError(f"unexpected Amazon list page: {page_title[:100]}")
-                            items.extend(page_items)
-                            if next_url and next_url in page_urls:
-                                raise ValueError(f"Amazon bestseller next-page link loops to {next_url}")
-                            url = next_url
-                            page_num += 1
-                            if page_num > 100:
-                                raise ValueError(f"Amazon bestseller pagination exceeded 100 pages for {category}")
-
-                        if not page_urls:
-                            raise ValueError(f"{category} bestseller list had no pages")
-
-                        unique: dict[str, dict] = {}
-                        for item in items:
-                            asin = (item.get("asin") or "").upper()
-                            if asin and (asin not in unique or item["rank"] < unique[asin]["rank"]):
-                                item["asin"] = asin
-                                unique[asin] = item
-
-                        if not unique:
-                            raise ValueError(f"{category} bestseller pages yielded no products")
                         valid_items = [item for item in unique.values() if bestseller_item_matches_category(item["title"], category)]
                         # Retain historical behavior for other component lists,
                         # but never persist unrelated products from Amazon's
@@ -594,20 +656,26 @@ async def scrape_amazon_component_bestsellers(categories: list[str] | None = Non
                         results["scraped"] += category_scraped
                         results["matched"] += category_matched_total
                         results["categories"] += 1
-                        results["category_results"][category] = {"status": "ok", "pages": len(page_urls), "parsed": len(unique), "valid": len(valid_items), "matched": category_matched, "priced": category_priced}
+                        results["category_results"][category] = {"status": "ok", "pages": page_count, "parsed": len(unique), "valid": len(valid_items), "matched": category_matched, "priced": category_priced}
                     except Exception as exc:
                         await db.rollback()
                         log.warning("bestsellers.category_error", category=category, error=str(exc))
                         results["errors"] += 1
                         results["category_results"][category] = {"status": "failed", "error": str(exc)}
         finally:
-            await page.close()
             await context.close()
             await browser.close()
     results["ok"] = results["errors"] == 0 and results["categories"] == len(selected_lists)
     if not results["ok"]:
         results["reason"] = f"pagination_failed: {results['categories']}/{len(selected_lists)} lists completed, {results['errors']} errors"
     log.info("bestsellers.components_complete", **results)
+    if reconcile_catalogue and results["categories"]:
+        from app.services.bestseller_catalogue_sync import sync_bestseller_catalogues
+        from app.services.playbook_service import enqueue_scheduled_playbook_rebuild
+        async with AsyncSessionLocal() as catalogue_db:
+            results["catalogue_sync"] = await sync_bestseller_catalogues(catalogue_db, check_free_software=False)
+            await catalogue_db.commit()
+        await enqueue_scheduled_playbook_rebuild("Amazon rankings changed the shared Curated catalogue")
     return results
 
 

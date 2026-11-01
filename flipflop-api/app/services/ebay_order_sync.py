@@ -11,6 +11,7 @@ Docs: https://developer.ebay.com/api-docs/sell/fulfillment/resources/order/metho
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime, timezone
 
 import httpx
 import structlog
@@ -63,6 +64,7 @@ class EbayOrderInfo:
     buyer_address: BuyerAddress
     sale_price: float
     currency: str
+    ship_by_date: datetime | None = None
 
 
 def _parse_order(order: dict, matching_legacy_item_id: str | None = None) -> EbayOrderInfo | None:
@@ -94,6 +96,16 @@ def _parse_order(order: dict, matching_legacy_item_id: str | None = None) -> Eba
 
     pricing_summary = order.get("pricingSummary", {})
     total = pricing_summary.get("total", {})
+    ship_by_date = None
+    fulfillment_instructions = line_item.get("lineItemFulfillmentInstructions") or {}
+    raw_ship_by_date = fulfillment_instructions.get("shipByDate")
+    if raw_ship_by_date:
+        try:
+            ship_by_date = datetime.fromisoformat(str(raw_ship_by_date).replace("Z", "+00:00"))
+            if ship_by_date.tzinfo is not None:
+                ship_by_date = ship_by_date.astimezone(timezone.utc).replace(tzinfo=None)
+        except ValueError:
+            ship_by_date = None
 
     return EbayOrderInfo(
         order_id=order["orderId"],
@@ -102,6 +114,7 @@ def _parse_order(order: dict, matching_legacy_item_id: str | None = None) -> Eba
         buyer_address=address,
         sale_price=float(total.get("value", 0)),
         currency=total.get("currency", "GBP"),
+        ship_by_date=ship_by_date,
     )
 
 

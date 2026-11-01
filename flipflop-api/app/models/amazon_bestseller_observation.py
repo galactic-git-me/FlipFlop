@@ -1,7 +1,7 @@
 """Daily Amazon Best Sellers observations matched to canonical products."""
 from datetime import datetime
 
-from sqlalchemy import DateTime, Float, Index, Integer, String
+from sqlalchemy import DateTime, Float, Index, Integer, JSON, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database import Base
@@ -28,4 +28,5 @@ class AmazonBestsellerObservation(Base):
     price: Mapped[float | None] = mapped_column(Float, nullable=True)
     rrp: Mapped[float | None] = mapped_column(Float, nullable=True)
     sales_velocity: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    product_capture: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     captured_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)

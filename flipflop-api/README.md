@@ -29,6 +29,20 @@ To check for drift without changing files:
 .\scripts\sync-api-package-sources.ps1 -Check
 ```
 
+### GLB publication pipeline
+
+The API image installs the pinned `@gltf-transform/cli` 4.2.1 optimizer. Every
+new Meshy GLB or operator-uploaded GLB is validated and optimized with Meshopt
+geometry compression, WebP textures capped at 2K, and mesh simplification
+disabled. The optimizer checks that primitive modes and index/vertex counts
+remain unchanged and publishes the optimized output only after those checks
+pass. If the output is not smaller, the validated source remains the published
+file. Original bytes are retained outside public media under
+`data/3d-media-originals/` for catalogue assets and `runtime/glb-originals/`
+for finished-build assets. GLB processing runs off the event loop; a missing or
+failed optimizer blocks publication instead of silently serving an unchecked
+new model.
+
 ### Option B — Local Python
 
 ```bash
@@ -44,6 +58,41 @@ python run_dev.py           # defaults to port 4311; restarts the API when Pytho
 The Windows launcher watches `app/` and restarts the API process after Python
 source changes. It keeps Uvicorn's built-in reload disabled so the API retains
 the Proactor event loop required by Playwright.
+
+Before starting normal DEV mode, apply database migrations. `create_all`
+does not add columns to existing tables. Scan schema checks run before worker
+startup, submission acceptance, and queue claims; incompatible work stays
+pending instead of exhausting retries. `WEB_ONLY=true` rejects scan submissions
+with HTTP 503 because sourcing workers are disabled.
+
+To recover the October image/provenance schema failures after schema repair:
+
+```powershell
+python scripts/recover_scan_schema_failures.py         # preview
+python scripts/recover_scan_schema_failures.py --apply # audited requeue
+```
+
+The recovery retains payloads and previous errors and saves an audit in the
+workspace `logs/` directory. It targets only the two diagnosed missing-column
+errors. On 14 October, `alembic upgrade head` was blocked by the pre-existing
+`curated_promotions` table in an older migration branch. The two additive media
+and provenance migrations were applied directly; migration history was not
+stamped. The branch has now been reconciled: the merge lists only independent
+heads, and compatible pre-existing DDL was adopted using the explicit command
+below. DEV is at `20261013_0002`; normal upgrades work again.
+
+```powershell
+python -m alembic -x reconcile_existing=true upgrade head
+python -m alembic current
+python -m alembic upgrade head
+```
+
+Use reconciliation only for reviewed schema drift. It validates existing
+column types, nullability, primary/unique/foreign keys and index definitions;
+incompatible definitions stop the transaction rather than being stamped.
+
+Top component cards use active lifecycle state rather than discarding scores
+after 24 hours; stored active candidates remain visible during a failed sweep.
 
 ## AI Setup
 
@@ -104,3 +153,26 @@ Environment variables:
 Manual run via swarms API:
 
 - `POST /api/swarms/compliant_market_ingestion/trigger`
+
+### Missing manual-build creation origin (20 October 2026)
+
+`delivery_followup` selects the full `ManualBuild` model. Older installations can lack `manual_builds.creation_method` because its original addition lived only in the disabled broad startup migration. Alembic revision `20261020_0001` adds the required `VARCHAR(20) NOT NULL DEFAULT 'manual'` column without replacing existing build data. It skips an existing compatible column and preserves recorded AI origins.
+
+For the local DEV database only, inspect and narrowly repair this specific drift with:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/repair_manual_build_creation_method.py
+.\.venv\Scripts\python.exe scripts/repair_manual_build_creation_method.py --apply
+```
+
+The default command is read-only and exits nonzero if mapped columns are missing. `--apply` validates matching local async/sync database targets, uses bounded lock/statement timeouts, and verifies existing row data is unchanged in the repair transaction. It applies only the new column migration without stamping Alembic history or running unrelated pending migrations. A later ordinary upgrade skips the already-present compatible column. Roll application code back while retaining this additive column; dropping it loses build-origin history. The check runs the follow-up SELECT only and never invokes the email worker.
+
+The named local `pcflipper` repair preserved 13 builds, left revision `20261015_0004` unchanged and verified the formerly failing query in a fresh connection. Production migration and actual follow-up email delivery were not performed.
+
+### Texture fidelity and source-photo size (20 October 2026)
+
+The four newest owner-generated GLBs were inspected and contained embedded base-colour/PBR maps. The case model's approved references were Amazon `._AC_US40_` 40×40 thumbnails; original copies of those same photo IDs were available at 500×500. Its saved colour atlas was largely grey/low-detail, and the running review viewer reported no loading errors. Low-resolution input is a confirmed pipeline defect; the visual quality of a regenerated model still needs owner review.
+
+Generation now resolves Amazon/eBay thumbnail URLs to original/larger renditions of exactly the approved image IDs, preserving order for geometry and texture guidance. Known public image CDNs are checked before submission; originals below 256 pixels on their longest edge, below 64 on the shortest, unsupported formats or files over 20 MB stop before a paid job. Arbitrary image hosts are not newly fetched by the backend. The submitted original-resolution URLs are recorded in variant generation metadata while `source_image_refs` retains the owner's exact approved selection for the existing model gate. Both single/multi-image requests keep `should_texture` and `enable_pbr` enabled, with 2K texture output. [Meshy image API](https://docs.meshy.ai/en/api/image-to-3d) and [multi-image API](https://docs.meshy.ai/en/api/multi-image-to-3d) define these parameters.
+
+Generated GLBs must contain an embedded colour texture referenced by rendered geometry before storage/publication. This is a structural check, not a substitute for inspecting fidelity. The Playbook photo and model-review panels display larger copies of the same images and offer **Regenerate from approved photos** for unpublished drafts; provider credits apply and every new draft still needs explicit owner approval. Existing drafts and approvals are not overwritten or silently replaced.
