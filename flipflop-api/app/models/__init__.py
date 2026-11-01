@@ -25,6 +25,7 @@ from app.models.source_search_term import SourceSearchTerm
 from app.models.listing_archive import ListingArchive
 from app.models.manual_build import ManualBuild
 from app.models.getting_started_job import GettingStartedJob
+from app.models.playbook_refresh_run import PlaybookRefreshRun
 from app.models.pc_builder import PCBuild, PCBuildPurchasePlan
 from app.models.benchmark import HardwareBenchmark, ComponentPerformanceMetric, BenchmarkRefreshRun
 from app.models.catalogue import PlaybookSlot, CatalogueVariant, CaseCatalogue
@@ -143,9 +144,10 @@ __all__ = [
 ]
 
 from .customer import Customer
+from .favourite import Favourite
 from .admin_user import AdminUser
 from .motherboard_spec import MotherboardSpec
-from .order import Order, OrderStatus
+from .order import Order, OrderStatus, PaymentStatus
 from .order_checklist import OrderChecklist
 from .order_photo import OrderPhoto
 from .playbook import Playbook, PlaybookStatus
@@ -206,7 +208,7 @@ __all__ = [
     "Customer",
     "AdminUser",
     "MotherboardSpec",
-    "Order", "OrderStatus",
+    "Order", "OrderStatus", "PaymentStatus",
     "OrderChecklist",
     "OrderPhoto",
     "Playbook", "PlaybookStatus",

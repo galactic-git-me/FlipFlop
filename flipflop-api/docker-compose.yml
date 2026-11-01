@@ -33,10 +33,10 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
-      # Host port matches the dev instance's port (run_dev.py --port 4311)
+      # Host port matches the dev instance's port (run_dev.py --port 4314)
       # so every consumer (storefront rewrites, the FlipFlopXtension scraper)
       # can target one consistent port regardless of how the API is started.
-      - "4311:8000"
+      - "4314:8000"
     environment:
       DATABASE_URL: postgresql+asyncpg://flipper:flipper@db:5432/pcflipper
       SYNC_DATABASE_URL: postgresql://flipper:flipper@db:5432/pcflipper

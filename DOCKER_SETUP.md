@@ -7,7 +7,7 @@ This Docker Compose configuration replaces the PowerShell startup script (`scrip
 | Service | Port | Description |
 |---------|------|-------------|
 | postgres | 5432 | PostgreSQL database |
-| ollama | 11434 | Qwen2:7b GPU-accelerated LLM |
+| ollama | 11434 | Qwen3.5:4b GPU-accelerated LLM (local default) |
 | backend | 4311 | FastAPI backend |
 | gemradar-api | 18000 | Gem Radar data pipeline |
 | admin | 4312 | Next.js admin dashboard |

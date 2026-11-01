@@ -41,7 +41,7 @@ async def test_ollama_request_uses_callers_max_tokens(monkeypatch):
 
     await service._request(
         provider="ollama",
-        model="qwen2.5:7b-instruct",
+        model="qwen3.5:4b",
         task="Getting Ready",
         messages=[{"role": "user", "content": "{}"}],
         system_prompt="Return JSON",

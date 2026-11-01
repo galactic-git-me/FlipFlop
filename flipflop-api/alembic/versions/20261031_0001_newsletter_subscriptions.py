@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 
 revision: str = "20261031_0001"
-down_revision: Union[str, None] = "20261012_merge_heads"
+down_revision: Union[str, None] = "20261028_0001"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

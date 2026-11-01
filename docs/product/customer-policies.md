@@ -14,6 +14,13 @@ This document converts the strategy and `policies/policies.ods` into one policy 
 - FlipFlop remains responsible for the goods until delivered to the customer or the customer's nominated recipient, subject to applicable law.
 - Delivery estimates use current supplier, workshop, and courier evidence. A date is a guarantee only when the checkout explicitly says so.
 
+## Payment methods and third-party instalments
+
+- Checkout is processed by Stripe and displays the methods enabled for, and eligible for, the specific order and customer. This can include cards, digital wallets, Amazon Pay and Klarna.
+- Klarna may offer pay-later or instalment plans. Klarna alone decides customer eligibility, approval, schedule, interest or fees, and its applicable terms. FlipFlop does not lend or guarantee approval. Do not advertise a specific plan or cost unless Klarna presents it for that purchase.
+- Amazon Pay is a wallet option. Any financing or pay-over-time option is available only when Amazon Pay presents it to the customer with its terms.
+- Send approved refunds to the original payment method. A third-party wallet or instalment provider controls when its customer account and payment schedule reflect the refund; this does not change FlipFlop's statutory obligations.
+
 ## Change-of-mind returns
 
 For online consumer orders, the baseline FlipFlop promise is:

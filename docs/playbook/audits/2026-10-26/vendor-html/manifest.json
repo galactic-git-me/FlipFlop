@@ -1,0 +1,77 @@
+[
+  {
+    "vendor": "amazon",
+    "requested_url": "https://www.amazon.co.uk/s?k=kingston+nv3&i=computers",
+    "final_url": "https://www.amazon.co.uk/s?k=kingston+nv3&i=computers",
+    "status": 503,
+    "bytes": 1427
+  },
+  {
+    "vendor": "ebay",
+    "requested_url": "https://www.ebay.co.uk/sch/i.html?_nkw=kingston+nv3&_sacat=0&LH_BIN=1&LH_PrefLoc=1",
+    "final_url": "https://www.ebay.co.uk/sch/i.html?_nkw=kingston+nv3&_sacat=0&LH_BIN=1&LH_PrefLoc=1",
+    "status": 403,
+    "bytes": 1740
+  },
+  {
+    "vendor": "overclockers",
+    "requested_url": "https://www.overclockers.co.uk/search?q=kingston%20nv3",
+    "final_url": "https://www.overclockers.co.uk/search?q=kingston%20nv3",
+    "status": 200,
+    "bytes": 782343
+  },
+  {
+    "vendor": "scan",
+    "requested_url": "https://www.scan.co.uk/search?q=kingston+nv3",
+    "final_url": "https://www.scan.co.uk/search?q=kingston+nv3",
+    "status": 200,
+    "bytes": 91773
+  },
+  {
+    "vendor": "awd_it",
+    "requested_url": "https://www.awd-it.co.uk/catalogsearch/result/?q=kingston%20nv3",
+    "final_url": "https://www.awd-it.co.uk/catalogsearch/result/?q=kingston%20nv3",
+    "status": 200,
+    "bytes": 360005
+  },
+  {
+    "vendor": "computer_orbit",
+    "requested_url": "https://computerorbit.com/search?q=kingston%20nv3&type=product",
+    "final_url": "https://computerorbit.com/search?q=kingston%20nv3&type=product",
+    "status": 200,
+    "bytes": 1193105
+  },
+  {
+    "vendor": "bargain_hardware",
+    "requested_url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=memory",
+    "final_url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=memory",
+    "status": 403,
+    "bytes": 5574
+  },
+  {
+    "vendor": "newegg_uk",
+    "requested_url": "https://www.newegg.com/global/uk-en/p/pl?d=kingston+nv3",
+    "final_url": "https://www.newegg.com/global/uk-en/p/pl?d=kingston+nv3",
+    "status": 403,
+    "bytes": 5573
+  },
+  {
+    "vendor": "ebuyer",
+    "requested_url": "https://www.ebuyer.com/searchresults?descriptionfilter=kingston%20nv3",
+    "error": "ReadTimeout: HTTPSConnectionPool(host='www.ebuyer.com', port=443): Read timed out. (read timeout=25)"
+  },
+  {
+    "vendor": "google_shopping",
+    "requested_url": "https://www.google.com/search?q=new+kingston+nv3&udm=28&hl=en-GB&gl=GB",
+    "final_url": "https://consent.google.com/ml?continue=https://www.google.com/search%3Fq%3Dnew%2Bkingston%2Bnv3%26hl%3Den-GB%26gl%3DGB&gl=GB&m=0&pc=srp&uxe=bip&cm=2&hl=en&src=1",
+    "status": 200,
+    "bytes": 33917
+  },
+  {
+    "vendor": "gamers_outlet",
+    "requested_url": "https://www.gamers-outlet.net/en/search/windows%2011",
+    "final_url": "https://www.gamers-outlet.net/en/search/windows%2011",
+    "status": 403,
+    "bytes": 5311
+  }
+]

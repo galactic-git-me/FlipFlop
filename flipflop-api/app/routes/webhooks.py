@@ -454,12 +454,8 @@ async def _handle_payment_intent_succeeded(
                         select(CaseCatalogue.name).where(CaseCatalogue.id == case_id)
                     )).scalar_one_or_none()
                 specs["chosen_week"] = str(intent["metadata"].get("chosen_week") or "") or None
-        address_snapshot = (await db.execute(
-            select(OrderCheckoutSnapshot).where(
-                OrderCheckoutSnapshot.payment_intent_id == intent_id,
-                OrderCheckoutSnapshot.customer_id == customer_id,
-            ).with_for_update()
-        )).scalar_one_or_none()
+        from app.services.commercial_checkout import checkout_snapshot_for_payment
+        address_snapshot = await checkout_snapshot_for_payment(db, intent_id, customer_id, intent["metadata"])
         if address_snapshot and address_snapshot.build_snapshot:
             # The payment-intent path saved the server-priced configuration.
             # Prefer it over live catalogue/admin state during webhook recovery.
@@ -467,6 +463,11 @@ async def _handle_payment_intent_succeeded(
         if address_snapshot:
             specs["delivery_address"] = address_snapshot.delivery_address
             specs["billing_address"] = address_snapshot.billing_address
+        from app.services.commercial_checkout import commercial_order_snapshot, commercial_promised_date
+        accepted_specs = await commercial_order_snapshot(db, intent["metadata"], customer_id, amount)
+        if accepted_specs is not None:
+            specs.update(accepted_specs)
+            playbook_id = accepted_specs["playbook_id"]
         software_profile = specs.get("software_profile")
         if playbook_id and not software_profile:
             playbook = await db.get(Playbook, playbook_id)
@@ -501,15 +502,22 @@ async def _handle_payment_intent_succeeded(
             order_id=f"ORD-{intent_id[-12:]}",
             customer_id=customer_id,
             status=OrderStatus.AWAITING_SOURCING,
+            payment_status="paid",
+            customer_name=customer.name,
+            customer_email=customer.email,
             specs={
                 **specs,
+                "payment_evidence": {"provider": "stripe", "status": "succeeded", "livemode": intent.get("livemode") is True, "currency": intent.get("currency")},
                 **({"software_profile": software_profile} if software_profile else {}),
                 "software_package_ids": software_package_ids,
             },
             customer_price=amount,
             component_costs=float(specs.get("parts_total") or 0),
             overhead_amount=float(specs.get("overhead") or 0),
-            promised_delivery_date=None,
+            promised_delivery_date=commercial_promised_date(accepted_specs),
+            fast_track_selected=bool(accepted_specs and accepted_specs.get("delivery_option") == "fast_track"),
+            fast_track_fee=float(accepted_specs.get("delivery_fee_gbp") or 0) if accepted_specs else 0,
+            playbook_id=playbook_id,
             stripe_payment_intent_id=intent_id,
             notes=f"Payment processed via Stripe webhook. Intent: {intent_id}",
         )
@@ -578,6 +586,8 @@ async def _handle_payment_intent_succeeded(
             intent_id=intent_id,
             customer_id=customer_id,
         )
+        if intent["metadata"].get("commercial_quote_snapshot_id"):
+            raise HTTPException(500, "Commercial payment reconciliation needs review") from e
 
 
 async def _handle_ai_setup_payment_succeeded(intent: dict, db: AsyncSession) -> None:
@@ -732,8 +742,12 @@ async def _handle_product_payment_succeeded(intent: dict, db: AsyncSession) -> N
         order_id=f"ORD-PROD-{intent_id[-12:]}",
         customer_id=customer_id,
         status=OrderStatus.READY_TO_PACKAGE,
+        payment_status="paid",
+        customer_name=customer.name,
+        customer_email=customer.email,
         specs={
             "product_id": product.id, "build_title": product.title,
+            "payment_evidence": {"provider": "stripe", "status": "succeeded", "livemode": intent.get("livemode") is True, "currency": intent.get("currency")},
             "delivery_address": (product.checkout_addresses or {}).get("delivery"),
             "billing_address": (product.checkout_addresses or {}).get("billing"),
             "fulfilment_type": product.fulfilment_type or "prebuilt",
@@ -783,6 +797,8 @@ async def _handle_product_payment_succeeded(intent: dict, db: AsyncSession) -> N
         manual_build.customer_id = customer.id
         manual_build.customer_email = customer.email
         manual_build.sale_price_actual = amount
+        from app.services.channel_sync import withdraw_other_channels
+        await withdraw_other_channels(db, manual_build, "flipflop_shop")
 
     # manual_build.status is deliberately left unset here — withdraw_ebay_for_sold_build's
     # own idempotency guard skips the withdrawal once status == "sold", so it

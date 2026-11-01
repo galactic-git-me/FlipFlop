@@ -1,0 +1,58 @@
+{
+  "listing_ids": [
+    17183,
+    17194,
+    17223,
+    17225,
+    17229,
+    17232
+  ],
+  "attempted": 6,
+  "captured": 6,
+  "retained": 0,
+  "unresolved": 0,
+  "by_host": {
+    "www.amazon.co.uk": {
+      "attempted": 2,
+      "captured": 2,
+      "retained": 0,
+      "unresolved": 0,
+      "capture_seconds_total": 4.84,
+      "capture_seconds_max": 2.771,
+      "queue_wait_seconds_total": 0.0,
+      "queue_wait_seconds_max": 0.0,
+      "unresolved_reasons": {}
+    },
+    "www.awd-it.co.uk": {
+      "attempted": 1,
+      "captured": 1,
+      "retained": 0,
+      "unresolved": 0,
+      "capture_seconds_total": 1.924,
+      "capture_seconds_max": 1.924,
+      "queue_wait_seconds_total": 0.0,
+      "queue_wait_seconds_max": 0.0,
+      "unresolved_reasons": {}
+    },
+    "www.overclockers.co.uk": {
+      "attempted": 3,
+      "captured": 3,
+      "retained": 0,
+      "unresolved": 0,
+      "capture_seconds_total": 3.885,
+      "capture_seconds_max": 1.591,
+      "queue_wait_seconds_total": 5.615,
+      "queue_wait_seconds_max": 2.383,
+      "unresolved_reasons": {}
+    }
+  },
+  "amazon_catalogue_attributes": {
+    "attempted": 0,
+    "captured": 0,
+    "unresolved": 0,
+    "unavailable": 2,
+    "cached_unavailable": 2,
+    "status": "cached_access_denied"
+  },
+  "published": false
+}

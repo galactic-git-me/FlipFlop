@@ -23,6 +23,7 @@ from typing import Optional, Tuple
 from structlog import get_logger
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from app.services.glb_optimizer import GlbOptimizationError, persist_optimized_glb
 
 from app.models.component_3d_asset import Component3DAsset, Component3DAssetStatus
 
@@ -88,8 +89,27 @@ class MeshyAssetDownloader:
         glb_local_path = category_dir / glb_filename
         
         if force_redownload or not glb_local_path.exists():
-            await self._download_file(meshy_glb_url, glb_local_path)
+            try:
+                async with httpx.AsyncClient(timeout=120, follow_redirects=True) as client:
+                    response = await client.get(meshy_glb_url)
+                    response.raise_for_status()
+                optimized = await persist_optimized_glb(
+                    response.content,
+                    glb_local_path,
+                    self.base_upload_dir.parent / "3d-media-originals" / "meshy-downloader" / category,
+                )
+            except httpx.HTTPError as exc:
+                log.error("meshy_asset.download_failed", url=meshy_glb_url, error=str(exc))
+                raise RuntimeError(f"Failed to download {meshy_glb_url}: {exc}") from exc
+            except GlbOptimizationError as exc:
+                raise RuntimeError(f"Downloaded GLB could not be safely optimized: {exc}") from exc
             log.info("meshy_asset.glb_downloaded", path=str(glb_local_path), size_bytes=glb_local_path.stat().st_size)
+            log.info(
+                "meshy_asset.glb_optimized",
+                original_size_bytes=optimized.original_bytes,
+                output_size_bytes=optimized.output_bytes,
+                compressed=optimized.compressed,
+            )
         else:
             log.info("meshy_asset.glb_exists", path=str(glb_local_path))
         

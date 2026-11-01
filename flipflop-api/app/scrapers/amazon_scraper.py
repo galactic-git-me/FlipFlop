@@ -87,8 +87,15 @@ async def _search_amazon_term(
                 const seen = new Set();
                 document.querySelectorAll('[data-component-type="s-search-result"]').forEach(item => {
                     try {
-                        const titleEl = item.querySelector('h2 span') || item.querySelector('h2');
-                        const linkEl  = item.querySelector('h2 a') || item.querySelector('a.a-link-normal[href*="/dp/"]');
+                        // New cards place a brand heading before the actual linked
+                        // product heading. Keep identity and URL on that same link.
+                        const titleEl = item.querySelector('a[href*="/dp/"] h2')
+                            || item.querySelector('h2[aria-label]')
+                            || item.querySelector('h2 a')?.closest('h2')
+                            || item.querySelector('h2');
+                        const linkEl = titleEl?.closest('a[href*="/dp/"]')
+                            || titleEl?.querySelector('a[href*="/dp/"]')
+                            || item.querySelector('a.a-link-normal[href*="/dp/"]');
                         const priceW  = item.querySelector('.a-price-whole');
                         const priceF  = item.querySelector('.a-price-fraction');
                         const imgEl   = item.querySelector('img.s-image');

@@ -138,12 +138,15 @@ def _build_asset_pack(
 
 
 def _summary_payload(p: Product) -> dict:
+    from app.services.channel_images import cached_variant_url
     return {
         "id": p.id,
         "title": p.title,
         "price": p.price,
         "status": p.status.value,
         "hero_photo_url": p.hero_photo_url,
+        "card_photo_url": cached_variant_url(p.hero_photo_url, "website_card") or p.hero_photo_url,
+        "website_hero_url": cached_variant_url(p.hero_photo_url, "website_hero") or p.hero_photo_url,
         "has_benchmark_report": p.benchmark_report_document_id is not None,
         "has_3d_twin": p.capture_3d_asset_id is not None or bool(p.model_3d_url),
         "model_3d_url": p.model_3d_url,

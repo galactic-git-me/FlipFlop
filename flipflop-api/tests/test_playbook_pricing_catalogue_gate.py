@@ -18,7 +18,7 @@ async def test_custom_catalogue_marks_only_playbook_optional_gpu_slot(monkeypatc
         {"slot_id": 11, "slot_type": "cpu", "variants_by_tier": {"mid": []}},
         {"slot_id": 12, "slot_type": "gpu", "variants_by_tier": {"mid": []}},
     ]
-    monkeypatch.setattr(public_catalogue, "public_playbook_slots", AsyncMock(return_value=slots))
+    monkeypatch.setattr(public_catalogue, "_published_playbook_slots", AsyncMock(return_value=slots))
     monkeypatch.setattr(public_catalogue, "public_list_playbooks", AsyncMock(return_value=[]))
     db = Mock()
     db.get = AsyncMock(return_value=SimpleNamespace(requirements={"gpu_required": False}))

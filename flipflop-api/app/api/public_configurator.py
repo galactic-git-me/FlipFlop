@@ -50,7 +50,7 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
         )).all()
         details = {
             slot.slot_type: {"variant_id": variant.id, "title": listing.title, "price": listing.price,
-                             "image_url": listing.image_urls[0] if listing.image_urls else None}
+                             "image_url": (variant.asset_media_review or {}).get("main_photo_approved_url") or (listing.image_urls[0] if listing.image_urls else None)}
             for variant, listing, slot in rows
             if listing.status.value == "active"
         }
@@ -72,6 +72,26 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
 
 # Only these lifecycle states are ever served to customers.
 _SERVABLE = (Component3DAssetStatus.VALIDATED, Component3DAssetStatus.FINAL)
+
+
+def _variant_asset_is_publishable(variant: CatalogueVariant | None, asset: Component3DAsset | None) -> bool:
+    """A component model is public only for its exact owner-selected model photo set."""
+    approval = (variant.asset_media_review or {}) if variant else {}
+    model_image_urls = approval.get("model_image_urls") or (
+        approval.get("image_urls") if len(approval.get("image_urls") or []) <= 4 else []
+    )
+    return bool(
+        variant
+        and variant.status == "active"
+        and approval.get("status") in {"approved", "auto_included"}
+        and approval.get("image_urls")
+        and model_image_urls
+        and asset
+        and asset.is_active
+        and asset.status == Component3DAssetStatus.FINAL
+        and asset.glb_ref
+        and asset.source_image_refs == model_image_urls
+    )
 
 
 def _asset_payload(asset: Component3DAsset, fallback_level: str) -> dict:
@@ -110,13 +130,21 @@ async def resolve_assets(body: AssetResolveRequest, db: AsyncSession = Depends(g
     then renders its own last-resort placeholder. A different product's model
     is never substituted (honest-fallback rule)."""
     results = []
+    variant_ids = list({subject.subject_id for subject in body.subjects if subject.subject_type != "case"})
+    variants = (await db.execute(select(CatalogueVariant).where(
+        CatalogueVariant.id.in_(variant_ids) if variant_ids else False,
+        CatalogueVariant.status == "active",
+    ))).scalars().all()
+    variants_by_id = {variant.id: variant for variant in variants}
+    from app.services.shared_variant_assets import final_assets_by_variant
+    shared_assets = await final_assets_by_variant(db, variants)
     for subject in body.subjects:
         stype = (
             AssetSubjectType.CASE
             if subject.subject_type == "case"
             else AssetSubjectType.VARIANT
         )
-        exact = (
+        exact = shared_assets.get(subject.subject_id) if stype == AssetSubjectType.VARIANT else (
             await db.execute(
                 select(Component3DAsset).where(
                     Component3DAsset.subject_type == stype,
@@ -126,6 +154,12 @@ async def resolve_assets(body: AssetResolveRequest, db: AsyncSession = Depends(g
                 )
             )
         ).scalar_one_or_none()
+
+        if stype == AssetSubjectType.VARIANT:
+            variant = variants_by_id.get(subject.subject_id)
+            if not _variant_asset_is_publishable(variant, exact):
+                results.append({"query": subject.model_dump(), "asset": None})
+                continue
 
         # Some exact PC case GLBs are approved against the catalogue variant
         # that supplied their source photos, rather than a ``Case`` row. A
@@ -154,7 +188,7 @@ async def resolve_assets(body: AssetResolveRequest, db: AsyncSession = Depends(g
 
         if exact and exact.glb_ref:
             results.append(
-                {"query": subject.model_dump(), "asset": _asset_payload(exact, "exact")}
+                {"query": subject.model_dump(), "asset": _asset_payload(exact, "exact" if exact.category == "case" else "family")}
             )
             continue
 

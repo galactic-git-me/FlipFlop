@@ -34,11 +34,13 @@ class Playbook(Base):
     what_they_use_it_for = Column(Text, nullable=True)
     what_they_want_from_build = Column(Text, nullable=True)
     critical_success_factors = Column(JSON, nullable=True)
-    profit_opportunity_score = Column(Float, nullable=True)
-    market_size_score = Column(Float, nullable=True)
-    resellability_score = Column(Float, nullable=True)
-    liquidity_score = Column(Float, nullable=True)
-    risk_score = Column(Float, nullable=True)
+    # Keep the ORM aligned with the original migration contract: scores are
+    # always numeric, with conservative defaults for newly created Playbooks.
+    profit_opportunity_score = Column(Float, nullable=False, default=0.0, server_default="0")
+    market_size_score = Column(Float, nullable=False, default=0.0, server_default="0")
+    resellability_score = Column(Float, nullable=False, default=0.0, server_default="0")
+    liquidity_score = Column(Float, nullable=False, default=0.0, server_default="0")
+    risk_score = Column(Float, nullable=False, default=5.0, server_default="5")
     market_growth_direction = Column(String, nullable=True)
     requirements = Column(JSON, nullable=True)
     search_strategy = Column(JSON, nullable=True)

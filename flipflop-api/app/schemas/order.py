@@ -68,6 +68,8 @@ class AdminOrderOut(BaseModel):
     customer_email: str
     total_gbp: Decimal
     status: str
+    fulfilment_status: str
+    payment_status: str
     assigned_build_week: Optional[str]
     delivery_at_risk: bool
     change_request: Optional[Dict[str, Any]] = None
@@ -92,6 +94,8 @@ class MyOrderOut(BaseModel):
     id: int
     order_id: str
     status: str
+    fulfilment_status: Optional[str] = None
+    payment_status: str = "not_applicable"
     customer_price: float
     component_costs: float
     slots: list[MyOrderSlotOut] = Field(default_factory=list)

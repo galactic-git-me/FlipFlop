@@ -20,6 +20,7 @@ import httpx
 import structlog
 
 from app.config import get_settings
+from app.services.model_reference_images import prepare_reference_images, meshy_reference_inputs
 
 log = structlog.get_logger(__name__)
 
@@ -38,6 +39,44 @@ class MeshyGenerationResult:
     thumbnail_url: str | None
     poly_count: int | None
     progress: int = 0
+    error: str | None = None
+    reference_image_urls: list[str] | None = None
+
+
+def _provider_error(response: httpx.Response) -> str:
+    try:
+        body = response.json()
+    except ValueError:
+        body = response.text
+    if isinstance(body, dict):
+        error = body.get("message") or body.get("error") or body.get("detail") or body
+    else:
+        error = body
+    return str(error)[:500]
+
+
+async def _submit_image_with_capacity_wait(client, endpoint, payload, progress_callback):
+    """Retry explicit pending-capacity rejections only; no task was created.
+
+    Never retry network timeouts or uncertain responses: the provider might
+    already have accepted those submissions and charged for them.
+    """
+    for attempt in range(31):
+        response = await client.post(endpoint, headers=_headers(), json=payload)
+        capacity_full = response.status_code == 429 and "NoMorePendingTasks" in _provider_error(response)
+        if not capacity_full or attempt == 30:
+            return response
+        if progress_callback:
+            await progress_callback(0, "QUEUED", None, "Meshy pending-task capacity is full; waiting for a slot.")
+        await asyncio.sleep(10)
+    raise RuntimeError("Unreachable submission state")
+
+
+def _task_error(data: dict) -> str | None:
+    error = data.get("task_error") or data.get("error")
+    if isinstance(error, dict):
+        error = error.get("message") or error.get("type") or error
+    return str(error)[:500] if error else None
 
 
 def _headers() -> dict[str, str]:
@@ -123,10 +162,16 @@ async def generate_multi_image_asset(
     """
     settings = get_settings()
     if not settings.meshy_api_key:
-        log.warning("meshy_generation.no_api_key")
-        return None
+        log.warning("meshy_generation.no_api_key", endpoint="image-to-3d" if len(image_urls) == 1 else "multi-image-to-3d")
+        return MeshyGenerationResult("", "CONFIGURATION_ERROR", None, None, None, error="MESHY_API_KEY is not configured in the API process")
     if not 1 <= len(image_urls) <= 4:
         raise ValueError("Meshy image generation requires 1 to 4 images")
+
+    try:
+        image_urls = await prepare_reference_images(image_urls)
+        provider_images = await meshy_reference_inputs(image_urls)
+    except ValueError as error:
+        return MeshyGenerationResult("", "SOURCE_IMAGES_INVALID", None, None, None, error=str(error))
 
     is_single_image = len(image_urls) == 1
     endpoint = _MESHY_IMAGE_BASE if is_single_image else _MESHY_MULTI_IMAGE_BASE
@@ -151,32 +196,55 @@ async def generate_multi_image_asset(
             }
             if is_single_image:
                 payload = {
-                    "image_url": image_urls[0],
-                    "texture_image_url": image_urls[0],
+                    "image_url": provider_images[0],
+                    "texture_image_url": provider_images[0],
                     "ai_model": "meshy-7.1",
+                    "texture_resolution": "2k",
                     "should_texture": True,
                     "enable_pbr": True,
                     "target_formats": ["glb"],
                 }
             else:
-                payload["image_urls"] = image_urls
-                payload["texture_image_urls"] = image_urls
-            response = await client.post(
-                endpoint,
-                headers=_headers(),
-                json=payload,
-            )
-            response.raise_for_status()
-            task_id = response.json().get("result")
+                payload["image_urls"] = provider_images
+                payload["texture_image_urls"] = provider_images
+            response = await _submit_image_with_capacity_wait(client, endpoint, payload, progress_callback)
+            try:
+                response.raise_for_status()
+            except httpx.HTTPStatusError as exc:
+                provider_error = _provider_error(response)
+                log.warning(
+                    "meshy_generation.image_submit_rejected",
+                    single_image=is_single_image,
+                    status_code=response.status_code,
+                    provider_error=provider_error,
+                )
+                return MeshyGenerationResult("", f"SUBMIT_REJECTED_{response.status_code}", None, None, None, error=provider_error)
+            response_data = response.json()
+            task_id = response_data.get("result")
             if not task_id:
-                return None
+                provider_error = _provider_error(response)
+                log.warning(
+                    "meshy_generation.image_submit_missing_task_id",
+                    single_image=is_single_image,
+                    provider_error=provider_error,
+                )
+                return MeshyGenerationResult("", "SUBMIT_FAILED", None, None, None, error=provider_error)
     except httpx.HTTPError as exc:
         log.warning("meshy_generation.image_submit_failed", single_image=is_single_image, error=str(exc))
-        return None
+        return MeshyGenerationResult("", "SUBMIT_FAILED", None, None, None, error=str(exc)[:500])
 
-    # Persist a visible state as soon as Meshy accepts the task. Without this
-    # first callback the dashboard can look frozen at 0% while the first poll
-    # is still pending.
+    result = await poll_multi_image_asset(task_id, is_single_image, progress_callback)
+    result.reference_image_urls = image_urls
+    return result
+
+
+async def poll_multi_image_asset(
+    task_id: str,
+    is_single_image: bool,
+    progress_callback: Callable[[int, str, str | None], Awaitable[None]] | None = None,
+) -> MeshyGenerationResult:
+    """Resume polling an existing Meshy image task without submitting a new paid job."""
+    endpoint = _MESHY_IMAGE_BASE if is_single_image else _MESHY_MULTI_IMAGE_BASE
     if progress_callback:
         try:
             await progress_callback(0, "SUBMITTED", task_id)
@@ -204,16 +272,21 @@ async def generate_multi_image_asset(
                 # A status-display write must never cancel the Meshy job.
                 log.warning("meshy_generation.progress_callback_failed", error=str(exc))
         if status == "SUCCEEDED":
+            model_urls = data.get("model_urls") or {}
+            if not model_urls.get("glb"):
+                log.warning("meshy_generation.image_succeeded_without_glb", task_id=task_id, response=data)
             return MeshyGenerationResult(
                 task_id=task_id,
                 status=status,
-                glb_url=(data.get("model_urls") or {}).get("glb"),
+                glb_url=model_urls.get("glb"),
                 thumbnail_url=data.get("thumbnail_url"),
                 poly_count=None,
                 progress=progress,
             )
         if status in ("FAILED", "CANCELED"):
-            return MeshyGenerationResult(task_id, status, None, None, None, progress)
+            error = _task_error(data)
+            log.warning("meshy_generation.image_task_failed", single_image=is_single_image, task_id=task_id, status=status, provider_error=error)
+            return MeshyGenerationResult(task_id, status, None, None, None, progress, error)
     return MeshyGenerationResult(task_id, "TIMED_OUT", None, None, None, last_progress)
 
 
@@ -225,6 +298,7 @@ def build_prompt(category: str, family_key: str) -> str:
     bucket, not a copy of any particular manufacturer's design."""
     descriptions = {
         "cpu_amd": "a modern desktop computer CPU processor chip, square ceramic package with metal contact pins, no branding",
+        "cpu_amd_threadripper": "a large workstation CPU processor package with a broad rectangular heat spreader and dense underside contact pads, no branding",
         "cpu_intel": "a modern desktop computer CPU processor chip, square ceramic package with gold contact pads, no branding",
         "motherboard_atx": "a full-size ATX desktop PC motherboard with CPU socket, four RAM slots, PCIe slots, M.2 heatsink and rear I/O, no branding",
         "motherboard_matx": "a compact micro-ATX desktop PC motherboard with CPU socket, two or four RAM slots, PCIe slots, M.2 heatsink and rear I/O, no branding",

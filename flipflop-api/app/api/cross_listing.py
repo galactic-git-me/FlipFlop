@@ -142,6 +142,22 @@ async def amazon_status():
         }
 
 
+@router.get("/ebay/status")
+async def ebay_listing_status(db: AsyncSession = Depends(get_db)):
+    """Verify credentials for the actual listing target, not sourcing OAuth."""
+    import httpx
+    from app.config import get_settings
+    from app.services.ebay_token_manager import get_valid_ebay_access_token
+    environment = get_settings().ebay_listing_environment
+    root = "https://api.sandbox.ebay.com" if environment == "sandbox" else "https://api.ebay.com"
+    try:
+        token = await get_valid_ebay_access_token(environment, db=db)
+        async with httpx.AsyncClient(timeout=20) as client:
+            response = await client.get(f"{root}/sell/inventory/v1/location", params={"limit": 1}, headers={"Authorization": f"Bearer {token}"})
+        return {"connected": response.status_code == 200, "environment": environment,
+                "message": f"eBay {environment} listing connection {'verified' if response.status_code == 200 else 'returned HTTP ' + str(response.status_code)}"}
+    except (ValueError, httpx.HTTPError):
+        return {"connected": False, "environment": environment, "message": f"eBay {environment} listing credentials could not be verified"}
 @router.get("/google/status")
 async def google_merchant_status():
     """Expose connection health without returning credentials or tokens."""
@@ -261,22 +277,6 @@ async def publish_google_merchant(build_id: int, body: GoogleMerchantPublishIn, 
         ))
         await db.commit()
         raise HTTPException(502, {"message": str(exc), "status_code": exc.status_code}) from exc
-@router.get("/ebay/status")
-async def ebay_listing_status(db: AsyncSession = Depends(get_db)):
-    """Verify credentials for the actual listing target, not sourcing OAuth."""
-    import httpx
-    from app.config import get_settings
-    from app.services.ebay_token_manager import get_valid_ebay_access_token
-    environment = get_settings().ebay_listing_environment
-    root = "https://api.sandbox.ebay.com" if environment == "sandbox" else "https://api.ebay.com"
-    try:
-        token = await get_valid_ebay_access_token(environment, db=db)
-        async with httpx.AsyncClient(timeout=20) as client:
-            response = await client.get(f"{root}/sell/inventory/v1/location", params={"limit": 1}, headers={"Authorization": f"Bearer {token}"})
-        return {"connected": response.status_code == 200, "environment": environment,
-                "message": f"eBay {environment} listing connection {'verified' if response.status_code == 200 else 'returned HTTP ' + str(response.status_code)}"}
-    except (ValueError, httpx.HTTPError):
-        return {"connected": False, "environment": environment, "message": f"eBay {environment} listing credentials could not be verified"}
 
 
 @router.post("/amazon/publish/{build_id}")

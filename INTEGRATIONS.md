@@ -36,3 +36,12 @@ created with the operator-only `/cross-listing/google/data-source` endpoint;
 save its returned ID in the live API environment before enabling product
 writes. `GOOGLE_MERCHANT_FEED_LABEL=GB` and
 `GOOGLE_MERCHANT_CONTENT_LANGUAGE=en` match the UK product inputs.
+
+Andromeda production supplies account `5845592785`, data source `10788861723`,
+and enables live product writes. The production GitHub environment must contain
+`GOOGLE_MERCHANT_SERVICE_ACCOUNT_JSON`; deployment copies it to
+`/home/mac/.secrets/flipflop/google-merchant-service-account.json` with
+owner-only access and mounts it read-only into the API container. Deployment
+also verifies the Merchant API connection and write gate. It does not
+bulk-publish products: an operator selects builds on Cross-listing, and the
+two-minute reconciler then keeps each submitted product aligned with inventory.

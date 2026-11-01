@@ -37,15 +37,20 @@ def _normalise_for_category(category: str | None, value: str | None) -> str | No
 
 
 def index_benchmarks(rows: Iterable[HardwareBenchmark]) -> dict[tuple[str, str], HardwareBenchmark]:
-    """Index one best row per category/model, preferring confidence then score."""
+    """Index one best row per stored and canonical category/model identity."""
     result: dict[tuple[str, str], HardwareBenchmark] = {}
     for row in rows:
-        key = (row.component_type, row.normalized_model)
-        current = result.get(key)
-        if current is None or (row.confidence_score, row.overall_score or 0) > (
-            current.confidence_score, current.overall_score or 0
-        ):
-            result[key] = row
+        keys={(row.component_type,row.normalized_model)}
+        if row.component_type=='cpu':
+            keys.add(('cpu',normalise_cpu(row.model)))
+        elif row.component_type=='gpu':
+            keys.add(('gpu',normalise_gpu(row.model)))
+        for key in keys:
+            current = result.get(key)
+            if current is None or (row.confidence_score, row.overall_score or 0) > (
+                current.confidence_score, current.overall_score or 0
+            ):
+                result[key] = row
     return result
 
 

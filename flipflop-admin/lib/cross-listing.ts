@@ -296,7 +296,7 @@ export function capabilities(
       canPublish: true,
       canUpdate: true,
       canEnd: true,
-      note: "Codex Chrome handles listing, update, relist and delist jobs when seller and product eligibility permit; confirmed URLs are saved.",
+      note: "Codex uses Chrome and local seller credentials to create, update, relist or end the listing, then saves the confirmed vendor URL.",
       officialReference: "https://www.onbuy.com/gb/sell/",
     },
     {
@@ -324,7 +324,7 @@ export function capabilities(
       canPublish: true,
       canUpdate: true,
       canEnd: true,
-      note: "Codex Chrome handles listing changes when account, category and delivery eligibility permit; restrictions are reported as blocked jobs.",
+      note: "Codex uses Chrome and local seller credentials to create, update, relist or end the listing. Account, category and delivery eligibility are checked before publication.",
       officialReference: "https://www.facebook.com/business/help/",
     },
     {
@@ -336,7 +336,7 @@ export function capabilities(
       canPublish: true,
       canUpdate: true,
       canEnd: true,
-      note: "Codex Chrome handles listing changes only where seller-account and product eligibility permit; unsupported account types are blocked.",
+      note: "Codex uses Chrome and local seller credentials to create, update, relist or end eligible listings. Seller or product restrictions are reported as blocked jobs.",
       officialReference: "https://www.vinted.co.uk/help",
     },
     {

@@ -12,6 +12,11 @@ import pytest
 from app.services import ebay_media
 
 
+def test_image_upload_uses_the_dedicated_media_api_host():
+    assert ebay_media._image_api_root("production") == "https://apim.ebay.com"
+    assert ebay_media._image_api_root("sandbox") == "https://api.sandbox.ebay.com"
+
+
 async def test_upload_video_success_full_flow():
     create_resp = AsyncMock(status_code=201)
     create_resp.json = lambda: {"videoId": "vid-1", "uploadUrl": "https://upload.example/vid-1"}

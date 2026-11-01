@@ -33,18 +33,20 @@ def validate_listing_url(channel: str, value: str) -> str:
     return value
 
 
-def seller_pack(build: ManualBuild, row: ChannelListing, image_urls: list[str] | None = None, *, allow_sold=False) -> dict:
-    if (build.status == "sold" or build.is_archived) and not allow_sold:
+def seller_pack(build: ManualBuild, row: ChannelListing, image_urls: list[str] | None = None, *, operation="publish") -> dict:
+    read_only = operation in {"inspect", "sale_check", "withdraw"}
+    if not read_only and (build.status == "sold" or build.is_archived):
         raise ValueError("Sold or archived builds cannot be listed")
     originals = [p["url"] for p in build.photos or [] if isinstance(p, dict) and p.get("url") and p.get("kind", "photo") == "photo"]
-    if not build.generated_description or not build.generated_title or not build.ebay_price or build.ebay_price <= 0 or not originals:
+    if not read_only and (not build.generated_description or not build.generated_title or not build.ebay_price or build.ebay_price <= 0 or not originals):
         raise ValueError("Save the canonical title, description, listing price and product photographs first")
     from app.services.product_faqs import selected_faqs
     faqs = selected_faqs(build.id, build.selected_faq_ids, build.selected_faq_answer_overrides)
-    title = build.generated_title.strip()
+    title = (build.generated_title or build.name).strip()
     if build.name.strip().lower() not in title.lower():
         title = f"{build.name.strip()} | {title}"[:80]
-    return {"schema": "flipflop.seller-pack.v1", "build_id": build.id, "channel": row.channel,
+    from app.services.channel_sync import canonical_hash
+    return {"schema": "flipflop.seller-pack.v1", "build_id": build.id, "channel": row.channel, "canonical_hash": canonical_hash(build),
         "seller_url": SELLER_URLS[row.channel], "previous_listing_id": row.external_listing_id,
         "previous_listing_url": row.listing_url,
         "listing": {"title": title, "description": build.generated_description, "faqs": faqs,
@@ -59,8 +61,6 @@ def seller_pack(build: ManualBuild, row: ChannelListing, image_urls: list[str] |
 async def enqueue_browser_job(db, build_id: int, channel: str, *, operation="publish", image_urls=None):
     if channel not in BROWSER_CHANNELS:
         raise ValueError("This channel uses its API publishing path")
-    if operation not in {"publish", "update", "relist", "withdraw", "reconcile"}:
-        raise ValueError("Unsupported browser listing operation")
     # Lock the build before finding/creating its channel identity; concurrent
     # double-clicks and scheduler ticks share this lock and the pending index.
     build = (await db.execute(select(ManualBuild).where(ManualBuild.id == build_id).with_for_update())).scalar_one_or_none()
@@ -78,25 +78,16 @@ async def enqueue_browser_job(db, build_id: int, channel: str, *, operation="pub
     pending = (await db.execute(select(BrowserListingJob).where(
         BrowserListingJob.channel_listing_id == row.id, BrowserListingJob.status.in_(PENDING)))).scalar_one_or_none()
     if pending:
-        if operation != "withdraw":
-            return pending
-        pending.status, pending.message = "blocked", "Superseded by a confirmed sale; withdrawal takes priority."
-        pending.lease_token = pending.lease_until = None
-        await db.flush()
-    if operation == "withdraw":
-        previous = (await db.execute(select(BrowserListingJob).where(
-            BrowserListingJob.channel_listing_id == row.id,
-            BrowserListingJob.status == "succeeded",
-        ).order_by(BrowserListingJob.id.desc()).limit(1))).scalars().first()
-        pack = dict(previous.payload) if previous else seller_pack(build, row, image_urls, allow_sold=True)
-    else:
-        pack = seller_pack(build, row, image_urls)
-    if operation == "withdraw" and (not row.external_listing_id or not row.listing_url):
-        raise ValueError("A confirmed vendor listing ID and URL are required for withdrawal")
+        return pending
+    if image_urls is None and operation not in {"inspect", "sale_check", "withdraw"}:
+        from app.services.channel_images import prepare_channel_urls
+        image_urls = await prepare_channel_urls([p["url"] for p in build.photos or []
+            if isinstance(p, dict) and p.get("url") and p.get("kind", "photo") == "photo"], channel)
+    pack = seller_pack(build, row, image_urls, operation=operation)
     job = BrowserListingJob(channel_listing_id=row.id, operation=operation, status="queued", payload=pack)
     db.add(job)
     row.last_recreate_status = "queued"
-    row.last_recreate_message = f"Queued for Codex to {operation} through Chrome."
+    row.last_recreate_message = f"Queued for Codex Chrome: {operation}."
     # Retain the due clock until verified completion. The pending-job index
     # prevents repeated scheduler ticks from producing duplicate work.
     db.add(ListingPublishEvent(channel_listing_id=row.id, event_type="browser_job_queued",
@@ -116,62 +107,19 @@ async def complete_browser_job(db, job, *, status, message, listing_url=None, ex
             raise ValueError("Vendor identity must match the confirmed item URL")
         if evidence.get("url") != listing_url or evidence.get("title") != job.payload["listing"]["title"] or evidence.get("price") != job.payload["listing"]["price"]:
             raise ValueError("Browser evidence must match the canonical title, price and confirmed URL")
-        if job.operation == "withdraw":
-            if row.external_listing_id != job.payload.get("previous_listing_id") or row.listing_url != job.payload.get("previous_listing_url"):
-                raise ValueError("Saved vendor listing identity changed; reconcile before withdrawal")
-        elif seller_pack(build, row, job.payload["listing"]["images"]) != job.payload:
+        if seller_pack(build, row, job.payload["listing"]["images"], operation=job.operation) != job.payload:
             raise ValueError("Saved listing changed; reconcile before confirming this job")
+        if build.status == "sold" or build.is_archived:
+            raise ValueError("Build is no longer sellable; reconcile the vendor listing before completion")
         now = datetime.utcnow()
-        if job.operation == "reconcile":
-            remote_state = (evidence or {}).get("remote_state")
-            if remote_state not in {"active", "ended", "missing", "sold"}:
-                raise ValueError("Seller-side reconciliation must confirm active, ended, missing or sold status")
-            if remote_state == "sold":
-                if not evidence.get("order_id") or not evidence.get("note") or external_id != row.external_listing_id:
-                    raise ValueError("Confirm a seller order ID and note for the exact saved vendor item before marking it sold")
-                row.status, row.withdrawn_at = "sold", now
-                row.recreate_enabled = False
-                row.next_recreate_at = None
-                build.status = "sold"
-                build.updated_at = now
-                row.last_recreate_status = "success"
-                row.last_recreate_message = "Vendor sale confirmed from the seller account. Other listings are being withdrawn."
-                from app.services.cross_channel_guard import (
-                    withdraw_google_for_sold_build,
-                    withdraw_storefront_for_sold_build,
-                    withdraw_ebay_for_sold_build,
-                )
-                from app.config import get_settings
-                await withdraw_google_for_sold_build(build, db)
-                await withdraw_storefront_for_sold_build(build, db)
-                await withdraw_ebay_for_sold_build(build, get_settings().ebay_listing_environment)
-            elif remote_state in {"ended", "missing"}:
-                row.status = "ended"
-                row.last_recreate_status = "success"
-                row.last_recreate_message = "Vendor listing ended; scheduled relisting will create a new vendor listing ID."
-                row.next_recreate_at = now if row.recreate_enabled else None
-            else:
-                row.status = "published"
-                row.last_recreate_status = "success"
-                row.last_recreate_message = "Vendor listing verified active."
-        elif job.operation == "withdraw":
-            if row.status not in {"published", "submitted", "withdrawal_pending"}:
-                raise ValueError("Only a currently published vendor listing can be withdrawn")
-            row.status, row.withdrawn_at = "withdrawn", now
-            row.recreate_enabled = False
-            row.next_recreate_at = None
-            row.last_recreate_status = "success"
-            row.last_recreate_message = "Vendor withdrawal confirmed by Chrome read-back."
-        else:
-            if build.status == "sold" or build.is_archived:
-                raise ValueError("Build is no longer sellable; reconcile the vendor listing before completion")
-            row.external_listing_id, row.listing_url = external_id, listing_url
-            row.status, row.published_at, row.withdrawn_at = "published", now, None
-            row.last_recreate_at = now
-            row.last_recreate_status = "success"
-            if job.operation == "relist":
-                row.recreate_count = (row.recreate_count or 0) + 1
-            row.next_recreate_at = now + timedelta(days=row.recreate_interval_days or 7) if row.recreate_enabled else None
+        row.external_listing_id, row.listing_url = external_id, listing_url
+        row.status, row.published_at, row.withdrawn_at = "published", now, None
+        row.last_payload_hash, row.last_checked_at = job.payload.get("canonical_hash"), now
+        row.last_recreate_at = now
+        row.last_recreate_status = "success"
+        if job.operation == "relist":
+            row.recreate_count = (row.recreate_count or 0) + 1
+        row.next_recreate_at = now + timedelta(days=row.recreate_interval_days or 7) if row.recreate_enabled else None
     else:
         # Keep the last confirmed identity and due timestamp on failures.
         row.last_recreate_status = status

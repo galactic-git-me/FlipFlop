@@ -6,13 +6,13 @@ relisting scheduler use the same queue, canonical saved price/copy, reviewed
 photographs, FAQs and build identity. No credentials are included in seller packs.
 
 The API runs on Andromeda. The worker runs on the logged-in Windows desktop
-with Chrome, Node and Codex CLI. It polls every 15 seconds and
+with Chrome, Node 20.12+ and Codex CLI. It polls every 15 seconds and
 runs one job at a time in a dedicated persistent Chrome profile. It does not
 control unrelated tabs. The machine must be awake and the Windows user logged in.
 
 ## Setup
 
-1. Apply migration `20261030_dev_browser` (dev branch). Set a strong, dedicated
+1. Apply migration `20261030_0001`. Set a strong, dedicated
    `CROSS_LISTING_WORKER_KEY` in `runtime/browser-worker.env` on the API host;
    the production compose file reads that optional file. Recreate the API
    container after changing it. Never reuse the admin key.
@@ -21,23 +21,26 @@ control unrelated tabs. The machine must be awake and the Windows user logged in
    (Read-Host 'Worker key' -AsSecureString)`. This stores the queue key using
    Windows DPAPI and registers a task for the current user's interactive logon.
    Pass `-AdminDirectory` if the admin's installed Playwright package is elsewhere.
-3. Keep the vendor login variables in the repository `.env.local`; the worker
-   loads them locally and does not send their values to the API or Codex model.
-4. Start `FlipFlop Codex Browser Listings`, or run `start-worker.ps1`. Use
-   `-Once` to check the connection without polling forever.
+3. Add the variables in `credentials.env.example` to the desktop's private
+   `.env.local` and set the values there. Pass `-CredentialsFile` to the
+   installer to select that file; the installed config records only its path.
+   Do not put vendor passwords in API requests, chat, the repository or public
+   `NEXT_PUBLIC_*` variables. Amazon SP-API credentials belong on the API host.
+4. Start `FlipFlop Codex Browser Listings`, or run `start-worker.ps1`.
+   Use `-Once` to check the connection without polling forever.
 
 The worker uses the existing admin Playwright dependency and installed Google
 Chrome; no third-party aggregator, browser extension or marketplace SDK is added.
 Codex reuses its installed CLI authentication. Each job disables shell execution,
 unrelated user MCP configuration and web search; its only
-browser tools come from the scoped `browser-mcp.mjs` server.
+browser/credential tools come from the scoped `browser-mcp.mjs` server.
 
 ## Credentials and browser boundaries
 
-The login tool fills credentials from the local `.env.local` directly into the
-observed vendor login fields. Passwords are never returned by a tool, included
-in the seller pack, sent to the API, placed in process arguments or logged.
-Missing credentials, MFA, CAPTCHA, onboarding,
+The `env_login` tool reads only the selected vendor's username/password keys
+from the configured desktop `.env.local` and fills them directly into the
+vendor's login fields. Values are never returned to the model, seller pack,
+API, command arguments or logs. Missing variables, MFA, CAPTCHA, onboarding,
 fees, seller restrictions and unsupported delivery choices block the job.
 The agent may not register accounts, approve new permissions, pay fees, bypass
 restrictions or enable collection/pickup.
@@ -64,6 +67,6 @@ channel listing, including blocked and interrupted work.
 
 The API stores job status and audit events. The worker removes temporary packs,
 downloaded photos and result files after a run; its Chrome profile remains local.
-Revoke the worker key to disable access. Remove the scheduled
+Revoke the worker key and remove the local vendor variables to disable access. Remove the scheduled
 task to disable automatic startup. Do not delete browser/job state to work around
 an uncertain publication: inspect the vendor first.

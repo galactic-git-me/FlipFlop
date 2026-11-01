@@ -133,6 +133,7 @@ function getEffectiveSpeed(value: number, reducedMotion: boolean) {
 const VARIANTS: Record<string, { gap: number; speed: number; colors: string; noFocus: boolean }> = {
   default: { gap: 6, speed: 30, colors: "#334155,#475569,#64748b", noFocus: true },
   emerald: { gap: 6, speed: 30, colors: "#065f46,#10b981,#34d399", noFocus: true },
+  brand: { gap: 6, speed: 30, colors: "#f97316,#fb923c,#3b82f6,#60a5fa", noFocus: true },
 };
 
 export interface PixelCardProps {

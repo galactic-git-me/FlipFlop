@@ -73,7 +73,9 @@ class SessionAnalyticsEvent(BaseModel):
     """
     event_type: str = Field(..., description="Event type: budget_chosen/customer_type_picked/etc")
     curated_build_id: Optional[str] = Field(None, description="Curated build ID if applicable")
+    session_id: Optional[str] = Field(None, max_length=120, description="Short-lived pseudonymous session ID, sent only after analytics consent")
     metadata: dict = Field(default_factory=dict, description="Event-specific metadata")
+    experiment_id: Optional[str] = Field(None, max_length=36)
     
     # Buying flow context (carried through session)
     buying_flow: Optional[BuyingFlowData] = Field(None, description="Buying flow preferences")

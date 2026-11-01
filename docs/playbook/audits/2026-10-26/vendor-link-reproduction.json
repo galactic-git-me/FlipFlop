@@ -1,0 +1,48 @@
+[
+  {
+    "symptom": "captured_vendor_not_matched",
+    "asin": "B0DBR3DZWG",
+    "vendor_listing": "STO-KNG-02942",
+    "amazon_cpk": "171817f97851df4f",
+    "vendor_cpk": "39f5e120c5269634",
+    "same_product": false,
+    "exact_vendor_url": "https://www.overclockers.co.uk/kingston-nv3-1tb-pci-e-4.0-nvme-m.2-solid-state-drive-snv3s-1000g/STO-KNG-02942.html"
+  },
+  {
+    "symptom": "captured_vendor_not_matched",
+    "asin": "B0B9C4DKKG",
+    "vendor_listing": "LN130047",
+    "amazon_cpk": "5b6af37e88a55eef",
+    "vendor_cpk": "368752d4ec55daa9",
+    "same_product": false,
+    "exact_vendor_url": "https://www.scan.co.uk/products/2tb-samsung-990-pro-m2-2280-pcie-40-x4-nvme-ssd-mlc-3d-v-nand-7450mb-s-read-6900mb-s-write-pc-ps5"
+  },
+  {
+    "symptom": "captured_vendor_not_matched",
+    "asin": "B07RW6Z692",
+    "vendor_listing": "MEM-CRS-08411",
+    "amazon_cpk": "16881be5473c90f8",
+    "vendor_cpk": "9bf92e72c4e5feca",
+    "same_product": false,
+    "exact_vendor_url": "https://www.overclockers.co.uk/corsair-vengeance-lpx-32gb-2x16gb-ddr4-c16-3200mhz-dual-channel-kit-black/MEM-CRS-08411.html"
+  },
+  {
+    "symptom": "wrong_capacity_and_speed_metadata_accepted",
+    "actual_title": "Corsair VENGEANCE LPX DDR4 RAM 32GB (2x16GB) 3200MHz",
+    "stored_metadata": {
+      "category": "ram",
+      "brand": "corsair",
+      "model": "vengeance-lpx",
+      "specs": {
+        "capacity_gb": 8,
+        "speed_mhz": 3600,
+        "type": "ddr4"
+      }
+    },
+    "accepted": true
+  },
+  {
+    "symptom": "scan_url_reconstructed_as_ebay",
+    "url": "https://www.ebay.co.uk/itm/LN130047"
+  }
+]

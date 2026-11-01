@@ -6,7 +6,7 @@ import secrets
 from typing import Literal
 from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, Field
-from sqlalchemy import select
+from sqlalchemy import select, case
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import require_operator
 from app.database import get_db
@@ -30,7 +30,7 @@ worker_router = APIRouter(prefix="/cross-listing/browser-worker", tags=["cross-l
 class QueueIn(BaseModel):
     build_id: int
     channel: str
-    operation: Literal["publish", "update", "relist", "withdraw"] = "publish"
+    operation: Literal["publish", "update", "relist"] = "publish"
     image_urls: list[str] = Field(default_factory=list, max_length=24)
 
 
@@ -39,11 +39,13 @@ class LeaseIn(BaseModel):
 
 
 class ResultIn(LeaseIn):
-    status: Literal["succeeded", "blocked", "needs_review"]
+    status: Literal["succeeded", "blocked", "needs_review", "observed"]
     message: str = Field(min_length=1, max_length=500)
     listing_url: str | None = Field(default=None, max_length=1000)
     external_id: str | None = Field(default=None, max_length=100)
     evidence: dict | None = None
+    remote_state: Literal["active", "ended", "missing", "sold", "unknown"] | None = None
+    order_id: str | None = Field(default=None, max_length=120)
 
 
 def summary(job):
@@ -99,6 +101,9 @@ async def retry(job_id: int, db: AsyncSession = Depends(get_db)):
 
 
 async def leased(db, job_id, token):
+    peek = await db.get(BrowserListingJob, job_id)
+    if peek:
+        await db.execute(select(ManualBuild).where(ManualBuild.id == peek.payload.get("build_id")).with_for_update())
     job = (await db.execute(select(BrowserListingJob).where(BrowserListingJob.id == job_id).with_for_update())).scalar_one_or_none()
     if not job or job.status != "running" or not secrets.compare_digest(job.lease_token or "", token) or not job.lease_until or job.lease_until < datetime.utcnow():
         raise HTTPException(409, "Job lease is no longer valid; reconcile before retrying")
@@ -112,8 +117,11 @@ async def claim(db: AsyncSession = Depends(get_db)):
         BrowserListingJob.lease_until < now).with_for_update(skip_locked=True))).scalars().all()
     for job in expired:
         await complete_browser_job(db, job, status="needs_review", message="Desktop worker stopped before confirming the outcome. Reconcile the vendor before resuming.")
-    job = (await db.execute(select(BrowserListingJob).where(BrowserListingJob.status == "queued")
-        .order_by(BrowserListingJob.id).with_for_update(skip_locked=True).limit(1))).scalar_one_or_none()
+    from app.services.browser_listing_jobs import BROWSER_CHANNELS
+    job = (await db.execute(select(BrowserListingJob).where(BrowserListingJob.status == "queued",
+        BrowserListingJob.available_at <= now, BrowserListingJob.payload["channel"].as_string().in_(BROWSER_CHANNELS))
+        .order_by(case((BrowserListingJob.operation == "withdraw", 0), (BrowserListingJob.operation == "sale_check", 1), else_=2), BrowserListingJob.id)
+        .with_for_update(skip_locked=True).limit(1))).scalar_one_or_none()
     if not job:
         await db.commit()
         return None
@@ -121,8 +129,7 @@ async def claim(db: AsyncSession = Depends(get_db)):
     build = await db.get(ManualBuild, row.manual_build_id)
     try:
         # Refresh saved copy/price but retain the reviewed image selection.
-        if job.operation != "withdraw":
-            job.payload = seller_pack(build, row, job.payload["listing"]["images"])
+        job.payload = seller_pack(build, row, job.payload["listing"]["images"], operation=job.operation)
     except ValueError as exc:
         await complete_browser_job(db, job, status="blocked", message=str(exc))
         await db.commit()
@@ -147,12 +154,7 @@ async def preflight(job_id: int, body: LeaseIn, db: AsyncSession = Depends(get_d
     row = await db.get(ChannelListing, job.channel_listing_id)
     build = await db.get(ManualBuild, row.manual_build_id)
     try:
-        if job.operation == "withdraw":
-            if row.external_listing_id != job.payload.get("previous_listing_id") or row.listing_url != job.payload.get("previous_listing_url"):
-                raise ValueError("Saved vendor listing identity changed; reconcile before withdrawal")
-            current = job.payload
-        else:
-            current = seller_pack(build, row, job.payload["listing"]["images"])
+        current = seller_pack(build, row, job.payload["listing"]["images"], operation=job.operation)
     except ValueError as exc:
         raise HTTPException(409, str(exc)) from exc
     if current != job.payload:
@@ -164,8 +166,13 @@ async def preflight(job_id: int, body: LeaseIn, db: AsyncSession = Depends(get_d
 async def result(job_id: int, body: ResultIn, db: AsyncSession = Depends(get_db)):
     job = await leased(db, job_id, body.lease_token)
     try:
-        await complete_browser_job(db, job, status=body.status, message=body.message,
-            listing_url=body.listing_url, external_id=body.external_id, evidence=body.evidence)
+        if body.status == "observed":
+            from app.services.channel_sync import confirm_browser_observation
+            await confirm_browser_observation(db, job, state=body.remote_state, external_id=body.external_id,
+                listing_url=body.listing_url, evidence=body.evidence, order_id=body.order_id)
+        else:
+            await complete_browser_job(db, job, status=body.status, message=body.message,
+                listing_url=body.listing_url, external_id=body.external_id, evidence=body.evidence)
     except ValueError as exc:
         raise HTTPException(422, str(exc)) from exc
     await db.commit()

@@ -19,6 +19,7 @@ import {
   Bell,
   Truck,
   Wrench,
+  CalendarDays,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ServiceHealthPanel } from "./service-health-panel";
@@ -28,6 +29,7 @@ const PRIMARY_NAV = [
   { href: "/best-sellers", icon: Trophy, label: "Best Sellers" },
   { href: "/catalogue", icon: Library, label: "Catalogue" },
   { href: "/build-hub", icon: Package, label: "Builds" },
+  { href: "/orders", icon: CalendarDays, label: "Workshop Calendar" },
   { href: "/upgrade-desk", icon: Wrench, label: "Upgrade Desk" },
   { href: "/inventory", icon: Warehouse, label: "Inventory" },
   { href: "/demand", icon: ChartNoAxesCombined, label: "Demand" },
@@ -35,7 +37,7 @@ const PRIMARY_NAV = [
   { href: "/dispatch-zone", icon: Truck, label: "Dispatch Zone" },
   { href: "/email-events", icon: Bell, label: "Email Events" },
   { href: "/advertising-growth", icon: Bell, label: "Advertising & Growth" },
-  { href: "/cases-3d-priority", icon: Box, label: "3D Assets" },
+    { href: "/catalogue/3d-assets", icon: Box, label: "Photos & 3D models" },
   { href: "/problems", icon: AlertTriangle, label: "Problems" },
 ];
 
@@ -120,7 +122,8 @@ export function Sidebar() {
 
         <nav className="node-nav">
           {PRIMARY_NAV.map((item) => {
-            const active = pathname === item.href || (item.href === "/cases-3d-priority" && pathname === "/components-3d-review");
+            const active = pathname === item.href.split("?")[0] ||
+              (item.href.startsWith("/catalogue/3d-assets") && pathname === "/components-3d-review");
             return (
               <Link
                 key={item.href}

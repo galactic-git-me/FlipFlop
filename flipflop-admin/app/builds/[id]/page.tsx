@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Toaster, toast } from "sonner";
 import JSZip from "jszip";
+import ChannelImageReview, { type ImageReviewRequest } from "@/components/ChannelImageReview";
 import { api, API_BASE_URL, ManualBuild, ComponentRating, ProductFaq } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
 import { drawRegistrationPlate, drawSpecCard, canvasToBlob, loadLogo } from "@/lib/build-cards";
@@ -136,6 +137,8 @@ export default function BuildDetailPage() {
   const [markingBuilt, setMarkingBuilt] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [uploadingPhotos, setUploadingPhotos] = useState(false);
+  const [photoChannel, setPhotoChannel] = useState("ebay");
+  const [photoReview, setPhotoReview] = useState<ImageReviewRequest[] | null>(null);
   const [uploading3dModel, setUploading3dModel] = useState(false);
   const [queueing3dModels, setQueueing3dModels] = useState(false);
   const [model3dPollError, setModel3dPollError] = useState<string | null>(null);
@@ -804,6 +807,7 @@ export default function BuildDetailPage() {
   return (
     <>
       <Toaster position="top-right" richColors />
+      {photoReview && <ChannelImageReview requests={photoReview} onCancel={() => setPhotoReview(null)} onApproved={() => { setPhotoReview(null); toast.success("Channel photographs approved"); }} />}
       <div className="min-h-screen bg-[#060d18] text-slate-100 px-4 py-6 md:px-8 max-w-3xl mx-auto">
         {/* offscreen canvas used to render branded cards before uploading them */}
         <canvas ref={hiddenCanvasRef} className="hidden" />
@@ -1145,6 +1149,13 @@ export default function BuildDetailPage() {
             <p className="text-sm font-semibold flex items-center gap-2 mb-3">
               <ImagePlus className="w-4 h-4 text-slate-500" /> Photos
             </p>
+            <p className="mb-3 text-xs text-slate-400">Upload originals once. Square channel images, website heroes and social versions are prepared without stretching or cutting off the PC.</p>
+            {regularPhotos.length > 0 && <div className="mb-4 flex flex-wrap items-center gap-2">
+              <select aria-label="Photograph channel" value={photoChannel} onChange={(event) => setPhotoChannel(event.target.value)} className="rounded border border-slate-600 bg-slate-900 p-2 text-sm">
+                {[ ["ebay", "eBay · 1600 square"], ["amazon", "Amazon · white background"], ["google_shopping", "Google Shopping · 1600 square"], ["facebook_marketplace", "Facebook Marketplace · square"], ["gumtree", "Gumtree · square"], ["etsy", "Etsy · landscape, safe square crop"], ["website_card", "Website product card · square"], ["website_hero", "Website hero · 16:9"], ["social", "Social · 4:5"] ].map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+              </select>
+              <button type="button" onClick={() => setPhotoReview([{ buildId, title: build.name, channel: photoChannel, urls: regularPhotos.map((photo) => photo.url) }])} className="rounded border border-cyan-400/40 px-3 py-2 text-sm text-cyan-300">Preview channel photographs</button>
+            </div>}
 
             {regularPhotos.length > 0 && (
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-3">

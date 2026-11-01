@@ -30,6 +30,9 @@ def _norm(text: str) -> str:
 # ---- CPU: brand only — concealed under the cooler in practice -------------
 def _classify_cpu(title: str) -> str | None:
     t = _norm(title)
+    # Threadripper workstation CPUs get their own shared photo/model family.
+    if re.search(r"\bthreadripper\b", t):
+        return "cpu_amd_threadripper"
     if re.search(r"\bryzen\b|\bamd\b", t):
         return "cpu_amd"
     if re.search(r"\bintel\b|\bcore i[3579]\b|\bcore ultra\b", t):
@@ -37,30 +40,58 @@ def _classify_cpu(title: str) -> str | None:
     return None
 
 
+RAM_MANUFACTURERS = {
+    "corsair": ("Corsair", r"\bcorsair\b"),
+    "crucial": ("Crucial", r"\bcrucial\b"),
+    "kingston": ("Kingston", r"\bkingston\b|\bhyperx\b"),
+    "gskill": ("G.Skill", r"\bg[.\s-]*skill\b|\bflare[\s-]+x5\b"),
+    "teamgroup": ("TeamGroup", r"\bteam[\s-]*group\b|\bt[\s-]*force\b|\bt[\s-]*create\b"),
+    "lexar": ("Lexar", r"\blexar\b"),
+    "patriot": ("Patriot", r"\bpatriot\b"),
+    "adata": ("ADATA", r"\badata\b|\bxpg\b"),
+    "silicon_power": ("Silicon Power", r"\bsilicon[\s-]+power\b"),
+    "samsung": ("Samsung", r"\bsamsung\b"),
+    "micron": ("Micron", r"\bmicron\b"),
+    "sk_hynix": ("SK hynix", r"\b(?:sk[\s-]*)?hynix\b"),
+    "pny": ("PNY", r"\bpny\b"),
+    "integral": ("Integral", r"\bintegral\b"),
+    "netac": ("Netac", r"\bnetac\b"),
+}
+
+
 def _classify_ram(title: str) -> str | None:
-    t = _norm(title)
-    if re.search(r"\bddr5\b", t):
-        return "ram_ddr5"
-    if re.search(r"\bddr4\b", t):
-        return "ram_ddr4"
-    return None
+    # Media groups by the module manufacturer, independent of DDR generation.
+    # Multiple brand mentions are ambiguous; never guess from a chip supplier.
+    matches = [key for key, (_, pattern) in RAM_MANUFACTURERS.items()
+        if re.search(pattern, _norm(title))]
+    return f"ram_{matches[0]}" if len(matches) == 1 else None
+
+
+MOTHERBOARD_MANUFACTURERS = {
+    "asus": ("ASUS", r"\basus\b"),
+    "msi": ("MSI", r"\bmsi\b|\bmicro[\s-]*star\b"),
+    "gigabyte": ("Gigabyte", r"\bgigabyte\b|\baorus\b"),
+    "asrock": ("ASRock", r"\basrock\b"),
+    "biostar": ("Biostar", r"\bbiostar\b"),
+    "nzxt": ("NZXT", r"\bnzxt\b"),
+    "supermicro": ("Supermicro", r"\bsupermicro\b"),
+    "evga": ("EVGA", r"\bevga\b"),
+    "colorful": ("Colorful", r"\bcolorful\b"),
+}
 
 
 def _classify_motherboard(title: str) -> str | None:
-    t = _norm(title)
-    if re.search(r"\bm(?:icro[- ]?)?atx\b|micro[- ]?atx", t):
-        return "motherboard_matx"
-    if re.search(r"\batx\b", t):
-        return "motherboard_atx"
-    return None
+    matches = [key for key, (_, pattern) in MOTHERBOARD_MANUFACTURERS.items()
+        if re.search(pattern, _norm(title))]
+    return f"motherboard_{matches[0]}" if len(matches) == 1 else None
 
 
 def _classify_storage(title: str) -> str | None:
     t = _norm(title)
-    if re.search(r"\bnvme\b|\bm\.2\b|\b2280\b", t):
-        return "storage_nvme_m2"
     if re.search(r"\bsata\b|2\.5(?:-inch|\s?inch|\")", t):
         return "storage_sata_2_5"
+    if re.search(r"\bnvme\b|\bpci[- ]?e\b|\bpcie\b", t):
+        return "storage_nvme_m2"
     return None
 
 
@@ -90,7 +121,7 @@ def _classify_gpu(title: str) -> str | None:
 # visually dominant features, not the brand -------------------------------
 def _classify_cooling(title: str) -> str | None:
     t = _norm(title)
-    is_aio = bool(re.search(r"\baio\b|liquid|water cool|radiator|\d{3}\s?mm", t))
+    is_aio = bool(re.search(r"\baio\b|liquid|water cool|radiator", t))
     if is_aio:
         has_lcd = "lcd" in t
         if "360" in t:
@@ -104,7 +135,7 @@ def _classify_cooling(title: str) -> str | None:
         else:
             return None  # radiator size is load-bearing for AIO shape — no guess
         return f"cooling_aio_{size}_lcd" if has_lcd else f"cooling_aio_{size}"
-    if re.search(r"\btower cooler\b|\bair cooler\b|\bheatsink\b", t):
+    if re.search(r"\btower cooler\b|\bair cooler\b|\bheatsink\b|\bcpu cooler\b", t):
         return "cooling_air_tower"
     return None
 
@@ -156,9 +187,9 @@ def classify_family(category: str, title: str) -> str | None:
 # Not exhaustive of every possible classify_family() output (brand lists can
 # grow), but enough to know what to generate first.
 KNOWN_FAMILY_BUCKETS: list[tuple[str, str]] = [
-    ("cpu", "cpu_amd"), ("cpu", "cpu_intel"),
-    ("motherboard", "motherboard_atx"), ("motherboard", "motherboard_matx"),
-    ("ram", "ram_ddr4"), ("ram", "ram_ddr5"),
+    ("cpu", "cpu_amd"), ("cpu", "cpu_amd_threadripper"), ("cpu", "cpu_intel"),
+    *(("motherboard", f"motherboard_{brand}") for brand in MOTHERBOARD_MANUFACTURERS),
+    *(("ram", f"ram_{brand}") for brand in RAM_MANUFACTURERS),
     ("gpu", "gpu_nvidia"), ("gpu", "gpu_amd"), ("gpu", "gpu_intel"),
     ("cooling", "cooling_air_tower"),
     ("cooling", "cooling_aio_240"),

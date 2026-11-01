@@ -1,0 +1,417 @@
+{
+  "sampled_at": "2026-10-27T00:03:09.767922+00:00",
+  "since": "2026-10-26T23:55:00",
+  "distinct_observed_listings": 343,
+  "by_source": {
+    "ebay": {
+      "listings": 39,
+      "mpn_field": 15,
+      "cpk": 15,
+      "validated_v3": 12,
+      "mpn_anchored_identity": 12,
+      "linked_2plus_direct_retailers": 9
+    },
+    "awd_it": {
+      "listings": 15,
+      "mpn_field": 0,
+      "cpk": 15,
+      "validated_v3": 9,
+      "mpn_anchored_identity": 1,
+      "linked_2plus_direct_retailers": 6
+    },
+    "amazon": {
+      "listings": 38,
+      "mpn_field": 9,
+      "cpk": 31,
+      "validated_v3": 31,
+      "mpn_anchored_identity": 21,
+      "linked_2plus_direct_retailers": 19
+    },
+    "bargain_hardware": {
+      "listings": 30,
+      "mpn_field": 0,
+      "cpk": 19,
+      "validated_v3": 12,
+      "mpn_anchored_identity": 0,
+      "linked_2plus_direct_retailers": 3
+    },
+    "overclockers": {
+      "listings": 84,
+      "mpn_field": 0,
+      "cpk": 64,
+      "validated_v3": 64,
+      "mpn_anchored_identity": 21,
+      "linked_2plus_direct_retailers": 50
+    },
+    "computer_orbit": {
+      "listings": 25,
+      "mpn_field": 2,
+      "cpk": 24,
+      "validated_v3": 20,
+      "mpn_anchored_identity": 1,
+      "linked_2plus_direct_retailers": 15
+    },
+    "google_shopping": {
+      "listings": 19,
+      "mpn_field": 11,
+      "cpk": 8,
+      "validated_v3": 2,
+      "mpn_anchored_identity": 2,
+      "linked_2plus_direct_retailers": 2
+    },
+    "ebuyer": {
+      "listings": 1,
+      "mpn_field": 0,
+      "cpk": 1,
+      "validated_v3": 0,
+      "mpn_anchored_identity": 0,
+      "linked_2plus_direct_retailers": 0
+    },
+    "scan": {
+      "listings": 92,
+      "mpn_field": 0,
+      "cpk": 91,
+      "validated_v3": 0,
+      "mpn_anchored_identity": 0,
+      "linked_2plus_direct_retailers": 65
+    }
+  },
+  "examples": [
+    {
+      "title": "AMD Ryzen 5 5600 3.6 GHz None Integrated Graphics Gaming CPU for MSI B550M PRO",
+      "vendors": [
+        "amazon",
+        "awd_it",
+        "computer_orbit",
+        "overclockers"
+      ],
+      "cpk": "1ce1c181be57c022fecf49e7935eb959"
+    },
+    {
+      "title": "AMD 100-100000457BOX CPU II price incl VAT 3 yr warranty* B2B",
+      "vendors": [
+        "amazon",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "overclockers",
+        "scan"
+      ],
+      "cpk": "fd96e8fee4f3f36e9b50c435f6670bb9"
+    },
+    {
+      "title": "ASUS TUF Gaming VG27AQ5F 27\" QHD Gaming Monitor - 2560 x 1440 200Hz Fast IPS G-SYNC Compatible - Black - VG27AQ5F",
+      "vendors": [
+        "awd_it",
+        "overclockers"
+      ],
+      "cpk": "7248ba260c977434"
+    },
+    {
+      "title": "AWD-IT Astraeus AMD Ryzen 5, Radeon RX 9070 GRE, 16GB RAM, 1TB SSD, Windows 11 Prebuilt Gaming PC",
+      "vendors": [
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "scan"
+      ],
+      "cpk": "46c267b25846119b"
+    },
+    {
+      "title": "AWD-IT Hecate AMD Ryzen 5, NVIDIA RTX 5050, 16GB RAM, 512GB SSD, Windows 11, Prebuilt Gaming PC",
+      "vendors": [
+        "awd_it",
+        "overclockers"
+      ],
+      "cpk": "99f5043219340719"
+    },
+    {
+      "title": "Palit GeForce RTX 5080 GamingPro V1 16GB GDDR7 Graphics Card - NE75080019T2-GB2031Y",
+      "vendors": [
+        "awd_it",
+        "overclockers"
+      ],
+      "cpk": "0ff7fa17badaf92a"
+    },
+    {
+      "title": "Seagate BarraCuda 8TB 5400RPM 190MB/s 3.5 Inch SATA Desktop Hard Drive - ST8000DM004",
+      "vendors": [
+        "awd_it",
+        "overclockers"
+      ],
+      "cpk": "b9ad2046c9f3e3b3"
+    },
+    {
+      "title": "AMD Ryzen 5 3400G Processor (4C/8T, 6 MB cache, 4.2 GHz Max Boost) with Radeon RX Vega 11 Graphics",
+      "vendors": [
+        "amazon",
+        "awd_it"
+      ],
+      "cpk": "e589836844d426fd"
+    },
+    {
+      "title": "AMD Ryzensets 7 5800X Processor (8 Cores/16 threads, 105W TDP, AM4 socket, 36 MB Cache, 4,7Ghz max boost frequency, no cooler)",
+      "vendors": [
+        "amazon",
+        "computer_orbit",
+        "overclockers"
+      ],
+      "cpk": "a61e68c5a87512ea"
+    },
+    {
+      "title": "AMD Ryzensets 7 5700X Processor (8 cores/16 threads, 65W DTP, Socket AM4, 36 MB cache, up to 4.6 GHz max boost, no cooler)",
+      "vendors": [
+        "amazon",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "overclockers"
+      ],
+      "cpk": "be3f530cb7eca044c7ac8305b29578da"
+    },
+    {
+      "title": "AMD Ryzensets 3 4100 processor (4 cores/8 threads, 65W DTP, 6 MB cache, up to 4.0 GHz max. Boost, wraith stealth cooler)",
+      "vendors": [
+        "amazon",
+        "overclockers"
+      ],
+      "cpk": "29dbce75b4daeb5dc935d55d763367a2"
+    },
+    {
+      "title": "AMD Ryzensets 7 7700X Processor (integrated Radeon Graphics, 8 cores/16 threads, 105W DTP, AM5 Socket, 40MB cache, up to 5.4 GHz max boost, no cooler)",
+      "vendors": [
+        "amazon",
+        "awd_it",
+        "newegg_uk",
+        "overclockers"
+      ],
+      "cpk": "bbebd433abf5c96a2867af3eb67a1f3f"
+    }
+  ],
+  "missing_identity_examples": [
+    {
+      "source": "ebay",
+      "title": "100-100000927BOX AMD Ryzen 5|560 R5 3 5GHz AM4 ~D~",
+      "mpn": null
+    },
+    {
+      "source": "ebay",
+      "title": "[AMD] Ryzen 5 Burmere 5600 (6-core/12 thread/3.5GHz/cooler) multi pack",
+      "mpn": null
+    },
+    {
+      "source": "amazon",
+      "title": "Corsair",
+      "mpn": null
+    },
+    {
+      "source": "amazon",
+      "title": "Crucial",
+      "mpn": null
+    },
+    {
+      "source": "amazon",
+      "title": "Crucial",
+      "mpn": null
+    },
+    {
+      "source": "amazon",
+      "title": "Corsair",
+      "mpn": null
+    },
+    {
+      "source": "amazon",
+      "title": "Integral",
+      "mpn": null
+    },
+    {
+      "source": "bargain_hardware",
+      "title": "AMD EPYC 7443 2.85GHz 24-Core Socket SP3 200W 128MB CPU",
+      "mpn": null
+    },
+    {
+      "source": "bargain_hardware",
+      "title": "AMD EPYC 7642 2.30GHz 48-Core SP3 225W 256MB CPU",
+      "mpn": null
+    },
+    {
+      "source": "bargain_hardware",
+      "title": "AMD EPYC 9684X 2.55GHz 96-Core Socket SP5 400W 1.125GB CPU",
+      "mpn": null
+    },
+    {
+      "source": "bargain_hardware",
+      "title": "Dell AMD EPYC 7502 - 2.50GHz 32-Core Socket SP3 128MB 180W CPU",
+      "mpn": null
+    },
+    {
+      "source": "bargain_hardware",
+      "title": "Dell AMD EPYC 7543 2.80Ghz 32-Core Socket SP3 225W 256MB CPU",
+      "mpn": null
+    }
+  ],
+  "queue": {
+    "pending": 269,
+    "processing": 4,
+    "completed": 3962,
+    "failed": 0
+  },
+  "pipeline": {
+    "runId": "5e35a2894a454134b70cb84613f4ef89",
+    "activeScans": [
+      {
+        "searchId": "catalogue-component-9d4763b1117c0fc0dd3f",
+        "query": "amd 100-100000927BOX",
+        "elapsedSeconds": 435.9,
+        "activeSubmissions": 1,
+        "totalListings": 47,
+        "discoveredCount": 47,
+        "eligibleCount": 47,
+        "ingestedCount": 47,
+        "ingestedNewCount": 3,
+        "cpkAssignedCount": 35,
+        "cpkFailedCount": 8,
+        "classifiedCount": 33,
+        "eligibleScoreCount": 23,
+        "ineligibleScoreCount": 0,
+        "gemCount": 0,
+        "superGemCount": 1,
+        "marketPricedCount": 28,
+        "processedPercent": 72.3,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "overclockers": 2,
+          "awd_it": 15,
+          "ebay": 12,
+          "computer_orbit": 18
+        },
+        "discoveredByVendor": {
+          "ebay": 12,
+          "computer_orbit": 18,
+          "overclockers": 2,
+          "awd_it": 15
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "amd-cpu",
+        "query": "AMD CPU -bundle -combo -laptop -\"cooler only\" -\"box only\" -\"heatsink only\" -bracket -mount -sticker -keychain -\"cooling fan\" -\"replacement fan\" -\"motherboard set\" -\"processor cooler\"",
+        "elapsedSeconds": 433.1,
+        "activeSubmissions": 1,
+        "totalListings": 30,
+        "discoveredCount": 30,
+        "eligibleCount": 30,
+        "ingestedCount": 30,
+        "ingestedNewCount": 0,
+        "cpkAssignedCount": 12,
+        "cpkFailedCount": 10,
+        "classifiedCount": 12,
+        "eligibleScoreCount": 3,
+        "ineligibleScoreCount": 4,
+        "gemCount": 0,
+        "superGemCount": 0,
+        "marketPricedCount": 7,
+        "processedPercent": 40.0,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "bargain_hardware": 30
+        },
+        "discoveredByVendor": {
+          "bargain_hardware": 30
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "catalogue-component-57c9297d03cfb4548df3",
+        "query": "crucial CP2K64G56C46U5",
+        "elapsedSeconds": 430.3,
+        "activeSubmissions": 1,
+        "totalListings": 73,
+        "discoveredCount": 73,
+        "eligibleCount": 73,
+        "ingestedCount": 73,
+        "ingestedNewCount": 44,
+        "cpkAssignedCount": 17,
+        "cpkFailedCount": 7,
+        "classifiedCount": 10,
+        "eligibleScoreCount": 3,
+        "ineligibleScoreCount": 0,
+        "gemCount": 0,
+        "superGemCount": 0,
+        "marketPricedCount": 5,
+        "processedPercent": 16.4,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "amazon": 14,
+          "ebay": 27,
+          "ebuyer": 1,
+          "google_shopping": 19,
+          "awd_it": 10,
+          "overclockers": 2
+        },
+        "discoveredByVendor": {
+          "overclockers": 2,
+          "awd_it": 10,
+          "amazon": 11,
+          "google_shopping": 50
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "catalogue-component-dc6e0bd855336f0a90a4",
+        "query": "AMD Ryzensets 5 9600X Processor (radeon graphics included",
+        "elapsedSeconds": 413.1,
+        "activeSubmissions": 1,
+        "totalListings": 207,
+        "discoveredCount": 207,
+        "eligibleCount": 207,
+        "ingestedCount": 207,
+        "ingestedNewCount": 0,
+        "cpkAssignedCount": 90,
+        "cpkFailedCount": 25,
+        "classifiedCount": 90,
+        "eligibleScoreCount": 64,
+        "ineligibleScoreCount": 16,
+        "gemCount": 1,
+        "superGemCount": 4,
+        "marketPricedCount": 80,
+        "processedPercent": 43.5,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "overclockers": 80,
+          "amazon": 24,
+          "computer_orbit": 11,
+          "scan": 92
+        },
+        "discoveredByVendor": {
+          "overclockers": 80,
+          "amazon": 24,
+          "computer_orbit": 11,
+          "scan": 92
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      }
+    ],
+    "recentHistory": [],
+    "binPricesCount": 145,
+    "soldPricesCount": 1550,
+    "superGemCount": 5,
+    "gemCount": 1,
+    "avgGemScore": 8.4,
+    "avgSuperGemScore": 9.5,
+    "totalsAcrossActive": {
+      "listings": 357,
+      "ingestedCount": 357,
+      "cpkAssignedCount": 154,
+      "classifiedInternalCount": 145,
+      "marketPricedCount": 120,
+      "processedCount": 172.2
+    },
+    "completedSweepRequestedAt": null,
+    "pendingSweepRequestedAt": "2026-10-26T20:09:54.187841Z"
+  }
+}

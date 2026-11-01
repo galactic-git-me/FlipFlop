@@ -1,0 +1,1246 @@
+{
+  "observed_at": "2026-10-22T19:26:58.855885+00:00",
+  "query": "Ryzen 5600G 32GB 1TB desktop PC",
+  "purpose": "playbook reconstruction research only",
+  "result": {
+    "available": true,
+    "comps": [
+      {
+        "price": 529.99,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.941398+00:00",
+        "url": "https://www.ebay.co.uk/itm/405839499692",
+        "title": "Ryzen 5 5600G Desktop PC | 16\u201332GB RAM | 512GB\u20131TB NVMe | WiFi 6 | Win11 ProOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  13 Sep 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 746.2,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.942873+00:00",
+        "url": "https://www.ebay.co.uk/itm/227398537490",
+        "title": "Desktop PC RTX 3070 Ryzen 5 5600x 32 GB RAM 1TB HDD RGBOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  28 Aug 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 729.95,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.945191+00:00",
+        "url": "https://www.ebay.co.uk/itm/255126051504",
+        "title": "RYZEN 5 GAMING PC - AMD RYZEN 5 5600X 32GB RAM 1TB SSD NVIDIA GEFORCE GTX1650 4GOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  15 Sep 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 189.88,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.948702+00:00",
+        "url": "https://www.ebay.co.uk/itm/860047285065",
+        "title": "DDR5 PC Ryzen 5 8500G RTX 4060 GPU 1TB NVMEOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  15 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 685.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.950482+00:00",
+        "url": "https://www.ebay.co.uk/itm/820119522448",
+        "title": "Gaming PC | RTX 3070 | Ryzen 5 5600G | 16gb RAM | WiFiOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  15 Sep 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 427.99,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.952603+00:00",
+        "url": "https://www.ebay.co.uk/itm/327272614673",
+        "title": "XUM Titan Gaming PC Ryzen 5 5600G | 16GB RAM | 256GB SSD | Windows 11Opens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  7 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 539.99,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.954678+00:00",
+        "url": "https://www.ebay.co.uk/itm/327272825312",
+        "title": "XUM Elite Gaming PC Ryzen 5 5600G | 16GB RAM | 256GB SSD | Windows 11Opens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  2 Sep 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 569.97,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.957255+00:00",
+        "url": "https://www.ebay.co.uk/itm/135647148438",
+        "title": "Zoostorm Mini Gaming Home Office Mini PC AMD Ryzen 5600G Wifi 16GB 500Gb SSDOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  3 Aug 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 420.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.958403+00:00",
+        "url": "https://www.ebay.co.uk/itm/147472663796",
+        "title": "Gaming PC Ryzen 5 5600G/GT GeForce GTX 1660 Super, 16GB RAM 1TB SSD Windows 11Opens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  16 Aug 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 883.9,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.959570+00:00",
+        "url": "https://www.ebay.co.uk/itm/860072734465",
+        "title": "New listingamd ryzen 5 5600x gaming pc rtx 5060ti 8gb 32gb ddr4 1tb ssdOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  22 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 649.95,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.961624+00:00",
+        "url": "https://www.ebay.co.uk/itm/256126324287",
+        "title": "RYZEN 7 GAMING PC - AMD RYZEN 7 5700G 32GB RAM 1TB SSD RADEON VEGA GRAPHICSOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  12 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 1599.99,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.962859+00:00",
+        "url": "https://www.ebay.co.uk/itm/317287631885",
+        "title": "RTX 5070 Gaming PC Bundle Ryzen 7 8700G | 32GB DDR5 | 1TB M.2 NVME | 27\u2033 MonitorOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  1 Aug 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 529.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.964290+00:00",
+        "url": "https://www.ebay.co.uk/itm/257634527023",
+        "title": "Fast Gaming PC AMD Ryzen 5 5600 , 1TB SSD , 32GB RAM , RTX 5060 WiFi Windows 11Opens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  13 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 1076.68,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.965975+00:00",
+        "url": "https://www.ebay.co.uk/itm/318805992738",
+        "title": "| Ryzen 7 | 32GB | NVIDIA RTX | 1TB | Madcap FrostByte White Gaming PCOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  11 Sep 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 899.99,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.967670+00:00",
+        "url": "https://www.ebay.co.uk/itm/389956696908",
+        "title": "Gaming PC AMD Ryzen 7 7700 32GB DDR5 1TB NVMe SSD AM5 White ARGB Desktop No GPUOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  1 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 750.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.969383+00:00",
+        "url": "https://www.ebay.co.uk/itm/116669896153",
+        "title": "Gaming PC RTX 5060 NVIDIA 32GB RAM / 1TB SSD / Win11 RYZEN 5 5600X 6 CORES WIFIOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  9 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 1029.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.970957+00:00",
+        "url": "https://www.ebay.co.uk/itm/398083148590",
+        "title": "GAMING PC / AMD Ryzen 7 5700X3D / RTX 5070 Ti 16GB / 2TB M.2 SSD / 32GB RAMOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  22 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 547.3,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.972382+00:00",
+        "url": "https://www.ebay.co.uk/itm/168171300057",
+        "title": "Gaming PC - Ryzen 5 5500, RX 6600, 16GB DDR4 3000Mhz, 1TB SSDOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  20 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 699.99,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.973766+00:00",
+        "url": "https://www.ebay.co.uk/itm/318886860483",
+        "title": "Gaming PC | Ryzen 5 3600 | RTX 5060 | 16GB RAM | 1TB SSDOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  20 Sep 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 859.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.976208+00:00",
+        "url": "https://www.ebay.co.uk/itm/395574785200",
+        "title": "Fast Gaming PC / AMD Ryzen 7 5700X / 1TB SSD / 32GB DDR4 / RTX 5060 TI 16GB WiFiOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  18 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 424.9,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.977684+00:00",
+        "url": "https://www.ebay.co.uk/itm/235813955093",
+        "title": "AMD RYZEN 5 5600G 16gb RAM 1Tb SSD 2Tb HDD Gaming PcOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  13 Aug 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 1800.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.979127+00:00",
+        "url": "https://www.ebay.co.uk/itm/920024264089",
+        "title": "Gaming Pc- Rtx 5080 16GB, Ryzen 9800X3D, 32GB DDR5, 2TB M.2 SSDOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  9 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 873.7,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.980485+00:00",
+        "url": "https://www.ebay.co.uk/itm/178414110340",
+        "title": "ZeroLag Gaming PC Ryzen 5 9600X RTX 5060 32GB DDR5 1TB SSD Windows 11 ProOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  20 Aug 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 972.99,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.982267+00:00",
+        "url": "https://www.ebay.co.uk/itm/267748562110",
+        "title": "Stormforce Gaming Desktop PC Ryzen 5500 32GB 1TB RTX 4060Ti WiFi PinkOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  20 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 499.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.984180+00:00",
+        "url": "https://www.ebay.co.uk/itm/397045953307",
+        "title": "NIPOGI H1 Mini Gaming PC AMD Ryzen 7 7735H (up to 4.75GHz)  32GB LPDDR5 1TB SSDOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  2 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 1200.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.985645+00:00",
+        "url": "https://www.ebay.co.uk/itm/267752678504",
+        "title": "NVIDIA RTX 5070 | AMD Ryzen 7 7700 | 32GB DDR5 | 1TB NVME SFF Gaming PCOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  10 Aug 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 1299.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.986989+00:00",
+        "url": "https://www.ebay.co.uk/itm/127966023416",
+        "title": "Gaming PC - Ryzen 7 5700X / RTX 5060 Ti / 32GB RAM / 1TB SSD / WiFi / Win 11 ProOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  18 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 2062.92,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.988408+00:00",
+        "url": "https://www.ebay.co.uk/itm/297475566131",
+        "title": "Gladiator PC Colosseum AMD Ryzen 7 9800X3D 32GB RAM 2TB SSD RX 9070 XT W 7000216Opens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  21 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 799.99,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.990117+00:00",
+        "url": "https://www.ebay.co.uk/itm/318314025152",
+        "title": "Gaming PC Ryzen 5 5500 RTX 5060 16GB RAM 256GB SSD 1TB HDD RGB WiFi Win11Opens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  22 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 699.99,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.991693+00:00",
+        "url": "https://www.ebay.co.uk/itm/317769746620",
+        "title": "Custom Gaming PC - Ryzen 5 5500 |RX 7600 |16GB RAM | 1TB SSD | Windows 11 ProOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  3 Sep 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 358.6,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.992831+00:00",
+        "url": "https://www.ebay.co.uk/itm/398323478274",
+        "title": "ACEMAGIC M1 Mini PC AMD Ryzen 7 6800H 32GB LPDDR5 1TB SSD WIFI6 BT5Opens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  25 Aug 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 726.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.994056+00:00",
+        "url": "https://www.ebay.co.uk/itm/820155106719",
+        "title": "Gaming Pc Steam Machine Killer Ryzen 7 Geforce RTX 32GB Ram 1TB M 2Opens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  22 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 1200.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.995412+00:00",
+        "url": "https://www.ebay.co.uk/itm/267760042043",
+        "title": "NVIDIA RTX 5070 | AMD Ryzen 7 7700 | 1TB NVME | 32GB DDR5 Gaming PCOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  21 Aug 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 930.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.996534+00:00",
+        "url": "https://www.ebay.co.uk/itm/128054091788",
+        "title": "NVIDIA 5060 TI 16GB , 1TB SSD, RYZEN 7 5700X, 32GB DDR4 RAM, HIGH END GAMING PCOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  1 Sep 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 479.95,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.997926+00:00",
+        "url": "https://www.ebay.co.uk/itm/256013461601",
+        "title": "RYZEN 5 GAMING PC - AMD RYZEN 5 5600G 16GB RAM 480GB SSD RADEON VEGA 2GB GRAPHICOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  16 Sep 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 799.99,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:57.999343+00:00",
+        "url": "https://www.ebay.co.uk/itm/318114186628",
+        "title": "Gaming PC | Ryzen 5 3600 | RTX 5060 | 16GB RAM | 1TB NVMe SSDOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  9 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 769.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.000706+00:00",
+        "url": "https://www.ebay.co.uk/itm/318625944137",
+        "title": "Premium Gaming PC Ryzen 5 5500 RTX 5050 8GB 16GB RAM 1TB SSD 1TB HDD White RGBOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  21 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 749.99,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.001958+00:00",
+        "url": "https://www.ebay.co.uk/itm/318576546726",
+        "title": "Gaming PC | Ryzen 5 3600 | RTX 3070 | 16GB RAM | 1TB SSDOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  25 Sep 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 1350.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.003177+00:00",
+        "url": "https://www.ebay.co.uk/itm/336769260478",
+        "title": "RX 9070 16GB VRAM, Ryzen 7 5700X3D, 32GB DDR4, 1TB NVMe Gaming PC, WiFi 7, WoodOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  30 Aug 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 792.09,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.004259+00:00",
+        "url": "https://www.ebay.co.uk/itm/188787170426",
+        "title": "Rtx 5060 , Ryzen 5 5600XT  Cpu , 1tb Nvme , Liquid Cooled Gaming PcOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  27 Aug 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 1599.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.005399+00:00",
+        "url": "https://www.ebay.co.uk/itm/336734794280",
+        "title": "AMD RX 9070 XT, Ryzen 5 7600 Gaming PC, Lian Li B4-mATX, 32GB DDR5, 1TB NVMeOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  12 Aug 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 1383.69,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.007021+00:00",
+        "url": "https://www.ebay.co.uk/itm/318881095480",
+        "title": "| Ryzen 7 X3D | 32GB | RTX 5060Ti 16GB | 1 TB | Madcap Menace Custom Gaming PC |Opens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  30 Sep 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 749.99,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.008339+00:00",
+        "url": "https://www.ebay.co.uk/itm/318206790543",
+        "title": "\ud83d\ude80 HIGH-END GAMING PC | Ryzen 5 5500 | RTX 5050 8GB| 16GB RAM | 1TB SSD+HDD |Opens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  29 Sep 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 499.99,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.009517+00:00",
+        "url": "https://www.ebay.co.uk/itm/358803830474",
+        "title": "Gaming PC Ryzen 5 5600 Radeon Rx 6600 16GB Ram 1TB SSDOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  2 Aug 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 539.99,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.010884+00:00",
+        "url": "https://www.ebay.co.uk/itm/236955112539",
+        "title": "XUM Legend Gaming PC Ryzen 5 5600G | 16GB RAM | 256GB SSD | Windows 11Opens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  5 Sep 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 1530.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.012142+00:00",
+        "url": "https://www.ebay.co.uk/itm/357169142772",
+        "title": "Powerful White Gaming PC: RTX 5070 RYZEN 7 5800X 32GB RAM 1TB SSD LIQUID COOLINGOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  13 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 599.99,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.013797+00:00",
+        "url": "https://www.ebay.co.uk/itm/168801156591",
+        "title": "Beelink SER Mini PC SER8 AMD Ryzen 7 8745HS 32GB RAM 1TB Silver UK NEXT DAY DELOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  19 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 873.69,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.015588+00:00",
+        "url": "https://www.ebay.co.uk/itm/198310537471",
+        "title": "ULTRA FAST GAMING PC WITH RYZEN 5 RX9060XT 16GB RAM 1TB NVME SSD WIN 11 PROOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  13 Aug 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 1579.99,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.017380+00:00",
+        "url": "https://www.ebay.co.uk/itm/168637961726",
+        "title": "Gaming PC RX 9060XT 16GB Ryzen 5 7500F 32GB DDR5 1TB NVME SSDOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  8 Sep 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 542.2,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.019167+00:00",
+        "url": "https://www.ebay.co.uk/itm/198669603850",
+        "title": "Custom Built PC | Ryzen 5 5600 | RTX 3060ti | 16GB Ram | 256gb SSD | 3TB HDDOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  15 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 699.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.020513+00:00",
+        "url": "https://www.ebay.co.uk/itm/317472314443",
+        "title": "Custom Gaming PC - Ryzen 5 5500 | RX 7600 | 16GB RAM | 1TB SSD | Windows 11 ProOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  3 Sep 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 2799.99,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.021953+00:00",
+        "url": "https://www.ebay.co.uk/itm/327283010993",
+        "title": "MSI MPG Infinite Z3 Gaming Desktop PC AMD Ryzen 9 32GB 2TB Storage RTX 5070TiOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  25 Aug 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 1230.7,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.023491+00:00",
+        "url": "https://www.ebay.co.uk/itm/117375574366",
+        "title": "Gaming PC Ryzen 7 8700G 32GB DDR 5 RAM 1TB NVMe M2 SSD  AMD Radeon 9060 XT 16 GBOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  6 Sep 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 199.99,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.024976+00:00",
+        "url": "https://www.ebay.co.uk/itm/318913368117",
+        "title": "\ud83d\udc8e RTX 4060 Gaming PC | Ryzen 5 | 16GB RAM | 1TB NVMe | RGB \ud83d\udc8eOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  28 Sep 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 1550.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.026518+00:00",
+        "url": "https://www.ebay.co.uk/itm/127955734903",
+        "title": "Gaming PC - Ryzen 7 7800X3D / RTX 5060 Ti / 32GB DDR5 / 1TB SSD / WiFi / Win 11Opens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  19 Aug 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "outside_30_day_sold_window",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 1100.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.028214+00:00",
+        "url": "https://www.ebay.co.uk/itm/357439212246",
+        "title": "Fast Gaming PC RYZEN 9 5900x 32GB RAM 2TB SSD RTX 5070 LIQUID COOLING WIFIOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  3 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 930.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.030176+00:00",
+        "url": "https://www.ebay.co.uk/itm/257194960295",
+        "title": "Fast Gaming PC AMD Ryzen 7 5700x , 1TB SSD , 32GB RAM , RTX 5060 TI , WiFi, W11Opens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  20 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 1026.7,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.031532+00:00",
+        "url": "https://www.ebay.co.uk/itm/336788519376",
+        "title": "BRAND NEW MICRO ATX GAMING PC RX 9060 XT 16GB RYZEN 5 5500X3D 32GB RAM 1TB NVMEOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  30 Sep 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 1569.0,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.033213+00:00",
+        "url": "https://www.ebay.co.uk/itm/397926618219",
+        "title": "GAMING PC / AMD Ryzen 9850X3D / RTX 5080 / 6TB M.2 SSD / 128GB DDR5 RAMOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  21 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      },
+      {
+        "price": 1874.95,
+        "postage": 0.0,
+        "condition": "new",
+        "sold_at": "2026-10-22T19:26:58.035023+00:00",
+        "url": "https://www.ebay.co.uk/itm/366230026138",
+        "title": "Vibox Gaming PC \ufffd Ryzen 7 7800X3D \ufffd RTX 5070 \ufffd 32GB RAM \ufffd 1TB SSDOpens in a new window or tab",
+        "delivery_cost_known": false,
+        "sold_date_text": "Sold  22 Oct 2026",
+        "research_blockers": [
+          "actual_condition_not_extracted",
+          "accepted_offer_status_not_extracted",
+          "configuration_price_not_verified",
+          "detail_review_pending",
+          "postage_unknown",
+          "cpu_not_exact_5600g"
+        ],
+        "status": "context_only",
+        "verified_transaction_price_gbp": null
+      }
+    ],
+    "unavailable_reason": null
+  },
+  "quality": {
+    "raw_candidates": 60,
+    "unique_listing_ids": 60,
+    "usable_exact_sold_prices": 0,
+    "blocker_counts": {
+      "actual_condition_not_extracted": 60,
+      "accepted_offer_status_not_extracted": 60,
+      "configuration_price_not_verified": 60,
+      "detail_review_pending": 60,
+      "postage_unknown": 60,
+      "outside_30_day_sold_window": 29,
+      "cpu_not_exact_5600g": 51
+    },
+    "warning": "Legacy adapter copies requested condition, may flatten price ranges and omits Best Offer. postage=0 with delivery_cost_known=false means unknown, not free. Never ingest these as verified prices."
+  }
+}

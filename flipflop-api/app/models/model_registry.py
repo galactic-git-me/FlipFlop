@@ -16,7 +16,7 @@ class ModelVersion(Base):
     score_profit_mae: Mapped[float | None] = mapped_column(Float)
     score_roi_mae: Mapped[float | None] = mapped_column(Float)
     trained_on_samples: Mapped[int] = mapped_column(Integer, default=0)
-    artifact_path: Mapped[str | None] = mapped_column(Text)
+    artifact_path: Mapped[str | None] = mapped_column(String(1024))
     notes: Mapped[str | None] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)
     activated_at: Mapped[datetime | None] = mapped_column(DateTime)

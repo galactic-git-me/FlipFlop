@@ -33,6 +33,15 @@ async def db_session():
     await engine.dispose()
 
 
+@pytest.fixture(autouse=True)
+def test_token_encryption_key(monkeypatch):
+    monkeypatch.setenv("EBAY_TOKEN_ENCRYPTION_KEY", "isolated-test-key-only")
+    from app.config import get_settings
+    get_settings.cache_clear()
+    yield
+    get_settings.cache_clear()
+
+
 def test_build_authorize_url_includes_scopes_and_client_id():
     with patch("app.services.ebay_oauth.get_settings") as mock_settings:
         mock_settings.return_value.ebay_app_id = "test-app-id"

@@ -15,6 +15,7 @@ operation that preserves existing row data.
 from typing import Sequence, Union
 
 from alembic import op
+import sqlalchemy as sa
 
 revision: str = "a1b2c3d4e5f6"
 down_revision: Union[str, None] = "573cf6989b91"
@@ -25,10 +26,22 @@ _RENAMES = [("ACTIVE", "active"), ("DEPRECATED", "deprecated"), ("RETIRED", "ret
 
 
 def upgrade() -> None:
+    inspector = sa.inspect(op.get_bind())
+    enums = {item["name"]: set(item["labels"]) for item in inspector.get_enums()}
+    labels = enums.get("playbookstatus", set())
     for old, new in _RENAMES:
-        op.execute(f"ALTER TYPE playbookstatus RENAME VALUE '{old}' TO '{new}'")
+        if old in labels and new not in labels:
+            op.execute(f"ALTER TYPE playbookstatus RENAME VALUE '{old}' TO '{new}'")
+            labels.remove(old)
+            labels.add(new)
 
 
 def downgrade() -> None:
+    inspector = sa.inspect(op.get_bind())
+    enums = {item["name"]: set(item["labels"]) for item in inspector.get_enums()}
+    labels = enums.get("playbookstatus", set())
     for old, new in _RENAMES:
-        op.execute(f"ALTER TYPE playbookstatus RENAME VALUE '{new}' TO '{old}'")
+        if new in labels and old not in labels:
+            op.execute(f"ALTER TYPE playbookstatus RENAME VALUE '{new}' TO '{old}'")
+            labels.remove(new)
+            labels.add(old)

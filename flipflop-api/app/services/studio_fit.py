@@ -7,6 +7,7 @@ from math import isfinite
 
 
 SPEC_KEYS = {
+    'gpu_interface','gpu_interfaces',
     'socket', 'supported_sockets', 'form_factor', 'supported_form_factors',
     'ram_type', 'ram_slots', 'ram_modules', 'ram_height_mm', 'ram_clearance_mm',
     'length_mm', 'height_mm', 'width_mm', 'depth_mm', 'max_gpu_length_mm',
@@ -15,7 +16,7 @@ SPEC_KEYS = {
     'psu_connectors', 'storage_interface', 'storage_interfaces', 'm2_lengths',
     'm2_length', 'sata_bays', 'cooler_type', 'radiator_mm', 'radiator_support',
     'front_radiator_depth_mm', 'installed_fans', 'cooling_capacity_w',
-    'bios_cpu_ids', 'reviewed', 'source_url', 'cpu_id',
+    'bios_cpu_ids', 'reviewed', 'source_url', 'cpu_id', 'm2_slots', 'sata_ports', 'integrated_graphics',
 }
 
 
@@ -50,10 +51,18 @@ def evaluate_fit(parts, case, *, gpu_required=True):
             add(code, 'pass', f'{label}: {value:g} / {limit:g}.', *affected)
 
     p = {key: value if value.get('reviewed') is True else {} for key, value in parts.items()}
-    cpu, board, gpu, ram, cooler, psu, ssd = [p.get(key, {}) for key in ('cpu', 'motherboard', 'gpu', 'ram', 'cooling', 'psu', 'storage')]
+    cpu, board, gpu, ram, cooler, psu = [p.get(key, {}) for key in ('cpu', 'motherboard', 'gpu', 'ram', 'cooling', 'psu')]
+    storages={key:value for key,value in p.items() if key=='storage' or key.startswith('storage_')}
     gpu_selected = 'gpu' in parts
     gpu_checks_required = gpu_required or gpu_selected
+    if not gpu_checks_required:
+        graphics=cpu.get('integrated_graphics')
+        add('INTEGRATED_GRAPHICS','pass' if graphics is True else 'error' if graphics is False else 'unknown',
+            'Integrated graphics confirmed.' if graphics is True else
+            'This CPU has no integrated graphics; a graphics card is required.' if graphics is False else
+            'Verify integrated graphics for this build without a graphics card.','cpu','gpu')
     case = case or {}
+    case_specs = case.get('engineering', {})
     def match(code, actual, allowed, label, *affected):
         if not actual or not isinstance(allowed, list):
             add(code, 'unknown', f'{label}: verified specification needed.', *affected)
@@ -81,14 +90,33 @@ def evaluate_fit(parts, case, *, gpu_required=True):
     else:
         measured('COOLER_HEIGHT', cooler.get('height_mm'), case.get('max_cooler_height_mm'), 'Cooler height (mm)', 'cooling', 'case')
         measured('RAM_CLEARANCE', ram.get('ram_height_mm'), cooler.get('ram_clearance_mm'), 'RAM clearance (mm)', 'ram', 'cooling')
-    case_specs = case.get('engineering', {})
     match('PSU_FORMAT', psu.get('form_factor'), case_specs.get('psu_form_factors'), 'PSU format', 'psu', 'case')
     measured('PSU_LENGTH', psu.get('length_mm'), case_specs.get('max_psu_length_mm'), 'PSU length (mm)', 'psu', 'case')
-    match('SSD_INTERFACE', ssd.get('storage_interface'), board.get('storage_interfaces'), 'SSD interface', 'storage', 'motherboard')
-    if ssd.get('storage_interface') == 'sata':
-        measured('SSD_MOUNT', 1, case_specs.get('sata_bays'), 'SATA mounting bays', 'storage', 'case')
-    else:
-        match('SSD_MOUNT', ssd.get('m2_length'), board.get('m2_lengths'), 'M.2 mounting', 'storage', 'motherboard')
+    nvme_roles=[];sata_roles=[]
+    for role,ssd in storages.items():
+        interface=ssd.get('storage_interface')
+        code_suffix='' if role=='storage' else f'_{role.upper()}'
+        match(f'SSD_INTERFACE{code_suffix}',interface,board.get('storage_interfaces'),
+            f'{role.replace("_"," ").title()} interface',role,'motherboard')
+        if interface in {'nvme','m2'}:
+            nvme_roles.append(role)
+            match(f'SSD_MOUNT{code_suffix}',ssd.get('m2_length'),board.get('m2_lengths'),
+                f'{role.replace("_"," ").title()} M.2 mounting',role,'motherboard')
+        elif interface=='sata':
+            sata_roles.append(role)
+        else:
+            add(f'SSD_MOUNT_{role.upper()}','unknown',
+                f'{role.replace("_"," ").title()}: verified M.2/SATA interface needed.',role,'motherboard','case')
+    if nvme_roles:
+        m2_slot_count=board.get('m2_slots')
+        if m2_slot_count is None and len(nvme_roles)==1 and board.get('m2_lengths'):
+            # A reviewed supported-length list proves at least one usable slot,
+            # but cannot prove capacity for a second or later NVMe drive.
+            m2_slot_count=1
+        measured('M2_SLOT_COUNT',len(nvme_roles),m2_slot_count,'NVMe drives / M.2 slots',*nvme_roles,'motherboard')
+    if sata_roles:
+        measured('SATA_PORT_COUNT',len(sata_roles),board.get('sata_ports'),'SATA drives / motherboard ports',*sata_roles,'motherboard')
+        measured('SATA_BAY_COUNT',len(sata_roles),case_specs.get('sata_bays'),'SATA drives / case bays',*sata_roles,'case')
     demand = None
     if number(cpu.get('power_w')) and (number(gpu.get('power_w')) or not gpu_checks_required):
         demand = (cpu['power_w'] + (gpu.get('power_w') or 0) + 75) * 1.25
@@ -108,4 +136,36 @@ def evaluate_fit(parts, case, *, gpu_required=True):
     else:
         add('BIOS', 'pass', 'CPU support confirmed in engineering record.', 'cpu', 'motherboard')
     add('AIRFLOW', 'warning', 'Keep intake and exhaust paths clear. Fan layout and temperatures require a build test.', 'case', 'cooling')
+    return checks
+
+
+def evaluate_playbook_fit(parts, case, *, gpu_required=True):
+    """Apply the owner-selected minimum Playbook compatibility gate.
+
+    Publication checks are CPU/motherboard socket, GPU/motherboard interface,
+    RAM generation/motherboard and motherboard/case form factor. A build without
+    a discrete GPU must have verified integrated graphics. Other physical,
+    electrical and installation checks remain workshop work and do not block
+    Playbook proposal approval.
+    """
+    checks=evaluate_fit(parts,case,gpu_required=gpu_required)
+    core={'CPU_SOCKET','RAM_TYPE','BOARD_FIT','INTEGRATED_GRAPHICS','GPU_INTERFACE'}
+    for check in checks:
+        if check['code'] in core:
+            check['stage']='publication'
+        else:
+            check['stage']='workshop'
+            # This checklist is intentionally narrower than the complete
+            # workshop fit report. Slot count, clearances, PSU sizing/cabling,
+            # BIOS and storage mounting are workshop verification items.
+            check['severity']='warning'
+    if gpu_required or 'gpu' in parts:
+        gpu=parts.get('gpu') or {};board=parts.get('motherboard') or {}
+        actual=gpu.get('gpu_interface') if gpu.get('reviewed') is True else None
+        supported=board.get('gpu_interfaces') if board.get('reviewed') is True else None
+        severity=('unknown' if not actual or not isinstance(supported,list)
+            else 'pass' if str(actual).casefold() in [str(v).casefold() for v in supported] else 'error')
+        checks.append({'code':'GPU_INTERFACE','severity':severity,'stage':'publication',
+            'message':'GPU and motherboard expansion interface: '+('compatible.' if severity=='pass' else 'incompatible.' if severity=='error' else 'source specifications needed.'),
+            'affected':['gpu','motherboard']})
     return checks

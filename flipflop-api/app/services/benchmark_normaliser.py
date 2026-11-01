@@ -28,13 +28,22 @@ def _resolve_bare_cpu_model(model: str) -> str | None:
 
 
 _CPU_PATTERNS = [
+    # Ryzen AI names need a dedicated pattern so product titles and benchmark
+    # catalogue rows continue to match when retailers append "integrated" or
+    # "processor" to the same model.
+    (re.compile(r'(?:amd\s+)?ryzen\s+ai\s+(\d)\s+(\d{3,4}[a-z0-9]*)', re.I),
+     lambda m: f"amd_ryzen_ai_{m.group(1)}_{_slug(m.group(2))}"),
+    (re.compile(r'(?:intel\s+)?core\s+ultra\s+([3579])\s+(?:processor\s+)?(\d{3,5}[a-z0-9]*(?:\s+plus)?)', re.I),
+     lambda m: f"intel_core_ultra_{m.group(1)}_{_slug(m.group(2))}"),
     # Intel patterns first (more specific)
     (re.compile(r'(?:intel\s+)?(?:core\s+)?i([3579])[- ](\d{4,5}[a-z0-9]*)', re.I),
      lambda m: f"intel_core_i{m.group(1)}_{_slug(m.group(2))}"),
     (re.compile(r'(?:intel\s+)?xeon\s+([a-z0-9-]+)', re.I),
      lambda m: f"intel_xeon_{_slug(m.group(1))}"),
     # AMD Ryzen with explicit series (e.g. "Ryzen 7 7800X3D", "R7 7800X3D")
-    (re.compile(r'(?:amd\s+)?(?:ryzen\s+|r)(\d)\s+(\d{4,5}(?:\s*(?:x3d|xt|x|ge|gt|g|kf|ks|k|hx|hs|h|u|f|t))?)\b', re.I),
+    # Some Amazon bestseller captures contain the source-title typo "Ryzensets";
+    # accept it as the same explicit AMD family spelling for model matching.
+    (re.compile(r'(?:amd\s+)?(?:ryzen(?:sets)?\s+|r)(\d)\s+(\d{4,5}(?:\s*(?:x3d|xt|x|ge|gt|g|kf|ks|k|hx|hs|h|u|f|t))?)\b', re.I),
      lambda m: f"amd_ryzen_{m.group(1)}_{_slug(m.group(2).strip())}"),
     (re.compile(r'(?:amd\s+)?(?:ryzen\s+)?threadripper\s+(?:pro\s+)?(\d{4}[a-z0-9]*)', re.I),
      lambda m: f"amd_threadripper_{_slug(m.group(1))}"),
@@ -46,7 +55,7 @@ _CPU_PATTERNS = [
 
 def normalise_cpu(raw: str) -> str:
     """Return a canonical CPU slug or the cleaned input if no pattern matched."""
-    s = raw.strip()
+    s = re.sub(r'[™®©]', '', raw).strip()
     for pattern, builder in _CPU_PATTERNS:
         match = pattern.search(s)
         if match:
@@ -66,6 +75,10 @@ def _ti_super_suffix(raw: str) -> str:
 
 
 _GPU_PATTERNS = [
+    (re.compile(r'(?:amd\s+)?(?:radeon\s+)?ai\s+pro\s+r?(\d{3,5})\b', re.I),
+     lambda m, raw: f"amd_radeon_ai_pro_r{m.group(1)}"),
+    (re.compile(r'(?:intel\s+)?arc(?:\s+graphics)?\s+([ab]\d{3,4})\b', re.I),
+     lambda m, raw: f"intel_arc_{_slug(m.group(1))}"),
     (re.compile(r'(?:nvidia\s+)?(?:geforce\s+)?(?:rtx|gtx)\s*(\d{4})(?:\s*ti)?(?:\s*super)?', re.I),
      lambda m, raw: f"nvidia_geforce_{'rtx' if 'rtx' in raw.lower() else 'gtx'}_{m.group(1)}{_ti_super_suffix(raw)}"),
     # Older GTX 700/900 cards use three digit model numbers.

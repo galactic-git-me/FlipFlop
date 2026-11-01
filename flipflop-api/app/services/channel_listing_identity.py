@@ -16,6 +16,8 @@ async def save_confirmed_identity(db, build, channel, external_id, listing_url):
         await db.flush()
     row.external_listing_id, row.listing_url, row.status = str(external_id), listing_url, "published"
     row.published_at = row.published_at or datetime.utcnow()
+    from app.services.channel_sync import canonical_hash
+    row.last_payload_hash, row.last_checked_at = canonical_hash(build), datetime.utcnow()
     row.withdrawn_at = None
     if row.recreate_enabled and row.next_recreate_at is None:
         row.next_recreate_at = build.next_recreate_at or row.published_at + timedelta(days=row.recreate_interval_days or 7)

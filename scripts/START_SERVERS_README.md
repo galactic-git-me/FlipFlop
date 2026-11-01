@@ -71,8 +71,19 @@ Once all servers are running, access them at:
 ✅ Shows colorized output for easy identification  
 ✅ Supports selective server startup  
 ✅ Uses hot reload for API and frontend development
+
+Python source reloads produce one completion notice, for example:
+`File change C:\...\app\example.py detected. Restarted API; ready in 3.2s.`
+The notice appears only when the replacement server reports that it is
+listening. Routine reload startup/worker-ready messages are suppressed;
+warnings, errors, tracebacks and subsequent request logs remain visible.
+Initial startup retains its full log. Unexpected process exits have a separate
+warning rather than being described as a successful file-change reload.
+Launcher logging changes take effect when the launcher itself is restarted.
+
 ✅ Routes DEV AI requests through Ollama priority port 11435
 ✅ Loads the configured Ollama model at startup and keeps it resident until Ollama stops
+✅ Enables the hourly catalogue-owned Playbook and commercial evidence refresh in normal DEV mode; `-CustomerTesting` keeps it disabled
 
 The warm-up uses a one-token request with Ollama's `keep_alive: -1`. This avoids
 first-request model-load delays and keeps the model's memory allocated while
@@ -160,13 +171,14 @@ The scripts automatically set required environment variables:
 | `BACKEND_URL` | `http://127.0.0.1:4311` |
 | `FLIPFLOP_RUNTIME_ENV` | `development` |
 | `OLLAMA_BASE_URL` | `http://127.0.0.1:11435` |
-| `OLLAMA_MODEL` | `qwen2.5:7b-instruct` (default) |
+| `OLLAMA_MODEL` | `qwen3:4b` (default) |
+| `LLM_PRIMARY_MODEL` | `qwen3:4b` (development primary) |
 | `EBAY_ENVIRONMENT` | `production` (read/sourcing) |
 | `EBAY_LISTING_ENVIRONMENT` | `sandbox` (writes/listing) |
 
 All backend LLM workflows use `app/services/model_selection_service.py`.
-The default hierarchy is `LLM_PRIMARY_PROVIDER=ollama` with
-`LLM_PRIMARY_MODEL=qwen2.5:7b-instruct`, then the configured OpenRouter free
+Development uses `LLM_PRIMARY_PROVIDER=ollama` with
+`LLM_PRIMARY_MODEL=qwen3:4b`, then the configured OpenRouter free
 model (`LLM_SECONDARY_PROVIDER=openrouter-free` and
 `LLM_SECONDARY_MODEL=google/gemma-4-31b-it:free`), then
 `LLM_TERTIARY_PROVIDER=openrouter` with `LLM_TERTIARY_MODEL=auto:cheapest`.

@@ -381,6 +381,13 @@ async def _phase2_trigger_loop() -> None:
                         )
                         signal.pending = False
                         await db.commit()
+                        if get_settings().commercial_reconciliation_enabled:
+                            # Own session/transaction: failure cannot undo scan completion.
+                            from app.services.commercial_reconciliation import run_commercial_reconciliation
+                            try:
+                                await run_commercial_reconciliation()
+                            except Exception as error:
+                                logger.warning('commercial.scan_reconciliation_failed', error_type=type(error).__name__)
                         # Phase 2 classifying the whole sweep is the natural
                         # end of a "run" -- archive the Current Scan Run
                         # panel's totals and clear it so the next sweep's
@@ -397,6 +404,9 @@ async def _worker_loop(worker_id: int, poll_interval_seconds: int) -> None:
     """One persistent worker: claim a submission, process it, repeat.
     Sleeps briefly only when the queue is empty or every pending row belongs
     to a search term already being processed by another worker."""
+    from app.gem_radar.schema_guard import require_scan_schema
+    import time
+    schema_checked_at = 0.0
     while True:
         try:
             # Reserve one search term and claim its next page atomically from
@@ -404,6 +414,11 @@ async def _worker_loop(worker_id: int, poll_interval_seconds: int) -> None:
             # short DB claim; expensive processing runs fully concurrently.
             async with _active_search_lock:
                 async with AsyncSessionLocal() as db:
+                    # Check before claiming: incompatible code must leave work
+                    # pending rather than consuming every submission's retries.
+                    if time.monotonic() - schema_checked_at >= 30:
+                        await require_scan_schema(db)
+                        schema_checked_at = time.monotonic()
                     submission = await SubmissionQueueService.claim_next_pending(
                         db,
                         excluded_search_ids=_active_search_ids,

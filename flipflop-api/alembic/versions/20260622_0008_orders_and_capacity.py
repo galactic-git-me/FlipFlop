@@ -13,33 +13,46 @@ depends_on = None
 
 
 def upgrade():
-    op.create_table(
-        "orders",
-        sa.Column("id", sa.Integer(), primary_key=True),
-        sa.Column("reference", sa.String(20), nullable=False, unique=True, index=True),
-        sa.Column("playbook_id", sa.Integer(), nullable=False),
-        sa.Column("playbook_name", sa.String(255), nullable=False),
-        sa.Column("build_config", sa.JSON(), nullable=False),
-        sa.Column("customer_name", sa.String(255), nullable=False),
-        sa.Column("customer_email", sa.String(255), nullable=False),
-        sa.Column("delivery_address", sa.JSON(), nullable=False),
-        sa.Column("subtotal_gbp", sa.Numeric(10, 2), nullable=False),
-        sa.Column("tax_gbp", sa.Numeric(10, 2), nullable=False),
-        sa.Column("total_gbp", sa.Numeric(10, 2), nullable=False),
-        sa.Column("stripe_session_id", sa.String(255), nullable=True),
-        sa.Column("stripe_payment_intent_id", sa.String(255), nullable=True),
-        sa.Column("status", sa.String(50), nullable=False, server_default="pending_payment"),
-        sa.Column("assigned_build_week", sa.String(10), nullable=True),
-        sa.Column("estimated_arrival_date", sa.Date(), nullable=True),
-        sa.Column("delivery_at_risk", sa.Boolean(), nullable=False, server_default="0"),
-        sa.Column("payment_confirmed_at", sa.DateTime(), nullable=True),
-        sa.Column("created_at", sa.DateTime(), nullable=False),
-        sa.Column("updated_at", sa.DateTime(), nullable=False),
-        sa.ForeignKeyConstraint(["playbook_id"], ["playbooks.id"]),
-        sa.Index("idx_orders_status", "status"),
-        sa.Index("idx_orders_week", "assigned_build_week"),
-        sa.Index("idx_orders_email", "customer_email"),
-    )
+    bind = op.get_bind()
+    inspector = sa.inspect(bind)
+    if inspector.has_table("orders"):
+        order_columns = {column["name"] for column in inspector.get_columns("orders")}
+        if "order_id" not in order_columns:
+            raise RuntimeError(
+                "The existing orders table is not the current unified order schema; "
+                "refusing to overlay the legacy checkout table."
+            )
+    else:
+        # This historical checkout-only shape predates the unified order
+        # aggregate. Fresh installs create the canonical ORM order table in
+        # the baseline and keep payment and fulfilment state separately.
+        op.create_table(
+            "orders",
+            sa.Column("id", sa.Integer(), primary_key=True),
+            sa.Column("reference", sa.String(20), nullable=False, unique=True, index=True),
+            sa.Column("playbook_id", sa.Integer(), nullable=False),
+            sa.Column("playbook_name", sa.String(255), nullable=False),
+            sa.Column("build_config", sa.JSON(), nullable=False),
+            sa.Column("customer_name", sa.String(255), nullable=False),
+            sa.Column("customer_email", sa.String(255), nullable=False),
+            sa.Column("delivery_address", sa.JSON(), nullable=False),
+            sa.Column("subtotal_gbp", sa.Numeric(10, 2), nullable=False),
+            sa.Column("tax_gbp", sa.Numeric(10, 2), nullable=False),
+            sa.Column("total_gbp", sa.Numeric(10, 2), nullable=False),
+            sa.Column("stripe_session_id", sa.String(255), nullable=True),
+            sa.Column("stripe_payment_intent_id", sa.String(255), nullable=True),
+            sa.Column("status", sa.String(50), nullable=False, server_default="pending_payment"),
+            sa.Column("assigned_build_week", sa.String(10), nullable=True),
+            sa.Column("estimated_arrival_date", sa.Date(), nullable=True),
+            sa.Column("delivery_at_risk", sa.Boolean(), nullable=False, server_default="0"),
+            sa.Column("payment_confirmed_at", sa.DateTime(), nullable=True),
+            sa.Column("created_at", sa.DateTime(), nullable=False),
+            sa.Column("updated_at", sa.DateTime(), nullable=False),
+            sa.ForeignKeyConstraint(["playbook_id"], ["playbooks.id"]),
+            sa.Index("idx_orders_status", "status"),
+            sa.Index("idx_orders_week", "assigned_build_week"),
+            sa.Index("idx_orders_email", "customer_email"),
+        )
 
     op.create_table(
         "build_capacity",
@@ -68,4 +81,8 @@ def upgrade():
 def downgrade():
     op.drop_table("build_capacity_overrides")
     op.drop_table("build_capacity")
-    op.drop_table("orders")
+    inspector = sa.inspect(op.get_bind())
+    if inspector.has_table("orders"):
+        order_columns = {column["name"] for column in inspector.get_columns("orders")}
+        if "order_id" not in order_columns:
+            op.drop_table("orders")

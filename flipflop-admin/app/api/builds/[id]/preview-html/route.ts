@@ -6,7 +6,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const backendOrigin = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4311').replace(/\/$/, '');
+    const backendOrigin = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4314').replace(/\/$/, '');
     const apiUrl = `${backendOrigin}/api/manual-builds/${id}`;
     const res = await fetch(apiUrl, {
       signal: AbortSignal.timeout(10000),

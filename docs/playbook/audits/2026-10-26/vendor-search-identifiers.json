@@ -1,0 +1,318 @@
+{
+  "observed_at": "2026-10-26T20:18:12.075193+00:00",
+  "scope": "11 current hardware/software sourcing connectors; legacy Vinted, retired AliExpress and replaced CD Keys excluded",
+  "sampling": "Live results/listing page and one product-detail example per retailer; Kingston NV3 SSDs (1TB aligned where possible), Lenovo RAM for Bargain Hardware and Windows 11 for Gamers Outlet. Google is an aggregator: merchant destination inspected, no separate Google detail page verified.",
+  "vendors": [
+    {
+      "vendor": "Amazon UK",
+      "url": "https://www.amazon.co.uk/s?k=kingston+nv3&i=computers",
+      "method": "rendered Chrome DOM",
+      "local_ids": {
+        "data-asin": "B0DBR9RZLV",
+        "data-uuid": "present; result/tracking identifier",
+        "data-index": "2"
+      },
+      "cross_vendor_evidence": {
+        "title_mpn": "SNV3S/500G"
+      },
+      "gtin": "No explicit GTIN/EAN/UPC field observed in sampled DOM or inline identifier properties",
+      "product_detail": {
+        "url": "https://www.amazon.co.uk/dp/B0DBR3DZWG",
+        "method": "rendered Chrome DOM; technical/product details table",
+        "identifiers": {
+          "ASIN": "B0DBR3DZWG",
+          "Manufacturer Part Number": "SNV3S/1000G",
+          "Model Number": "SNV3S/1000G",
+          "UPC": "740617344790"
+        },
+        "note": "Used 1TB detail for same-product comparison; initial search example was 500GB. Also inspected 500GB B0DBR9RZLV: UPC 740617344806 and MPN SNV3S/500G.",
+        "summary": "ASIN B0DBR3DZWG; MPN/model SNV3S/1000G; UPC 740617344790 in product-details table."
+      }
+    },
+    {
+      "vendor": "eBay UK",
+      "url": "https://www.ebay.co.uk/sch/i.html?_nkw=kingston+nv3&_sacat=0&LH_BIN=1&LH_PrefLoc=1",
+      "method": "rendered Chrome DOM",
+      "local_ids": {
+        "data-listingid": "407268716519",
+        "url_item_id": "407268716519"
+      },
+      "cross_vendor_evidence": {
+        "title_mpn": "SNV3S/1000G"
+      },
+      "gtin": "Not observed; ePID also not observed on sampled results",
+      "product_detail": {
+        "url": "https://www.ebay.co.uk/itm/407268716519",
+        "method": "rendered Chrome DOM; JSON-LD Product, item specifics, catalogue link",
+        "identifiers": {
+          "listing_id": "407268716519",
+          "mpn": "SNV3S/1000G",
+          "model": "SNV3S/1000G",
+          "brand": "Kingston",
+          "ePID": "4076398884"
+        },
+        "note": "No UPC/EAN/GTIN observed for this seller listing. ePID found via https://www.ebay.co.uk/p/4076398884; eBay catalogue alias only.",
+        "summary": "MPN/model SNV3S/1000G in JSON-LD/item specifics; ePID 4076398884; listing ID. No barcode observed."
+      }
+    },
+    {
+      "vendor": "Overclockers UK",
+      "url": "https://www.overclockers.co.uk/search?q=kingston%20nv3",
+      "method": "live HTTP HTML",
+      "local_ids": {
+        "data-tracking-product-tile.item_id": "STO-KNG-02942",
+        "aria-label SKU": "STO-KNG-02942"
+      },
+      "cross_vendor_evidence": {
+        "title_mpn": "SNV3S/1000G",
+        "tracking_item_brand": "Kingston"
+      },
+      "gtin": "Not observed",
+      "product_detail": {
+        "url": "https://www.overclockers.co.uk/kingston-nv3-1tb-pci-e-4.0-nvme-m.2-solid-state-drive-snv3s-1000g/STO-KNG-02942.html",
+        "method": "live HTTP HTML; JSON-LD Product and EAN/product attributes",
+        "identifiers": {
+          "sku": "STO-KNG-02942",
+          "jsonld_mpn": "STO-KNG-02942",
+          "gtin": "0740617344790",
+          "title_mpn": "SNV3S/1000G"
+        },
+        "note": "JSON-LD mpn contains retailer SKU rather than the Kingston MPN. Prefer evidenced EAN and real manufacturer code from title.",
+        "summary": "EAN/JSON-LD gtin 0740617344790; true MPN SNV3S/1000G in title; SKU STO-KNG-02942. Caution: JSON-LD mpn incorrectly repeats retailer SKU."
+      }
+    },
+    {
+      "vendor": "Scan",
+      "url": "https://www.scan.co.uk/search?q=kingston+nv3",
+      "method": "live HTTP HTML",
+      "local_ids": {
+        "visible_linkNo": "LN151058",
+        "data-productcode": "151058",
+        "data-wpid": "present; internal catalogue/image/compare ID"
+      },
+      "cross_vendor_evidence": {
+        "brand": "Kingston",
+        "model_title": "NV3 1TB; no full manufacturer code in sampled results"
+      },
+      "gtin": "Not observed",
+      "product_detail": {
+        "url": "https://www.scan.co.uk/products/1tb-kingston-nv3-ssd-m2-2280-pcie-40-x4-nvme-ssd-3d-nand-6000mb-s-read-4000mb-s-write-oem",
+        "method": "live HTTP HTML; manufacturerCode/itemprop=mpn and specification table",
+        "identifiers": {
+          "retailer_code": "LN151058",
+          "Manufacturer code": "SNV3S/1000G",
+          "itemprop_mpn": "SNV3S/1000G",
+          "GTIN": "740617344790"
+        },
+        "summary": "Manufacturer code/itemprop mpn SNV3S/1000G; GTIN 740617344790 in specification table; LN151058."
+      }
+    },
+    {
+      "vendor": "AWD-IT",
+      "url": "https://www.awd-it.co.uk/catalogsearch/result/?q=kingston%20nv3",
+      "method": "live HTTP HTML",
+      "local_ids": {
+        "data-product-id": "51886",
+        "data-product-sku": "44F-DB7-526"
+      },
+      "cross_vendor_evidence": {
+        "title_mpn": "SNV3S/1000G"
+      },
+      "gtin": "Not observed",
+      "product_detail": {
+        "url": "https://www.awd-it.co.uk/kingston-nv3-pcie-4-0-nvme-ssd-1tb-m-2-2280-snv3s-1000g-read-6000mb-s-write-4000mb-s.html",
+        "method": "live HTTP HTML; product-barcode block, SKU table and product title",
+        "identifiers": {
+          "SKU": "44F-DB7-526",
+          "EAN": "740617344790",
+          "title_mpn": "SNV3S/1000G"
+        },
+        "note": "Field labelled EAN contains a valid 12-digit UPC/GTIN-12, equivalent to the 13-digit EAN elsewhere.",
+        "summary": "Product barcode labelled EAN: 740617344790 (GTIN-12); MPN SNV3S/1000G in title; SKU 44F-DB7-526."
+      }
+    },
+    {
+      "vendor": "Computer Orbit",
+      "url": "https://computerorbit.com/search?q=kingston%20nv3&type=product",
+      "method": "live HTTP HTML and embedded inline product JSON",
+      "local_ids": {
+        "Shopify_product_id": "15189073592704",
+        "Shopify_variant_id": "56041649045888",
+        "product_handle": "1tb-kingston-nv3-pcie-4-0-nvme-m-2-ssd"
+      },
+      "cross_vendor_evidence": {
+        "variant_sku": "SNV3S/1000G",
+        "vendor": "KINGSTON",
+        "interpretation": "This SKU value equals the manufacturer MPN; verified against Kingston datasheet, not assumed from the sku property name"
+      },
+      "gtin": "No barcode/GTIN field observed",
+      "product_detail": {
+        "url": "https://computerorbit.com/products/1tb-kingston-nv3-pcie-4-0-nvme-m-2-ssd",
+        "method": "live HTTP HTML; inline Shopify variant JSON and JSON-LD Product",
+        "identifiers": {
+          "sku": "SNV3S/1000G",
+          "variant_barcode": "740617344790",
+          "jsonld_mpn": "740617344790",
+          "product_id": "15189073592704",
+          "variant_id": "56041649045888"
+        },
+        "note": "JSON-LD mpn is populated with the barcode. Inline barcode establishes its meaning; actual MPN is SKU SNV3S/1000G.",
+        "summary": "Shopify variant barcode 740617344790; SKU is actual MPN SNV3S/1000G; product/variant IDs. Caution: JSON-LD mpn contains barcode."
+      }
+    },
+    {
+      "vendor": "Bargain Hardware",
+      "url": "https://www.bargainhardware.co.uk/components/memory-ram",
+      "requested_url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=memory",
+      "method": "rendered Chrome DOM; search redirected to category listing",
+      "local_ids": {
+        "data-product-id": "214183",
+        "data-product-sku": "ITM0054201"
+      },
+      "cross_vendor_evidence": {
+        "title_examples": [
+          "Lenovo 03GX338",
+          "Micron MTA18ADF4G72AZ-3G2B3",
+          "Samsung M393A4G43BB4-CWE"
+        ],
+        "jsonld": "ItemList -> Product.name contains part numbers; no separate mpn/gtin property observed"
+      },
+      "gtin": "Not observed",
+      "product_detail": {
+        "url": "https://www.bargainhardware.co.uk/lenovo-03gx338-64gb-pc5-38400b-pb-2rx4-ddr5-4800mhz-ecc-reg-ram",
+        "method": "rendered Chrome DOM; JSON-LD Product and Part Number(s) specification",
+        "identifiers": {
+          "mpn": "03GX338",
+          "sku": "ITM0054201",
+          "model": "Lenovo (03GX338) 64GB PC5-38400B-PB (2RX4, DDR5-4800MHz) ECC REG RAM"
+        },
+        "note": "No GTIN/EAN/UPC observed on this RAM product. Category-prefixed product link redirects to this canonical URL.",
+        "summary": "JSON-LD mpn and Part Number(s): 03GX338; sku ITM0054201. No barcode observed."
+      }
+    },
+    {
+      "vendor": "Newegg UK",
+      "url": "https://www.newegg.com/global/uk-en/p/pl?d=kingston+nv3",
+      "method": "rendered Chrome DOM",
+      "local_ids": {
+        "data-itemnumber": "20-242-902",
+        "url_product_code": "N82E16820242902",
+        "DOM_id": "item_cell_20-242-902_1_0"
+      },
+      "cross_vendor_evidence": {
+        "title_and_image_title_mpn": "SNV3S/1000G"
+      },
+      "gtin": "Not observed",
+      "product_detail": {
+        "url": "https://www.newegg.com/global/uk-en/kingston-1tb-snv3s/p/N82E16820242902",
+        "method": "rendered Chrome DOM; product specification table and inline product data",
+        "identifiers": {
+          "Model": "SNV3S/1000G",
+          "Part Number": "SNV3S/1000G",
+          "inline_UPCCode": "740617344790",
+          "retailer_product_code": "N82E16820242902"
+        },
+        "note": "UPCCode occurs in embedded script data, not the initial visible specification rows.",
+        "summary": "Model/Part Number SNV3S/1000G; inline UPCCode 740617344790; retailer code N82E16820242902."
+      }
+    },
+    {
+      "vendor": "Ebuyer",
+      "url": "https://www.ebuyer.com/searchresults?descriptionfilter=kingston%20nv3",
+      "method": "rendered Chrome DOM after product grid populated",
+      "local_ids": {
+        "li-productid": "73248418",
+        "li-productidoriginal": "732484",
+        "li-sku": "73248418000",
+        "data-insights-object-id": "ebuy_73248418",
+        "colcode": "73248418"
+      },
+      "cross_vendor_evidence": {
+        "brand": "Kingston Technology",
+        "title": "Kingston NV3 1TB Internal M.2 SSD",
+        "mpn": "No complete manufacturer part number found in sampled result cards"
+      },
+      "gtin": "Not observed; do not interpret li-sku as EAN",
+      "product_detail": {
+        "url": "https://www.ebuyer.com/kingston-technology-kingston-nv3-1tb-internal-m2-ssd-732484#colcode=73248418",
+        "method": "rendered Chrome DOM; JSON-LD Product",
+        "identifiers": {
+          "gtin13": "0740617344790",
+          "product_id": "732484",
+          "variant_code": "73248418",
+          "sku_from_results": "73248418000"
+        },
+        "note": "gtin13 is an explicit product identifier missing from sampled results cards. No explicit MPN observed in inspected primary Product object.",
+        "summary": "JSON-LD gtin13 0740617344790; product 732484 and variant 73248418. No explicit MPN observed in inspected Product object."
+      }
+    },
+    {
+      "vendor": "Google Shopping UK",
+      "url": "https://www.google.com/search?q=new+kingston+nv3&udm=28&hl=en-GB&gl=GB",
+      "method": "rendered Chrome DOM",
+      "local_ids": {
+        "data-offer-id": "73248903000",
+        "other": "merchant destination URLs and Google result IDs"
+      },
+      "cross_vendor_evidence": {
+        "some_titles_contain_mpn": "SNV3S/500G; SNV3S/1000G",
+        "observed_alias": "73248903000 also appears as the Ebuyer 500GB li-sku; useful merchant-scoped bridge, not a global product ID"
+      },
+      "gtin": "Not observed",
+      "product_detail": {
+        "url": "https://www.google.com/search?q=new+kingston+nv3&udm=28&hl=en-GB&gl=GB",
+        "method": "rendered Chrome DOM; inspected merchant destination of product result",
+        "identifiers": {
+          "observed_merchant_destination": "https://www.scan.co.uk/products/1tb-kingston-nv3-ssd-m2-2280-pcie-40-x4-nvme-ssd-3d-nand-6000mb-s-read-4000mb-s-write-oem",
+          "merchant_detail_GTIN": "740617344790",
+          "merchant_detail_MPN": "SNV3S/1000G"
+        },
+        "note": "Aggregator, not a retailer detail page. Sample result exposes direct merchant link. No separate Google-owned detail page with standard identifiers was verified; the GTIN/MPN here belong to Scan.",
+        "summary": "Merchant click-through: Scan detail exposes GTIN 740617344790 and MPN SNV3S/1000G. No separate Google-owned detail identifier verified."
+      }
+    },
+    {
+      "vendor": "Gamers Outlet",
+      "url": "https://www.gamers-outlet.net/en/search/windows%2011",
+      "method": "rendered Chrome DOM",
+      "local_ids": {
+        "cart.add_product_id": "3665 (Windows 11 Pro); 765 (Home); 766 (Pro Retail)",
+        "product_url_slug": "buy-windows-11-pro-cd-key-oem-microsoft-global-1"
+      },
+      "cross_vendor_evidence": {
+        "edition_and_licence_labels": "Visible product titles and slugs; no explicit MPN/GTIN found"
+      },
+      "gtin": "Not observed; keep software edition/version/licence channel/region/seats distinct",
+      "product_detail": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-pro-cd-key-oem-microsoft-global-1",
+        "method": "rendered Chrome DOM; JSON-LD Product",
+        "identifiers": {
+          "gtin": "7427282736657",
+          "mpn": "Windows 11 Pro",
+          "model": "Lifetime License",
+          "internal_cart_product_id": "3665"
+        },
+        "note": "Site-declared GTIN passes length/checksum validation, but manufacturer ownership and exact licence SKU mapping were not verified. mpn is a generic edition name rather than an established Microsoft part code; do not auto-match on it.",
+        "summary": "JSON-LD declares gtin 7427282736657, mpn Windows 11 Pro and model Lifetime License. GTIN checksum passes; ownership/exact licence mapping unverified; mpn is generic."
+      }
+    }
+  ],
+  "detail_observed_at": "2026-10-26T20:24:14.439514+00:00",
+  "cross_vendor_detail_match": {
+    "product": "Kingston NV3 1TB M.2 2280",
+    "mpn": "SNV3S/1000G",
+    "gtin12": "740617344790",
+    "gtin13": "0740617344790",
+    "canonical_comparison_gtin14": "00740617344790",
+    "vendors": [
+      "Amazon UK",
+      "Overclockers UK",
+      "Scan",
+      "AWD-IT",
+      "Computer Orbit",
+      "Newegg UK",
+      "Ebuyer"
+    ],
+    "validation": "GTIN length/checksum and zero-padding equivalence checked offline; not a GS1 ownership lookup."
+  }
+}

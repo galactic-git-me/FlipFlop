@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import itertools
+import json
 import os
 from dataclasses import dataclass
 from typing import AsyncIterator
@@ -17,7 +18,7 @@ from fastapi.responses import JSONResponse, StreamingResponse
 UPSTREAM = os.getenv("OLLAMA_UPSTREAM_URL", "http://127.0.0.1:11433").rstrip("/")
 MAX_QUEUE = int(os.getenv("OLLAMA_GATEWAY_MAX_QUEUE", "100"))
 GENERATION_CONCURRENCY = max(1, int(os.getenv("OLLAMA_GATEWAY_CONCURRENCY", "4")))
-OLLAMA_NUM_PARALLEL = max(1, int(os.getenv("OLLAMA_NUM_PARALLEL", "1")))
+OLLAMA_NUM_PARALLEL = max(1, int(os.getenv("OLLAMA_NUM_PARALLEL", "4")))
 GENERATION_PATHS = {"/api/chat", "/api/generate", "/api/embed", "/api/embeddings"}
 READ_ONLY_PATHS = {"/api/tags", "/api/version", "/api/ps"}
 
@@ -56,6 +57,30 @@ class PriorityForwarder:
             await asyncio.gather(*self._worker_tasks, return_exceptions=True)
         if self._client:
             await self._client.aclose()
+
+    async def gpu_request_body(self, body: bytes) -> bytes:
+        """Load without a prompt, then refuse inference unless fully GPU resident."""
+        payload = json.loads(body)
+        model = payload.get("model")
+        if not isinstance(model, str) or not model:
+            raise HTTPException(422, "A local model name is required")
+        options = {**(payload.get("options") or {}), "num_gpu": 999}
+        assert self._client is not None
+        # Empty generation loads the runner without evaluating a user prompt.
+        loaded = await self._client.post(f"{UPSTREAM}/api/generate", json={
+            "model": model, "stream": False, "keep_alive": -1, "options": options,
+        }, timeout=120)
+        loaded.raise_for_status()
+        state = await self._client.get(f"{UPSTREAM}/api/ps", timeout=10)
+        state.raise_for_status()
+        names = {model, model if ":" in model else f"{model}:latest"}
+        resident = next((m for m in state.json().get("models", [])
+            if m.get("name") in names or m.get("model") in names), None)
+        if not resident or not resident.get("size") or resident.get("size_vram", 0) < resident["size"]:
+            raise HTTPException(503, "GPU-only inference required: model is not fully resident on the GPU. CPU fallback is blocked; check Ollama GPU discovery and available VRAM.")
+        payload["options"] = options
+        payload["keep_alive"] = -1
+        return json.dumps(payload).encode()
 
     async def submit(
         self,
@@ -101,6 +126,7 @@ class PriorityForwarder:
                     continue
 
                 assert self._client is not None
+                request.body = await self.gpu_request_body(request.body)
                 upstream_request = self._client.build_request(
                     request.method,
                     f"{UPSTREAM}{request.path}{request.query}",
@@ -109,13 +135,13 @@ class PriorityForwarder:
                 )
                 upstream = await self._client.send(upstream_request, stream=True)
 
-                async def body_stream() -> AsyncIterator[bytes]:
+                async def body_stream(response: httpx.Response = upstream) -> AsyncIterator[bytes]:
                     try:
-                        async for chunk in upstream.aiter_raw():
+                        async for chunk in response.aiter_raw():
                             yield chunk
                     finally:
                         try:
-                            await upstream.aclose()
+                            await response.aclose()
                         finally:
                             self._generation_slots.release()
                             self._queue.task_done()
@@ -130,7 +156,7 @@ class PriorityForwarder:
             except Exception as exc:  # noqa: BLE001 - forwarded to the caller
                 if not request.result.done():
                     request.result.set_exception(
-                        HTTPException(status_code=502, detail=f"Ollama upstream unavailable: {exc}")
+                        exc if isinstance(exc, HTTPException) else HTTPException(status_code=502, detail=f"Ollama upstream unavailable: {exc}")
                     )
             finally:
                 if not slot_transferred_to_stream:
@@ -166,6 +192,7 @@ def create_app(priority: int, name: str) -> FastAPI:
             "priority": name,
             "generation_concurrency": GENERATION_CONCURRENCY,
             "ollama_num_parallel": OLLAMA_NUM_PARALLEL,
+            "gpu_only": True,
         })
 
     @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"])

@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Package, Plus, Trash2, ArrowRight, Layers } from "lucide-react";
+import { Package, Plus, Trash2, ArrowRight, Layers, Sparkles } from "lucide-react";
 import { api, ManualBuildSummary } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
 import { VendorLogo } from "@/components/VendorLogo";
@@ -140,13 +140,14 @@ function BuildsPageInner() {
           <Package className="w-5 h-5 text-[#00dc82]" />
           <h1 className="text-xl font-black">Pre-Built</h1>
         </div>
-        <button
-          onClick={() => router.push("/add-build")}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold bg-cyan-500 hover:bg-cyan-400 text-black rounded-lg transition-colors"
-        >
-          <Plus className="w-3.5 h-3.5" />
-          Create Pre-Built
-        </button>
+        <div className="flex items-center gap-2">
+          <button onClick={() => router.push("/add-build")} className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold border border-cyan-400/30 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-200 rounded-lg transition-colors">
+            <Plus className="w-3.5 h-3.5" /> Manual build
+          </button>
+          <button onClick={() => router.push("/add-build/ai")} className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold bg-[#00dc82] hover:bg-[#18e991] text-black rounded-lg transition-colors">
+            <Sparkles className="w-3.5 h-3.5" /> AI-created
+          </button>
+        </div>
       </div>
 
       {/* Summary row */}
@@ -157,7 +158,7 @@ function BuildsPageInner() {
             <p className="text-2xl font-black">{builds.length}</p>
           </div>
           <div className="flex-1 rounded-xl p-4 border border-white/[0.07] bg-white/[0.02]">
-            <p className="text-xs text-slate-500 mb-1">Total invested</p>
+            <p className="text-xs text-slate-500 mb-1">Total paid</p>
             <p className="text-2xl font-black text-[#00dc82]">
               {formatCurrency(builds.reduce((s, b) => s + (b.total_cost ?? 0), 0))}
             </p>
@@ -172,12 +173,10 @@ function BuildsPageInner() {
         <div className="flex flex-col items-center justify-center py-24 gap-4 text-slate-500">
           <Package className="w-10 h-10 opacity-20" />
           <p className="text-sm">No builds yet.</p>
-          <button
-            onClick={() => router.push("/add-build")}
-            className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold bg-cyan-500 hover:bg-cyan-400 text-black rounded-lg transition-colors"
-          >
-            <Plus className="w-3.5 h-3.5" /> Create Your First Pre-Built
-          </button>
+          <div className="flex gap-2">
+            <button onClick={() => router.push("/add-build")} className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold border border-cyan-400/30 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-200 rounded-lg transition-colors"><Plus className="w-3.5 h-3.5" /> Manual build</button>
+            <button onClick={() => router.push("/add-build/ai")} className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold bg-[#00dc82] hover:bg-[#18e991] text-black rounded-lg transition-colors"><Sparkles className="w-3.5 h-3.5" /> AI-created</button>
+          </div>
         </div>
       ) : (
         <div className="flex flex-col gap-3">
@@ -230,7 +229,10 @@ function BuildCard({
       </div>
 
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-slate-100 truncate">{build.name}</p>
+        <div className="flex items-center gap-2 min-w-0">
+          <p className="text-sm font-semibold text-slate-100 truncate">{build.name}</p>
+          <span className={`shrink-0 rounded border px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide ${build.creation_method === "ai" || build.creation_method === "gem_spotlight" ? "border-[#00dc82]/30 bg-[#00dc82]/10 text-[#00dc82]" : "border-slate-500/30 bg-slate-500/10 text-slate-400"}`}>{build.creation_method === "ai" ? "AI-built" : build.creation_method === "gem_spotlight" ? "Gem spotlight" : "Manual"}</span>
+        </div>
         <p className="text-[11px] text-slate-500 mt-0.5">
           {build.component_count} component{build.component_count === 1 ? "" : "s"} · updated {formatDate(build.updated_at)}
         </p>
@@ -260,9 +262,23 @@ function BuildCard({
         {STATUS_LABEL[build.status] ?? build.status}
       </div>
 
-      <div className="text-right shrink-0">
-        <p className="text-xs text-slate-500">Total paid</p>
-        <p className="text-sm font-semibold">{build.total_cost != null ? formatCurrency(build.total_cost) : "—"}</p>
+      <div className="grid grid-cols-3 gap-4 text-right shrink-0">
+        <div>
+          <p className="text-xs text-slate-500">Total paid</p>
+          <p className="text-sm font-semibold">{(build.creation_method === "ai" || build.creation_method === "gem_spotlight") && build.total_cost === 0 ? "—" : build.total_cost != null ? formatCurrency(build.total_cost) : "—"}</p>
+        </div>
+        <div>
+          <p className="text-xs text-slate-500">Listing price</p>
+          <p className="text-sm font-semibold text-emerald-300">{build.ebay_price != null ? formatCurrency(build.ebay_price) : "—"}</p>
+        </div>
+        <div>
+          <p className="text-xs text-slate-500">Est. profit</p>
+          <p className={`text-sm font-semibold ${build.ebay_price != null && build.total_cost != null ? build.ebay_price - build.total_cost >= 0 ? "text-emerald-300" : "text-red-300" : "text-slate-500"}`}>
+            {build.ebay_price != null && build.total_cost != null
+              ? formatCurrency(build.ebay_price - build.total_cost)
+              : "—"}
+          </p>
+        </div>
       </div>
 
       <button

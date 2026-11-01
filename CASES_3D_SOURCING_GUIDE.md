@@ -1,9 +1,9 @@
 # 3D Case Model Sourcing Guide
 
 ## Overview
-You have **226 unique PC cases** in the database. To launch the customer builder, you need **20-30 cases with 3D models**, prioritized by **Amazon bestseller rank** (most popular first).
+Amazon's **top 100 ranked cases** are the default customer-builder case catalogue. Every case in that set should be eligible for photo and 3D sourcing; the frozen top-30 campaign is an optional prioritisation view, not a generation requirement.
 
-**Target:** Top 30 bestsellers + Geometry Green case
+**Target:** Amazon Top 100 cases, plus any separately curated custom cases.
 
 ## Target Deliverables (4 items)
 
@@ -190,10 +190,10 @@ Google's new full-web search offering. Until that access is provisioned, use
 the image-upload control in the 3D review screen to add owner-approved
 manufacturer images.
 
-### Step 1: Visit /cases-3d-sourcing
-- Shows top 30 cases by Amazon bestseller rank
-- Geometry Green case at top
-- Systematic checklist for each case
+### Step 1: Visit /cases-3d-priority
+- The default `Amazon Top 100` view shows ranked Amazon cases without a deployed model.
+- The `Priority campaign` view is optional and may be frozen for a separate top-30 review workflow.
+- Case photo sourcing runs for the Amazon top 100 as well as frozen campaign cases.
 
 ### Step 2: For each case, collect 4 deliverables:
 
@@ -219,9 +219,10 @@ manufacturer images.
 - Key features (tempered glass, cable management, design style)
 - Why it's special: value, performance, aesthetics, silence, etc
 
-### Step 3: Mark complete
-- Click "Complete" when all sources found
-- Page tracks progress toward 30 cases
+### Step 3: Finish the sourcing checks
+- Record the manufacturer 3D search and third-party model search outcomes.
+- Approve the exact listing photos and the separate one-to-four-picture model reference set.
+- A case does not need a frozen campaign rank to generate a model.
 
 ### Step 4: Begin 3D modeling
 - Use CAD files as base (if available)
@@ -261,18 +262,16 @@ site:grabcad.com "Case Name" filetype:step
 
 ---
 
-## Cases by Priority (Top 30)
+## Amazon cases by priority (Top 100)
 
-Run query to get top 30 by bestseller_rank:
+Run query to get Amazon's top 100 by bestseller rank:
 ```sql
 SELECT id, name, bestseller_rank, price, rating, review_count
 FROM parts
 WHERE category = 'case' AND bestseller_rank IS NOT NULL
 ORDER BY bestseller_rank ASC
-LIMIT 31;  -- 31 for Geometry Green
+LIMIT 100;
 ```
-
-Plus your **Geometry Green** custom case at top.
 
 ---
 

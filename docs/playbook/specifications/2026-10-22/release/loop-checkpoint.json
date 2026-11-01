@@ -1,0 +1,17 @@
+{
+  "goal": "publishable reconstructed Playbook",
+  "status": "active_not_complete",
+  "specification_version": "0.2.1",
+  "focused_tests_passed": 56,
+  "sale_ready_cells": 0,
+  "production_changed": false,
+  "next": [
+    "Complete an economically viable exact-source entry basket with known postage and supplier ETA",
+    "Resolve exact compatibility and licence-rights evidence",
+    "Collect qualified recent complete-PC sold detail cohorts",
+    "Prepare the exact final revision for owner approval"
+  ],
+  "environment": "C: fluctuates between zero and tens of MB; small integrations complete, substantial disk headroom still pending. Tests and browsers use R:.",
+  "latest_evidence": "release/research-20261022T202400Z/manifest.json",
+  "identity_and_default_discovery_repairs": "integrated; production contract checks pass"
+}

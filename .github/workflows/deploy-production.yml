@@ -22,10 +22,25 @@ permissions:
 jobs:
   verify-release:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: flipflop_release_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d flipflop_release_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
     outputs:
       release_sha: ${{ steps.release.outputs.sha }}
     env:
       OLLAMA_MODEL: disabled-in-ci
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/flipflop_release_test
+      SYNC_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/flipflop_release_test
+      TEST_DATABASE_URL: postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/flipflop_release_test
+      FLIPFLOP_TEST_ADMIN_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
       EBAY_TOKEN_ENCRYPTION_KEY: ci-only-ebay-token-encryption-test-key
     defaults:
       run:
@@ -67,14 +82,17 @@ jobs:
         run: pip install -r requirements.txt -r requirements-dev.txt pytest pytest-asyncio
       - name: Verify eBay OAuth and price alerts
         run: >-
-          python -m pytest -q
+          python scripts/run_isolated_tests.py -- -q
           tests/test_ebay_oauth.py
+          tests/test_browser_listing_jobs.py
           tests/test_component_price_alert_matching.py
 
   deploy:
     needs: verify-release
     runs-on: ubuntu-latest
     environment: production
+    env:
+      EXTENSION_DISPATCH_TOKEN: ${{ secrets.FLIPFLOP_EXTENSION_DISPATCH_TOKEN }}
     steps:
       - name: Configure SSH
         env:
@@ -86,6 +104,37 @@ jobs:
           chmod 600 ~/.ssh/andromeda
           printf '%s\n' "$SSH_HOST_KEY" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
+      - name: Provision Google Merchant service-account key
+        env:
+          GOOGLE_MERCHANT_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_MERCHANT_SERVICE_ACCOUNT_JSON }}
+          ANDROMEDA_HOST: ${{ secrets.ANDROMEDA_HOST }}
+          ANDROMEDA_USER: ${{ secrets.ANDROMEDA_USER }}
+          ANDROMEDA_PORT: ${{ secrets.ANDROMEDA_PORT }}
+        run: |
+          test -n "$GOOGLE_MERCHANT_SERVICE_ACCOUNT_JSON" || {
+            echo "Missing GOOGLE_MERCHANT_SERVICE_ACCOUNT_JSON production environment secret." >&2
+            exit 1
+          }
+          printf '%s' "$GOOGLE_MERCHANT_SERVICE_ACCOUNT_JSON" | ssh -i ~/.ssh/andromeda \
+            -p "${ANDROMEDA_PORT:-22}" \
+            "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
+            provision-google-merchant-key
+      - name: Provision Chrome worker authentication key
+        env:
+          CROSS_LISTING_WORKER_KEY: ${{ secrets.CROSS_LISTING_WORKER_KEY }}
+          ANDROMEDA_HOST: ${{ secrets.ANDROMEDA_HOST }}
+          ANDROMEDA_USER: ${{ secrets.ANDROMEDA_USER }}
+          ANDROMEDA_PORT: ${{ secrets.ANDROMEDA_PORT }}
+        run: |
+          test "${#CROSS_LISTING_WORKER_KEY}" -ge 48 || {
+            echo "Missing or invalid CROSS_LISTING_WORKER_KEY production environment secret." >&2
+            exit 1
+          }
+          printf 'CROSS_LISTING_WORKER_KEY=%s\n' "$CROSS_LISTING_WORKER_KEY" | \
+            ssh -i ~/.ssh/andromeda \
+              -p "${ANDROMEDA_PORT:-22}" \
+              "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
+              provision-browser-worker-key
       - name: Deploy tagged Andromeda services
         env:
           ANDROMEDA_HOST: ${{ secrets.ANDROMEDA_HOST }}
@@ -96,15 +145,8 @@ jobs:
             -p "${ANDROMEDA_PORT:-22}" \
             "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
             "/home/mac/CODING/FlipFlop-production/deploy/deploy-andromeda.sh '${{ needs.verify-release.outputs.release_sha }}'"
-      - name: Require extension dispatch token
-        env:
-          EXTENSION_DISPATCH_TOKEN: ${{ secrets.FLIPFLOP_EXTENSION_DISPATCH_TOKEN }}
-        run: |
-          test -n "$EXTENSION_DISPATCH_TOKEN" || {
-            echo "Missing FLIPFLOP_EXTENSION_DISPATCH_TOKEN production secret." >&2
-            exit 1
-          }
       - name: Build DEV and LIVE extensions
+        if: env.EXTENSION_DISPATCH_TOKEN != ''
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.FLIPFLOP_EXTENSION_DISPATCH_TOKEN }}

@@ -1,0 +1,489 @@
+[
+  {
+    "listing_id": "awd_it:kingston-nv3-2230-1tb-gen4-m-2-nvme-6000mb-s-5000mb-s-snv3sm3-1t0.html",
+    "source": "awd_it",
+    "title": "Kingston NV3 2230 1TB Gen4 M.2 NVMe 6000MB/s 5000MB/s - SNV3SM3/1T0",
+    "category": null,
+    "condition_normalised": "new",
+    "listing_type": "buy_it_now",
+    "item_price": 217.98,
+    "observed_at": "2026-10-26 04:05:50.780000",
+    "mpn": null,
+    "cpk": "ec8a57169613a564",
+    "cpk_data": {
+      "cpk": "ec8a57169613a564",
+      "brand": "kingston",
+      "model": "nv3-2230-1tb",
+      "specs": {
+        "interface": "nvme",
+        "speed_mbps": null,
+        "capacity_gb": 1000,
+        "form_factor": "m.2"
+      },
+      "category": "ssd",
+      "confidence": 0.95
+    },
+    "commercial_source_evidence": {
+      "observed_at": "2026-10-26T04:05:50.780000+00:00",
+      "url": "https://www.awd-it.co.uk/kingston-nv3-2230-1tb-gen4-m-2-nvme-6000mb-s-5000mb-s-snv3sm3-1t0.html",
+      "item_gbp": "217.98",
+      "delivery_gbp": "0.0",
+      "source_currency": null,
+      "source_item_price": null,
+      "exchange_rate": null,
+      "exchange_rate_date": null,
+      "exchange_rate_source": null,
+      "stock_status": "unknown",
+      "stock_evidence": null
+    },
+    "scored_url": "https://www.awd-it.co.uk/catalogsearch/result/?q=Kingston+NV3+2230+1TB+Gen4+M.2+NVMe+6000MB%2Fs+5000MB%2Fs+-+SNV3SM3%2F1T0",
+    "canonical_url": null
+  },
+  {
+    "listing_id": "awd_it:kingston-nv3-pcie-4-0-nvme-ssd-1tb-m-2-2280-snv3s-1000g-read-6000mb-s-write-4000mb-s.html",
+    "source": "awd_it",
+    "title": "Kingston NV3 PCIe 4.0 NVMe SSD 1TB M.2 2280 - SNV3S/1000G - Read 6000MB/s, Write 4000MB/s",
+    "category": null,
+    "condition_normalised": "new",
+    "listing_type": "buy_it_now",
+    "item_price": 146.38,
+    "observed_at": "2026-10-26 04:38:41.711000",
+    "mpn": null,
+    "cpk": "1d3b114dff95aeb7",
+    "cpk_data": {
+      "cpk": "1d3b114dff95aeb7",
+      "brand": "fanxiang",
+      "model": "nvme-ssd-1tb-m2",
+      "specs": {
+        "interface": "nvme",
+        "speed_mbps": 7100000,
+        "capacity_gb": 1000,
+        "form_factor": "m.2"
+      },
+      "category": "ssd",
+      "confidence": 0.95
+    },
+    "commercial_source_evidence": null,
+    "scored_url": "https://www.awd-it.co.uk/catalogsearch/result/?q=Kingston+NV3+PCIe+4.0+NVMe+SSD+1TB+M.2+2280+-+SNV3S%2F1000G+-+Read+6000MB%2Fs%2C+Write+4000MB%2Fs",
+    "canonical_url": null
+  },
+  {
+    "listing_id": "awd_it:samsung-990-pro-2tb-m-2-pcie-4-0-nvme-ssd-mz-v9p2t0cw.html",
+    "source": "awd_it",
+    "title": "Samsung 990 PRO 2TB M.2 PCIe 4.0 NVMe SSD - MZ-V9P2T0CW",
+    "category": null,
+    "condition_normalised": "new",
+    "listing_type": "buy_it_now",
+    "item_price": 990.0,
+    "observed_at": "2026-10-13 15:36:27.056000",
+    "mpn": null,
+    "cpk": "368752d4ec55daa9",
+    "cpk_data": {
+      "cpk": "368752d4ec55daa9",
+      "brand": "samsung",
+      "model": "990-pro-2tb",
+      "specs": {
+        "interface": "nvme",
+        "speed_mbps": null,
+        "capacity_gb": 2,
+        "form_factor": "m.2"
+      },
+      "category": "ssd",
+      "confidence": 1.0
+    },
+    "commercial_source_evidence": null,
+    "scored_url": "https://www.awd-it.co.uk/catalogsearch/result/?q=Samsung+990+PRO+2TB+M.2+PCIe+4.0+NVMe+SSD+-+MZ-V9P2T0CW",
+    "canonical_url": null
+  },
+  {
+    "listing_id": "awd_it:samsung-990-pro-2tb-ssd-pcie-4-0-nvme-m-2-solid-state-drive-mz-v9p2t0bw.html",
+    "source": "awd_it",
+    "title": "Samsung 990 PRO 2TB SSD PCIe 4.0 NVMe M.2 Solid State Drive - MZ-V9P2T0BW",
+    "category": null,
+    "condition_normalised": "new",
+    "listing_type": "buy_it_now",
+    "item_price": 388.04,
+    "observed_at": "2026-10-26 04:38:41.709000",
+    "mpn": null,
+    "cpk": "368752d4ec55daa9",
+    "cpk_data": {
+      "cpk": "368752d4ec55daa9",
+      "brand": "samsung",
+      "model": "990-pro-2tb",
+      "specs": {
+        "interface": "nvme",
+        "speed_mbps": null,
+        "capacity_gb": 2048,
+        "form_factor": "m.2"
+      },
+      "category": "ssd",
+      "confidence": 0.95
+    },
+    "commercial_source_evidence": {
+      "observed_at": "2026-10-26T04:38:41.709000+00:00",
+      "url": "https://www.awd-it.co.uk/samsung-990-pro-2tb-ssd-pcie-4-0-nvme-m-2-solid-state-drive-mz-v9p2t0bw.html",
+      "item_gbp": "388.04",
+      "delivery_gbp": "0.0",
+      "source_currency": null,
+      "source_item_price": null,
+      "exchange_rate": null,
+      "exchange_rate_date": null,
+      "exchange_rate_source": null,
+      "stock_status": "unknown",
+      "stock_evidence": null
+    },
+    "scored_url": "https://www.awd-it.co.uk/catalogsearch/result/?q=Samsung+990+PRO+2TB+SSD+PCIe+4.0+NVMe+M.2+Solid+State+Drive+-+MZ-V9P2T0BW",
+    "canonical_url": null
+  },
+  {
+    "listing_id": "computer_orbit:1tb-kingston-nv3-pcie-4-0-nvme-m-2-ssd",
+    "source": "computer_orbit",
+    "title": "1TB Kingston NV3 PCIe 4.0 NVMe M.2 SSD",
+    "category": null,
+    "condition_normalised": "new",
+    "listing_type": "buy_it_now",
+    "item_price": 135.0,
+    "observed_at": "2026-10-26 04:41:09.516000",
+    "mpn": null,
+    "cpk": "39f5e120c5269634",
+    "cpk_data": {
+      "cpk": "39f5e120c5269634",
+      "brand": "kingston",
+      "model": "nv3-1tb",
+      "specs": {
+        "interface": "nvme",
+        "speed_mbps": null,
+        "capacity_gb": 1024,
+        "form_factor": "m.2"
+      },
+      "category": "ssd",
+      "confidence": 0.95
+    },
+    "commercial_source_evidence": null,
+    "scored_url": "https://computerorbit.com/search?q=1TB+Kingston+NV3+PCIe+4.0+NVMe+M.2+SSD&type=product",
+    "canonical_url": null
+  },
+  {
+    "listing_id": "ebuyer:corsair-vengeance-lpx-ddr4-ram-32gb-2x16gb-3200mhz-713161",
+    "source": "ebuyer",
+    "title": "Corsair\nVENGEANCE LPX DDR4 RAM 32GB (2x16GB) 3200MHz",
+    "category": null,
+    "condition_normalised": "new",
+    "listing_type": "buy_it_now",
+    "item_price": 349.99,
+    "observed_at": "2026-10-15 15:16:18.481000",
+    "mpn": null,
+    "cpk": "48d311db95b94dcc",
+    "cpk_data": {
+      "cpk": "48d311db95b94dcc",
+      "brand": "corsair",
+      "model": "vengeance-lpx",
+      "specs": {
+        "ecc": null,
+        "type": "ddr4",
+        "speed_mhz": 3600,
+        "capacity_gb": 8
+      },
+      "category": "ram",
+      "confidence": 1.0
+    },
+    "commercial_source_evidence": {
+      "observed_at": "2026-10-15T15:16:18.481000+00:00",
+      "url": "https://www.ebuyer.com/corsair-vengeance-lpx-ddr4-ram-32gb-2x16gb-3200mhz-713161#colcode=71316103",
+      "item_gbp": "349.99",
+      "delivery_gbp": "0.0",
+      "stock_status": "unknown",
+      "stock_evidence": null
+    },
+    "scored_url": "https://www.ebay.co.uk/itm/ebuyer:corsair-vengeance-lpx-ddr4-ram-32gb-2x16gb-3200mhz-713161",
+    "canonical_url": "https://www.ebay.co.uk/itm/ebuyer:corsair-vengeance-lpx-ddr4-ram-32gb-2x16gb-3200mhz-713161"
+  },
+  {
+    "listing_id": "ebuyer:kingston-technology-kingston-nv3-1tb-internal-m2-ssd-732484",
+    "source": "ebuyer",
+    "title": "Kingston Technology\nKingston NV3 1TB Internal M.2 SSD",
+    "category": null,
+    "condition_normalised": "new",
+    "listing_type": "buy_it_now",
+    "item_price": 149.99,
+    "observed_at": "2026-10-15 15:16:52.410000",
+    "mpn": null,
+    "cpk": "39f5e120c5269634",
+    "cpk_data": {
+      "cpk": "39f5e120c5269634",
+      "brand": "kingston",
+      "model": "nv3-1tb",
+      "specs": {
+        "gen": 4,
+        "interface": "nvme",
+        "capacity_gb": 1024,
+        "form_factor": "m.2"
+      },
+      "category": "ssd",
+      "confidence": 0.95
+    },
+    "commercial_source_evidence": null,
+    "scored_url": "https://www.ebay.co.uk/itm/ebuyer:kingston-technology-kingston-nv3-1tb-internal-m2-ssd-732484",
+    "canonical_url": null
+  },
+  {
+    "listing_id": "ebuyer:s-write-internal-ssd-700774",
+    "source": "ebuyer",
+    "title": "Samsung\n990 PRO NVMe M.2 SSD 2TB PCIe 4.0 7450 MB/s read 6900 MB/s write Internal SSD",
+    "category": null,
+    "condition_normalised": "new",
+    "listing_type": "buy_it_now",
+    "item_price": 349.99,
+    "observed_at": "2026-10-15 15:17:16.779000",
+    "mpn": null,
+    "cpk": "74f4e755229f692e",
+    "cpk_data": {
+      "cpk": "ba16b11d9b78acda",
+      "brand": "samsung",
+      "model": "990-pro-nvme-m2-ssd-2tb",
+      "specs": {
+        "interface": "nvme",
+        "speed_mbps": {
+          "read": 7450,
+          "write": 6900
+        },
+        "capacity_gb": 2048,
+        "form_factor": "m.2"
+      },
+      "category": "ssd",
+      "confidence": 1.0
+    },
+    "commercial_source_evidence": {
+      "observed_at": "2026-10-15T15:17:16.779000+00:00",
+      "url": "https://www.ebuyer.com/samsung-990-pro-nvme-m2-ssd-2tb-pcie-40-7450-mb/s-read-6900-mb/s-write-internal-ssd-700774#colcode=70077403",
+      "item_gbp": "349.99",
+      "delivery_gbp": "0.0",
+      "stock_status": "unknown",
+      "stock_evidence": null
+    },
+    "scored_url": "https://www.ebay.co.uk/itm/ebuyer:s-write-internal-ssd-700774",
+    "canonical_url": null
+  },
+  {
+    "listing_id": "HD-24R-SA",
+    "source": "overclockers",
+    "title": "Samsung 990 Pro 2TB M.2 2280 PCI-e 4.0 x4 NVMe 1.3c Solid State Drive",
+    "category": null,
+    "condition_normalised": "new",
+    "listing_type": "buy_it_now",
+    "item_price": 399.95,
+    "observed_at": "2026-10-26 04:41:54.011000",
+    "mpn": null,
+    "cpk": "54033a100e32fa43",
+    "cpk_data": {
+      "cpk": "54033a100e32fa43",
+      "brand": "samsung",
+      "model": "990-pro",
+      "specs": {},
+      "category": "ssd",
+      "confidence": 0.85,
+      "extraction_method": "deterministic"
+    },
+    "commercial_source_evidence": {
+      "observed_at": "2026-10-26T04:41:54.011000+00:00",
+      "url": "https://www.overclockers.co.uk/samsung-990-pro-2tb-m.2-2280-pci-e-4.0-x4-nvme-1.3c-solid-state-drive/HD-24R-SA.html",
+      "item_gbp": "399.95",
+      "delivery_gbp": "0.0",
+      "source_currency": null,
+      "source_item_price": null,
+      "exchange_rate": null,
+      "exchange_rate_date": null,
+      "exchange_rate_source": null,
+      "stock_status": "available",
+      "stock_evidence": "In Stock"
+    },
+    "scored_url": "https://www.overclockers.co.uk/search?sSearch=Samsung+990+Pro+2TB+M.2+2280+PCI-e+4.0+x4+NVMe+1.3c+Solid+State+Drive",
+    "canonical_url": null
+  },
+  {
+    "listing_id": "LN130047",
+    "source": "scan",
+    "title": "Quick view2TB Samsung 990 PRO, M.2 (2280), PCIe 4.0 (x4) NVMe SSD, MLC 3D V-NAND, 7450MB/s Read, 6900MB/s Write, PC/PS5Samsung 990 PRO 2TB M.2 PCIe 4.0 NVMe SSD/Solid State Drive PC/PS5",
+    "category": null,
+    "condition_normalised": "new",
+    "listing_type": "buy_it_now",
+    "item_price": 439.99,
+    "observed_at": "2026-10-15 04:45:52.279000",
+    "mpn": null,
+    "cpk": "368752d4ec55daa9",
+    "cpk_data": {
+      "cpk": "368752d4ec55daa9",
+      "brand": "samsung",
+      "model": "990-pro-2tb",
+      "specs": {
+        "interface": "nvme",
+        "speed_mbps": {
+          "read": 7450000,
+          "write": 6900000
+        },
+        "capacity_gb": 2048,
+        "form_factor": "m.2"
+      },
+      "category": "ssd",
+      "confidence": 1.0
+    },
+    "commercial_source_evidence": {
+      "observed_at": "2026-10-15T04:45:52.279000+00:00",
+      "url": "https://www.scan.co.uk/products/2tb-samsung-990-pro-m2-2280-pcie-40-x4-nvme-ssd-mlc-3d-v-nand-7450mb-s-read-6900mb-s-write-pc-ps5",
+      "item_gbp": "439.99",
+      "delivery_gbp": "0.0",
+      "stock_status": "unknown",
+      "stock_evidence": null
+    },
+    "scored_url": "https://www.ebay.co.uk/itm/LN130047",
+    "canonical_url": null
+  },
+  {
+    "listing_id": "LN169771",
+    "source": "scan",
+    "title": "Quick view1TB Kingston NV3 SSD, M.2 (2230), PCIe 4.0 (x4) NVMe, 3D NAND, 6000MB/s Read, 4000MB/s WriteKingston NV3 1TB M.2 (2230) PCIe Gen 4 NVMe SSD / Solid State Drive",
+    "category": null,
+    "condition_normalised": "new",
+    "listing_type": "buy_it_now",
+    "item_price": 219.98,
+    "observed_at": "2026-10-26 04:03:00.361000",
+    "mpn": null,
+    "cpk": "39f5e120c5269634",
+    "cpk_data": {
+      "cpk": "39f5e120c5269634",
+      "brand": "kingston",
+      "model": "nv3-1tb",
+      "specs": {
+        "gen": 4,
+        "interface": "nvme",
+        "capacity_gb": 1024,
+        "form_factor": "m.2"
+      },
+      "category": "ssd",
+      "confidence": 0.95
+    },
+    "commercial_source_evidence": null,
+    "scored_url": "https://www.ebay.co.uk/itm/LN169771",
+    "canonical_url": null
+  },
+  {
+    "listing_id": "MEM-CRS-08411",
+    "source": "overclockers",
+    "title": "Corsair Vengeance LPX 32GB (2x16GB) DDR4 C16 3200MHz Dual Channel Kit - Black",
+    "category": null,
+    "condition_normalised": "new",
+    "listing_type": "buy_it_now",
+    "item_price": 299.99,
+    "observed_at": "2026-10-26 04:35:21.567000",
+    "mpn": null,
+    "cpk": "9bf92e72c4e5feca",
+    "cpk_data": {
+      "cpk": "6500e5885cd2f8c2",
+      "brand": "corsair",
+      "model": "vengeance-lpx-32gb",
+      "specs": {
+        "ecc": null,
+        "type": "ddr4",
+        "speed_mhz": 3200,
+        "capacity_gb": 32
+      },
+      "category": "ram",
+      "confidence": 1.0
+    },
+    "commercial_source_evidence": {
+      "observed_at": "2026-10-26T04:35:21.567000+00:00",
+      "url": "https://www.overclockers.co.uk/corsair-vengeance-lpx-32gb-2x16gb-ddr4-c16-3200mhz-dual-channel-kit-black/MEM-CRS-08411.html",
+      "item_gbp": "299.99",
+      "delivery_gbp": "0.0",
+      "source_currency": null,
+      "source_item_price": null,
+      "exchange_rate": null,
+      "exchange_rate_date": null,
+      "exchange_rate_source": null,
+      "stock_status": "available",
+      "stock_evidence": "In Stock"
+    },
+    "scored_url": "https://www.overclockers.co.uk/search?sSearch=Corsair+Vengeance+LPX+32GB+%282x16GB%29+DDR4+C16+3200MHz+Dual+Channel+Kit+-+Black",
+    "canonical_url": null
+  },
+  {
+    "listing_id": "MY-49E-CS",
+    "source": "overclockers",
+    "title": "Corsair Vengeance LPX 32GB (4x8GB) DDR4 PC4-25600C16 3200MHz Quad Channel Kit -",
+    "category": null,
+    "condition_normalised": "new",
+    "listing_type": "buy_it_now",
+    "item_price": 299.99,
+    "observed_at": "2026-10-26 04:35:38.803000",
+    "mpn": null,
+    "cpk": "9bf92e72c4e5feca",
+    "cpk_data": {
+      "cpk": "9bf92e72c4e5feca",
+      "brand": "corsair",
+      "model": "vengeance-lpx-32gb",
+      "specs": {
+        "ecc": null,
+        "type": "ddr4",
+        "speed_mhz": 3200,
+        "capacity_gb": 32
+      },
+      "category": "ram",
+      "confidence": 1.0
+    },
+    "commercial_source_evidence": {
+      "observed_at": "2026-10-26T04:35:38.803000+00:00",
+      "url": "https://www.overclockers.co.uk/MY-49E-CS.html",
+      "item_gbp": "299.99",
+      "delivery_gbp": "0.0",
+      "source_currency": null,
+      "source_item_price": null,
+      "exchange_rate": null,
+      "exchange_rate_date": null,
+      "exchange_rate_source": null,
+      "stock_status": "available",
+      "stock_evidence": "In Stock"
+    },
+    "scored_url": "https://www.overclockers.co.uk/search?sSearch=Corsair+Vengeance+LPX+32GB+%284x8GB%29+DDR4+PC4-25600C16+3200MHz+Quad+Channel+Kit+-",
+    "canonical_url": "https://www.overclockers.co.uk/search?sSearch=Corsair+Vengeance+LPX+32GB+%284x8GB%29+DDR4+PC4-25600C16+3200MHz+Quad+Channel+Kit+-"
+  },
+  {
+    "listing_id": "STO-KNG-02942",
+    "source": "overclockers",
+    "title": "Kingston NV3 1TB PCI-e 4.0 NVMe M.2 Solid State Drive (SNV3S/1000G)",
+    "category": null,
+    "condition_normalised": "new",
+    "listing_type": "buy_it_now",
+    "item_price": 159.95,
+    "observed_at": "2026-10-26 04:41:54.012000",
+    "mpn": null,
+    "cpk": "39f5e120c5269634",
+    "cpk_data": {
+      "cpk": "be66fd90379c48f1",
+      "brand": "kingston",
+      "model": "nv3-1tb",
+      "specs": {
+        "interface": "nvme",
+        "speed_mbps": null,
+        "capacity_gb": 1000,
+        "form_factor": "m.2"
+      },
+      "category": "ssd",
+      "confidence": 1.0
+    },
+    "commercial_source_evidence": {
+      "observed_at": "2026-10-26T04:41:54.012000+00:00",
+      "url": "https://www.overclockers.co.uk/kingston-nv3-1tb-pci-e-4.0-nvme-m.2-solid-state-drive-snv3s-1000g/STO-KNG-02942.html",
+      "item_gbp": "159.95",
+      "delivery_gbp": "0.0",
+      "source_currency": null,
+      "source_item_price": null,
+      "exchange_rate": null,
+      "exchange_rate_date": null,
+      "exchange_rate_source": null,
+      "stock_status": "available",
+      "stock_evidence": "In Stock"
+    },
+    "scored_url": "https://www.overclockers.co.uk/search?sSearch=Kingston+NV3+1TB+PCI-e+4.0+NVMe+M.2+Solid+State+Drive+%28SNV3S%2F1000G%29",
+    "canonical_url": null
+  }
+]

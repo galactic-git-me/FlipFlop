@@ -11,15 +11,24 @@ const allowedOrigins = [
 ];
 
 // In Docker the backend is reachable at http://backend:8000.
-// In local dev it falls back to localhost:4311.
+// In local dev it falls back to localhost:4314.
 const backendUrl = process.env.BACKEND_URL ?? "http://localhost:4311";
 // Gem Radar is mounted in the main API for local development. Deployments
 // that run it as a separate service can continue to provide GEMRADAR_URL.
 const gemradarUrl = process.env.GEMRADAR_URL ?? backendUrl;
 const ebayOpsBackendUrl = (process.env.EBAY_OPS_BACKEND_URL ?? backendUrl).replace(/\/$/, "");
 
+// DEV and PROD admin now run as two simultaneous, always-on instances from
+// this SAME checkout (no git worktree/second clone). Without a distinct
+// build output per instance they'd share .next and corrupt each other's
+// build manifest across concurrent writes. NEXT_DIST_DIR lets each service
+// point at its own directory; unset (e.g. plain `npm run dev` locally)
+// falls back to the Next.js default ".next".
+const distDir = process.env.NEXT_DIST_DIR?.trim() || ".next";
+
 const nextConfig: NextConfig = {
   output: "standalone",
+  distDir,
   turbopack: {
     root: path.join(__dirname),
   },
@@ -41,7 +50,7 @@ const nextConfig: NextConfig = {
         source: "/api/gem-radar/:path*",
         destination: `${gemradarUrl}/api/gem-radar/:path*`,
       },
-      // Main backend (port 4311 by default)
+      // Main backend (port 4314 by default)
       {
         source: "/api/:path*",
         destination: `${backendUrl}/api/:path*`,

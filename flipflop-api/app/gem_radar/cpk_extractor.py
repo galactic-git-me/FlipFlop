@@ -1,7 +1,7 @@
 """
-Canonical Product Key (CPK) extraction via local LLM.
+Canonical Product Key (CPK) extraction via the configured local LLM.
 
-Extracts structured product data from marketplace listings using Qwen2:7b,
+Extracts structured product data from marketplace listings using Ollama,
 creates a deterministic product consolidation key, and stores metadata for
 cross-vendor price aggregation.
 
@@ -11,6 +11,9 @@ Usage:
 from __future__ import annotations
 
 import asyncio
+from collections import OrderedDict
+from copy import deepcopy
+from time import monotonic
 import json
 import hashlib
 import re
@@ -19,14 +22,29 @@ from typing import Optional
 
 import structlog
 
-from app.services.model_selection_service import model_selection_service
+from app.config import get_settings
+from app.services.model_selection_service import ModelSelectionService, model_selection_service
 from app.services.case_product_key import case_product_key
 
 log = structlog.get_logger(__name__)
 
-# Limit concurrent Ollama requests to 4 (optimal for Qwen2:7b on GPU)
-# Tested 5 but hit VRAM exhaustion — 4 is the sweet spot
+# Limit concurrent Ollama requests to 4. The prior Qwen2:7b setup hit VRAM
+# exhaustion at 5; keep this conservative until concurrency is benchmarked again.
 _CPK_EXTRACTOR_SEMAPHORE = asyncio.Semaphore(4)
+
+
+def _extraction_service(settings=None):
+    """Use the opt-in DEV extraction model without changing shared model tiers."""
+    settings = settings or get_settings()
+    override = settings.dev_cpk_ollama_model.strip() if settings.app_env == 'dev' else ''
+    if not override:
+        return model_selection_service
+    # This task-specific route has no cloud or shared-model fallback. An error
+    # remains visible rather than silently reverting to the serial model.
+    return ModelSelectionService(settings.model_copy(update={
+        'llm_primary_provider': 'ollama', 'llm_primary_model': override,
+        'llm_secondary_provider': '', 'llm_tertiary_provider': '',
+    }), ollama_options={'num_ctx': 2048, 'num_batch': 128})
 
 # The only categories the prompt's own schema comment offers the model — a
 # multi-category answer like "cpu|gpu" (seen on full-PC-bundle listings) or
@@ -142,13 +160,55 @@ class ExtractedProductData:
         }
 
 
-async def extract_cpk(
+# Exact input reuse only: no fuzzy matching across product variants or conditions.
+_CPK_RESULT_CACHE = OrderedDict()
+_CPK_INFLIGHT = {}
+_CPK_CACHE_LIMIT = 512
+
+
+async def extract_cpk(title: str, category: Optional[str] = None,
+    condition: Optional[str] = None, *, free_only: bool = False,
+    local_only: bool = False, raise_on_provider_error: bool = False,
+    timeout: float = 45) -> ExtractedProductData | None:
+    tiers=tuple((tier.provider,tier.model) for tier in _extraction_service().tiers())
+    key=(title,category,condition,free_only,local_only,raise_on_provider_error,timeout,tiers)
+    cached=_CPK_RESULT_CACHE.get(key)
+    if cached and cached[0]>monotonic():
+        _CPK_RESULT_CACHE.move_to_end(key)
+        return deepcopy(cached[1])
+    _CPK_RESULT_CACHE.pop(key,None)
+    task=_CPK_INFLIGHT.get(key)
+    if task is None:
+        async def run():
+            try:
+                value=await _extract_cpk_uncached(title,category,condition,
+                    free_only=free_only,local_only=local_only,
+                    raise_on_provider_error=raise_on_provider_error,timeout=timeout)
+                _CPK_RESULT_CACHE[key]=(monotonic()+(3600 if value is not None else 30),deepcopy(value))
+                _CPK_RESULT_CACHE.move_to_end(key)
+                while len(_CPK_RESULT_CACHE)>_CPK_CACHE_LIMIT:
+                    _CPK_RESULT_CACHE.popitem(last=False)
+                return value
+            finally:
+                _CPK_INFLIGHT.pop(key,None)
+        task=asyncio.create_task(run())
+        _CPK_INFLIGHT[key]=task
+    # Cancelling one page submission must not cancel another's shared extraction.
+    return deepcopy(await asyncio.shield(task))
+
+
+async def _extract_cpk_uncached(
     title: str,
     category: Optional[str] = None,
     condition: Optional[str] = None,
+    *,
+    free_only: bool = False,
+    local_only: bool = False,
+    raise_on_provider_error: bool = False,
+    timeout: float = 45,
 ) -> ExtractedProductData | None:
     """
-    Extract structured product data from a listing title using Qwen2:7b.
+    Extract structured product data from a listing title using the configured local model.
 
     Args:
         title: Listing title (e.g., "AMD Ryzen 7 3800X 8-Core Processor")
@@ -218,11 +278,12 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
     # Keep extractions from flooding the local model gateway during scans.
     try:
         async with _CPK_EXTRACTOR_SEMAPHORE:
-            selected = await model_selection_service.complete(
+            selected = await _extraction_service().complete(
                 task="Gem Radar canonical product extraction",
                 messages=[{"role": "user", "content": prompt}],
                 system_prompt="Return only valid JSON. Do not use markdown or explanations.",
-                max_tokens=256, timeout=45, json_mode=True,
+                max_tokens=256, timeout=timeout, json_mode=True, free_only=free_only,
+                local_only=local_only, streaming=local_only,
             )
         output = selected.text.strip()
         try:
@@ -266,6 +327,8 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
         )
     except Exception as exc:
         log.warning("cpk_extractor.exception", error=str(exc), title=_safe_title(title))
+        if raise_on_provider_error:
+            raise
         return None
 
 

@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String, DateTime, Float, ForeignKey, Enum, JSON, Boolean
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, DateTime, Float, ForeignKey, Enum, JSON, Boolean, Index
+from sqlalchemy.orm import relationship, synonym
 from datetime import datetime
 from app.database import Base
 import enum
@@ -18,8 +18,17 @@ class OrderStatus(enum.Enum):
     CANCELLED = "cancelled"
 
 
+class PaymentStatus(str, enum.Enum):
+    PENDING = "pending"
+    PAID = "paid"
+    REFUND_PENDING = "refund_pending"
+    PARTIALLY_REFUNDED = "partially_refunded"
+    REFUNDED = "refunded"
+
+
 class Order(Base):
     __tablename__ = "orders"
+    __table_args__ = (Index("idx_orders_status", "status"),)
 
     id = Column(Integer, primary_key=True)
     order_id = Column(String, unique=True, index=True, nullable=False)
@@ -52,6 +61,22 @@ class Order(Base):
     actual_delivery_date = Column(DateTime, nullable=True)
 
     status = Column(Enum(OrderStatus), default=OrderStatus.AWAITING_SOURCING)
+    # `status` is retained as the fulfilment status column for compatibility
+    # with existing routes and migrations. Payment state is independent.
+    fulfilment_status = synonym("status")
+    payment_status = Column(
+        String(32),
+        nullable=False,
+        default=PaymentStatus.PAID.value,
+        server_default=PaymentStatus.PAID.value,
+        index=True,
+    )
+    # Immutable contact snapshot used for order filtering and customer
+    # correspondence even if the customer later changes their profile.
+    customer_name = Column(String(255), nullable=True)
+    customer_email = Column(String(320), nullable=True, index=True)
+    assigned_build_week = Column(String(10), nullable=True, index=True)
+    delivery_at_risk = Column(Boolean, default=False, server_default="false", nullable=False)
     notes = Column(String, nullable=True)
     rating = Column(Integer, nullable=True)
 
@@ -107,3 +132,17 @@ class Order(Base):
     welcome_guide = relationship("WelcomeGuide", back_populates="order", uselist=False)
     checklists = relationship("OrderChecklist", cascade="all, delete-orphan")
     photos = relationship("OrderPhoto", cascade="all, delete-orphan")
+
+    @property
+    def reference(self) -> str:
+        """Compatibility name for the canonical human-readable order ID."""
+        return self.order_id
+
+    @property
+    def total_gbp(self) -> float:
+        """The charged total stored by the current checkout flow."""
+        return self.customer_price
+
+    @property
+    def playbook_name(self) -> str:
+        return self.playbook.name if self.playbook else ""

@@ -158,7 +158,7 @@ async def generate_flip_listing(
 async def process_flip_images(
     flip_id: int,
     image_urls: list[str] = [],
-    add_watermark: bool = True,
+    add_watermark: bool = False,
     db: AsyncSession = Depends(get_db),
 ):
     """

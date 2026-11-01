@@ -60,8 +60,10 @@ services:
     env_file:
       - path: ../.env.local
         required: true
+      - path: ../runtime/admin-auth.env
+        required: true
       - path: ../runtime/browser-worker.env
-        required: false
+        required: true
       # Developer-local API overrides are gitignored and are not present in
       # the production checkout. Production secrets live in ../.env.local.
       - path: ../flipflop-api/.env
@@ -71,6 +73,8 @@ services:
       FLIPFLOP_RUNTIME_ENV: live
       # This API owns production background jobs, including manual-build relists.
       WEB_ONLY: "false"
+      # Keep Gem Radar scan intake enabled while the standalone endpoint remains web-only.
+      EXTERNAL_GEM_RADAR_WORKER_ENABLED: "true"
       DATABASE_URL: postgresql+asyncpg://flipper:flipper@postgres:5432/pcflipper
       SYNC_DATABASE_URL: postgresql://flipper:flipper@postgres:5432/pcflipper
       REDIS_URL: redis://redis:6379/0
@@ -92,6 +96,10 @@ services:
       # OAuth is completed by the public production admin UI.
       ADMIN_FRONTEND_URL: https://admin.theflipflop.shop
       EBAY_OAUTH_CALLBACK_URL: https://www.theflipflop.shop/api/ebay/oauth/callback
+      GOOGLE_MERCHANT_ACCOUNT_ID: "5845592785"
+      GOOGLE_MERCHANT_DATA_SOURCE_ID: "10788861723"
+      GOOGLE_MERCHANT_SERVICE_ACCOUNT_FILE: /run/secrets/google-merchant-service-account.json
+      GOOGLE_MERCHANT_WRITES_ENABLED: "true"
     ports:
       - "127.0.0.1:4311:4311"
     networks:
@@ -107,6 +115,7 @@ services:
       - ../runtime/fb-profile:/app/.fb-profile
       - ../runtime/fb_cookies.json:/app/fb_cookies.json
       - ../runtime/public-media:/FlipFlop.shop/public/media
+      - /home/mac/.local/share/flipflop/google-merchant-service-account.json:/run/secrets/google-merchant-service-account.json:ro
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4311/health"]
       interval: 10s
@@ -214,6 +223,9 @@ services:
         NEXT_PUBLIC_API_URL: /api
     container_name: flipflop-production-admin
     restart: unless-stopped
+    env_file:
+      - path: ../runtime/admin-auth.env
+        required: true
     depends_on:
       api:
         condition: service_healthy

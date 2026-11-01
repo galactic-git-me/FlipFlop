@@ -35,7 +35,7 @@ log = structlog.get_logger(__name__)
 async def withdraw_ebay_for_sold_build(build: ManualBuild, environment: str) -> None:
     """Call once a build's storefront Product sale is confirmed — ends the
     matching live eBay listing, if any, so it can't also sell there."""
-    if not build.ebay_sku:
+    if not build.ebay_sku or build.status == "sold":
         return
     try:
         await withdraw_listing_by_sku(build.ebay_sku, environment=environment)
@@ -51,6 +51,8 @@ async def withdraw_storefront_for_sold_build(build: ManualBuild, db: AsyncSessio
     """Call once a build's eBay sale is confirmed (see sync_ebay_order) —
     withdraws the matching storefront Product listing, if any, so it can't
     also sell there."""
+    from app.services.channel_sync import withdraw_other_channels
+    await withdraw_other_channels(db, build, "ebay_uk")
     if not build.storefront_product_id:
         return
 
@@ -87,9 +89,10 @@ async def withdraw_google_for_sold_build(build: ManualBuild, db: AsyncSession) -
             ChannelListing.external_listing_id.is_not(None),
         )
     )).scalars().all()
-    if rows:
-      client = GoogleMerchantAPI()
-      for row in rows:
+    if not rows:
+        return
+    client = GoogleMerchantAPI()
+    for row in rows:
         now = datetime.utcnow()
         row.status = "withdrawal_pending"
         row.withdrawn_at = now
@@ -111,31 +114,4 @@ async def withdraw_google_for_sold_build(build: ManualBuild, db: AsyncSession) -
             message=row.last_recreate_message,
             event_metadata={"build_id": build.id, "channel": "google_shopping", "at": now.isoformat()},
         ))
-    await queue_browser_withdrawals(build, db)
     await db.flush()
-
-
-async def queue_browser_withdrawals(build: ManualBuild, db: AsyncSession) -> None:
-    """Queue sold-build withdrawals for active Chrome-managed vendor listings."""
-    from app.services.browser_listing_jobs import BROWSER_CHANNELS, enqueue_browser_job
-    from app.services.channel_images import prepare_channel_urls
-
-    rows = (await db.execute(select(ChannelListing).where(
-        ChannelListing.manual_build_id == build.id,
-        ChannelListing.channel.in_(BROWSER_CHANNELS),
-        ChannelListing.status.in_(("published", "submitted", "withdrawal_pending")),
-        ChannelListing.external_listing_id.is_not(None),
-        ChannelListing.listing_url.is_not(None),
-    ))).scalars().all()
-    for row in rows:
-        try:
-            originals = [p["url"] for p in build.photos or [] if isinstance(p, dict) and p.get("url") and p.get("kind", "photo") == "photo"]
-            images = await prepare_channel_urls(originals, row.channel)
-            await enqueue_browser_job(db, build.id, row.channel, operation="withdraw", image_urls=images)
-            row.status = "withdrawal_pending"
-            row.recreate_enabled = False
-            row.next_recreate_at = None
-            row.last_recreate_message = "Sale confirmed. Waiting for Codex to end this vendor listing in Chrome."
-            log.info("cross_channel_guard.browser_withdrawal_queued", build_id=build.id, channel=row.channel)
-        except Exception as exc:
-            log.error("cross_channel_guard.browser_withdrawal_queue_failed", build_id=build.id, channel=row.channel, error=str(exc))

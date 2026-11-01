@@ -487,14 +487,14 @@ def _build_terms(taxonomy_rows: list[dict[str, Any]], telem_items: dict[str, Any
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--base-url", default="http://127.0.0.1:4311")
+    ap.add_argument("--base-url", default="http://127.0.0.1:4314")
     ap.add_argument("--refresh", type=float, default=1.0)
     ap.add_argument("--log-file", default="", help="Backend log file path")
     ap.add_argument("--docker-container", default="", help="Stream logs from this Docker container instead of a file")
     args = ap.parse_args()
 
     api = args.base_url.rstrip("/") + "/api"
-    default_log = str(Path(__file__).resolve().parents[1] / ".run-logs" / "backend-4311.log")
+    default_log = str(Path(__file__).resolve().parents[1] / ".run-logs" / "backend-4314.log")
     log_file = args.log_file or default_log
     tailer = LogTailer(log_file=log_file, max_lines=140, docker_container=args.docker_container)
     with httpx.Client(follow_redirects=True) as client:

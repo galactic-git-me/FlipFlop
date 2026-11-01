@@ -17,6 +17,7 @@ from app.models.listing import Listing
 from app.models.app_settings import AppSettings
 from app.workers.offer_poll import run_offer_poll_job, run_send_to_watchers_job
 from app.workers.message_poll import run_message_poll_job
+from app.services import ebay_oauth
 
 
 @pytest.fixture(autouse=True)
@@ -41,6 +42,12 @@ async def _connect_ebay():
             ebay_seller_connected_at=datetime.utcnow(),
         ))
         await db.commit()
+
+
+@pytest.fixture(autouse=True)
+def _mock_token_cipher(monkeypatch):
+    monkeypatch.setattr(ebay_oauth, "_token_cipher", lambda: None)
+    monkeypatch.setattr(ebay_oauth, "_decrypt_token", lambda token: (token, False))
 
 
 async def _make_flip(**overrides) -> int:

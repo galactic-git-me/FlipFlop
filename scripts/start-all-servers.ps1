@@ -112,7 +112,8 @@ function Get-OllamaServiceFailures {
             if ($health.status -ne 'ok' -or
                 $health.priority -ne $gateway.Priority -or
                 $health.generation_concurrency -ne 4 -or
-                $health.ollama_num_parallel -ne 4) {
+                $health.ollama_num_parallel -ne 4 -or
+                $health.gpu_only -ne $true) {
                 $failures += "gateway:$($gateway.Port)"
             }
         } catch {

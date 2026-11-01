@@ -1048,7 +1048,9 @@ async def refresh_playbook_economics_from_benchmarks() -> int:
         for pb in playbooks:
             economics = compute_live_economics(pb.name, benchmarks)
             if economics:
-                pb.pricing_model = economics.get("pricing_model", pb.pricing_model)
+                pb.pricing_model = {**(pb.pricing_model or {}), **(economics.get("pricing_model") or {}),
+                    **{key:value for key,value in (pb.pricing_model or {}).items()
+                       if key in {"commercial_cells", "commercial_configurations", "managed_offers"}}}
                 pb.profit_model  = economics.get("profit_model",  pb.profit_model)
                 updated += 1
         await db.commit()
@@ -1140,7 +1142,9 @@ async def seed_playbooks(db: AsyncSession) -> int:
         else:
             # Refresh live pricing even for existing records
             if economics:
-                existing.pricing_model = economics.get("pricing_model", existing.pricing_model)
+                existing.pricing_model = {**(existing.pricing_model or {}), **(economics.get("pricing_model") or {}),
+                    **{key:value for key,value in (existing.pricing_model or {}).items()
+                       if key in {"commercial_cells", "commercial_configurations", "managed_offers"}}}
                 existing.profit_model  = economics.get("profit_model",  existing.profit_model)
             # Seed a useful starter recommendation once, without overwriting
             # a profile already reviewed or authored by the administrator.

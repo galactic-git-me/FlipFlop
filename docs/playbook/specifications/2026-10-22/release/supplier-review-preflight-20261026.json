@@ -1,0 +1,1953 @@
+{
+  "observed_at": "2026-10-26",
+  "proposal_count": 24,
+  "unique_listing_products": 53,
+  "reviewable_products": 43,
+  "pending_products": 10,
+  "products": [
+    {
+      "listing_id": 12047,
+      "title": "AMD Ryzensets 5 9600X Processor (radeon graphics included, 6 Cores/12 Threads, 65W TDP, Socket AM5, Cache 38MB, up to 5.4 GHz max boost Frequency, no cooler)",
+      "url": "https://www.amazon.co.uk/AMD-Ryzensets-9600X-Processor-Frequency/dp/B0D6NN6TM7/ref=sr_1_5?dib=eyJ2IjoiMSJ9.dogrGivqJXsW4TurIOrzXFckkppVWeiWA8x79D8oOKg5MONwVJS_VtezyLZpoa5QPYOTFq3UryswCNjjNwoD5DoCp3OcxU5L_PoAl4VhY3lMf35XebEU2S_l8P-3j-hiFJpQWIK1ZvoHk8RPvicHEOFTtgCjFgc5LElaUzsosz10DSUNb5diLZNCbSdLCih0zYIvmQF6H1TMlorD7KaKA9hNkn0EL815Rmm94f7ZdzEYp01MVH4PpNx35U_XfsUGpUHe4TIlVfvwU16APTABSTuJW81xuq6C6uAgIrZ6TsY.Y6kS8Rm2ySvJFACJJpBwtOIGnFblg0A6w3chYAMFXQI&dib_tag=se&keywords=CPU+Processor&qid=1792988827&s=computers&sr=1-5",
+      "source": "amazon",
+      "item_gbp": "137.26",
+      "condition": "new",
+      "stock_status": "unknown",
+      "stock_evidence": null,
+      "postage_verified": false,
+      "postage_assumption": "owner-approved-zero-fallback",
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": false,
+      "cells": [
+        "FF-AIW-01",
+        "FF-BOF-01",
+        "FF-FAM-01",
+        "FF-FAM-02",
+        "FF-GVG-02",
+        "FF-STU-01",
+        "FF-STU-02",
+        "FF-SWD-01"
+      ],
+      "roles": [
+        "cpu"
+      ]
+    },
+    {
+      "listing_id": 13599,
+      "title": "Samsung 990 PRO NVMe M.2 SSD, 4 TB, PCIe 4.0, 7,450 MB/s read, 6,900 MB/s write, Internal SSD, For gaming and video editing, MZ-V9P4T0BW",
+      "url": "https://www.amazon.co.uk/dp/B0CBYZ6DD1",
+      "source": "amazon",
+      "item_gbp": "589.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-02",
+        "FF-AIW-03",
+        "FF-CCR-02",
+        "FF-CCR-03",
+        "FF-FAM-03",
+        "FF-HPG-03",
+        "FF-SWD-02",
+        "FF-SWD-03"
+      ],
+      "roles": [
+        "storage",
+        "storage_secondary"
+      ]
+    },
+    {
+      "listing_id": 13986,
+      "title": "APNX Creator C1 ChromaFlair Mid Tower Case",
+      "url": "https://www.overclockers.co.uk/apnx-creator-c1-chromaflair-mid-tower-case/CAS-AER-00612.html",
+      "source": "overclockers",
+      "item_gbp": "39.95",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In Stock",
+      "postage_verified": false,
+      "postage_assumption": "owner-approved-zero-fallback",
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-01",
+        "FF-AIW-02",
+        "FF-BOF-01",
+        "FF-BOF-02",
+        "FF-BOF-03",
+        "FF-CCR-01",
+        "FF-CCR-02",
+        "FF-CCR-03",
+        "FF-FAM-01",
+        "FF-FAM-02",
+        "FF-FAM-03",
+        "FF-GVG-01",
+        "FF-GVG-02",
+        "FF-HPG-01",
+        "FF-HPG-02",
+        "FF-HPG-03",
+        "FF-STU-01",
+        "FF-STU-02",
+        "FF-SWD-01",
+        "FF-SWD-02",
+        "FF-SWD-03"
+      ],
+      "roles": [
+        "case"
+      ]
+    },
+    {
+      "listing_id": 14791,
+      "title": "Lian Li Lancool 207 ATX Mid Tower Gaming PC Case, Tempered Glass, Black | ATX and micro ATX compatible computer case with air",
+      "url": "https://www.amazon.co.uk/Lancool-207-Mid-Tower-Premium-Tempered-Black/dp/B0DJDM7V1R/ref=zg_bs_g_430498031_d_sccl_30/525-2744570-5187137",
+      "source": "OverclockersUK",
+      "item_gbp": "74.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-GVG-03",
+        "FF-STU-03"
+      ],
+      "roles": [
+        "case"
+      ]
+    },
+    {
+      "listing_id": 14843,
+      "title": "Thermalright Peerless Assassin 120 SE CPU Air Cooler,PA120 SE,6 Heat Pipes Cpu cooler,Dual 120mm TL-C12C PWM Fan,Aluminium He",
+      "url": "https://www.amazon.co.uk/Thermalright-Peerless-Assassin-Aluminium-Technology/dp/B0B4G8QKZP/ref=zg_bs_g_430499031_d_sccl_24/525-2744570-5187137",
+      "source": "THERMALRIGHT.EUR",
+      "item_gbp": "25.41",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": false,
+      "postage_assumption": "owner-approved-zero-fallback",
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-01",
+        "FF-FAM-02",
+        "FF-GVG-01",
+        "FF-GVG-02",
+        "FF-HPG-01",
+        "FF-STU-02",
+        "FF-SWD-01"
+      ],
+      "roles": [
+        "cooling"
+      ]
+    },
+    {
+      "listing_id": 14849,
+      "title": "Thermalright AQUA ELITE 240 V3 Liquid CPU Cooler, 240 Cooling Row Size, 2 x 120mm PWM Fans, S-FDB Bearings,for AMD/AM4/AM5, I",
+      "url": "https://www.amazon.co.uk/Thermalright-Cooling-Bearings-LGA1150-Desktop/dp/B0CCP1T3W7/ref=zg_bs_g_430499031_d_sccl_38/525-2744570-5187137",
+      "source": "deliming321",
+      "item_gbp": "35.90",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-CCR-01",
+        "FF-FAM-03",
+        "FF-GVG-03",
+        "FF-HPG-02",
+        "FF-STU-03"
+      ],
+      "roles": [
+        "cooling"
+      ]
+    },
+    {
+      "listing_id": 14860,
+      "title": "TR-Assassin X 120R SE V2 CPU Air Cooler, 4 Heat Pipes,148MM High, TL-C12C-L V2 PWM Fan CPU Cooler, for AMD AM4 AM5/Intel LGA1",
+      "url": "https://www.amazon.co.uk/TR-Assassin-SE-TL-C12C-L-LGA1700-LGA17XX/dp/B0DWSQ9VX2/ref=zg_bs_g_430499031_d_sccl_19/525-2749015-4854065",
+      "source": "TR- Store",
+      "item_gbp": "14.49",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": false,
+      "postage_assumption": "owner-approved-zero-fallback",
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-BOF-01",
+        "FF-BOF-02",
+        "FF-BOF-03",
+        "FF-CCR-03",
+        "FF-FAM-01",
+        "FF-STU-01"
+      ],
+      "roles": [
+        "cooling"
+      ]
+    },
+    {
+      "listing_id": 14898,
+      "title": "AMD Ryzensets 7 7800X3D Processor with 3D V Cache technology (integrated Radeon Graphics, 8 cores/16 threads, 120W TDP, AM5 S",
+      "url": "https://www.amazon.co.uk/AMD-7800X3D-Desk-top-Processor-16-thread/dp/B0BTZB7F88/ref=sr_1_17?dib=eyJ2IjoiMSJ9.dogrGivqJXsW4TurIOrzXFckkppVWeiWA8x79D8oOKg5MONwVJS_VtezyLZpoa5QPYOTFq3UryswCNjjNwoD5DoCp3OcxU5L_PoAl4VhY3lMf35XebEU2S_l8P-3j-hiFJpQWIK1ZvoHk8RPvicHEOFTtgCjFgc5LElaUzsosz10DSUNb5diLZNCbSdLCih0zYIvmQF6H1TMlorD7KaKA9hNkn0EL815Rmm94f7ZdzEYp01MVH4PpNx35U_XfsUGpUHe4TIlVfvwU16APTABSTuJW81xuq6C6uAgIrZ6TsY.Y6kS8Rm2ySvJFACJJpBwtOIGnFblg0A6w3chYAMFXQI&dib_tag=se&keywords=CPU+Processor&qid=1792988827&s=computers&sr=1-17&ufe=app_do%3Aamzn1.fos.306fc827-d528-4764-b864-7a43ae39ec28",
+      "source": "amazon",
+      "item_gbp": "334.94",
+      "condition": "new",
+      "stock_status": "unknown",
+      "stock_evidence": null,
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": false,
+      "cells": [
+        "FF-HPG-02"
+      ],
+      "roles": [
+        "cpu"
+      ]
+    },
+    {
+      "listing_id": 14919,
+      "title": "AMD Ryzensets 7 9700X Processor (8 Cores/16 Threads) 65W DTP, AM5 socket, 40MB Cache, Up to 5.5 GHz max boost frequency, no c",
+      "url": "https://www.amazon.co.uk/AMD-Ryzensets-9700X-Processor-frequency/dp/B0D6NMDNNX/ref=zg_bs_g_430515031_d_sccl_12/520-0243193-1826356",
+      "source": "ST TECH ZONE",
+      "item_gbp": "252.49",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-BOF-03",
+        "FF-FAM-03"
+      ],
+      "roles": [
+        "cpu"
+      ]
+    },
+    {
+      "listing_id": 14922,
+      "title": "AMD Ryzensets 9 9950X Processor (integrated radeon graphics, 16 Cores/32 Threads, 170 W DTP, AM5 Socket, 80MB Cache, Up to 5.",
+      "url": "https://www.amazon.co.uk/AMD-Ryzensets-9950X-Processor-integrated/dp/B0D6NNRBGP/ref=zg_bs_g_430515031_d_sccl_14/520-0243193-1826356",
+      "source": "amazon",
+      "item_gbp": "441.71",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-02",
+        "FF-CCR-03",
+        "FF-SWD-03"
+      ],
+      "roles": [
+        "cpu"
+      ]
+    },
+    {
+      "listing_id": 14934,
+      "title": "AMD RYZEN™ 7 9850X3D",
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-9850X3D-100-100001973WOF-RYZENTM/dp/B0G8JMLXNQ/ref=zg_bs_g_430515031_d_sccl_5/520-0243193-1826356",
+      "source": "amazon",
+      "item_gbp": "399.95",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-GVG-03",
+        "FF-HPG-03"
+      ],
+      "roles": [
+        "cpu"
+      ]
+    },
+    {
+      "listing_id": 14937,
+      "title": "Intel Core Ultra 5 Processor 250K Plus, up to 5.3 GHz, LGA1851 Socket, PCIe 5.0, DDR5 Support, 125W TDP",
+      "url": "https://www.amazon.co.uk/Intel-Processor-250K-LGA1851-Support/dp/B0GMKXVVJQ/ref=zg_bs_g_430515031_d_sccl_46/520-0243193-1826356",
+      "source": "Amazon Resale",
+      "item_gbp": "204.98",
+      "condition": "used",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": false,
+      "cells": [
+        "FF-BOF-02",
+        "FF-CCR-01",
+        "FF-HPG-01"
+      ],
+      "roles": [
+        "cpu"
+      ]
+    },
+    {
+      "listing_id": 14938,
+      "title": "Intel Core Ultra 7 Processor 270K Plus, up to 5.5 GHz, LGA1851 Socket, PCIe 5.0, DDR5 Support, 125W TDP",
+      "url": "https://www.amazon.co.uk/Intel-Processor-270K-LGA1851-Support/dp/B0GMLJCBBM/ref=zg_bs_g_430515031_d_sccl_11/520-0243193-1826356",
+      "source": "amazon",
+      "item_gbp": "284.97",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-CCR-02",
+        "FF-STU-03",
+        "FF-SWD-02"
+      ],
+      "roles": [
+        "cpu"
+      ]
+    },
+    {
+      "listing_id": 15001,
+      "title": "Gigabyte Radeon RX 9060 XT GAMING OC 16G Graphics Card - 16GB GDDR6, 128bit, PCI-E 5.0, 3320 MHz Core Clock, 2 x DisplayPort,",
+      "url": "https://www.amazon.co.uk/Gigabyte-Radeon-9060-GAMING-Graphics/dp/B0F7HTR8DQ/ref=zg_bs_g_430500031_d_sccl_9/520-9806223-4116349",
+      "source": "amazon",
+      "item_gbp": "539.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-FAM-02",
+        "FF-GVG-02"
+      ],
+      "roles": [
+        "gpu"
+      ]
+    },
+    {
+      "listing_id": 15046,
+      "title": "ASUS ProArt X870E-Creator WiFi AMD AM5 ATX Content Creator Motherboard | PCIe® 5.0 x16, 16+2+2 power stages, DDR5, dual USB4®",
+      "url": "https://www.amazon.co.uk/ASUS-X870E-CREATOR-motherboard-support-next-gen/dp/B09KB8GGN1/ref=zg_bs_g_430512031_d_sccl_46/525-2744570-5187137",
+      "source": "LSBB",
+      "item_gbp": "448.98",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "Only 1 left in stock.",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-BOF-01",
+        "FF-FAM-01"
+      ],
+      "roles": [
+        "motherboard"
+      ]
+    },
+    {
+      "listing_id": 15065,
+      "title": "Gigabyte A520M K V2 Motherboard - Supports AMD Ryzen 5000 Series AM4 CPUs, up to 5100MHz DDR4 (OC), PCIe Gen3 x4 M.2, GbE LAN",
+      "url": "https://www.amazon.co.uk/Gigabyte-Motherboard-Bandwidth-Management-Anti-Sulfur/dp/B0BXFBN121/ref=zg_bs_g_430512031_d_sccl_10/525-2744570-5187137",
+      "source": "amazon",
+      "item_gbp": "43.97",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-GVG-01"
+      ],
+      "roles": [
+        "motherboard"
+      ]
+    },
+    {
+      "listing_id": 15077,
+      "title": "ASUS ROG Crosshair X870E Hero, AMD ATX motherboard, 18+2+2 power stages, DDR5 slots, PCIe 5.0 with full support for next-gen",
+      "url": "https://www.amazon.co.uk/ASUS-ROG-X870E-motherboard-Overclocking/dp/B0DDZSP2BG/ref=zg_bs_g_430512031_d_sccl_12/525-2744570-5187137",
+      "source": "Realtime Distribution",
+      "item_gbp": "469.00",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-02",
+        "FF-CCR-03",
+        "FF-HPG-03",
+        "FF-SWD-03"
+      ],
+      "roles": [
+        "motherboard"
+      ]
+    },
+    {
+      "listing_id": 15160,
+      "title": "be quiet! System Power 11 750W Power Supply, ATX 3.1 PSU, 80 PLUS® Bronze | With Support For PCIe 5.1 GPUs, Temperature-Contr",
+      "url": "https://www.amazon.co.uk/quiet-System-Power-Supply-Bronze/dp/B0FNDFHLQX/ref=zg_bs_g_430514031_d_sccl_13/525-2744570-5187137",
+      "source": "be quiet!",
+      "item_gbp": "59.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-01",
+        "FF-BOF-01",
+        "FF-BOF-02",
+        "FF-BOF-03",
+        "FF-CCR-01",
+        "FF-FAM-01",
+        "FF-FAM-02",
+        "FF-GVG-01",
+        "FF-GVG-02",
+        "FF-HPG-01",
+        "FF-HPG-02",
+        "FF-STU-01",
+        "FF-STU-02",
+        "FF-SWD-01"
+      ],
+      "roles": [
+        "psu"
+      ]
+    },
+    {
+      "listing_id": 15161,
+      "title": "be quiet! Pure Power 13 M 1000W Power Supply, 80+ Gold, Cybenetics Platinum | PCIe 5.1 Ready, ATX 3.1, Fully Modular, PSU wit",
+      "url": "https://www.amazon.co.uk/quiet-Power-1000W-Fully-Modular/dp/B0FNDGQ7CK/ref=zg_bs_g_430514031_d_sccl_7/525-2744570-5187137",
+      "source": "be quiet!",
+      "item_gbp": "118.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-02",
+        "FF-CCR-02",
+        "FF-FAM-03",
+        "FF-GVG-03",
+        "FF-STU-03",
+        "FF-SWD-02",
+        "FF-SWD-03"
+      ],
+      "roles": [
+        "psu"
+      ]
+    },
+    {
+      "listing_id": 15203,
+      "title": "CORSAIR VENGEANCE RGB PRO DDR4 RAM 32GB (2x16GB) Up to 3200MHz CL16 Intel XMP AMD EXPO Computer Memory – Black (CMW32GX4M2E32",
+      "url": "https://www.amazon.co.uk/CORSAIR-VENGEANCE-3200MHz-CL16-20-20-38-Computer/dp/B081XWLQKS/ref=zg_bs_g_430511031_d_sccl_12/520-9806223-4116349",
+      "source": "The Chosen Supplier",
+      "item_gbp": "238.75",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "Only 3 left in stock.",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-GVG-01"
+      ],
+      "roles": [
+        "ram"
+      ]
+    },
+    {
+      "listing_id": 15227,
+      "title": "CORSAIR VENGEANCE RGB DDR5 32GB (2x16GB) DDR5 Up to 6000MHz CL30 AMD EXPO Intel XMP iCUE Compatible Computer Memory – Grey (C",
+      "url": "https://www.amazon.co.uk/CORSAIR-VENGEANCE-6000MHz-Compatible-Computer/dp/B0BPTKD797/ref=zg_bs_g_430511031_d_sccl_15/520-9806223-4116349",
+      "source": "Amazon US",
+      "item_gbp": "519.41",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": false,
+      "postage_assumption": "owner-approved-zero-fallback",
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-BOF-01",
+        "FF-BOF-02",
+        "FF-FAM-01",
+        "FF-FAM-02",
+        "FF-GVG-02",
+        "FF-GVG-03",
+        "FF-HPG-01",
+        "FF-HPG-02",
+        "FF-STU-01",
+        "FF-STU-02"
+      ],
+      "roles": [
+        "ram"
+      ]
+    },
+    {
+      "listing_id": 15240,
+      "title": "CORSAIR DOMINATOR TITANIUM RGB DDR5 64GB (2x32GB) DDR5 Up to 6000MHz CL30 AMD EXPO Intel XMP iCUE Compatible Computer Memory",
+      "url": "https://www.amazon.co.uk/CORSAIR-DOMINATOR-TITANIUM-Compatible-Computer/dp/B0CHSGDFN4/ref=zg_bs_g_430511031_d_sccl_13/520-9806223-4116349",
+      "source": "amazon",
+      "item_gbp": "1118.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-01",
+        "FF-BOF-03",
+        "FF-CCR-01",
+        "FF-CCR-02",
+        "FF-FAM-03",
+        "FF-HPG-03",
+        "FF-STU-03",
+        "FF-SWD-01"
+      ],
+      "roles": [
+        "ram"
+      ]
+    },
+    {
+      "listing_id": 15324,
+      "title": "Kingston NV3 NVMe PCIe 4.0 Internal SSD 1TB M.2 2280-SNV3S/1000G",
+      "url": "https://www.amazon.co.uk/Kingston-NVMe-Internal-2280-SNV3S-1000G/dp/B0DBR3DZWG/ref=zg_bs_g_430505031_d_sccl_4/520-9691297-2949550",
+      "source": "Texeno",
+      "item_gbp": "129.98",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-BOF-01",
+        "FF-FAM-01",
+        "FF-GVG-01",
+        "FF-HPG-01",
+        "FF-HPG-02",
+        "FF-STU-01"
+      ],
+      "roles": [
+        "storage"
+      ]
+    },
+    {
+      "listing_id": 15325,
+      "title": "Crucial P310 2TB SSD M.2 2280 NVMe PCIe Gen4, Up to 7,100MB/s, Laptop & Desktop (PC) Compatible, Internal Solid State Drive -",
+      "url": "https://www.amazon.co.uk/Crucial-Internal-Gaming-Desktop-Compatible/dp/B0DC8RVRBZ/ref=zg_bs_g_430505031_d_sccl_1/520-9691297-2949550",
+      "source": "amazon",
+      "item_gbp": "199.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-01",
+        "FF-BOF-02",
+        "FF-BOF-03",
+        "FF-CCR-01",
+        "FF-FAM-02",
+        "FF-GVG-02",
+        "FF-GVG-03",
+        "FF-STU-02",
+        "FF-STU-03",
+        "FF-SWD-01"
+      ],
+      "roles": [
+        "storage"
+      ]
+    },
+    {
+      "listing_id": 15953,
+      "title": "Ubuntu 24.04 LTS Desktop (official free download)",
+      "url": "https://releases.ubuntu.com/24.04/",
+      "source": "Ubuntu",
+      "item_gbp": "0.00",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "Official Ubuntu desktop ISO link found on the release index; no physical stock.",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-02",
+        "FF-AIW-03",
+        "FF-SWD-03"
+      ],
+      "roles": [
+        "os_secondary"
+      ]
+    },
+    {
+      "listing_id": 16005,
+      "title": "Sparkle Intel Arc B580 Titan OC 12GB GDDR6",
+      "url": "https://www.amazon.co.uk/Sparkle-Intel-B580-Titan-GDDR6/dp/B0DNMH4KQM/ref=sr_1_1?dib=eyJ2IjoiMSJ9.Yip4XsUVN2IlSmbUxpk4agekPBSffDUrdP3fiEDnSYrKrRlUl8dFhC9SUWkbyyARg9ToAHti3cwZZNnHESfs0qsqebzdCE7mbl4z0fz17-dwTF6QqGA0zcmohJ0pdcCrfS_oO3E12IAqnhbympRVw8N6hJEK1jNvEvrg0rt1VR-D3xHfTPdO7FjMUPkOLRrwDvnp87UnyXoGwhafi-O-1ErfzA3a6x8CEoogNblpwks4hgRInadQDNgbEcFrXhteGBqq_gOuZBb_lw1RTwSwdGO1oh-W-WxtemRcPZdqtGQ.LR796i0SxJTUfG2c1LZeqgVL1QZa96V57k5vpRCqTnk&dib_tag=se&keywords=Intel+Arc+B580+12GB&qid=1792991886&s=computers&sr=1-1&ufe=app_do%3Aamzn1.fos.306fc827-d528-4764-b864-7a43ae39ec28",
+      "source": "amazon",
+      "item_gbp": "344.87",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "FREE delivery 9 - 21 NovOr fastest delivery 9 - 18 NovOnly 7 left in stock.",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-STU-02",
+        "FF-SWD-01"
+      ],
+      "roles": [
+        "gpu"
+      ]
+    },
+    {
+      "listing_id": 16023,
+      "title": "ASUS Dual GeForce RTX 5060 Ti 16GB GDDR7 OC Edition (PCIe 5.0, 16GB GDDR7, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2.5-slot desi",
+      "url": "https://www.amazon.co.uk/ASUS-DisplayPort-2-5-slot-Axial-tech-technology/dp/B0F4DX2GLY/ref=zg_bs_g_430500031_d_sccl_21/524-1065766-8214213",
+      "source": "amazon",
+      "item_gbp": "638.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-01",
+        "FF-CCR-01",
+        "FF-HPG-01",
+        "FF-SWD-02"
+      ],
+      "roles": [
+        "gpu"
+      ]
+    },
+    {
+      "listing_id": 16417,
+      "title": "TR-AQUA ELITE 360 V3 CPU Liquid Cooler, AIO Pump Head Speed Up to 3300RPM, TL-C12B-S V2*3 PWM Fans, For AMD/AM4/AM5, Intel LG",
+      "url": "https://www.amazon.co.uk/TR-AQUA-ELITE-360-TL-C12B-S-Computer/dp/B0DWW3RQC1/ref=zg_bs_g_430499031_d_sccl_1/525-5449435-4278503",
+      "source": "TR- Store",
+      "item_gbp": "46.29",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-02",
+        "FF-CCR-02",
+        "FF-HPG-03",
+        "FF-SWD-03"
+      ],
+      "roles": [
+        "cooling"
+      ]
+    },
+    {
+      "listing_id": 16659,
+      "title": "Crucial Pro DDR5 RAM 128GB Kit (2x64GB) 5600MHz, Intel XMP 3.0 / AMD EXPO, Computer Memory (PC) - CP2K64G56C46U5",
+      "url": "https://www.amazon.co.uk/Crucial-2x64GB-5600MHz-Computer-Memory/dp/B0DSR5P84D/ref=sr_1_34?dib=eyJ2IjoiMSJ9.CBygmwHQriC6zpugqWbMtLMNYvw6EtgrI9CJCLmX5bIXvWRIxXTwzEiGE98IFRUxb-lJorDHg23utEC-4NA8TSaeXtMkXtmc0ouQiBvBgRf3VpOttIHm8Hn-oXHmuDhBRcuZfP5XEA4_7yukmQMspdvlfMOUhNXlAeTuMwO8FKIc4KeppSWj6k4wp9aoIVXKIH5sqKuzDJU9sjQRgwnnRtUBLjm82jBSIy67gJ4WNCOJnq_xVgHAojMQmZNouDTGR5mB_4nrbzdpF_zVEocnBJruSywCI3vfc_Qrw__MuzI.RYn_TUml40U7HtcgcvQnPEkG9Qj-TU75sVpgUHKnhb0&dib_tag=se&keywords=RAM+Memory&qid=1792682559&s=computers&sr=1-34&xpid=g1lWj1k5Cy_HZ",
+      "source": "amazon",
+      "item_gbp": "2199.0",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "FREE delivery Sun 25 OctOnly 1 left in stock.",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": false,
+      "reviewable": false,
+      "cells": [
+        "FF-AIW-02",
+        "FF-CCR-03",
+        "FF-SWD-03"
+      ],
+      "roles": [
+        "ram"
+      ]
+    },
+    {
+      "listing_id": 16936,
+      "title": "Noctua NH-D15 G2 chromax.black, Quiet High-Performance CPU Cooler | 168mm Height, Ultimate Low-Noise Cooling, 8 Heatpipes, Fo",
+      "url": "https://www.amazon.co.uk/Noctua-NH-D15-G2-chromax-black-Premium/dp/B0FXGWKHND/ref=zg_bs_g_430499031_d_sccl_95/522-2937676-0377409",
+      "source": "NOCTUA - Designed in Austria",
+      "item_gbp": "139.90",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-SWD-02"
+      ],
+      "roles": [
+        "cooling"
+      ]
+    },
+    {
+      "listing_id": 16961,
+      "title": "MSI GeForce RTX 5080 16G VENTUS 3X OC Graphics Card - RTX 5080 GPU | 16GB GDDR7 (30Gbps/256-bit), PCIe 5.0 - Triple Fan Desig",
+      "url": "https://www.amazon.co.uk/MSI-GeForce-5080-VENTUS-Graphics/dp/B0DT6NZ9V9/ref=zg_bs_g_430500031_d_sccl_12/524-8030566-4114121",
+      "source": "amazon",
+      "item_gbp": "1429.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": false,
+      "cells": [
+        "FF-CCR-02",
+        "FF-SWD-03"
+      ],
+      "roles": [
+        "gpu"
+      ]
+    },
+    {
+      "listing_id": 17153,
+      "title": "ASUS TUF GAMING Z890-PLUS WIFI Intel ATX motherboard, 16+1+2+1(80A) power stages, DDR5, PCIe 5.0 w/ full support for next-gen",
+      "url": "https://www.amazon.co.uk/ASUS-Z890-PLUS-motherboard-support-next-gen/dp/B0DJDFKV2J/ref=zg_bs_g_430512031_d_sccl_92/520-2931519-0587922",
+      "source": "iSale 1-2 Day Delivery",
+      "item_gbp": "224.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "Only 6 left in stock.",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-BOF-02",
+        "FF-CCR-01",
+        "FF-CCR-02",
+        "FF-HPG-01",
+        "FF-STU-03",
+        "FF-SWD-02"
+      ],
+      "roles": [
+        "motherboard"
+      ]
+    },
+    {
+      "listing_id": 17154,
+      "title": "Fractal Design Define 7 XL Black Brushed Aluminum/Steel E-ATX Silent Modular Full Tower Computer Case",
+      "url": "https://www.amazon.co.uk/Fractal-Design-FD-C-DEF7X-01-Define-Black/dp/B08146GB6Y/ref=zg_bs_g_430498031_d_sccl_26/524-1065766-8214213",
+      "source": "amazon",
+      "item_gbp": "199.99",
+      "condition": "new",
+      "stock_status": "unavailable",
+      "stock_evidence": "Usually dispatched within 3 to 7 months",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": false,
+      "fresh": true,
+      "reviewable": false,
+      "cells": [
+        "FF-AIW-03"
+      ],
+      "roles": [
+        "case"
+      ]
+    },
+    {
+      "listing_id": 17186,
+      "title": "ASUS PRIME X870-P AMD ATX motherboard, 14-2-1(80A) power stages, PCIe 5.0 x16 slot with full support for next-gen graphics ca",
+      "url": "https://www.amazon.co.uk/ASUS-motherboard-next-gen-graphics-Q-Release/dp/B09KBJQPV1/ref=zg_bs_g_430512031_d_sccl_29/523-1137684-0646837",
+      "source": "Realtime Distribution",
+      "item_gbp": "149.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-01",
+        "FF-BOF-03",
+        "FF-FAM-02",
+        "FF-FAM-03",
+        "FF-GVG-02",
+        "FF-GVG-03",
+        "FF-HPG-02",
+        "FF-STU-01",
+        "FF-STU-02",
+        "FF-SWD-01"
+      ],
+      "roles": [
+        "motherboard"
+      ]
+    },
+    {
+      "listing_id": 17196,
+      "title": "Ryzensets Threadripper Pro 7975WX (32 cores/64 threads, 350W DTP, SP6 Socket, 160MB cache, up to 5.3Ghz max boost, no cooler)",
+      "url": "https://www.amazon.co.uk/dp/B0CK2TZWZX",
+      "source": "Nitrosocket (SN RECORDED)",
+      "item_gbp": "3409.33",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "Usually dispatched within 3 to 4 days",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-03"
+      ],
+      "roles": [
+        "cpu"
+      ]
+    },
+    {
+      "listing_id": 17222,
+      "title": "Ryzensets 5 5600 processor ( 6 Cores/12 Threads, 65W TDP, AM4 Socket, up to 4.4 Ghz max boost, wraith stealth cooler)",
+      "url": "https://www.amazon.co.uk/dp/B09VCHR1VH",
+      "source": "ZLR TRADE",
+      "item_gbp": "119.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-GVG-01"
+      ],
+      "roles": [
+        "cpu"
+      ]
+    },
+    {
+      "listing_id": 17223,
+      "title": "Lian Li RS 1200W RS Hub ATX 3.1 PCIe 5.1 80 Plus Gold Modular Power Supply",
+      "url": "https://www.overclockers.co.uk/lian-li-rs-1200w-rs-hub-atx-3.1-pcie-5.1-80-plus-gold-modular-power-supply/POW-LIA-06175.html",
+      "source": "overclockers",
+      "item_gbp": "144.95",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "https://schema.org/InStock",
+      "postage_verified": false,
+      "postage_assumption": "owner-approved-zero-fallback",
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-CCR-03",
+        "FF-HPG-03"
+      ],
+      "roles": [
+        "psu"
+      ]
+    },
+    {
+      "listing_id": 17225,
+      "title": "FSP Hydro PTM PRO 1650W ATX 3.1 PCIe 5.1 80 Plus Platinum Modular Power Supply",
+      "url": "https://www.overclockers.co.uk/fsp-hydro-ptm-pro-1650w-atx-3.1-pcie-5.1-80-plus-platinum-modular-power-supply/POW-FSP-06659.html",
+      "source": "overclockers",
+      "item_gbp": "249.95",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "https://schema.org/InStock",
+      "postage_verified": false,
+      "postage_assumption": "owner-approved-zero-fallback",
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-03"
+      ],
+      "roles": [
+        "psu"
+      ]
+    },
+    {
+      "listing_id": 17229,
+      "title": "Asus Pro WS WRX90E-SAGE SE AMD sTR5 EEB Workstation Motherboard",
+      "url": "https://www.awd-it.co.uk/asus-pro-ws-wrx90e-sage-se-amd-str5-eeb-workstation-motherboard.html",
+      "source": "awd_it",
+      "item_gbp": "1243.73",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "https://schema.org/InStock",
+      "postage_verified": false,
+      "postage_assumption": "owner-approved-zero-fallback",
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": false,
+      "cells": [
+        "FF-AIW-03"
+      ],
+      "roles": [
+        "motherboard"
+      ]
+    },
+    {
+      "listing_id": 17232,
+      "title": "Noctua NH-U14S TR5-SP6 CPU Cooler - 140mm",
+      "url": "https://www.overclockers.co.uk/noctua-nh-u14s-tr5-sp6-cpu-cooler-140mm/COO-NOC-01407.html",
+      "source": "overclockers",
+      "item_gbp": "119.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "https://schema.org/InStock",
+      "postage_verified": false,
+      "postage_assumption": "owner-approved-zero-fallback",
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-03"
+      ],
+      "roles": [
+        "cooling"
+      ]
+    },
+    {
+      "listing_id": 17234,
+      "title": "PNY NVIDIA RTX 6000 ADA",
+      "url": "https://www.amazon.co.uk/PNY-NVIDIA-RTX-6000-ADA/dp/B0BNYR4VX8/ref=sr_1_129?dib=eyJ2IjoiMSJ9.XVC0GGkIWKQGNNsrkp7KAhPy80iHHAIdn2ZsBbOoCoSp6qiug3awhzoVNlcJAGnfBWK-16YcRzKU7d4uPa6Xoa6HXbITMKHVMjinsBnalhw_x9CWkBCfnG-5dCkXfO7ubHrTb1c2Ibz28v2exWl2k-1qmzCuOWfM8hKFfh5y9TXUhqrq7UJGHj8-FJVK_i_igxwyhvCZqQhXKIENE6NBN2YpJX-SWNAtsKkAN_1LlVkQ2SjOtKe7WDkyFvXuTfhGS1enQP5Pv3f54PcBz-s4JbCdboOSTvLmhgAYNOIuafY.dE7DTu5NFqmYlrbUI9Oo1bgDPfzy6s_Nzw7kofHQu88&dib_tag=se&keywords=Graphics+Card&qid=1792681808&s=computers&sr=1-129&xpid=T3aTuShAAsq72",
+      "source": "amazon",
+      "item_gbp": "7675.00",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "Only 5 left in stock.",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-03"
+      ],
+      "roles": [
+        "gpu"
+      ]
+    },
+    {
+      "listing_id": 17250,
+      "title": "Asus GeForce RTX 5050 Dual OC 8GB GDDR6 PCI-Express Graphics Card",
+      "url": "https://www.overclockers.co.uk/asus-geforce-rtx-5050-dual-oc-8gb-gddr6-pci-express-graphics-card/GRA-ASU-05708.html",
+      "source": "overclockers",
+      "item_gbp": "329.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "https://schema.org/InStock",
+      "postage_verified": false,
+      "postage_assumption": "owner-approved-zero-fallback",
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-GVG-01"
+      ],
+      "roles": [
+        "gpu"
+      ]
+    },
+    {
+      "listing_id": 17252,
+      "title": "Asus Radeon RX 9070 Prime OC 16GB GDDR6 PCI-Express Graphics Card",
+      "url": "https://www.overclockers.co.uk/asus-radeon-rx-9070-prime-oc-16gb-gddr6-pci-express-graphics-card/GRA-ASU-04157.html",
+      "source": "overclockers",
+      "item_gbp": "698.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "https://schema.org/InStock",
+      "postage_verified": false,
+      "postage_assumption": "owner-approved-zero-fallback",
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-FAM-03",
+        "FF-GVG-03"
+      ],
+      "roles": [
+        "gpu"
+      ]
+    },
+    {
+      "listing_id": 17254,
+      "title": "Asus Radeon RX 9070 XT Prime OC 16GB GDDR6 PCI-Express Graphics Card",
+      "url": "https://www.overclockers.co.uk/asus-radeon-rx-9070-xt-prime-oc-16gb-gddr6-pci-express-graphics-card/GRA-ASU-04155.html",
+      "source": "overclockers",
+      "item_gbp": "758.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "https://schema.org/InStock",
+      "postage_verified": false,
+      "postage_assumption": "owner-approved-zero-fallback",
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-HPG-02"
+      ],
+      "roles": [
+        "gpu"
+      ]
+    },
+    {
+      "listing_id": 17258,
+      "title": "Gainward GeForce RTX 5070 Ti Phoenix-S 16GB GDDR7 PCI-Express Graphics Card",
+      "url": "https://www.overclockers.co.uk/gainward-geforce-rtx-5070-ti-phoenix-s-16gb-gddr7-pci-express-graphics-card/GRA-GNW-05399.html",
+      "source": "overclockers",
+      "item_gbp": "1129.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "https://schema.org/InStock",
+      "postage_verified": false,
+      "postage_assumption": "owner-approved-zero-fallback",
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-STU-03"
+      ],
+      "roles": [
+        "gpu"
+      ]
+    },
+    {
+      "listing_id": 17260,
+      "title": "Asus Radeon Turbo AI Pro R9700 32GB GDDR6 PCI-Express Workstation Graphics Card",
+      "url": "https://www.overclockers.co.uk/asus-radeon-turbo-ai-pro-r9700-32gb-gddr6-pci-express-workstation-graphics-card/GRA-ASU-09224.html",
+      "source": "overclockers",
+      "item_gbp": "1699.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "https://schema.org/InStock",
+      "postage_verified": false,
+      "postage_assumption": "owner-approved-zero-fallback",
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-02"
+      ],
+      "roles": [
+        "gpu"
+      ]
+    },
+    {
+      "listing_id": 17261,
+      "title": "CORSAIR VENGEANCE DDR5 RAM 96GB (2x48GB) Up to 5600MHz CL40 Intel XMP iCUE Compatible Computer Memory - Black (CMK96GX5M2B5600C40)",
+      "url": "https://www.amazon.co.uk/CORSAIR-VENGEANCE-5600MHz-Compatible-Computer/dp/B0BVN1FLKN/ref=sr_1_192?dib=eyJ2IjoiMSJ9.Zt1u2VfLpzLQEP5lQgBCMx21DGTtLtTWmcKSjDBUgICOT6E-PqwJT5_aBkhBSRdISfnGIi7kdmwHyQU_muozkdhDA-lKt9Klgz25aoL8IdJnqnJg1nJ92CkkOuUUs6shq_29nD9rjcUiz38BYaG0NudZC3Bd2tM0nWiOZ3j1rcQnd_8RMfR5KvJbiQw7g5jKog3SedYU0bba5OfBxWeusBlN8QyMSjR-tnBmMBby0C9o0ZjClw44If6UHTtzwaYlcHLRiBDMgkd3u39tbwPUeT3L0sy-pOJ6RJRbfLgUvxQ.kFgOdaO1W-LoiN_W5UPqeIrJo36ln2icdYHjj2gvJwc&dib_tag=se&keywords=RAM+Memory&qid=1792682636&s=computers&sr=1-192&xpid=g1lWj1k5Cy_HZ",
+      "source": null,
+      "item_gbp": null,
+      "condition": null,
+      "stock_status": null,
+      "stock_evidence": null,
+      "postage_verified": null,
+      "postage_assumption": null,
+      "active_listing": null,
+      "fresh": null,
+      "reviewable": false,
+      "cells": [
+        "FF-SWD-02"
+      ],
+      "roles": [
+        "ram"
+      ]
+    },
+    {
+      "listing_id": 17262,
+      "title": "Silicon Power RDIMM 32GB (1x32GB) DDR5 C40 4800MHz Single Channel Kit",
+      "url": "https://www.overclockers.co.uk/silicon-power-rdimm-32gb-1x32gb-ddr5-c40-4800mhz-single-channel-kit/MEM-SIL-08450.html",
+      "source": "overclockers",
+      "item_gbp": "1399.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "https://schema.org/InStock",
+      "postage_verified": false,
+      "postage_assumption": "owner-approved-zero-fallback",
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-03"
+      ],
+      "roles": [
+        "ram"
+      ]
+    },
+    {
+      "listing_id": 17264,
+      "title": "Zotac GeForce RTX 5090 Solid OC 32GB GDDR7 PCI-Express Graphics Card",
+      "url": "https://www.overclockers.co.uk/zotac-geforce-rtx-5090-solid-oc-32gb-gddr7-pci-express-graphics-card/GRA-ZTC-04048.html",
+      "source": "overclockers",
+      "item_gbp": "6989.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "https://schema.org/InStock",
+      "postage_verified": false,
+      "postage_assumption": "owner-approved-zero-fallback",
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-CCR-03",
+        "FF-HPG-03"
+      ],
+      "roles": [
+        "gpu"
+      ]
+    },
+    {
+      "listing_id": 17314,
+      "title": "WD_BLACK SN850P 8TB PS5 SSD, Officially Licensed for PlayStation 5, Read Speeds Up to 7200 MB/s, M.2 2280 PCIe NVMe, Exclusiv",
+      "url": "https://www.amazon.co.uk/WD_BLACK-Officially-Playstation-Exclusive-Expansion/dp/B0DBQP4F3Z/ref=zg_bs_g_430505031_d_sccl_43/524-6031944-5282105",
+      "source": "amazon",
+      "item_gbp": "976.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "In stock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-03"
+      ],
+      "roles": [
+        "storage_secondary"
+      ]
+    },
+    {
+      "listing_id": 17448,
+      "title": "Windows 11 Home OEM Digital Key (supplier listing)",
+      "url": "https://www.gamers-outlet.net/en/buy-windows-11-home-cd-key-retail-microsoft-global",
+      "source": "Gamers Outlet",
+      "item_gbp": "3.34",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "https://schema.org/InStock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": false,
+      "cells": [
+        "FF-CCR-01",
+        "FF-FAM-01",
+        "FF-FAM-02",
+        "FF-FAM-03",
+        "FF-GVG-01",
+        "FF-GVG-02",
+        "FF-GVG-03",
+        "FF-HPG-01",
+        "FF-HPG-02",
+        "FF-STU-01",
+        "FF-STU-02",
+        "FF-STU-03"
+      ],
+      "roles": [
+        "os"
+      ]
+    },
+    {
+      "listing_id": 17449,
+      "title": "Windows 11 Pro OEM Digital Key (supplier listing)",
+      "url": "https://www.gamers-outlet.net/en/buy-windows-11-pro-cd-key-oem-microsoft-global-1",
+      "source": "Gamers Outlet",
+      "item_gbp": "4.68",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "https://schema.org/InStock",
+      "postage_verified": true,
+      "postage_assumption": null,
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": false,
+      "cells": [
+        "FF-AIW-01",
+        "FF-AIW-02",
+        "FF-AIW-03",
+        "FF-BOF-01",
+        "FF-BOF-02",
+        "FF-BOF-03",
+        "FF-CCR-02",
+        "FF-CCR-03",
+        "FF-HPG-03",
+        "FF-SWD-01",
+        "FF-SWD-02",
+        "FF-SWD-03"
+      ],
+      "roles": [
+        "os"
+      ]
+    },
+    {
+      "listing_id": 17458,
+      "title": "MSI HERALD BE6500 WiFi 7 PCIe Card",
+      "url": "https://www.overclockers.co.uk/msi-herald-be6500-wifi-7-pcie-card/NET-MSI-08223.html",
+      "source": "Overclockers",
+      "item_gbp": "34.99",
+      "condition": "new",
+      "stock_status": "available",
+      "stock_evidence": "https://schema.org/InStock",
+      "postage_verified": false,
+      "postage_assumption": "owner-approved-zero-fallback",
+      "active_listing": true,
+      "fresh": true,
+      "reviewable": true,
+      "cells": [
+        "FF-AIW-01",
+        "FF-AIW-03",
+        "FF-BOF-01",
+        "FF-BOF-03",
+        "FF-FAM-01",
+        "FF-FAM-02",
+        "FF-FAM-03",
+        "FF-GVG-01",
+        "FF-GVG-02",
+        "FF-GVG-03",
+        "FF-HPG-02",
+        "FF-STU-01",
+        "FF-STU-02",
+        "FF-SWD-01"
+      ],
+      "roles": [
+        "wireless_adapter"
+      ]
+    }
+  ],
+  "pending_appearances": [
+    {
+      "cell_id": "FF-GVG-01",
+      "role": "os",
+      "title": "Windows 11 Home OEM Digital Key (supplier listing)",
+      "listing_id": 17448,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-home-cd-key-retail-microsoft-global",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "3.34",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-GVG-02",
+      "role": "os",
+      "title": "Windows 11 Home OEM Digital Key (supplier listing)",
+      "listing_id": 17448,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-home-cd-key-retail-microsoft-global",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "3.34",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-GVG-03",
+      "role": "os",
+      "title": "Windows 11 Home OEM Digital Key (supplier listing)",
+      "listing_id": 17448,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-home-cd-key-retail-microsoft-global",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "3.34",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-HPG-01",
+      "role": "os",
+      "title": "Windows 11 Home OEM Digital Key (supplier listing)",
+      "listing_id": 17448,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-home-cd-key-retail-microsoft-global",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "3.34",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-HPG-02",
+      "role": "os",
+      "title": "Windows 11 Home OEM Digital Key (supplier listing)",
+      "listing_id": 17448,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-home-cd-key-retail-microsoft-global",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "3.34",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-STU-01",
+      "role": "os",
+      "title": "Windows 11 Home OEM Digital Key (supplier listing)",
+      "listing_id": 17448,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-home-cd-key-retail-microsoft-global",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "3.34",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-STU-02",
+      "role": "os",
+      "title": "Windows 11 Home OEM Digital Key (supplier listing)",
+      "listing_id": 17448,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-home-cd-key-retail-microsoft-global",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "3.34",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-STU-03",
+      "role": "os",
+      "title": "Windows 11 Home OEM Digital Key (supplier listing)",
+      "listing_id": 17448,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-home-cd-key-retail-microsoft-global",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "3.34",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-CCR-01",
+      "role": "os",
+      "title": "Windows 11 Home OEM Digital Key (supplier listing)",
+      "listing_id": 17448,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-home-cd-key-retail-microsoft-global",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "3.34",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-FAM-01",
+      "role": "os",
+      "title": "Windows 11 Home OEM Digital Key (supplier listing)",
+      "listing_id": 17448,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-home-cd-key-retail-microsoft-global",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "3.34",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-FAM-02",
+      "role": "os",
+      "title": "Windows 11 Home OEM Digital Key (supplier listing)",
+      "listing_id": 17448,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-home-cd-key-retail-microsoft-global",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "3.34",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-FAM-03",
+      "role": "os",
+      "title": "Windows 11 Home OEM Digital Key (supplier listing)",
+      "listing_id": 17448,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-home-cd-key-retail-microsoft-global",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "3.34",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-GVG-02",
+      "role": "cpu",
+      "title": "AMD Ryzensets 5 9600X Processor (radeon graphics included, 6 Cores/12 Threads, 65W TDP, Socket AM5, Cache 38MB, up to 5.4 GHz max boost Frequency, no cooler)",
+      "listing_id": 12047,
+      "source": {
+        "url": "https://www.amazon.co.uk/AMD-Ryzensets-9600X-Processor-Frequency/dp/B0D6NN6TM7/ref=sr_1_5?dib=eyJ2IjoiMSJ9.dogrGivqJXsW4TurIOrzXFckkppVWeiWA8x79D8oOKg5MONwVJS_VtezyLZpoa5QPYOTFq3UryswCNjjNwoD5DoCp3OcxU5L_PoAl4VhY3lMf35XebEU2S_l8P-3j-hiFJpQWIK1ZvoHk8RPvicHEOFTtgCjFgc5LElaUzsosz10DSUNb5diLZNCbSdLCih0zYIvmQF6H1TMlorD7KaKA9hNkn0EL815Rmm94f7ZdzEYp01MVH4PpNx35U_XfsUGpUHe4TIlVfvwU16APTABSTuJW81xuq6C6uAgIrZ6TsY.Y6kS8Rm2ySvJFACJJpBwtOIGnFblg0A6w3chYAMFXQI&dib_tag=se&keywords=CPU+Processor&qid=1792988827&s=computers&sr=1-5",
+        "source": "amazon",
+        "condition": "new",
+        "item_gbp": "137.26",
+        "stock_status": "unknown",
+        "stock_evidence": null,
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-STU-01",
+      "role": "cpu",
+      "title": "AMD Ryzensets 5 9600X Processor (radeon graphics included, 6 Cores/12 Threads, 65W TDP, Socket AM5, Cache 38MB, up to 5.4 GHz max boost Frequency, no cooler)",
+      "listing_id": 12047,
+      "source": {
+        "url": "https://www.amazon.co.uk/AMD-Ryzensets-9600X-Processor-Frequency/dp/B0D6NN6TM7/ref=sr_1_5?dib=eyJ2IjoiMSJ9.dogrGivqJXsW4TurIOrzXFckkppVWeiWA8x79D8oOKg5MONwVJS_VtezyLZpoa5QPYOTFq3UryswCNjjNwoD5DoCp3OcxU5L_PoAl4VhY3lMf35XebEU2S_l8P-3j-hiFJpQWIK1ZvoHk8RPvicHEOFTtgCjFgc5LElaUzsosz10DSUNb5diLZNCbSdLCih0zYIvmQF6H1TMlorD7KaKA9hNkn0EL815Rmm94f7ZdzEYp01MVH4PpNx35U_XfsUGpUHe4TIlVfvwU16APTABSTuJW81xuq6C6uAgIrZ6TsY.Y6kS8Rm2ySvJFACJJpBwtOIGnFblg0A6w3chYAMFXQI&dib_tag=se&keywords=CPU+Processor&qid=1792988827&s=computers&sr=1-5",
+        "source": "amazon",
+        "condition": "new",
+        "item_gbp": "137.26",
+        "stock_status": "unknown",
+        "stock_evidence": null,
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-STU-02",
+      "role": "cpu",
+      "title": "AMD Ryzensets 5 9600X Processor (radeon graphics included, 6 Cores/12 Threads, 65W TDP, Socket AM5, Cache 38MB, up to 5.4 GHz max boost Frequency, no cooler)",
+      "listing_id": 12047,
+      "source": {
+        "url": "https://www.amazon.co.uk/AMD-Ryzensets-9600X-Processor-Frequency/dp/B0D6NN6TM7/ref=sr_1_5?dib=eyJ2IjoiMSJ9.dogrGivqJXsW4TurIOrzXFckkppVWeiWA8x79D8oOKg5MONwVJS_VtezyLZpoa5QPYOTFq3UryswCNjjNwoD5DoCp3OcxU5L_PoAl4VhY3lMf35XebEU2S_l8P-3j-hiFJpQWIK1ZvoHk8RPvicHEOFTtgCjFgc5LElaUzsosz10DSUNb5diLZNCbSdLCih0zYIvmQF6H1TMlorD7KaKA9hNkn0EL815Rmm94f7ZdzEYp01MVH4PpNx35U_XfsUGpUHe4TIlVfvwU16APTABSTuJW81xuq6C6uAgIrZ6TsY.Y6kS8Rm2ySvJFACJJpBwtOIGnFblg0A6w3chYAMFXQI&dib_tag=se&keywords=CPU+Processor&qid=1792988827&s=computers&sr=1-5",
+        "source": "amazon",
+        "condition": "new",
+        "item_gbp": "137.26",
+        "stock_status": "unknown",
+        "stock_evidence": null,
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-BOF-01",
+      "role": "cpu",
+      "title": "AMD Ryzensets 5 9600X Processor (radeon graphics included, 6 Cores/12 Threads, 65W TDP, Socket AM5, Cache 38MB, up to 5.4 GHz max boost Frequency, no cooler)",
+      "listing_id": 12047,
+      "source": {
+        "url": "https://www.amazon.co.uk/AMD-Ryzensets-9600X-Processor-Frequency/dp/B0D6NN6TM7/ref=sr_1_5?dib=eyJ2IjoiMSJ9.dogrGivqJXsW4TurIOrzXFckkppVWeiWA8x79D8oOKg5MONwVJS_VtezyLZpoa5QPYOTFq3UryswCNjjNwoD5DoCp3OcxU5L_PoAl4VhY3lMf35XebEU2S_l8P-3j-hiFJpQWIK1ZvoHk8RPvicHEOFTtgCjFgc5LElaUzsosz10DSUNb5diLZNCbSdLCih0zYIvmQF6H1TMlorD7KaKA9hNkn0EL815Rmm94f7ZdzEYp01MVH4PpNx35U_XfsUGpUHe4TIlVfvwU16APTABSTuJW81xuq6C6uAgIrZ6TsY.Y6kS8Rm2ySvJFACJJpBwtOIGnFblg0A6w3chYAMFXQI&dib_tag=se&keywords=CPU+Processor&qid=1792988827&s=computers&sr=1-5",
+        "source": "amazon",
+        "condition": "new",
+        "item_gbp": "137.26",
+        "stock_status": "unknown",
+        "stock_evidence": null,
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-AIW-01",
+      "role": "cpu",
+      "title": "AMD Ryzensets 5 9600X Processor (radeon graphics included, 6 Cores/12 Threads, 65W TDP, Socket AM5, Cache 38MB, up to 5.4 GHz max boost Frequency, no cooler)",
+      "listing_id": 12047,
+      "source": {
+        "url": "https://www.amazon.co.uk/AMD-Ryzensets-9600X-Processor-Frequency/dp/B0D6NN6TM7/ref=sr_1_5?dib=eyJ2IjoiMSJ9.dogrGivqJXsW4TurIOrzXFckkppVWeiWA8x79D8oOKg5MONwVJS_VtezyLZpoa5QPYOTFq3UryswCNjjNwoD5DoCp3OcxU5L_PoAl4VhY3lMf35XebEU2S_l8P-3j-hiFJpQWIK1ZvoHk8RPvicHEOFTtgCjFgc5LElaUzsosz10DSUNb5diLZNCbSdLCih0zYIvmQF6H1TMlorD7KaKA9hNkn0EL815Rmm94f7ZdzEYp01MVH4PpNx35U_XfsUGpUHe4TIlVfvwU16APTABSTuJW81xuq6C6uAgIrZ6TsY.Y6kS8Rm2ySvJFACJJpBwtOIGnFblg0A6w3chYAMFXQI&dib_tag=se&keywords=CPU+Processor&qid=1792988827&s=computers&sr=1-5",
+        "source": "amazon",
+        "condition": "new",
+        "item_gbp": "137.26",
+        "stock_status": "unknown",
+        "stock_evidence": null,
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-SWD-01",
+      "role": "cpu",
+      "title": "AMD Ryzensets 5 9600X Processor (radeon graphics included, 6 Cores/12 Threads, 65W TDP, Socket AM5, Cache 38MB, up to 5.4 GHz max boost Frequency, no cooler)",
+      "listing_id": 12047,
+      "source": {
+        "url": "https://www.amazon.co.uk/AMD-Ryzensets-9600X-Processor-Frequency/dp/B0D6NN6TM7/ref=sr_1_5?dib=eyJ2IjoiMSJ9.dogrGivqJXsW4TurIOrzXFckkppVWeiWA8x79D8oOKg5MONwVJS_VtezyLZpoa5QPYOTFq3UryswCNjjNwoD5DoCp3OcxU5L_PoAl4VhY3lMf35XebEU2S_l8P-3j-hiFJpQWIK1ZvoHk8RPvicHEOFTtgCjFgc5LElaUzsosz10DSUNb5diLZNCbSdLCih0zYIvmQF6H1TMlorD7KaKA9hNkn0EL815Rmm94f7ZdzEYp01MVH4PpNx35U_XfsUGpUHe4TIlVfvwU16APTABSTuJW81xuq6C6uAgIrZ6TsY.Y6kS8Rm2ySvJFACJJpBwtOIGnFblg0A6w3chYAMFXQI&dib_tag=se&keywords=CPU+Processor&qid=1792988827&s=computers&sr=1-5",
+        "source": "amazon",
+        "condition": "new",
+        "item_gbp": "137.26",
+        "stock_status": "unknown",
+        "stock_evidence": null,
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-FAM-01",
+      "role": "cpu",
+      "title": "AMD Ryzensets 5 9600X Processor (radeon graphics included, 6 Cores/12 Threads, 65W TDP, Socket AM5, Cache 38MB, up to 5.4 GHz max boost Frequency, no cooler)",
+      "listing_id": 12047,
+      "source": {
+        "url": "https://www.amazon.co.uk/AMD-Ryzensets-9600X-Processor-Frequency/dp/B0D6NN6TM7/ref=sr_1_5?dib=eyJ2IjoiMSJ9.dogrGivqJXsW4TurIOrzXFckkppVWeiWA8x79D8oOKg5MONwVJS_VtezyLZpoa5QPYOTFq3UryswCNjjNwoD5DoCp3OcxU5L_PoAl4VhY3lMf35XebEU2S_l8P-3j-hiFJpQWIK1ZvoHk8RPvicHEOFTtgCjFgc5LElaUzsosz10DSUNb5diLZNCbSdLCih0zYIvmQF6H1TMlorD7KaKA9hNkn0EL815Rmm94f7ZdzEYp01MVH4PpNx35U_XfsUGpUHe4TIlVfvwU16APTABSTuJW81xuq6C6uAgIrZ6TsY.Y6kS8Rm2ySvJFACJJpBwtOIGnFblg0A6w3chYAMFXQI&dib_tag=se&keywords=CPU+Processor&qid=1792988827&s=computers&sr=1-5",
+        "source": "amazon",
+        "condition": "new",
+        "item_gbp": "137.26",
+        "stock_status": "unknown",
+        "stock_evidence": null,
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-FAM-02",
+      "role": "cpu",
+      "title": "AMD Ryzensets 5 9600X Processor (radeon graphics included, 6 Cores/12 Threads, 65W TDP, Socket AM5, Cache 38MB, up to 5.4 GHz max boost Frequency, no cooler)",
+      "listing_id": 12047,
+      "source": {
+        "url": "https://www.amazon.co.uk/AMD-Ryzensets-9600X-Processor-Frequency/dp/B0D6NN6TM7/ref=sr_1_5?dib=eyJ2IjoiMSJ9.dogrGivqJXsW4TurIOrzXFckkppVWeiWA8x79D8oOKg5MONwVJS_VtezyLZpoa5QPYOTFq3UryswCNjjNwoD5DoCp3OcxU5L_PoAl4VhY3lMf35XebEU2S_l8P-3j-hiFJpQWIK1ZvoHk8RPvicHEOFTtgCjFgc5LElaUzsosz10DSUNb5diLZNCbSdLCih0zYIvmQF6H1TMlorD7KaKA9hNkn0EL815Rmm94f7ZdzEYp01MVH4PpNx35U_XfsUGpUHe4TIlVfvwU16APTABSTuJW81xuq6C6uAgIrZ6TsY.Y6kS8Rm2ySvJFACJJpBwtOIGnFblg0A6w3chYAMFXQI&dib_tag=se&keywords=CPU+Processor&qid=1792988827&s=computers&sr=1-5",
+        "source": "amazon",
+        "condition": "new",
+        "item_gbp": "137.26",
+        "stock_status": "unknown",
+        "stock_evidence": null,
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-HPG-01",
+      "role": "cpu",
+      "title": "Intel Core Ultra 5 Processor 250K Plus, up to 5.3 GHz, LGA1851 Socket, PCIe 5.0, DDR5 Support, 125W TDP",
+      "listing_id": 14937,
+      "source": {
+        "url": "https://www.amazon.co.uk/Intel-Processor-250K-LGA1851-Support/dp/B0GMKXVVJQ/ref=zg_bs_g_430515031_d_sccl_46/520-0243193-1826356",
+        "source": "Amazon Resale",
+        "condition": "used",
+        "item_gbp": "204.98",
+        "stock_status": "available",
+        "stock_evidence": "In stock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-BOF-02",
+      "role": "cpu",
+      "title": "Intel Core Ultra 5 Processor 250K Plus, up to 5.3 GHz, LGA1851 Socket, PCIe 5.0, DDR5 Support, 125W TDP",
+      "listing_id": 14937,
+      "source": {
+        "url": "https://www.amazon.co.uk/Intel-Processor-250K-LGA1851-Support/dp/B0GMKXVVJQ/ref=zg_bs_g_430515031_d_sccl_46/520-0243193-1826356",
+        "source": "Amazon Resale",
+        "condition": "used",
+        "item_gbp": "204.98",
+        "stock_status": "available",
+        "stock_evidence": "In stock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-CCR-01",
+      "role": "cpu",
+      "title": "Intel Core Ultra 5 Processor 250K Plus, up to 5.3 GHz, LGA1851 Socket, PCIe 5.0, DDR5 Support, 125W TDP",
+      "listing_id": 14937,
+      "source": {
+        "url": "https://www.amazon.co.uk/Intel-Processor-250K-LGA1851-Support/dp/B0GMKXVVJQ/ref=zg_bs_g_430515031_d_sccl_46/520-0243193-1826356",
+        "source": "Amazon Resale",
+        "condition": "used",
+        "item_gbp": "204.98",
+        "stock_status": "available",
+        "stock_evidence": "In stock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-HPG-02",
+      "role": "cpu",
+      "title": "AMD Ryzensets 7 7800X3D Processor with 3D V Cache technology (integrated Radeon Graphics, 8 cores/16 threads, 120W TDP, AM5 S",
+      "listing_id": 14898,
+      "source": {
+        "url": "https://www.amazon.co.uk/AMD-7800X3D-Desk-top-Processor-16-thread/dp/B0BTZB7F88/ref=sr_1_17?dib=eyJ2IjoiMSJ9.dogrGivqJXsW4TurIOrzXFckkppVWeiWA8x79D8oOKg5MONwVJS_VtezyLZpoa5QPYOTFq3UryswCNjjNwoD5DoCp3OcxU5L_PoAl4VhY3lMf35XebEU2S_l8P-3j-hiFJpQWIK1ZvoHk8RPvicHEOFTtgCjFgc5LElaUzsosz10DSUNb5diLZNCbSdLCih0zYIvmQF6H1TMlorD7KaKA9hNkn0EL815Rmm94f7ZdzEYp01MVH4PpNx35U_XfsUGpUHe4TIlVfvwU16APTABSTuJW81xuq6C6uAgIrZ6TsY.Y6kS8Rm2ySvJFACJJpBwtOIGnFblg0A6w3chYAMFXQI&dib_tag=se&keywords=CPU+Processor&qid=1792988827&s=computers&sr=1-17&ufe=app_do%3Aamzn1.fos.306fc827-d528-4764-b864-7a43ae39ec28",
+        "source": "amazon",
+        "condition": "new",
+        "item_gbp": "334.94",
+        "stock_status": "unknown",
+        "stock_evidence": null,
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-HPG-03",
+      "role": "os",
+      "title": "Windows 11 Pro OEM Digital Key (supplier listing)",
+      "listing_id": 17449,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-pro-cd-key-oem-microsoft-global-1",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "4.68",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-BOF-01",
+      "role": "os",
+      "title": "Windows 11 Pro OEM Digital Key (supplier listing)",
+      "listing_id": 17449,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-pro-cd-key-oem-microsoft-global-1",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "4.68",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-BOF-02",
+      "role": "os",
+      "title": "Windows 11 Pro OEM Digital Key (supplier listing)",
+      "listing_id": 17449,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-pro-cd-key-oem-microsoft-global-1",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "4.68",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-BOF-03",
+      "role": "os",
+      "title": "Windows 11 Pro OEM Digital Key (supplier listing)",
+      "listing_id": 17449,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-pro-cd-key-oem-microsoft-global-1",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "4.68",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-CCR-02",
+      "role": "os",
+      "title": "Windows 11 Pro OEM Digital Key (supplier listing)",
+      "listing_id": 17449,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-pro-cd-key-oem-microsoft-global-1",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "4.68",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-CCR-03",
+      "role": "os",
+      "title": "Windows 11 Pro OEM Digital Key (supplier listing)",
+      "listing_id": 17449,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-pro-cd-key-oem-microsoft-global-1",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "4.68",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-AIW-01",
+      "role": "os",
+      "title": "Windows 11 Pro OEM Digital Key (supplier listing)",
+      "listing_id": 17449,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-pro-cd-key-oem-microsoft-global-1",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "4.68",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-AIW-02",
+      "role": "os",
+      "title": "Windows 11 Pro OEM Digital Key (supplier listing)",
+      "listing_id": 17449,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-pro-cd-key-oem-microsoft-global-1",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "4.68",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-AIW-03",
+      "role": "os",
+      "title": "Windows 11 Pro OEM Digital Key (supplier listing)",
+      "listing_id": 17449,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-pro-cd-key-oem-microsoft-global-1",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "4.68",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-SWD-01",
+      "role": "os",
+      "title": "Windows 11 Pro OEM Digital Key (supplier listing)",
+      "listing_id": 17449,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-pro-cd-key-oem-microsoft-global-1",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "4.68",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-SWD-02",
+      "role": "os",
+      "title": "Windows 11 Pro OEM Digital Key (supplier listing)",
+      "listing_id": 17449,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-pro-cd-key-oem-microsoft-global-1",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "4.68",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-SWD-03",
+      "role": "os",
+      "title": "Windows 11 Pro OEM Digital Key (supplier listing)",
+      "listing_id": 17449,
+      "source": {
+        "url": "https://www.gamers-outlet.net/en/buy-windows-11-pro-cd-key-oem-microsoft-global-1",
+        "source": "Gamers Outlet",
+        "condition": "new",
+        "item_gbp": "4.68",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-CCR-02",
+      "role": "gpu",
+      "title": "MSI GeForce RTX 5080 16G VENTUS 3X OC Graphics Card - RTX 5080 GPU | 16GB GDDR7 (30Gbps/256-bit), PCIe 5.0 - Triple Fan Desig",
+      "listing_id": 16961,
+      "source": {
+        "url": "https://www.amazon.co.uk/MSI-GeForce-5080-VENTUS-Graphics/dp/B0DT6NZ9V9/ref=zg_bs_g_430500031_d_sccl_12/524-8030566-4114121",
+        "source": "amazon",
+        "condition": "new",
+        "item_gbp": "1429.99",
+        "stock_status": "available",
+        "stock_evidence": "In stock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-SWD-03",
+      "role": "gpu",
+      "title": "MSI GeForce RTX 5080 16G VENTUS 3X OC Graphics Card - RTX 5080 GPU | 16GB GDDR7 (30Gbps/256-bit), PCIe 5.0 - Triple Fan Desig",
+      "listing_id": 16961,
+      "source": {
+        "url": "https://www.amazon.co.uk/MSI-GeForce-5080-VENTUS-Graphics/dp/B0DT6NZ9V9/ref=zg_bs_g_430500031_d_sccl_12/524-8030566-4114121",
+        "source": "amazon",
+        "condition": "new",
+        "item_gbp": "1429.99",
+        "stock_status": "available",
+        "stock_evidence": "In stock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-CCR-03",
+      "role": "ram",
+      "title": "Crucial Pro DDR5 RAM 128GB Kit (2x64GB) 5600MHz, Intel XMP 3.0 / AMD EXPO, Computer Memory (PC) - CP2K64G56C46U5",
+      "listing_id": 16659,
+      "source": {
+        "url": "https://www.amazon.co.uk/Crucial-2x64GB-5600MHz-Computer-Memory/dp/B0DSR5P84D/ref=sr_1_34?dib=eyJ2IjoiMSJ9.CBygmwHQriC6zpugqWbMtLMNYvw6EtgrI9CJCLmX5bIXvWRIxXTwzEiGE98IFRUxb-lJorDHg23utEC-4NA8TSaeXtMkXtmc0ouQiBvBgRf3VpOttIHm8Hn-oXHmuDhBRcuZfP5XEA4_7yukmQMspdvlfMOUhNXlAeTuMwO8FKIc4KeppSWj6k4wp9aoIVXKIH5sqKuzDJU9sjQRgwnnRtUBLjm82jBSIy67gJ4WNCOJnq_xVgHAojMQmZNouDTGR5mB_4nrbzdpF_zVEocnBJruSywCI3vfc_Qrw__MuzI.RYn_TUml40U7HtcgcvQnPEkG9Qj-TU75sVpgUHKnhb0&dib_tag=se&keywords=RAM+Memory&qid=1792682559&s=computers&sr=1-34&xpid=g1lWj1k5Cy_HZ",
+        "source": "amazon",
+        "condition": "new",
+        "item_gbp": "2199.0",
+        "stock_status": "available",
+        "stock_evidence": "FREE delivery Sun 25 OctOnly 1 left in stock.",
+        "fresh": false
+      }
+    },
+    {
+      "cell_id": "FF-AIW-02",
+      "role": "ram",
+      "title": "Crucial Pro DDR5 RAM 128GB Kit (2x64GB) 5600MHz, Intel XMP 3.0 / AMD EXPO, Computer Memory (PC) - CP2K64G56C46U5",
+      "listing_id": 16659,
+      "source": {
+        "url": "https://www.amazon.co.uk/Crucial-2x64GB-5600MHz-Computer-Memory/dp/B0DSR5P84D/ref=sr_1_34?dib=eyJ2IjoiMSJ9.CBygmwHQriC6zpugqWbMtLMNYvw6EtgrI9CJCLmX5bIXvWRIxXTwzEiGE98IFRUxb-lJorDHg23utEC-4NA8TSaeXtMkXtmc0ouQiBvBgRf3VpOttIHm8Hn-oXHmuDhBRcuZfP5XEA4_7yukmQMspdvlfMOUhNXlAeTuMwO8FKIc4KeppSWj6k4wp9aoIVXKIH5sqKuzDJU9sjQRgwnnRtUBLjm82jBSIy67gJ4WNCOJnq_xVgHAojMQmZNouDTGR5mB_4nrbzdpF_zVEocnBJruSywCI3vfc_Qrw__MuzI.RYn_TUml40U7HtcgcvQnPEkG9Qj-TU75sVpgUHKnhb0&dib_tag=se&keywords=RAM+Memory&qid=1792682559&s=computers&sr=1-34&xpid=g1lWj1k5Cy_HZ",
+        "source": "amazon",
+        "condition": "new",
+        "item_gbp": "2199.0",
+        "stock_status": "available",
+        "stock_evidence": "FREE delivery Sun 25 OctOnly 1 left in stock.",
+        "fresh": false
+      }
+    },
+    {
+      "cell_id": "FF-SWD-03",
+      "role": "ram",
+      "title": "Crucial Pro DDR5 RAM 128GB Kit (2x64GB) 5600MHz, Intel XMP 3.0 / AMD EXPO, Computer Memory (PC) - CP2K64G56C46U5",
+      "listing_id": 16659,
+      "source": {
+        "url": "https://www.amazon.co.uk/Crucial-2x64GB-5600MHz-Computer-Memory/dp/B0DSR5P84D/ref=sr_1_34?dib=eyJ2IjoiMSJ9.CBygmwHQriC6zpugqWbMtLMNYvw6EtgrI9CJCLmX5bIXvWRIxXTwzEiGE98IFRUxb-lJorDHg23utEC-4NA8TSaeXtMkXtmc0ouQiBvBgRf3VpOttIHm8Hn-oXHmuDhBRcuZfP5XEA4_7yukmQMspdvlfMOUhNXlAeTuMwO8FKIc4KeppSWj6k4wp9aoIVXKIH5sqKuzDJU9sjQRgwnnRtUBLjm82jBSIy67gJ4WNCOJnq_xVgHAojMQmZNouDTGR5mB_4nrbzdpF_zVEocnBJruSywCI3vfc_Qrw__MuzI.RYn_TUml40U7HtcgcvQnPEkG9Qj-TU75sVpgUHKnhb0&dib_tag=se&keywords=RAM+Memory&qid=1792682559&s=computers&sr=1-34&xpid=g1lWj1k5Cy_HZ",
+        "source": "amazon",
+        "condition": "new",
+        "item_gbp": "2199.0",
+        "stock_status": "available",
+        "stock_evidence": "FREE delivery Sun 25 OctOnly 1 left in stock.",
+        "fresh": false
+      }
+    },
+    {
+      "cell_id": "FF-AIW-03",
+      "role": "motherboard",
+      "title": "Asus Pro WS WRX90E-SAGE SE AMD sTR5 EEB Workstation Motherboard",
+      "listing_id": 17229,
+      "source": {
+        "url": "https://www.awd-it.co.uk/asus-pro-ws-wrx90e-sage-se-amd-str5-eeb-workstation-motherboard.html",
+        "source": "awd_it",
+        "condition": "new",
+        "item_gbp": "1243.73",
+        "stock_status": "available",
+        "stock_evidence": "https://schema.org/InStock",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-AIW-03",
+      "role": "case",
+      "title": "Fractal Design Define 7 XL Black Brushed Aluminum/Steel E-ATX Silent Modular Full Tower Computer Case",
+      "listing_id": 17154,
+      "source": {
+        "url": "https://www.amazon.co.uk/Fractal-Design-FD-C-DEF7X-01-Define-Black/dp/B08146GB6Y/ref=zg_bs_g_430498031_d_sccl_26/524-1065766-8214213",
+        "source": "amazon",
+        "condition": "new",
+        "item_gbp": "199.99",
+        "stock_status": "unavailable",
+        "stock_evidence": "Usually dispatched within 3 to 7 months",
+        "fresh": true
+      }
+    },
+    {
+      "cell_id": "FF-SWD-02",
+      "role": "ram",
+      "title": "CORSAIR VENGEANCE DDR5 RAM 96GB (2x48GB) Up to 5600MHz CL40 Intel XMP iCUE Compatible Computer Memory - Black (CMK96GX5M2B5600C40)",
+      "listing_id": 17261,
+      "source": {}
+    }
+  ]
+}

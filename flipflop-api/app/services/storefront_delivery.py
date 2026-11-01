@@ -44,13 +44,17 @@ async def estimate_component_sourcing_days(db: AsyncSession, variant_ids: list[i
             days = int(item.delivery_working_days)
             used_scrape = used_scrape or item.delivery_estimate_source == "listing_estimate"
         else:
-            supplier = (row.source_name or "").casefold()
-            if "vinted" in supplier or "ebay" in supplier:
-                days = 7
-            elif "amazon" in supplier and item is not None and item.prime_eligible:
-                days = 1
-            else:
-                days = 3
+            # Use the same vendor defaults as Playbook costing. Prefer the
+            # listing host so generic/missing source labels cannot turn an
+            # eBay or Vinted fallback into the generic three-day estimate.
+            from urllib.parse import urlsplit
+            from app.services.commerce_pricing import estimate_delivery_working_days
+            try:
+                supplier = urlsplit(str(row.url or "")).hostname or row.source_name or "retail"
+            except ValueError:
+                supplier = row.source_name or "retail"
+            days, _ = estimate_delivery_working_days(
+                supplier, None, item.prime_eligible if item is not None else None)
         estimates.append(max(0, days))
     return max(estimates) if estimates else None, "scraped_listing" if used_scrape else "vendor_default"
 
@@ -79,6 +83,9 @@ async def apply_component_delivery_estimate(db: AsyncSession, choice: dict, vari
         raise ValueError("Fast Track is unavailable because a selected supplier's delivery estimate exceeds its target")
     choice["supplier_delivery_days"] = sourcing_days
     choice["delivery_estimate_source"] = source or "configured_fulfilment_default"
+    if choice.get('delivery_option')=='flexible':
+        choice.update(delivery_days=None,promise='Flexible pace — no promised delivery date.',delivery_promised=False)
+        return choice
     choice["delivery_days"] = max(configured_days, sourcing_days or 0)
     choice["promise"] = f"Estimated delivery within {choice['delivery_days']} working days."
     return choice
@@ -121,9 +128,9 @@ async def delivery_choice(db: AsyncSession, fulfilment_type: str, speedy: bool, 
                 "delivery_option": "standard", "promise": f"Estimated delivery within {days} working days.", "delivery_days": days, "same_day_dispatch": False}
 
     if flexible:
-        days = int(settings.flexible_curated_custom_days if settings.flexible_curated_custom_days is not None else 10)
         return {"fulfilment_type": fulfilment_type, "speedy_delivery": False, "delivery_option": "flexible", "fee_gbp": 0.0,
-                "promise": f"Estimated delivery within {days} working days.", "delivery_days": days, "same_day_dispatch": False}
+                "promise": "Flexible pace — no promised delivery date.", "delivery_days": None,
+                "delivery_promised": False, "same_day_dispatch": False}
     days = int(settings.speedy_curated_custom_days if settings.speedy_curated_custom_days is not None else 3) if speedy else int(settings.standard_curated_custom_days if settings.standard_curated_custom_days is not None else 5)
     return {"fulfilment_type": fulfilment_type, "speedy_delivery": speedy, "delivery_option": "fast_track" if speedy else "standard", "fee_gbp": speedy_fee,
             "promise": f"Estimated delivery within {days} working days.", "delivery_days": days, "same_day_dispatch": False}

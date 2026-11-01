@@ -28,6 +28,8 @@ class GemRadarScoredListing(Base):
     title: Mapped[str] = mapped_column(String(500))
     seller_name: Mapped[str | None] = mapped_column(String(200))
     image_url: Mapped[str | None] = mapped_column(String(1000), nullable=True)
+    image_urls: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
+    video_urls: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
     condition: Mapped[str | None] = mapped_column(String(30), nullable=True)  # new, used, refurbished, etc.
     # Resolved product category (cpu, gpu, ram, motherboard, ssd, psu, cooler)
     # from identity.resolve_identity() — None when identity resolution found

@@ -66,6 +66,9 @@ class CatalogueVariant(Base):
     custom_proposed_price: Mapped[Optional[float]] = mapped_column(Float)
     custom_cost_snapshot: Mapped[Optional[float]] = mapped_column(Float)
     custom_sale_status: Mapped[str] = mapped_column(String(20), default="out_of_stock", nullable=False, index=True)
+    # Operator-approved listing photos used for the exact variant's 3D
+    # generation. Null means the source gallery has not been reviewed.
+    asset_media_review: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
     reviewed_at: Mapped[Optional[str]] = mapped_column(String(50))
     reviewed_by: Mapped[Optional[str]] = mapped_column(String(100))
     reject_reason: Mapped[Optional[str]] = mapped_column(String(200))
