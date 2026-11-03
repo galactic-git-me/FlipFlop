@@ -18,6 +18,8 @@ concurrency:
 
 permissions:
   contents: read
+  pull-requests: read
+  checks: read
 
 jobs:
   verify-release:
@@ -60,7 +62,7 @@ jobs:
         env:
           RELEASE_TAG: ${{ inputs.tag }}
         run: |
-          git fetch --force --tags origin main
+          git fetch --force --tags origin main:refs/remotes/origin/main
           test -n "$RELEASE_TAG"
           sha="$(git rev-parse "$RELEASE_TAG^{commit}")"
           git merge-base --is-ancestor "$RELEASE_TAG" origin/main || {
@@ -68,6 +70,35 @@ jobs:
             exit 1
           }
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
+      - name: Require a production pull request with passing DEV parity
+        id: dev_promotion
+        uses: actions/github-script@v7
+        env:
+          RELEASE_SHA: ${{ steps.release.outputs.sha }}
+        with:
+          script: |
+            const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: process.env.RELEASE_SHA,
+            });
+            const promotion = prs.find((pr) => pr.merged_at && pr.base.ref === 'main');
+            if (!promotion) {
+              core.setFailed('Production deployment requires a commit merged through a production pull request.');
+              return;
+            }
+            const { data: checks } = await github.rest.checks.listForRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: process.env.RELEASE_SHA,
+              per_page: 100,
+            });
+            const passedGate = checks.check_runs.some((check) =>
+              check.name === 'checks' && check.conclusion === 'success' && check.app.slug === 'github-actions'
+            );
+            if (!passedGate) {
+              core.setFailed('Production deployment requires a passing DEV-source parity and repository checks run.');
+            }
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
@@ -86,6 +117,9 @@ jobs:
           tests/test_ebay_oauth.py
           tests/test_browser_listing_jobs.py
           tests/test_component_price_alert_matching.py
+      - name: Build release admin bundle
+        working-directory: flipflop-admin
+        run: npm ci && npm run build
 
   deploy:
     needs: verify-release
