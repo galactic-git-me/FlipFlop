@@ -229,6 +229,7 @@ async def auto_publish_gems(db: AsyncSession) -> int:
             Listing.classification.in_(gem_classifications),
             Listing.gem_score >= MIN_GEM_SCORE,
             Listing.status == ListingStatus.active,
+            Listing.price.is_not(None),
             Listing.condition.notin_(("for_parts", "parts_only", "untested")),
             ~Listing.title.ilike("%for parts%"),
             ~Listing.title.ilike("%parts only%"),
@@ -364,7 +365,10 @@ async def update_prices(db: AsyncSession) -> int:
     result = await db.execute(
         select(CatalogueVariant, Listing)
         .join(Listing, CatalogueVariant.listing_id == Listing.id)
-        .where(CatalogueVariant.status == "active")
+        .where(
+            CatalogueVariant.status == "active",
+            Listing.price.is_not(None),
+        )
     )
     rows = result.all()
 
