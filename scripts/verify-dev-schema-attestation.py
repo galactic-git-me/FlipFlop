@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import ast
 import hashlib
+import io
 import json
 import subprocess
 import sys
@@ -35,16 +36,11 @@ def is_ancestor(ancestor: str, descendant: str) -> bool:
     ).returncode == 0
 
 
-def migration_head(ref: str, paths: list[str]) -> str:
+def migration_head(migrations: dict[str, bytes]) -> str:
     revisions: set[str] = set()
     parents: set[str] = set()
-    for path in paths:
-        content = subprocess.run(
-            ["git", "show", f"{ref}:{path}"],
-            cwd=ROOT,
-            capture_output=True,
-            check=True,
-        ).stdout.decode("utf-8")
+    for path, raw_content in migrations.items():
+        content = raw_content.decode("utf-8")
         tree = ast.parse(content, filename=path)
         values: dict[str, object] = {}
         for node in tree.body:
@@ -71,19 +67,40 @@ def migration_head(ref: str, paths: list[str]) -> str:
     return next(iter(heads))
 
 
-def tracked_migration_hashes(ref: str) -> dict[str, str]:
-    paths = git("ls-tree", "-r", "--name-only", ref, "--", MIGRATIONS).splitlines()
-    result: dict[str, str] = {}
-    for relative in paths:
-        if not relative.endswith(".py") or relative.endswith("/__init__.py"):
+def tracked_migrations(ref: str) -> dict[str, bytes]:
+    tree = subprocess.run(
+        ["git", "ls-tree", "-r", "-z", ref, "--", MIGRATIONS],
+        cwd=ROOT,
+        capture_output=True,
+        check=True,
+    ).stdout
+    entries = []
+    for entry in tree.split(b"\0"):
+        if not entry:
             continue
-        content = subprocess.run(
-            ["git", "show", f"{ref}:{relative}"],
-            cwd=ROOT,
-            capture_output=True,
-            check=True,
-        ).stdout
-        result[relative] = hashlib.sha256(content).hexdigest()
+        metadata, raw_path = entry.split(b"\t", 1)
+        mode, kind, object_id = metadata.decode("ascii").split()
+        path = raw_path.decode("utf-8")
+        if kind == "blob" and path.endswith(".py") and not path.endswith("/__init__.py"):
+            entries.append((path, object_id))
+
+    batch = subprocess.run(
+        ["git", "cat-file", "--batch"],
+        cwd=ROOT,
+        input=("\n".join(object_id for _, object_id in entries) + "\n").encode("ascii"),
+        capture_output=True,
+        check=True,
+    ).stdout
+    result: dict[str, bytes] = {}
+    stream = io.BytesIO(batch)
+    for path, expected_id in entries:
+        header = stream.readline().decode("ascii").split()
+        if len(header) != 3 or header[0] != expected_id or header[1] != "blob":
+            raise RuntimeError(f"Could not read migration blob from release: {path}")
+        content = stream.read(int(header[2]))
+        if stream.read(1) != b"\n":
+            raise RuntimeError(f"Malformed migration blob output from Git: {path}")
+        result[path] = content
     return result
 
 
@@ -112,11 +129,15 @@ def main() -> int:
     if args.require_dev_ancestor and not is_ancestor(source_commit, args.dev_ref):
         raise RuntimeError("Attested DEV validation commit has not reached origin/dev")
 
-    release_hashes = tracked_migration_hashes(args.release_ref)
+    migration_sources = tracked_migrations(args.release_ref)
+    release_hashes = {
+        path: hashlib.sha256(content).hexdigest()
+        for path, content in migration_sources.items()
+    }
     if manifest.get("migration_sha256") != release_hashes:
         raise RuntimeError("Migration files changed since the local DEV validation")
 
-    head = migration_head(args.release_ref, list(release_hashes))
+    head = migration_head(migration_sources)
     if manifest.get("schema_head") != head:
         raise RuntimeError(
             f"Attested schema head {manifest.get('schema_head')!r} does not match release head {head!r}"
