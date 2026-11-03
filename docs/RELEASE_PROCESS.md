@@ -15,12 +15,14 @@ FlipFlop has two runtime environments, not three:
 3. Run the DEV application from that exact `dev` commit and verify the affected
    user journey against DEV data and services. Record the tested commit SHA in
    the release notes or pull request.
-4. Open a pull request from `dev` to `main`. CI verifies that the proposed
-   commit is already present in `dev`; pull requests from feature branches are
-   rejected. Merge only after the DEV runtime check is recorded.
+4. Open a production pull request whose complete tracked source tree matches
+   the validated DEV tree. CI rejects application, migration, configuration,
+   or data differences from DEV while ignoring generated build and local tool
+   artifacts. Merge only after the DEV runtime check is recorded.
 5. Create a version tag on that DEV-to-main merge commit, for example
    `v1.0.0`. Release checks require the tag to be on `main` and its commit to
-   be associated with the merged DEV-to-main pull request.
+   be associated with the merged production pull request and its successful
+   DEV-parity CI run.
 6. Run **Actions → Deploy production**, enter the tag, and type
    `DEPLOY-PRODUCTION`. The deploy workflow reruns API checks and builds the
    admin bundle before connecting to production.

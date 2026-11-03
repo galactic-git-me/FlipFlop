@@ -7,14 +7,16 @@ FlipFlop uses two branches with different responsibilities:
   runtime journey are completed before production promotion.
 - `main` is the production branch. It is never updated by autosync and the
   production deploy workflow has no push trigger. Pull requests into `main`
-  must come from `dev`, and GitHub branch protection requires the `checks`
-  status check and pull-request flow for administrators too.
+  must match the current `dev` source tree, and GitHub branch protection
+  requires the `checks` status check and pull-request flow for administrators
+  too.
 
 After the exact DEV commit has passed its runtime check, open a pull request
-from `dev` to `main`. CI confirms the proposed commit is already present in
-`dev`; feature branches cannot target `main`. Tag that exact merge commit. Both
-release verification and production deployment confirm the tagged commit is
-associated with a merged `dev`-to-`main` pull request.
+for `main` only when its tracked source tree matches `dev`. This permits a
+promotion branch that preserves production-only generated artifacts while
+ensuring application code and migrations are the tested DEV versions. Tag
+that exact merge commit. Release and deployment checks require a passing
+DEV-parity CI run for the associated production pull request.
 
 The remote startup and deployment scripts verify that the production checkout
 is on `main` and deploy only `origin/main`. If a production checkout is still
