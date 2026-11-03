@@ -554,12 +554,13 @@ async def lifespan(app: FastAPI):
     loop = asyncio.get_running_loop()
     loop.set_exception_handler(_loop_exception_handler)
     log.info("app.startup", event_loop_type=type(loop).__name__, app_env=settings.app_env)
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-        # Small additive lifecycle columns used by Email Events/Dispatch
-        # Zone. Keep this separate from the legacy broad migration because
-        # that migration is intentionally disabled in production startup.
-        await _ensure_additive_columns(conn, (
+    if settings.app_env == "dev":
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+            # Local DEV retains additive bootstrap support. Production schema
+            # changes are applied only by reviewed Alembic migrations after
+            # the DEV schema attestation gate succeeds.
+            await _ensure_additive_columns(conn, (
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS customer_email VARCHAR(320)",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS dispatch_status VARCHAR(30) DEFAULT 'awaiting_dispatch'",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS collection_date TIMESTAMP",
@@ -584,23 +585,28 @@ async def lifespan(app: FastAPI):
             "ALTER TABLE products ADD COLUMN IF NOT EXISTS platform_category_id VARCHAR(30)",
             "ALTER TABLE products ADD COLUMN IF NOT EXISTS platform_category_name VARCHAR(150)",
             "ALTER TABLE gem_radar_scored_listings ADD COLUMN IF NOT EXISTS cpk VARCHAR(64)",
-        ))
-        # Canonical Product Keys can be up to 64 characters. ADD COLUMN IF
-        # NOT EXISTS does not widen an older VARCHAR(16) column, so normalize
-        # existing Gem Radar tables before background scoring updates run.
-        for table in ("gem_radar_scored_listings", "cpk_pricing_index"):
-            width = await conn.execute(text("""
+            ))
+            # Canonical Product Keys can be up to 64 characters. ADD COLUMN IF
+            # NOT EXISTS does not widen an older VARCHAR(16) column, so normalize
+            # existing Gem Radar tables before background scoring updates run.
+            for table in ("gem_radar_scored_listings", "cpk_pricing_index"):
+                width = await conn.execute(text("""
                 SELECT character_maximum_length
                 FROM information_schema.columns
                 WHERE table_schema=current_schema()
                   AND table_name=:table_name AND column_name='cpk'
-            """), {"table_name": table})
-            current_width = width.scalar_one_or_none()
-            if current_width is not None and current_width < 64:
-                await conn.exec_driver_sql(
-                    f"ALTER TABLE {table} ALTER COLUMN cpk TYPE VARCHAR(64)"
-                )
-        await _install_manual_build_delete_guard(conn)
+                """), {"table_name": table})
+                current_width = width.scalar_one_or_none()
+                if current_width is not None and current_width < 64:
+                    await conn.exec_driver_sql(
+                        f"ALTER TABLE {table} ALTER COLUMN cpk TYPE VARCHAR(64)"
+                    )
+            await _install_manual_build_delete_guard(conn)
+    else:
+        log.info(
+            "app.startup_schema_mutations_skipped",
+            note="Apply production schema changes only through validated Alembic releases",
+        )
     # DISABLED: migrations deadlock on ALTER TABLE (PostgreSQL constraint acquisition)
     # Safe to skip because all migrations use IF NOT EXISTS and are idempotent
     # await _migrate_add_columns()
