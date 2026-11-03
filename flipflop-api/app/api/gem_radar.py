@@ -78,6 +78,7 @@ from app.services.submission_queue_service import SubmissionQueueService
 from app.services.hardware_performance import enrich_listing_performance, load_benchmark_context
 from app.services.product_reviews import aggregate_cpk_reviews
 from app.services.amazon_bestsellers import bestseller_item_matches_category
+from app.services.playbook_extension import bestseller_tags_for_cpks
 
 router = APIRouter(prefix="/gem-radar", tags=["gem-radar"])
 
@@ -86,8 +87,8 @@ _GEM_SPOTLIGHT_CACHE: dict[str, tuple[float, dict]] = {}
 
 @router.get('/playbook-market-searches')
 async def playbook_market_searches(db:AsyncSession=Depends(get_db), _:None=Depends(require_operator)):
-    from app.services.playbook_extension import searches
-    return await searches(db)
+    from app.services.playbook_extension import search_feed
+    return await search_feed(db)
 
 
 from pydantic import Field
@@ -3120,16 +3121,9 @@ async def _submit_scan_body(
     from app.gem_radar.cpk_pipeline import _deterministic_identity, _lookup_unique_catalog_alias
     from app.gem_radar.observations import find_existing_listing
 
-    # Search tags describe discovery intent, not product identity. Preserve
-    # every valid source observation before resolving its actual identifiers;
-    # a missing/incorrect existing CPK must not discard repair evidence.
-
-    # Persist search tags on each observation payload so the Curated marker is
-    # carried through queueing and any scoring result built from that listing.
-    if payload.tags:
-        payload = payload.model_copy(update={
-            "listings": [listing.model_copy(update={"search_tags": payload.tags}) for listing in payload.listings]
-        })
+    # Search terms are generic. Product labels are attached below from the
+    # resolved CPK and current Amazon bestseller observations, never copied
+    # from a per-Playbook search definition.
 
     malformed_awdit = [
         listing for listing in payload.listings
@@ -3251,7 +3245,7 @@ async def _submit_scan_body(
                     image_url=listing.image_url,
                     image_urls=listing.image_urls,
                     video_urls=listing.video_urls,
-                    search_tags=payload.tags,
+                    search_tags=None,
                     delivery_text=listing.delivery_text,
                     delivery_postcode=listing.delivery_postcode,
                     prime_eligible=listing.prime_eligible,
@@ -3396,9 +3390,38 @@ async def _submit_scan_body(
                 # separately so is_complete doesn't wait on a count that can
                 # never be reached this run.
                 pipeline_status.increment(payload.search_id, cpk_failed_count=1)
-    if payload.tags:
-        from app.services.catalogue_tag_sync import sync_search_tags_to_catalogue
-        await sync_search_tags_to_catalogue(db, payload.listings, payload.tags)
+
+    # Resolve bestseller labels for the complete batch, including listings
+    # whose CPK was already known and listings just assigned one above.
+    listing_cpks = (await db.execute(select(
+        GemRadarListingCpk.listing_id, GemRadarListingCpk.cpk
+    ).where(GemRadarListingCpk.listing_id.in_(
+        [listing.listing_id for listing in payload.listings]
+    )))).all() if payload.listings else []
+    cpk_by_listing = {listing_id: cpk for listing_id, cpk in listing_cpks if cpk}
+    bestseller_tags = await bestseller_tags_for_cpks(db, cpk_by_listing.values())
+    if payload.listings:
+        from app.models.gem_radar_observation import GemRadarListingObservation
+        listing_ids = list({listing.listing_id for listing in payload.listings})
+        latest_rows = select(
+            GemRadarListingObservation.id.label('id'),
+            func.row_number().over(
+                partition_by=GemRadarListingObservation.listing_id,
+                order_by=(GemRadarListingObservation.observed_at.desc(),
+                          GemRadarListingObservation.id.desc()),
+            ).label('row_number'),
+        ).where(GemRadarListingObservation.listing_id.in_(listing_ids)).subquery()
+        rows = (await db.execute(select(GemRadarListingObservation).join(
+            latest_rows, latest_rows.c.id == GemRadarListingObservation.id
+        ).where(latest_rows.c.row_number == 1))).scalars().all()
+        for row in rows:
+            tags = bestseller_tags.get(cpk_by_listing.get(row.listing_id), [])
+            existing_tags = [tag for tag in (row.search_tags or [])
+                if not tag.startswith('Playbook:')
+                and tag != 'Complete-build-market'
+                and not re.match(r'^(?:ASIN|CPK):(?:cpu|gpu|motherboard|ram|storage|psu|cooling|case):', tag)]
+            row.search_tags = list(dict.fromkeys([*existing_tags, *tags]))
+        await db.commit()
 
     log.info(
         "diag.scan.phase1_ingest_done",
@@ -3455,7 +3478,7 @@ async def submit_scan_queued(
         search_id=payload.search_id,
         query=payload.query,
         source_url=payload.source_url,
-        search_tags=payload.tags,
+        search_tags=None,
         max_candidates_for_deep_research=payload.max_candidates_for_deep_research,
         # mode="json" — plain model_dump() leaves extracted_at/auction_end_at
         # as Python datetime objects, which the listings_json JSON column's
