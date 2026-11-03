@@ -52,7 +52,7 @@ jobs:
           PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          git fetch --quiet origin dev main
+          git fetch --quiet origin dev:refs/remotes/origin/dev main:refs/remotes/origin/main
           if [[ "$EVENT_NAME" == "pull_request" && "$BASE_REF" == "main" ]]; then
             if [[ "$PR_HEAD_REF" != "dev" ]]; then
               echo "Production pull requests must come from dev. Merge and validate feature work in dev first." >&2

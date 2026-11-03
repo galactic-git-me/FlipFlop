@@ -12,8 +12,9 @@ FlipFlop uses two branches with different responsibilities:
 
 After the exact DEV commit has passed its runtime check, open a pull request
 from `dev` to `main`. CI confirms the proposed commit is already present in
-`dev`; feature branches cannot target `main`. Tag only the merged production
-commit, then use the explicit production deployment workflow.
+`dev`; feature branches cannot target `main`. Tag that exact merge commit. Both
+release verification and production deployment confirm the tagged commit is
+associated with a merged `dev`-to-`main` pull request.
 
 The remote startup and deployment scripts verify that the production checkout
 is on `main` and deploy only `origin/main`. If a production checkout is still

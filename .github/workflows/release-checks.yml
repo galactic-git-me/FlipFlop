@@ -12,6 +12,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   verify:
@@ -54,13 +55,47 @@ jobs:
           test -n "$tag"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
       - name: Require tag on main
+        id: tag_check
         env:
           RELEASE_TAG: ${{ steps.release.outputs.tag }}
         run: |
-          git fetch --force --tags origin main
+          git fetch --force --tags origin main:refs/remotes/origin/main
           git rev-parse "$RELEASE_TAG^{commit}" >/dev/null
           git merge-base --is-ancestor "$RELEASE_TAG" origin/main || {
             echo "Release tag is not reachable from origin/main." >&2
+            exit 1
+          }
+          sha="$(git rev-parse "$RELEASE_TAG^{commit}")"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+      - name: Require a merged DEV-to-main pull request
+        id: dev_promotion
+        uses: actions/github-script@v7
+        env:
+          RELEASE_SHA: ${{ steps.tag_check.outputs.sha }}
+        with:
+          script: |
+            const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: process.env.RELEASE_SHA,
+            });
+            const promotedFromDev = prs.some((pr) =>
+              pr.merged_at && pr.base.ref === 'main' && pr.head.ref === 'dev'
+            );
+            if (!promotedFromDev) {
+              core.setFailed('Release commit must be merged to main from dev.');
+              return;
+            }
+            core.setOutput('dev_sha', prs.find((pr) =>
+              pr.merged_at && pr.base.ref === 'main' && pr.head.ref === 'dev'
+            ).head.sha);
+      - name: Verify promoted commit remains in dev history
+        env:
+          PROMOTED_DEV_SHA: ${{ steps.dev_promotion.outputs.dev_sha }}
+        run: |
+          git fetch --quiet origin dev:refs/remotes/origin/dev
+          git merge-base --is-ancestor "$PROMOTED_DEV_SHA" origin/dev || {
+            echo "The production change is no longer present in dev history." >&2
             exit 1
           }
       - name: Run repository checks

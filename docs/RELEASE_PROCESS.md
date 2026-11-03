@@ -18,8 +18,9 @@ FlipFlop has two runtime environments, not three:
 4. Open a pull request from `dev` to `main`. CI verifies that the proposed
    commit is already present in `dev`; pull requests from feature branches are
    rejected. Merge only after the DEV runtime check is recorded.
-5. Create a version tag on the production merge commit, for example `v1.0.0`.
-   Release checks require the tag to be reachable from `main`.
+5. Create a version tag on that DEV-to-main merge commit, for example
+   `v1.0.0`. Release checks require the tag to be on `main` and its commit to
+   be associated with the merged DEV-to-main pull request.
 6. Run **Actions → Deploy production**, enter the tag, and type
    `DEPLOY-PRODUCTION`. The deploy workflow reruns API checks and builds the
    admin bundle before connecting to production.
