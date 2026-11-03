@@ -39,7 +39,13 @@ def migration_head(ref: str, paths: list[str]) -> str:
     revisions: set[str] = set()
     parents: set[str] = set()
     for path in paths:
-        tree = ast.parse(git("show", f"{ref}:{path}"), filename=path)
+        content = subprocess.run(
+            ["git", "show", f"{ref}:{path}"],
+            cwd=ROOT,
+            capture_output=True,
+            check=True,
+        ).stdout.decode("utf-8")
+        tree = ast.parse(content, filename=path)
         values: dict[str, object] = {}
         for node in tree.body:
             if isinstance(node, (ast.Assign, ast.AnnAssign)):
@@ -71,7 +77,12 @@ def tracked_migration_hashes(ref: str) -> dict[str, str]:
     for relative in paths:
         if not relative.endswith(".py") or relative.endswith("/__init__.py"):
             continue
-        content = git("show", f"{ref}:{relative}").encode("utf-8")
+        content = subprocess.run(
+            ["git", "show", f"{ref}:{relative}"],
+            cwd=ROOT,
+            capture_output=True,
+            check=True,
+        ).stdout
         result[relative] = hashlib.sha256(content).hexdigest()
     return result
 
