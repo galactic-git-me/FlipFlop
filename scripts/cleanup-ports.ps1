@@ -18,7 +18,12 @@ foreach ($port in $ports) {
             if ($processId -and $processId -match '^\d+$') {
                 Write-Host "    Killing PID ${processId}..." -ForegroundColor Yellow
                 try {
-                    Stop-Process -Id $processId -Force -ErrorAction SilentlyContinue
+                    $process = Get-CimInstance Win32_Process -Filter "ProcessId=$processId" -ErrorAction SilentlyContinue
+                    if ([string]$process.CommandLine -notmatch 'run_dev\.py|next(?:\\|/)dist\\bin\\next|next-server|app\.gem_radar_standalone') {
+                        Write-Host "    [SKIP] PID $processId is not a recognized FlipFlop DEV service" -ForegroundColor Yellow
+                        continue
+                    }
+                    & taskkill.exe /PID $processId /T /F 2>&1 | Out-Null
                     Write-Host "    [OK] Killed PID ${processId}" -ForegroundColor Green
                 } catch {
                     Write-Host "    [ERROR] Failed to kill PID ${processId}" -ForegroundColor Red

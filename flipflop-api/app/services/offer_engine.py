@@ -80,6 +80,22 @@ class WatcherOfferPlan:
     reason: str
 
 
+def watcher_offer_not_due_reason(
+    listed_at: Optional[datetime],
+    last_watcher_offer_sent_at: Optional[datetime],
+    now: Optional[datetime] = None,
+    days_unsold_threshold: int = DEFAULT_WATCHER_DAYS_UNSOLD,
+) -> Optional[str]:
+    now = now or datetime.utcnow()
+    if listed_at is None:
+        return "Not yet listed."
+    if now - listed_at < timedelta(days=days_unsold_threshold):
+        return "Still within the unsold-days threshold."
+    if last_watcher_offer_sent_at is not None and now - last_watcher_offer_sent_at < timedelta(hours=10):
+        return "Already sent within the twice-daily cadence window."
+    return None
+
+
 def evaluate_send_to_watchers(
     listing_price: float,
     min_offer_price: Optional[float],
@@ -92,18 +108,21 @@ def evaluate_send_to_watchers(
     """Row 45: proactively send offers to watchers after N days unsold, floor-aware."""
     now = now or datetime.utcnow()
 
-    if listed_at is None:
-        return WatcherOfferPlan(False, discount_pct, None, "Not yet listed.")
-
-    if now - listed_at < timedelta(days=days_unsold_threshold):
-        return WatcherOfferPlan(False, discount_pct, None, "Still within the unsold-days threshold.")
-
-    # Twice-daily cadence: don't send again within 10 hours of the last send.
-    if last_watcher_offer_sent_at is not None and now - last_watcher_offer_sent_at < timedelta(hours=10):
-        return WatcherOfferPlan(False, discount_pct, None, "Already sent within the twice-daily cadence window.")
+    not_due_reason = watcher_offer_not_due_reason(
+        listed_at, last_watcher_offer_sent_at, now, days_unsold_threshold
+    )
+    if not_due_reason:
+        return WatcherOfferPlan(False, discount_pct, None, not_due_reason)
 
     offer_price = round(listing_price * (1 - discount_pct), 2)
     if min_offer_price is not None:
         offer_price = max(offer_price, min_offer_price)
+    if offer_price >= listing_price:
+        return WatcherOfferPlan(
+            False,
+            discount_pct,
+            None,
+            "The minimum offer price is at or above the current listing price.",
+        )
 
     return WatcherOfferPlan(True, discount_pct, offer_price, f"{days_unsold_threshold}+ days unsold — sending watcher offer.")

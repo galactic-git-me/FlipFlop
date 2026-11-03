@@ -27,12 +27,13 @@ The established local layout is:
 | Service | Local address |
 |---|---:|
 | Admin UI | `http://localhost:4312` |
-| Main API | `http://localhost:4311` |
+| Main API | `http://localhost:4314` |
+| Extension scan-lock service | `http://localhost:4311` |
 | GemRadar API | `http://localhost:18000` |
 | Local PostgreSQL | local Docker/PostgreSQL database |
 | Local Redis | local Docker/Redis instance |
 
-The admin UI talks to the local main API on port `4311`. GemRadar is a separate service on `18000`.
+The admin UI talks to the local main API on port `4314`. The extension's scan-lock service owns port `4311`; GemRadar is a separate service on `18000`.
 
 The normal local launcher starts these local services by default. It does not connect to the production website, production API, production database, or the SSH database tunnel. Peer database synchronisation is an explicit opt-in operation only.
 
@@ -46,7 +47,7 @@ The older compose definitions that map the whole development API to `18000` are 
 Local browser + FlipFlopExtension
               |
               v
-        Local main API (4311)
+        Local main API (4314)
               |
               v
         Local development DB
@@ -136,7 +137,7 @@ The existing `peer_sync` code is a row-level peer synchroniser and currently sup
 
 ## 7. Items to make explicit in implementation
 
-- Make the local `4311/4312/18000` environment variables canonical and remove conflicting defaults from older compose paths.
+- Make the local `4314/4312/4313/18000` service layout canonical; reserve `4311` for the local extension scan-lock service and remove conflicting defaults from older compose paths.
 - Implement the scheduled, one-way production-to-local database refresh.
 - Keep the production database backup and local pre-refresh backup.
 - Add a dry-run and a clear health/status report for the daily copy.
