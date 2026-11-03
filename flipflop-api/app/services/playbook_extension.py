@@ -9,6 +9,7 @@ from app.models.commerce_evidence import PriceQuoteSnapshot
 from app.services.curated_build_policy import definitions
 from app.services.playbook_market import bom_hash, search_query, candidate, core_spec_blockers, key, latest
 from app.services.commercial_readiness import cell_context
+from app.services.amazon_bestsellers import bestseller_item_matches_category
 
 VENDORS = ['ebay','amazon','overclockers','scan','awd_it','computer_orbit','bargain_hardware','newegg_uk','ebuyer','google_shopping']
 HOSTS = {'amazon':('amazon.co.uk',), 'overclockers':('overclockers.co.uk',), 'scan':('scan.co.uk',),
@@ -53,18 +54,67 @@ def target(definition, parent, parts):
 
 
 async def searches(db):
-    parents=(await db.execute(select(Playbook).where(Playbook.status=='active'))).scalars().all()
-    proposals=(await db.execute(select(PlaybookProposal).where(PlaybookProposal.status=='pending',
-        PlaybookProposal.action=='UPDATE').order_by(PlaybookProposal.id.desc()))).scalars().all()
-    items=[]
-    for definition in definitions()['builds']:
-        parent=next((p for p in parents if p.name==definition['segment']),None)
-        if not parent:continue
-        parts=selected_parts(definition,parent,proposals)
-        items.append(target(definition,parent,parts))
-    component_items=await component_searches(db,proposals)
-    return {'items':items,'count':len(items),'componentItems':component_items,
-            'componentCount':len(component_items)}
+    # Catalogue identity belongs in the backend after listings are scraped and
+    # resolved, never in the query/tag payload generated per Playbook cell.
+    # Keep one small, generic hardware search set for all Playbook segments.
+    generic = [
+        ('amd-cpu', 'AMD CPU'),
+        ('intel-cpu', 'Intel CPU'),
+        ('nvidia-gpu', 'NVIDIA GPU'),
+        ('amd-gpu', 'AMD GPU'),
+        ('intel-gpu', 'Intel GPU'),
+        ('asus-motherboard', 'ASUS motherboard'),
+        ('msi-motherboard', 'MSI motherboard'),
+        ('gigabyte-motherboard', 'Gigabyte motherboard'),
+        ('ddr4-udimm-ram', 'DDR4 UDIMM RAM'),
+        ('ddr5-udimm-ram', 'DDR5 UDIMM RAM'),
+        ('m2-nvme-ssd', 'M.2 NVMe SSD'),
+        ('psu-gold-750w-modular', '750W Gold modular PSU'),
+        ('cpu-cooler', 'CPU cooler'),
+        ('pc-case-chassis', 'PC case chassis'),
+        ('wireless-wifi-bluetooth-adapter', 'WiFi Bluetooth adapter'),
+    ]
+    items = [{'id': search_id, 'label': query, 'query': query,
+              'marketplaces': VENDORS, 'listingMode': 'both'}
+             for search_id, query in generic]
+    return {'items': items, 'count': len(items), 'componentItems': [], 'componentCount': 0}
+
+
+async def search_feed(db):
+    """Return generic hardware searches and no per-Playbook/tagged searches."""
+    return await searches(db)
+
+
+async def bestseller_tags_for_cpks(db, cpks, *, now=None):
+    """Return fresh Amazon bestseller tags keyed by canonical product identity."""
+    from datetime import timedelta
+    from app.models.amazon_bestseller_observation import AmazonBestsellerObservation
+
+    identities = {str(cpk) for cpk in cpks if cpk}
+    if not identities:
+        return {}
+    now = now or datetime.utcnow()
+    rows = (await db.execute(select(AmazonBestsellerObservation).where(
+        AmazonBestsellerObservation.cpk.in_(identities),
+        AmazonBestsellerObservation.captured_at >= now - timedelta(days=7),
+        AmazonBestsellerObservation.captured_at <= now,
+    ).order_by(AmazonBestsellerObservation.captured_at.desc(),
+               AmazonBestsellerObservation.id.desc()))).scalars().all()
+
+    tags_by_cpk = {}
+    seen = set()
+    for row in rows:
+        category = (row.category or '').strip().casefold()
+        cpk = str(row.cpk or '')
+        if not category or not cpk or not row.asin or (cpk, category) in seen:
+            continue
+        if not bestseller_item_matches_category(row.title or '', category):
+            continue
+        seen.add((cpk, category))
+        tags_by_cpk.setdefault(cpk, []).append(
+            f'amazon-bestseller:{category}:{row.asin.upper()}'
+        )
+    return tags_by_cpk
 
 
 async def ingest(db, body):
