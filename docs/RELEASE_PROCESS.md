@@ -8,15 +8,27 @@ FlipFlop has two runtime environments, not three:
 
 ## Workflow
 
-1. Create a branch and open a pull request into `dev` or `main`.
-2. GitHub Actions runs environment checks, API tests, and the admin production build.
-3. Merge approved work to `main`.
-4. Create a version tag, for example `v1.0.0`.
-5. The release workflow verifies that the tag points to `main` and reruns checks.
-6. Test the corresponding code locally in DEV.
-7. Run **Actions → Deploy production**, enter the tag, and type `DEPLOY-PRODUCTION`.
+1. Create a feature branch and open a pull request into `dev`. Pull requests
+   into `main` are rejected by CI.
+2. Wait for the DEV validation workflow and pull-request checks to pass. Merge
+   the change into `dev`.
+3. Run the DEV application from that exact `dev` commit and verify the affected
+   user journey against DEV data and services. Record the tested commit SHA in
+   the release notes or pull request.
+4. Open a pull request from `dev` to `main`. CI verifies that the proposed
+   commit is already present in `dev`; pull requests from feature branches are
+   rejected. Merge only after the DEV runtime check is recorded.
+5. Create a version tag on the production merge commit, for example `v1.0.0`.
+   Release checks require the tag to be reachable from `main`.
+6. Run **Actions → Deploy production**, enter the tag, and type
+   `DEPLOY-PRODUCTION`. The deploy workflow reruns API checks and builds the
+   admin bundle before connecting to production.
 
 Production is never deployed merely because code was pushed to `main`.
+The DEV runtime check happens before promotion; CI build success alone is not
+evidence that the live DEV journey was exercised. GitHub branch protection on
+`main` requires pull requests and the `checks` status check, including for
+administrators, so a direct production push cannot bypass this path.
 
 ## Secrets
 

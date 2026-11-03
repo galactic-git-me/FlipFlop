@@ -42,6 +42,27 @@ jobs:
       TEST_DATABASE_SCHEMA: flipflop_test
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Enforce DEV-first promotion
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git fetch --quiet origin dev main
+          if [[ "$EVENT_NAME" == "pull_request" && "$BASE_REF" == "main" ]]; then
+            if [[ "$PR_HEAD_REF" != "dev" ]]; then
+              echo "Production pull requests must come from dev. Merge and validate feature work in dev first." >&2
+              exit 1
+            fi
+            git merge-base --is-ancestor "$PR_HEAD_SHA" origin/dev || {
+              echo "The proposed production commit is not present in the current dev branch." >&2
+              exit 1
+            }
+          fi
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
