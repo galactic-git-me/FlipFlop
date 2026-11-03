@@ -12,6 +12,8 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
+  checks: read
 
 jobs:
   verify:
@@ -54,15 +56,47 @@ jobs:
           test -n "$tag"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
       - name: Require tag on main
+        id: tag_check
         env:
           RELEASE_TAG: ${{ steps.release.outputs.tag }}
         run: |
-          git fetch --force --tags origin main
+          git fetch --force --tags origin main:refs/remotes/origin/main
           git rev-parse "$RELEASE_TAG^{commit}" >/dev/null
           git merge-base --is-ancestor "$RELEASE_TAG" origin/main || {
             echo "Release tag is not reachable from origin/main." >&2
             exit 1
           }
+          sha="$(git rev-parse "$RELEASE_TAG^{commit}")"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+      - name: Require a production pull request with passing DEV parity
+        id: dev_promotion
+        uses: actions/github-script@v7
+        env:
+          RELEASE_SHA: ${{ steps.tag_check.outputs.sha }}
+        with:
+          script: |
+            const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: process.env.RELEASE_SHA,
+            });
+            const promotion = prs.find((pr) => pr.merged_at && pr.base.ref === 'main');
+            if (!promotion) {
+              core.setFailed('Release commit must be merged through a production pull request.');
+              return;
+            }
+            const { data: checks } = await github.rest.checks.listForRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: process.env.RELEASE_SHA,
+              per_page: 100,
+            });
+            const passedGate = checks.check_runs.some((check) =>
+              check.name === 'checks' && check.conclusion === 'success' && check.app.slug === 'github-actions'
+            );
+            if (!passedGate) {
+              core.setFailed('Release commit lacks a passing DEV-source parity and repository checks run.');
+            }
       - name: Run repository checks
         shell: bash
         run: bash scripts/ci.sh

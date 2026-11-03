@@ -13,6 +13,9 @@ coverage/
 
 # next.js
 .next/
+**/.next-*/
+# Never version generated Next.js builds or caches (including environment
+# snapshots such as .next-prod and .next-dev).
 out/
 
 # production
