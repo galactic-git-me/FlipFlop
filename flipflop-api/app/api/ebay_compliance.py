@@ -24,9 +24,9 @@ _PUBKEY_CACHE: dict[str, tuple[str, float]] = {}
 _TOKEN_CACHE: dict[str, tuple[str, float]] = {"token": ("", 0.0)}
 
 
-def _ebay_api_root() -> str:
+def _ebay_api_root(environment: str | None = None) -> str:
     settings = get_settings()
-    env = (settings.ebay_environment or "production").strip().lower()
+    env = (environment or settings.ebay_environment or "production").strip().lower()
     return "https://api.sandbox.ebay.com" if env == "sandbox" else "https://api.ebay.com"
 
 

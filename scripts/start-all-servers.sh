@@ -68,11 +68,23 @@ start_server() {
 
     local pid=$!
     echo -e "${color}✅ $name started (PID: $pid)${NC}"
-    echo "$pid" >> /tmp/flipflop-servers.pids
+    echo "$pid" >> "$PID_FILE"
 }
 
-# Clean up previous PIDs file
-rm -f /tmp/flipflop-servers.pids
+# Retire only tracked processes still identifying this checkout.
+PID_FILE="/tmp/flipflop-servers-$(id -u).pids"
+if [ -f "$PID_FILE" ]; then
+    while IFS= read -r old_pid; do
+        [[ "$old_pid" =~ ^[0-9]+$ ]] || continue
+        old_command=$(ps -p "$old_pid" -o args= 2>/dev/null || true)
+        if [[ "$old_command" == *"$PROJECT_ROOT"* ]]; then
+            pkill -TERM -P "$old_pid" 2>/dev/null || true
+            kill -TERM "$old_pid" 2>/dev/null || true
+        fi
+    done < "$PID_FILE"
+    rm -f "$PID_FILE"
+fi
+: > "$PID_FILE"
 
 echo "Starting servers..."
 echo ""
@@ -109,9 +121,6 @@ echo ""
 echo -e "${CYAN}Press Ctrl+C to stop all servers${NC}"
 echo ""
 
-# Wait for interrupt
-trap 'kill $(cat /tmp/flipflop-servers.pids 2>/dev/null); rm -f /tmp/flipflop-servers.pids; echo "Servers stopped"; exit 0' INT
-
-if [ -f /tmp/flipflop-servers.pids ]; then
-    wait $(cat /tmp/flipflop-servers.pids | head -1)
-fi
+# Wait for interrupt while preserving server process ownership.
+trap 'while read -r child; do [[ "$child" =~ ^[0-9]+$ ]] && kill "$child" 2>/dev/null || true; done < "$PID_FILE"; rm -f "$PID_FILE"; exit 0' INT TERM
+while true; do sleep 3600; done

@@ -16,6 +16,10 @@ function Stop-PortListener {
     $pids = @($connections | Select-Object -ExpandProperty OwningProcess -Unique)
     foreach ($ownerPid in $pids) {
         if ($ownerPid -and $ownerPid -ne 0) {
+            $process = Get-CimInstance Win32_Process -Filter "ProcessId=$ownerPid" -ErrorAction SilentlyContinue
+            if ([string]$process.CommandLine -notmatch 'run_dev\.py|next(?:\\|/)dist\\bin\\next|next-server|start-server\.js|app\.gem_radar_standalone') {
+                throw "Refusing to stop unrelated PID $ownerPid on FlipFlop DEV port $Port."
+            }
             & taskkill.exe /PID $ownerPid /T /F 2>&1 | Out-Null
             Write-Host "[OK] Stopped listener on port $Port (PID $ownerPid)" -ForegroundColor Green
         }
@@ -24,7 +28,7 @@ function Stop-PortListener {
 
 Write-Host "[*] Stopping FlipFlop local servers..." -ForegroundColor Cyan
 
-$ports = @(4311, 4312, 4313, 18000)
+$ports = @(4314, 4312, 4313, 18000)
 foreach ($port in $ports) { Stop-PortListener -Port $port }
 
 if ($StopOllama) {

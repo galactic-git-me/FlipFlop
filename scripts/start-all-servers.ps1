@@ -89,6 +89,39 @@ function Stop-PortListener([int]$Port) {
     }
 }
 
+function Stop-FlipFlopProcessTree([int]$ProcessId) {
+    if (-not $ProcessId -or $ProcessId -eq $PID) { return }
+    $process = Get-CimInstance Win32_Process -Filter "ProcessId=$ProcessId" -ErrorAction SilentlyContinue
+    if (-not $process) { return }
+    $commandLine = [string]$process.CommandLine
+    $owned = $commandLine -match [regex]::Escape($projectRoot) -or
+        $commandLine -match 'run_dev\.py|next dev|next-server|uvicorn'
+    if (-not $owned) { throw "Refusing to stop unrelated PID $ProcessId ($commandLine) on a DEV port." }
+    & taskkill.exe /PID $ProcessId /T /F 2>&1 | Out-Null
+}
+
+function Stop-DevelopmentProcesses([int[]]$Ports) {
+    foreach ($port in $Ports) {
+        $listeners = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue
+        foreach ($ownerPid in @($listeners | Select-Object -ExpandProperty OwningProcess -Unique)) {
+            if ($ownerPid -and $ownerPid -ne 0) {
+                Stop-FlipFlopProcessTree -ProcessId $ownerPid
+                Write-Host "  [OK] Stopped FlipFlop process tree on DEV port $port" -ForegroundColor Green
+            }
+        }
+    }
+    # Killing only the listening reloader worker leaves its supervisor alive.
+    # Its launcher command includes this checkout's per-run log path.
+    Get-CimInstance Win32_Process -Filter "Name='python.exe'" -ErrorAction SilentlyContinue |
+        Where-Object { $_.CommandLine -match 'run_dev\.py' -and $_.CommandLine -match '--port\s+4314' } |
+        ForEach-Object {
+            $parent = Get-CimInstance Win32_Process -Filter "ProcessId=$($_.ParentProcessId)" -ErrorAction SilentlyContinue
+            if ($parent -and $parent.CommandLine -match [regex]::Escape($projectRoot) -and $parent.CommandLine -match 'run_dev\.py') {
+                Stop-FlipFlopProcessTree -ProcessId $parent.ProcessId
+            }
+        }
+}
+
 function Test-ListeningPort([int]$Port) {
     return [bool](Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue)
 }
@@ -212,13 +245,13 @@ Ensure-OllamaPriorityGateway
 New-Item -ItemType Directory -Path $logsDir -Force | Out-Null
 
 $portsToClean = @()
-if (-not $NoBackend) { $portsToClean += 4311 }
+if (-not $NoBackend) { $portsToClean += 4314 }
 if (-not $NoAdmin) { $portsToClean += 4312 }
 if (-not $NoFrontend) { $portsToClean += 4313 }
 if ($GemRadarStandalone) { $portsToClean += 18000 }
 
 Write-Host '[*] Clearing selected development ports...' -ForegroundColor Cyan
-foreach ($port in $portsToClean) { Stop-PortListener $port }
+Stop-DevelopmentProcesses -Ports $portsToClean
 
 $env:FLIPFLOP_RUNTIME_ENV = 'development'
 $env:EBAY_ENVIRONMENT = 'production'
@@ -243,11 +276,11 @@ $env:OLLAMA_MODEL = $ollamaModel
 Warm-OllamaModel -BaseUrl $ollamaBaseUrl -Model $ollamaModel
 
 $servers = @()
-$apiUrl = 'http://127.0.0.1:4311'
+$apiUrl = 'http://127.0.0.1:4314'
 
 if (-not $NoBackend) {
-    $command = "set `"FLIPFLOP_RUNTIME_ENV=development`" && set `"OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"OLLAMA_MODEL=$ollamaModel`" && set `"EBAY_ENVIRONMENT=production`" && set `"EBAY_LISTING_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENDPOINT=https://sandbox.sellingpartnerapi-eu.amazon.com`" && set `"AMAZON_SP_API_SELLER_ID=SANDBOX_SELLER_ID`" && set `"ADMIN_FRONTEND_URL=http://localhost:4312`" && set `"FRONTEND_URL=http://localhost:4313`" && .venv\Scripts\python.exe run_dev.py --host 127.0.0.1 --port 4311"
-    $servers += Start-DevelopmentServer -Name 'backend' -WorkingDirectory (Join-Path $projectRoot 'flipflop-api') -Command $command -Port 4311 -Color Yellow
+    $command = "set `"FLIPFLOP_RUNTIME_ENV=development`" && set `"OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"OLLAMA_MODEL=$ollamaModel`" && set `"EBAY_ENVIRONMENT=production`" && set `"EBAY_LISTING_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENDPOINT=https://sandbox.sellingpartnerapi-eu.amazon.com`" && set `"AMAZON_SP_API_SELLER_ID=SANDBOX_SELLER_ID`" && set `"ADMIN_FRONTEND_URL=http://localhost:4312`" && set `"FRONTEND_URL=http://localhost:4313`" && .venv\Scripts\python.exe run_dev.py --host 127.0.0.1 --port 4314"
+    $servers += Start-DevelopmentServer -Name 'backend' -WorkingDirectory (Join-Path $projectRoot 'flipflop-api') -Command $command -Port 4314 -Color Yellow
 }
 
 if ($GemRadarStandalone) {
@@ -309,7 +342,7 @@ try {
     Write-Host ''
     Write-Host '[*] Stopping development servers...' -ForegroundColor Yellow
     foreach ($server in $servers) {
-        if (-not $server.Process.HasExited) { & taskkill.exe /PID $server.Process.Id /T /F 2>&1 | Out-Null }
+        if (-not $server.Process.HasExited) { Stop-FlipFlopProcessTree -ProcessId $server.Process.Id }
     }
     Write-Host '[OK] Development servers stopped. Ollama and its shared gateway remain running.' -ForegroundColor Green
 }

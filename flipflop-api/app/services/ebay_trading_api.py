@@ -141,10 +141,18 @@ async def get_item_status(
     selling = item.find(f"{{{_NS}}}SellingStatus")
     listing_status = selling.findtext(f"{{{_NS}}}ListingStatus") if selling is not None else None
     quantity_sold_text = selling.findtext(f"{{{_NS}}}QuantitySold") if selling is not None else None
+    current_price_element = selling.find(f"{{{_NS}}}CurrentPrice") if selling is not None else None
+    current_price_text = current_price_element.text if current_price_element is not None else None
+    try:
+        current_price = float(current_price_text) if current_price_text else None
+    except ValueError:
+        current_price = None
     return {
         "listing_status": listing_status or "Unknown",
         "quantity_sold": int(quantity_sold_text or 0),
         "end_time": item.findtext(f"{{{_NS}}}ListingDetails/{{{_NS}}}EndTime"),
+        "current_price": current_price,
+        "currency": current_price_element.get("currencyID") if current_price_element is not None else None,
     }
 
 
@@ -171,12 +179,12 @@ async def get_user_identity(token: str, environment: str = "production") -> dict
     }
 
 
-async def get_best_offers(item_id: str, token: str) -> list[dict]:
+async def get_best_offers(item_id: str, token: str, environment: str | None = None) -> list[dict]:
     """Poll for open Best Offers on a listing (rows 8/45's read side)."""
     body = f"""<ItemID>{item_id}</ItemID>
 <BestOfferStatus>Active</BestOfferStatus>
 <DetailLevel>ReturnAll</DetailLevel>"""
-    tree = await _call("GetBestOffers", body, token)
+    tree = await _call("GetBestOffers", body, token, environment=environment)
     offers = []
     for offer_el in tree.findall(f".//{{{_NS}}}BestOffer"):
         offers.append({
@@ -189,7 +197,12 @@ async def get_best_offers(item_id: str, token: str) -> list[dict]:
 
 
 async def respond_to_best_offer(
-    item_id: str, best_offer_id: str, action: str, counter_price: Optional[float], token: str,
+    item_id: str,
+    best_offer_id: str,
+    action: str,
+    counter_price: Optional[float],
+    token: str,
+    environment: str | None = None,
 ) -> bool:
     """
     Rows 8/21: post FlipFlop's counter-offer decision back to eBay.
@@ -203,17 +216,19 @@ async def respond_to_best_offer(
 <BestOfferID>{best_offer_id}</BestOfferID>
 <Action>{action}</Action>
 {counter_block}"""
-    await _call("RespondToBestOffer", body, token)
+    await _call("RespondToBestOffer", body, token, environment=environment)
     return True
 
 
-async def get_member_messages(token: str, days_back: int = 7) -> list[dict]:
+async def get_member_messages(
+    token: str, days_back: int = 7, environment: str | None = None
+) -> list[dict]:
     """Row 47: unanswered buyer messages, for the response-time alert job."""
     since = (datetime.utcnow().replace(microsecond=0)).isoformat() + "Z"
     body = f"""<MailMessageType>All</MailMessageType>
 <DetailLevel>ReturnHeaders</DetailLevel>
 <MessageStatus>Unanswered</MessageStatus>"""
-    tree = await _call("GetMemberMessages", body, token)
+    tree = await _call("GetMemberMessages", body, token, environment=environment)
     messages = []
     for msg_el in tree.findall(f".//{{{_NS}}}MemberMessage"):
         messages.append({
