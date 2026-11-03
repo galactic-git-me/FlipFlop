@@ -62,7 +62,7 @@ jobs:
         env:
           RELEASE_TAG: ${{ inputs.tag }}
         run: |
-          git fetch --force --tags origin main:refs/remotes/origin/main
+          git fetch --force --tags origin main:refs/remotes/origin/main dev:refs/remotes/origin/dev
           test -n "$RELEASE_TAG"
           sha="$(git rev-parse "$RELEASE_TAG^{commit}")"
           git merge-base --is-ancestor "$RELEASE_TAG" origin/main || {
@@ -99,6 +99,14 @@ jobs:
             if (!passedGate) {
               core.setFailed('Production deployment requires a passing DEV-source parity and repository checks run.');
             }
+      - name: Require DEV-tested database schema
+        env:
+          RELEASE_SHA: ${{ steps.release.outputs.sha }}
+        run: >-
+          python ../scripts/verify-dev-schema-attestation.py
+          --release-ref "$RELEASE_SHA"
+          --dev-ref origin/dev
+          --require-dev-ancestor
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
