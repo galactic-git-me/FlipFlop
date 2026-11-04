@@ -8,7 +8,8 @@ param(
     [switch]$GemRadarStandalone,
     [switch]$NoOllamaGateway,
     [switch]$BuildExtension,
-    [switch]$CheckOnly
+    [switch]$CheckOnly,
+    [switch]$AllowBranch
 )
 
 $ErrorActionPreference = 'Stop'
@@ -72,11 +73,40 @@ function Assert-DevelopmentPrerequisites {
         throw 'npm.cmd is not available on PATH.'
     }
 
+    Assert-LatestDevelopmentSource
+}
+
+# DEV must run the latest origin/dev. Starting stale code (an old feature branch,
+# or a dev that has not been pulled) is how DEV ended up behind production, so
+# this fails closed. Use -AllowBranch to deliberately run another branch.
+function Assert-LatestDevelopmentSource {
     $branch = (& git -C $projectRoot branch --show-current 2>$null).Trim()
-    if ($branch -and $branch -ne 'dev') {
-        Write-Host "[WARN] FlipFlop is on branch '$branch'; development normally uses 'dev'." -ForegroundColor Yellow
-        Write-Host '[WARN] The launcher will not switch branches or modify your working tree.' -ForegroundColor Yellow
+    & git -C $projectRoot fetch origin dev --quiet 2>$null
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host '[WARN] Could not fetch origin/dev; cannot confirm this is the latest DEV source.' -ForegroundColor Yellow
+        return
     }
+    $head = (& git -C $projectRoot rev-parse HEAD).Trim()
+    $latest = (& git -C $projectRoot rev-parse origin/dev).Trim()
+
+    if ($branch -ne 'dev') {
+        if ($AllowBranch) {
+            Write-Host "[WARN] Running branch '$branch' at $($head.Substring(0,9)) (-AllowBranch); origin/dev is $($latest.Substring(0,9))." -ForegroundColor Yellow
+            return
+        }
+        $label = if ($branch) { $branch } else { 'detached HEAD' }
+        throw "DEV must run the 'dev' branch but this checkout is on '$label'. Run: git switch dev   (or pass -AllowBranch to run this branch on purpose)."
+    }
+    if ($head -eq $latest) {
+        Write-Host "[OK] Serving origin/dev @ $($head.Substring(0,9))" -ForegroundColor Green
+        return
+    }
+    if (& git -C $projectRoot status --porcelain --untracked-files=no) {
+        throw "dev is behind origin/dev ($($head.Substring(0,9)) vs $($latest.Substring(0,9))) and has uncommitted changes; commit or stash, then re-run."
+    }
+    & git -C $projectRoot merge --ff-only origin/dev
+    if ($LASTEXITCODE -ne 0) { throw 'Local dev has diverged from origin/dev and cannot fast-forward; fix before starting DEV.' }
+    Write-Host "[OK] Fast-forwarded dev to origin/dev @ $((& git -C $projectRoot rev-parse --short HEAD).Trim())" -ForegroundColor Green
 }
 
 function Stop-PortListener([int]$Port) {
