@@ -82,9 +82,9 @@ services:
       # port 11434. Containers must use the host gateway rather than their own
       # localhost namespace.
       OLLAMA_BASE_URL: http://ollama-tunnel:11434
-      OLLAMA_MODEL: qwen2.5:7b-instruct
+      OLLAMA_MODEL: ${FLIPFLOP_OLLAMA_MODEL:-qwen3:4b}
       LLM_PRIMARY_PROVIDER: ollama
-      LLM_PRIMARY_MODEL: qwen2.5:7b-instruct
+      LLM_PRIMARY_MODEL: ${FLIPFLOP_OLLAMA_MODEL:-qwen3:4b}
       LLM_SECONDARY_PROVIDER: openrouter-free
       LLM_SECONDARY_MODEL: google/gemma-4-31b-it:free
       LLM_TERTIARY_PROVIDER: openrouter
@@ -155,9 +155,9 @@ services:
       SYNC_DATABASE_URL: postgresql://flipper:flipper@postgres:5432/pcflipper
       REDIS_URL: redis://redis:6379/0
       OLLAMA_BASE_URL: http://ollama-tunnel:11434
-      OLLAMA_MODEL: qwen2.5:7b-instruct
+      OLLAMA_MODEL: ${FLIPFLOP_OLLAMA_MODEL:-qwen3:4b}
       LLM_PRIMARY_PROVIDER: ollama
-      LLM_PRIMARY_MODEL: qwen2.5:7b-instruct
+      LLM_PRIMARY_MODEL: ${FLIPFLOP_OLLAMA_MODEL:-qwen3:4b}
       LLM_SECONDARY_PROVIDER: openrouter-free
       LLM_SECONDARY_MODEL: google/gemma-4-31b-it:free
       LLM_TERTIARY_PROVIDER: openrouter

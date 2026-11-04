@@ -9,7 +9,7 @@ sold-search page for data that's already sitting in this table — the same
 already applies to active-listing data.
 """
 from datetime import datetime
-from sqlalchemy import String, Float, DateTime, Integer, Index
+from sqlalchemy import String, Text, Float, DateTime, Integer, Index
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
 
@@ -33,7 +33,9 @@ class GemRadarSoldObservation(Base):
     condition: Mapped[str] = mapped_column(String(10))  # "new" | "used"
     price: Mapped[float] = mapped_column(Float)
     postage: Mapped[float] = mapped_column(Float, default=0.0)
-    source_url: Mapped[str | None] = mapped_column(String(1000), nullable=True)
+    # Marketplace tracking/query strings can exceed 1000 characters. Retain
+    # the full evidence URL rather than rejecting the entire submitted batch.
+    source_url: Mapped[str | None] = mapped_column(Text, nullable=True)
     # Identity captured with the sold observation. These fields make later
     # reconciliation auditable instead of forcing us to infer a product from
     # a lossy normalised match key.
