@@ -43,6 +43,7 @@ async def run_manual_build_offer_poll_job() -> dict:
     from app.database import AsyncSessionLocal
     from app.models.manual_build import ManualBuild
 
+    environment = get_settings().ebay_listing_environment
     polled, countered, errors = 0, 0, 0
 
     async with AsyncSessionLocal() as db:
@@ -62,7 +63,9 @@ async def run_manual_build_offer_poll_job() -> dict:
 
         for build in builds:
             try:
-                offers = await ebay_trading_api.get_best_offers(build.ebay_listing_id, token)
+                offers = await ebay_trading_api.get_best_offers(
+                    build.ebay_listing_id, token, environment=environment
+                )
             except Exception as exc:
                 errors += 1
                 log.warning("manual_build_offer_poll.get_best_offers_failed", build_id=build.id, error=str(exc))
@@ -88,7 +91,12 @@ async def run_manual_build_offer_poll_job() -> dict:
 
             try:
                 await ebay_trading_api.respond_to_best_offer(
-                    build.ebay_listing_id, best["best_offer_id"], "Counter", decision.counter_price, token,
+                    build.ebay_listing_id,
+                    best["best_offer_id"],
+                    "Counter",
+                    decision.counter_price,
+                    token,
+                    environment=environment,
                 )
                 build.last_counter_offer_price = decision.counter_price
                 build.counter_offer_round += 1
@@ -107,6 +115,7 @@ async def run_manual_build_send_to_watchers_job() -> dict:
     from app.database import AsyncSessionLocal
     from app.models.manual_build import ManualBuild
 
+    environment = get_settings().ebay_listing_environment
     sent, errors = 0, 0
 
     async with AsyncSessionLocal() as db:
@@ -126,7 +135,29 @@ async def run_manual_build_send_to_watchers_job() -> dict:
             return {"sent": 0, "errors": 0, "note": "Connect the eBay seller account in Settings."}
 
         for build in builds:
-            listing_price = build.ebay_price or build.total_cost
+            if offer_engine.watcher_offer_not_due_reason(
+                build.listed_at, build.last_watcher_offer_sent_at
+            ):
+                continue
+            try:
+                listing = await ebay_trading_api.get_item_status(
+                    build.ebay_listing_id, token, environment=environment
+                )
+            except Exception as exc:
+                log.warning(
+                    "manual_build_send_to_watchers.current_price_failed",
+                    build_id=build.id,
+                    error=str(exc),
+                )
+                continue
+            listing_price = listing.get("current_price")
+            if listing_price is None or listing.get("currency") != "GBP":
+                log.warning(
+                    "manual_build_send_to_watchers.current_price_missing",
+                    build_id=build.id,
+                    currency=listing.get("currency"),
+                )
+                continue
             plan = offer_engine.evaluate_send_to_watchers(
                 listing_price=listing_price,
                 min_offer_price=build.auto_reject_below_price,
@@ -139,6 +170,7 @@ async def run_manual_build_send_to_watchers_job() -> dict:
                 ok = await ebay_negotiation.send_offer_to_watchers(
                     build.ebay_listing_id, plan.offer_price,
                     "Thanks for watching this build — happy to offer you a deal.", token,
+                    environment=environment,
                 )
                 if ok:
                     build.last_watcher_offer_sent_at = datetime.utcnow()

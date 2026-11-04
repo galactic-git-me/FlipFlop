@@ -29,6 +29,7 @@ log "Fetching origin/$BRANCH"
 # Remove only this branch's local tracking ref, then recreate it from origin.
 git update-ref -d "refs/remotes/origin/$BRANCH" 2>/dev/null || true
 git fetch --prune origin "$BRANCH:refs/remotes/origin/$BRANCH"
+git fetch --prune origin dev:refs/remotes/origin/dev
 
 if [[ -z "$TARGET_SHA" ]]; then
   TARGET_SHA="$(git rev-parse "origin/$BRANCH")"
@@ -127,6 +128,12 @@ else
 fi
 
 git update-index --no-skip-worktree -- deploy/github-deploy-command.sh deploy/deploy-andromeda.sh
+
+log "Verifying the production schema has a successful local DEV validation record"
+python3 scripts/verify-dev-schema-attestation.py \
+  --release-ref "$TARGET_SHA" \
+  --dev-ref origin/dev \
+  --require-dev-ancestor
 
 OLD_IMAGE="$(docker inspect flipflop-production-api --format '{{.Image}}' 2>/dev/null || true)"
 if [[ -n "$OLD_IMAGE" ]]; then

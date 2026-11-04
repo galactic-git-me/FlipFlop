@@ -42,6 +42,26 @@ jobs:
       TEST_DATABASE_SCHEMA: flipflop_test
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Enforce DEV-first promotion
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git fetch --quiet origin dev:refs/remotes/origin/dev main:refs/remotes/origin/main
+          if [[ "$EVENT_NAME" == "pull_request" && "$BASE_REF" == "main" ]]; then
+            bash scripts/verify-dev-source-parity.sh origin/dev "$PR_HEAD_SHA"
+            python scripts/verify-dev-schema-attestation.py \
+              --release-ref "$PR_HEAD_SHA" --dev-ref origin/dev --require-dev-ancestor
+          fi
+          if [[ "$EVENT_NAME" == "push" && "$GITHUB_REF" == "refs/heads/main" ]]; then
+            bash scripts/verify-dev-source-parity.sh origin/dev "$GITHUB_SHA"
+            python scripts/verify-dev-schema-attestation.py \
+              --release-ref "$GITHUB_SHA" --dev-ref origin/dev --require-dev-ancestor
+          fi
       - uses: actions/setup-node@v4
         with:
           node-version: "20"

@@ -138,6 +138,12 @@ test("cross-listing loads canonical sources and supports search, status filterin
   await expect(page.getByText("FlipFlop.shop", { exact: true }).first()).toBeVisible();
   await expect(page.getByText("Select all filtered (2)")).toBeVisible();
 
+  const listedRow = page.locator("tr", { hasText: "Atlas Gaming PC RTX 3060" });
+  const ebayCheck = listedRow.locator("td").nth(2).getByRole("link", { name: "Listed live" });
+  const storefrontCheck = listedRow.locator("td").nth(3).getByRole("link", { name: "Listed live" });
+  await expect(ebayCheck).toHaveAttribute("href", "https://www.ebay.co.uk/itm/EBAY-42");
+  await expect(storefrontCheck).toHaveAttribute("href", "http://localhost:4313/ready-to-ship/420");
+
   await page.getByLabel("Search listings").fill("Borealis");
   await expect(page.getByText("Borealis Workstation")).toBeVisible();
   await expect(page.getByText("Atlas Gaming PC RTX 3060")).toHaveCount(0);

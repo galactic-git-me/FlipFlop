@@ -23,7 +23,9 @@ from __future__ import annotations
 import structlog
 from sqlalchemy import select
 
-from app.services import ebay_oauth, ebay_trading_api, ebay_negotiation, offer_engine
+from app.config import get_settings
+from app.services import ebay_trading_api, ebay_negotiation, offer_engine
+from app.services.ebay_token_manager import get_valid_ebay_access_token
 
 log = structlog.get_logger(__name__)
 
@@ -32,10 +34,14 @@ async def run_offer_poll_job() -> dict:
     from app.database import AsyncSessionLocal
     from app.models.flip import Flip, FlipStage
 
+    environment = get_settings().ebay_listing_environment
     polled, countered, errors = 0, 0, 0
 
     async with AsyncSessionLocal() as db:
-        token = await ebay_oauth.get_valid_access_token(db)
+        try:
+            token = await get_valid_ebay_access_token(environment, db=db)
+        except ValueError:
+            token = None
         if not token:
             return {"polled": 0, "countered": 0, "errors": 0, "note": "No connected eBay seller account."}
 
@@ -50,7 +56,9 @@ async def run_offer_poll_job() -> dict:
 
         for flip in flips:
             try:
-                offers = await ebay_trading_api.get_best_offers(flip.ebay_listing_id, token)
+                offers = await ebay_trading_api.get_best_offers(
+                    flip.ebay_listing_id, token, environment=environment
+                )
             except Exception as exc:
                 errors += 1
                 log.warning("offer_poll.get_best_offers_failed", flip_id=flip.id, error=str(exc))
@@ -77,7 +85,12 @@ async def run_offer_poll_job() -> dict:
 
             try:
                 await ebay_trading_api.respond_to_best_offer(
-                    flip.ebay_listing_id, best["best_offer_id"], "Counter", decision.counter_price, token,
+                    flip.ebay_listing_id,
+                    best["best_offer_id"],
+                    "Counter",
+                    decision.counter_price,
+                    token,
+                    environment=environment,
                 )
                 flip.last_counter_offer_price = decision.counter_price
                 flip.counter_offer_round += 1
@@ -97,10 +110,14 @@ async def run_send_to_watchers_job() -> dict:
     from app.models.flip import Flip, FlipStage
     from datetime import datetime
 
+    environment = get_settings().ebay_listing_environment
     sent, errors = 0, 0
 
     async with AsyncSessionLocal() as db:
-        token = await ebay_oauth.get_valid_access_token(db)
+        try:
+            token = await get_valid_ebay_access_token(environment, db=db)
+        except ValueError:
+            token = None
         if not token:
             return {"sent": 0, "errors": 0, "note": "No connected eBay seller account."}
 
@@ -115,7 +132,29 @@ async def run_send_to_watchers_job() -> dict:
         flips = result.scalars().all()
 
         for flip in flips:
-            listing_price = flip.listing_price or flip.current_estimated_resale or flip.total_cost
+            if offer_engine.watcher_offer_not_due_reason(
+                flip.listed_at, flip.last_watcher_offer_sent_at
+            ):
+                continue
+            try:
+                listing = await ebay_trading_api.get_item_status(
+                    flip.ebay_listing_id, token, environment=environment
+                )
+            except Exception as exc:
+                log.warning(
+                    "offer_poll.send_to_watchers.current_price_failed",
+                    flip_id=flip.id,
+                    error=str(exc),
+                )
+                continue
+            listing_price = listing.get("current_price")
+            if listing_price is None or listing.get("currency") != "GBP":
+                log.warning(
+                    "offer_poll.send_to_watchers.current_price_missing",
+                    flip_id=flip.id,
+                    currency=listing.get("currency"),
+                )
+                continue
             plan = offer_engine.evaluate_send_to_watchers(
                 listing_price=listing_price,
                 min_offer_price=flip.min_offer_price,
@@ -128,6 +167,7 @@ async def run_send_to_watchers_job() -> dict:
                 ok = await ebay_negotiation.send_offer_to_watchers(
                     flip.ebay_listing_id, plan.offer_price,
                     "Thanks for watching this build — happy to offer you a deal.", token,
+                    environment=environment,
                 )
                 if ok:
                     flip.last_watcher_offer_sent_at = datetime.utcnow()

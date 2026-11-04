@@ -15,7 +15,7 @@ if ($Action -eq 'Stop') {
         $running += @{port=$port; pid=$proc.ProcessId}
     }
     $running | ConvertTo-Json -AsArray | Set-Content -LiteralPath $statePath
-    foreach ($proc in $running) { Stop-Process -Id $proc.pid -Force }
+    foreach ($proc in $running) { & taskkill.exe /PID $proc.pid /T /F 2>&1 | Out-Null }
 } else {
     if (-not (Test-Path -LiteralPath $statePath)) { return }
     $running = @(Get-Content -LiteralPath $statePath -Raw | ConvertFrom-Json)

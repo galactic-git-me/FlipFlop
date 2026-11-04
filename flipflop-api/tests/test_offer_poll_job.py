@@ -116,7 +116,9 @@ async def test_send_to_watchers_sends_when_due():
         listed_at=datetime.utcnow() - timedelta(days=6), min_offer_price=700.0,
     )
 
-    with patch("app.workers.offer_poll.ebay_negotiation.send_offer_to_watchers", new=AsyncMock(return_value=True)) as mock_send:
+    with patch("app.workers.offer_poll.ebay_trading_api.get_item_status", new=AsyncMock(return_value={
+        "current_price": 1000.0, "currency": "GBP",
+    })), patch("app.workers.offer_poll.ebay_negotiation.send_offer_to_watchers", new=AsyncMock(return_value=True)) as mock_send:
         result = await run_send_to_watchers_job()
 
     assert result["sent"] == 1
@@ -125,6 +127,21 @@ async def test_send_to_watchers_sends_when_due():
     async with AsyncSessionLocal() as db:
         refreshed = await db.get(Flip, flip_id)
         assert refreshed.last_watcher_offer_sent_at is not None
+
+
+async def test_send_to_watchers_skips_when_current_listing_price_is_unavailable():
+    await _connect_ebay()
+    await _make_flip(
+        listed_at=datetime.utcnow() - timedelta(days=6), min_offer_price=700.0,
+    )
+
+    with patch("app.workers.offer_poll.ebay_trading_api.get_item_status", new=AsyncMock(return_value={
+        "current_price": None, "currency": "GBP",
+    })), patch("app.workers.offer_poll.ebay_negotiation.send_offer_to_watchers", new=AsyncMock()) as mock_send:
+        result = await run_send_to_watchers_job()
+
+    assert result["sent"] == 0
+    mock_send.assert_not_called()
 
 
 async def test_send_to_watchers_not_due_yet():

@@ -24,18 +24,28 @@ from app.api.ebay_compliance import _ebay_api_root
 log = structlog.get_logger(__name__)
 
 
-async def send_offer_to_watchers(listing_id: str, offer_price: float, message: str, token: str) -> bool:
+async def send_offer_to_watchers(
+    listing_id: str,
+    offer_price: float,
+    message: str,
+    token: str,
+    environment: str | None = None,
+) -> bool:
     """Row 45: push an unsolicited discount offer to everyone watching/viewing the listing."""
-    root = _ebay_api_root()
+    root = _ebay_api_root(environment)
     headers = {
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json",
         "X-EBAY-C-MARKETPLACE-ID": "EBAY_GB",
     }
     body = {
-        "offerItems": [{"listingId": listing_id, "quantity": 1}],
+        "offeredItems": [{
+            "listingId": listing_id,
+            "quantity": "1",
+            "price": {"value": f"{offer_price:.2f}", "currency": "GBP"},
+        }],
         "message": message[:250],
-        "priceOverride": {"value": f"{offer_price:.2f}", "currency": "GBP"},
+        "offerDuration": {"unit": "DAY", "value": "2"},
     }
     async with httpx.AsyncClient(timeout=20) as client:
         resp = await client.post(
