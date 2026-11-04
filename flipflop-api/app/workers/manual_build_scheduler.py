@@ -90,7 +90,7 @@ async def _publish_due_build(build, db) -> str:
     return outcome
 
 
-async def post_build_to_ebay(build, db=None) -> str:
+async def post_build_to_ebay(build, db=None, *, update_existing: bool = False) -> str:
     """
     Shared eBay-publish logic for a ManualBuild — used by the deferred
     first-publish job above and by the recreate-cycle end-and-republish job
@@ -99,6 +99,8 @@ async def post_build_to_ebay(build, db=None) -> str:
     Does NOT touch build.status/deferred_publish_at, since the recreate
     cycle re-publishes an already-listed build — callers that care about
     those fields (the deferred job) set them themselves.
+    When update_existing is true, revise the saved Inventory API offer using
+    its existing listing ID and SKU instead of creating a second offer.
     """
     if not build.generated_title or not build.generated_description:
         log.info("manual_build_scheduler.skip_not_ready", build_id=build.id, reason="no_listing_content")
@@ -149,6 +151,11 @@ async def post_build_to_ebay(build, db=None) -> str:
     if build.fulfillment_policy_id:
         fulfillment_policy_id = build.fulfillment_policy_id
 
+    existing_listing = (
+        {"listing_id": build.ebay_listing_id, "sku": build.ebay_sku}
+        if update_existing
+        else {}
+    )
     result = await post_flip_to_ebay(
         title=build.generated_title,
         description=build.generated_description,
@@ -161,6 +168,7 @@ async def post_build_to_ebay(build, db=None) -> str:
         return_policy_id=return_policy_id,
         fulfillment_policy_id=fulfillment_policy_id,
         aspects=build.generated_aspects or {},
+        **existing_listing,
     )
 
     if result.get("success"):
