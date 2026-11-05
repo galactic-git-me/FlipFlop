@@ -330,6 +330,7 @@ async def record_observation(
         gtin=listing.gtin,
         mpn=listing.mpn,
         model_number=listing.model_number,
+        vendor_product_id=listing.vendor_product_id,
         seller_feedback_percent=listing.seller_feedback_percent,
         seller_feedback_count=listing.seller_feedback_count,
         scan_price=listing.scan_price,
