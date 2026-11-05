@@ -36,6 +36,7 @@ from app.models.product import Product, ProductType, ProductStatus
 from app.models.order import Order, OrderStatus
 from app.models.playbook import Playbook
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
+from app.models.gem_radar_listing_cpk import GemRadarListingCpk
 from app.models.gem_radar_sold_observation import GemRadarSoldObservation
 from app.models.listing import Listing, ListingStatus
 from app.models.inventory import InventoryItem
@@ -2968,7 +2969,7 @@ async def get_build_purchase_plan(build_id: int, db: AsyncSession = Depends(get_
     if cpks:
         ranked_sold = select(
             GemRadarSoldObservation.cpk.label("cpk"),
-            GemRadarSoldObservation.price.label("price"),
+            (GemRadarSoldObservation.price + func.coalesce(GemRadarSoldObservation.postage, 0)).label("price"),
             func.row_number().over(
                 partition_by=GemRadarSoldObservation.cpk,
                 order_by=GemRadarSoldObservation.observed_at.desc(),
@@ -2984,37 +2985,30 @@ async def get_build_purchase_plan(build_id: int, db: AsyncSession = Depends(get_
             sold_by_cpk[cpk].append(float(sold_price))
 
     candidates = (await db.execute(
-        select(Listing).where(
+        select(Listing, GemRadarListingCpk.cpk)
+        .join(GemRadarListingCpk, GemRadarListingCpk.listing_id == Listing.external_id)
+        .where(
             Listing.status == ListingStatus.active,
             Listing.listing_type == "auction",
             Listing.listing_ends_at > datetime.utcnow(),
             Listing.url.ilike("%ebay.%"),
+            GemRadarListingCpk.cpk.in_(cpks),
         ).order_by(Listing.listing_ends_at.asc()).limit(500)
-    )).scalars().all()
+    )).all() if cpks else []
 
     plan = []
     for component in components:
-        sold_prices = sold_by_cpk.get(cpk_by_slot.get(component.get("slot")), [])
-
-        tokens = {
-            token for token in re.findall(r"[a-z0-9]+", (component.get("name") or "").lower())
-            if len(token) >= 3 and token not in {"with", "for", "the", "and", "new", "used"}
-        }
-        auctions = []
-        if tokens:
-            ranked = []
-            for listing in candidates:
-                listing_tokens = set(re.findall(r"[a-z0-9]+", (listing.title or "").lower()))
-                overlap = tokens & listing_tokens
-                if len(overlap) >= 2 or (len(tokens) == 1 and overlap):
-                    ranked.append((len(overlap), listing))
-            for _, listing in sorted(ranked, key=lambda row: (-row[0], row[1].listing_ends_at))[:5]:
-                auctions.append({
-                    "title": listing.title,
-                    "url": listing.url,
-                    "price": listing.price,
-                    "ends_at": listing.listing_ends_at.isoformat() if listing.listing_ends_at else None,
-                })
+        component_cpk = cpk_by_slot.get(component.get("slot"))
+        sold_prices = sold_by_cpk.get(component_cpk, [])
+        auctions = [
+            {
+                "title": listing.title,
+                "url": listing.url,
+                "price": listing.price,
+                "ends_at": listing.listing_ends_at.isoformat() if listing.listing_ends_at else None,
+            }
+            for listing, cpk in candidates if component_cpk and cpk == component_cpk
+        ][:5]
 
         plan.append({
             "slot": component.get("slot"),
