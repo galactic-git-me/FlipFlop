@@ -1,14 +1,21 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const reason = new URLSearchParams(window.location.search).get("reason");
+    if (reason === "session_invalid") {
+      setError("Your sign-in session could not be verified. Please sign in again.");
+    } else if (reason === "session_missing") {
+      setError("Your sign-in cookie was not received. Check that cookies are enabled, then sign in again.");
+    }
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -30,8 +37,9 @@ export default function LoginPage() {
         return;
       }
 
-      router.replace("/");
-      router.refresh();
+      // A fresh document request makes the proxy verify the cookie just issued
+      // by the login route before rendering a protected page.
+      window.location.replace("/");
     } catch {
       setError("Could not reach the server. Is the backend running?");
     } finally {
