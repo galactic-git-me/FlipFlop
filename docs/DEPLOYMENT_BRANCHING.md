@@ -17,9 +17,9 @@ Local `dev` is a separate copy from GitHub's `origin/dev`. Before starting
 services, `scripts/start-all-servers.ps1` fast-forwards a clean local `dev`
 from `origin/dev`. It preserves dirty work and starts other branches without
 blocking; it prints the branch, commit, and dirty-worktree state. The API
-`/health` response reports the running source commit, branch, and dirty state.
-The admin header compares its own build metadata with the API and flags a
-mismatch.
+`/health` response and admin `/build-info` route refresh source details from
+Git during local DEV hot reloads. The admin header compares both services and
+flags a mismatch.
 
 After the exact DEV commit has passed its runtime check, open a pull request
 for `main` only when its tracked source tree matches `dev`. This permits a
