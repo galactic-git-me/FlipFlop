@@ -36,6 +36,21 @@ export function TopCommandBar() {
   const [toasts, setToasts] = useState<Array<{ id: string; text: string; linkUrl?: string | null; persistent?: boolean }>>([]);
   const [confettiPieces, setConfettiPieces] = useState<Array<{ id: string; left: number; delay: number; duration: number; size: number; color: string; drift: number }>>([]);
   const [isLocalEnvironment, setIsLocalEnvironment] = useState(process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "development");
+  const [adminSource, setAdminSource] = useState({
+    commit: process.env.NEXT_PUBLIC_SOURCE_COMMIT ?? "unknown",
+    branch: process.env.NEXT_PUBLIC_SOURCE_BRANCH ?? "unknown",
+    dirty: process.env.NEXT_PUBLIC_SOURCE_DIRTY === "true",
+  });
+  const [apiSource, setApiSource] = useState<{ commit: string; branch: string; dirty: boolean } | null>(null);
+  const adminSourceCommit = adminSource.commit;
+  const adminSourceBranch = adminSource.branch;
+  const adminSourceDirty = adminSource.dirty;
+  const sourceMismatch = Boolean(apiSource && (
+    adminSourceCommit !== apiSource.commit ||
+    adminSourceBranch !== apiSource.branch ||
+    adminSourceDirty !== apiSource.dirty
+  ));
+  const sourceLabel = adminSourceCommit === "unknown" ? "" : adminSourceCommit.slice(0, 7);
   const liveOperator = process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live";
   const seenProposalIdsRef = useRef<Set<number>>(new Set());
   const seenAlertIdsRef = useRef<Set<number>>(new Set());
@@ -57,6 +72,38 @@ export function TopCommandBar() {
 
   useEffect(() => {
     setIsLocalEnvironment(!liveOperator && ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname));
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    const checkSources = async () => {
+      try {
+        const [adminResponse, apiResponse] = await Promise.all([
+          fetch("/build-info", { cache: "no-store" }),
+          fetch("/health", { cache: "no-store" }),
+        ]);
+        if (!adminResponse.ok || !apiResponse.ok) return;
+        const [admin, api] = await Promise.all([
+          adminResponse.json() as Promise<{ source_commit?: string; source_branch?: string; source_dirty?: boolean }>,
+          apiResponse.json() as Promise<{ source_commit?: string; source_branch?: string; source_dirty?: boolean }>,
+        ]);
+        if (active && admin.source_commit) setAdminSource({
+          commit: admin.source_commit,
+          branch: admin.source_branch ?? "unknown",
+          dirty: admin.source_dirty === true,
+        });
+        if (active && api.source_commit) setApiSource({
+          commit: api.source_commit,
+          branch: api.source_branch ?? "unknown",
+          dirty: api.source_dirty === true,
+        });
+      } catch {
+        // Keep the environment header usable while the API is restarting.
+      }
+    };
+    void checkSources();
+    const timer = window.setInterval(() => void checkSources(), 30_000);
+    return () => { active = false; window.clearInterval(timer); };
   }, []);
 
   useEffect(() => {
@@ -225,10 +272,10 @@ export function TopCommandBar() {
         <Link
           href={isLocalEnvironment ? "http://localhost:4313" : "https://www.theflipflop.shop"}
           className={`inline-flex animate-pulse items-center gap-1.5 rounded-md border px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest transition ${environmentBadgeClass}`}
-          title={isLocalEnvironment ? "Open the local FlipFlop.shop storefront" : "Open the production FlipFlop.shop storefront"}
+          title={`Admin source: ${adminSourceBranch}@${adminSourceCommit}${adminSourceDirty ? " (dirty)" : ""}; API source: ${apiSource ? `${apiSource.branch}@${apiSource.commit}${apiSource.dirty ? " (dirty)" : ""}` : "not checked"}${sourceMismatch ? "; SOURCES DO NOT MATCH" : ""}. ${isLocalEnvironment ? "Open the local FlipFlop.shop storefront" : "Open the production FlipFlop.shop storefront"}`}
         >
-          <span className={`h-2 w-2 animate-pulse rounded-full ${environmentDotClass}`} />
-          {isLocalEnvironment ? "DEV · LOCAL" : "LIVE · PRODUCTION"}
+          <span className={`h-2 w-2 animate-pulse rounded-full ${sourceMismatch ? "bg-rose-400" : environmentDotClass}`} />
+          {isLocalEnvironment ? "DEV · LOCAL" : "LIVE · PRODUCTION"}{sourceLabel ? ` · ${sourceLabel}` : ""}{adminSourceDirty ? " · DIRTY" : ""}{sourceMismatch ? " · SOURCE MISMATCH" : ""}
         </Link>
         <div className="node-live-chip">
           <span className="node-live-dot" />

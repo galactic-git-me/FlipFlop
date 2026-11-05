@@ -48,6 +48,10 @@ services:
       context: ../flipflop-api
       dockerfile: Dockerfile
       target: backend
+      args:
+        FLIPFLOP_SOURCE_COMMIT: ${FLIPFLOP_SOURCE_COMMIT:-unknown}
+        FLIPFLOP_SOURCE_BRANCH: main
+        FLIPFLOP_SOURCE_DIRTY: "false"
     container_name: flipflop-production-api
     restart: unless-stopped
     depends_on:
@@ -131,6 +135,10 @@ services:
       context: ../flipflop-api
       dockerfile: Dockerfile
       target: backend
+      args:
+        FLIPFLOP_SOURCE_COMMIT: ${FLIPFLOP_SOURCE_COMMIT:-unknown}
+        FLIPFLOP_SOURCE_BRANCH: main
+        FLIPFLOP_SOURCE_DIRTY: "false"
     container_name: flipflop-production-gemradar-worker
     restart: unless-stopped
     depends_on:
@@ -221,6 +229,9 @@ services:
       dockerfile: flipflop-admin/Dockerfile.prod
       args:
         NEXT_PUBLIC_API_URL: /api
+        NEXT_PUBLIC_SOURCE_COMMIT: ${FLIPFLOP_SOURCE_COMMIT:-unknown}
+        NEXT_PUBLIC_SOURCE_BRANCH: main
+        NEXT_PUBLIC_SOURCE_DIRTY: "false"
     container_name: flipflop-production-admin
     restart: unless-stopped
     env_file:
