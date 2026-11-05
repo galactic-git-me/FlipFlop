@@ -42,6 +42,7 @@ class PriorityForwarder:
         self._worker_tasks: list[asyncio.Task[None]] = []
         self._client: httpx.AsyncClient | None = None
         self._generation_slots = asyncio.Semaphore(GENERATION_CONCURRENCY)
+        self._model_load_locks: dict[str, asyncio.Lock] = {}
 
     async def start(self) -> None:
         self._client = httpx.AsyncClient(timeout=None)
@@ -59,23 +60,38 @@ class PriorityForwarder:
             await self._client.aclose()
 
     async def gpu_request_body(self, body: bytes) -> bytes:
-        """Load without a prompt, then refuse inference unless fully GPU resident."""
+        """Ensure the requested model is fully GPU resident before forwarding user input."""
         payload = json.loads(body)
         model = payload.get("model")
         if not isinstance(model, str) or not model:
             raise HTTPException(422, "A local model name is required")
         options = {**(payload.get("options") or {}), "num_gpu": 999}
         assert self._client is not None
-        # Empty generation loads the runner without evaluating a user prompt.
-        loaded = await self._client.post(f"{UPSTREAM}/api/generate", json={
-            "model": model, "stream": False, "keep_alive": -1, "options": options,
-        }, timeout=120)
-        loaded.raise_for_status()
-        state = await self._client.get(f"{UPSTREAM}/api/ps", timeout=10)
-        state.raise_for_status()
         names = {model, model if ":" in model else f"{model}:latest"}
-        resident = next((m for m in state.json().get("models", [])
-            if m.get("name") in names or m.get("model") in names), None)
+
+        async def get_resident_model() -> dict | None:
+            state = await self._client.get(f"{UPSTREAM}/api/ps", timeout=10)
+            state.raise_for_status()
+            return next((m for m in state.json().get("models", [])
+                if m.get("name") in names or m.get("model") in names), None)
+
+        model_lock = self._model_load_locks.setdefault(model, asyncio.Lock())
+        async with model_lock:
+            resident = await get_resident_model()
+            if not resident or not resident.get("size") or resident.get("size_vram", 0) < resident["size"]:
+                # Ollama's empty-prompt generate call can keep generating forever.
+                # Use one harmless token only when the model is absent or not fully
+                # resident, then verify actual VRAM placement before passing user input.
+                warmup_options = {**options, "num_predict": 1}
+                loaded = await self._client.post(f"{UPSTREAM}/api/generate", json={
+                    "model": model,
+                    "prompt": ".",
+                    "stream": False,
+                    "keep_alive": -1,
+                    "options": warmup_options,
+                }, timeout=120)
+                loaded.raise_for_status()
+                resident = await get_resident_model()
         if not resident or not resident.get("size") or resident.get("size_vram", 0) < resident["size"]:
             raise HTTPException(503, "GPU-only inference required: model is not fully resident on the GPU. CPU fallback is blocked; check Ollama GPU discovery and available VRAM.")
         payload["options"] = options
