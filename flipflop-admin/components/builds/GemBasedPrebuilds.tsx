@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Box, CircuitBoard, Cpu, Fan, Gem, HardDrive, Loader2, MemoryStick, Save, Zap } from "lucide-react";
+import { ArrowLeft, ExternalLink, Loader2, Save, X } from "lucide-react";
 import { api } from "@/lib/api";
 
 interface GemData {
@@ -10,7 +10,8 @@ interface GemData {
   title: string;
   price: number;
   seller?: string;
-  condition: string;
+  condition?: string | null;
+  source?: string | null;
   url: string;
   image_url?: string | null;
   cpu?: string | null;
@@ -18,7 +19,13 @@ interface GemData {
   classification?: "SUPER_GEM" | "GEM";
   deal_score?: number;
   market_reference?: number | null;
+  market_median_price?: number | null;
   expected_profit?: number | null;
+  performance_percentile?: number | null;
+  desirability_score?: number | null;
+  liquidity_score?: number | null;
+  watch_count?: number | null;
+  bid_count?: number | null;
 }
 
 type GemBuildConceptKey = "best" | "cheapest" | "highest_end" | "most_profitable" | "most_popular";
@@ -43,23 +50,23 @@ interface GemSpotlightData {
 }
 
 const componentOrder = ["motherboard", "cpu", "cooler", "ram", "gpu", "ssd", "psu", "case"];
-const componentLabels: Record<string, { label: string; icon: typeof Cpu }> = {
-  motherboard: { label: "Motherboard", icon: CircuitBoard },
-  cpu: { label: "CPU", icon: Cpu },
-  cooler: { label: "CPU cooler", icon: Fan },
-  ram: { label: "Memory", icon: MemoryStick },
-  gpu: { label: "GPU", icon: CircuitBoard },
-  ssd: { label: "Storage", icon: HardDrive },
-  psu: { label: "Power supply", icon: Zap },
-  case: { label: "PC case", icon: Box },
+const componentLabels: Record<string, string> = {
+  motherboard: "Motherboard",
+  cpu: "CPU",
+  cooler: "CPU cooler",
+  ram: "Memory",
+  gpu: "GPU",
+  ssd: "Storage",
+  psu: "Power supply",
+  case: "PC case",
 };
 
 const concepts: { key: GemBuildConceptKey; title: string; description: string; signal: string }[] = [
-  { key: "best", title: "The Best Gem Build", description: "Highest-ranked overall Gem set by deal score.", signal: "Overall Gem deal score" },
-  { key: "cheapest", title: "The Cheapest Gem Build", description: "Lowest total asking price among available Gem listings.", signal: "Lowest parts total" },
-  { key: "highest_end", title: "The Highest-end Gem Build", description: "Highest known CPU/GPU benchmark tier, with component specs considered where benchmark data is unavailable.", signal: "CPU/GPU benchmark percentile" },
-  { key: "most_profitable", title: "The Most Profitable Gem Build", description: "Highest combined per-listing expected profit from available Gem market evidence.", signal: "Combined component profit signal" },
-  { key: "most_popular", title: "The Most Popular Gem Build", description: "Highest combined desirability, liquidity, watch and bid signals from the selected listings.", signal: "Observed demand signals" },
+  { key: "best", title: "Top Deal Score Concept", description: "Selected from the available Gems by their overall deal scores.", signal: "Overall Gem deal score" },
+  { key: "cheapest", title: "Lowest Parts Cost Concept", description: "The available Gem set with the lowest combined asking price.", signal: "Lowest parts total" },
+  { key: "highest_end", title: "Highest Benchmark Tier Concept", description: "Highest known CPU/GPU benchmark tier, with component specs considered where benchmark data is unavailable.", signal: "CPU/GPU benchmark percentile" },
+  { key: "most_profitable", title: "Combined Profit Signal Concept", description: "Selected by summed per-listing expected profit estimates. Component estimates do not guarantee whole-PC profit.", signal: "Combined component profit signal" },
+  { key: "most_popular", title: "Top Demand Signal Concept", description: "Selected by combined desirability, liquidity, watch and bid signals from the chosen listings.", signal: "Observed demand signals" },
 ];
 
 const accents = {
@@ -70,10 +77,13 @@ const accents = {
   orange: { label: "text-orange-300", price: "text-orange-200", border: "ring-orange-400/30" },
 } as const;
 
-function GemCard({ gem, label, accent }: { gem: GemData | null; label: string; accent: keyof typeof accents }) {
+function GemCard({ gem, label, accent, details, onSelect }: { gem: GemData | null; label: string; accent: keyof typeof accents; details?: string; onSelect: (gem: GemData) => void }) {
   const colors = accents[accent];
   if (!gem) return <div className="flex aspect-square min-w-0 flex-col justify-between rounded-xl border border-white/10 bg-white/[0.03] p-3"><span className="truncate text-[10px] font-semibold uppercase tracking-wide text-slate-400">{label}</span><p className="text-xs text-slate-500">No compatible Gem</p></div>;
-  return <a href={gem.url} target="_blank" rel="noopener noreferrer" className={`group relative block aspect-square min-w-0 overflow-hidden rounded-xl ring-1 ${colors.border}`}>
+  const medianDifference = gem.market_median_price != null && gem.market_median_price > 0
+    ? gem.price - gem.market_median_price
+    : null;
+  return <button type="button" onClick={() => onSelect(gem)} aria-haspopup="dialog" aria-label={`View ${label} details: ${gem.title}`} className={`group relative block aspect-square min-w-0 overflow-hidden rounded-xl text-left ring-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${colors.border}`}>
     {gem.image_url ? <img src={gem.image_url} alt={gem.title} className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" onError={event => { event.currentTarget.style.display = "none"; }} /> : <div className="absolute inset-0 bg-slate-800" />}
     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-black/40" />
     <span className={`absolute left-2 top-2 max-w-[calc(100%-1rem)] truncate rounded-full bg-black/50 px-2 py-1 text-[9px] font-semibold uppercase tracking-wide ${colors.label}`}>{label}</span>
@@ -81,8 +91,14 @@ function GemCard({ gem, label, accent }: { gem: GemData | null; label: string; a
       <p className="truncate text-xs font-medium text-white">{gem.title}</p>
       {gem.cpu && <p className="truncate text-[10px] text-white/70">{gem.cpu}</p>}
       <p className={`mt-0.5 text-base font-bold ${colors.price}`}>£{gem.price.toFixed(2)}</p>
+      {medianDifference != null && gem.market_median_price != null && <p className={`truncate text-[10px] font-semibold ${medianDifference < 0 ? "text-red-300" : "text-white/70"}`}>
+        {medianDifference === 0
+          ? "At market median"
+          : `£${Math.abs(medianDifference).toFixed(0)} · ${Math.abs((medianDifference / gem.market_median_price) * 100).toFixed(1)}% ${medianDifference < 0 ? "below" : "above"} median`}
+      </p>}
+      {details && <p className="truncate text-[9px] text-white/60">{details}</p>}
     </div>
-  </a>;
+  </button>;
 }
 
 export default function GemBasedPrebuilds() {
@@ -92,6 +108,16 @@ export default function GemBasedPrebuilds() {
   const [loadError, setLoadError] = useState("");
   const [saving, setSaving] = useState<GemBuildConceptKey | null>(null);
   const [draftError, setDraftError] = useState("");
+  const [selectedGem, setSelectedGem] = useState<GemData | null>(null);
+
+  useEffect(() => {
+    if (!selectedGem) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedGem(null);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [selectedGem]);
 
   useEffect(() => {
     let active = true;
@@ -159,7 +185,7 @@ export default function GemBasedPrebuilds() {
 
     <section aria-label="Top Gems from the Best Gem Build" className="grid w-full min-w-0 grid-cols-8 gap-2">
       {componentOrder.map(category => <GemCard key={category} gem={data?.builds?.best?.gems?.[category] ?? null}
-        label={componentLabels[category].label} accent={category === "motherboard" ? "emerald" : category === "cpu" ? "cyan" : category === "gpu" ? "purple" : category === "ssd" ? "blue" : "orange"} />)}
+        label={componentLabels[category]} accent={category === "motherboard" || category === "ram" ? "emerald" : category === "cpu" ? "cyan" : category === "gpu" ? "purple" : category === "ssd" ? "blue" : "orange"} onSelect={setSelectedGem} />)}
     </section>
 
     {concepts.map(({ key, title, description, signal }) => {
@@ -174,26 +200,36 @@ export default function GemBasedPrebuilds() {
       return <article key={key} className="rounded-2xl border border-white/10 bg-white/[0.035] p-5 shadow-lg shadow-black/20">
         <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
           <div><p className="text-xs font-bold uppercase tracking-wider text-emerald-300">Pre-built concept · {signal}</p><h2 className="mt-1 text-xl font-semibold text-white">{title}</h2><p className="mt-1 max-w-3xl text-sm text-slate-400">{description}</p></div>
-          <div className="text-right"><p className="text-xs text-slate-400">Estimated parts total</p><p className="text-xl font-bold text-emerald-200">{money(partsTotal)}</p><p className="text-[11px] text-slate-500">Asking prices · not paid cost</p></div>
         </div>
 
-        <div className="mb-4 grid gap-3 rounded-xl border border-emerald-400/15 bg-emerald-400/[0.04] p-4 sm:grid-cols-2">
-          <div><p className="text-xs text-slate-400">Estimated resale value from component evidence</p><p className="text-lg font-bold text-white">{sellingPrice === null ? "Insufficient listing data" : money(sellingPrice)}</p></div>
-          <div><p className="text-xs text-slate-400">Estimated profit after costs and reserves</p><p className={`text-lg font-bold ${estimatedProfit !== null && estimatedProfit >= 0 ? "text-emerald-200" : "text-slate-500"}`}>{estimatedProfit === null ? "Insufficient listing data" : money(estimatedProfit)}</p></div>
-          {key === "most_profitable" && <p className="text-[11px] text-slate-500 sm:col-span-2">Combined Gem market profit signal: {concept.metrics.component_profit_signal == null ? "—" : money(concept.metrics.component_profit_signal)} · listing-level estimate, not guaranteed whole-PC profit.</p>}
-          {key === "most_popular" && <p className="text-[11px] text-slate-500 sm:col-span-2">Listing signals: {concept.metrics.listing_watch_count ?? 0} watches · {concept.metrics.listing_bid_count ?? 0} bids. These reflect the selected listings, not total product demand.</p>}
-          {key === "highest_end" && <p className="text-[11px] text-slate-500 sm:col-span-2">Average matched CPU/GPU benchmark percentile: {concept.metrics.performance_percentile == null ? "unavailable" : `${concept.metrics.performance_percentile}th`}.</p>}
-          <p className="text-[11px] leading-relaxed text-slate-500 sm:col-span-2">Resale value sums each listing’s available market reference; it is not a confirmed whole-PC selling price. Profit estimate subtracts asking costs, 10% parts overhead, £20 outbound delivery, £15 insurance, £6 packaging, £0 labour, £0.20 fixed payment cost, and payment, warranty and returns reserves. Buying postage is not confirmed.</p>
+        <div className="mb-4 grid gap-3 rounded-xl border border-emerald-400/15 bg-emerald-400/[0.04] p-4 sm:grid-cols-3">
+          <div className="rounded-lg border border-sky-300/15 bg-sky-300/[0.04] p-3">
+            <p className="text-xs font-semibold text-sky-200">Estimated resale value</p>
+            <p className="mt-1 text-xl font-bold text-white">{sellingPrice === null ? "Insufficient data" : money(sellingPrice)}</p>
+            <p className="mt-1 text-[11px] leading-4 text-slate-400">Sum of the parts’ available market references. This is not a confirmed whole-PC sale price.</p>
+          </div>
+          <div className="rounded-lg border border-amber-300/15 bg-amber-300/[0.04] p-3">
+            <p className="text-xs font-semibold text-amber-200">Estimated parts cost</p>
+            <p className="mt-1 text-xl font-bold text-white">{money(partsTotal)}</p>
+            <p className="mt-1 text-[11px] leading-4 text-slate-400">Sum of current listing asking prices; not confirmed paid cost. Buying postage is not included.</p>
+          </div>
+          <div className="rounded-lg border border-emerald-300/15 bg-emerald-300/[0.04] p-3">
+            <p className="text-xs font-semibold text-emerald-200">Estimated profit</p>
+            <p className={`mt-1 text-xl font-bold ${estimatedProfit !== null && estimatedProfit >= 0 ? "text-emerald-200" : "text-slate-400"}`}>{estimatedProfit === null ? "Insufficient data" : money(estimatedProfit)}</p>
+            <p className="mt-1 text-[11px] leading-4 text-slate-400">Deducts parts asking prices, 10% parts overhead, £20 delivery, £15 insurance, £6 packaging, £0.20 fixed payment fee and a 10.15% selling fee. No separate warranty or returns reserve is included.</p>
+          </div>
+          {key === "most_profitable" && <p className="text-[11px] leading-4 text-slate-400 sm:col-span-3">Separate component profit signal: {concept.metrics.component_profit_signal == null ? "—" : money(concept.metrics.component_profit_signal)}. This sums individual listing-level estimates; it is not the whole-build profit shown above.</p>}
+          {key === "most_popular" && <p className="text-[11px] leading-4 text-slate-400 sm:col-span-3">Demand signals for these selected listings: {concept.metrics.listing_watch_count ?? 0} watches · {concept.metrics.listing_bid_count ?? 0} bids. These are not total product demand.</p>}
+          {key === "highest_end" && <p className="text-[11px] leading-4 text-slate-400 sm:col-span-3">Average matched CPU/GPU benchmark percentile: {concept.metrics.performance_percentile == null ? "unavailable" : `${concept.metrics.performance_percentile}th`}.</p>}
         </div>
 
-        <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">{selected.map(({ category, gem }) => {
+        <div className="grid w-full min-w-0 grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-8">{selected.map(({ category, gem }) => {
           const meta = componentLabels[category];
-          const Icon = meta.icon;
-          return <div key={category} className="flex min-w-0 items-center gap-3 rounded-xl border border-white/[0.07] bg-black/20 p-3">
-            {gem?.image_url ? <img src={gem.image_url} alt="" className="h-12 w-12 shrink-0 rounded-lg bg-slate-800 object-contain" /> : <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-slate-800 text-slate-500"><Icon size={20} /></div>}
-            <div className="min-w-0 flex-1"><p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">{meta.label}</p><p className="truncate text-sm text-slate-200">{gem?.title ?? "No active Gem available"}</p>{gem && <p className="mt-0.5 truncate text-[10px] text-slate-500">Market: {gem.market_reference == null ? "unknown" : money(gem.market_reference)} · Profit signal: {gem.expected_profit == null ? "unknown" : money(gem.expected_profit)}</p>}</div>
-            {gem && <span className="shrink-0 text-sm font-semibold text-emerald-200">{money(gem.price)}</span>}
-          </div>;
+          const details = gem
+            ? `Market: ${gem.market_reference == null ? "unknown" : money(gem.market_reference)} · Profit: ${gem.expected_profit == null ? "unknown" : money(gem.expected_profit)}`
+            : undefined;
+          const accent = category === "motherboard" ? "emerald" : category === "cpu" ? "cyan" : category === "gpu" ? "purple" : category === "ssd" ? "blue" : "orange";
+          return <GemCard key={category} gem={gem} label={meta} accent={accent} details={details} onSelect={setSelectedGem} />;
         })}</div>
 
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.07] pt-4">
@@ -204,5 +240,41 @@ export default function GemBasedPrebuilds() {
         </div>
       </article>;
     })}
+    {selectedGem && <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm" onClick={event => { if (event.target === event.currentTarget) setSelectedGem(null); }}>
+      <div role="dialog" aria-modal="true" aria-labelledby="gem-detail-title" className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-white/15 bg-[#0b1422] shadow-2xl">
+        <div className="flex items-start justify-between gap-4 border-b border-white/10 p-5">
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-wider text-cyan-300">{componentLabels[selectedGem.category ?? ""] ?? selectedGem.category ?? "Gem component"} · {selectedGem.classification?.replaceAll("_", " ") ?? "Listing details"}</p>
+            <h2 id="gem-detail-title" className="mt-1 text-lg font-bold text-white">{selectedGem.title}</h2>
+          </div>
+          <button type="button" autoFocus onClick={() => setSelectedGem(null)} aria-label="Close component details" className="shrink-0 rounded-md p-2 text-slate-400 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"><X className="h-5 w-5" /></button>
+        </div>
+        <div className="grid gap-5 p-5 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+          <div className="overflow-hidden rounded-xl border border-white/10 bg-slate-900">
+            {selectedGem.image_url ? <img src={selectedGem.image_url} alt={selectedGem.title} className="aspect-square w-full object-contain" /> : <div className="grid aspect-square place-items-center text-sm text-slate-500">No listing image</div>}
+          </div>
+          <dl className="grid content-start grid-cols-2 gap-2 text-sm">
+            {[
+              ["Listing price", money(selectedGem.price)],
+              ["Condition", selectedGem.condition ?? "Unknown"],
+              ["Seller", selectedGem.seller ?? "Unknown"],
+              ["Source", selectedGem.source ?? "Unknown"],
+              ["Market median", selectedGem.market_median_price == null ? "Unavailable" : money(selectedGem.market_median_price)],
+              ["Market reference", selectedGem.market_reference == null ? "Unavailable" : money(selectedGem.market_reference)],
+              ["Expected profit signal", selectedGem.expected_profit == null ? "Unavailable" : money(selectedGem.expected_profit)],
+              ["Deal score", selectedGem.deal_score == null ? "Unavailable" : selectedGem.deal_score.toFixed(1)],
+              ["CPU/GPU benchmark", selectedGem.performance_percentile == null ? "Unavailable" : `${selectedGem.performance_percentile.toFixed(1)}th percentile`],
+              ["Watches · bids", `${selectedGem.watch_count ?? "—"} · ${selectedGem.bid_count ?? "—"}`],
+              ["Demand scores", `Desirability ${selectedGem.desirability_score == null ? "—" : selectedGem.desirability_score.toFixed(0)} · liquidity ${selectedGem.liquidity_score == null ? "—" : selectedGem.liquidity_score.toFixed(0)}`],
+            ].map(([label, value]) => <div key={label} className="rounded-lg border border-white/[0.07] bg-white/[0.03] p-3">
+              <dt className="text-[11px] text-slate-500">{label}</dt><dd className="mt-1 break-words font-semibold text-slate-100">{value}</dd>
+            </div>)}
+          </dl>
+        </div>
+        {selectedGem.url && <div className="flex justify-end border-t border-white/10 p-4">
+          <a href={selectedGem.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg border border-cyan-400/30 px-4 py-2 text-sm font-semibold text-cyan-200 hover:bg-cyan-400/10">View original listing <ExternalLink className="h-4 w-4" /></a>
+        </div>}
+      </div>
+    </div>}
   </div>;
 }
