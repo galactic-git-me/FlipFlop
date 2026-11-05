@@ -8,6 +8,7 @@ This is the one place all the gem_radar modules are wired together, so the
 "cached research never goes stale on price" invariants are visible in one
 spot rather than scattered.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -24,7 +25,11 @@ from app.gem_radar import risk as risk_mod
 from app.gem_radar import scoring
 from app.gem_radar.adapters.amazon_price import AmazonPriceAdapter
 from app.gem_radar.adapters.sold_comps import SoldCompsAdapter
-from app.gem_radar.benchmarks import build_price_bundle, normalize_match_key, unavailable_price_bundle
+from app.gem_radar.benchmarks import (
+    build_price_bundle,
+    normalize_match_key,
+    unavailable_price_bundle,
+)
 from app.gem_radar.claude_screening import screen_with_claude
 from app.gem_radar.inventory_match import fetch_inventory_awareness
 from app.gem_radar.marketplace import UNTRUSTED_FOR_PRICE_BENCHMARKS, infer_marketplace
@@ -35,7 +40,13 @@ from app.gem_radar.observations import (
     store_cached_research,
     update_observation_category,
 )
-from app.gem_radar.schemas import ExtractedListing, Identity, RiskFlag, ScoredListing, SellerIntelligence
+from app.gem_radar.schemas import (
+    ExtractedListing,
+    Identity,
+    RiskFlag,
+    ScoredListing,
+    SellerIntelligence,
+)
 from app.gem_radar.seller_intelligence import upsert_seller_profile
 from app.models.gem_radar_observation import GemRadarListingObservation
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
@@ -97,18 +108,22 @@ def _bucket_for_condition(condition_normalised: str) -> str | None:
 def _epid_key(epid: str) -> str:
     return f"EPID:{epid}"
 
+
 def _gtin_key(gtin: str) -> str:
     return f"GTIN:{gtin}"
 
+
 def _mpn_key(mpn: str) -> str:
     return f"MPN:{mpn}"
+
 
 def _model_number_key(model_number: str) -> str:
     return f"MODELNUM:{model_number}"
 
 
 def _merge_bucket_dicts(
-    a: dict[str, list[tuple[str, float]]] | None, b: dict[str, list[tuple[str, float]]] | None
+    a: dict[str, list[tuple[str, float]]] | None,
+    b: dict[str, list[tuple[str, float]]] | None,
 ) -> dict[str, list[tuple[str, float]]] | None:
     """Unions two {bucket -> [(listing_id, price), ...]} dicts, deduping by
     listing_id (first occurrence wins) so a listing that happens to appear
@@ -139,28 +154,40 @@ def _make_index_adders(index: BatchPriceIndex):
         # see benchmarks.normalize_match_key.
         index[normalize_match_key(key)][bucket].append((listing_id, delivered_price))
 
-    def _add_epid(epid: str, bucket: str, listing_id: str, delivered_price: float) -> None:
+    def _add_epid(
+        epid: str, bucket: str, listing_id: str, delivered_price: float
+    ) -> None:
         # Bypasses normalize_match_key deliberately — epid is already a
         # stable, canonical eBay identifier, not free text to collapse.
         index[_epid_key(epid)][bucket].append((listing_id, delivered_price))
 
-    def _add_gtin(gtin: str, bucket: str, listing_id: str, delivered_price: float) -> None:
+    def _add_gtin(
+        gtin: str, bucket: str, listing_id: str, delivered_price: float
+    ) -> None:
         # GTIN (Global Trade Item Number / UPC barcode) is a canonical product
         # identifier that consolidates the same product across all title variants.
         # Preferred over epid for matching since it works across retailers.
         index[_gtin_key(gtin)][bucket].append((listing_id, delivered_price))
 
-    def _add_mpn(mpn: str, bucket: str, listing_id: str, delivered_price: float) -> None:
+    def _add_mpn(
+        mpn: str, bucket: str, listing_id: str, delivered_price: float
+    ) -> None:
         # Manufacturer Part Number is a backup canonical identifier when GTIN
         # is unavailable, still far more stable than title-based matching.
         index[_mpn_key(mpn)][bucket].append((listing_id, delivered_price))
 
-    def _add_model_number(model_number: str, bucket: str, listing_id: str, delivered_price: float) -> None:
+    def _add_model_number(
+        model_number: str, bucket: str, listing_id: str, delivered_price: float
+    ) -> None:
         # Product model number from vendor API (eBay productSummary.modelNumber).
         # Stable across title variants, third-priority key after GTIN/MPN.
-        index[_model_number_key(model_number)][bucket].append((listing_id, delivered_price))
+        index[_model_number_key(model_number)][bucket].append(
+            (listing_id, delivered_price)
+        )
 
-    def _add_from_title(listing_id: str, title: str, condition_normalised: str, delivered_price: float) -> None:
+    def _add_from_title(
+        listing_id: str, title: str, condition_normalised: str, delivered_price: float
+    ) -> None:
         if identity_mod.is_likely_accessory(title):
             return
         resolved = identity_mod.resolve_identity(title, delivered_price)
@@ -180,7 +207,9 @@ async def _fetch_historical_price_index(db: AsyncSession) -> BatchPriceIndex:
     run inline on every call — factored out so the result can be cached (see
     _historical_index_cache) instead of rebuilt from scratch per submission."""
     index: BatchPriceIndex = defaultdict(lambda: {"new": [], "used": []})
-    _add, _add_epid, _add_gtin, _add_mpn, _add_model_number, _add_from_title = _make_index_adders(index)
+    _add, _add_epid, _add_gtin, _add_mpn, _add_model_number, _add_from_title = (
+        _make_index_adders(index)
+    )
 
     cutoff = datetime.utcnow() - timedelta(days=_HISTORICAL_LOOKBACK_DAYS)
     result = await db.execute(
@@ -202,12 +231,23 @@ async def _fetch_historical_price_index(db: AsyncSession) -> BatchPriceIndex:
             # from the index. Only positively-identified Temu rows get cut.
             or_(
                 GemRadarListingObservation.source.is_(None),
-                GemRadarListingObservation.source.not_in(UNTRUSTED_FOR_PRICE_BENCHMARKS),
+                GemRadarListingObservation.source.not_in(
+                    UNTRUSTED_FOR_PRICE_BENCHMARKS
+                ),
             ),
         )
         .limit(_HISTORICAL_QUERY_LIMIT)
     )
-    for listing_id, title, condition_normalised, delivered_price, gtin, mpn, model_number, epid in result.all():
+    for (
+        listing_id,
+        title,
+        condition_normalised,
+        delivered_price,
+        gtin,
+        mpn,
+        model_number,
+        epid,
+    ) in result.all():
         _add_from_title(listing_id, title, condition_normalised, delivered_price)
         bucket = _bucket_for_condition(condition_normalised)
         if bucket is not None:
@@ -236,7 +276,12 @@ async def _fetch_historical_price_index(db: AsyncSession) -> BatchPriceIndex:
         )
         .limit(_HISTORICAL_QUERY_LIMIT)
     )
-    for listing_id, canonical_model_id, condition_normalised, delivered_price in canonical_result.all():
+    for (
+        listing_id,
+        canonical_model_id,
+        condition_normalised,
+        delivered_price,
+    ) in canonical_result.all():
         bucket = _bucket_for_condition(condition_normalised or "")
         if bucket is None:
             continue
@@ -257,7 +302,9 @@ async def _fetch_historical_price_index(db: AsyncSession) -> BatchPriceIndex:
             GemRadarListingObservation.epid.is_not(None),
             or_(
                 GemRadarListingObservation.source.is_(None),
-                GemRadarListingObservation.source.not_in(UNTRUSTED_FOR_PRICE_BENCHMARKS),
+                GemRadarListingObservation.source.not_in(
+                    UNTRUSTED_FOR_PRICE_BENCHMARKS
+                ),
             ),
         )
         .limit(_HISTORICAL_QUERY_LIMIT)
@@ -279,14 +326,22 @@ async def _get_cached_historical_price_index(db: AsyncSession) -> BatchPriceInde
     global _historical_index_cache, _historical_index_cache_built_at
 
     now = _time.monotonic()
-    if _historical_index_cache is not None and (now - _historical_index_cache_built_at) < _HISTORICAL_INDEX_CACHE_TTL_SECONDS:
+    if (
+        _historical_index_cache is not None
+        and (now - _historical_index_cache_built_at)
+        < _HISTORICAL_INDEX_CACHE_TTL_SECONDS
+    ):
         return _historical_index_cache
 
     async with _historical_index_cache_lock:
         # Re-check after acquiring the lock — another task may have already
         # rebuilt it while this one was waiting.
         now = _time.monotonic()
-        if _historical_index_cache is not None and (now - _historical_index_cache_built_at) < _HISTORICAL_INDEX_CACHE_TTL_SECONDS:
+        if (
+            _historical_index_cache is not None
+            and (now - _historical_index_cache_built_at)
+            < _HISTORICAL_INDEX_CACHE_TTL_SECONDS
+        ):
             return _historical_index_cache
 
         fresh = await _fetch_historical_price_index(db)
@@ -295,7 +350,9 @@ async def _get_cached_historical_price_index(db: AsyncSession) -> BatchPriceInde
         return fresh
 
 
-async def build_batch_price_index(db: AsyncSession, listings: list[ExtractedListing]) -> BatchPriceIndex:
+async def build_batch_price_index(
+    db: AsyncSession, listings: list[ExtractedListing]
+) -> BatchPriceIndex:
     """Groups same-model listings into new/used price buckets, drawing from
     FOUR sources: (1) this scan's own listings, keyed by the regex-derived
     model (no per-listing canonical id exists yet — that's only assigned
@@ -330,30 +387,59 @@ async def build_batch_price_index(db: AsyncSession, listings: list[ExtractedList
     listings can still be scored as candidates themselves, they just never
     get to set the price bar other listings are measured against."""
     batch_index: BatchPriceIndex = defaultdict(lambda: {"new": [], "used": []})
-    _add, _add_epid, _add_gtin, _add_mpn, _add_model_number, _add_from_title = _make_index_adders(batch_index)
+    _add, _add_epid, _add_gtin, _add_mpn, _add_model_number, _add_from_title = (
+        _make_index_adders(batch_index)
+    )
 
     for listing in listings:
         if infer_marketplace(listing.url) in UNTRUSTED_FOR_PRICE_BENCHMARKS:
             continue
-        _add_from_title(listing.listing_id, listing.title, listing.condition_normalised, listing.current_delivered_price)
+        _add_from_title(
+            listing.listing_id,
+            listing.title,
+            listing.condition_normalised,
+            listing.current_delivered_price,
+        )
         bucket = _bucket_for_condition(listing.condition_normalised)
         if bucket is not None:
             # Prefer canonical identifiers (GTIN > MPN > model_number > epid) for grouping,
             # as they consolidate the same product across all title variants and retailers.
             # All keys are added (not mutually exclusive) so any lookup path can find matches.
             if listing.gtin:
-                _add_gtin(listing.gtin, bucket, listing.listing_id, listing.current_delivered_price)
+                _add_gtin(
+                    listing.gtin,
+                    bucket,
+                    listing.listing_id,
+                    listing.current_delivered_price,
+                )
             if listing.mpn:
-                _add_mpn(listing.mpn, bucket, listing.listing_id, listing.current_delivered_price)
+                _add_mpn(
+                    listing.mpn,
+                    bucket,
+                    listing.listing_id,
+                    listing.current_delivered_price,
+                )
             if listing.model_number:
-                _add_model_number(listing.model_number, bucket, listing.listing_id, listing.current_delivered_price)
+                _add_model_number(
+                    listing.model_number,
+                    bucket,
+                    listing.listing_id,
+                    listing.current_delivered_price,
+                )
             if listing.epid:
-                _add_epid(listing.epid, bucket, listing.listing_id, listing.current_delivered_price)
+                _add_epid(
+                    listing.epid,
+                    bucket,
+                    listing.listing_id,
+                    listing.current_delivered_price,
+                )
 
     historical_index = await _get_cached_historical_price_index(db)
     merged: BatchPriceIndex = defaultdict(lambda: {"new": [], "used": []})
     for key in set(batch_index) | set(historical_index):
-        merged[key] = _merge_bucket_dicts(batch_index.get(key), historical_index.get(key)) or {"new": [], "used": []}
+        merged[key] = _merge_bucket_dicts(
+            batch_index.get(key), historical_index.get(key)
+        ) or {"new": [], "used": []}
     return merged
 
 
@@ -393,7 +479,9 @@ async def _get_or_compute_research(
     _stage_timings: dict[str, float] = {}
 
     _s = _time.monotonic()
-    cached = await get_cached_research(db, listing.listing_id, RESEARCH_CACHE_MAX_AGE_MINUTES)
+    cached = await get_cached_research(
+        db, listing.listing_id, RESEARCH_CACHE_MAX_AGE_MINUTES
+    )
     _stage_timings["cache_lookup_s"] = round(_time.monotonic() - _s, 3)
     risk_flags = risk_mod.detect_risk_flags(listing.title, listing.condition_raw)
 
@@ -405,14 +493,27 @@ async def _get_or_compute_research(
         # in for it.
         _stage_timings["total_s"] = round(_time.monotonic() - _research_t0, 3)
         if _stage_timings["total_s"] > 1.0:
-            _diag_log.info("diag.research.timings", listing_id=listing.listing_id, cache_hit=True, **_stage_timings)
-        return cached.identity, cached.prices, risk_flags, cached.reasoning_summary, cached.release_year
+            _diag_log.info(
+                "diag.research.timings",
+                listing_id=listing.listing_id,
+                cache_hit=True,
+                **_stage_timings,
+            )
+        return (
+            cached.identity,
+            cached.prices,
+            risk_flags,
+            cached.reasoning_summary,
+            cached.release_year,
+        )
 
     if cached is not None and deep_research:
         identity, prices = cached.identity, cached.prices
     else:
         _s = _time.monotonic()
-        resolved = identity_mod.resolve_identity(listing.title, listing.current_delivered_price)
+        resolved = identity_mod.resolve_identity(
+            listing.title, listing.current_delivered_price
+        )
         _stage_timings["identity_resolve_s"] = round(_time.monotonic() - _s, 3)
         # A cache miss (>RESEARCH_CACHE_MAX_AGE_MINUTES old, or first sighting
         # this scan) loses the short-lived research cache, but a Claude-
@@ -465,14 +566,23 @@ async def _get_or_compute_research(
 
             # Step 3: Title-based (fallback only if batch_price_index empty or no canonical match)
             if not batch_entries and match_key:
-                title_entries = (batch_price_index or {}).get(normalize_match_key(match_key))
+                title_entries = (batch_price_index or {}).get(
+                    normalize_match_key(match_key)
+                )
                 if title_entries:
                     batch_entries = title_entries
             _s = _time.monotonic()
             prices = await build_price_bundle(
-                db, listing.current_delivered_price, query, match_level, listing.condition_normalised,
-                sold_adapter, amazon_adapter,
-                batch_entries=batch_entries, exclude_listing_id=listing.listing_id, cpk=cpk,
+                db,
+                listing.current_delivered_price,
+                query,
+                match_level,
+                listing.condition_normalised,
+                sold_adapter,
+                amazon_adapter,
+                batch_entries=batch_entries,
+                exclude_listing_id=listing.listing_id,
+                cpk=cpk,
             )
             _stage_timings["price_bundle_s"] = round(_time.monotonic() - _s, 3)
 
@@ -485,25 +595,45 @@ async def _get_or_compute_research(
         if claude_result is not None:
             reasoning_summary = claude_result.reasoning_summary
             release_year = claude_result.release_year
-            use_claude_model = claude_result.identity_confidence > (identity.exact_sku_confidence or 0)
+            use_claude_model = claude_result.identity_confidence > (
+                identity.exact_sku_confidence or 0
+            )
             identity = Identity(
                 brand=identity.brand,
-                model=(claude_result.canonical_name or identity.model) if use_claude_model else identity.model,
+                model=(
+                    (claude_result.canonical_name or identity.model)
+                    if use_claude_model
+                    else identity.model
+                ),
                 mpn=identity.mpn,
                 category=identity.category,
-                exact_sku_confidence=claude_result.identity_confidence if use_claude_model else identity.exact_sku_confidence,
-                model_canonical=claude_result.canonical_model_id or identity.model_canonical,
+                exact_sku_confidence=(
+                    claude_result.identity_confidence
+                    if use_claude_model
+                    else identity.exact_sku_confidence
+                ),
+                model_canonical=claude_result.canonical_model_id
+                or identity.model_canonical,
             )
             for note in claude_result.additional_risk_notes:
-                risk_flags.append(RiskFlag(code="CLAUDE_NOTED_RISK", severity="low", evidence=note))
+                risk_flags.append(
+                    RiskFlag(code="CLAUDE_NOTED_RISK", severity="low", evidence=note)
+                )
 
     _s = _time.monotonic()
-    await store_cached_research(db, listing.listing_id, identity, prices, reasoning_summary, release_year)
+    await store_cached_research(
+        db, listing.listing_id, identity, prices, reasoning_summary, release_year
+    )
     _stage_timings["store_cache_s"] = round(_time.monotonic() - _s, 3)
 
     _stage_timings["total_s"] = round(_time.monotonic() - _research_t0, 3)
     if _stage_timings["total_s"] > 1.0:
-        _diag_log.info("diag.research.timings", listing_id=listing.listing_id, cache_hit=False, **_stage_timings)
+        _diag_log.info(
+            "diag.research.timings",
+            listing_id=listing.listing_id,
+            cache_hit=False,
+            **_stage_timings,
+        )
     return identity, prices, risk_flags, reasoning_summary, release_year
 
 
@@ -522,9 +652,12 @@ async def score_listing(
     cpk: str | None = None
     try:
         from sqlalchemy import text
+
         cpk_result = await db.execute(
-            text("SELECT cpk FROM gem_radar_listing_cpk WHERE listing_id = :listing_id"),
-            {"listing_id": listing.listing_id}
+            text(
+                "SELECT cpk FROM gem_radar_listing_cpk WHERE listing_id = :listing_id"
+            ),
+            {"listing_id": listing.listing_id},
         )
         cpk_row = cpk_result.fetchone()
         if cpk_row:
@@ -533,8 +666,16 @@ async def score_listing(
         pass  # CPK lookup failed, proceed without it
 
     _s = _time.monotonic()
-    identity, prices, risk_flags, reasoning_summary, release_year = await _get_or_compute_research(
-        db, listing, sold_adapter, amazon_adapter, deep_research, batch_price_index, cpk=cpk
+    identity, prices, risk_flags, reasoning_summary, release_year = (
+        await _get_or_compute_research(
+            db,
+            listing,
+            sold_adapter,
+            amazon_adapter,
+            deep_research,
+            batch_price_index,
+            cpk=cpk,
+        )
     )
     _research_s = round(_time.monotonic() - _s, 3)
 
@@ -542,23 +683,36 @@ async def score_listing(
 
     _s = _time.monotonic()
     deal_score, benchmark_label = scoring.compute_deal_score(listing, prices, penalty)
-    market_stat, _ = scoring.pick_condition_benchmark(listing.condition_normalised, prices)
+    market_stat, _ = scoring.pick_condition_benchmark(
+        listing.condition_normalised, prices
+    )
     classification = scoring.classify(
-        deal_score, benchmark_label, identity.category, listing.current_delivered_price, market_stat
+        deal_score,
+        benchmark_label,
+        identity.category,
+        listing.current_delivered_price,
+        market_stat,
     )
     confidence_score, confidence_band = scoring.compute_confidence(
         identity, prices, listing.condition_normalised, listing, benchmark_label
     )
     decision = scoring.compute_decision(classification, confidence_band, risk_flags)
-    flip_score = scoring.compute_flip_score(deal_score, prices, listing.condition_normalised)
+    flip_score = scoring.compute_flip_score(
+        deal_score, prices, listing.condition_normalised
+    )
     build_value_score = scoring.compute_build_value_score(deal_score, identity)
     offer_strategy = scoring.compute_offer_strategy(
-        listing.current_delivered_price, prices, listing.condition_normalised, confidence_band
+        listing.current_delivered_price,
+        prices,
+        listing.condition_normalised,
+        confidence_band,
     )
     _scoring_calc_s = round(_time.monotonic() - _s, 3)
 
     _s = _time.monotonic()
-    inventory_awareness = await fetch_inventory_awareness(db, identity.category, identity.model, identity.brand)
+    inventory_awareness = await fetch_inventory_awareness(
+        db, identity.category, identity.model, identity.brand
+    )
     _inventory_s = round(_time.monotonic() - _s, 3)
 
     scored = ScoredListing(
@@ -588,9 +742,15 @@ async def score_listing(
     _s = _time.monotonic()
     if deal_score >= 7.5 and classification in ("GEM", "SUPER_GEM"):
         from app.gem_radar.margin_verifier import enqueue_verification
-        market_resale_median = market_stat.median if market_stat.status == "ok" else None
+
+        market_resale_median = (
+            market_stat.median if market_stat.status == "ok" else None
+        )
         market_resale_range = (
-            (market_stat.min or market_resale_median or 0, market_stat.max or market_resale_median or 0)
+            (
+                market_stat.min or market_resale_median or 0,
+                market_stat.max or market_resale_median or 0,
+            )
             if market_resale_median
             else None
         )
@@ -641,7 +801,9 @@ async def apply_watchlist_and_seller_intelligence(
     # _submit_scan_body's dedup loop, before identity resolution had run —
     # this just fills in the category now that it's known, rather than
     # inserting a second row for the same sighting.
-    await update_observation_category(db, listing.listing_id, search_run_id, result.identity.category)
+    await update_observation_category(
+        db, listing.listing_id, search_run_id, result.identity.category
+    )
 
     seller_profile = await upsert_seller_profile(db, listing, result.classification)
     seller_intelligence = (
@@ -661,4 +823,9 @@ async def apply_watchlist_and_seller_intelligence(
         else None
     )
 
-    return result.model_copy(update={"watch_signals": watch_signals, "seller_intelligence": seller_intelligence})
+    return result.model_copy(
+        update={
+            "watch_signals": watch_signals,
+            "seller_intelligence": seller_intelligence,
+        }
+    )
