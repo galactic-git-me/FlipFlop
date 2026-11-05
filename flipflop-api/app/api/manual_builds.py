@@ -2987,7 +2987,7 @@ async def get_build_purchase_plan(build_id: int, db: AsyncSession = Depends(get_
     candidates = (await db.execute(
         select(Listing, GemRadarListingCpk.cpk)
         .join(GemRadarListingCpk, GemRadarListingCpk.listing_id == case(
-            (Listing.external_id.like("ebay_v1|%"), func.split_part(Listing.external_id, "|", 2)),
+            (Listing.external_id.startswith("ebay_v1|", autoescape=True), func.split_part(Listing.external_id, "|", 2)),
             else_=Listing.external_id,
         ))
         .where(
