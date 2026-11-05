@@ -720,10 +720,8 @@ def _is_current_gen(title: str, category: str) -> bool:
 
 
 def _is_current_gen_ram(title: str) -> bool:
-    """RAM specifically: require DDR5 — DDR3/DDR4 kits routinely show up
-    with huge deal_score gaps (they're genuinely cheap relative to their
-    original price) but nobody building a current PC wants DDR3."""
-    return "ddr5" in title.lower()
+    """Accept DDR4 and DDR5 equally; generation does not change Gem ranking."""
+    return bool(re.search(r"\bddr[45]\b", title, re.IGNORECASE))
 
 
 def _is_damaged(title: str) -> bool:
@@ -751,7 +749,7 @@ async def _fetch_best_gem(db: AsyncSession, since, require_modern: bool = False)
     via is_likely_accessory.
 
     require_modern additionally excludes laptop/mobile parts, display-less
-    datacenter GPUs, and (for RAM) anything that isn't DDR5 — see
+    datacenter GPUs, and (for RAM) anything outside DDR4/DDR5 — see
     _is_desktop_appropriate/_is_current_gen_ram. Walks candidates in
     deal_score order and returns the first one that actually qualifies,
     rather than a single top-1 query, since the disqualifying signals live
@@ -2269,6 +2267,11 @@ async def _fetch_best_gem_for_category(
             # Priority 1: Blocking filters (reject immediately)
             if not _has_valid_category(candidate.category):  # Malformed or unknown
                 continue
+            resolved_category = identity_mod.resolve_identity(
+                candidate.title, delivered_price=candidate.delivered_price
+            ).category
+            if resolved_category and resolved_category != category:
+                continue
             if _is_server_hardware(candidate.title, candidate.category):  # Server/professional
                 continue
             if _is_complete_system(candidate.title):  # Prebuilt systems
@@ -2382,6 +2385,11 @@ async def _gem_spotlight_candidates(db: AsyncSession, category: str, actionable_
     candidates = []
     for row in candidate_rows.values():
         if not media_urls([row.image_url, *(row.image_urls or [])]):
+            continue
+        resolved_category = identity_mod.resolve_identity(
+            row.title, delivered_price=row.delivered_price
+        ).category
+        if resolved_category and resolved_category != category:
             continue
         if (not _has_valid_category(category) or _is_server_hardware(row.title, category)
                 or _is_complete_system(row.title) or _is_bundled_components(row.title)
@@ -2826,6 +2834,50 @@ async def record_scan_run_history(
     await db.flush()
     await db.refresh(row)
     return ScanRunHistoryOut.model_validate(row, from_attributes=True)
+
+
+@router.get("/scan-run-history-chart")
+async def scan_run_history_chart(
+    basis: Literal["processed", "observations"] = Query("processed"),
+    db: AsyncSession = Depends(get_db),
+    _: None = Depends(require_operator),
+) -> list[dict]:
+    """Aggregate every stored run into chart sessions, without a record limit."""
+    if basis == "processed":
+        statement = text("""
+            SELECT occurred_at, total_listings_found, vendors, run_by
+            FROM gem_radar_scan_runs ORDER BY occurred_at, id
+        """)
+    else:
+        statement = text("""
+            SELECT MAX(observed_at) AS occurred_at, COUNT(*) AS total_listings_found,
+                   ARRAY_REMOVE(ARRAY_AGG(DISTINCT source), NULL) AS vendors,
+                   'Unknown (historical)' AS run_by
+            FROM gem_radar_listing_observations
+            WHERE search_run_id IS NOT NULL AND search_query IS NOT NULL
+            GROUP BY search_run_id ORDER BY MAX(observed_at), search_run_id
+        """)
+    sessions = []
+    previous_at = None
+    for row in (await db.execute(statement)).mappings():
+        occurred_at = row["occurred_at"]
+        if previous_at is None or occurred_at - previous_at > timedelta(minutes=10):
+            sessions.append({"occurredAt": occurred_at.isoformat(),
+                "runBy": row["run_by"], "searchCount": 0,
+                "totalListings": 0, "vendorTotals": {}})
+        session = sessions[-1]
+        if session["runBy"] != row["run_by"]:
+            session["runBy"] = "Mixed"
+        count = int(row["total_listings_found"] or 0)
+        session["searchCount"] += 1
+        session["totalListings"] += count
+        vendors = row["vendors"] or ["unknown"]
+        share, remainder = divmod(count, len(vendors))
+        for index, vendor in enumerate(vendors):
+            totals = session["vendorTotals"]
+            totals[vendor] = totals.get(vendor, 0) + share + int(index < remainder)
+        previous_at = occurred_at
+    return sessions
 
 
 @router.get("/scan-run-history", response_model=list[ScanRunHistoryOut])

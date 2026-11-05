@@ -36,15 +36,10 @@ export function TopCommandBar() {
   const [toasts, setToasts] = useState<Array<{ id: string; text: string; linkUrl?: string | null; persistent?: boolean }>>([]);
   const [confettiPieces, setConfettiPieces] = useState<Array<{ id: string; left: number; delay: number; duration: number; size: number; color: string; drift: number }>>([]);
   const [isLocalEnvironment, setIsLocalEnvironment] = useState(process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "development");
-  const [adminSource, setAdminSource] = useState({
-    commit: process.env.NEXT_PUBLIC_SOURCE_COMMIT ?? "unknown",
-    branch: process.env.NEXT_PUBLIC_SOURCE_BRANCH ?? "unknown",
-    dirty: process.env.NEXT_PUBLIC_SOURCE_DIRTY === "true",
-  });
+  const adminSourceCommit = process.env.NEXT_PUBLIC_SOURCE_COMMIT ?? "unknown";
+  const adminSourceBranch = process.env.NEXT_PUBLIC_SOURCE_BRANCH ?? "unknown";
+  const adminSourceDirty = process.env.NEXT_PUBLIC_SOURCE_DIRTY === "true";
   const [apiSource, setApiSource] = useState<{ commit: string; branch: string; dirty: boolean } | null>(null);
-  const adminSourceCommit = adminSource.commit;
-  const adminSourceBranch = adminSource.branch;
-  const adminSourceDirty = adminSource.dirty;
   const sourceMismatch = Boolean(apiSource && (
     adminSourceCommit !== apiSource.commit ||
     adminSourceBranch !== apiSource.branch ||
@@ -76,33 +71,22 @@ export function TopCommandBar() {
 
   useEffect(() => {
     let active = true;
-    const checkSources = async () => {
+    const checkApiSource = async () => {
       try {
-        const [adminResponse, apiResponse] = await Promise.all([
-          fetch("/build-info", { cache: "no-store" }),
-          fetch("/health", { cache: "no-store" }),
-        ]);
-        if (!adminResponse.ok || !apiResponse.ok) return;
-        const [admin, api] = await Promise.all([
-          adminResponse.json() as Promise<{ source_commit?: string; source_branch?: string; source_dirty?: boolean }>,
-          apiResponse.json() as Promise<{ source_commit?: string; source_branch?: string; source_dirty?: boolean }>,
-        ]);
-        if (active && admin.source_commit) setAdminSource({
-          commit: admin.source_commit,
-          branch: admin.source_branch ?? "unknown",
-          dirty: admin.source_dirty === true,
-        });
-        if (active && api.source_commit) setApiSource({
-          commit: api.source_commit,
-          branch: api.source_branch ?? "unknown",
-          dirty: api.source_dirty === true,
+        const response = await fetch("/health", { cache: "no-store" });
+        if (!response.ok) return;
+        const health = await response.json() as { source_commit?: string; source_branch?: string; source_dirty?: boolean };
+        if (active && health.source_commit) setApiSource({
+          commit: health.source_commit,
+          branch: health.source_branch ?? "unknown",
+          dirty: health.source_dirty === true,
         });
       } catch {
         // Keep the environment header usable while the API is restarting.
       }
     };
-    void checkSources();
-    const timer = window.setInterval(() => void checkSources(), 30_000);
+    void checkApiSource();
+    const timer = window.setInterval(() => void checkApiSource(), 30_000);
     return () => { active = false; window.clearInterval(timer); };
   }, []);
 

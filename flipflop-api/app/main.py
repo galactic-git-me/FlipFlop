@@ -2,7 +2,6 @@ import structlog
 import asyncio
 import os
 import re
-import subprocess
 import sys
 import threading
 
@@ -880,42 +879,14 @@ app.mount("/api/builds", StaticFiles(directory=str(_builds_dir)), name="build-as
 _startup_time: datetime = datetime.now(timezone.utc)
 
 
-def _source_metadata() -> dict[str, str | bool]:
-    metadata: dict[str, str | bool] = {
-        "source_commit": os.getenv("FLIPFLOP_SOURCE_COMMIT", "unknown"),
-        "source_branch": os.getenv("FLIPFLOP_SOURCE_BRANCH", "unknown"),
-        "source_dirty": os.getenv("FLIPFLOP_SOURCE_DIRTY", "false").lower() == "true",
-    }
-    if os.getenv("FLIPFLOP_RUNTIME_ENV") != "development":
-        return metadata
-
-    repo_root = Path(__file__).resolve().parents[2]
-    try:
-        def git(*args: str, check: bool = True) -> str:
-            result = subprocess.run(
-                ["git", "-C", str(repo_root), *args],
-                check=check,
-                capture_output=True,
-                text=True,
-                timeout=2,
-            )
-            return result.stdout.strip()
-
-        metadata["source_commit"] = git("rev-parse", "HEAD")
-        metadata["source_branch"] = git("symbolic-ref", "--short", "-q", "HEAD", check=False) or "detached"
-        metadata["source_dirty"] = bool(git("status", "--porcelain"))
-    except (OSError, subprocess.SubprocessError):
-        # Preserve launch-time metadata if Git is unavailable during reload.
-        pass
-    return metadata
-
-
 @app.get("/health")
 async def health():
     return {
         "status": "ok",
         "version": "5.0.0",
-        **_source_metadata(),
+        "source_commit": os.getenv("FLIPFLOP_SOURCE_COMMIT", "unknown"),
+        "source_branch": os.getenv("FLIPFLOP_SOURCE_BRANCH", "unknown"),
+        "source_dirty": os.getenv("FLIPFLOP_SOURCE_DIRTY", "false").lower() == "true",
         "app_env": settings.app_env,
         "web_only": settings.web_only,
         "provider_modes": {
