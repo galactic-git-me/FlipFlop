@@ -153,7 +153,22 @@ function Stop-DevelopmentProcesses([int[]]$Ports) {
 }
 
 function Test-ListeningPort([int]$Port) {
-    return [bool](Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue)
+    # Get-NetTCPConnection can briefly miss active listeners during rapid
+    # Next.js reloads. Confirm readiness by opening a short loopback TCP socket.
+    $client = [System.Net.Sockets.TcpClient]::new()
+    $waitHandle = $null
+    try {
+        $connect = $client.BeginConnect([System.Net.IPAddress]::Loopback, $Port, $null, $null)
+        $waitHandle = $connect.AsyncWaitHandle
+        if (-not $waitHandle.WaitOne(500)) { return $false }
+        $client.EndConnect($connect)
+        return $client.Connected
+    } catch {
+        return $false
+    } finally {
+        if ($waitHandle) { $waitHandle.Dispose() }
+        $client.Dispose()
+    }
 }
 
 function Get-OllamaServiceFailures {
@@ -193,9 +208,14 @@ function Ensure-OllamaPriorityGateway {
     }
 
     $failures = @(Get-OllamaServiceFailures)
-    $needsRestart = $failures.Count -gt 0
+    $gatewayProcesses = @(Get-CimInstance Win32_Process -ErrorAction SilentlyContinue | Where-Object {
+        $_.CommandLine -match '(?i)ollama-priority-gateway[\\/]server\.py'
+    })
+    $duplicateOrMissingGateway = $gatewayProcesses.Count -ne 1
+    $needsRestart = $failures.Count -gt 0 -or $duplicateOrMissingGateway
     if ($needsRestart) {
-        Write-Host "[*] Starting/reconfiguring Ollama for four concurrent requests (unhealthy services: $($failures -join ', '))..." -ForegroundColor Cyan
+        $reason = if ($duplicateOrMissingGateway) { "gateway process count: $($gatewayProcesses.Count)" } else { "unhealthy services: $($failures -join ', ')" }
+        Write-Host "[*] Starting/reconfiguring Ollama for four concurrent requests ($reason)..." -ForegroundColor Cyan
         & (Join-Path $projectRoot 'services\ollama-priority-gateway\start-prometheus-services.ps1') -ForceRestart
     }
 
