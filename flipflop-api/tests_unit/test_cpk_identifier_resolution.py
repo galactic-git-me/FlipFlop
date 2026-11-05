@@ -7,6 +7,7 @@ from app.gem_radar.product_identifiers import normalise_gtin, normalise_mpn, ide
 from app.gem_radar.cpk_pipeline import _valid_existing_cpk
 from app.services.playbook_stored_offers import product_keys, same_product
 from app.gem_radar.product_identity_registry import identifier_claims
+from app.gem_radar.search_identity import last_resort_title_key
 
 class IdentityChecks(unittest.TestCase):
     def test_claims_are_identifier_based_and_namespaced(self):
@@ -26,6 +27,30 @@ class IdentityChecks(unittest.TestCase):
     def test_mpn_keeps_meaningful_variant_suffixes(self):
         self.assertEqual(normalise_mpn(' snv3s/1000g '),'SNV3S/1000G')
         self.assertNotEqual(normalise_mpn('SNV3S/1000G'),normalise_mpn('SNV3SM3/1T0'))
+
+    def test_vendor_product_ids_are_namespaced_and_distinct_from_listing_ids(self):
+        claims=identifier_claims(title='Intel Core i5-12400F',category='cpu',
+            vendor_product_id='scan-LN12345',source_url='https://www.scan.co.uk/products/item')
+        self.assertIn({'kind':'vendor_product_id','namespace':'scan.co.uk','value':'scan-LN12345'},claims)
+
+    def test_epid_and_model_number_are_registered_aliases(self):
+        claims=identifier_claims(title='AMD Ryzen 7 7800X3D',category='cpu',brand='AMD',
+            model_number='100-100000910WOF',epid='123456789')
+        self.assertIn({'kind':'model_number','namespace':'amd','value':'100-100000910WOF'},claims)
+        self.assertIn({'kind':'epid','namespace':'ebay','value':'123456789'},claims)
+
+    def test_asin_only_fallback_does_not_register_ambiguous_title_aliases(self):
+        claims=identifier_claims(title='AMD Ryzen 7 7800X3D Processor',category='cpu',
+            source_url='https://www.amazon.co.uk/dp/B0ABCDE123',
+            include_title_alias=False,include_manufacturer_part=False)
+        self.assertEqual(claims,[{'kind':'asin','namespace':'amazon.co.uk','value':'B0ABCDE123'}])
+
+    def test_gpu_title_key_requires_partner_and_memory_tier(self):
+        self.assertIsNone(last_resort_title_key('ASUS GeForce RTX 4070 12GB', 'gpu'))
+        self.assertIsNone(last_resort_title_key('ASUS TUF RTX 4070 12GB', 'gpu'))
+        self.assertEqual(last_resort_title_key('ASUS DUAL-RTX4070-O12G', 'gpu'),
+                         ('title_product','gpu','asus','DUAL-RTX4070-O12G'))
+        self.assertIsNone(last_resort_title_key('GeForce RTX 4070', 'gpu'))
 
     def test_real_wrong_ram_metadata_is_not_reused(self):
         title='Corsair VENGEANCE LPX DDR4 RAM 32GB (2x16GB) 3200MHz'

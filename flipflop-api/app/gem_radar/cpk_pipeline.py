@@ -136,6 +136,8 @@ async def assign_cpk_and_accumulate_price(
     mpn: str | None = None,
     model_number: str | None = None,
     brand: str | None = None,
+    epid: str | None = None,
+    vendor_product_id: str | None = None,
 ) -> str | None:
     """Looks up (or extracts, via one LLM call if genuinely new) this
     listing's CPK, persists it to gem_radar_listing_cpk, and folds its price
@@ -167,8 +169,16 @@ async def assign_cpk_and_accumulate_price(
     row = existing.fetchone()
 
     from app.gem_radar.product_identity_registry import resolve_identifiers
+    valid_existing = row is not None and _valid_existing_cpk(row[1], title)
     identifier_identity = await resolve_identifiers(db, title=title, category=category,
-        brand=brand, gtin=gtin, mpn=mpn, source_url=source_url)
+        brand=brand, gtin=gtin, mpn=mpn, model_number=model_number,
+        epid=epid, vendor_product_id=vendor_product_id, source_url=source_url,
+        existing_cpk=row[0] if valid_existing else None,
+        existing_data=row[1] if valid_existing else None)
+    if identifier_identity and identifier_identity['status']=='deferred':
+        if not valid_existing:
+            return None
+        identifier_identity=None
     if identifier_identity and identifier_identity['status']=='conflict':
         await remove_listing_price(db, listing_id)
         if row:

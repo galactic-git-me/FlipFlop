@@ -633,6 +633,31 @@ async def scrape_amazon_component_bestsellers(categories: list[str] | None = Non
                             exact_rows = marketplace_by_asin.get(item["asin"], [])
                             match = (_best_scored_match(item, [*scored_for_category, *exact_rows], category)
                                      if bestseller_item_matches_category(item["title"], category) else None)
+                            # Every accepted bestseller has an exact Amazon
+                            # product key. If no current marketplace row or
+                            # unique title candidate exists, retain it as an
+                            # ASIN-anchored CPK so later vendor sightings can
+                            # attach through that ASIN or a safe title alias.
+                            if match is None and bestseller_item_matches_category(item["title"], category):
+                                from app.gem_radar.product_identity_registry import resolve_identifiers
+                                identity = await resolve_identifiers(
+                                    db, title=item["title"], category=category,
+                                    source_url=item.get("url"),
+                                )
+                                if identity and identity.get("status") == "conflict":
+                                    # A strong identifier disagreement remains
+                                    # unresolved. An ASIN-only fallback still
+                                    # gives the exact Amazon product its own key
+                                    # when weaker title/MPN aliases collide.
+                                    identity = await resolve_identifiers(
+                                        db, title=item["title"], category=category,
+                                        source_url=item.get("url"),
+                                        include_title_alias=False,
+                                        include_manufacturer_part=False,
+                                        use_search_identity=False,
+                                    )
+                                if identity and identity.get("status") in {"matched", "new"}:
+                                    match = {"cpk":identity["cpk"]}
                             db.add(AmazonBestsellerObservation(
                                 category=category,
                                 list_name=list_name,
