@@ -1417,7 +1417,7 @@ function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | 
 
   return (
     <>
-      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3 mb-6 mt-6">
+      <div className="grid grid-cols-[repeat(8,minmax(200px,1fr))] gap-3 mb-6 mt-6 overflow-x-auto pb-1">
         {Object.keys(componentLabels).map((category) => {
           const gem = componentGems?.[category];
           return gem ? (
