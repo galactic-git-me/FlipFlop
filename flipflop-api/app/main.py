@@ -884,6 +884,9 @@ async def health():
     return {
         "status": "ok",
         "version": "5.0.0",
+        "source_commit": os.getenv("FLIPFLOP_SOURCE_COMMIT", "unknown"),
+        "source_branch": os.getenv("FLIPFLOP_SOURCE_BRANCH", "unknown"),
+        "source_dirty": os.getenv("FLIPFLOP_SOURCE_DIRTY", "false").lower() == "true",
         "app_env": settings.app_env,
         "web_only": settings.web_only,
         "provider_modes": {
