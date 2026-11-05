@@ -28,7 +28,7 @@ function Stop-PortListener {
 
 Write-Host "[*] Stopping FlipFlop local servers..." -ForegroundColor Cyan
 
-$ports = @(4314, 4312, 4313, 18000)
+$ports = @(4311, 4312, 4313, 18000)
 foreach ($port in $ports) { Stop-PortListener -Port $port }
 
 if ($StopOllama) {

@@ -8,7 +8,7 @@ This launcher starts only the local FlipFlop development servers on
 
 | Server | Type | Port | Technology |
 |--------|------|------|------------|
-| Backend | API | 4314 | FastAPI (Python) |
+| Backend | API | 4311 | FastAPI (Python) |
 | Admin | Web | 4312 | Next.js (Node.js) |
 | Frontend | Web | 4313 | Next.js (Node.js) |
 | Gem Radar standalone (optional) | API/worker | 18000 | FastAPI (Python) |
@@ -60,7 +60,7 @@ chmod +x scripts/start-all-servers.sh
 
 Once all servers are running, access them at:
 
-- **Backend API**: http://localhost:4314
+- **Backend API**: http://localhost:4311
 - **Admin Dashboard**: http://localhost:4312
 - **Frontend Shop**: http://localhost:4313
 
@@ -71,6 +71,11 @@ Once all servers are running, access them at:
 ✅ Shows colorized output for easy identification  
 ✅ Supports selective server startup  
 ✅ Uses hot reload for API and frontend development
+✅ Fast-forwards a clean local `dev` branch from `origin/dev`; dirty work and
+   other branches are preserved and startup continues
+✅ Reports the running source commit, branch, and dirty-worktree state at
+   startup; `/health` exposes the API source and the admin header flags source
+   mismatches
 
 Python source reloads produce one completion notice, for example:
 `File change C:\...\app\example.py detected. Restarted API; ready in 3.2s.`

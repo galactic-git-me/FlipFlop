@@ -23,7 +23,7 @@ nssm set FlipFlopDevAdmin AppStderr (Join-Path $logDir 'dev-admin.log')
 nssm set FlipFlopDevAdmin AppRotateFiles 1
 nssm set FlipFlopDevAdmin AppRotateBytes 10485760
 nssm set FlipFlopDevAdmin AppEnvironmentExtra `
-    "NODE_ENV=development`r`nNEXT_DIST_DIR=.next-dev`r`nBACKEND_URL=http://localhost:4314`r`nNEXT_PUBLIC_API_URL=http://localhost:4314`r`nNEXT_PUBLIC_FLIPFLOP_ENV=development`r`nNEXT_PUBLIC_APP_MODE=dev`r`nGEMRADAR_URL=http://localhost:18000`r`nNEXT_PUBLIC_STOREFRONT_URL=https://www.theflipflop.shop`r`nNEXT_PUBLIC_STOREFRONT_DEV_URL=http://localhost:4313"
+    "NODE_ENV=development`r`nNEXT_DIST_DIR=.next-dev`r`nBACKEND_URL=http://localhost:4311`r`nNEXT_PUBLIC_API_URL=http://localhost:4311`r`nNEXT_PUBLIC_FLIPFLOP_ENV=development`r`nNEXT_PUBLIC_APP_MODE=dev`r`nGEMRADAR_URL=http://localhost:18000`r`nNEXT_PUBLIC_STOREFRONT_URL=https://www.theflipflop.shop`r`nNEXT_PUBLIC_STOREFRONT_DEV_URL=http://localhost:4313"
 nssm set FlipFlopDevAdmin DependOnService FlipFlopDevBackend
 nssm restart FlipFlopDevAdmin
 

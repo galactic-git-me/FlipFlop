@@ -13,6 +13,7 @@ from datetime import date, datetime, timedelta, timezone
 from urllib.parse import quote
 from urllib.parse import urlparse
 import shutil
+import statistics
 import httpx
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from typing import Literal
@@ -22,7 +23,7 @@ from starlette.background import BackgroundTask
 from jose import jwt
 from pydantic import AnyHttpUrl, BaseModel, Field, field_validator
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, text, or_
+from sqlalchemy import select, text, or_, func, case
 from app.database import AsyncSessionLocal, get_db
 from app.models.manual_build import ManualBuild
 from app.models.getting_started_job import GettingStartedJob
@@ -35,6 +36,9 @@ from app.models.product import Product, ProductType, ProductStatus
 from app.models.order import Order, OrderStatus
 from app.models.playbook import Playbook
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
+from app.models.gem_radar_listing_cpk import GemRadarListingCpk
+from app.models.gem_radar_sold_observation import GemRadarSoldObservation
+from app.models.listing import Listing, ListingStatus
 from app.models.inventory import InventoryItem
 from app.models.inventory_allocation import InventoryAllocation
 from app.models.price_alert import PriceAlert
@@ -117,6 +121,7 @@ from app.services.cross_channel_guard import (
 from app.services.meshy_generation import generate_multi_image_asset
 from app.services.product_faqs import FAQ_BANK, FAQ_BY_ID, selected_faqs, render_ebay_faq_html
 from app.services import pricing_engine
+from app.services.gem_build_names import ASTRONOMICAL_BUILD_NAMES, choose_gem_build_name
 from app.services.email_service import (
     send_dispatched_guest_portal_email,
     send_shipment_update_email,
@@ -1309,6 +1314,20 @@ async def create_gem_spotlight_draft(body: GemSpotlightDraftInput, db: AsyncSess
     if any(float(item.delivered_price or 0) <= 0 for item in rows):
         raise HTTPException(409, "A selected Gem no longer has a valid delivered price. Refresh the Sourcing page and try again.")
 
+    existing_builds = (await db.execute(
+        select(ManualBuild.name, ManualBuild.evidence_data).where(ManualBuild.creation_method == "gem_spotlight")
+    )).all()
+    used_names = set()
+    known_astronomy_names = {name.casefold() for name in ASTRONOMICAL_BUILD_NAMES}
+    for existing_name, evidence_data in existing_builds:
+        spotlight_data = (evidence_data or {}).get("sourcing_spotlight", {})
+        assigned_name = spotlight_data.get("astronomy_name")
+        if assigned_name:
+            used_names.add(assigned_name)
+        if existing_name and existing_name.casefold() in known_astronomy_names:
+            used_names.add(existing_name)
+    astronomy_name = choose_gem_build_name(used_names)
+
     components = [
         {
             "slot": category,
@@ -1327,7 +1346,7 @@ async def create_gem_spotlight_draft(body: GemSpotlightDraftInput, db: AsyncSess
     ]
     estimated_parts_cost = round(sum(component["price_paid"] for component in components), 2)
     build = ManualBuild(
-        name=body.build_name.strip(),
+        name=astronomy_name,
         creation_method="gem_spotlight",
         components=components,
         total_cost=0,
@@ -1335,6 +1354,7 @@ async def create_gem_spotlight_draft(body: GemSpotlightDraftInput, db: AsyncSess
             "sourcing_spotlight": {
                 "created_at": datetime.utcnow().isoformat(),
                 "concept": body.concept,
+                "astronomy_name": astronomy_name,
                 "candidate_listing_ids": [by_category[category].listing_id for category in required_categories],
                 "estimated_parts_cost_gbp": estimated_parts_cost,
                 "compatibility_status": "not_checked",
@@ -2926,6 +2946,87 @@ async def get_build(build_id: int, db: AsyncSession = Depends(get_db)):
     return build
 
 
+@router.get("/{build_id}/purchase-plan")
+async def get_build_purchase_plan(build_id: int, db: AsyncSession = Depends(get_db)):
+    """Return stored listing, live-auction and sold-price evidence for a build draft."""
+    build = await db.get(ManualBuild, build_id)
+    if not build or build.is_archived:
+        raise HTTPException(404, "Build not found")
+    if build.creation_method != "gem_spotlight":
+        raise HTTPException(400, "Purchase plans are available for Gem sourcing drafts")
+
+    components = list(build.components or [])
+    scored_ids = [component["gem_radar_listing_id"] for component in components if component.get("gem_radar_listing_id")]
+    scored_rows = (await db.execute(
+        select(GemRadarScoredListing).where(GemRadarScoredListing.id.in_(scored_ids))
+    )).scalars().all() if scored_ids else []
+    cpk_by_slot = {
+        component.get("slot"): next((row.cpk for row in scored_rows if row.id == component.get("gem_radar_listing_id")), None)
+        for component in components
+    }
+    cpks = list({cpk for cpk in cpk_by_slot.values() if cpk})
+    sold_by_cpk: dict[str, list[float]] = {cpk: [] for cpk in cpks}
+    if cpks:
+        ranked_sold = select(
+            GemRadarSoldObservation.cpk.label("cpk"),
+            (GemRadarSoldObservation.price + func.coalesce(GemRadarSoldObservation.postage, 0)).label("price"),
+            func.row_number().over(
+                partition_by=GemRadarSoldObservation.cpk,
+                order_by=GemRadarSoldObservation.observed_at.desc(),
+            ).label("rank"),
+        ).where(
+            GemRadarSoldObservation.cpk.in_(cpks),
+            GemRadarSoldObservation.price > 0,
+        ).subquery()
+        sold_rows = (await db.execute(
+            select(ranked_sold.c.cpk, ranked_sold.c.price).where(ranked_sold.c.rank <= 200)
+        )).all()
+        for cpk, sold_price in sold_rows:
+            sold_by_cpk[cpk].append(float(sold_price))
+
+    candidates = (await db.execute(
+        select(Listing, GemRadarListingCpk.cpk)
+        .join(GemRadarListingCpk, GemRadarListingCpk.listing_id == case(
+            (Listing.external_id.startswith("ebay_v1|", autoescape=True), func.split_part(Listing.external_id, "|", 2)),
+            else_=Listing.external_id,
+        ))
+        .where(
+            Listing.status == ListingStatus.active,
+            Listing.listing_type == "auction",
+            Listing.listing_ends_at > datetime.utcnow(),
+            Listing.url.ilike("%ebay.%"),
+            GemRadarListingCpk.cpk.in_(cpks),
+        ).order_by(Listing.listing_ends_at.asc()).limit(500)
+    )).all() if cpks else []
+
+    plan = []
+    for component in components:
+        component_cpk = cpk_by_slot.get(component.get("slot"))
+        sold_prices = sold_by_cpk.get(component_cpk, [])
+        auctions = [
+            {
+                "title": listing.title,
+                "url": listing.url,
+                "price": listing.price,
+                "ends_at": listing.listing_ends_at.isoformat() if listing.listing_ends_at else None,
+            }
+            for listing, cpk in candidates if component_cpk and cpk == component_cpk
+        ][:5]
+
+        plan.append({
+            "slot": component.get("slot"),
+            "name": component.get("name"),
+            "image_url": component.get("image_url"),
+            "listing_url": component.get("listing_url"),
+            "listing_price": component.get("price_paid"),
+            "purchased": bool(component.get("purchased")),
+            "auctions": auctions,
+            "sold_median": statistics.median(sold_prices) if sold_prices else None,
+            "sold_sample_size": len(sold_prices),
+        })
+    return {"components": plan}
+
+
 @router.patch("/{build_id}", response_model=ManualBuildOut)
 async def patch_build(build_id: int, body: ManualBuildPatch, db: AsyncSession = Depends(get_db)):
     result = await db.execute(
@@ -2988,7 +3089,7 @@ async def purchase_build_component(
         raise HTTPException(404, f"Component slot {slot} not found")
     component = dict(components[index])
     if component.get("sourcing_candidate") and not component.get("purchased"):
-        if body.price_paid is None or body.price_paid == component.get("price_paid"):
+        if body.price_paid is None:
             raise HTTPException(409, "Enter the confirmed purchase price before recording this sourcing candidate as purchased.")
         component["price_paid"] = body.price_paid
         component["source"] = body.source or "Confirmed purchase"

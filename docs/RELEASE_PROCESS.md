@@ -8,13 +8,17 @@ FlipFlop has two runtime environments, not three:
 
 ## Workflow
 
-1. Create a feature branch and open a pull request into `dev`. Pull requests
-   into `main` are rejected by CI.
+1. Create a feature branch from the latest `origin/dev` and open a pull request
+   into `dev`. GitHub requires pull requests and the `checks` status on both
+   `dev` and `main`; force pushes and branch deletion are disabled. Keep the
+   branch current with its base before merging.
 2. Wait for the DEV validation workflow and pull-request checks to pass. Merge
    the change into `dev`.
 3. Run the DEV application from that exact `dev` commit and verify the affected
-   user journey against DEV data and services. Record the tested commit SHA in
-   the release notes or pull request.
+   user journey against DEV data and services. The launcher safely
+   fast-forwards a clean local `dev` from `origin/dev`; otherwise it reports
+   the commit and preserves local work. The API health response and admin
+   header refresh source details during hot reload and flag mismatches.
 4. Open a production pull request whose complete tracked source tree matches
    the validated DEV tree. CI rejects application, migration, configuration,
    or data differences from DEV while ignoring generated build and local tool
@@ -25,7 +29,9 @@ FlipFlop has two runtime environments, not three:
    DEV-parity CI run.
 6. Run **Actions → Deploy production**, enter the tag, and type
    `DEPLOY-PRODUCTION`. The deploy workflow reruns API checks and builds the
-   admin bundle before connecting to production.
+   admin bundle before connecting to production. The deployment stamps the
+   release commit into API and admin builds and verifies the live API reports
+   that exact commit before it reports success.
 
 Production is never deployed merely because code was pushed to `main`.
 The DEV runtime check happens before promotion; CI build success alone is not

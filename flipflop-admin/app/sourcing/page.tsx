@@ -93,6 +93,7 @@ interface Listing {
 interface GemData {
   title: string;
   price: number;
+  market_median_price?: number | null;
   seller?: string;
   condition: string;
   url: string;
@@ -899,7 +900,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
           </div>
           <div className="flex items-center gap-4">
             <QueueStatusBar queue={queueStatus} />
-            <MiniStat label="Listings Processed" value={displayedListingCount} color="#e2e8f0" />
+            <MiniStat label="Processed" value={displayedListingCount} color="#e2e8f0" />
             <MiniStat label="SUPER GEMs" value={displayedSuperGemCount} color="#fcd34d" />
             <MiniStat label="Avg Super Gem" value={displayedAvgSuperGemScore.toFixed(1)} color="#fcd34d" />
             <MiniStat label="GEMs" value={displayedGemCount} color="#93c5fd" />
@@ -1357,6 +1358,8 @@ function GemSpotlightCard({
   accent: keyof typeof GEM_SPOTLIGHT_ACCENTS;
 }) {
   const colors = GEM_SPOTLIGHT_ACCENTS[accent];
+  const median = gem.market_median_price;
+  const medianDifference = median != null && median > 0 ? gem.price - median : null;
   return (
     <a
       href={gem.url}
@@ -1388,6 +1391,13 @@ function GemSpotlightCard({
         <div className="text-sm text-white truncate group-hover:underline">{gem.title.substring(0, 40)}...</div>
         {gem.cpu && <div className="text-xs text-white/70 mt-0.5 truncate">⚡ {gem.cpu}</div>}
         <div className={`text-xl font-bold mt-1 ${colors.price}`}>£{gem.price.toFixed(2)}</div>
+        {medianDifference != null && median != null && (
+          <div className={`mt-0.5 text-[10px] font-medium ${medianDifference < 0 ? "text-rose-300" : "text-white/70"}`}>
+            {medianDifference === 0
+              ? "At market median"
+              : `£${Math.abs(medianDifference).toFixed(0)} · ${Math.abs((medianDifference / median) * 100).toFixed(1)}% ${medianDifference < 0 ? "below" : "above"} median`}
+          </div>
+        )}
       </div>
     </a>
   );
@@ -1397,10 +1407,10 @@ function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | 
   const componentLabels: Record<string, { label: string; emoji: string; accent: keyof typeof GEM_SPOTLIGHT_ACCENTS }> = {
     motherboard: { label: "Gem Motherboard", emoji: "🔧", accent: "emerald" },
     cpu: { label: "Gem CPU", emoji: "⚡", accent: "cyan" },
-    cooler: { label: "Gem CPU Cooler", emoji: "❄️", accent: "blue" },
-    ram: { label: "Gem Memory", emoji: "🧠", accent: "purple" },
     gpu: { label: "Gem GPU", emoji: "🎮", accent: "purple" },
+    ram: { label: "Gem Memory", emoji: "🧠", accent: "purple" },
     ssd: { label: "Gem Storage", emoji: "💾", accent: "blue" },
+    cooler: { label: "Gem CPU Cooler", emoji: "❄️", accent: "blue" },
     psu: { label: "Gem PSU", emoji: "🔌", accent: "amber" },
     case: { label: "Gem PC Case", emoji: "🖥️", accent: "orange" },
   };
@@ -2723,67 +2733,25 @@ interface ScanRunHistory {
 
 type ScanChartMetric = "processed" | "observations";
 
-const SCAN_SESSION_GAP_MS = 10 * 60 * 1000;
-const FALLBACK_VENDOR_COLORS = ["#06b6d4", "#84cc16", "#ec4899", "#a855f7"];
-
-function groupScanHistoryIntoSessions(runs: ScanRunHistory[]) {
-  const validRuns = runs
-    .map((run) => ({ ...run, timestamp: new Date(run.occurredAt).getTime() }))
-    .filter((run) => Number.isFinite(run.timestamp))
-    .sort((a, b) => a.timestamp - b.timestamp);
-  const sessions: typeof validRuns[] = [];
-
-  for (const run of validRuns) {
-    const current = sessions.at(-1);
-    const previous = current?.at(-1);
-    if (!current || !previous || run.timestamp - previous.timestamp > SCAN_SESSION_GAP_MS) {
-      sessions.push([run]);
-    } else {
-      current.push(run);
-    }
-  }
-
-  return sessions.map((session, sessionIndex) => {
-    const startedAt = session[0].timestamp;
-    const vendorTotals: Record<string, number> = {};
-
-    for (const run of session) {
-      const vendors = run.vendors.length > 0 ? run.vendors : ["unknown"];
-      // Current history records contain one vendor. If an older record
-      // combines vendors, divide its collective result without inflating the
-      // session total.
-      const baseShare = Math.floor(run.totalListingsFound / vendors.length);
-      let remainder = run.totalListingsFound % vendors.length;
-      for (const vendor of vendors) {
-        vendorTotals[vendor] = (vendorTotals[vendor] ?? 0) + baseShare + (remainder-- > 0 ? 1 : 0);
-      }
-    }
-
-    return {
-      sessionId: sessionIndex,
-      occurredAtLabel: new Date(startedAt).toLocaleString(undefined, {
-        day: "numeric",
-        month: "short",
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      runBy: session.every((run) => run.runBy === session[0].runBy) ? session[0].runBy : "Mixed",
-      searchCount: session.length,
-      totalListings: session.reduce((total, run) => total + run.totalListingsFound, 0),
-      ...vendorTotals,
-    };
-  });
+interface ScanChartSession {
+  occurredAt: string;
+  runBy: string;
+  searchCount: number;
+  totalListings: number;
+  vendorTotals: Record<string, number>;
 }
+
+const FALLBACK_VENDOR_COLORS = ["#06b6d4", "#84cc16", "#ec4899", "#a855f7"];
 
 const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
   const [metric, setMetric] = useState<ScanChartMetric>("processed");
-  const [runs, setRuns] = useState<ScanRunHistory[]>([]);
+  const [runs, setRuns] = useState<ScanChartSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    fetch(`/api/gem-radar/scan-run-history?limit=10000&basis=${metric}`, {
+    fetch(`/api/gem-radar/scan-run-history-chart?basis=${metric}`, {
       cache: "no-store",
       signal: AbortSignal.timeout(15_000),
     })
@@ -2791,7 +2759,7 @@ const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
         if (!res.ok) throw new Error(`Scan history request failed (${res.status})`);
         return res.json();
       })
-      .then((data: ScanRunHistory[]) => {
+      .then((data: ScanChartSession[]) => {
         if (!cancelled) setRuns(data);
       })
       .catch((requestError: unknown) => {
@@ -2807,9 +2775,15 @@ const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
     };
   }, [metric]);
 
-  const chartData = useMemo(() => groupScanHistoryIntoSessions(runs), [runs]);
+  const chartData = useMemo(() => runs.map((run) => ({
+    ...run,
+    ...run.vendorTotals,
+    occurredAtLabel: new Date(run.occurredAt).toLocaleString(undefined, {
+      day: "numeric", month: "short", hour: "2-digit", minute: "2-digit",
+    }),
+  })), [runs]);
   const vendorKeys = useMemo(() => {
-    const presentVendors = new Set(runs.flatMap((run) => (run.vendors.length > 0 ? run.vendors : ["unknown"])));
+    const presentVendors = new Set(runs.flatMap((run) => Object.keys(run.vendorTotals)));
     return [
       ...VENDOR_ORDER.filter((vendor) => presentVendors.has(vendor)),
       ...[...presentVendors].filter((vendor) => !VENDOR_ORDER.includes(vendor as (typeof VENDOR_ORDER)[number])).sort(),
@@ -2906,7 +2880,7 @@ const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
             tick={{ fill: "#94a3b8", fontSize: 12 }}
             allowDecimals={false}
             domain={[0, "dataMax"]}
-            label={{ value: metric === "processed" ? "Listings processed" : "New/changed observations", angle: -90, position: "insideLeft", fill: "#94a3b8" }}
+            label={{ value: metric === "processed" ? "Processed" : "New/changed observations", angle: -90, position: "insideLeft", fill: "#94a3b8" }}
           />
           <Tooltip
             contentStyle={{ background: "#0f172a", border: "1px solid #334155", borderRadius: 6 }}
@@ -3309,6 +3283,17 @@ function SourcingPageInner() {
             className="grid h-[50px] w-[50px] cursor-pointer place-items-center rounded-2xl border border-white/10 bg-white/[0.06] text-slate-300 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-colors duration-200 hover:border-blue-400/40 hover:bg-blue-500/15 hover:text-blue-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
           >
             <History className="h-5 w-5" />
+          </Link>
+
+          <Link
+            href="/gem-based-pre-builds"
+            aria-label="Create pre-builds from Gems"
+            title="Create pre-builds from Gems"
+            className="inline-flex h-[50px] items-center gap-2 rounded-2xl border border-emerald-400/25 bg-emerald-500/10 px-4 text-sm font-semibold text-emerald-200 shadow-[0_8px_32px_rgba(0,0,0,0.25)] transition-colors hover:border-emerald-300/50 hover:bg-emerald-500/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+          >
+            <Gem className="h-4 w-4" />
+            <span className="hidden sm:inline">Create pre-builds from Gems</span>
+            <span className="sm:hidden">Pre-builds</span>
           </Link>
 
           <button

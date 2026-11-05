@@ -8,8 +8,7 @@ param(
     [switch]$GemRadarStandalone,
     [switch]$NoOllamaGateway,
     [switch]$BuildExtension,
-    [switch]$CheckOnly,
-    [switch]$AllowBranch
+    [switch]$CheckOnly
 )
 
 $ErrorActionPreference = 'Stop'
@@ -73,40 +72,6 @@ function Assert-DevelopmentPrerequisites {
         throw 'npm.cmd is not available on PATH.'
     }
 
-    Assert-LatestDevelopmentSource
-}
-
-# DEV must run the latest origin/dev. Starting stale code (an old feature branch,
-# or a dev that has not been pulled) is how DEV ended up behind production, so
-# this fails closed. Use -AllowBranch to deliberately run another branch.
-function Assert-LatestDevelopmentSource {
-    $branch = (& git -C $projectRoot branch --show-current 2>$null).Trim()
-    & git -C $projectRoot fetch origin dev --quiet 2>$null
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host '[WARN] Could not fetch origin/dev; cannot confirm this is the latest DEV source.' -ForegroundColor Yellow
-        return
-    }
-    $head = (& git -C $projectRoot rev-parse HEAD).Trim()
-    $latest = (& git -C $projectRoot rev-parse origin/dev).Trim()
-
-    if ($branch -ne 'dev') {
-        if ($AllowBranch) {
-            Write-Host "[WARN] Running branch '$branch' at $($head.Substring(0,9)) (-AllowBranch); origin/dev is $($latest.Substring(0,9))." -ForegroundColor Yellow
-            return
-        }
-        $label = if ($branch) { $branch } else { 'detached HEAD' }
-        throw "DEV must run the 'dev' branch but this checkout is on '$label'. Run: git switch dev   (or pass -AllowBranch to run this branch on purpose)."
-    }
-    if ($head -eq $latest) {
-        Write-Host "[OK] Serving origin/dev @ $($head.Substring(0,9))" -ForegroundColor Green
-        return
-    }
-    if (& git -C $projectRoot status --porcelain --untracked-files=no) {
-        throw "dev is behind origin/dev ($($head.Substring(0,9)) vs $($latest.Substring(0,9))) and has uncommitted changes; commit or stash, then re-run."
-    }
-    & git -C $projectRoot merge --ff-only origin/dev
-    if ($LASTEXITCODE -ne 0) { throw 'Local dev has diverged from origin/dev and cannot fast-forward; fix before starting DEV.' }
-    Write-Host "[OK] Fast-forwarded dev to origin/dev @ $((& git -C $projectRoot rev-parse --short HEAD).Trim())" -ForegroundColor Green
 }
 
 function Stop-PortListener([int]$Port) {
@@ -142,18 +107,35 @@ function Stop-DevelopmentProcesses([int[]]$Ports) {
     }
     # Killing only the listening reloader worker leaves its supervisor alive.
     # Its launcher command includes this checkout's per-run log path.
-    Get-CimInstance Win32_Process -Filter "Name='python.exe'" -ErrorAction SilentlyContinue |
-        Where-Object { $_.CommandLine -match 'run_dev\.py' -and $_.CommandLine -match '--port\s+4314' } |
-        ForEach-Object {
-            $parent = Get-CimInstance Win32_Process -Filter "ProcessId=$($_.ParentProcessId)" -ErrorAction SilentlyContinue
-            if ($parent -and $parent.CommandLine -match [regex]::Escape($projectRoot) -and $parent.CommandLine -match 'run_dev\.py') {
-                Stop-FlipFlopProcessTree -ProcessId $parent.ProcessId
+    if ($Ports -contains 4311) {
+        Get-CimInstance Win32_Process -Filter "Name='python.exe'" -ErrorAction SilentlyContinue |
+            Where-Object { $_.CommandLine -match 'run_dev\.py' -and $_.CommandLine -match '--port\s+4311' } |
+            ForEach-Object {
+                $parent = Get-CimInstance Win32_Process -Filter "ProcessId=$($_.ParentProcessId)" -ErrorAction SilentlyContinue
+                if ($parent -and $parent.CommandLine -match [regex]::Escape($projectRoot) -and $parent.CommandLine -match 'run_dev\.py') {
+                    Stop-FlipFlopProcessTree -ProcessId $parent.ProcessId
+                }
             }
-        }
+    }
 }
 
 function Test-ListeningPort([int]$Port) {
-    return [bool](Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue)
+    # Get-NetTCPConnection can briefly miss active listeners during rapid
+    # Next.js reloads. Confirm readiness by opening a short loopback TCP socket.
+    $client = [System.Net.Sockets.TcpClient]::new()
+    $waitHandle = $null
+    try {
+        $connect = $client.BeginConnect([System.Net.IPAddress]::Loopback, $Port, $null, $null)
+        $waitHandle = $connect.AsyncWaitHandle
+        if (-not $waitHandle.WaitOne(500)) { return $false }
+        $client.EndConnect($connect)
+        return $client.Connected
+    } catch {
+        return $false
+    } finally {
+        if ($waitHandle) { $waitHandle.Dispose() }
+        $client.Dispose()
+    }
 }
 
 function Get-OllamaServiceFailures {
@@ -193,9 +175,14 @@ function Ensure-OllamaPriorityGateway {
     }
 
     $failures = @(Get-OllamaServiceFailures)
-    $needsRestart = $failures.Count -gt 0
+    $gatewayProcesses = @(Get-CimInstance Win32_Process -ErrorAction SilentlyContinue | Where-Object {
+        $_.CommandLine -match '(?i)ollama-priority-gateway[\\/]server\.py'
+    })
+    $duplicateOrMissingGateway = $gatewayProcesses.Count -ne 1
+    $needsRestart = $failures.Count -gt 0 -or $duplicateOrMissingGateway
     if ($needsRestart) {
-        Write-Host "[*] Starting/reconfiguring Ollama for four concurrent requests (unhealthy services: $($failures -join ', '))..." -ForegroundColor Cyan
+        $reason = if ($duplicateOrMissingGateway) { "gateway process count: $($gatewayProcesses.Count)" } else { "unhealthy services: $($failures -join ', ')" }
+        Write-Host "[*] Starting/reconfiguring Ollama for four concurrent requests ($reason)..." -ForegroundColor Cyan
         & (Join-Path $projectRoot 'services\ollama-priority-gateway\start-prometheus-services.ps1') -ForceRestart
     }
 
@@ -275,7 +262,7 @@ Ensure-OllamaPriorityGateway
 New-Item -ItemType Directory -Path $logsDir -Force | Out-Null
 
 $portsToClean = @()
-if (-not $NoBackend) { $portsToClean += 4314 }
+if (-not $NoBackend) { $portsToClean += 4311 }
 if (-not $NoAdmin) { $portsToClean += 4312 }
 if (-not $NoFrontend) { $portsToClean += 4313 }
 if ($GemRadarStandalone) { $portsToClean += 18000 }
@@ -305,12 +292,46 @@ $env:OLLAMA_BASE_URL = $ollamaBaseUrl
 $env:OLLAMA_MODEL = $ollamaModel
 Warm-OllamaModel -BaseUrl $ollamaBaseUrl -Model $ollamaModel
 
+# Report the exact source served by each local process without blocking startup
+# based on branch name. A clean local dev branch safely fast-forwards first.
+$sourceBranch = (& git -C $projectRoot branch --show-current 2>$null).Trim()
+if ($sourceBranch -eq 'dev') {
+    $worktreeChanges = @(& git -C $projectRoot status --porcelain 2>$null)
+    if ($LASTEXITCODE -eq 0 -and $worktreeChanges.Count -eq 0) {
+        try {
+            & git -C $projectRoot fetch --quiet origin dev:refs/remotes/origin/dev
+            if ($LASTEXITCODE -eq 0) {
+                & git -C $projectRoot merge --ff-only origin/dev
+                if ($LASTEXITCODE -ne 0) { Write-Warning 'Local dev and origin/dev have diverged; starting the current checkout.' }
+            } else {
+                Write-Warning 'Could not refresh origin/dev; starting the current checkout.'
+            }
+        } catch {
+            Write-Warning "Could not fast-forward local dev: $($_.Exception.Message). Starting the current checkout."
+        }
+    } elseif ($worktreeChanges.Count -gt 0) {
+        Write-Warning 'Local dev has uncommitted changes; leaving them intact and starting the current checkout.'
+    }
+}
+$sourceCommit = (& git -C $projectRoot rev-parse HEAD 2>$null).Trim()
+if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($sourceCommit)) {
+    throw 'Could not determine the source commit for this development checkout.'
+}
+$sourceDirty = @(& git -C $projectRoot status --porcelain 2>$null).Count -gt 0
+$env:FLIPFLOP_SOURCE_COMMIT = $sourceCommit
+$env:FLIPFLOP_SOURCE_BRANCH = if ($sourceBranch) { $sourceBranch } else { 'detached' }
+$env:FLIPFLOP_SOURCE_DIRTY = $sourceDirty.ToString().ToLowerInvariant()
+$env:NEXT_PUBLIC_SOURCE_COMMIT = $sourceCommit
+$env:NEXT_PUBLIC_SOURCE_BRANCH = $env:FLIPFLOP_SOURCE_BRANCH
+$env:NEXT_PUBLIC_SOURCE_DIRTY = $env:FLIPFLOP_SOURCE_DIRTY
+Write-Host "[*] Starting source $($env:FLIPFLOP_SOURCE_BRANCH)@$sourceCommit$(if ($sourceDirty) { ' (dirty worktree)' })" -ForegroundColor Cyan
+
 $servers = @()
-$apiUrl = 'http://127.0.0.1:4314'
+$apiUrl = 'http://127.0.0.1:4311'
 
 if (-not $NoBackend) {
-    $command = "set `"FLIPFLOP_RUNTIME_ENV=development`" && set `"OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"OLLAMA_MODEL=$ollamaModel`" && set `"EBAY_ENVIRONMENT=production`" && set `"EBAY_LISTING_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENDPOINT=https://sandbox.sellingpartnerapi-eu.amazon.com`" && set `"AMAZON_SP_API_SELLER_ID=SANDBOX_SELLER_ID`" && set `"ADMIN_FRONTEND_URL=http://localhost:4312`" && set `"FRONTEND_URL=http://localhost:4313`" && .venv\Scripts\python.exe run_dev.py --host 127.0.0.1 --port 4314"
-    $servers += Start-DevelopmentServer -Name 'backend' -WorkingDirectory (Join-Path $projectRoot 'flipflop-api') -Command $command -Port 4314 -Color Yellow
+    $command = "set `"FLIPFLOP_RUNTIME_ENV=development`" && set `"OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"OLLAMA_MODEL=$ollamaModel`" && set `"EBAY_ENVIRONMENT=production`" && set `"EBAY_LISTING_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENDPOINT=https://sandbox.sellingpartnerapi-eu.amazon.com`" && set `"AMAZON_SP_API_SELLER_ID=SANDBOX_SELLER_ID`" && set `"ADMIN_FRONTEND_URL=http://localhost:4312`" && set `"FRONTEND_URL=http://localhost:4313`" && .venv\Scripts\python.exe run_dev.py --host 127.0.0.1 --port 4311"
+    $servers += Start-DevelopmentServer -Name 'backend' -WorkingDirectory (Join-Path $projectRoot 'flipflop-api') -Command $command -Port 4311 -Color Yellow
 }
 
 if ($GemRadarStandalone) {

@@ -78,6 +78,7 @@ from app.services.submission_queue_service import SubmissionQueueService
 from app.services.hardware_performance import enrich_listing_performance, load_benchmark_context
 from app.services.product_reviews import aggregate_cpk_reviews
 from app.services.amazon_bestsellers import bestseller_item_matches_category
+from app.services.playbook_extension import bestseller_tags_for_cpks
 
 router = APIRouter(prefix="/gem-radar", tags=["gem-radar"])
 
@@ -86,8 +87,8 @@ _GEM_SPOTLIGHT_CACHE: dict[str, tuple[float, dict]] = {}
 
 @router.get('/playbook-market-searches')
 async def playbook_market_searches(db:AsyncSession=Depends(get_db), _:None=Depends(require_operator)):
-    from app.services.playbook_extension import searches
-    return await searches(db)
+    from app.services.playbook_extension import search_feed
+    return await search_feed(db)
 
 
 from pydantic import Field
@@ -719,10 +720,8 @@ def _is_current_gen(title: str, category: str) -> bool:
 
 
 def _is_current_gen_ram(title: str) -> bool:
-    """RAM specifically: require DDR5 — DDR3/DDR4 kits routinely show up
-    with huge deal_score gaps (they're genuinely cheap relative to their
-    original price) but nobody building a current PC wants DDR3."""
-    return "ddr5" in title.lower()
+    """Accept DDR4 and DDR5 equally; generation does not change Gem ranking."""
+    return bool(re.search(r"\bddr[45]\b", title, re.IGNORECASE))
 
 
 def _is_damaged(title: str) -> bool:
@@ -750,7 +749,7 @@ async def _fetch_best_gem(db: AsyncSession, since, require_modern: bool = False)
     via is_likely_accessory.
 
     require_modern additionally excludes laptop/mobile parts, display-less
-    datacenter GPUs, and (for RAM) anything that isn't DDR5 — see
+    datacenter GPUs, and (for RAM) anything outside DDR4/DDR5 — see
     _is_desktop_appropriate/_is_current_gen_ram. Walks candidates in
     deal_score order and returns the first one that actually qualifies,
     rather than a single top-1 query, since the disqualifying signals live
@@ -2268,6 +2267,11 @@ async def _fetch_best_gem_for_category(
             # Priority 1: Blocking filters (reject immediately)
             if not _has_valid_category(candidate.category):  # Malformed or unknown
                 continue
+            resolved_category = identity_mod.resolve_identity(
+                candidate.title, delivered_price=candidate.delivered_price
+            ).category
+            if resolved_category and resolved_category != category:
+                continue
             if _is_server_hardware(candidate.title, candidate.category):  # Server/professional
                 continue
             if _is_complete_system(candidate.title):  # Prebuilt systems
@@ -2338,6 +2342,7 @@ async def _fetch_best_gem_for_category(
         "id": best.id,
         "title": best.title,
         "price": best.delivered_price,
+        "market_median_price": best.market_median_price,
         "seller": best.seller_name,
         "condition": best.condition,
         "url": usable_listing_url(best.url, best.listing_id, best.source, best.title),
@@ -2381,6 +2386,11 @@ async def _gem_spotlight_candidates(db: AsyncSession, category: str, actionable_
     for row in candidate_rows.values():
         if not media_urls([row.image_url, *(row.image_urls or [])]):
             continue
+        resolved_category = identity_mod.resolve_identity(
+            row.title, delivered_price=row.delivered_price
+        ).category
+        if resolved_category and resolved_category != category:
+            continue
         if (not _has_valid_category(category) or _is_server_hardware(row.title, category)
                 or _is_complete_system(row.title) or _is_bundled_components(row.title)
                 or _is_obsolete_socket(row.title, row.delivered_price) or _is_damaged(row.title)
@@ -2414,11 +2424,14 @@ async def _gem_spotlight_candidates(db: AsyncSession, category: str, actionable_
             "classification": row.classification, "deal_score": float(row.deal_score or 0),
             "price": float(row.delivered_price), "image_url": media_urls([row.image_url, *(row.image_urls or [])])[0],
             "url": usable_listing_url(row.url, row.listing_id, row.source, row.title),
-            "seller": row.seller_name, "condition": row.condition,
+            "seller": row.seller_name, "condition": row.condition, "source": row.source,
             "cpu": cpu_match.group(0) if cpu_match else None,
-            "market_reference": reference_price, "expected_profit": expected_profit,
+            "market_reference": reference_price,
+            "market_median_price": float(row.market_median_price) if row.market_median_price is not None else None,
+            "expected_profit": expected_profit,
             "performance_percentile": performance_percentile,
-            "desirability_score": float(row.desirability_score or 0),
+            "desirability_score": float(row.desirability_score) if row.desirability_score is not None else None,
+            "liquidity_score": float(row.liquidity_score) if row.liquidity_score is not None else None,
             "sell_through_rate_pct": float(row.sell_through_rate_pct or 0),
             "watch_count": int(row.watch_count or 0), "bid_count": int(row.bid_count or 0),
             "popularity_score": popularity_score})
@@ -2444,9 +2457,9 @@ async def get_gem_spotlight(db: AsyncSession, actionable_ids: set[str] | None = 
 
     all_categories = ("motherboard", "cpu", "cooler", "ram", "gpu", "ssd", "psu", "case")
     objectives = ("best", "cheapest", "highest_end", "most_profitable", "most_popular")
-    titles = {"best": "The Best Gem Build", "cheapest": "The Cheapest Gem Build",
-        "highest_end": "The Highest-end Gem Build", "most_profitable": "The Most Profitable Gem Build",
-        "most_popular": "The Most Popular Gem Build"}
+    titles = {"best": "Top Deal Score Concept", "cheapest": "Lowest Parts Cost Concept",
+        "highest_end": "Highest Benchmark Tier Concept", "most_profitable": "Combined Profit Signal Concept",
+        "most_popular": "Top Demand Signal Concept"}
     actionable_ids = actionable_ids if actionable_ids is not None else await get_active_buy_it_now_listing_ids(db)
     benchmark_context = await load_benchmark_context(db)
     pools = {category: await _gem_spotlight_candidates(db, category, actionable_ids, benchmark_context)
@@ -2823,6 +2836,50 @@ async def record_scan_run_history(
     return ScanRunHistoryOut.model_validate(row, from_attributes=True)
 
 
+@router.get("/scan-run-history-chart")
+async def scan_run_history_chart(
+    basis: Literal["processed", "observations"] = Query("processed"),
+    db: AsyncSession = Depends(get_db),
+    _: None = Depends(require_operator),
+) -> list[dict]:
+    """Aggregate every stored run into chart sessions, without a record limit."""
+    if basis == "processed":
+        statement = text("""
+            SELECT occurred_at, total_listings_found, vendors, run_by
+            FROM gem_radar_scan_runs ORDER BY occurred_at, id
+        """)
+    else:
+        statement = text("""
+            SELECT MAX(observed_at) AS occurred_at, COUNT(*) AS total_listings_found,
+                   ARRAY_REMOVE(ARRAY_AGG(DISTINCT source), NULL) AS vendors,
+                   'Unknown (historical)' AS run_by
+            FROM gem_radar_listing_observations
+            WHERE search_run_id IS NOT NULL AND search_query IS NOT NULL
+            GROUP BY search_run_id ORDER BY MAX(observed_at), search_run_id
+        """)
+    sessions = []
+    previous_at = None
+    for row in (await db.execute(statement)).mappings():
+        occurred_at = row["occurred_at"]
+        if previous_at is None or occurred_at - previous_at > timedelta(minutes=10):
+            sessions.append({"occurredAt": occurred_at.isoformat(),
+                "runBy": row["run_by"], "searchCount": 0,
+                "totalListings": 0, "vendorTotals": {}})
+        session = sessions[-1]
+        if session["runBy"] != row["run_by"]:
+            session["runBy"] = "Mixed"
+        count = int(row["total_listings_found"] or 0)
+        session["searchCount"] += 1
+        session["totalListings"] += count
+        vendors = row["vendors"] or ["unknown"]
+        share, remainder = divmod(count, len(vendors))
+        for index, vendor in enumerate(vendors):
+            totals = session["vendorTotals"]
+            totals[vendor] = totals.get(vendor, 0) + share + int(index < remainder)
+        previous_at = occurred_at
+    return sessions
+
+
 @router.get("/scan-run-history", response_model=list[ScanRunHistoryOut])
 async def list_scan_run_history(
     limit: int = Query(50, ge=1, le=10000),
@@ -3120,16 +3177,9 @@ async def _submit_scan_body(
     from app.gem_radar.cpk_pipeline import _deterministic_identity, _lookup_unique_catalog_alias
     from app.gem_radar.observations import find_existing_listing
 
-    # Search tags describe discovery intent, not product identity. Preserve
-    # every valid source observation before resolving its actual identifiers;
-    # a missing/incorrect existing CPK must not discard repair evidence.
-
-    # Persist search tags on each observation payload so the Curated marker is
-    # carried through queueing and any scoring result built from that listing.
-    if payload.tags:
-        payload = payload.model_copy(update={
-            "listings": [listing.model_copy(update={"search_tags": payload.tags}) for listing in payload.listings]
-        })
+    # Search terms are generic. Product labels are attached below from the
+    # resolved CPK and current Amazon bestseller observations, never copied
+    # from a per-Playbook search definition.
 
     malformed_awdit = [
         listing for listing in payload.listings
@@ -3251,7 +3301,7 @@ async def _submit_scan_body(
                     image_url=listing.image_url,
                     image_urls=listing.image_urls,
                     video_urls=listing.video_urls,
-                    search_tags=payload.tags,
+                    search_tags=None,
                     delivery_text=listing.delivery_text,
                     delivery_postcode=listing.delivery_postcode,
                     prime_eligible=listing.prime_eligible,
@@ -3398,9 +3448,38 @@ async def _submit_scan_body(
                 # separately so is_complete doesn't wait on a count that can
                 # never be reached this run.
                 pipeline_status.increment(payload.search_id, cpk_failed_count=1)
-    if payload.tags:
-        from app.services.catalogue_tag_sync import sync_search_tags_to_catalogue
-        await sync_search_tags_to_catalogue(db, payload.listings, payload.tags)
+
+    # Resolve bestseller labels for the complete batch, including listings
+    # whose CPK was already known and listings just assigned one above.
+    listing_cpks = (await db.execute(select(
+        GemRadarListingCpk.listing_id, GemRadarListingCpk.cpk
+    ).where(GemRadarListingCpk.listing_id.in_(
+        [listing.listing_id for listing in payload.listings]
+    )))).all() if payload.listings else []
+    cpk_by_listing = {listing_id: cpk for listing_id, cpk in listing_cpks if cpk}
+    bestseller_tags = await bestseller_tags_for_cpks(db, cpk_by_listing.values())
+    if payload.listings:
+        from app.models.gem_radar_observation import GemRadarListingObservation
+        listing_ids = list({listing.listing_id for listing in payload.listings})
+        latest_rows = select(
+            GemRadarListingObservation.id.label('id'),
+            func.row_number().over(
+                partition_by=GemRadarListingObservation.listing_id,
+                order_by=(GemRadarListingObservation.observed_at.desc(),
+                          GemRadarListingObservation.id.desc()),
+            ).label('row_number'),
+        ).where(GemRadarListingObservation.listing_id.in_(listing_ids)).subquery()
+        rows = (await db.execute(select(GemRadarListingObservation).join(
+            latest_rows, latest_rows.c.id == GemRadarListingObservation.id
+        ).where(latest_rows.c.row_number == 1))).scalars().all()
+        for row in rows:
+            tags = bestseller_tags.get(cpk_by_listing.get(row.listing_id), [])
+            existing_tags = [tag for tag in (row.search_tags or [])
+                if not tag.startswith('Playbook:')
+                and tag != 'Complete-build-market'
+                and not re.match(r'^(?:ASIN|CPK):(?:cpu|gpu|motherboard|ram|storage|psu|cooling|case):', tag)]
+            row.search_tags = list(dict.fromkeys([*existing_tags, *tags]))
+        await db.commit()
 
     log.info(
         "diag.scan.phase1_ingest_done",
@@ -3457,7 +3536,7 @@ async def submit_scan_queued(
         search_id=payload.search_id,
         query=payload.query,
         source_url=payload.source_url,
-        search_tags=payload.tags,
+        search_tags=None,
         max_candidates_for_deep_research=payload.max_candidates_for_deep_research,
         # mode="json" — plain model_dump() leaves extracted_at/auction_end_at
         # as Python datetime objects, which the listings_json JSON column's

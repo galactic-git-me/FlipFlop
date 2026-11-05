@@ -13,6 +13,7 @@ async def list_email_events(limit: int = Query(100, ge=1, le=500), db: AsyncSess
     rows = (await db.execute(select(EmailEvent).order_by(EmailEvent.received_at.desc()).limit(limit))).scalars().all()
     return [{"id": r.id, "subject": r.subject, "sender": r.sender, "summary": r.summary,
              "event_type": r.event_type, "marketplace": r.marketplace,
+             "manual_build_id": r.manual_build_id, "body": (r.body or "")[:3000],
              "received_at": r.received_at.isoformat() if r.received_at else None,
              "link_url": f"/email-events/{r.id}"} for r in rows]
 

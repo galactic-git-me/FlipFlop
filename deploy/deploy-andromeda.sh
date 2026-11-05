@@ -42,6 +42,9 @@ if ! git merge-base --is-ancestor "$TARGET_SHA" "origin/$BRANCH"; then
   log "Refusing SHA $TARGET_SHA because it is not on origin/$BRANCH."
   exit 1
 fi
+export FLIPFLOP_SOURCE_COMMIT="$(git rev-parse "$TARGET_SHA^{commit}")"
+export FLIPFLOP_SOURCE_BRANCH="$BRANCH"
+export FLIPFLOP_SOURCE_DIRTY=false
 
 CURRENT_SHA="$(git rev-parse HEAD)"
 MERGE_BASE="$(git merge-base "$CURRENT_SHA" "$TARGET_SHA" || true)"
@@ -154,8 +157,11 @@ log "Starting production stack"
 docker compose -f "$COMPOSE_FILE" up -d api gemradar-worker admin
 
 healthy=0
+running_sha=""
 for _ in $(seq 1 30); do
-  if curl --fail --silent --show-error http://127.0.0.1:4311/health >/dev/null \
+  health_payload="$(curl --fail --silent --show-error http://127.0.0.1:4311/health || true)"
+  running_sha="$(python3 -c 'import json,sys; print(json.loads(sys.stdin.read()).get("source_commit", ""))' <<<"$health_payload" 2>/dev/null || true)"
+  if [[ "$running_sha" == "$FLIPFLOP_SOURCE_COMMIT" ]] \
     && curl --fail --silent --show-error http://127.0.0.1:3020/ >/dev/null \
     && curl --fail --silent --show-error http://127.0.0.1:3021/health >/dev/null; then
     healthy=1
@@ -165,7 +171,7 @@ for _ in $(seq 1 30); do
 done
 
 if [[ "$healthy" -ne 1 ]]; then
-  log "Health check failed. Restoring the previous API image."
+  log "Health or release-SHA check failed (API reports ${running_sha:-unknown}, expected $FLIPFLOP_SOURCE_COMMIT). Restoring the previous API image."
   if docker image inspect flipflop-api:rollback >/dev/null 2>&1; then
     docker image tag flipflop-api:rollback deploy-api:latest
     docker compose -f "$COMPOSE_FILE" up -d --no-deps --force-recreate api

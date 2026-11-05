@@ -9,7 +9,7 @@ $ErrorActionPreference = 'Stop'
 
 function Test-DevApi {
     try {
-        $response = Invoke-WebRequest -Uri 'http://127.0.0.1:4314/health' -UseBasicParsing -TimeoutSec 2
+        $response = Invoke-WebRequest -Uri 'http://127.0.0.1:4311/health' -UseBasicParsing -TimeoutSec 2
         return $response.StatusCode -eq 200
     } catch {
         return $false
@@ -17,9 +17,9 @@ function Test-DevApi {
 }
 
 if ($Target -eq 'dev' -and -not (Test-DevApi)) {
-    $listener = Get-NetTCPConnection -LocalPort 4314 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
+    $listener = Get-NetTCPConnection -LocalPort 4311 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
     if ($listener) {
-        throw "DEV API port 4314 is occupied by PID $($listener.OwningProcess) but its health check failed; refusing to start a duplicate backend. Inspect the existing service logs first."
+        throw "DEV API port 4311 is occupied by PID $($listener.OwningProcess) but its health check failed; refusing to start a duplicate backend. Inspect the existing service logs first."
     }
     $projectRoot = Split-Path -Parent $PSScriptRoot
     $backendRoot = Join-Path $projectRoot 'flipflop-api'
@@ -37,7 +37,7 @@ if ($Target -eq 'dev' -and -not (Test-DevApi)) {
     $env:FRONTEND_URL = 'http://localhost:4313'
 
     Start-Process -FilePath $python `
-        -ArgumentList @('run_dev.py', '--host', '127.0.0.1', '--port', '4314') `
+        -ArgumentList @('run_dev.py', '--host', '127.0.0.1', '--port', '4311') `
         -WorkingDirectory $backendRoot `
         -WindowStyle Hidden
 
@@ -46,7 +46,7 @@ if ($Target -eq 'dev' -and -not (Test-DevApi)) {
         Start-Sleep -Seconds 1
     }
     if (-not (Test-DevApi)) {
-        throw 'Development API did not become healthy on 127.0.0.1:4314.'
+        throw 'Development API did not become healthy on 127.0.0.1:4311.'
     }
 }
 
