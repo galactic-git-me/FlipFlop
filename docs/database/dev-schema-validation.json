@@ -1,7 +1,7 @@
 {
-  "validated_at_utc": "2026-11-04T06:33:11.305251+00:00",
-  "source_commit": "f76e781a7d3653440e79141d4480f2bd707f2e93",
-  "schema_head": "20261104_0001",
+  "validated_at_utc": "2026-11-05T01:14:21.554894+00:00",
+  "source_commit": "a9754a669b08d74a578d20b818ce9bf13f5dc77d",
+  "schema_head": "20261105_0001",
   "migration_sha256": {
     "flipflop-api/alembic/versions/097b6aff6ac2_merge_review_feedback_branch_with_.py": "17692f5edda90ca52fd4ea5adaae0a31cb14c285e3fdf98504a29ff406914ff0",
     "flipflop-api/alembic/versions/1f83fbbf32fa_merge_scan_price_branch_into_main.py": "92ce1e1219129ef674680517b902000b404631d44d78b15df03da48e9f57f8e0",
@@ -186,6 +186,7 @@
     "flipflop-api/alembic/versions/20261103_0001_dev_schema_alignment.py": "e27e83d95badc388d3c0fe2c84f9864bfae38c660cd749b0efb610b5fac8ecee",
     "flipflop-api/alembic/versions/20261103_0002_align_dev_relationship_constraints.py": "69c0bfead6f23a90fff40450e5d7d57a585534bb904db59fc6da937b95cdaeda",
     "flipflop-api/alembic/versions/20261104_0001_sold_observation_url_text.py": "da9b1d4270cecb868859559cd619be6114834de6829079b116507a7f0a97a00a",
+    "flipflop-api/alembic/versions/20261105_0001_vendor_product_identity.py": "5b1d9b28d7d8fee5d870d6fc73faf52c94e7fdf6aee60f0b881345103da32d57",
     "flipflop-api/alembic/versions/3348793fd2db_add_cpk_to_gem_radar_favourites.py": "b7a0188041ddde4e007fbf269b0cf2601825610cb9410cd4c3526627ea12f2f7",
     "flipflop-api/alembic/versions/573cf6989b91_playbook_rich_authoring_fields.py": "4c0e0680090e918ea7b81d754f33d331766678275cc49c38ea6c72eb45907ba0",
     "flipflop-api/alembic/versions/6ce7c69805a2_merge_family_key_and_concurrent_flip_.py": "2a05e18474e4533aaff1f0b4b2b5f0ae6d2beee77165d3f47a2b18d8ba822ab8",

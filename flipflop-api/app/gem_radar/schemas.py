@@ -88,6 +88,7 @@ class ExtractedListing(CamelModel):
     # Stable across title variants and a primary consolidation key after GTIN/MPN.
     # Example: "100-10000108​4WOF" for AMD Ryzen 9 9800X3D.
     model_number: Optional[str] = None
+    vendor_product_id: Optional[str] = Field(default=None, min_length=1, max_length=255)
     # Product review rating (0-5) and review count. eBay: only populated for
     # GEM/SUPER_GEM-classified listings via the Catalog API (see
     # services/ebay_catalog.py), gated + 7-day cached since it's a per-epid
