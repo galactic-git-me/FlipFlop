@@ -720,10 +720,8 @@ def _is_current_gen(title: str, category: str) -> bool:
 
 
 def _is_current_gen_ram(title: str) -> bool:
-    """RAM specifically: require DDR5 — DDR3/DDR4 kits routinely show up
-    with huge deal_score gaps (they're genuinely cheap relative to their
-    original price) but nobody building a current PC wants DDR3."""
-    return "ddr5" in title.lower()
+    """Accept DDR4 and DDR5 equally; generation does not change Gem ranking."""
+    return bool(re.search(r"\bddr[45]\b", title, re.IGNORECASE))
 
 
 def _is_damaged(title: str) -> bool:
@@ -751,7 +749,7 @@ async def _fetch_best_gem(db: AsyncSession, since, require_modern: bool = False)
     via is_likely_accessory.
 
     require_modern additionally excludes laptop/mobile parts, display-less
-    datacenter GPUs, and (for RAM) anything that isn't DDR5 — see
+    datacenter GPUs, and (for RAM) anything outside DDR4/DDR5 — see
     _is_desktop_appropriate/_is_current_gen_ram. Walks candidates in
     deal_score order and returns the first one that actually qualifies,
     rather than a single top-1 query, since the disqualifying signals live
@@ -2222,7 +2220,6 @@ async def _fetch_best_gem_for_category(
     require_modern: bool = False,
     actionable_ids: set[str] | None = None,
     require_image: bool = False,
-    require_current_gen_ram: bool = True,
 ) -> dict | None:
     """Best gem for a specific component category, sorted by deal_score.
     If no qualifying GEM/SUPER_GEM exists, falls back to the highest-scoring listing."""
@@ -2307,7 +2304,7 @@ async def _fetch_best_gem_for_category(
                 continue
             if not _is_desktop_appropriate(candidate.title, candidate.category):
                 continue
-            if candidate.category == "ram" and require_current_gen_ram and not _is_current_gen_ram(candidate.title):
+            if candidate.category == "ram" and not _is_current_gen_ram(candidate.title):
                 continue
             if candidate.category != "ram" and not _is_current_gen(candidate.title, candidate.category):
                 continue
@@ -2537,15 +2534,6 @@ async def get_gem_by_component(
     for category in categories:
         gems[category] = await _fetch_best_gem_for_category(db, category, datetime.min,
             require_modern=True, actionable_ids=actionable_ids, require_image=True)
-        # Prefer DDR5 for the current-build spotlight, but keep the standalone
-        # Memory card populated with a correctly identified desktop DDR4 Gem
-        # when no image-ready DDR5 candidate passes the quality filters.
-        if category == "ram" and gems[category] is None:
-            gems[category] = await _fetch_best_gem_for_category(
-                db, category, datetime.min, require_modern=True,
-                actionable_ids=actionable_ids, require_image=True,
-                require_current_gen_ram=False,
-            )
     return gems
 
 

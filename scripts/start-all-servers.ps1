@@ -108,7 +108,7 @@ function Stop-DevelopmentProcesses([int[]]$Ports) {
     # Killing only the listening reloader worker leaves its supervisor alive.
     # Its launcher command includes this checkout's per-run log path.
     Get-CimInstance Win32_Process -Filter "Name='python.exe'" -ErrorAction SilentlyContinue |
-        Where-Object { $_.CommandLine -match 'run_dev\.py' -and $_.CommandLine -match '--port\s+4314' } |
+        Where-Object { $_.CommandLine -match 'run_dev\.py' -and $_.CommandLine -match '--port\s+4311' } |
         ForEach-Object {
             $parent = Get-CimInstance Win32_Process -Filter "ProcessId=$($_.ParentProcessId)" -ErrorAction SilentlyContinue
             if ($parent -and $parent.CommandLine -match [regex]::Escape($projectRoot) -and $parent.CommandLine -match 'run_dev\.py') {
@@ -260,7 +260,7 @@ Ensure-OllamaPriorityGateway
 New-Item -ItemType Directory -Path $logsDir -Force | Out-Null
 
 $portsToClean = @()
-if (-not $NoBackend) { $portsToClean += 4314 }
+if (-not $NoBackend) { $portsToClean += 4311 }
 if (-not $NoAdmin) { $portsToClean += 4312 }
 if (-not $NoFrontend) { $portsToClean += 4313 }
 if ($GemRadarStandalone) { $portsToClean += 18000 }
@@ -325,11 +325,11 @@ $env:NEXT_PUBLIC_SOURCE_DIRTY = $env:FLIPFLOP_SOURCE_DIRTY
 Write-Host "[*] Starting source $($env:FLIPFLOP_SOURCE_BRANCH)@$sourceCommit$(if ($sourceDirty) { ' (dirty worktree)' })" -ForegroundColor Cyan
 
 $servers = @()
-$apiUrl = 'http://127.0.0.1:4314'
+$apiUrl = 'http://127.0.0.1:4311'
 
 if (-not $NoBackend) {
-    $command = "set `"FLIPFLOP_RUNTIME_ENV=development`" && set `"OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"OLLAMA_MODEL=$ollamaModel`" && set `"EBAY_ENVIRONMENT=production`" && set `"EBAY_LISTING_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENDPOINT=https://sandbox.sellingpartnerapi-eu.amazon.com`" && set `"AMAZON_SP_API_SELLER_ID=SANDBOX_SELLER_ID`" && set `"ADMIN_FRONTEND_URL=http://localhost:4312`" && set `"FRONTEND_URL=http://localhost:4313`" && .venv\Scripts\python.exe run_dev.py --host 127.0.0.1 --port 4314"
-    $servers += Start-DevelopmentServer -Name 'backend' -WorkingDirectory (Join-Path $projectRoot 'flipflop-api') -Command $command -Port 4314 -Color Yellow
+    $command = "set `"FLIPFLOP_RUNTIME_ENV=development`" && set `"OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"OLLAMA_MODEL=$ollamaModel`" && set `"EBAY_ENVIRONMENT=production`" && set `"EBAY_LISTING_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENDPOINT=https://sandbox.sellingpartnerapi-eu.amazon.com`" && set `"AMAZON_SP_API_SELLER_ID=SANDBOX_SELLER_ID`" && set `"ADMIN_FRONTEND_URL=http://localhost:4312`" && set `"FRONTEND_URL=http://localhost:4313`" && .venv\Scripts\python.exe run_dev.py --host 127.0.0.1 --port 4311"
+    $servers += Start-DevelopmentServer -Name 'backend' -WorkingDirectory (Join-Path $projectRoot 'flipflop-api') -Command $command -Port 4311 -Color Yellow
 }
 
 if ($GemRadarStandalone) {

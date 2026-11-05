@@ -23,7 +23,7 @@ if ($Mode -eq "development") {
     # DEV's actual local backend (flipflop-api). 4311 is the separate always-on
     # scan-lock coordinator (scripts/scan-lock-service.py) and is present in
     # both DEV and LIVE builds, so it isn't a useful DEV-vs-LIVE discriminator.
-    $expectedApi = "http://127.0.0.1:4314/*"
+    $expectedApi = "http://127.0.0.1:4311/*"
     $forbiddenApi = 'theflipflop\.shop'
     $other = "LIVE"
 } else {
