@@ -1,0 +1,26 @@
+{
+  "name": "gradient-studio",
+  "displayName": "Gradient Studio",
+  "description": "Give your editor a little colour with smooth, curated background gradients.",
+  "version": "0.1.0",
+  "publisher": "flipflop-tools",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Themes"],
+  "activationEvents": ["onCommand:gradientStudio.chooseGradient", "onCommand:gradientStudio.clearGradient"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "gradientStudio.chooseGradient", "title": "Gradient Studio: Choose Editor Gradient" },
+      { "command": "gradientStudio.clearGradient", "title": "Gradient Studio: Clear Editor Gradient" }
+    ],
+    "keybindings": [
+      { "command": "gradientStudio.chooseGradient", "key": "ctrl+alt+g", "mac": "cmd+alt+g" }
+    ]
+  },
+  "scripts": { "compile": "tsc -p ./", "vscode:prepublish": "npm run compile" },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3"
+  }
+}
