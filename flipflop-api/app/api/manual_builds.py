@@ -23,7 +23,7 @@ from starlette.background import BackgroundTask
 from jose import jwt
 from pydantic import AnyHttpUrl, BaseModel, Field, field_validator
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, text, or_, func
+from sqlalchemy import select, text, or_, func, case
 from app.database import AsyncSessionLocal, get_db
 from app.models.manual_build import ManualBuild
 from app.models.getting_started_job import GettingStartedJob
@@ -904,7 +904,7 @@ _BUILD_ASSETS_ROOT = Path(__file__).resolve().parents[3] / "builds"
 _BUILD_3D_SUBDIR = "3D Build"
 _BUILD_ASSET_SUBDIRS = {"Media", "Performance", "Registration", "Specifications"}
 # Served directly by this process (see app.mount("/api/uploads", ...) in
-# main.py) — files never leave this container, so no cross-host sync needed.
+# main.py) â€” files never leave this container, so no cross-host sync needed.
 _PUBLIC_API_BASE = "https://www.theflipflop.shop/api"
 _SELLING_PRINCIPLES_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "selling_principles.md"
 _EBAY_LISTING_SYSTEM_PROMPT_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "ebay_listing_system_prompt.md"
@@ -971,13 +971,13 @@ def _persist_build_model_download(build_id: int, filename: str, source: Path) ->
     return download_path
 
 # HERO_IMAGE_URL is the one listing-template placeholder the LLM is
-# instructed NOT to fill in itself (see ebay_listing_system_prompt.md) — it
+# instructed NOT to fill in itself (see ebay_listing_system_prompt.md) â€” it
 # varies per build, so only this backend can know the right value. Filled in
 # deterministically below from build.hero_photo_url, which is set the moment
 # a build's first photo is uploaded (see the photo-upload endpoint below).
 # The flipflop logo URL used to be a similarly LLM-filled placeholder too,
 # but that one never varies between builds, so it's now hardcoded straight
-# into the template itself — nothing left to substitute for it here.
+# into the template itself â€” nothing left to substitute for it here.
 
 # eBay Item Specifics for category 179 (PC Desktops & All-in-Ones), fetched
 # from the Taxonomy API's get_item_aspects_for_category. "Brand" and "Type"
@@ -1031,7 +1031,7 @@ def _load_build_performance_evidence(build_name: str) -> dict | None:
 
 def _extract_section(text: str, start_marker: str, end_markers: list[str]) -> str:
     """Extract text between a section header and whichever of the given
-    next-section headers appears first — tolerant of the model reformatting
+    next-section headers appears first â€” tolerant of the model reformatting
     the exact separator characters around each header."""
     m = re.search(re.escape(start_marker), text, re.IGNORECASE)
     if not m:
@@ -1443,10 +1443,10 @@ async def get_manual_build_deletion_audit(
 @router.get("/ebay-fulfillment-policies", response_model=list[FulfillmentPolicyOut])
 async def get_ebay_fulfillment_policies(db: AsyncSession = Depends(get_db)):
     """Real shipping-destination options for the Shipping & Delivery section
-    — fetched live from the seller's own eBay account, not a hardcoded list.
+    â€” fetched live from the seller's own eBay account, not a hardcoded list.
     Uses whichever environment (sandbox/production) is currently configured
     for listing, same as post_to_ebay. MUST stay registered before
-    GET /{build_id} below — Starlette matches routes by position, and
+    GET /{build_id} below â€” Starlette matches routes by position, and
     /{build_id} would otherwise swallow this path first and 422 on failing
     to parse "ebay-fulfillment-policies" as an int."""
     settings = get_settings()
@@ -1820,7 +1820,7 @@ async def generate_getting_ready_package_content(
             "assigned_at": datetime.utcnow().isoformat(),
         }
     elif not (assignment.get("playbook_id") and assignment.get("software_profile")):
-        raise HTTPException(422, "Select a Playbook customer-type × budget cell before generating this Ready-to-Ship package")
+        raise HTTPException(422, "Select a Playbook customer-type Ã— budget cell before generating this Ready-to-Ship package")
     profile = assignment["software_profile"]
     if job and (job.checklist or {}).get("software_selection_submitted"):
         default_software_ids = list(job.customer_software_selections or [])
@@ -1858,7 +1858,7 @@ async def generate_getting_ready_package_content(
     ]
     inputs = {
         "build_name": build.name,
-        "playbook_segment": f"{assignment['customer_type']} / {assignment['budget_tier']} · {assignment['cell_name']}",
+        "playbook_segment": f"{assignment['customer_type']} / {assignment['budget_tier']} Â· {assignment['cell_name']}",
         "build_specification": build.components or [],
         "benchmark_results": evidence.get("benchmark_results") or evidence.get("performance_card"),
         "customer_software_selections": selected_software_ids,
@@ -1958,7 +1958,7 @@ async def generate_getting_ready_package_content(
         "source_inputs": {
             "software_selections": selected_software_ids,
             "purchased_ai_services": list(job.purchased_ai_services or []) if job else [],
-            "playbook_segment": f"{assignment['customer_type']} / {assignment['budget_tier']} · {assignment['cell_name']}",
+            "playbook_segment": f"{assignment['customer_type']} / {assignment['budget_tier']} Â· {assignment['cell_name']}",
             "approved_research_bundle": reviewed_research_bundle,
             "approved_component_manuals": body.approved_component_manuals,
             "cached_component_manuals": cached_manual_matches,
@@ -2986,7 +2986,10 @@ async def get_build_purchase_plan(build_id: int, db: AsyncSession = Depends(get_
 
     candidates = (await db.execute(
         select(Listing, GemRadarListingCpk.cpk)
-        .join(GemRadarListingCpk, GemRadarListingCpk.listing_id == Listing.external_id)
+        .join(GemRadarListingCpk, GemRadarListingCpk.listing_id == case(
+            (Listing.external_id.like("ebay_v1|%"), func.split_part(Listing.external_id, "|", 2)),
+            else_=Listing.external_id,
+        ))
         .where(
             Listing.status == ListingStatus.active,
             Listing.listing_type == "auction",
@@ -3165,7 +3168,7 @@ async def delete_build(build_id: int, db: AsyncSession = Depends(get_db)):
     """Archives the build rather than deleting it.
 
     A hard delete here previously left any live eBay listing (ebay_listing_id/
-    ebay_sku) with no local record at all — orphaned from every reprice, Best
+    ebay_sku) with no local record at all â€” orphaned from every reprice, Best
     Offer, and relist automation, and untraceable since the delete wasn't
     logged. Archiving keeps the row (and those eBay identifiers) intact so
     it can still be found and reconciled later.
@@ -3214,7 +3217,7 @@ async def evaluate_build(build_id: int, db: AsyncSession = Depends(get_db)):
         name = c["name"] if isinstance(c, dict) else c.name
         slot = c["slot"] if isinstance(c, dict) else c.slot
         price = c["price_paid"] if isinstance(c, dict) else c.price_paid
-        lines.append(f"  - {slot}: {name} (paid £{price:.0f})")
+        lines.append(f"  - {slot}: {name} (paid Â£{price:.0f})")
     component_text = "\n".join(lines)
     total = build.total_cost or sum(
         (c["price_paid"] if isinstance(c, dict) else c.price_paid)
@@ -3225,7 +3228,7 @@ async def evaluate_build(build_id: int, db: AsyncSession = Depends(get_db)):
 
 {component_text}
 
-Total cost: £{total:.0f}
+Total cost: Â£{total:.0f}
 
 Please assess this build and respond with ONLY valid JSON (no markdown, no code fences) in this exact format:
 {{
@@ -3246,7 +3249,7 @@ low/mid/high = estimated resale prices in GBP. uplift = estimated price increase
     if _model == "none":
         raise HTTPException(503, response_text)
 
-    # Parse JSON from response — strip any accidental markdown fences
+    # Parse JSON from response â€” strip any accidental markdown fences
     raw = response_text.strip()
     raw = re.sub(r"^```(?:json)?\s*", "", raw)
     raw = re.sub(r"\s*```$", "", raw)
@@ -3300,7 +3303,7 @@ async def mark_built(build_id: int, db: AsyncSession = Depends(get_db)):
     if unpurchased:
         raise HTTPException(
             400,
-            f"Every component must be marked purchased first — still waiting on: {', '.join(unpurchased)}",
+            f"Every component must be marked purchased first â€” still waiting on: {', '.join(unpurchased)}",
         )
 
     build.status = "built"
@@ -3338,7 +3341,7 @@ async def mark_built(build_id: int, db: AsyncSession = Depends(get_db)):
 
     # Rows 10/33/19/20: demand check + initial pricing anchor/floor fire
     # automatically once cost is finalized (all components purchased), no
-    # click needed — mirrors the retired Flip system's create_flip hook.
+    # click needed â€” mirrors the retired Flip system's create_flip hook.
     try:
         from app.services import demand_check as demand_check_service
         from app.services.pricing_engine import _component_spec
@@ -3512,12 +3515,12 @@ async def generate_listing(build_id: int, db: AsyncSession = Depends(get_db)):
     system_prompt = _load_ebay_listing_system_prompt()
     selling_principles = _load_selling_principles()
 
-    # This build's own evidence — spec card and registration plate data are
+    # This build's own evidence â€” spec card and registration plate data are
     # entirely derivable from fields already on the build (components,
     # name), so they're auto-populated unless the seller has uploaded more
     # specific JSON via PUT /{build_id}/evidence-data. Performance data has
-    # no such fallback — it only exists if uploaded for this exact build.
-    # All of it goes to the LLM as plain JSON text, never as an image —
+    # no such fallback â€” it only exists if uploaded for this exact build.
+    # All of it goes to the LLM as plain JSON text, never as an image â€”
     # no vision model involved.
     evidence = build.evidence_data or {}
     spec_card_data = evidence.get("spec_card") or {
@@ -3553,7 +3556,7 @@ REGISTRATION PLATE DATA (JSON):
 {json.dumps(registration_plate_data, indent=2)}
 
 MEASURED BENCHMARKS / TEMPERATURES / STABILITY RESULTS (JSON):
-{json.dumps(performance_card_data, indent=2) if performance_card_data else "None supplied — omit the PERFORMANCE YOU CAN COUNT ON section or place it under INFORMATION REQUIRED"}
+{json.dumps(performance_card_data, indent=2) if performance_card_data else "None supplied â€” omit the PERFORMANCE YOU CAN COUNT ON section or place it under INFORMATION REQUIRED"}
 
 RETURNS POLICY: {f"{build.return_days} day returns" if build.return_days else "No voluntary returns period set"}
 CHANGE-OF-MIND RETURN POSTAGE: Customer pays the return postage. The PC must be returned securely packed and in the condition received.
@@ -3563,15 +3566,15 @@ SUPPORT: Direct setup and after-sales support is available from flipflop. Manufa
 
 DELIVERY METHOD: {delivery_method}
 DISPATCH TIME: {build.handling_time_days} business day(s)
-COLLECTION AVAILABLE: No — delivery only, collection is never offered on any listing
-COLLECTION TESTING AVAILABLE: Not applicable — no collection offered
+COLLECTION AVAILABLE: No â€” delivery only, collection is never offered on any listing
+COLLECTION TESTING AVAILABLE: Not applicable â€” no collection offered
 
-PRICE: {f"£{build.ebay_price}" if build.ebay_price else "Not yet set"}
+PRICE: {f"Â£{build.ebay_price}" if build.ebay_price else "Not yet set"}
 BEST OFFER ENABLED: {"Yes" if build.allow_offers else "No"}
 """
 
     if selling_principles:
-        materials += f"\n\nADDITIONAL SELLER GUIDANCE (house style — follow alongside the system instructions above):\n{selling_principles}\n"
+        materials += f"\n\nADDITIONAL SELLER GUIDANCE (house style â€” follow alongside the system instructions above):\n{selling_principles}\n"
 
     try:
         raw_response, _model = await ai_service.generate_ebay_listing(system_prompt, materials)
@@ -3586,7 +3589,7 @@ BEST OFFER ENABLED: {"Yes" if build.allow_offers else "No"}
     if not title or not description_html:
         raise HTTPException(
             502,
-            "The AI response didn't include a parseable title or HTML section — "
+            "The AI response didn't include a parseable title or HTML section â€” "
             f"raw response (first 800 chars): {raw_response[:800]}",
         )
 
@@ -3598,7 +3601,7 @@ BEST OFFER ENABLED: {"Yes" if build.allow_offers else "No"}
         structlog.get_logger(__name__).warning(
             "generate_listing.hero_image_placeholder_unfilled",
             build_id=build_id,
-            reason="build has no hero_photo_url set — upload a photo first",
+            reason="build has no hero_photo_url set â€” upload a photo first",
         )
 
     prepared_description = prepare_ebay_listing_description(
@@ -3667,9 +3670,9 @@ async def get_courier_quote(
     build_id: int, delivery_country: str | None = None, db: AsyncSession = Depends(get_db)
 ):
     """Cheapest real tracked-delivery quote for this build's saved package
-    dimensions, via Parcel2Go — see app/services/parcel2go_courier.py.
+    dimensions, via Parcel2Go â€” see app/services/parcel2go_courier.py.
     Requires package_weight_kg/length_cm/width_cm/height_cm to already be
-    set on the build (via PATCH .../ebay-config) — deliberately doesn't
+    set on the build (via PATCH .../ebay-config) â€” deliberately doesn't
     guess them from components."""
     import structlog
     log = structlog.get_logger(__name__)
@@ -3698,14 +3701,14 @@ async def get_courier_quote(
         )
 
     # Prefer the real sale price once the build has actually sold and synced
-    # (see sync_ebay_order below) — ebay_price/total_cost are pre-sale
+    # (see sync_ebay_order below) â€” ebay_price/total_cost are pre-sale
     # estimates. Parcel2Go requires a non-zero insurance value either way.
     value_gbp = build.sale_price_actual or build.ebay_price or build.total_cost
     if not value_gbp or value_gbp <= 0:
         log.warning("courier_quote.zero_value", build_id=build_id, ebay_price=build.ebay_price, total_cost=build.total_cost)
         raise HTTPException(
             400,
-            "Set either ebay_price or total_cost (must be > £0) before requesting a courier quote."
+            "Set either ebay_price or total_cost (must be > Â£0) before requesting a courier quote."
         )
 
     # If the real buyer address has been synced, default to their actual
@@ -3873,7 +3876,7 @@ async def create_build_insurance_policy(
     if str(quote.currency or "").upper() != "GBP":
         raise HTTPException(502, "The insurer returned a premium outside GBP. No policy was created; check the provider configuration.")
     if not _gbp_amounts_match_to_penny(quote.price_gbp, body.quoted_price_gbp):
-        raise HTTPException(409, f"The fresh premium is £{quote.price_gbp:.2f}; review and confirm the new price before buying.")
+        raise HTTPException(409, f"The fresh premium is Â£{quote.price_gbp:.2f}; review and confirm the new price before buying.")
 
     name_parts = buyer_name.strip().split(maxsplit=1)
     first_name = name_parts[0]
@@ -4144,20 +4147,20 @@ async def reconcile_build_insurance_policy(
 
 @router.post("/{build_id}/sync-ebay-order", response_model=SyncEbayOrderResult)
 async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
-    """Fetches this build's real eBay order — buyer name, actual delivery
-    address, actual sale price — once it's sold. This data only exists
+    """Fetches this build's real eBay order â€” buyer name, actual delivery
+    address, actual sale price â€” once it's sold. This data only exists
     after a real buyer has paid; it's never available at listing time.
     Requires ebay_listing_id to already be set (i.e. the build was actually
-    posted to eBay). Safe to call again later — it just re-fetches and
+    posted to eBay). Safe to call again later â€” it just re-fetches and
     overwrites with the current order state."""
-    # Unlocked existence/precondition check first — fast-fail path, no lock
+    # Unlocked existence/precondition check first â€” fast-fail path, no lock
     # held across the eBay API call below.
     result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
     build = result.scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
     if not build.ebay_listing_id:
-        raise HTTPException(400, "This build has no eBay listing ID — it hasn't been posted to eBay yet.")
+        raise HTTPException(400, "This build has no eBay listing ID â€” it hasn't been posted to eBay yet.")
 
     settings = get_settings()
     try:
@@ -4170,11 +4173,11 @@ async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
     if order is None:
         raise HTTPException(
             404,
-            "No paid order found for this listing yet — it may not have sold, "
+            "No paid order found for this listing yet â€” it may not have sold, "
             "or the sale is older than the lookback window.",
         )
 
-    # FOR UPDATE taken only now, right before the write — not across the eBay
+    # FOR UPDATE taken only now, right before the write â€” not across the eBay
     # API call above. Global lock order across this codebase's cross-channel
     # paths is always ManualBuild before Product (see cross_channel_guard.py
     # and public_showcase.py's confirm_checkout), to avoid an ABBA deadlock
@@ -4216,10 +4219,10 @@ async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
     build.updated_at = datetime.utcnow()
     await db.flush()
 
-    # This build just sold on eBay — pull any matching storefront listing
+    # This build just sold on eBay â€” pull any matching storefront listing
     # so the same physical unit can't also sell there. See
     # app/services/cross_channel_guard.py. Still within the ManualBuild lock
-    # taken above, then takes the Product lock — ManualBuild-before-Product,
+    # taken above, then takes the Product lock â€” ManualBuild-before-Product,
     # matching the global order.
     await withdraw_storefront_for_sold_build(build, db)
     await withdraw_google_for_sold_build(build, db)
@@ -4245,7 +4248,7 @@ async def book_shipment(
     number is pushed to eBay only after physical carrier handover is confirmed
     by the separate dispatch action.
 
-    This is the one step in the whole shipping flow that spends real money —
+    This is the one step in the whole shipping flow that spends real money â€”
     it only runs when explicitly called from the "Book & Pay" button the
     seller clicks after reviewing the quoted price, never automatically."""
     result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id).with_for_update())
@@ -4351,7 +4354,7 @@ async def book_shipment(
     if not selected_quote or not selected_quote.signature_tracking:
         raise HTTPException(409, "That courier quote is no longer available with the required Signature extra. Request a fresh quote.")
     if not _gbp_amounts_match_to_penny(selected_quote.price_gbp, body.price_gbp):
-        raise HTTPException(409, f"The courier price has changed to £{selected_quote.price_gbp:.2f}. Review and confirm the fresh quote.")
+        raise HTTPException(409, f"The courier price has changed to Â£{selected_quote.price_gbp:.2f}. Review and confirm the fresh quote.")
 
     # Commit a durable in-flight marker before calling either provider
     # endpoint. A concurrent request or retry after timeout will now stop
@@ -4463,7 +4466,7 @@ async def book_shipment(
         return BookShipmentResult(success=False, parcel2go_order_id=order_id,
                                   error="Payment outcome is unclear. Check Parcel2Go before attempting another booking.")
 
-    # Persist immediately — payment has already happened at this point, so
+    # Persist immediately â€” payment has already happened at this point, so
     # this must be saved even if the eBay push below fails.
     build.parcel2go_order_id = booked.parcel2go_order_id
     build.parcel2go_service_slug = body.service_slug
@@ -4840,7 +4843,7 @@ async def update_aspects(build_id: int, body: UpdateAspectsRequest, db: AsyncSes
 @router.put("/{build_id}/evidence-data", response_model=ManualBuildOut)
 async def update_evidence_data(build_id: int, body: UpdateEvidenceDataRequest, db: AsyncSession = Depends(get_db)):
     """Stores the structured factual data (JSON) behind the spec card,
-    registration plate, or performance card for this build — this is what
+    registration plate, or performance card for this build â€” this is what
     actually gets sent to the LLM for listing generation, as plain text.
     The rendered PNG images (uploaded separately via /photos and
     /photos/branded) are just a visual rendering of this same data for the
@@ -5095,7 +5098,7 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
             f"Item Specifics are incomplete (missing: {', '.join(missing_required)}). "
             "Generate or fill in the listing's Specifics section before posting to eBay.",
         )
-    # Defensive re-check even though update_aspects now validates on save —
+    # Defensive re-check even though update_aspects now validates on save â€”
     # catches aspects written before that validation existed (like the
     # over-length "Connectivity" free-text value that first surfaced this
     # bug), turning what would be a slow eBay API rejection into an
@@ -5104,7 +5107,7 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
     if aspect_problems:
         raise HTTPException(
             400,
-            "Item Specifics have invalid values — fix these in the Specifics section before posting: "
+            "Item Specifics have invalid values â€” fix these in the Specifics section before posting: "
             + "; ".join(aspect_problems),
         )
 
@@ -5123,7 +5126,7 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
         raise HTTPException(400, "Upload at least one photo before listing on eBay")
 
     # Listing/publishing target (sandbox vs production) is driven by
-    # EBAY_LISTING_ENVIRONMENT — credentials, token, and business policies
+    # EBAY_LISTING_ENVIRONMENT â€” credentials, token, and business policies
     # all switch together with it. Token is auto-renewed via the stored
     # refresh token when possible, falling back to the static one.
     from app.services.ebay_token_manager import get_valid_ebay_access_token
@@ -5346,7 +5349,7 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
                     else None
                 )
 
-            # Row 40: promote automatically if opted in — a failure here
+            # Row 40: promote automatically if opted in â€” a failure here
             # doesn't undo the listing itself, just logs.
             if build.promoted_enabled:
                 try:
@@ -5435,7 +5438,7 @@ async def upload_photos(
     db: AsyncSession = Depends(get_db),
 ):
     """kind defaults to "photo" (regular listing photos) but also accepts
-    "performance_card" — the build-specific benchmark/performance renders
+    "performance_card" â€” the build-specific benchmark/performance renders
     uploaded from the build detail page's Performance Card section. Tagging
     them lets generate-listing find exactly this build's performance
     evidence rather than relying on any shared/global file."""
@@ -5703,8 +5706,8 @@ async def list_on_storefront(
     db: AsyncSession = Depends(get_db),
 ):
     """
-    Publish this build to the FlipFlop.shop pre-built showcase — the first
-    code path in this codebase that actually creates a Product row (Build →
+    Publish this build to the FlipFlop.shop pre-built showcase â€” the first
+    code path in this codebase that actually creates a Product row (Build â†’
     Product has been a schema-only relationship until now).
     """
     result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id).with_for_update())
