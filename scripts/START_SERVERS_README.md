@@ -71,6 +71,11 @@ Once all servers are running, access them at:
 ✅ Shows colorized output for easy identification  
 ✅ Supports selective server startup  
 ✅ Uses hot reload for API and frontend development
+✅ Fast-forwards a clean local `dev` branch from `origin/dev`; dirty work and
+   other branches are preserved and startup continues
+✅ Reports the running source commit, branch, and dirty-worktree state at
+   startup; `/health` exposes the API source and the admin header flags source
+   mismatches
 
 Python source reloads produce one completion notice, for example:
 `File change C:\...\app\example.py detected. Restarted API; ready in 3.2s.`
