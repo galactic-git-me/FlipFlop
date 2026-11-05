@@ -76,41 +76,36 @@ function Assert-DevelopmentPrerequisites {
     Assert-LatestDevelopmentSource
 }
 
-# DEV must include the latest origin/dev. Branch names do not establish whether
-# the checked-out code is stale; feature branches based on current dev are safe.
+# Startup always serves the latest origin/dev. If invoked from a feature branch,
+# switch to dev first so the services never launch an old feature checkout.
 function Assert-LatestDevelopmentSource {
     $branch = (& git -C $projectRoot branch --show-current 2>$null).Trim()
     & git -C $projectRoot fetch origin dev --quiet 2>$null
     if ($LASTEXITCODE -ne 0) {
-        Write-Host '[WARN] Could not fetch origin/dev; cannot confirm this is the latest DEV source.' -ForegroundColor Yellow
-        return
+        throw 'Could not fetch origin/dev; refusing to start without confirming the latest DEV source.'
     }
+
+    if ($branch -ne 'dev') {
+        Write-Host "[*] Startup was invoked from '$branch'; switching to dev so the latest DEV code is served..." -ForegroundColor Cyan
+        & git -C $projectRoot switch dev
+        if ($LASTEXITCODE -ne 0) {
+            throw "Could not switch from '$branch' to 'dev'. Preserve or resolve local changes, then run startup again."
+        }
+    }
+
     $head = (& git -C $projectRoot rev-parse HEAD).Trim()
     $latest = (& git -C $projectRoot rev-parse origin/dev).Trim()
-
-    if (& git -C $projectRoot merge-base --is-ancestor origin/dev HEAD) {
-        if ($LASTEXITCODE -eq 0) {
-            Write-Host "[OK] Serving $branch at $($head.Substring(0,9)); includes origin/dev @ $($latest.Substring(0,9))" -ForegroundColor Green
-            return
-        }
-    }
-
-    if ($branch -eq 'dev') {
-        if ($head -eq $latest) {
-        Write-Host "[OK] Serving origin/dev @ $($head.Substring(0,9))" -ForegroundColor Green
-        return
-        }
-        if (& git -C $projectRoot status --porcelain --untracked-files=no) {
-            throw "dev is behind origin/dev ($($head.Substring(0,9)) vs $($latest.Substring(0,9))) and has uncommitted changes; commit or stash, then re-run."
-        }
-        & git -C $projectRoot merge --ff-only origin/dev
-        if ($LASTEXITCODE -ne 0) { throw 'Local dev has diverged from origin/dev and cannot fast-forward; fix before starting DEV.' }
-        Write-Host "[OK] Fast-forwarded dev to origin/dev @ $((& git -C $projectRoot rev-parse --short HEAD).Trim())" -ForegroundColor Green
+    if ($head -eq $latest) {
+        Write-Host "[OK] Serving latest origin/dev @ $($head.Substring(0,9))" -ForegroundColor Green
         return
     }
 
-    $label = if ($branch) { $branch } else { 'detached HEAD' }
-    throw "DEV checkout '$label' at $($head.Substring(0,9)) does not include latest origin/dev @ $($latest.Substring(0,9)); update this branch before starting DEV."
+    if (& git -C $projectRoot status --porcelain --untracked-files=no) {
+        throw "dev is not at latest origin/dev ($($head.Substring(0,9)) vs $($latest.Substring(0,9))) and has uncommitted changes; preserve or resolve them before startup."
+    }
+    & git -C $projectRoot merge --ff-only origin/dev
+    if ($LASTEXITCODE -ne 0) { throw 'Local dev cannot fast-forward to origin/dev; resolve the branch state before starting DEV.' }
+    Write-Host "[OK] Fast-forwarded dev to latest origin/dev @ $((& git -C $projectRoot rev-parse --short HEAD).Trim())" -ForegroundColor Green
 }
 
 function Stop-PortListener([int]$Port) {
