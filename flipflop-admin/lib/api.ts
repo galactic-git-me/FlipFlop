@@ -282,6 +282,20 @@ export interface ManualBuild {
   updated_at: string;
 }
 
+export interface BuildPurchasePlan {
+  components: Array<{
+    slot: string;
+    name: string;
+    image_url: string | null;
+    listing_url: string | null;
+    listing_price: number | null;
+    purchased: boolean;
+    auctions: Array<{ title: string; url: string; price: number | null; ends_at: string | null }>;
+    sold_median: number | null;
+    sold_sample_size: number;
+  }>;
+}
+
 // Real tracked-delivery quotes, cheapest first, for a build's saved package
 // dimensions, via Parcel2Go (see /manual-builds/{id}/courier-quote).
 export interface CourierQuote {
@@ -1314,6 +1328,7 @@ export const api = {
   manualBuilds: {
     list: () => request<ManualBuildSummary[]>("/manual-builds/"),
     get: (id: number) => request<ManualBuild>(`/manual-builds/${id}`),
+    getPurchasePlan: (id: number) => request<BuildPurchasePlan>(`/manual-builds/${id}/purchase-plan`),
     generateAi: () => request<AiReadyToShipProposal>("/manual-builds/ai-generate", { method: "POST" }),
     createAi: (data: { component_ids: number[]; playbook_id: number; curated_build_id: string; build_name: string; rationale: string; playbook_rationale: string }) =>
       request<ManualBuild>("/manual-builds/ai-create", {

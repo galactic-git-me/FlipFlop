@@ -2339,6 +2339,7 @@ async def _fetch_best_gem_for_category(
         "id": best.id,
         "title": best.title,
         "price": best.delivered_price,
+        "market_median_price": best.market_median_price,
         "seller": best.seller_name,
         "condition": best.condition,
         "url": usable_listing_url(best.url, best.listing_id, best.source, best.title),
@@ -2415,11 +2416,14 @@ async def _gem_spotlight_candidates(db: AsyncSession, category: str, actionable_
             "classification": row.classification, "deal_score": float(row.deal_score or 0),
             "price": float(row.delivered_price), "image_url": media_urls([row.image_url, *(row.image_urls or [])])[0],
             "url": usable_listing_url(row.url, row.listing_id, row.source, row.title),
-            "seller": row.seller_name, "condition": row.condition,
+            "seller": row.seller_name, "condition": row.condition, "source": row.source,
             "cpu": cpu_match.group(0) if cpu_match else None,
-            "market_reference": reference_price, "expected_profit": expected_profit,
+            "market_reference": reference_price,
+            "market_median_price": float(row.market_median_price) if row.market_median_price is not None else None,
+            "expected_profit": expected_profit,
             "performance_percentile": performance_percentile,
-            "desirability_score": float(row.desirability_score or 0),
+            "desirability_score": float(row.desirability_score) if row.desirability_score is not None else None,
+            "liquidity_score": float(row.liquidity_score) if row.liquidity_score is not None else None,
             "sell_through_rate_pct": float(row.sell_through_rate_pct or 0),
             "watch_count": int(row.watch_count or 0), "bid_count": int(row.bid_count or 0),
             "popularity_score": popularity_score})
@@ -2445,9 +2449,9 @@ async def get_gem_spotlight(db: AsyncSession, actionable_ids: set[str] | None = 
 
     all_categories = ("motherboard", "cpu", "cooler", "ram", "gpu", "ssd", "psu", "case")
     objectives = ("best", "cheapest", "highest_end", "most_profitable", "most_popular")
-    titles = {"best": "The Best Gem Build", "cheapest": "The Cheapest Gem Build",
-        "highest_end": "The Highest-end Gem Build", "most_profitable": "The Most Profitable Gem Build",
-        "most_popular": "The Most Popular Gem Build"}
+    titles = {"best": "Top Deal Score Concept", "cheapest": "Lowest Parts Cost Concept",
+        "highest_end": "Highest Benchmark Tier Concept", "most_profitable": "Combined Profit Signal Concept",
+        "most_popular": "Top Demand Signal Concept"}
     actionable_ids = actionable_ids if actionable_ids is not None else await get_active_buy_it_now_listing_ids(db)
     benchmark_context = await load_benchmark_context(db)
     pools = {category: await _gem_spotlight_candidates(db, category, actionable_ids, benchmark_context)
