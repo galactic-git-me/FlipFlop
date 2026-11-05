@@ -232,7 +232,20 @@ export function TopCommandBar() {
         </Link>
         <div className="node-live-chip">
           <span className="node-live-dot" />
-          <Image src="/pics/logo_simple_no_bg.png" alt="FlipFlop" width={240} height={120} className="h-[120px] w-auto object-contain" />
+          <span
+            className="relative h-8 w-8 shrink-0 overflow-hidden"
+            role="img"
+            aria-label="FlipFlop"
+          >
+            <Image
+              src="/pics/logo_simple_no_bg.png"
+              alt=""
+              aria-hidden="true"
+              width={1280}
+              height={1280}
+              className="absolute inset-0 h-full w-full scale-[3] object-contain"
+            />
+          </span>
         </div>
         <div className="node-top-icons relative">
           <button
