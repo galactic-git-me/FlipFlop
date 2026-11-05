@@ -24,7 +24,9 @@ export async function proxy(request: NextRequest) {
   // calls. Previously these pages loaded first and produced a cascade of
   // "Missing authorization header" errors from their useEffect hooks.
   if (pathname !== "/login" && process.env.PLAYWRIGHT_TEST !== "1" && (!session || !token)) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("reason", token ? "session_invalid" : "session_missing");
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
