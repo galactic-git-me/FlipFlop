@@ -6,13 +6,13 @@ import {
   ArrowLeft, CheckCircle2, Circle, Hammer, Sparkles, ExternalLink,
   Loader2, ShoppingBag, ImagePlus, Star, X, IdCard, BadgeCheck, Download, Zap,
   CalendarClock, Truck, AlertTriangle, PoundSterling, UploadCloud,
-  HelpCircle, Shuffle,
+  HelpCircle, Shuffle, Pencil, Save,
   Warehouse, Undo2,
 } from "lucide-react";
 import { Toaster, toast } from "sonner";
 import JSZip from "jszip";
 import ChannelImageReview, { type ImageReviewRequest } from "@/components/ChannelImageReview";
-import { api, API_BASE_URL, ManualBuild, ComponentRating, ProductFaq } from "@/lib/api";
+import { api, API_BASE_URL, ManualBuild, BuildPurchasePlan, ComponentRating, ProductFaq } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
 import { drawRegistrationPlate, drawSpecCard, canvasToBlob, loadLogo } from "@/lib/build-cards";
 import { EbayOffersSection } from "@/components/builds/EbayOffersSection";
@@ -134,6 +134,13 @@ export default function BuildDetailPage() {
     reasons: string[]; warnings: string[];
   }>>([]);
   const [inventoryChoice, setInventoryChoice] = useState<Record<string, string>>({});
+  const [selectedPurchaseSlots, setSelectedPurchaseSlots] = useState<string[]>([]);
+  const [actualPurchasePrices, setActualPurchasePrices] = useState<Record<string, string>>({});
+  const [purchasePlan, setPurchasePlan] = useState<BuildPurchasePlan | null>(null);
+  const [markingSelectedPurchased, setMarkingSelectedPurchased] = useState(false);
+  const [editingBuildName, setEditingBuildName] = useState(false);
+  const [buildNameDraft, setBuildNameDraft] = useState("");
+  const [savingBuildName, setSavingBuildName] = useState(false);
   const [markingBuilt, setMarkingBuilt] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [uploadingPhotos, setUploadingPhotos] = useState(false);
@@ -199,6 +206,10 @@ export default function BuildDetailPage() {
       .get(buildId)
       .then((b) => {
         setBuild(b);
+        setBuildNameDraft(b.name);
+        if (b.creation_method === "gem_spotlight") {
+          api.manualBuilds.getPurchasePlan(buildId).then(setPurchasePlan).catch(() => setPurchasePlan(null));
+        }
         // The declared insurance value and publish price must be the actual
         // saved listing price. The market-evaluation midpoint is only a
         // fallback for a build that has never had a listing price set.
@@ -346,6 +357,67 @@ export default function BuildDetailPage() {
       alert("Failed to save. Please check the console for details.");
     } finally {
       setSavingSlot(null);
+    }
+  };
+
+  const markSelectedPurchased = async () => {
+    if (!build || selectedPurchaseSlots.length === 0 || markingSelectedPurchased) return;
+    const selectedComponents = build.components.filter((component) => selectedPurchaseSlots.includes(component.slot) && !component.purchased);
+    const missingPrice = selectedComponents.find((component) => {
+      const price = Number(actualPurchasePrices[component.slot]);
+      return !Number.isFinite(price) || price <= 0;
+    });
+    if (missingPrice) {
+      toast.error(`Enter the actual amount paid for ${missingPrice.name}.`);
+      return;
+    }
+    setMarkingSelectedPurchased(true);
+    let savedCount = 0;
+    try {
+      for (const component of selectedComponents) {
+        const saved = await api.manualBuilds.purchaseComponent(buildId, component.slot, {
+          price_paid: Number(actualPurchasePrices[component.slot]),
+          source: "Confirmed purchase",
+        });
+        setBuild(saved);
+        savedCount += 1;
+      }
+      setSelectedPurchaseSlots([]);
+      setActualPurchasePrices({});
+      const plan = await api.manualBuilds.getPurchasePlan(buildId);
+      setPurchasePlan(plan);
+      toast.success(`Marked ${savedCount} component${savedCount === 1 ? "" : "s"} purchased`);
+      api.inventory.buildCandidates(buildId).then(setFreeInventory).catch(() => setFreeInventory([]));
+    } catch (error) {
+      toast.error(`${savedCount} saved. ${error instanceof Error ? error.message : "Could not mark the remaining components purchased."}`);
+      api.manualBuilds.get(buildId).then(setBuild).catch(() => undefined);
+    } finally {
+      setMarkingSelectedPurchased(false);
+    }
+  };
+
+  const saveBuildName = async () => {
+    if (!build) return;
+    const name = buildNameDraft.trim();
+    if (!name) {
+      toast.error("Enter a name for this pre-build.");
+      return;
+    }
+    if (name === build.name) {
+      setEditingBuildName(false);
+      return;
+    }
+    setSavingBuildName(true);
+    try {
+      const saved = await api.manualBuilds.patch(buildId, { name });
+      setBuild(saved);
+      setBuildNameDraft(saved.name);
+      setEditingBuildName(false);
+      toast.success("Pre-build name saved");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not save the pre-build name.");
+    } finally {
+      setSavingBuildName(false);
     }
   };
 
@@ -836,7 +908,28 @@ export default function BuildDetailPage() {
       </button>
 
       <div className="flex items-center justify-between mb-3">
-        <h1 className="text-xl font-black">{build.name}</h1>
+        <div className="flex min-w-0 items-center gap-2">
+          {editingBuildName && build.creation_method === "gem_spotlight" ? (
+            <div className="flex min-w-0 items-center gap-2">
+              <input
+                autoFocus
+                value={buildNameDraft}
+                onChange={(event) => setBuildNameDraft(event.target.value)}
+                onKeyDown={(event) => { if (event.key === "Enter") void saveBuildName(); if (event.key === "Escape") { setBuildNameDraft(build.name); setEditingBuildName(false); } }}
+                maxLength={300}
+                aria-label="Pre-build name"
+                className="min-w-0 rounded-md border border-white/15 bg-black/30 px-2.5 py-1.5 text-lg font-bold text-white outline-none focus:border-cyan-300/50"
+              />
+              <button type="button" onClick={() => void saveBuildName()} disabled={savingBuildName} className="inline-flex shrink-0 items-center gap-1 rounded-md bg-cyan-400 px-2.5 py-2 text-xs font-bold text-slate-950 disabled:opacity-50"><Save className="h-3.5 w-3.5" /> Save</button>
+              <button type="button" onClick={() => { setBuildNameDraft(build.name); setEditingBuildName(false); }} disabled={savingBuildName} aria-label="Cancel name edit" className="rounded-md border border-white/10 p-2 text-slate-400 hover:text-white disabled:opacity-50"><X className="h-4 w-4" /></button>
+            </div>
+          ) : (
+            <>
+              <h1 className="truncate text-xl font-black">{build.name}</h1>
+              {build.creation_method === "gem_spotlight" && <button type="button" onClick={() => { setBuildNameDraft(build.name); setEditingBuildName(true); }} className="inline-flex shrink-0 items-center gap-1 rounded-md border border-white/10 px-2 py-1.5 text-xs text-slate-400 hover:border-cyan-300/30 hover:text-cyan-200"><Pencil className="h-3 w-3" /> Edit name</button>}
+            </>
+          )}
+        </div>
         <div className={`flex items-center gap-1.5 px-3 py-1 rounded-lg border text-xs font-bold uppercase tracking-wider ${STATUS_COLOR[build.status]}`}>
           {STATUS_LABEL[build.status]}
         </div>
@@ -863,7 +956,7 @@ export default function BuildDetailPage() {
       {/* Guided Steps Tabs */}
       <div className="flex gap-1.5 overflow-x-auto pb-2 mb-6 border-b border-white/[0.06] no-scrollbar">
         <TabButton
-          label="1. Build Checklist"
+          label={build.creation_method === "gem_spotlight" ? "1. Purchase Plan" : "1. Build Checklist"}
           icon={Hammer}
           active={activeTab === "build"}
           completed={build.status !== "in_progress"}
@@ -946,6 +1039,55 @@ export default function BuildDetailPage() {
       {/* Tab 1: Build Checklist */}
       {activeTab === "build" && (
         <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 mb-6">
+          {build.creation_method === "gem_spotlight" && (
+            <section className="mb-5 rounded-lg border border-cyan-300/15 bg-cyan-300/[0.035] p-3">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h2 className="text-sm font-bold text-slate-100">Purchase plan</h2>
+                  <p className="mt-1 text-xs text-slate-500">Selected Gem listings, title matched eBay auctions and recorded sold evidence.</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => void markSelectedPurchased()}
+                  disabled={selectedPurchaseSlots.length === 0 || markingSelectedPurchased}
+                  className="inline-flex items-center gap-2 rounded-md bg-cyan-400 px-3 py-2 text-xs font-bold text-slate-950 hover:bg-cyan-300 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-slate-500"
+                >
+                  {markingSelectedPurchased ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCircle2 className="h-3.5 w-3.5" />}
+                  Mark selected purchased ({selectedPurchaseSlots.filter((slot) => !build.components.find((c) => c.slot === slot)?.purchased).length})
+                </button>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[760px] text-left text-xs">
+                  <thead className="text-[10px] uppercase tracking-wide text-slate-500">
+                    <tr><th className="py-2 pr-3">Component</th><th className="py-2 pr-3">Selected Gem listing</th><th className="py-2 pr-3">Title matched eBay auctions</th><th className="py-2">eBay sold median</th></tr>
+                  </thead>
+                  <tbody>
+                    {build.components.map((component) => {
+                      const evidence = purchasePlan?.components.find((row) => row.slot === component.slot);
+                      return (
+                        <tr key={component.slot} className="border-t border-white/[0.06] align-top">
+                          <td className="py-2.5 pr-3">
+                            <div className="flex items-center gap-2.5">
+                              {component.image_url ? <img src={component.image_url} alt="" className="h-10 w-10 rounded border border-white/10 bg-black/20 object-contain" /> : <div className="h-10 w-10 rounded border border-white/10 bg-black/20" />}
+                              <div><p className="font-semibold text-slate-200">{component.slot}</p><p className="max-w-52 truncate text-slate-500" title={component.name}>{component.name}</p></div>
+                            </div>
+                          </td>
+                          <td className="py-2.5 pr-3">
+                            <span className="font-bold text-slate-200">{formatCurrency(evidence?.listing_price ?? component.price_paid)}</span>
+                            {component.listing_url && <a href={component.listing_url} target="_blank" rel="noreferrer" className="ml-2 inline-flex items-center gap-1 text-cyan-300 hover:text-cyan-200">Open listing <ExternalLink className="h-3 w-3" /></a>}
+                          </td>
+                          <td className="py-2.5 pr-3">
+                            {!purchasePlan ? <span className="text-slate-600">Loading evidence…</span> : evidence?.auctions.length ? <div className="space-y-1.5">{evidence.auctions.map((auction) => <div key={auction.url} className="max-w-80"><a href={auction.url} target="_blank" rel="noreferrer" className="block truncate text-cyan-300 hover:text-cyan-200" title={auction.title}>{auction.title}</a><span className="text-slate-500">{auction.price != null ? formatCurrency(auction.price) : "Price unavailable"}{auction.ends_at ? ` · ends ${new Date(auction.ends_at).toLocaleString()}` : ""}</span></div>)}</div> : <span className="text-slate-600">No matching active auctions found</span>}
+                          </td>
+                          <td className="py-2.5">{evidence?.sold_median != null ? <><span className="font-bold text-slate-200">{formatCurrency(evidence.sold_median)}</span><span className="mt-0.5 block text-[10px] text-slate-500">{evidence.sold_sample_size} recorded sales</span></> : <span className="text-slate-600">No matched sold data</span>}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          )}
           <div className="flex items-center justify-between mb-3">
             <p className="text-sm font-semibold flex items-center gap-2">
               <ShoppingBag className="w-4 h-4 text-slate-500" /> Components purchased
@@ -963,6 +1105,16 @@ export default function BuildDetailPage() {
               return (
                 <div key={c.slot} className="rounded-lg border border-white/[0.05] bg-black/10 p-2.5 transition-colors hover:border-white/[0.1]">
                   <div className="flex items-center gap-3">
+                    {build.creation_method === "gem_spotlight" && !c.purchased && build.status === "in_progress" && (
+                      <input
+                        type="checkbox"
+                        aria-label={`Select ${c.name} for bulk purchase marking`}
+                        checked={selectedPurchaseSlots.includes(c.slot)}
+                        onChange={(event) => setSelectedPurchaseSlots((current) => event.target.checked ? [...new Set([...current, c.slot])] : current.filter((slot) => slot !== c.slot))}
+                        className="h-4 w-4 accent-cyan-400"
+                      />
+                    )}
+                    {c.image_url && <img src={c.image_url} alt="" className="h-10 w-10 shrink-0 rounded border border-white/10 bg-black/20 object-contain" />}
                     {savingSlot === c.slot ? <Loader2 className="h-4 w-4 shrink-0 animate-spin text-slate-500" />
                       : c.purchased ? <CheckCircle2 className="h-4 w-4 shrink-0 text-[#00dc82]" />
                       : <Circle className="h-4 w-4 shrink-0 text-slate-600" />}
@@ -970,7 +1122,7 @@ export default function BuildDetailPage() {
                     <span className="min-w-0 flex-1 truncate text-sm">{c.name}</span>
                     {c.inventory_item_id && <span className="rounded bg-[#00dc82]/10 px-2 py-1 text-[10px] font-semibold uppercase text-[#00dc82]">Inventory</span>}
                     <span className="text-sm font-semibold text-slate-400">{formatCurrency(c.price_paid)}</span>
-                    {build.status === "in_progress" && (
+                    {build.status === "in_progress" && build.creation_method !== "gem_spotlight" && (
                       <button
                         type="button"
                         onClick={() => void togglePurchased(c.slot)}
@@ -981,6 +1133,11 @@ export default function BuildDetailPage() {
                       </button>
                     )}
                   </div>
+                  {build.creation_method === "gem_spotlight" && !c.purchased && selectedPurchaseSlots.includes(c.slot) && (
+                    <label className="mt-2 block max-w-xs pl-7 text-[10px] uppercase tracking-wide text-slate-500">Actual amount paid (£)
+                      <input type="number" min="0.01" step="0.01" value={actualPurchasePrices[c.slot] ?? ""} onChange={(event) => setActualPurchasePrices((current) => ({ ...current, [c.slot]: event.target.value }))} placeholder={`Estimate ${formatCurrency(c.price_paid)}`} className="mt-1 w-full rounded border border-white/10 bg-[#080e18] px-2 py-1.5 text-xs normal-case text-slate-200" />
+                    </label>
+                  )}
                   <div className="mt-2 grid gap-2 border-t border-white/[0.05] pt-2 pl-7 sm:grid-cols-[150px_170px_1fr] sm:items-end">
                     <label className="text-[10px] uppercase tracking-wide text-slate-500">Condition
                       <select value={c.condition ?? "unknown"} onChange={event => void updateComponentEvidence(c.slot, { condition: event.target.value as ManualBuild["components"][number]["condition"] })} className="mt-1 w-full cursor-pointer rounded border border-white/10 bg-[#080e18] px-2 py-1.5 text-xs normal-case text-slate-200">

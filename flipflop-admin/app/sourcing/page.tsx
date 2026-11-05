@@ -93,6 +93,7 @@ interface Listing {
 interface GemData {
   title: string;
   price: number;
+  market_median_price?: number | null;
   seller?: string;
   condition: string;
   url: string;
@@ -1359,6 +1360,8 @@ function GemSpotlightCard({
   accent: keyof typeof GEM_SPOTLIGHT_ACCENTS;
 }) {
   const colors = GEM_SPOTLIGHT_ACCENTS[accent];
+  const median = gem.market_median_price;
+  const medianDifference = median != null && median > 0 ? gem.price - median : null;
   return (
     <a
       href={gem.url}
@@ -1390,6 +1393,13 @@ function GemSpotlightCard({
         <div className="text-sm text-white truncate group-hover:underline">{gem.title.substring(0, 40)}...</div>
         {gem.cpu && <div className="text-xs text-white/70 mt-0.5 truncate">⚡ {gem.cpu}</div>}
         <div className={`text-xl font-bold mt-1 ${colors.price}`}>£{gem.price.toFixed(2)}</div>
+        {medianDifference != null && median != null && (
+          <div className={`mt-0.5 text-[10px] font-medium ${medianDifference < 0 ? "text-rose-300" : "text-white/70"}`}>
+            {medianDifference === 0
+              ? "At market median"
+              : `£${Math.abs(medianDifference).toFixed(0)} · ${Math.abs((medianDifference / median) * 100).toFixed(1)}% ${medianDifference < 0 ? "below" : "above"} median`}
+          </div>
+        )}
       </div>
     </a>
   );
@@ -1399,10 +1409,10 @@ function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | 
   const componentLabels: Record<string, { label: string; emoji: string; accent: keyof typeof GEM_SPOTLIGHT_ACCENTS }> = {
     motherboard: { label: "Gem Motherboard", emoji: "🔧", accent: "emerald" },
     cpu: { label: "Gem CPU", emoji: "⚡", accent: "cyan" },
-    cooler: { label: "Gem CPU Cooler", emoji: "❄️", accent: "blue" },
-    ram: { label: "Gem Memory", emoji: "🧠", accent: "purple" },
     gpu: { label: "Gem GPU", emoji: "🎮", accent: "purple" },
+    ram: { label: "Gem Memory", emoji: "🧠", accent: "purple" },
     ssd: { label: "Gem Storage", emoji: "💾", accent: "blue" },
+    cooler: { label: "Gem CPU Cooler", emoji: "❄️", accent: "blue" },
     psu: { label: "Gem PSU", emoji: "🔌", accent: "amber" },
     case: { label: "Gem PC Case", emoji: "🖥️", accent: "orange" },
   };
