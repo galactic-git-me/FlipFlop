@@ -90,12 +90,14 @@ function GemCard({ gem, label, accent, details, onSelect }: { gem: GemData | nul
     <div className="absolute inset-x-0 bottom-0 min-w-0 border-t border-white/10 bg-black/35 p-2 backdrop-blur-sm">
       <p className="truncate text-xs font-medium text-white">{gem.title}</p>
       {gem.cpu && <p className="truncate text-[10px] text-white/70">{gem.cpu}</p>}
-      <p className={`mt-0.5 text-base font-bold ${colors.price}`}>£{gem.price.toFixed(2)}</p>
-      {medianDifference != null && gem.market_median_price != null && <p className={`truncate text-[10px] font-semibold ${medianDifference < 0 ? "text-red-300" : "text-white/70"}`}>
-        {medianDifference === 0
-          ? "At market median"
-          : `£${Math.abs(medianDifference).toFixed(0)} · ${Math.abs((medianDifference / gem.market_median_price) * 100).toFixed(1)}% ${medianDifference < 0 ? "below" : "above"} median`}
-      </p>}
+      <div className="mt-0.5 flex items-baseline gap-1.5 whitespace-nowrap">
+        <span className={`text-base font-bold ${colors.price}`}>£{gem.price.toFixed(2)}</span>
+        {medianDifference != null && gem.market_median_price != null && (
+          <span className="text-[10px] font-semibold text-red-300" title={`${Math.abs(medianDifference).toFixed(0)} pounds ${medianDifference > 0 ? "above" : "below"} market median`}>
+            {medianDifference > 0 ? "↑" : medianDifference < 0 ? "↓" : "↔"} £{Math.abs(medianDifference).toFixed(0)} · {Math.abs((medianDifference / gem.market_median_price) * 100).toFixed(0)}%
+          </span>
+        )}
+      </div>
       {details && <p className="truncate text-[9px] text-white/60">{details}</p>}
     </div>
   </button>;
