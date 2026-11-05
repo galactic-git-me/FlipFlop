@@ -29,7 +29,9 @@ log "Fetching origin/$BRANCH"
 # Remove only this branch's local tracking ref, then recreate it from origin.
 git update-ref -d "refs/remotes/origin/$BRANCH" 2>/dev/null || true
 git fetch --prune origin "$BRANCH:refs/remotes/origin/$BRANCH"
-git fetch --prune origin dev:refs/remotes/origin/dev
+# The preceding fetch prunes refs outside its explicit main-branch refspec,
+# including origin/dev. Refresh the attestation ref without pruning it away.
+git fetch origin dev:refs/remotes/origin/dev
 
 if [[ -z "$TARGET_SHA" ]]; then
   TARGET_SHA="$(git rev-parse "origin/$BRANCH")"
