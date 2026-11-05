@@ -1387,17 +1387,17 @@ function GemSpotlightCard({
         <span className={`text-[10px] uppercase tracking-wide font-semibold ${colors.label}`}>{label}</span>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 bg-black/35 backdrop-blur-md border-t border-white/10 p-4">
+      <div className="absolute inset-x-0 bottom-0 bg-black/35 backdrop-blur-md border-t border-white/10 p-2">
         <div className="text-sm text-white truncate group-hover:underline">{gem.title.substring(0, 40)}...</div>
         {gem.cpu && <div className="text-xs text-white/70 mt-0.5 truncate">⚡ {gem.cpu}</div>}
-        <div className={`text-xl font-bold mt-1 ${colors.price}`}>£{gem.price.toFixed(2)}</div>
-        {medianDifference != null && median != null && (
-          <div className={`mt-0.5 text-[10px] font-medium ${medianDifference < 0 ? "text-rose-300" : "text-white/70"}`}>
-            {medianDifference === 0
-              ? "At market median"
-              : `£${Math.abs(medianDifference).toFixed(0)} · ${Math.abs((medianDifference / median) * 100).toFixed(1)}% ${medianDifference < 0 ? "below" : "above"} median`}
-          </div>
-        )}
+        <div className="mt-1 flex items-baseline gap-1.5 whitespace-nowrap">
+          <span className={`text-xl font-bold ${colors.price}`}>£{gem.price.toFixed(2)}</span>
+          {medianDifference != null && median != null && (
+            <span className="text-[10px] font-medium text-red-300" title={`${Math.abs(medianDifference).toFixed(0)} pounds ${medianDifference > 0 ? "above" : "below"} market median`}>
+              {medianDifference > 0 ? "↑" : medianDifference < 0 ? "↓" : "↔"} £{Math.abs(medianDifference).toFixed(0)} · {Math.abs((medianDifference / median) * 100).toFixed(0)}%
+            </span>
+          )}
+        </div>
       </div>
     </a>
   );
