@@ -13,6 +13,10 @@
 #
 # Requires elevation (installing a service needs admin rights).
 $ErrorActionPreference = 'Stop'
+$coordinator = Get-Service -Name FlipFlopScanLock -ErrorAction SilentlyContinue
+if ($coordinator -and ($coordinator.Status -ne 'Stopped' -or $coordinator.StartType -ne 'Disabled')) {
+    throw 'Port 4311 now belongs to the full DEV API. First retire the old coordinator in an elevated PowerShell: Stop-Service FlipFlopScanLock; Set-Service FlipFlopScanLock -StartupType Disabled. Then rerun this installer. The DEV API provides the same scan-lock endpoints.'
+}
 $repo = Split-Path -Parent $PSScriptRoot
 $api = Join-Path $repo 'flipflop-api'
 $pythonExe = Join-Path $api '.venv\Scripts\python.exe'
