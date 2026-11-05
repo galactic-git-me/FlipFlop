@@ -77,3 +77,33 @@ class CaptureTests(IsolatedAsyncioTestCase):
         row=self.db.add.call_args.args[0].evidence_json['candidates'][0]
         self.assertEqual(row['kind'],'active');self.assertEqual(row['blockers'],[])
         with self.assertRaises(HTTPException):await extension.ingest(self.db,self.request(vendor='amazon'))
+
+
+class GenericSearchFeedTests(IsolatedAsyncioTestCase):
+    async def test_search_feed_uses_generic_hardware_queries(self):
+        db = AsyncMock()
+
+        result = await extension.search_feed(db)
+
+        self.assertEqual(result["count"], 15)
+        self.assertEqual(result["componentCount"], 0)
+        self.assertEqual(result["componentItems"], [])
+        self.assertTrue(all("tags" not in item and "playbookTarget" not in item for item in result["items"]))
+        db.execute.assert_not_awaited()
+
+    async def test_bestseller_tags_are_deduplicated_and_category_checked(self):
+        now = datetime(2026, 11, 5, 12, 0, 0)
+        rows = [
+            NS(cpk="cpu:ryzen-7800x", category="CPU", asin="b0001", title="AMD Ryzen 7 7800X Processor"),
+            NS(cpk="cpu:ryzen-7800x", category="cpu", asin="b0002", title="AMD Ryzen 7 7800X Processor"),
+            NS(cpk="cpu:ryzen-7800x", category="gpu", asin="b0003", title="USB gaming headset"),
+        ]
+        result = NS(scalars=Mock(return_value=NS(all=Mock(return_value=rows))))
+        db = NS(execute=AsyncMock(return_value=result))
+
+        tags = await extension.bestseller_tags_for_cpks(
+            db, ["cpu:ryzen-7800x", "cpu:ryzen-7800x", None], now=now
+        )
+
+        self.assertEqual(tags, {"cpu:ryzen-7800x": ["amazon-bestseller:cpu:B0001"]})
+        db.execute.assert_awaited_once()

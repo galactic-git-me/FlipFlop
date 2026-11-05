@@ -1,8 +1,11 @@
 import pytest
+from unittest.mock import AsyncMock
 from app.services.catalogue_service import (
+    auto_publish_gems,
     compute_display_price,
     determine_tier,
     infer_slot_type,
+    update_prices,
 )
 
 def test_display_price_rounds_up_to_five():
@@ -66,3 +69,36 @@ def test_all_bestseller_hardware_categories_reach_catalogue_slots():
 
 def test_windows_operating_system_category_reaches_os_slot():
     assert infer_slot_type('Microsoft Windows 11 Home FPP Retail USB','os')=='os'
+
+
+class _EmptyResult:
+    def scalars(self):
+        return self
+
+    def all(self):
+        return []
+
+    def __iter__(self):
+        return iter(())
+
+
+@pytest.mark.asyncio
+async def test_auto_publish_gems_excludes_listings_without_prices():
+    db = AsyncMock()
+    db.execute = AsyncMock(side_effect=[_EmptyResult(), _EmptyResult(), _EmptyResult()])
+
+    assert await auto_publish_gems(db) == 0
+
+    sql = str(db.execute.await_args_list[0].args[0])
+    assert "IS NOT NULL" in sql
+
+
+@pytest.mark.asyncio
+async def test_update_prices_excludes_listings_without_prices():
+    db = AsyncMock()
+    db.execute = AsyncMock(return_value=_EmptyResult())
+
+    assert await update_prices(db) == 0
+
+    sql = str(db.execute.await_args.args[0])
+    assert "IS NOT NULL" in sql

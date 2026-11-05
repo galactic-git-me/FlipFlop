@@ -88,7 +88,7 @@ const CONFIGURED_SEARCH_TERM_ORDER = [
 ];
 
 const METRICS: Array<{ value: MatrixMetric; label: string }> = [
-  { value: "listings", label: "Listings processed" },
+  { value: "listings", label: "Processed" },
   { value: "duration", label: "Duration" },
   { value: "completed", label: "Completed?" },
   { value: "vendors", label: "Number of vendors" },
