@@ -72,12 +72,14 @@ extraction.
 
 ## GPU-only inference
 
-Generation preloads the requested model without a prompt, requesting GPU offload
-with the same runner options, then checks `/api/ps`. CPU-only and partially
-offloaded models return HTTP 503 before the user prompt is forwarded. Read-only
-health/model endpoints remain available. Startup checks GPU placement rather than
-calling CPU warm-up a success. This policy concerns model inference: tokenization,
-HTTP handling and other host work still use the CPU.
+Before generation, the gateway checks `/api/ps` and skips loading when the
+requested model is already fully resident in VRAM. If it is absent or partially
+offloaded, the gateway uses a generic one-token warm-up with GPU offload
+requested, then checks `/api/ps` again. It never sends the user's prompt during
+this check. CPU-only and partially offloaded models return HTTP 503 before the
+user prompt is forwarded. Read-only health/model endpoints remain available.
+This policy concerns model inference: tokenization, HTTP handling and other host
+work still use the CPU.
 
 A smaller model does not fix failed GPU discovery. Inspect the timestamped
 `logs/ollama-*.err.log` files produced by the launcher. Restarting this shared

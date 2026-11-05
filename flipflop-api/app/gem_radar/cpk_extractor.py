@@ -118,6 +118,52 @@ def _slug(value: str) -> str:
     return re.sub(r"-+", "-", re.sub(r"[^a-z0-9]+", "-", value.lower())).strip("-")
 
 
+def _parse_extraction_output(output: str, selected) -> dict | None:
+    """Parse model JSON and record bounded diagnostics when its output is invalid."""
+    decoder = json.JSONDecoder()
+    parse_error: json.JSONDecodeError | None = None
+    try:
+        parsed = json.loads(output)
+        if isinstance(parsed, dict):
+            return parsed
+        parse_error = json.JSONDecodeError("expected a JSON object", output, 0)
+        _record_parse_failure(output, selected, parse_error)
+        return None
+    except json.JSONDecodeError as exc:
+        parse_error = exc
+
+    # Ollama's JSON mode normally returns a plain object, but tolerate a short
+    # prose prefix/suffix from models that ignore the format instruction.
+    for offset, char in enumerate(output):
+        if char != "{":
+            continue
+        try:
+            data, _ = decoder.raw_decode(output[offset:])
+            if isinstance(data, dict):
+                return data
+        except json.JSONDecodeError as exc:
+            if exc.pos + offset > parse_error.pos:
+                parse_error = json.JSONDecodeError(exc.msg, output, offset + exc.pos)
+
+    _record_parse_failure(output, selected, parse_error)
+    return None
+
+
+def _record_parse_failure(output: str, selected, parse_error: json.JSONDecodeError | None) -> None:
+    raw = getattr(selected, "raw", {}) or {}
+    usage = getattr(selected, "usage", {}) or {}
+    log.warning(
+        "cpk_extractor.json_parse_failed",
+        parse_error=parse_error.msg if parse_error else "no_json_object",
+        error_position=parse_error.pos if parse_error else None,
+        error_line=parse_error.lineno if parse_error else None,
+        error_column=parse_error.colno if parse_error else None,
+        output_chars=len(output),
+        completion_tokens=usage.get("completion_tokens") or raw.get("eval_count"),
+        done_reason=raw.get("done_reason"),
+    )
+
+
 def canonical_variant_model(category: str, model: str, title: str) -> str:
     """Add value-defining variants which a product-line name omits."""
     result = _slug(model)
@@ -286,15 +332,9 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
                 local_only=local_only, streaming=local_only,
             )
         output = selected.text.strip()
-        try:
-            data = json.loads(output)
-        except json.JSONDecodeError:
-            import re
-            match = re.search(r'\{.*\}', output, re.DOTALL)
-            if not match:
-                log.warning("cpk_extractor.json_parse_failed", output=output[:100])
-                return None
-            data = json.loads(match.group())
+        data = _parse_extraction_output(output, selected)
+        if data is None:
+            return None
 
         # Identity is upstream of every market cohort. Only high-confidence
         # model extractions may receive a canonical product key.
@@ -326,7 +366,7 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
             specs=data.get("specs", {}), confidence=data.get("confidence", 0), cpk=cpk,
         )
     except Exception as exc:
-        log.warning("cpk_extractor.exception", error=str(exc), title=_safe_title(title))
+        log.warning("cpk_extractor.exception", error_type=type(exc).__name__, error=str(exc), title=_safe_title(title))
         if raise_on_provider_error:
             raise
         return None
