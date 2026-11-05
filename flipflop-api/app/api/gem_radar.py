@@ -3365,6 +3365,8 @@ async def _submit_scan_body(
                         source_url=listing.url,
                         gtin=listing.gtin, mpn=listing.mpn,
                         model_number=listing.model_number, brand=listing.brand,
+                        epid=listing.epid,
+                        vendor_product_id=listing.vendor_product_id,
                     )
                     await task_db.commit()
                     return (listing.listing_id, cpk)

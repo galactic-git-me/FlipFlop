@@ -80,6 +80,8 @@ class GemRadarListingObservation(Base):
     # Stable across title variants, used as 3rd-priority matching key after GTIN/MPN.
     # Example: "100-10000108​4WOF" for AMD Ryzen 9 9800X3D.
     model_number: Mapped[str | None] = mapped_column(String(100), index=True, nullable=True)
+    # Exact merchant product/SKU ID, separate from a listing/offer ID.
+    vendor_product_id: Mapped[str | None] = mapped_column(String(255), index=True, nullable=True)
     # eBay Browse API item.seller.feedbackPercentage/feedbackScore — free on
     # every search response, carried through to gem_radar_scored_listings so
     # the dashboard can render it (see services/ebay_browse.py's EbayListing).

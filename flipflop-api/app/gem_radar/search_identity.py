@@ -145,6 +145,10 @@ def last_resort_title_key(title, category, identity=None):
         from app.services.benchmark_normaliser import normalise_cpu
         model = normalise_cpu(re.sub(r'\bryzensets\b','Ryzen',title,flags=re.I))
         return ('title_product','cpu',brand,model) if model else None
+    if category == 'gpu':
+        # Brand/chip/VRAM can still describe different board editions.
+        part = manufacturer_part(title)
+        return ('title_product','gpu',part['manufacturer'],part['mpn']) if part and part['status']=='identified' else None
     facts = variant_facts(title, category)
     if identity and identity.get('identity_claims'):
         for key,value in (identity.get('variant_facts') or {}).items():
