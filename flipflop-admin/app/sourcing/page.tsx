@@ -879,7 +879,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
     <div className="mb-6 p-4 rounded-lg glass-panel">
       <div className="space-y-4">
         <div className="flex items-center justify-between gap-4 flex-wrap">
-          <div className="w-72 shrink-0">
+          <div className="w-64 shrink-0">
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-semibold text-white">{hasActiveRun ? "Current Scan Run" : "Most Recent Scan Run"}</h3>
               {isRunning && (
@@ -896,12 +896,10 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                   ? `${latestRun.runBy} · Last updated ${new Date(latestRun.occurredAt).toLocaleString()}`
                   : "No completed scan run is available"}
             </p>
-            <div className="mt-2">
-              <QueueStatusBar queue={queueStatus} />
-            </div>
           </div>
           <div className="flex items-center gap-4">
-            <MiniStat label="Listings" value={displayedListingCount} color="#e2e8f0" />
+            <QueueStatusBar queue={queueStatus} />
+            <MiniStat label="Processed" value={displayedListingCount} color="#e2e8f0" />
             <MiniStat label="SUPER GEMs" value={displayedSuperGemCount} color="#fcd34d" />
             <MiniStat label="Avg Super Gem" value={displayedAvgSuperGemScore.toFixed(1)} color="#fcd34d" />
             <MiniStat label="GEMs" value={displayedGemCount} color="#93c5fd" />
@@ -2908,7 +2906,7 @@ const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
             tick={{ fill: "#94a3b8", fontSize: 12 }}
             allowDecimals={false}
             domain={[0, "dataMax"]}
-            label={{ value: metric === "processed" ? "Listings processed" : "New/changed observations", angle: -90, position: "insideLeft", fill: "#94a3b8" }}
+            label={{ value: metric === "processed" ? "Processed" : "New/changed observations", angle: -90, position: "insideLeft", fill: "#94a3b8" }}
           />
           <Tooltip
             contentStyle={{ background: "#0f172a", border: "1px solid #334155", borderRadius: 6 }}
