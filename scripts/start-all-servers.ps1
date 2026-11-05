@@ -153,7 +153,22 @@ function Stop-DevelopmentProcesses([int[]]$Ports) {
 }
 
 function Test-ListeningPort([int]$Port) {
-    return [bool](Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue)
+    # Get-NetTCPConnection can briefly miss active listeners during rapid
+    # Next.js reloads. Confirm readiness by opening a short loopback TCP socket.
+    $client = [System.Net.Sockets.TcpClient]::new()
+    $waitHandle = $null
+    try {
+        $connect = $client.BeginConnect([System.Net.IPAddress]::Loopback, $Port, $null, $null)
+        $waitHandle = $connect.AsyncWaitHandle
+        if (-not $waitHandle.WaitOne(500)) { return $false }
+        $client.EndConnect($connect)
+        return $client.Connected
+    } catch {
+        return $false
+    } finally {
+        if ($waitHandle) { $waitHandle.Dispose() }
+        $client.Dispose()
+    }
 }
 
 function Get-OllamaServiceFailures {
