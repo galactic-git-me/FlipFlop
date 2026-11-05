@@ -12,5 +12,9 @@
         "editor.selectionBackground": "#FF2D9A28",
         "editorBracketHighlight.foreground1": "#FF2D9A",
         "editorBracketHighlight.foreground2": "#FF6EC7"
-    }
+    },
+    "gradify.gradient": [
+        "#43cea2",
+        "#185a9d"
+    ]
 }
