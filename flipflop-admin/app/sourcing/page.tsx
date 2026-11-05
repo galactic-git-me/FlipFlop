@@ -2733,67 +2733,25 @@ interface ScanRunHistory {
 
 type ScanChartMetric = "processed" | "observations";
 
-const SCAN_SESSION_GAP_MS = 10 * 60 * 1000;
-const FALLBACK_VENDOR_COLORS = ["#06b6d4", "#84cc16", "#ec4899", "#a855f7"];
-
-function groupScanHistoryIntoSessions(runs: ScanRunHistory[]) {
-  const validRuns = runs
-    .map((run) => ({ ...run, timestamp: new Date(run.occurredAt).getTime() }))
-    .filter((run) => Number.isFinite(run.timestamp))
-    .sort((a, b) => a.timestamp - b.timestamp);
-  const sessions: typeof validRuns[] = [];
-
-  for (const run of validRuns) {
-    const current = sessions.at(-1);
-    const previous = current?.at(-1);
-    if (!current || !previous || run.timestamp - previous.timestamp > SCAN_SESSION_GAP_MS) {
-      sessions.push([run]);
-    } else {
-      current.push(run);
-    }
-  }
-
-  return sessions.map((session, sessionIndex) => {
-    const startedAt = session[0].timestamp;
-    const vendorTotals: Record<string, number> = {};
-
-    for (const run of session) {
-      const vendors = run.vendors.length > 0 ? run.vendors : ["unknown"];
-      // Current history records contain one vendor. If an older record
-      // combines vendors, divide its collective result without inflating the
-      // session total.
-      const baseShare = Math.floor(run.totalListingsFound / vendors.length);
-      let remainder = run.totalListingsFound % vendors.length;
-      for (const vendor of vendors) {
-        vendorTotals[vendor] = (vendorTotals[vendor] ?? 0) + baseShare + (remainder-- > 0 ? 1 : 0);
-      }
-    }
-
-    return {
-      sessionId: sessionIndex,
-      occurredAtLabel: new Date(startedAt).toLocaleString(undefined, {
-        day: "numeric",
-        month: "short",
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      runBy: session.every((run) => run.runBy === session[0].runBy) ? session[0].runBy : "Mixed",
-      searchCount: session.length,
-      totalListings: session.reduce((total, run) => total + run.totalListingsFound, 0),
-      ...vendorTotals,
-    };
-  });
+interface ScanChartSession {
+  occurredAt: string;
+  runBy: string;
+  searchCount: number;
+  totalListings: number;
+  vendorTotals: Record<string, number>;
 }
+
+const FALLBACK_VENDOR_COLORS = ["#06b6d4", "#84cc16", "#ec4899", "#a855f7"];
 
 const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
   const [metric, setMetric] = useState<ScanChartMetric>("processed");
-  const [runs, setRuns] = useState<ScanRunHistory[]>([]);
+  const [runs, setRuns] = useState<ScanChartSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    fetch(`/api/gem-radar/scan-run-history?limit=10000&basis=${metric}`, {
+    fetch(`/api/gem-radar/scan-run-history-chart?basis=${metric}`, {
       cache: "no-store",
       signal: AbortSignal.timeout(15_000),
     })
@@ -2801,7 +2759,7 @@ const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
         if (!res.ok) throw new Error(`Scan history request failed (${res.status})`);
         return res.json();
       })
-      .then((data: ScanRunHistory[]) => {
+      .then((data: ScanChartSession[]) => {
         if (!cancelled) setRuns(data);
       })
       .catch((requestError: unknown) => {
@@ -2817,9 +2775,15 @@ const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
     };
   }, [metric]);
 
-  const chartData = useMemo(() => groupScanHistoryIntoSessions(runs), [runs]);
+  const chartData = useMemo(() => runs.map((run) => ({
+    ...run,
+    ...run.vendorTotals,
+    occurredAtLabel: new Date(run.occurredAt).toLocaleString(undefined, {
+      day: "numeric", month: "short", hour: "2-digit", minute: "2-digit",
+    }),
+  })), [runs]);
   const vendorKeys = useMemo(() => {
-    const presentVendors = new Set(runs.flatMap((run) => (run.vendors.length > 0 ? run.vendors : ["unknown"])));
+    const presentVendors = new Set(runs.flatMap((run) => Object.keys(run.vendorTotals)));
     return [
       ...VENDOR_ORDER.filter((vendor) => presentVendors.has(vendor)),
       ...[...presentVendors].filter((vendor) => !VENDOR_ORDER.includes(vendor as (typeof VENDOR_ORDER)[number])).sort(),

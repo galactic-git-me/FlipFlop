@@ -2836,6 +2836,50 @@ async def record_scan_run_history(
     return ScanRunHistoryOut.model_validate(row, from_attributes=True)
 
 
+@router.get("/scan-run-history-chart")
+async def scan_run_history_chart(
+    basis: Literal["processed", "observations"] = Query("processed"),
+    db: AsyncSession = Depends(get_db),
+    _: None = Depends(require_operator),
+) -> list[dict]:
+    """Aggregate every stored run into chart sessions, without a record limit."""
+    if basis == "processed":
+        statement = text("""
+            SELECT occurred_at, total_listings_found, vendors, run_by
+            FROM gem_radar_scan_runs ORDER BY occurred_at, id
+        """)
+    else:
+        statement = text("""
+            SELECT MAX(observed_at) AS occurred_at, COUNT(*) AS total_listings_found,
+                   ARRAY_REMOVE(ARRAY_AGG(DISTINCT source), NULL) AS vendors,
+                   'Unknown (historical)' AS run_by
+            FROM gem_radar_listing_observations
+            WHERE search_run_id IS NOT NULL AND search_query IS NOT NULL
+            GROUP BY search_run_id ORDER BY MAX(observed_at), search_run_id
+        """)
+    sessions = []
+    previous_at = None
+    for row in (await db.execute(statement)).mappings():
+        occurred_at = row["occurred_at"]
+        if previous_at is None or occurred_at - previous_at > timedelta(minutes=10):
+            sessions.append({"occurredAt": occurred_at.isoformat(),
+                "runBy": row["run_by"], "searchCount": 0,
+                "totalListings": 0, "vendorTotals": {}})
+        session = sessions[-1]
+        if session["runBy"] != row["run_by"]:
+            session["runBy"] = "Mixed"
+        count = int(row["total_listings_found"] or 0)
+        session["searchCount"] += 1
+        session["totalListings"] += count
+        vendors = row["vendors"] or ["unknown"]
+        share, remainder = divmod(count, len(vendors))
+        for index, vendor in enumerate(vendors):
+            totals = session["vendorTotals"]
+            totals[vendor] = totals.get(vendor, 0) + share + int(index < remainder)
+        previous_at = occurred_at
+    return sessions
+
+
 @router.get("/scan-run-history", response_model=list[ScanRunHistoryOut])
 async def list_scan_run_history(
     limit: int = Query(50, ge=1, le=10000),

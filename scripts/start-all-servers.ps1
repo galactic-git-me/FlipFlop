@@ -107,6 +107,7 @@ function Stop-DevelopmentProcesses([int[]]$Ports) {
     }
     # Killing only the listening reloader worker leaves its supervisor alive.
     # Its launcher command includes this checkout's per-run log path.
+    if ($Ports -contains 4311) {
     Get-CimInstance Win32_Process -Filter "Name='python.exe'" -ErrorAction SilentlyContinue |
         Where-Object { $_.CommandLine -match 'run_dev\.py' -and $_.CommandLine -match '--port\s+4311' } |
         ForEach-Object {
@@ -115,6 +116,7 @@ function Stop-DevelopmentProcesses([int[]]$Ports) {
                 Stop-FlipFlopProcessTree -ProcessId $parent.ProcessId
             }
         }
+    }
 }
 
 function Test-ListeningPort([int]$Port) {
