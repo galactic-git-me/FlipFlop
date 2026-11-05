@@ -2222,6 +2222,7 @@ async def _fetch_best_gem_for_category(
     require_modern: bool = False,
     actionable_ids: set[str] | None = None,
     require_image: bool = False,
+    require_current_gen_ram: bool = True,
 ) -> dict | None:
     """Best gem for a specific component category, sorted by deal_score.
     If no qualifying GEM/SUPER_GEM exists, falls back to the highest-scoring listing."""
@@ -2269,6 +2270,11 @@ async def _fetch_best_gem_for_category(
             # Priority 1: Blocking filters (reject immediately)
             if not _has_valid_category(candidate.category):  # Malformed or unknown
                 continue
+            resolved_category = identity_mod.resolve_identity(
+                candidate.title, delivered_price=candidate.delivered_price
+            ).category
+            if resolved_category and resolved_category != category:
+                continue
             if _is_server_hardware(candidate.title, candidate.category):  # Server/professional
                 continue
             if _is_complete_system(candidate.title):  # Prebuilt systems
@@ -2301,7 +2307,7 @@ async def _fetch_best_gem_for_category(
                 continue
             if not _is_desktop_appropriate(candidate.title, candidate.category):
                 continue
-            if candidate.category == "ram" and not _is_current_gen_ram(candidate.title):
+            if candidate.category == "ram" and require_current_gen_ram and not _is_current_gen_ram(candidate.title):
                 continue
             if candidate.category != "ram" and not _is_current_gen(candidate.title, candidate.category):
                 continue
@@ -2382,6 +2388,11 @@ async def _gem_spotlight_candidates(db: AsyncSession, category: str, actionable_
     candidates = []
     for row in candidate_rows.values():
         if not media_urls([row.image_url, *(row.image_urls or [])]):
+            continue
+        resolved_category = identity_mod.resolve_identity(
+            row.title, delivered_price=row.delivered_price
+        ).category
+        if resolved_category and resolved_category != category:
             continue
         if (not _has_valid_category(category) or _is_server_hardware(row.title, category)
                 or _is_complete_system(row.title) or _is_bundled_components(row.title)
@@ -2526,6 +2537,15 @@ async def get_gem_by_component(
     for category in categories:
         gems[category] = await _fetch_best_gem_for_category(db, category, datetime.min,
             require_modern=True, actionable_ids=actionable_ids, require_image=True)
+        # Prefer DDR5 for the current-build spotlight, but keep the standalone
+        # Memory card populated with a correctly identified desktop DDR4 Gem
+        # when no image-ready DDR5 candidate passes the quality filters.
+        if category == "ram" and gems[category] is None:
+            gems[category] = await _fetch_best_gem_for_category(
+                db, category, datetime.min, require_modern=True,
+                actionable_ids=actionable_ids, require_image=True,
+                require_current_gen_ram=False,
+            )
     return gems
 
 
@@ -2830,7 +2850,7 @@ async def record_scan_run_history(
 
 @router.get("/scan-run-history", response_model=list[ScanRunHistoryOut])
 async def list_scan_run_history(
-    limit: int = Query(50, ge=1, le=10000),
+    limit: int = Query(50, ge=1, le=100000),
     basis: Literal["combined", "processed", "observations"] = Query("combined"),
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),

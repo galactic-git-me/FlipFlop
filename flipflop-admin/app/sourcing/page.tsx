@@ -2793,7 +2793,7 @@ const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch(`/api/gem-radar/scan-run-history?limit=10000&basis=${metric}`, {
+    fetch(`/api/gem-radar/scan-run-history?limit=100000&basis=${metric}`, {
       cache: "no-store",
       signal: AbortSignal.timeout(15_000),
     })
@@ -3319,6 +3319,17 @@ function SourcingPageInner() {
             className="grid h-[50px] w-[50px] cursor-pointer place-items-center rounded-2xl border border-white/10 bg-white/[0.06] text-slate-300 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-colors duration-200 hover:border-blue-400/40 hover:bg-blue-500/15 hover:text-blue-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
           >
             <History className="h-5 w-5" />
+          </Link>
+
+          <Link
+            href="/gem-based-pre-builds"
+            aria-label="Create pre-builds from Gems"
+            title="Create pre-builds from Gems"
+            className="inline-flex h-[50px] items-center gap-2 rounded-2xl border border-emerald-400/25 bg-emerald-500/10 px-4 text-sm font-semibold text-emerald-200 shadow-[0_8px_32px_rgba(0,0,0,0.25)] transition-colors hover:border-emerald-300/50 hover:bg-emerald-500/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+          >
+            <Gem className="h-4 w-4" />
+            <span className="hidden sm:inline">Create pre-builds from Gems</span>
+            <span className="sm:hidden">Pre-builds</span>
           </Link>
 
           <button

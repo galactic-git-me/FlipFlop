@@ -220,7 +220,7 @@ function MatrixValue({ result, metric, maxValue }: { result?: TermResult; metric
 }
 
 async function fetchRunHistory(): Promise<ScanRunHistoryRecord[]> {
-  const response = await fetch("/api/gem-radar/scan-run-history?limit=10000", {
+  const response = await fetch("/api/gem-radar/scan-run-history?limit=100000", {
     cache: "no-store",
     signal: AbortSignal.timeout(15_000),
   });
