@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-06T02:47:00.349241+00:00",
+  "generated_at": "2026-11-06T03:47:52.871024+00:00",
   "builds": [
     {
       "components": [
@@ -32,18 +32,18 @@
           "url": "https://www.bargainhardware.co.uk/hp-860651-b21-proliant-dl360-gen10-intel-xeon-bronze-3106-cpu-2-kit"
         },
         {
-          "id": 84488951,
-          "listing_id": "COO-CRS-08300",
+          "id": 84488950,
+          "listing_id": "COO-CRS-08299",
           "category": "gpu",
-          "title": "CORSAIR iCUE LINK RX120 II RGB White 120mm PWM Fan",
+          "title": "CORSAIR iCUE LINK RX120 II RGB 120mm PWM Fan",
           "seller": null,
-          "image_url": "https://www.overclockers.co.uk/dw/image/v2/BLRM_PRD/on/demandware.static/-/Sites-master-catalog-ocuk/default/dwc86f5284/images/data/product/85/d2ab5a/0527baac0e28e6cc99d2fcf27557c96981186379.jpg?sw=200",
+          "image_url": "https://www.overclockers.co.uk/dw/image/v2/BLRM_PRD/on/demandware.static/-/Sites-master-catalog-ocuk/default/dw61e1f7d5/images/data/product/62/9aca82/90f7e71e990b26c57ca0e3ebd99f37fdde5d0152.jpg?sw=200",
           "delivered_price": 24.95,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -24.95,
-          "url": "https://www.overclockers.co.uk/corsair-icue-link-rx120-ii-rgb-white-120mm-pwm-fan/COO-CRS-08300.html"
+          "url": "https://www.overclockers.co.uk/corsair-icue-link-rx120-ii-rgb-120mm-pwm-fan/COO-CRS-08299.html"
         },
         {
           "id": 84443649,
@@ -132,12 +132,12 @@
           "count": 49,
           "min_price": 72.49,
           "max_price": 1652.25,
-          "average_price": 389.24
+          "average_price": 398.35
         }
       },
-      "resale_estimate": 389.24,
+      "resale_estimate": 398.35,
       "resale_source": "bin_average",
-      "estimated_profit": 267.83,
+      "estimated_profit": 276.94,
       "rank": 1
     },
     {
@@ -271,12 +271,12 @@
           "count": 49,
           "min_price": 72.49,
           "max_price": 1652.25,
-          "average_price": 389.24
+          "average_price": 388.15
         }
       },
-      "resale_estimate": 389.24,
+      "resale_estimate": 388.15,
       "resale_source": "bin_average",
-      "estimated_profit": 267.8,
+      "estimated_profit": 266.71,
       "rank": 2
     },
     {
@@ -310,18 +310,18 @@
           "url": "https://www.bargainhardware.co.uk/hp-860651-b21-proliant-dl360-gen10-intel-xeon-bronze-3106-cpu-2-kit"
         },
         {
-          "id": 84488950,
-          "listing_id": "COO-CRS-08299",
+          "id": 84488951,
+          "listing_id": "COO-CRS-08300",
           "category": "gpu",
-          "title": "CORSAIR iCUE LINK RX120 II RGB 120mm PWM Fan",
+          "title": "CORSAIR iCUE LINK RX120 II RGB White 120mm PWM Fan",
           "seller": null,
-          "image_url": "https://www.overclockers.co.uk/dw/image/v2/BLRM_PRD/on/demandware.static/-/Sites-master-catalog-ocuk/default/dw61e1f7d5/images/data/product/62/9aca82/90f7e71e990b26c57ca0e3ebd99f37fdde5d0152.jpg?sw=200",
+          "image_url": "https://www.overclockers.co.uk/dw/image/v2/BLRM_PRD/on/demandware.static/-/Sites-master-catalog-ocuk/default/dwc86f5284/images/data/product/85/d2ab5a/0527baac0e28e6cc99d2fcf27557c96981186379.jpg?sw=200",
           "delivered_price": 24.95,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -24.95,
-          "url": "https://www.overclockers.co.uk/corsair-icue-link-rx120-ii-rgb-120mm-pwm-fan/COO-CRS-08299.html"
+          "url": "https://www.overclockers.co.uk/corsair-icue-link-rx120-ii-rgb-white-120mm-pwm-fan/COO-CRS-08300.html"
         },
         {
           "id": 84443649,
@@ -410,12 +410,12 @@
           "count": 49,
           "min_price": 72.49,
           "max_price": 1652.25,
-          "average_price": 381.1
+          "average_price": 386.67
         }
       },
-      "resale_estimate": 381.1,
+      "resale_estimate": 386.67,
       "resale_source": "bin_average",
-      "estimated_profit": 259.69,
+      "estimated_profit": 265.26,
       "rank": 3
     },
     {
