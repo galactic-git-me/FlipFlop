@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-06T04:46:58.259712+00:00",
+  "generated_at": "2026-11-06T05:47:47.439599+00:00",
   "builds": [
     {
       "components": [
@@ -132,12 +132,12 @@
           "count": 49,
           "min_price": 72.49,
           "max_price": 1652.25,
-          "average_price": 397.55
+          "average_price": 395.6
         }
       },
-      "resale_estimate": 397.55,
+      "resale_estimate": 395.6,
       "resale_source": "bin_average",
-      "estimated_profit": 276.11,
+      "estimated_profit": 274.16,
       "rank": 1
     },
     {
@@ -271,12 +271,12 @@
           "count": 49,
           "min_price": 72.49,
           "max_price": 1652.25,
-          "average_price": 384.77
+          "average_price": 385.47
         }
       },
-      "resale_estimate": 384.77,
+      "resale_estimate": 385.47,
       "resale_source": "bin_average",
-      "estimated_profit": 263.36,
+      "estimated_profit": 264.06,
       "rank": 2
     },
     {
@@ -410,12 +410,12 @@
           "count": 49,
           "min_price": 72.49,
           "max_price": 1652.25,
-          "average_price": 383.53
+          "average_price": 385.47
         }
       },
-      "resale_estimate": 383.53,
+      "resale_estimate": 385.47,
       "resale_source": "bin_average",
-      "estimated_profit": 262.12,
+      "estimated_profit": 264.06,
       "rank": 3
     },
     {
