@@ -90,12 +90,14 @@ function GemCard({ gem, label, accent, details, onSelect }: { gem: GemData | nul
     <div className="absolute inset-x-0 bottom-0 min-w-0 border-t border-white/10 bg-black/35 p-2 backdrop-blur-sm">
       <p className="truncate text-xs font-medium text-white">{gem.title}</p>
       {gem.cpu && <p className="truncate text-[10px] text-white/70">{gem.cpu}</p>}
-      <p className={`mt-0.5 text-base font-bold ${colors.price}`}>£{gem.price.toFixed(2)}</p>
-      {medianDifference != null && gem.market_median_price != null && <p className={`truncate text-[10px] font-semibold ${medianDifference < 0 ? "text-red-300" : "text-white/70"}`}>
-        {medianDifference === 0
-          ? "At market median"
-          : `£${Math.abs(medianDifference).toFixed(0)} · ${Math.abs((medianDifference / gem.market_median_price) * 100).toFixed(1)}% ${medianDifference < 0 ? "below" : "above"} median`}
-      </p>}
+      <div className="mt-0.5 flex items-baseline gap-1.5 whitespace-nowrap">
+        <span className={`text-base font-bold ${colors.price}`}>£{gem.price.toFixed(2)}</span>
+        {medianDifference != null && gem.market_median_price != null && (
+          <span className="text-[10px] font-semibold text-red-300" title={`${Math.abs(medianDifference).toFixed(0)} pounds ${medianDifference > 0 ? "above" : "below"} market median`}>
+            {medianDifference > 0 ? "↑" : medianDifference < 0 ? "↓" : "↔"} £{Math.abs(medianDifference).toFixed(0)} · {Math.abs((medianDifference / gem.market_median_price) * 100).toFixed(0)}%
+          </span>
+        )}
+      </div>
       {details && <p className="truncate text-[9px] text-white/60">{details}</p>}
     </div>
   </button>;
@@ -183,7 +185,7 @@ export default function GemBasedPrebuilds() {
     {!loading && loadError && <div role="alert" className="rounded-xl border border-red-500/30 bg-red-950/30 p-4 text-sm text-red-200">{loadError}</div>}
     {draftError && <div role="alert" className="rounded-xl border border-red-500/30 bg-red-950/30 p-4 text-sm text-red-200">{draftError}</div>}
 
-    <section aria-label="Top Gems from the Best Gem Build" className="grid w-full min-w-0 grid-cols-8 gap-2">
+    <section aria-label="Top Gems from the Best Gem Build" className="grid w-full min-w-0 grid-cols-[repeat(8,minmax(200px,1fr))] gap-2 overflow-x-auto pb-1">
       {componentOrder.map(category => <GemCard key={category} gem={data?.builds?.best?.gems?.[category] ?? null}
         label={componentLabels[category]} accent={category === "motherboard" || category === "ram" ? "emerald" : category === "cpu" ? "cyan" : category === "gpu" ? "purple" : category === "ssd" ? "blue" : "orange"} onSelect={setSelectedGem} />)}
     </section>
@@ -223,7 +225,7 @@ export default function GemBasedPrebuilds() {
           {key === "highest_end" && <p className="text-[11px] leading-4 text-slate-400 sm:col-span-3">Average matched CPU/GPU benchmark percentile: {concept.metrics.performance_percentile == null ? "unavailable" : `${concept.metrics.performance_percentile}th`}.</p>}
         </div>
 
-        <div className="grid w-full min-w-0 grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-8">{selected.map(({ category, gem }) => {
+        <div className="grid w-full min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,200px),1fr))] gap-2">{selected.map(({ category, gem }) => {
           const meta = componentLabels[category];
           const details = gem
             ? `Market: ${gem.market_reference == null ? "unknown" : money(gem.market_reference)} · Profit: ${gem.expected_profit == null ? "unknown" : money(gem.expected_profit)}`
