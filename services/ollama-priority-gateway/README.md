@@ -61,12 +61,13 @@ The stream owner closes the upstream with a bounded timeout and releases its
 generation slot exactly once, including a disconnect before the first
 response-body iteration. Health reports waiting queue depth/limit, active
 generations, worker states, completed requests, and seconds since the last
-dequeue or streamed chunk; a read-only health 200 alone does not establish
+streamed chunk or completed response; queue pickup alone is not progress. A
+read-only health 200 alone does not establish
 that generation is working.
 
 The Windows gateway launcher supervises a child gateway process without
 supervising or restarting Ollama. If the queue stays at its limit for ten
-minutes and no request is dequeued or emits a streamed chunk for that whole
+minutes and no request emits a streamed chunk or completes for that whole
 period, the child writes a critical log and exits; the parent restarts the
 gateway after a short backoff. Active inference streams are interrupted by
 that recovery, so the threshold is intentionally much longer than the normal

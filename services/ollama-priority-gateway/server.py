@@ -299,7 +299,6 @@ class PriorityForwarder:
     async def _worker(self) -> None:
         while True:
             _, _, request = await self._queue.get()
-            self.record_progress()
             slot_acquired = False
             slot_transferred_to_stream = False
             upstream = None

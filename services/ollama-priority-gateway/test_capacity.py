@@ -86,6 +86,24 @@ class GatewayCapacity(unittest.IsolatedAsyncioTestCase):
    forwarder.record_progress()
    self.assertFalse(forwarder.should_restart_stalled_queue(now=time.monotonic()))
 
+ async def test_worker_pickup_without_output_does_not_count_as_progress(self):
+  forwarder=server.PriorityForwarder();await forwarder.start()
+  await forwarder._client.aclose()
+  forwarder._client=httpx.AsyncClient(transport=httpx.MockTransport(lambda req:httpx.Response(200,content=b'reply')))
+  forwarder.gpu_request_body=AsyncMock(side_effect=lambda body:body)
+  request=server.QueuedRequest(1,1,'POST','/api/chat','',b'{}',{},asyncio.get_running_loop().create_future())
+  await forwarder._queue.put((1,1,request))
+  last_progress=forwarder._last_progress_at
+  worker=asyncio.create_task(forwarder._worker())
+  try:
+   _,_,body=await asyncio.wait_for(request.result,1)
+   self.assertEqual(forwarder._last_progress_at,last_progress)
+   await body.aclose()
+   self.assertGreater(forwarder._last_progress_at,last_progress)
+  finally:
+   worker.cancel();await asyncio.gather(worker,return_exceptions=True)
+   await forwarder.stop()
+
  async def test_not_full_queue_never_triggers_restart(self):
   forwarder=server.PriorityForwarder()
   with patch.object(server,'MAX_QUEUE',1):
