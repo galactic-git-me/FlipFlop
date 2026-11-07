@@ -168,6 +168,13 @@ function Get-OllamaServiceFailures {
     return $failures
 }
 
+function Get-PriorityGatewayInstanceCount([object[]]$Processes) {
+    # The supervisor and gateway child share the same command line; count the
+    # root process once, along with any additional independent gateway roots.
+    $gatewayIds = @($Processes | ForEach-Object { $_.ProcessId })
+    return @($Processes | Where-Object { $_.ParentProcessId -notin $gatewayIds }).Count
+}
+
 function Ensure-OllamaPriorityGateway {
     if ($NoOllamaGateway) {
         Write-Host '[SKIP] Ollama priority gateway check disabled.' -ForegroundColor Yellow
@@ -178,10 +185,11 @@ function Ensure-OllamaPriorityGateway {
     $gatewayProcesses = @(Get-CimInstance Win32_Process -ErrorAction SilentlyContinue | Where-Object {
         $_.CommandLine -match '(?i)ollama-priority-gateway[\\/]server\.py'
     })
-    $duplicateOrMissingGateway = $gatewayProcesses.Count -ne 1
+    $gatewayInstances = Get-PriorityGatewayInstanceCount $gatewayProcesses
+    $duplicateOrMissingGateway = $gatewayInstances -ne 1
     $needsRestart = $failures.Count -gt 0 -or $duplicateOrMissingGateway
     if ($needsRestart) {
-        $reason = if ($duplicateOrMissingGateway) { "gateway process count: $($gatewayProcesses.Count)" } else { "unhealthy services: $($failures -join ', ')" }
+        $reason = if ($duplicateOrMissingGateway) { "gateway service instances: $gatewayInstances" } else { "unhealthy services: $($failures -join ', ')" }
         Write-Host "[*] Starting/reconfiguring Ollama for four concurrent requests ($reason)..." -ForegroundColor Cyan
         & (Join-Path $projectRoot 'services\ollama-priority-gateway\start-prometheus-services.ps1') -ForceRestart
     }
