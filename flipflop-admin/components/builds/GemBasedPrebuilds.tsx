@@ -160,9 +160,10 @@ export default function GemBasedPrebuilds() {
   }, []);
 
   useEffect(() => {
-    if (!data || Object.keys(compatibilityReviews).length > 0 || compatibilityLoading) return;
+    if (!data) return;
     let active = true;
     setCompatibilityLoading(true);
+    setCompatibilityReviews({});
     void fetch("/proxy-api/gem-radar/gem-build-concepts/compatibility", {
       method: "POST", cache: "no-store", signal: AbortSignal.timeout(300_000),
     }).then(async response => {
@@ -174,7 +175,7 @@ export default function GemBasedPrebuilds() {
       }]))); })
       .finally(() => { if (active) setCompatibilityLoading(false); });
     return () => { active = false; };
-  }, [data, compatibilityReviews, compatibilityLoading]);
+  }, [data]);
 
   const money = (value: number) => new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format(value);
 
