@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, ExternalLink, Loader2, Save, X } from "lucide-react";
 import { api } from "@/lib/api";
@@ -33,6 +34,12 @@ type GemBuildConceptKey = "best" | "cheapest" | "highest_end" | "most_profitable
 interface GemBuildConcept {
   title: string;
   gems: Record<string, GemData | null>;
+  compatibility_review?: {
+    status?: string;
+    summary?: string;
+    model?: string | null;
+    checks?: { pair: string; verdict: string; explanation?: string; evidence?: string[] }[];
+  };
   metrics: {
     parts_total?: number;
     component_profit_signal?: number;
@@ -111,6 +118,8 @@ export default function GemBasedPrebuilds() {
   const [saving, setSaving] = useState<GemBuildConceptKey | null>(null);
   const [draftError, setDraftError] = useState("");
   const [selectedGem, setSelectedGem] = useState<GemData | null>(null);
+  const [compatibilityReviews, setCompatibilityReviews] = useState<Partial<Record<GemBuildConceptKey, NonNullable<GemBuildConcept["compatibility_review"]>>>>({});
+  const [compatibilityLoading, setCompatibilityLoading] = useState(false);
 
   useEffect(() => {
     if (!selectedGem) return;
@@ -129,7 +138,7 @@ export default function GemBasedPrebuilds() {
         let failure: Error | null = null;
         for (let attempt = 0; attempt < 2 && !result; attempt += 1) {
           try {
-            const response = await fetch("/proxy-api/gem-radar/gem-build-concepts", { cache: "no-store", signal: AbortSignal.timeout(240_000) });
+            const response = await fetch("/proxy-api/gem-radar/gem-build-concepts", { cache: "no-store", signal: AbortSignal.timeout(60_000) });
             if (!response.ok) throw new Error(`Gem build selection returned ${response.status}.`);
             result = await response.json() as GemSpotlightData;
           } catch (error) {
@@ -149,6 +158,23 @@ export default function GemBasedPrebuilds() {
     const interval = setInterval(load, 5 * 60_000);
     return () => { active = false; clearInterval(interval); };
   }, []);
+
+  useEffect(() => {
+    if (!data || Object.keys(compatibilityReviews).length > 0 || compatibilityLoading) return;
+    let active = true;
+    setCompatibilityLoading(true);
+    void fetch("/proxy-api/gem-radar/gem-build-concepts/compatibility", {
+      method: "POST", cache: "no-store", signal: AbortSignal.timeout(300_000),
+    }).then(async response => {
+      if (!response.ok) throw new Error(`Compatibility review returned ${response.status}.`);
+      return response.json() as Promise<{ reviews?: Partial<Record<GemBuildConceptKey, NonNullable<GemBuildConcept["compatibility_review"]>>> }>;
+    }).then(result => { if (active) setCompatibilityReviews(result.reviews ?? {}); })
+      .catch(() => { if (active) setCompatibilityReviews(Object.fromEntries(concepts.map(({ key }) => [key, {
+        status: "review_unavailable", summary: "The local LLM review could not be completed. Please retry by refreshing the page.", checks: [],
+      }]))); })
+      .finally(() => { if (active) setCompatibilityLoading(false); });
+    return () => { active = false; };
+  }, [data, compatibilityReviews, compatibilityLoading]);
 
   const money = (value: number) => new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format(value);
 
@@ -178,16 +204,19 @@ export default function GemBasedPrebuilds() {
         <h1 className="mt-2 text-3xl font-bold text-white">Gem-based pre-builds</h1>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-400">Five eight-part build concepts assembled from active Gem listings. Drafts remain unpaid sourcing candidates.</p>
       </div>
-      <a href="/builds" className="rounded-lg border border-white/10 px-4 py-2 text-sm font-semibold text-slate-200 hover:bg-white/[0.06]">View current builds</a>
+      <Link href="/builds" className="rounded-lg border border-white/10 px-4 py-2 text-sm font-semibold text-slate-200 hover:bg-white/[0.06]">View current builds</Link>
     </header>
 
-    {loading && <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-5 text-sm text-slate-300"><Loader2 className="h-5 w-5 animate-spin text-cyan-300" /> Checking Gem candidates and compatibility…</div>}
+    {loading && <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-5 text-sm text-slate-300"><Loader2 className="h-5 w-5 animate-spin text-cyan-300" /> Loading individually ranked Gem candidates…</div>}
     {!loading && loadError && <div role="alert" className="rounded-xl border border-red-500/30 bg-red-950/30 p-4 text-sm text-red-200">{loadError}</div>}
     {draftError && <div role="alert" className="rounded-xl border border-red-500/30 bg-red-950/30 p-4 text-sm text-red-200">{draftError}</div>}
 
-    <section aria-label="Top Gems from the Best Gem Build" className="grid w-full min-w-0 grid-cols-[repeat(8,minmax(200px,1fr))] gap-2 overflow-x-auto pb-1">
+    <section aria-label="Best individual Gems, ranked independently of compatibility" className="rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.035] p-4">
+      <div className="mb-3"><h2 className="text-sm font-bold uppercase tracking-wide text-emerald-200">Best individual Gems</h2><p className="mt-1 text-xs text-slate-400">Each slot shows its top Gem by individual deal score. These picks are not filtered or reordered by compatibility with one another.</p></div>
+      <div className="grid w-full min-w-0 grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-8">
       {componentOrder.map(category => <GemCard key={category} gem={data?.builds?.best?.gems?.[category] ?? null}
         label={componentLabels[category]} accent={category === "motherboard" || category === "ram" ? "emerald" : category === "cpu" ? "cyan" : category === "gpu" ? "purple" : category === "ssd" ? "blue" : "orange"} onSelect={setSelectedGem} />)}
+      </div>
     </section>
 
     {concepts.map(({ key, title, description, signal }) => {
@@ -224,6 +253,30 @@ export default function GemBasedPrebuilds() {
           {key === "most_popular" && <p className="text-[11px] leading-4 text-slate-400 sm:col-span-3">Demand signals for these selected listings: {concept.metrics.listing_watch_count ?? 0} watches · {concept.metrics.listing_bid_count ?? 0} bids. These are not total product demand.</p>}
           {key === "highest_end" && <p className="text-[11px] leading-4 text-slate-400 sm:col-span-3">Average matched CPU/GPU benchmark percentile: {concept.metrics.performance_percentile == null ? "unavailable" : `${concept.metrics.performance_percentile}th`}.</p>}
         </div>
+
+        <section aria-label={`${title} compatibility review`} className="mb-4 rounded-xl border border-cyan-400/20 bg-cyan-400/[0.035] p-4">
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <div><h3 className="text-sm font-semibold text-cyan-100">LLM compatibility cross-check</h3>
+              <p className="mt-1 text-xs text-slate-400">Advisory only. It uses captured listing specs; missing facts stay unverified and are never inferred from names.</p></div>
+            <span className="rounded-full border border-white/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-slate-300">{compatibilityLoading ? "review running" : compatibilityReviews[key]?.status?.replaceAll("_", " ") ?? "review pending"}</span>
+          </div>
+          {compatibilityReviews[key]?.summary && <p className="mt-2 text-xs text-slate-300">{compatibilityReviews[key]?.summary}</p>}
+          <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+            {[
+              ["CPU · motherboard", "cpu_motherboard"], ["RAM · motherboard", "ram_motherboard"],
+              ["GPU · motherboard", "gpu_motherboard"], ["Motherboard · case", "motherboard_case"],
+            ].map(([label, pair]) => {
+              const check = compatibilityReviews[key]?.checks?.find(item => item.pair === pair);
+              const verdict = check?.verdict ?? "insufficient_evidence";
+              const color = verdict === "compatible" ? "text-emerald-200" : verdict === "incompatible" ? "text-red-200" : "text-amber-200";
+              return <div key={pair} className="rounded-lg border border-white/[0.07] bg-black/15 p-3">
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">{label}</p>
+                <p className={`mt-1 text-xs font-bold ${color}`}>{verdict.replaceAll("_", " ")}</p>
+                {check?.explanation && <p className="mt-1 text-[10px] leading-4 text-slate-500">{check.explanation}</p>}
+              </div>;
+            })}
+          </div>
+        </section>
 
         <div className="grid w-full min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,200px),1fr))] gap-2">{selected.map(({ category, gem }) => {
           const meta = componentLabels[category];
