@@ -2420,7 +2420,7 @@ async def _gem_spotlight_candidates(db: AsyncSession, category: str, actionable_
         cpu_match = re.search(r'(Intel|AMD)\s+(?:Core\s+)?(?:i[3-9]|Ryzen\s+[3-9]|[A-Z]+\s+\d+)[^\s]*', row.title, re.IGNORECASE) if category == "cpu" else None
         popularity_score = float(row.desirability_score or 0) + float(row.liquidity_score or 0)
         popularity_score += float(row.watch_count or 0) + float(row.bid_count or 0)
-        candidates.append({"id": row.id, "title": row.title, "category": category,
+        candidates.append({"id": row.id, "listing_id": row.listing_id, "title": row.title, "category": category,
             "classification": row.classification, "deal_score": float(row.deal_score or 0),
             "price": float(row.delivered_price), "image_url": media_urls([row.image_url, *(row.image_urls or [])])[0],
             "url": usable_listing_url(row.url, row.listing_id, row.source, row.title),
@@ -2520,6 +2520,124 @@ async def get_gem_spotlight(db: AsyncSession, actionable_ids: set[str] | None = 
     return result
 
 
+async def _review_gem_spotlight_compatibility(db: AsyncSession, builds: dict) -> dict:
+    """Return one bounded local LLM cross-check for the assembled concepts."""
+    from app.models.gem_radar_observation import GemRadarListingObservation
+    from app.models.listing import Listing
+    from app.services.compatibility_llm_review import validate_compatibility_review
+    from app.services.model_selection_service import model_selection_service
+
+    listing_ids = {str(gem.get("listing_id")) for build in builds.values()
+        for gem in build.get("gems", {}).values() if gem and gem.get("listing_id")}
+    if not listing_ids:
+        return {"reviews": {}}
+    latest_rows = (await db.execute(select(GemRadarListingObservation).where(
+        GemRadarListingObservation.listing_id.in_(listing_ids)
+    ).order_by(GemRadarListingObservation.observed_at.desc(),
+        GemRadarListingObservation.id.desc()))).scalars().all()
+    source_by_listing = {}
+    for row in latest_rows:
+        source_by_listing.setdefault(row.listing_id, row.commercial_source_evidence or {})
+    source_urls = {str(source.get("url")) for source in source_by_listing.values()
+        if isinstance(source, dict) and source.get("url")}
+    catalogue_rows = (await db.execute(select(Listing).where(Listing.url.in_(source_urls))
+        .order_by(Listing.id.desc()))).scalars().all() if source_urls else []
+    catalogue_by_url = {}
+    for row in catalogue_rows:
+        catalogue_by_url.setdefault(row.url, row)
+
+    model_builds = []
+    roles_by_build = {}
+    components_by_build = {}
+    for key, build in builds.items():
+        components = []
+        for role, gem in build.get("gems", {}).items():
+            if not gem:
+                continue
+            source = source_by_listing.get(str(gem.get("listing_id")), {})
+            source_url = source.get("url") if isinstance(source, dict) else None
+            catalogue = catalogue_by_url.get(source_url)
+            raw_specs = catalogue.raw_specs if catalogue and isinstance(catalogue.raw_specs, dict) else {}
+            # Product page captures live on the exact-URL catalogue record, not
+            # on Gem Radar's commercial observation. Only captured property maps
+            # matching the observed listing URL enter the advisory model input.
+            specs = {}
+            capture = raw_specs.get("playbook_product_capture") if isinstance(raw_specs.get("playbook_product_capture"), dict) else {}
+            engineering_capture = raw_specs.get("playbook_product_engineering_capture") if isinstance(raw_specs.get("playbook_product_engineering_capture"), dict) else {}
+            catalog_capture = raw_specs.get("playbook_amazon_catalog_capture") if isinstance(raw_specs.get("playbook_amazon_catalog_capture"), dict) else {}
+            captured_property_maps = []
+            if capture.get("status") == "captured" and capture.get("url") == source_url:
+                captured_property_maps.append(capture.get("product_properties"))
+            if engineering_capture.get("url") == source_url:
+                captured_property_maps.append(engineering_capture.get("product_properties"))
+            if catalog_capture.get("status") == "captured" and catalog_capture.get("url") == source_url:
+                from app.services.playbook_service import _amazon_catalog_engineering_properties
+                captured_property_maps.append(_amazon_catalog_engineering_properties(
+                    catalog_capture, "storage" if role == "ssd" else role, source_url))
+            for properties in captured_property_maps:
+                if not isinstance(properties, dict):
+                    continue
+                for key, value in properties.items():
+                    if re.search(r"socket|memory|ram|form.factor|motherboard|pcie|interface", str(key), re.I):
+                        specs[str(key)[:80]] = value
+                    if len(specs) >= 12:
+                        break
+            components.append({"role": role, "title": gem.get("title", ""),
+                "source_observation": {"product_properties": specs},
+                "manufacturer_facts": {}, "engineering": {}})
+        model_builds.append({"key": key, "name": build.get("title"), "components": components})
+        roles_by_build[key] = {part["role"] for part in components}
+        components_by_build[key] = components
+
+    expected = [(key, pair) for key, roles in roles_by_build.items() for pair, required in (
+        ("cpu_motherboard", {"cpu", "motherboard"}), ("ram_motherboard", {"ram", "motherboard"}),
+        ("gpu_motherboard", {"gpu", "motherboard"}), ("motherboard_case", {"motherboard", "case"}))
+        if required.issubset(roles)]
+    if not expected:
+        return {"reviews": {key: {"status": "insufficient_evidence", "summary": "No complete hardware pair was available to review.", "checks": []}
+            for key in builds}}
+    prompt = (
+        "Review the listed PC build pairs using only the provided captured facts. Do not infer any specification from a product title. "
+        "CPU to motherboard sockets must match; RAM to motherboard generations must match; GPU and motherboard must both identify PCIe; "
+        "motherboard form factor must be listed as supported by the case. Missing facts mean insufficient_evidence. "
+        "Return JSON only: {\"checks\":[{\"build\":\"best\",\"pair\":\"cpu_motherboard\",\"verdict\":\"compatible|incompatible|insufficient_evidence\"}]}. "
+        "Include every requested build/pair exactly once. Data: " + json.dumps({"builds": model_builds,
+            "required_checks": [{"build": key, "pair": pair} for key, pair in expected]}, ensure_ascii=True, separators=(",", ":")))
+    try:
+        result = await model_selection_service.complete(task="Gem pre-build compatibility cross-check",
+            messages=[{"role": "user", "content": prompt}],
+            system_prompt="Use only supplied captured product facts. Never guess from titles. Return the requested JSON checks only.",
+            max_tokens=800, timeout=300, json_mode=True, local_only=True)
+        match = re.search(r"\{[\s\S]*\}", result.text or "")
+        payload = json.loads(match.group()) if match else {}
+        raw_checks = payload.get("checks", []) if isinstance(payload, dict) else []
+        checks_by_build = {key: [] for key in builds}
+        allowed = set(expected)
+        for check in raw_checks:
+            if not isinstance(check, dict):
+                continue
+            pair_key = (check.get("build"), check.get("pair"))
+            if pair_key not in allowed:
+                continue
+            verdict = check.get("verdict")
+            if verdict not in {"compatible", "incompatible", "insufficient_evidence"}:
+                verdict = "insufficient_evidence"
+            checks_by_build[pair_key[0]].append({"pair": pair_key[1], "verdict": verdict,
+                "explanation": "LLM assessment based on captured listing specs; advisory only."})
+        reviews = {}
+        for key in builds:
+            checks = checks_by_build[key]
+            evidence_offer = {"name": builds[key].get("title"), "components": components_by_build[key]}
+            reviews[key] = validate_compatibility_review(evidence_offer, {
+                "status": "reviewed", "summary": "LLM cross-check is advisory; exact captured facts determine the displayed verdict.",
+                "authority": "advisory_only", "model": getattr(result, "model", None), "checks": checks})
+        return {"reviews": reviews}
+    except Exception as error:
+        return {"reviews": {key: {"status": "review_unavailable",
+            "summary": f"LLM compatibility review unavailable ({type(error).__name__}).", "checks": []}
+            for key in builds}}
+
+
 @router.get("/gem-by-component")
 async def get_gem_by_component(
     db: AsyncSession = Depends(get_db),
@@ -2545,6 +2663,17 @@ async def get_gem_build_concepts(
     """Five objective-ranked Gem build concepts without compatibility checks."""
     actionable_ids = await get_active_buy_it_now_listing_ids(db)
     return await get_gem_spotlight(db, actionable_ids)
+
+
+@router.post("/gem-build-concepts/compatibility")
+async def review_gem_build_concepts_compatibility(
+    db: AsyncSession = Depends(get_db),
+    _: None = Depends(require_operator),
+) -> dict:
+    """Run a local LLM evidence cross-check for the currently selected concepts."""
+    actionable_ids = await get_active_buy_it_now_listing_ids(db)
+    result = await get_gem_spotlight(db, actionable_ids)
+    return await _review_gem_spotlight_compatibility(db, result.get("builds", {}))
 
 
 @router.get("/source-activity")
