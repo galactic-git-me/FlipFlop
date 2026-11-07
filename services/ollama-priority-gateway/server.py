@@ -5,9 +5,14 @@ from __future__ import annotations
 import asyncio
 import itertools
 import json
+import logging
 import os
+import subprocess
+import sys
+import time
 from dataclasses import dataclass
-from typing import AsyncIterator
+from pathlib import Path
+from typing import AsyncIterator, Callable
 
 import httpx
 import uvicorn
@@ -19,8 +24,74 @@ UPSTREAM = os.getenv("OLLAMA_UPSTREAM_URL", "http://127.0.0.1:11433").rstrip("/"
 MAX_QUEUE = int(os.getenv("OLLAMA_GATEWAY_MAX_QUEUE", "100"))
 GENERATION_CONCURRENCY = max(1, int(os.getenv("OLLAMA_GATEWAY_CONCURRENCY", "4")))
 OLLAMA_NUM_PARALLEL = max(1, int(os.getenv("OLLAMA_NUM_PARALLEL", "4")))
+QUEUE_WAIT_SECONDS = max(1, float(os.getenv("OLLAMA_GATEWAY_QUEUE_WAIT_SECONDS", "300")))
+UPSTREAM_READ_SECONDS = max(1, float(os.getenv("OLLAMA_GATEWAY_READ_TIMEOUT_SECONDS", "300")))
 GENERATION_PATHS = {"/api/chat", "/api/generate", "/api/embed", "/api/embeddings"}
 READ_ONLY_PATHS = {"/api/tags", "/api/version", "/api/ps"}
+FULL_QUEUE_STALL_SECONDS = max(60, float(os.getenv("OLLAMA_GATEWAY_FULL_QUEUE_STALL_SECONDS", "600")))
+UPSTREAM_CLOSE_SECONDS = max(1, float(os.getenv("OLLAMA_GATEWAY_UPSTREAM_CLOSE_SECONDS", "5")))
+
+logger = logging.getLogger("ollama_priority_gateway")
+
+
+def _observe_close_task(task: asyncio.Task[None]) -> None:
+    if task.cancelled():
+        return
+    error = task.exception()
+    if error is not None:
+        logger.error("gateway.upstream_close_failed error=%s", error)
+
+
+async def _close_with_timeout(response: httpx.Response) -> None:
+    """Bound capacity release even if an upstream close ignores cancellation."""
+    close_task = asyncio.create_task(response.aclose())
+    done, _ = await asyncio.wait({close_task}, timeout=UPSTREAM_CLOSE_SECONDS)
+    if close_task not in done:
+        close_task.cancel()
+        close_task.add_done_callback(_observe_close_task)
+        logger.error("gateway.upstream_close_timed_out seconds=%s", UPSTREAM_CLOSE_SECONDS)
+        return
+    _observe_close_task(close_task)
+
+
+class ManagedBody:
+    """Own the upstream and capacity even before streaming has started."""
+
+    def __init__(self, response: httpx.Response, release: Callable[[], None], on_progress: Callable[[], None] | None = None) -> None:
+        self.response = response
+        self.release = release
+        self.on_progress = on_progress
+        self.closed = False
+
+    async def __aiter__(self) -> AsyncIterator[bytes]:
+        try:
+            async for chunk in self.response.aiter_raw():
+                if self.on_progress is not None:
+                    self.on_progress()
+                yield chunk
+        finally:
+            await self.aclose()
+
+    async def aclose(self) -> None:
+        if self.closed:
+            return
+        self.closed = True
+        try:
+            await _close_with_timeout(self.response)
+        except asyncio.CancelledError:
+            raise
+        finally:
+            self.release()
+
+
+class ManagedStreamingResponse(StreamingResponse):
+    async def __call__(self, scope, receive, send) -> None:
+        try:
+            await super().__call__(scope, receive, send)
+        finally:
+            # An async generator's finally block never runs if it was closed
+            # before its first iteration. Close the owner explicitly instead.
+            await self.body_iterator.aclose()
 
 
 @dataclass
@@ -32,7 +103,7 @@ class QueuedRequest:
     query: str
     body: bytes
     headers: dict[str, str]
-    result: asyncio.Future[tuple[int, dict[str, str], AsyncIterator[bytes]]]
+    result: asyncio.Future[tuple[int, dict[str, str], ManagedBody]]
 
 
 class PriorityForwarder:
@@ -43,21 +114,99 @@ class PriorityForwarder:
         self._client: httpx.AsyncClient | None = None
         self._generation_slots = asyncio.Semaphore(GENERATION_CONCURRENCY)
         self._model_load_locks: dict[str, asyncio.Lock] = {}
+        self._last_completed_at = time.monotonic()
+        self._last_progress_at = self._last_completed_at
+        self._completed_requests = 0
+        self._full_queue_since: float | None = None
+        self._watchdog_task: asyncio.Task[None] | None = None
 
     async def start(self) -> None:
-        self._client = httpx.AsyncClient(timeout=None)
+        self._client = httpx.AsyncClient(timeout=httpx.Timeout(
+            connect=10, read=UPSTREAM_READ_SECONDS, write=30, pool=10))
         self._worker_tasks = [
             asyncio.create_task(self._worker(), name=f"ollama-priority-worker-{index + 1}")
             for index in range(GENERATION_CONCURRENCY)
         ]
+        self._watchdog_task = asyncio.create_task(self._watch_full_stalled_queue(), name="ollama-priority-watchdog")
 
     async def stop(self) -> None:
+        if self._watchdog_task is not None:
+            self._watchdog_task.cancel()
+            await asyncio.gather(self._watchdog_task, return_exceptions=True)
+            self._watchdog_task = None
         for task in self._worker_tasks:
             task.cancel()
         if self._worker_tasks:
             await asyncio.gather(*self._worker_tasks, return_exceptions=True)
         if self._client:
             await self._client.aclose()
+
+    def record_completion(self) -> None:
+        self._completed_requests += 1
+        self._last_completed_at = time.monotonic()
+        self.record_progress()
+
+    def record_progress(self) -> None:
+        self._last_progress_at = time.monotonic()
+
+    def should_restart_stalled_queue(self, now: float | None = None) -> bool:
+        now = time.monotonic() if now is None else now
+        if self._queue.qsize() < MAX_QUEUE:
+            self._full_queue_since = None
+            return False
+        if self._full_queue_since is None:
+            self._full_queue_since = now
+            return False
+        return now - self._full_queue_since >= FULL_QUEUE_STALL_SECONDS and now - self._last_progress_at >= FULL_QUEUE_STALL_SECONDS
+
+    def queue_state(self) -> dict[str, object]:
+        now = time.monotonic()
+        depth = self._queue.qsize()
+        if depth >= MAX_QUEUE:
+            if self._full_queue_since is None:
+                self._full_queue_since = now
+        else:
+            self._full_queue_since = None
+        return {
+            "queue_depth": depth,
+            "queue_limit": MAX_QUEUE,
+            "active_generations": GENERATION_CONCURRENCY - self._generation_slots._value,
+            "workers": [
+                {"name": task.get_name(), "state": "running" if not task.done() else "stopped"}
+                for task in self._worker_tasks
+            ],
+            "completed_requests": self._completed_requests,
+            "seconds_since_completion": round(now - self._last_completed_at, 1),
+            "seconds_since_progress": round(now - self._last_progress_at, 1),
+            "full_queue_seconds": round(now - self._full_queue_since, 1) if self._full_queue_since is not None else 0,
+        }
+
+    async def _close_upstream(self, upstream: httpx.Response | None) -> None:
+        if upstream is None:
+            return
+        try:
+            await _close_with_timeout(upstream)
+        except asyncio.CancelledError:
+            raise
+
+    async def _watch_full_stalled_queue(self) -> None:
+        """Restart only this gateway after a continuously full, non-progressing queue."""
+        while True:
+            await asyncio.sleep(5)
+            depth = self._queue.qsize()
+            now = time.monotonic()
+            if self.should_restart_stalled_queue(now):
+                logger.critical(
+                    "gateway.full_queue_stalled_restart queue_depth=%s queue_limit=%s active_generations=%s completed_requests=%s seconds_since_progress=%.1f stall_seconds=%s",
+                    depth,
+                    MAX_QUEUE,
+                    GENERATION_CONCURRENCY - self._generation_slots._value,
+                    self._completed_requests,
+                    now - self._last_progress_at,
+                    FULL_QUEUE_STALL_SECONDS,
+                )
+                # The parent supervisor restarts only this gateway, leaving Ollama alive.
+                os._exit(75)
 
     async def gpu_request_body(self, body: bytes) -> bytes:
         """Ensure the requested model is fully GPU resident before forwarding user input."""
@@ -107,12 +256,13 @@ class PriorityForwarder:
         query: str,
         body: bytes,
         headers: dict[str, str],
-    ) -> tuple[int, dict[str, str], AsyncIterator[bytes]]:
+    ) -> tuple[int, dict[str, str], ManagedBody]:
+        self.prune_cancelled()
         if self._queue.qsize() >= MAX_QUEUE:
             raise HTTPException(status_code=503, detail="Ollama priority queue is full")
 
         loop = asyncio.get_running_loop()
-        result: asyncio.Future[tuple[int, dict[str, str], AsyncIterator[bytes]]] = loop.create_future()
+        result: asyncio.Future[tuple[int, dict[str, str], ManagedBody]] = loop.create_future()
         request = QueuedRequest(
             priority=priority,
             sequence=next(self._sequence),
@@ -125,16 +275,34 @@ class PriorityForwarder:
         )
         await self._queue.put((priority, request.sequence, request))
         try:
-            return await result
+            return await asyncio.wait_for(result, timeout=QUEUE_WAIT_SECONDS)
+        except TimeoutError as exc:
+            result.cancel()
+            raise HTTPException(504, "Ollama request exceeded its waiting deadline") from exc
         except asyncio.CancelledError:
             # The worker skips cancelled futures when it reaches them.
             raise
 
+    def prune_cancelled(self) -> None:
+        """Expired/disconnected callers must not occupy admission capacity."""
+        live = []
+        while not self._queue.empty():
+            item = self._queue.get_nowait()
+            if item[2].result.done():
+                self._queue.task_done()
+            else:
+                live.append(item)
+        for item in live:
+            self._queue.put_nowait(item)
+            self._queue.task_done()
+
     async def _worker(self) -> None:
         while True:
             _, _, request = await self._queue.get()
+            self.record_progress()
             slot_acquired = False
             slot_transferred_to_stream = False
+            upstream = None
             try:
                 await self._generation_slots.acquire()
                 slot_acquired = True
@@ -143,6 +311,8 @@ class PriorityForwarder:
 
                 assert self._client is not None
                 request.body = await self.gpu_request_body(request.body)
+                if request.result.done():
+                    continue
                 upstream_request = self._client.build_request(
                     request.method,
                     f"{UPSTREAM}{request.path}{request.query}",
@@ -151,23 +321,20 @@ class PriorityForwarder:
                 )
                 upstream = await self._client.send(upstream_request, stream=True)
 
-                async def body_stream(response: httpx.Response = upstream) -> AsyncIterator[bytes]:
-                    try:
-                        async for chunk in response.aiter_raw():
-                            yield chunk
-                    finally:
-                        try:
-                            await response.aclose()
-                        finally:
-                            self._generation_slots.release()
-                            self._queue.task_done()
+                if request.result.done():
+                    continue
+
+                def release() -> None:
+                    self.record_completion()
+                    self._generation_slots.release()
+                    self._queue.task_done()
 
                 response_headers = {
                     key: value
                     for key, value in upstream.headers.items()
                     if key.lower() in {"content-type", "content-encoding", "cache-control"}
                 }
-                request.result.set_result((upstream.status_code, response_headers, body_stream()))
+                request.result.set_result((upstream.status_code, response_headers, ManagedBody(upstream, release, self.record_progress)))
                 slot_transferred_to_stream = True
             except Exception as exc:  # noqa: BLE001 - forwarded to the caller
                 if not request.result.done():
@@ -176,9 +343,14 @@ class PriorityForwarder:
                     )
             finally:
                 if not slot_transferred_to_stream:
-                    if slot_acquired:
-                        self._generation_slots.release()
-                    self._queue.task_done()
+                    try:
+                        await self._close_upstream(upstream)
+                    finally:
+                        if slot_acquired:
+                            self._generation_slots.release()
+                        if not request.result.done():
+                            request.result.set_exception(HTTPException(502, "Ollama request failed before streaming began"))
+                        self._queue.task_done()
 
 
 forwarder = PriorityForwarder()
@@ -202,11 +374,14 @@ def create_app(priority: int, name: str) -> FastAPI:
 
     @app.get("/health")
     async def health() -> JSONResponse:
+        forwarder.prune_cancelled()
         return JSONResponse({
             "status": "ok",
-            "queue_depth": forwarder._queue.qsize(),
+            **forwarder.queue_state(),
             "priority": name,
             "generation_concurrency": GENERATION_CONCURRENCY,
+            "queue_wait_seconds": QUEUE_WAIT_SECONDS,
+            "upstream_read_timeout_seconds": UPSTREAM_READ_SECONDS,
             "ollama_num_parallel": OLLAMA_NUM_PARALLEL,
             "gpu_only": True,
         })
@@ -244,7 +419,7 @@ def create_app(priority: int, name: str) -> FastAPI:
             body=body,
             headers=headers,
         )
-        return StreamingResponse(stream, status_code=status, headers=response_headers)
+        return ManagedStreamingResponse(stream, status_code=status, headers=response_headers)
 
     return app
 
@@ -262,5 +437,30 @@ async def serve() -> None:
     await asyncio.gather(other.serve(), dev.serve(), prod.serve())
 
 
+def supervise_gateway() -> None:
+    gateway_script = Path(__file__).resolve()
+    repo_root = gateway_script.parents[2]
+    child = None
+    while True:
+        try:
+            child = subprocess.Popen(
+                [sys.executable, str(gateway_script), "--gateway-child"],
+                cwd=repo_root,
+            )
+            exit_code = child.wait()
+        except KeyboardInterrupt:
+            if child is not None and child.poll() is None:
+                child.terminate()
+                child.wait(timeout=10)
+            raise
+        if exit_code == 0:
+            return
+        logger.error("gateway.child_exited_restarting exit_code=%s", exit_code)
+        time.sleep(min(30, max(5, abs(exit_code))))
+
+
 if __name__ == "__main__":
-    asyncio.run(serve())
+    if "--gateway-child" in sys.argv:
+        asyncio.run(serve())
+    else:
+        supervise_gateway()
