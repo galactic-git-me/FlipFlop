@@ -102,13 +102,13 @@ class OllamaRecoveryWatchdog(unittest.TestCase):
     def tearDown(self):
         self.temp.cleanup()
 
-    def run_watchdog(self, *extra):
+    def run_watchdog(self, *extra, failure_threshold=1):
         command = [POWERSHELL, "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass",
             "-File", str(SCRIPT), "-ProjectRoot", str(self.root), "-StatePath", str(self.state),
             "-GatewayHealthUrl", self.health_url, "-GatewayGenerationUrl", self.generation_url,
             "-GatewayHealthUrls", self.health_url, "-GatewayMaintenanceUrl",
             self.health_url.rsplit("/", 1)[0] + "/_maintenance", "-MaintenanceTokenPath", str(self.token),
-            "-FailureThreshold", "1", *extra]
+            "-FailureThreshold", str(failure_threshold), *extra]
         result = subprocess.run(command, check=False, capture_output=True, text=True, timeout=45)
         if result.returncode:
             self.fail(f"PowerShell watchdog failed: {result.stdout}\n{result.stderr}")
@@ -122,13 +122,28 @@ class OllamaRecoveryWatchdog(unittest.TestCase):
         self.assertEqual(Handler.post_count, 1, watchdog_log.read_text() if watchdog_log.exists() else "no watchdog log")
         self.assertFalse(self.marker.exists())
 
-    def test_active_queue_skips_generation_probe_and_restart(self):
+    def test_active_queue_skips_generation_probe_and_preserves_failure_streak(self):
         Handler.queue_depth = 3
         self.state.write_text(json.dumps({"consecutive_failures": 2, "last_restart_epoch": None}))
         self.run_watchdog()
-        self.assertEqual(json.loads(self.state.read_text())["consecutive_failures"], 0)
+        self.assertEqual(json.loads(self.state.read_text())["consecutive_failures"], 2)
         self.assertEqual(Handler.post_count, 0)
         self.assertFalse(self.marker.exists())
+
+    def test_busy_skip_preserves_failures_until_next_idle_failure(self):
+        self.state.write_text(json.dumps({"consecutive_failures": 2, "last_restart_epoch": None}))
+        Handler.active = 1
+        self.run_watchdog(failure_threshold=3)
+        self.assertEqual(json.loads(self.state.read_text())["consecutive_failures"], 2)
+        self.assertFalse(self.marker.exists())
+
+        Handler.active = 0
+        Handler.fail_generation = True
+        self.run_watchdog(failure_threshold=3)
+        saved = json.loads(self.state.read_text())
+        self.assertEqual(saved["consecutive_failures"], 0)
+        self.assertIsNotNone(saved["last_restart_epoch"])
+        self.assertTrue(self.marker.exists())
 
     def test_repeated_generation_failure_calls_restart_with_cooldown_state(self):
         Handler.fail_generation = True
