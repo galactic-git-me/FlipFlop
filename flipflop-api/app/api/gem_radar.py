@@ -2546,7 +2546,6 @@ async def _review_gem_spotlight_compatibility(db: AsyncSession, builds: dict) ->
     for row in catalogue_rows:
         catalogue_by_url.setdefault(row.url, row)
 
-    model_builds = []
     roles_by_build = {}
     components_by_build = {}
     for key, build in builds.items():
@@ -2585,7 +2584,6 @@ async def _review_gem_spotlight_compatibility(db: AsyncSession, builds: dict) ->
             components.append({"role": role, "title": gem.get("title", ""),
                 "source_observation": {"product_properties": specs},
                 "manufacturer_facts": {}, "engineering": {}})
-        model_builds.append({"key": key, "name": build.get("title"), "components": components})
         roles_by_build[key] = {part["role"] for part in components}
         components_by_build[key] = components
 
@@ -2596,49 +2594,85 @@ async def _review_gem_spotlight_compatibility(db: AsyncSession, builds: dict) ->
     if not expected:
         return {"reviews": {key: {"status": "insufficient_evidence", "summary": "No complete hardware pair was available to review.", "checks": []}
             for key in builds}}
-    prompt = (
-        "Review the listed PC build pairs using only the provided captured facts. Do not infer any specification from a product title. "
-        "CPU to motherboard sockets must match; RAM to motherboard generations must match; GPU and motherboard must both identify PCIe; "
-        "motherboard form factor must be listed as supported by the case. Missing facts mean insufficient_evidence. "
-        "Return JSON only: {\"checks\":[{\"build\":\"best\",\"pair\":\"cpu_motherboard\",\"verdict\":\"compatible|incompatible|insufficient_evidence\"}]}. "
-        "Include every requested build/pair exactly once. Data: " + json.dumps({"builds": model_builds,
-            "required_checks": [{"build": key, "pair": pair} for key, pair in expected]}, ensure_ascii=True, separators=(",", ":")))
-    try:
-        result = await model_selection_service.complete(task="Gem pre-build compatibility cross-check",
-            messages=[{"role": "user", "content": prompt}],
-            system_prompt="Use only supplied captured product facts. Never guess from titles. Return the requested JSON checks only.",
-            max_tokens=800, timeout=300, json_mode=True, local_only=True)
-        payload = _parse_gem_compatibility_response(result.text or "")
-        raw_checks = payload.get("checks", []) if isinstance(payload, dict) else []
-        checks_by_build = {key: [] for key in builds}
-        allowed = set(expected)
-        for check in raw_checks:
-            if not isinstance(check, dict):
-                continue
-            pair_key = (check.get("build"), check.get("pair"))
-            if pair_key not in allowed:
-                continue
-            verdict = check.get("verdict")
-            if verdict not in {"compatible", "incompatible", "insufficient_evidence"}:
-                verdict = "insufficient_evidence"
-            checks_by_build[pair_key[0]].append({"pair": pair_key[1], "verdict": verdict,
-                "explanation": "LLM assessment based on captured listing specs; advisory only."})
-        reviews = {}
-        for key in builds:
-            checks = checks_by_build[key]
+    pair_roles = {
+        "cpu_motherboard": (("cpu", "socket"), ("motherboard", "socket")),
+        "ram_motherboard": (("ram", "memory|ram"), ("motherboard", "memory|ram")),
+        "gpu_motherboard": (("gpu", "pcie|interface"), ("motherboard", "pcie|interface")),
+        "motherboard_case": (("motherboard", "form.factor"), ("case", "form.factor|motherboard.support|supported.form")),
+    }
+    compact_checks = []
+    for build_key, pair in expected:
+        facts = {}
+        for role, pattern in pair_roles[pair]:
+            component = next((row for row in components_by_build[build_key] if row["role"] == role), None)
+            properties = ((component or {}).get("source_observation") or {}).get("product_properties") or {}
+            relevant = {name: value for name, value in properties.items()
+                if re.search(pattern, str(name), re.I)}
+            facts[role] = relevant
+        compact_checks.append({"build": build_key, "pair": pair, "facts": facts})
+    compact_by_build = {key: [row for row in compact_checks if row["build"] == key] for key in builds}
+    reviews = {}
+    build_keys = list(builds)
+    for index, key in enumerate(build_keys):
+        requested = compact_by_build[key]
+        if not requested:
+            reviews[key] = {"status": "insufficient_evidence",
+                "summary": "No complete hardware pair was available to review.", "checks": []}
+            continue
+        input_facts = {"build": key, "pairs": [{"pair": row["pair"], "facts": row["facts"]}
+            for row in requested]}
+        prompt = (
+            "Assess this build's PC compatibility using only the captured facts below, never product names. "
+            "CPU/motherboard sockets and RAM/motherboard generations must match. GPU and motherboard must both show PCIe. "
+            "The case must list support for the motherboard form factor. Missing facts mean insufficient_evidence. "
+            "Create a new JSON object with a checks property. Put exactly one [build,pair,verdict] string triple for each input pair, in order. "
+            "Do not copy the input, add keys, explain, or include prose. Verdicts are compatible, incompatible, or insufficient_evidence. "
+            "Output shape: {\"checks\":[[\"best\",\"cpu_motherboard\",\"insufficient_evidence\"]]}. Input facts: "
+            + json.dumps(input_facts, ensure_ascii=True, separators=(",", ":")))
+        try:
+            result = await model_selection_service.complete(task="Gem pre-build compatibility cross-check",
+                messages=[{"role": "user", "content": prompt}],
+                system_prompt="Return a new object with a checks array of compact [build,pair,verdict] string triples. Never copy the input keys or facts. No explanations.",
+                # Five reviews are sequential behind a 120s admin proxy deadline.
+                # Bound LLM time to 15s each, leaving time for DB work and response handling.
+                max_tokens=256, timeout=15, json_mode=True, local_only=True)
+        except Exception as error:
+            failure = {"status": "review_unavailable",
+                "summary": f"LLM compatibility review unavailable ({type(error).__name__}).", "checks": []}
+            for remaining in build_keys[index:]:
+                reviews[remaining] = (failure if compact_by_build[remaining] else {
+                    "status": "insufficient_evidence",
+                    "summary": "No complete hardware pair was available to review.", "checks": []})
+            break
+        try:
+            payload = _parse_gem_compatibility_response(result.text or "")
+            allowed = {(key, row["pair"]) for row in requested}
+            checks = []
+            seen = set()
+            for check in payload.get("checks", []):
+                if not isinstance(check, dict):
+                    continue
+                pair_key = (check.get("build"), check.get("pair"))
+                if pair_key not in allowed or pair_key[1] in seen:
+                    continue
+                seen.add(pair_key[1])
+                verdict = check.get("verdict")
+                if verdict not in {"compatible", "incompatible", "insufficient_evidence"}:
+                    verdict = "insufficient_evidence"
+                checks.append({"pair": pair_key[1], "verdict": verdict,
+                    "explanation": "LLM assessment based on captured listing specs; advisory only."})
             evidence_offer = {"name": builds[key].get("title"), "components": components_by_build[key]}
             reviews[key] = validate_compatibility_review(evidence_offer, {
                 "status": "reviewed", "summary": "LLM cross-check is advisory; exact captured facts determine the displayed verdict.",
                 "authority": "advisory_only", "model": getattr(result, "model", None), "checks": checks})
-        return {"reviews": reviews}
-    except Exception as error:
-        return {"reviews": {key: {"status": "review_unavailable",
-            "summary": f"LLM compatibility review unavailable ({type(error).__name__}).", "checks": []}
-            for key in builds}}
+        except Exception as error:
+            reviews[key] = {"status": "review_unavailable",
+                "summary": f"LLM compatibility review unavailable ({type(error).__name__}).", "checks": []}
+    return {"reviews": reviews}
 
 
 def _parse_gem_compatibility_response(text: str) -> dict:
-    """Read the requested JSON object without greedily joining unrelated braces."""
+    """Read the requested JSON object and normalize compact triple rows."""
     decoder = json.JSONDecoder()
     candidate = text.strip()
     if candidate.startswith("```"):
@@ -2651,6 +2685,12 @@ def _parse_gem_compatibility_response(text: str) -> dict:
         except json.JSONDecodeError:
             continue
         if isinstance(value, dict) and isinstance(value.get("checks"), list):
+            value["checks"] = [
+                {"build": row[0], "pair": row[1], "verdict": row[2]}
+                if isinstance(row, list) and len(row) == 3 and all(isinstance(item, str) for item in row)
+                else row
+                for row in value["checks"]
+            ]
             return value
     raise ValueError("The compatibility model returned no complete checks JSON object")
 
