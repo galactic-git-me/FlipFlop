@@ -42,8 +42,10 @@ tunnel, so the gateway is never exposed directly to the LAN or tailnet.
 | `DEV_LISTEN_PORT` | `11435` | Development listener |
 | `PROD_LISTEN_HOST` | `127.0.0.1` | Production bind address |
 | `PROD_LISTEN_PORT` | `11436` | Production listener |
-| `OLLAMA_GATEWAY_MAX_QUEUE` | `100` | Maximum waiting requests per listener |
+| `OLLAMA_GATEWAY_MAX_QUEUE` | `100` | Maximum waiting requests shared across all three priorities |
 | `OLLAMA_GATEWAY_CONCURRENCY` | `4` | Maximum Ollama generation requests forwarded at once |
+| `OLLAMA_GATEWAY_QUEUE_WAIT_SECONDS` | `300` | Deadline while waiting for generation response headers; expired callers are removed from admission accounting |
+| `OLLAMA_GATEWAY_READ_TIMEOUT_SECONDS` | `300` | Maximum idle interval waiting for upstream response data |
 | `OLLAMA_NUM_PARALLEL` | `4` | Engine parallel generations; set by the Windows launcher |
 
 `start-all-servers.ps1` checks the live gateway health values and restarts the
@@ -54,6 +56,43 @@ the development stack after the active scan queue has drained.
 Health and read-only Ollama endpoints (`/api/tags`, `/api/version`, and
 `/api/ps`) bypass the generation queue. Generation endpoints are streamed
 without buffering.
+
+The stream owner closes the upstream with a bounded timeout and releases its
+generation slot exactly once, including a disconnect before the first
+response-body iteration. Health reports waiting queue depth/limit, active
+generations, worker states, completed requests, and seconds since the last
+streamed chunk or completed response; queue pickup alone is not progress. A
+read-only health 200 alone does not establish
+that generation is working.
+
+The Windows gateway launcher supervises a child gateway process without
+supervising or restarting Ollama. If the queue stays at its limit for ten
+minutes and no request emits a streamed chunk or completes for that whole
+period, the child writes a critical log and exits; the parent restarts the
+gateway after a short backoff. Active inference streams are interrupted by
+that recovery, so the threshold is intentionally much longer than the normal
+queue wait/read timeout. Set `OLLAMA_GATEWAY_FULL_QUEUE_STALL_SECONDS` to tune
+the threshold and `OLLAMA_GATEWAY_UPSTREAM_CLOSE_SECONDS` to bound stream
+cleanup.
+
+On Windows, `install-ollama-recovery-watchdog.ps1` installs a per-user
+scheduled task that checks every two minutes. It sends a two-token generation
+probe through the DEV gateway only when its queue and active generation count
+are both zero. The maintenance-token-protected probe deadline cancels stalled
+upstream work at the gateway, and busy skips retain any prior failure count.
+Three consecutive idle probe failures trigger the existing
+startup script to restart Ollama and the priority gateway; each restart is
+followed by a ten-minute cooldown. The startup script stops only orphan model
+runners from the installed Ollama distribution. This recovery interrupts any
+in-flight inference, so the watchdog pauses generation admission with a
+per-user secret, then rechecks queue depth and active generations on all three
+priorities. If any work appeared, it resumes admission and defers recovery.
+The token is stored in `%LOCALAPPDATA%\FlipFlop`; install requires PowerShell
+7. The watchdog log and cooldown state are stored under the project's `logs`
+directory and `%LOCALAPPDATA%\FlipFlop`.
+
+Run `python services/ollama-priority-gateway/test_capacity.py` for isolated
+capacity, disconnect, timeout, and stalled-recovery tests.
 
 The health values describe configured limits, not verified model parallelism.
 Ollama 0.32.6 forces the `qwen35` architecture (`qwen3.5:4b`) to one runner
