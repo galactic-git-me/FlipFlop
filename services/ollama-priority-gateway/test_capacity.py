@@ -60,6 +60,26 @@ class GatewayCapacity(unittest.IsolatedAsyncioTestCase):
    self.assertEqual(forwarder._generation_slots._value,server.GENERATION_CONCURRENCY)
   finally:await forwarder.stop()
 
+ async def test_watchdog_deadline_cancels_stalled_upstream_and_releases_capacity(self):
+  forwarder=server.PriorityForwarder();await forwarder.start()
+  await forwarder._client.aclose()
+  cancelled=[]
+  async def stalled(request):
+   try:await asyncio.sleep(1)
+   except asyncio.CancelledError:
+    cancelled.append(True)
+    raise
+  forwarder._client=httpx.AsyncClient(transport=httpx.MockTransport(stalled))
+  forwarder.gpu_request_body=AsyncMock(side_effect=lambda body:body)
+  try:
+   with self.assertRaises(server.HTTPException) as error:
+    await forwarder.submit(priority=1,method='POST',path='/api/chat',query='',body=b'{}',headers={},deadline_seconds=0.02)
+   self.assertEqual(error.exception.status_code,504)
+   await asyncio.wait_for(forwarder._queue.join(),1)
+   self.assertEqual(cancelled,[True])
+   self.assertEqual(forwarder._generation_slots._value,server.GENERATION_CONCURRENCY)
+  finally:await forwarder.stop()
+
  async def test_stalled_close_cannot_hold_generation_slot(self):
   release=unittest.mock.Mock()
   response=httpx.Response(200,content=b'body')
@@ -142,6 +162,25 @@ class GatewayCapacity(unittest.IsolatedAsyncioTestCase):
     resumed=await client.post('/_maintenance/resume',headers={'X-Ollama-Maintenance-Token':'test-secret'})
     self.assertEqual(resumed.status_code,200)
     self.assertFalse(resumed.json()['admission_paused'])
+
+ async def test_watchdog_deadline_requires_maintenance_token_and_is_not_forwarded(self):
+  release=unittest.mock.Mock()
+  class Bytes(httpx.AsyncByteStream):
+   async def __aiter__(self):yield b'{"message":{"content":"OK"}}'
+  body=server.ManagedBody(httpx.Response(200,stream=Bytes()),release)
+  app=server.create_app(1,'dev')
+  async with AsyncClient(transport=ASGITransport(app=app),base_url='http://test') as client:
+   with patch.object(server,'MAINTENANCE_TOKEN','test-secret'),patch.object(server.forwarder,'submit',new_callable=AsyncMock) as submit:
+    submit.return_value=(200,{'content-type':'application/json'},body)
+    denied=await client.post('/api/chat',json={'model':'qwen3:4b'},headers={'X-Ollama-Watchdog-Timeout-Seconds':'1'})
+    self.assertEqual(denied.status_code,403)
+    submit.assert_not_awaited()
+    response=await client.post('/api/chat',json={'model':'qwen3:4b'},headers={
+     'X-Ollama-Maintenance-Token':'test-secret','X-Ollama-Watchdog-Timeout-Seconds':'1'})
+    self.assertEqual(response.status_code,200)
+    self.assertEqual(submit.await_args.kwargs['deadline_seconds'],1.0)
+    self.assertNotIn('x-ollama-maintenance-token',submit.await_args.kwargs['headers'])
+    self.assertNotIn('x-ollama-watchdog-timeout-seconds',submit.await_args.kwargs['headers'])
 
  async def test_supervisor_restarts_gateway_after_nonzero_exit(self):
   failed=unittest.mock.Mock(wait=unittest.mock.Mock(return_value=75))

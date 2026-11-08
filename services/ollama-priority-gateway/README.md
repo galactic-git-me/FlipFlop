@@ -78,7 +78,9 @@ cleanup.
 On Windows, `install-ollama-recovery-watchdog.ps1` installs a per-user
 scheduled task that checks every two minutes. It sends a two-token generation
 probe through the DEV gateway only when its queue and active generation count
-are both zero. Three consecutive idle probe failures trigger the existing
+are both zero. The maintenance-token-protected probe deadline cancels stalled
+upstream work at the gateway, and busy skips retain any prior failure count.
+Three consecutive idle probe failures trigger the existing
 startup script to restart Ollama and the priority gateway; each restart is
 followed by a ten-minute cooldown. The startup script stops only orphan model
 runners from the installed Ollama distribution. This recovery interrupts any
