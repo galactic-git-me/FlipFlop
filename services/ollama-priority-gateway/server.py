@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import hmac
 import itertools
 import json
 import logging
@@ -30,6 +31,7 @@ GENERATION_PATHS = {"/api/chat", "/api/generate", "/api/embed", "/api/embeddings
 READ_ONLY_PATHS = {"/api/tags", "/api/version", "/api/ps"}
 FULL_QUEUE_STALL_SECONDS = max(60, float(os.getenv("OLLAMA_GATEWAY_FULL_QUEUE_STALL_SECONDS", "600")))
 UPSTREAM_CLOSE_SECONDS = max(1, float(os.getenv("OLLAMA_GATEWAY_UPSTREAM_CLOSE_SECONDS", "5")))
+MAINTENANCE_TOKEN = os.getenv("OLLAMA_GATEWAY_MAINTENANCE_TOKEN", "")
 
 logger = logging.getLogger("ollama_priority_gateway")
 
@@ -119,6 +121,8 @@ class PriorityForwarder:
         self._completed_requests = 0
         self._full_queue_since: float | None = None
         self._watchdog_task: asyncio.Task[None] | None = None
+        self._admission_lock = asyncio.Lock()
+        self._admissions_paused = False
 
     async def start(self) -> None:
         self._client = httpx.AsyncClient(timeout=httpx.Timeout(
@@ -140,6 +144,14 @@ class PriorityForwarder:
             await asyncio.gather(*self._worker_tasks, return_exceptions=True)
         if self._client:
             await self._client.aclose()
+
+    async def pause_admission(self) -> None:
+        async with self._admission_lock:
+            self._admissions_paused = True
+
+    async def resume_admission(self) -> None:
+        async with self._admission_lock:
+            self._admissions_paused = False
 
     def record_completion(self) -> None:
         self._completed_requests += 1
@@ -179,6 +191,7 @@ class PriorityForwarder:
             "seconds_since_completion": round(now - self._last_completed_at, 1),
             "seconds_since_progress": round(now - self._last_progress_at, 1),
             "full_queue_seconds": round(now - self._full_queue_since, 1) if self._full_queue_since is not None else 0,
+            "admission_paused": self._admissions_paused,
         }
 
     async def _close_upstream(self, upstream: httpx.Response | None) -> None:
@@ -258,22 +271,24 @@ class PriorityForwarder:
         headers: dict[str, str],
     ) -> tuple[int, dict[str, str], ManagedBody]:
         self.prune_cancelled()
-        if self._queue.qsize() >= MAX_QUEUE:
-            raise HTTPException(status_code=503, detail="Ollama priority queue is full")
-
         loop = asyncio.get_running_loop()
         result: asyncio.Future[tuple[int, dict[str, str], ManagedBody]] = loop.create_future()
-        request = QueuedRequest(
-            priority=priority,
-            sequence=next(self._sequence),
-            method=method,
-            path=path,
-            query=query,
-            body=body,
-            headers=headers,
-            result=result,
-        )
-        await self._queue.put((priority, request.sequence, request))
+        async with self._admission_lock:
+            if self._admissions_paused:
+                raise HTTPException(status_code=503, detail="Ollama gateway is pausing for recovery")
+            if self._queue.qsize() >= MAX_QUEUE:
+                raise HTTPException(status_code=503, detail="Ollama priority queue is full")
+            request = QueuedRequest(
+                priority=priority,
+                sequence=next(self._sequence),
+                method=method,
+                path=path,
+                query=query,
+                body=body,
+                headers=headers,
+                result=result,
+            )
+            self._queue.put_nowait((priority, request.sequence, request))
         try:
             return await asyncio.wait_for(result, timeout=QUEUE_WAIT_SECONDS)
         except TimeoutError as exc:
@@ -384,6 +399,19 @@ def create_app(priority: int, name: str) -> FastAPI:
             "ollama_num_parallel": OLLAMA_NUM_PARALLEL,
             "gpu_only": True,
         })
+
+    @app.post("/_maintenance/{action}")
+    async def maintenance(action: str, request: Request) -> JSONResponse:
+        supplied = request.headers.get("x-ollama-maintenance-token", "")
+        if not MAINTENANCE_TOKEN or not hmac.compare_digest(supplied, MAINTENANCE_TOKEN):
+            raise HTTPException(status_code=403, detail="Maintenance authorization failed")
+        if action == "pause":
+            await forwarder.pause_admission()
+        elif action == "resume":
+            await forwarder.resume_admission()
+        else:
+            raise HTTPException(status_code=404, detail="Unknown maintenance action")
+        return JSONResponse({"admission_paused": forwarder._admissions_paused})
 
     @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"])
     async def proxy(request: Request, path: str):

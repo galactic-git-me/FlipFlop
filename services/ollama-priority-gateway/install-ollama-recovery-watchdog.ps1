@@ -7,7 +7,13 @@ $ErrorActionPreference = 'Stop'
 $taskName = 'FlipFlop Ollama Generation Watchdog'
 $watchdog = Join-Path $PSScriptRoot 'ollama-recovery-watchdog.ps1'
 $pwsh = (Get-Command pwsh.exe -ErrorAction SilentlyContinue).Source
-if (-not $pwsh) { $pwsh = (Get-Command powershell.exe -ErrorAction Stop).Source }
+if (-not $pwsh) { throw 'PowerShell 7 (pwsh.exe) is required by the Ollama recovery watchdog.' }
+$maintenanceState = Join-Path $env:LOCALAPPDATA 'FlipFlop'
+New-Item -ItemType Directory -Path $maintenanceState -Force | Out-Null
+$maintenanceToken = Join-Path $maintenanceState 'ollama-gateway-maintenance-token.txt'
+if (-not (Test-Path -LiteralPath $maintenanceToken)) {
+    throw 'The gateway maintenance token is not initialized. Start the updated Ollama priority gateway first.'
+}
 $user = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 $argument = "-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$watchdog`" -ProjectRoot `"$ProjectRoot`""
 $action = New-ScheduledTaskAction -Execute $pwsh -Argument $argument

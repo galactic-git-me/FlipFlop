@@ -19,19 +19,43 @@ class Handler(BaseHTTPRequestHandler):
     active = 0
     fail_generation = False
     post_count = 0
+    admission_paused = False
+    busy_after_pause = False
 
     def log_message(self, *_args):
         pass
 
     def do_GET(self):
         body = json.dumps({"status": "ok", "queue_depth": self.queue_depth,
-            "active_generations": self.active}).encode()
+            "active_generations": self.active, "admission_paused": self.admission_paused}).encode()
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
         self.wfile.write(body)
 
     def do_POST(self):
+        if self.path.startswith("/_maintenance/") and self.headers.get("X-Ollama-Maintenance-Token") != "test-token":
+            self.send_error(403)
+            return
+        if self.path == "/_maintenance/pause":
+            type(self).admission_paused = True
+            if self.busy_after_pause:
+                type(self).active = 1
+            body = json.dumps({"admission_paused": True}).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(body)
+            return
+        if self.path == "/_maintenance/resume":
+            type(self).admission_paused = False
+            type(self).active = 0
+            body = json.dumps({"admission_paused": False}).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(body)
+            return
         type(self).post_count += 1
         if self.fail_generation:
             self.send_error(503)
@@ -63,9 +87,13 @@ class OllamaRecoveryWatchdog(unittest.TestCase):
         Handler.active = 0
         Handler.fail_generation = False
         Handler.post_count = 0
+        Handler.admission_paused = False
+        Handler.busy_after_pause = False
         self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)
         self.state = self.root / "state.json"
+        self.token = self.root / "maintenance-token.txt"
+        self.token.write_text("test-token")
         self.launcher = self.root / "services" / "ollama-priority-gateway" / "start-prometheus-services.ps1"
         self.launcher.parent.mkdir(parents=True)
         self.marker = self.root / "restart.marker"
@@ -78,6 +106,8 @@ class OllamaRecoveryWatchdog(unittest.TestCase):
         command = [POWERSHELL, "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass",
             "-File", str(SCRIPT), "-ProjectRoot", str(self.root), "-StatePath", str(self.state),
             "-GatewayHealthUrl", self.health_url, "-GatewayGenerationUrl", self.generation_url,
+            "-GatewayHealthUrls", self.health_url, "-GatewayMaintenanceUrl",
+            self.health_url.rsplit("/", 1)[0] + "/_maintenance", "-MaintenanceTokenPath", str(self.token),
             "-FailureThreshold", "1", *extra]
         result = subprocess.run(command, check=False, capture_output=True, text=True, timeout=45)
         if result.returncode:
@@ -120,6 +150,16 @@ class OllamaRecoveryWatchdog(unittest.TestCase):
             f"{saved}; {watchdog_log.read_text() if watchdog_log.exists() else 'no log'}")
         self.assertEqual(saved["last_restart_epoch"], recent_restart)
         self.assertFalse(self.marker.exists())
+
+    def test_restart_is_deferred_when_work_arrives_before_maintenance_check(self):
+        Handler.fail_generation = True
+        Handler.busy_after_pause = True
+        self.run_watchdog()
+        saved = json.loads(self.state.read_text())
+        self.assertEqual(saved["consecutive_failures"], 1)
+        self.assertFalse(saved.get("last_restart_epoch"))
+        self.assertFalse(self.marker.exists())
+        self.assertFalse(Handler.admission_paused)
 
 
 if __name__ == "__main__":

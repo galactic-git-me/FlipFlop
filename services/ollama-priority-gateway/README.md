@@ -82,9 +82,12 @@ are both zero. Three consecutive idle probe failures trigger the existing
 startup script to restart Ollama and the priority gateway; each restart is
 followed by a ten-minute cooldown. The startup script stops only orphan model
 runners from the installed Ollama distribution. This recovery interrupts any
-in-flight inference, so the watchdog never probes or restarts while the
-gateway reports active work. Its log and cooldown state are stored under the
-project's `logs` and gateway-service directories.
+in-flight inference, so the watchdog pauses generation admission with a
+per-user secret, then rechecks queue depth and active generations on all three
+priorities. If any work appeared, it resumes admission and defers recovery.
+The token is stored in `%LOCALAPPDATA%\FlipFlop`; install requires PowerShell
+7. The watchdog log and cooldown state are stored under the project's `logs`
+and gateway-service directories.
 
 Run `python services/ollama-priority-gateway/test_capacity.py` for isolated
 capacity, disconnect, timeout, and stalled-recovery tests.

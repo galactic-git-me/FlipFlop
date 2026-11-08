@@ -78,6 +78,13 @@ Stop-OrphanedOllamaRunners
 $env:OLLAMA_HOST = '127.0.0.1:11433'
 $env:OLLAMA_NUM_PARALLEL = '4'
 $env:OLLAMA_GATEWAY_CONCURRENCY = '4'
+$localStateRoot = Join-Path $env:LOCALAPPDATA 'FlipFlop'
+New-Item -ItemType Directory -Path $localStateRoot -Force | Out-Null
+$maintenanceTokenPath = Join-Path $localStateRoot 'ollama-gateway-maintenance-token.txt'
+if (-not (Test-Path -LiteralPath $maintenanceTokenPath)) {
+    [Guid]::NewGuid().ToString('N') | Set-Content -LiteralPath $maintenanceTokenPath -NoNewline
+}
+$env:OLLAMA_GATEWAY_MAINTENANCE_TOKEN = (Get-Content -LiteralPath $maintenanceTokenPath -Raw).Trim()
 $logRoot = Join-Path $repoRoot 'logs'
 New-Item -ItemType Directory -Path $logRoot -Force | Out-Null
 $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'

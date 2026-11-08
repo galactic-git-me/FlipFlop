@@ -3,6 +3,9 @@ param(
     [string]$StatePath = (Join-Path $PSScriptRoot 'ollama-recovery-state.json'),
     [string]$GatewayHealthUrl = 'http://127.0.0.1:11435/health',
     [string]$GatewayGenerationUrl = 'http://127.0.0.1:11435/api/chat',
+    [string[]]$GatewayHealthUrls = @('http://127.0.0.1:11434/health', 'http://127.0.0.1:11435/health', 'http://127.0.0.1:11436/health'),
+    [string]$GatewayMaintenanceUrl = 'http://127.0.0.1:11435/_maintenance',
+    [string]$MaintenanceTokenPath = (Join-Path $env:LOCALAPPDATA 'FlipFlop\ollama-gateway-maintenance-token.txt'),
     [string]$Model = 'qwen3:4b',
     [int]$FailureThreshold = 3,
     [int]$CooldownMinutes = 10,
@@ -43,6 +46,7 @@ function Save-WatchdogState($State) {
 function Invoke-GenerationProbe {
     $health = Invoke-RestMethod -Uri $GatewayHealthUrl -TimeoutSec 5
     if ($health.status -ne 'ok') { throw 'DEV gateway health is not ok' }
+    if ($health.admission_paused) { return 'busy' }
 
     # Never compete with customer or scan traffic. The real probe runs only
     # while the shared gateway has no waiting or active generations.
@@ -62,6 +66,28 @@ function Invoke-GenerationProbe {
         -ContentType 'application/json' -Body $body -TimeoutSec 25
     if (-not $response.message.content) { throw 'DEV gateway generation probe returned no content' }
     return 'ok'
+}
+
+function Invoke-GatewayMaintenance([string]$Action) {
+    if (-not (Test-Path -LiteralPath $MaintenanceTokenPath)) {
+        throw 'Gateway maintenance token is missing; start the updated Ollama gateway before enabling recovery.'
+    }
+    $token = (Get-Content -LiteralPath $MaintenanceTokenPath -Raw).Trim()
+    if (-not $token) { throw 'Gateway maintenance token is empty' }
+    return Invoke-RestMethod -Method Post -Uri "$GatewayMaintenanceUrl/$Action" `
+        -Headers @{ 'X-Ollama-Maintenance-Token' = $token } -ContentType 'application/json' `
+        -Body '{}' -TimeoutSec 5
+}
+
+function Test-AllGatewaysIdleAndPaused {
+    foreach ($url in $GatewayHealthUrls) {
+        $health = Invoke-RestMethod -Uri $url -TimeoutSec 5
+        if ($health.status -ne 'ok' -or -not $health.admission_paused -or
+            [int]$health.queue_depth -ne 0 -or [int]$health.active_generations -ne 0) {
+            return $false
+        }
+    }
+    return $true
 }
 
 $state = Read-WatchdogState
@@ -104,10 +130,29 @@ if ($state.last_restart_epoch) {
 
 $launcher = Join-Path $ProjectRoot 'services\ollama-priority-gateway\start-prometheus-services.ps1'
 if (-not (Test-Path -LiteralPath $launcher)) { throw "Ollama startup script not found: $launcher" }
-Write-WatchdogLog 'CRITICAL repeated idle generation failures; restarting shared Ollama and priority gateway'
-& $launcher -ForceRestart
-if ($LASTEXITCODE -and $LASTEXITCODE -ne 0) { throw "Ollama restart script failed with exit code $LASTEXITCODE" }
-$state.consecutive_failures = 0
-$state.last_restart_epoch = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
-Save-WatchdogState $state
-Write-WatchdogLog 'RECOVERY restart command completed; startup script verified all gateway listeners'
+$admissionPaused = $false
+try {
+    $pauseResult = Invoke-GatewayMaintenance 'pause'
+    if (-not $pauseResult.admission_paused) { throw 'Gateway did not confirm paused admission' }
+    $admissionPaused = $true
+    if (-not (Test-AllGatewaysIdleAndPaused)) {
+        Invoke-GatewayMaintenance 'resume' | Out-Null
+        $admissionPaused = $false
+        Write-WatchdogLog 'DEFERRED recovery because queued or active work remained after admission was paused'
+        exit 0
+    }
+    Write-WatchdogLog 'CRITICAL repeated idle generation failures; admission paused and all priorities idle; restarting Ollama and gateway'
+    & $launcher -ForceRestart
+    if (-not $?) { throw 'Ollama restart script failed' }
+    $admissionPaused = $false # the restarted gateway has reopened admission
+    $state.consecutive_failures = 0
+    $state.last_restart_epoch = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+    Save-WatchdogState $state
+    Write-WatchdogLog 'RECOVERY restart command completed; startup script verified all gateway listeners'
+} catch {
+    if ($admissionPaused) {
+        try { Invoke-GatewayMaintenance 'resume' | Out-Null }
+        catch { Write-WatchdogLog "ERROR could not resume gateway admission after failed recovery: $($_.Exception.GetType().Name)" }
+    }
+    throw
+}
