@@ -16,6 +16,15 @@ def test_parses_fenced_json_response():
     assert result == {"checks": []}
 
 
+def test_normalizes_compact_llm_check_triples():
+    result = _parse_gem_compatibility_response(
+        '{"checks":[["best","cpu_motherboard","compatible"]]}'
+    )
+    assert result["checks"] == [{
+        "build": "best", "pair": "cpu_motherboard", "verdict": "compatible"
+    }]
+
+
 def test_ignores_unrelated_braces_before_valid_response():
     result = _parse_gem_compatibility_response(
         'The example {} is not the result. {"checks":[]}'
