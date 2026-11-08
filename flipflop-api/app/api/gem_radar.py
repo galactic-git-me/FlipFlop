@@ -2608,8 +2608,7 @@ async def _review_gem_spotlight_compatibility(db: AsyncSession, builds: dict) ->
             messages=[{"role": "user", "content": prompt}],
             system_prompt="Use only supplied captured product facts. Never guess from titles. Return the requested JSON checks only.",
             max_tokens=800, timeout=300, json_mode=True, local_only=True)
-        match = re.search(r"\{[\s\S]*\}", result.text or "")
-        payload = json.loads(match.group()) if match else {}
+        payload = _parse_gem_compatibility_response(result.text or "")
         raw_checks = payload.get("checks", []) if isinstance(payload, dict) else []
         checks_by_build = {key: [] for key in builds}
         allowed = set(expected)
@@ -2636,6 +2635,24 @@ async def _review_gem_spotlight_compatibility(db: AsyncSession, builds: dict) ->
         return {"reviews": {key: {"status": "review_unavailable",
             "summary": f"LLM compatibility review unavailable ({type(error).__name__}).", "checks": []}
             for key in builds}}
+
+
+def _parse_gem_compatibility_response(text: str) -> dict:
+    """Read the requested JSON object without greedily joining unrelated braces."""
+    decoder = json.JSONDecoder()
+    candidate = text.strip()
+    if candidate.startswith("```"):
+        candidate = re.sub(r"^```(?:json)?\s*|\s*```$", "", candidate,
+            flags=re.IGNORECASE).strip()
+    starts = [index for index, char in enumerate(candidate) if char == "{"]
+    for start in starts:
+        try:
+            value, _ = decoder.raw_decode(candidate[start:])
+        except json.JSONDecodeError:
+            continue
+        if isinstance(value, dict) and isinstance(value.get("checks"), list):
+            return value
+    raise ValueError("The compatibility model returned no complete checks JSON object")
 
 
 @router.get("/gem-by-component")

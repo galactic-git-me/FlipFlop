@@ -5,6 +5,8 @@ from unittest.mock import AsyncMock,patch
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 import server
 import httpx
+from fastapi import HTTPException
+from httpx import ASGITransport, AsyncClient
 from starlette.requests import ClientDisconnect
 
 class GatewayCapacity(unittest.IsolatedAsyncioTestCase):
@@ -109,6 +111,37 @@ class GatewayCapacity(unittest.IsolatedAsyncioTestCase):
   with patch.object(server,'MAX_QUEUE',1):
    self.assertFalse(forwarder.should_restart_stalled_queue())
    self.assertIsNone(forwarder._full_queue_since)
+
+ async def test_paused_admission_rejects_new_requests_until_resumed(self):
+  forwarder=server.PriorityForwarder()
+  await forwarder.pause_admission()
+  with self.assertRaises(server.HTTPException) as error:
+   await forwarder.submit(priority=1,method='POST',path='/api/chat',query='',body=b'{}',headers={})
+  self.assertEqual(error.exception.status_code,503)
+  self.assertEqual(forwarder._queue.qsize(),0)
+  await forwarder.resume_admission()
+  await forwarder.start()
+  await forwarder._client.aclose()
+  forwarder._client=httpx.AsyncClient(transport=httpx.MockTransport(lambda req:httpx.Response(200,content=b'reply')))
+  forwarder.gpu_request_body=AsyncMock(side_effect=lambda body:body)
+  try:
+   _,_,body=await asyncio.wait_for(forwarder.submit(priority=1,method='POST',path='/api/chat',query='',body=b'{}',headers={}),timeout=1)
+   await body.aclose()
+  finally:await forwarder.stop()
+
+ async def test_maintenance_pause_endpoint_requires_token(self):
+  app=server.create_app(1,'dev')
+  async with AsyncClient(transport=ASGITransport(app=app),base_url='http://test') as client:
+   with patch.object(server,'MAINTENANCE_TOKEN','test-secret'):
+    denied=await client.post('/_maintenance/pause')
+    self.assertEqual(denied.status_code,403)
+    paused=await client.post('/_maintenance/pause',headers={'X-Ollama-Maintenance-Token':'test-secret'})
+    self.assertEqual(paused.status_code,200)
+    self.assertTrue(paused.json()['admission_paused'])
+    self.assertTrue(server.forwarder.queue_state()['admission_paused'])
+    resumed=await client.post('/_maintenance/resume',headers={'X-Ollama-Maintenance-Token':'test-secret'})
+    self.assertEqual(resumed.status_code,200)
+    self.assertFalse(resumed.json()['admission_paused'])
 
  async def test_supervisor_restarts_gateway_after_nonzero_exit(self):
   failed=unittest.mock.Mock(wait=unittest.mock.Mock(return_value=75))

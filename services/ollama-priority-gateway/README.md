@@ -75,6 +75,20 @@ queue wait/read timeout. Set `OLLAMA_GATEWAY_FULL_QUEUE_STALL_SECONDS` to tune
 the threshold and `OLLAMA_GATEWAY_UPSTREAM_CLOSE_SECONDS` to bound stream
 cleanup.
 
+On Windows, `install-ollama-recovery-watchdog.ps1` installs a per-user
+scheduled task that checks every two minutes. It sends a two-token generation
+probe through the DEV gateway only when its queue and active generation count
+are both zero. Three consecutive idle probe failures trigger the existing
+startup script to restart Ollama and the priority gateway; each restart is
+followed by a ten-minute cooldown. The startup script stops only orphan model
+runners from the installed Ollama distribution. This recovery interrupts any
+in-flight inference, so the watchdog pauses generation admission with a
+per-user secret, then rechecks queue depth and active generations on all three
+priorities. If any work appeared, it resumes admission and defers recovery.
+The token is stored in `%LOCALAPPDATA%\FlipFlop`; install requires PowerShell
+7. The watchdog log and cooldown state are stored under the project's `logs`
+directory and `%LOCALAPPDATA%\FlipFlop`.
+
 Run `python services/ollama-priority-gateway/test_capacity.py` for isolated
 capacity, disconnect, timeout, and stalled-recovery tests.
 
