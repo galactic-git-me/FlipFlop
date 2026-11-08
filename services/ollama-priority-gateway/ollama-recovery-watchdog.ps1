@@ -43,6 +43,15 @@ function Save-WatchdogState($State) {
     $State | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $StatePath -Encoding UTF8
 }
 
+function Get-MaintenanceToken {
+    if (-not (Test-Path -LiteralPath $MaintenanceTokenPath)) {
+        throw 'Gateway maintenance token is missing; start the updated Ollama gateway before enabling recovery.'
+    }
+    $token = (Get-Content -LiteralPath $MaintenanceTokenPath -Raw).Trim()
+    if (-not $token) { throw 'Gateway maintenance token is empty' }
+    return $token
+}
+
 function Invoke-GenerationProbe {
     $health = Invoke-RestMethod -Uri $GatewayHealthUrl -TimeoutSec 5
     if ($health.status -ne 'ok') { throw 'DEV gateway health is not ok' }
@@ -63,17 +72,14 @@ function Invoke-GenerationProbe {
         options = @{ num_predict = 2 }
     } | ConvertTo-Json -Depth 5 -Compress
     $response = Invoke-RestMethod -Method Post -Uri $GatewayGenerationUrl `
+        -Headers @{ 'X-Ollama-Maintenance-Token' = (Get-MaintenanceToken); 'X-Ollama-Watchdog-Timeout-Seconds' = '20' } `
         -ContentType 'application/json' -Body $body -TimeoutSec 25
     if (-not $response.message.content) { throw 'DEV gateway generation probe returned no content' }
     return 'ok'
 }
 
 function Invoke-GatewayMaintenance([string]$Action) {
-    if (-not (Test-Path -LiteralPath $MaintenanceTokenPath)) {
-        throw 'Gateway maintenance token is missing; start the updated Ollama gateway before enabling recovery.'
-    }
-    $token = (Get-Content -LiteralPath $MaintenanceTokenPath -Raw).Trim()
-    if (-not $token) { throw 'Gateway maintenance token is empty' }
+    $token = Get-MaintenanceToken
     return Invoke-RestMethod -Method Post -Uri "$GatewayMaintenanceUrl/$Action" `
         -Headers @{ 'X-Ollama-Maintenance-Token' = $token } -ContentType 'application/json' `
         -Body '{}' -TimeoutSec 5
@@ -94,11 +100,7 @@ $state = Read-WatchdogState
 try {
     $probe = Invoke-GenerationProbe
     if ($probe -eq 'busy') {
-        if ([int]$state.consecutive_failures -gt 0) {
-            $state.consecutive_failures = 0
-            Save-WatchdogState $state
-        }
-        Write-WatchdogLog 'INFO generation probe skipped because the shared queue is active'
+        Write-WatchdogLog "INFO generation probe skipped because the shared queue is active; preserving failure streak $([int]$state.consecutive_failures)"
         exit 0
     }
     if ([int]$state.consecutive_failures -gt 0) {

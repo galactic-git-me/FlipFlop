@@ -11,7 +11,7 @@ import os
 import subprocess
 import sys
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import AsyncIterator, Callable
 
@@ -106,6 +106,8 @@ class QueuedRequest:
     body: bytes
     headers: dict[str, str]
     result: asyncio.Future[tuple[int, dict[str, str], ManagedBody]]
+    deadline_seconds: float | None = None
+    cancelled: asyncio.Event = field(default_factory=asyncio.Event)
 
 
 class PriorityForwarder:
@@ -269,6 +271,7 @@ class PriorityForwarder:
         query: str,
         body: bytes,
         headers: dict[str, str],
+        deadline_seconds: float | None = None,
     ) -> tuple[int, dict[str, str], ManagedBody]:
         self.prune_cancelled()
         loop = asyncio.get_running_loop()
@@ -287,16 +290,46 @@ class PriorityForwarder:
                 body=body,
                 headers=headers,
                 result=result,
+                deadline_seconds=deadline_seconds,
             )
             self._queue.put_nowait((priority, request.sequence, request))
         try:
-            return await asyncio.wait_for(result, timeout=QUEUE_WAIT_SECONDS)
+            return await asyncio.wait_for(result, timeout=deadline_seconds or QUEUE_WAIT_SECONDS)
         except TimeoutError as exc:
+            request.cancelled.set()
             result.cancel()
-            raise HTTPException(504, "Ollama request exceeded its waiting deadline") from exc
+            detail = "Ollama request exceeded its watchdog deadline" if deadline_seconds else "Ollama request exceeded its waiting deadline"
+            raise HTTPException(504, detail) from exc
         except asyncio.CancelledError:
             # The worker skips cancelled futures when it reaches them.
+            request.cancelled.set()
+            result.cancel()
             raise
+
+    @staticmethod
+    async def _await_or_cancel(awaitable, cancelled: asyncio.Event):
+        """Cancel an in-flight upstream operation when its bounded caller expires."""
+        operation = asyncio.create_task(awaitable)
+        cancel_wait = asyncio.create_task(cancelled.wait())
+        try:
+            done, _ = await asyncio.wait(
+                {operation, cancel_wait}, return_when=asyncio.FIRST_COMPLETED
+            )
+            if operation in done:
+                return operation.result()
+            if cancel_wait in done:
+                operation.cancel()
+                await asyncio.gather(operation, return_exceptions=True)
+                return None
+            raise RuntimeError("Upstream operation completed without a result")
+        except BaseException:
+            operation.cancel()
+            await asyncio.gather(operation, return_exceptions=True)
+            raise
+        finally:
+            if not cancel_wait.done():
+                cancel_wait.cancel()
+            await asyncio.gather(cancel_wait, return_exceptions=True)
 
     def prune_cancelled(self) -> None:
         """Expired/disconnected callers must not occupy admission capacity."""
@@ -324,7 +357,15 @@ class PriorityForwarder:
                     continue
 
                 assert self._client is not None
-                request.body = await self.gpu_request_body(request.body)
+                if request.deadline_seconds is None:
+                    request.body = await self.gpu_request_body(request.body)
+                else:
+                    prepared_body = await self._await_or_cancel(
+                        self.gpu_request_body(request.body), request.cancelled
+                    )
+                    if prepared_body is None:
+                        continue
+                    request.body = prepared_body
                 if request.result.done():
                     continue
                 upstream_request = self._client.build_request(
@@ -333,7 +374,14 @@ class PriorityForwarder:
                     content=request.body,
                     headers=request.headers,
                 )
-                upstream = await self._client.send(upstream_request, stream=True)
+                if request.deadline_seconds is None:
+                    upstream = await self._client.send(upstream_request, stream=True)
+                else:
+                    upstream = await self._await_or_cancel(
+                        self._client.send(upstream_request, stream=True), request.cancelled
+                    )
+                    if upstream is None:
+                        continue
 
                 if request.result.done():
                     continue
@@ -423,6 +471,19 @@ def create_app(priority: int, name: str) -> FastAPI:
             if key.lower() not in {"host", "content-length", "connection"}
         }
 
+        probe_timeout = headers.pop("x-ollama-watchdog-timeout-seconds", None)
+        maintenance_token = headers.pop("x-ollama-maintenance-token", "")
+        deadline_seconds = None
+        if probe_timeout is not None:
+            if not MAINTENANCE_TOKEN or not hmac.compare_digest(maintenance_token, MAINTENANCE_TOKEN):
+                raise HTTPException(403, "Watchdog probe authorization failed")
+            try:
+                deadline_seconds = float(probe_timeout)
+            except ValueError as exc:
+                raise HTTPException(422, "Watchdog timeout must be a positive number of seconds") from exc
+            if deadline_seconds <= 0 or deadline_seconds > min(QUEUE_WAIT_SECONDS, UPSTREAM_READ_SECONDS):
+                raise HTTPException(422, "Watchdog timeout is outside the allowed gateway deadline")
+
         if route in READ_ONLY_PATHS or route not in GENERATION_PATHS:
             assert forwarder._client is not None
             response = await forwarder._client.request(
@@ -445,6 +506,7 @@ def create_app(priority: int, name: str) -> FastAPI:
             query=(f"?{request.url.query}" if request.url.query else ""),
             body=body,
             headers=headers,
+            deadline_seconds=deadline_seconds,
         )
         return ManagedStreamingResponse(stream, status_code=status, headers=response_headers)
 

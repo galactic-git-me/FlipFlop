@@ -2576,9 +2576,9 @@ async def _review_gem_spotlight_compatibility(db: AsyncSession, builds: dict) ->
             for properties in captured_property_maps:
                 if not isinstance(properties, dict):
                     continue
-                for key, value in properties.items():
-                    if re.search(r"socket|memory|ram|form.factor|motherboard|pcie|interface", str(key), re.I):
-                        specs[str(key)[:80]] = value
+                for property_name, value in properties.items():
+                    if re.search(r"socket|memory|ram|form.factor|motherboard|pcie|interface", str(property_name), re.I):
+                        specs[str(property_name)[:80]] = value
                     if len(specs) >= 12:
                         break
             components.append({"role": role, "title": gem.get("title", ""),
