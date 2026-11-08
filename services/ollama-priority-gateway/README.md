@@ -87,7 +87,7 @@ per-user secret, then rechecks queue depth and active generations on all three
 priorities. If any work appeared, it resumes admission and defers recovery.
 The token is stored in `%LOCALAPPDATA%\FlipFlop`; install requires PowerShell
 7. The watchdog log and cooldown state are stored under the project's `logs`
-and gateway-service directories.
+directory and `%LOCALAPPDATA%\FlipFlop`.
 
 Run `python services/ollama-priority-gateway/test_capacity.py` for isolated
 capacity, disconnect, timeout, and stalled-recovery tests.

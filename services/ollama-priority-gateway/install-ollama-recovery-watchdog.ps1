@@ -14,8 +14,9 @@ $maintenanceToken = Join-Path $maintenanceState 'ollama-gateway-maintenance-toke
 if (-not (Test-Path -LiteralPath $maintenanceToken)) {
     throw 'The gateway maintenance token is not initialized. Start the updated Ollama priority gateway first.'
 }
+$statePath = Join-Path $maintenanceState 'ollama-recovery-state.json'
 $user = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
-$argument = "-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$watchdog`" -ProjectRoot `"$ProjectRoot`""
+$argument = "-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$watchdog`" -ProjectRoot `"$ProjectRoot`" -StatePath `"$statePath`""
 $action = New-ScheduledTaskAction -Execute $pwsh -Argument $argument
 $logon = New-ScheduledTaskTrigger -AtLogOn -User $user
 $recurring = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1) `
