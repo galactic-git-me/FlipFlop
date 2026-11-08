@@ -4,7 +4,8 @@ $ErrorActionPreference = 'Stop'
 
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 $ollama = (Get-Command ollama.exe -ErrorAction Stop).Source
-$python = (Get-Command python.exe -ErrorAction Stop).Source
+$venvPython = Join-Path $repoRoot 'flipflop-api\.venv\Scripts\python.exe'
+$python = if (Test-Path -LiteralPath $venvPython) { $venvPython } else { (Get-Command python.exe -ErrorAction Stop).Source }
 
 function Get-PriorityGatewayProcesses {
     return @(Get-CimInstance Win32_Process -ErrorAction SilentlyContinue | Where-Object {
