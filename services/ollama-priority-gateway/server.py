@@ -315,11 +315,13 @@ class PriorityForwarder:
             done, _ = await asyncio.wait(
                 {operation, cancel_wait}, return_when=asyncio.FIRST_COMPLETED
             )
+            if operation in done:
+                return operation.result()
             if cancel_wait in done:
                 operation.cancel()
                 await asyncio.gather(operation, return_exceptions=True)
                 return None
-            return operation.result()
+            raise RuntimeError("Upstream operation completed without a result")
         except BaseException:
             operation.cancel()
             await asyncio.gather(operation, return_exceptions=True)
