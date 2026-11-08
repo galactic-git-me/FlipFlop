@@ -2633,7 +2633,9 @@ async def _review_gem_spotlight_compatibility(db: AsyncSession, builds: dict) ->
             result = await model_selection_service.complete(task="Gem pre-build compatibility cross-check",
                 messages=[{"role": "user", "content": prompt}],
                 system_prompt="Return a new object with a checks array of compact [build,pair,verdict] string triples. Never copy the input keys or facts. No explanations.",
-                max_tokens=256, timeout=300, json_mode=True, local_only=True)
+                # Five reviews are sequential behind a 120s admin proxy deadline.
+                # Bound LLM time to 15s each, leaving time for DB work and response handling.
+                max_tokens=256, timeout=15, json_mode=True, local_only=True)
         except Exception as error:
             failure = {"status": "review_unavailable",
                 "summary": f"LLM compatibility review unavailable ({type(error).__name__}).", "checks": []}
