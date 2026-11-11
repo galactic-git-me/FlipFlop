@@ -54,11 +54,26 @@ _MANUFACTURER_DOMAINS: dict[str, tuple[str, ...]] = {
 
 def _raw_identity(listing: Listing) -> dict[str, Any]:
     raw = listing.raw_specs if isinstance(listing.raw_specs, dict) else {}
-    props = raw.get("product_properties") if isinstance(raw.get("product_properties"), dict) else {}
     identity = raw.get("identity") if isinstance(raw.get("identity"), dict) else {}
+    capture = raw.get("playbook_product_capture") if isinstance(raw.get("playbook_product_capture"), dict) else {}
+    engineering = raw.get("playbook_product_engineering_capture") if isinstance(raw.get("playbook_product_engineering_capture"), dict) else {}
+    amazon_capture = raw.get("playbook_amazon_catalog_capture") if isinstance(raw.get("playbook_amazon_catalog_capture"), dict) else {}
+    sources = [
+        identity,
+        capture.get("identity") if isinstance(capture.get("identity"), dict) else {},
+        engineering.get("identity") if isinstance(engineering.get("identity"), dict) else {},
+        capture,
+        engineering,
+        raw,
+    ]
+    for source in (capture, engineering):
+        properties = source.get("product_properties")
+        if isinstance(properties, dict):
+            sources.append(properties)
+    sources.append(amazon_capture.get("attributes") if isinstance(amazon_capture.get("attributes"), dict) else {})
 
     def first(*keys: str) -> Any:
-        for source in (identity, raw, props):
+        for source in sources:
             for key in keys:
                 value = source.get(key)
                 if isinstance(value, (str, int)) and str(value).strip():
@@ -71,7 +86,7 @@ def _raw_identity(listing: Listing) -> dict[str, Any]:
         manufacturer = next((name for name in sorted(_MANUFACTURER_DOMAINS, key=len, reverse=True)
                              if re.search(rf"\b{re.escape(name)}\b", title)), None)
     model = first("model", "model_number", "modelNumber", "Model", "Model Number")
-    mpn = first("mpn", "manufacturer_part_number", "manufacturerPartNumber", "part_number", "sku", "MPN", "Part Number")
+    mpn = first("mpn", "manufacturer_part_number", "manufacturerPartNumber", "part_number", "MPN", "Part Number")
     gtin = first("gtin", "GTIN", "upc", "UPC", "ean", "EAN")
     key = mpn if len(normalize_manual_key(mpn or "")) >= 8 else model if len(normalize_manual_key(model or "")) >= 8 else listing.title
     return {

@@ -10,7 +10,7 @@ import httpx
 from bs4 import BeautifulSoup
 
 RETAILERS=('amazon.co.uk','overclockers.co.uk','royalcdkeys.com')
-PARSER_VERSION=12
+PARSER_VERSION=13
 
 
 def max_working_days_for_calendar_duration(calendar_days):
@@ -74,6 +74,59 @@ def _add_product_property(properties,name,value):
     elif properties[name]!=value:
         previous=properties[name] if isinstance(properties[name],list) else [properties[name]]
         if value not in previous:properties[name]=[*previous,value]
+
+
+def _identity_scalar(value):
+    """Unwrap a single unambiguous identifier from retailer structured data."""
+    if isinstance(value,dict):
+        for key in ('value','displayValue','display_value','name'):
+            if key in value:
+                result=_identity_scalar(value[key])
+                if result:return result
+        return None
+    if isinstance(value,(list,tuple,set)):
+        candidates=list(dict.fromkeys(result for item in value
+            if (result:=_identity_scalar(item))))
+        return candidates[0] if len(candidates)==1 else None
+    if isinstance(value,(str,int,float)) and not isinstance(value,bool):
+        result=str(value).strip()
+        return result[:255] if result else None
+    return None
+
+
+def _product_identity(capture):
+    """Normalize product identifiers without treating retailer SKUs as MPNs."""
+    if not isinstance(capture,dict):return {}
+    properties=capture.get('product_properties')
+    if not isinstance(properties,dict):properties={}
+    attributes=capture.get('attributes')
+    if isinstance(attributes,dict):properties={**attributes,**properties}
+    keyed={re.sub(r'[^a-z0-9]+','',str(key).casefold()):value
+        for key,value in properties.items()}
+
+    def property_value(*names):
+        for name in names:
+            if name in keyed:
+                value=_identity_scalar(keyed[name])
+                if value:return value
+        return None
+
+    manufacturer=(capture.get('manufacturer') or capture.get('product_brand') or capture.get('brand')
+        or property_value('manufacturer','brand','brandname'))
+    model=(capture.get('model_number') or capture.get('modelNumber') or capture.get('model')
+        or property_value('modelnumber','itemmodelnumber','manufacturermodelnumber'))
+    mpn=(capture.get('manufacturer_part_number') or capture.get('mpn')
+        or property_value('manufacturerpartnumber','manufacturerspartnumber','mpn','partnumber'))
+    gtin=(capture.get('gtin') or capture.get('gtin14') or capture.get('gtin13')
+        or capture.get('gtin12') or capture.get('gtin8')
+        or property_value('gtin','gtin14','gtin13','gtin12','gtin8','ean','upc',
+            'universalproductcode','globaltradeitemnumber'))
+    identity={}
+    if value:=_identity_scalar(manufacturer):identity['manufacturer']=value
+    if value:=_identity_scalar(model):identity['model_number']=value
+    if value:=_identity_scalar(mpn):identity.update(mpn=value,manufacturer_part_number=value)
+    if value:=_identity_scalar(gtin):identity['gtin']=value
+    return identity
 
 
 def _amazon_product_properties(soup):
@@ -239,7 +292,7 @@ async def refresh_amazon_catalogue_attributes(listings,now=None,*,db=None):
                     'error_code':'exact_asin_not_returned','attempted_at':now.isoformat()}
             else:
                 selected={key:value for key,value in attributes.items()
-                    if re.search(r'socket|form.factor|memory|ram|watt|power|thermal|length|height|cooler|graphics|gpu|interface|connector|module|ddr|storage|m2',key,re.I)}
+                    if re.search(r'manufacturer|brand|model|mpn|part.number|gtin|ean|upc|socket|form.factor|memory|ram|watt|power|thermal|length|height|cooler|graphics|gpu|interface|connector|module|ddr|storage|m2',key,re.I)}
                 result={'status':'captured','asin':asin,'source':'amazon_sp_api_catalog_items_v2022_04_01',
                     'observed_at':now.isoformat(),'attempted_at':now.isoformat(),'attributes':dict(list(selected.items())[:40])}
                 counts['captured']+=1
@@ -282,7 +335,16 @@ async def persist_product_source_capture(db,listing,key,attempt,*,role=None):
     previous=(listing.raw_specs or {}).get(key) or {}
     retain=retain_last_good_capture if key=='playbook_product_capture' else retain_last_good_amazon_catalog_capture
     stored=retain(previous,attempt,listing.url)
-    raw={**(listing.raw_specs or {}),key:stored}
+    raw={**(listing.raw_specs or {})}
+    # Expose exact product identifiers in one predictable place for manuals,
+    # compatibility details and catalogue tooling. Retailer SKUs are kept
+    # separate and are never silently promoted to manufacturer part numbers.
+    current_identity=raw.get('identity') if isinstance(raw.get('identity'),dict) else {}
+    identity={**current_identity,**_product_identity(attempt)}
+    if identity:
+        stored={**stored,'identity':identity}
+        raw['identity']=identity
+    raw[key]=stored
     # Compatibility facts can be useful even when an Amazon page has no
     # selected offer. Keep this separate from the last-good commercial capture
     # so unresolved price/stock evidence can never become a purchasable source.
@@ -292,7 +354,7 @@ async def persist_product_source_capture(db,listing,key,attempt,*,role=None):
         raw['playbook_product_engineering_capture']={
             'url':listing.url,'title':attempt.get('title') or listing.title,
             'sku':attempt.get('sku'),'observed_at':attempt.get('observed_at') or attempt.get('attempted_at'),
-            'product_properties':properties,'engineering_reviewed':False}
+            'product_properties':properties,'identity':identity,'engineering_reviewed':False}
     listing.raw_specs=raw
     if key=='playbook_product_capture' and stored.get('status')=='captured':
         listing.price=float(stored['item_gbp'])
@@ -592,9 +654,21 @@ def parse_product_capture(html,url):
             condition_evidence='first_party_retail_default_new_no_second_hand_designation'
     brand=product.get('brand') or {}
     brand=brand.get('name') if isinstance(brand,dict) else brand
+    manufacturer=product.get('manufacturer') or {}
+    manufacturer=manufacturer.get('name') if isinstance(manufacturer,dict) else manufacturer
+    identity=_product_identity({
+        'manufacturer':manufacturer,'product_brand':brand,
+        'model':product.get('model') or product.get('modelNumber'),
+        'mpn':product.get('mpn'),
+        'gtin':(product.get('gtin') or product.get('gtin14') or product.get('gtin13')
+            or product.get('gtin12') or product.get('gtin8')),
+        'product_properties':captured_properties,
+    })
     return {'status':'captured','url':url,'observed_at':datetime.now(timezone.utc).isoformat(),
-        'title':product.get('name'),'sku':product.get('sku'),'mpn':product.get('mpn'),
-        'product_brand':brand,'product_description':str(product.get('description') or '')[:4000],
+        'title':product.get('name'),'sku':product.get('sku'),'mpn':identity.get('mpn'),
+        'model_number':identity.get('model_number'),'gtin':identity.get('gtin'),
+        'product_brand':identity.get('manufacturer') or brand,'identity':identity,
+        'product_description':str(product.get('description') or '')[:4000],
         'condition':{'NewCondition':'new','UsedCondition':'used','RefurbishedCondition':'refurbished'}.get(condition,'unknown'),
         'condition_evidence':condition_evidence,
         'item_gbp':amount(offer['price']),'delivery_gbp':postage,'postage_verified':postage is not None,
