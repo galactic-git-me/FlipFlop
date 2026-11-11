@@ -25,7 +25,13 @@ def media_family(category, title):
 
 def media_key(category, title, listing_id):
     category = "storage" if category == "storage_secondary" else category
-    return (category, f"case:{listing_id}" if category == "case" else media_family(category, title) or f"{category}_unclassified")
+    if category in {"case", "wireless_adapter"}:
+        # Wireless adapters have meaningfully different shapes (PCIe cards,
+        # USB dongles, external antenna bases). Keep their approved media and
+        # generated models scoped to the exact product until a safe shared
+        # family can be identified.
+        return category, f"{category}_product_{listing_id}"
+    return (category, media_family(category, title) or f"{category}_unclassified")
 
 
 def family_label(key):
@@ -47,12 +53,18 @@ def group_media_inventory(rows, family_assets=()):
         assets = [a for a in family_assets if a.get("category") == category and a.get("family_key") == key]
         assets.extend(row["asset"] for row in members if row.get("asset"))
         asset = next((a for a in assets if a.get("is_active") and a.get("status") == "final"), next((a for a in assets if a.get("glb_ref")), assets[0] if assets else None))
-        result.append({**owner, "title": family_label(key), "sample_product_title": owner["title"],
+        display_title = owner["title"] if key == f"{category}_product_{owner['listing_id']}" else family_label(key)
+        owner_review = owner.get("asset_media_review") or {}
+        approval_scope_matches = owner_review.get("media_family_key") == key or (
+            category == "wireless_adapter"
+            and owner_review.get("media_family_key") == "wireless_adapter_unclassified"
+        )
+        result.append({**owner, "title": display_title, "sample_product_title": owner["title"],
             "media_scope": "family", "media_family_key": key,
             "product_count": len({row["listing_id"] for row in members}),
             "variant_ids": list(dict.fromkeys(v for row in members for v in row["variant_ids"])),
             "member_listing_ids": list(dict.fromkeys(row["listing_id"] for row in members)),
-            "main_photo_approved": bool(owner.get("main_photo_approved") and (owner.get("asset_media_review") or {}).get("media_family_key") == key),
+            "main_photo_approved": bool(owner.get("main_photo_approved") and approval_scope_matches),
             "asset": asset})
     return sorted(result, key=lambda row: (row["category"], row["title"]))
 
