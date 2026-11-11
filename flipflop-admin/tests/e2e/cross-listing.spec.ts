@@ -71,7 +71,7 @@ const builds: Build[] = [
     generated_description: "Quiet workstation, fully tested.",
     generated_aspects: { Features: ["32GB RAM"] },
     components: [{ slot: "cpu", name: "Ryzen 7" }],
-    photos: [],
+    photos: [{ url: "https://cdn.example.test/borealis.jpg", kind: "photo" }],
     hero_photo_url: null,
     last_evaluation: { mid: 650 },
   },
@@ -105,6 +105,22 @@ async function installCrossListingMocks(page: Page, ebayConnected = true, amazon
     if (ebayStatus && method === "GET") return json(route, 200, { connected: ebayConnected });
     if (apiPath === "/cross-listing/amazon/status" && method === "GET") {
       return json(route, 200, { connected: amazonConnected, message: amazonConnected ? "Sandbox provider is connected." : "Amazon test connection unavailable." });
+    }
+    if (apiPath === "/cross-listing/images/preview" && method === "POST") {
+      const payload = request.postDataJSON() as { channel: string; urls: string[] };
+      return json(route, 200, {
+        channel: payload.channel,
+        images: payload.urls.map((url, index) => ({
+          id: String(index + 1).padStart(64, "0"),
+          policy_version: 1,
+          url: `https://cdn.example.test/${payload.channel}-${index + 1}.jpg`,
+          source_url: url,
+          width: 1600,
+          height: 1600,
+          upscaled: false,
+          square_crop_safe: false,
+        })),
+      });
     }
     if (/^\/cross-listing\/amazon\/publish\/\d+$/.test(apiPath) && method === "POST") {
       return json(route, 200, { success: true, status: "published", sku: "FF-BUILD-42", listing_url: "https://www.amazon.co.uk/dp/SYNTHETIC42", message: "Amazon fake provider accepted the publish request." });
@@ -217,6 +233,29 @@ test("treats an eBay draft as unpublished and selects eBay for a new listing", a
     page.locator("section.grid").getByRole("button", { name: /eBay UK/ })
   ).toHaveAttribute("aria-pressed", "true");
   await expect(page.getByRole("button", { name: "Review & submit" })).toBeEnabled();
+});
+
+test("the row Cross-list action opens photo approval before posting to eBay", async ({ page, context }) => {
+  await authenticate(context);
+  await installCrossListingMocks(page);
+  let publishRequests = 0;
+  page.on("request", (request) => {
+    if (request.url().includes("/post-to-ebay")) publishRequests += 1;
+  });
+  await page.goto("/cross-listing");
+
+  const row = page.locator("tr", { hasText: "Borealis Workstation" });
+  page.on("dialog", (dialog) => void dialog.accept());
+  await row.getByRole("button", { name: "Cross-list" }).click();
+
+  const dialog = page.getByRole("dialog", { name: "Review channel photographs" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("img", { name: "Borealis Workstation, ebay_uk photograph 1" })).toBeVisible();
+  expect(publishRequests).toBe(0);
+
+  await dialog.getByRole("button", { name: "Cancel" }).click();
+  await expect(dialog).toHaveCount(0);
+  expect(publishRequests).toBe(0);
 });
 
 test("creates development-only previews for manual channels without reporting them live", async ({ page, context }) => {
