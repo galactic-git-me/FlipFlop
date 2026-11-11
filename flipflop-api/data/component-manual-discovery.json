@@ -406,5 +406,35 @@
     "reason": "no_exact_official_pdf",
     "component": "MSI GeForce RTX 5050 8G SHADOW 2X OC Graphics Card - RTX 5050 GPU, 8GB GDDR6 (20Gbps/128-bit), PCIe 5.0 - DUAL-Fan Thermal De",
     "retry_after": "2026-12-11T07:55:48.905811"
+  },
+  "cd0fca0695ad318885f6179264465817fbabdd7b4be370f26d9c6897997b03c2": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzensets 5 9600X Processor (radeon graphics included, 6 Cores/12 Threads, 65W TDP, Socket AM5, Cache 38MB, up to 5.4 GHz max boost Frequency, no cooler)",
+    "retry_after": "2026-12-11T11:10:34.635588"
+  },
+  "72f8f87ef1fbbfe7bfa2245914489b88917752ea0b7103ef279f18fa977913af": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR VENGEANCE LPX DDR4 RAM 32GB (2x16GB) Up to 3200MHz CL16-20-20-38 1.35V Intel XMP AMD EXPO Computer Memory \u2013 Black (CMK32GX4M2E3200C16)",
+    "retry_after": "2026-12-11T11:10:34.635588"
+  },
+  "640b228521813139228190d0b61982c81547e054974b41e267af0680cf794b18": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR FRAME 4000D Modular Mid-Tower ATX PC Case \u2013 High Airflow, InfiniRail\u2122 Fan Mounting System, Dual 360mm Radiator Support, ASUS BTF, MSI Project Zero, Gigabyte Project Stealth \u2013 White",
+    "retry_after": "2026-12-11T11:10:34.635588"
+  },
+  "5c3b0c87be0948c912bb0a596ddc1352ace37da8ad54b1ef08c19206b8f0a06e": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "CiT F3 Curved Glass mATX Gaming PC Case - Panoramic Curved Front & Side Tempered Glass - 3x 120mm ARGB Fans Included - Daisy Chain Lighting - USB 3.0 + USB 2.0-240mm AIO Support | Black",
+    "retry_after": "2026-12-11T11:10:34.635588"
+  },
+  "c0c28534a87479737dbab54de67eabe15987c9be9c41a384129d5376b60e83b4": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Patriot Viper Steel DDR4 16GB (1 x 16GB) 3200MHz Module - PVS416G320C6",
+    "retry_after": "2026-12-11T11:10:34.635588"
   }
 }
