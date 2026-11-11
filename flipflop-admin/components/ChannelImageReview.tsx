@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 export type ImageReviewRequest = { buildId: number; title: string; channel: string; urls: string[] };
 type PreviewImage = { id: string; policy_version: number; url: string; source_url: string; width: number; height: number; upscaled: boolean; square_crop_safe: boolean };
@@ -11,12 +12,17 @@ export default function ChannelImageReview({ requests, onCancel, onApproved }: {
   requests: ImageReviewRequest[]; onCancel: () => void; onApproved: (urls: Record<string, string[]>) => void;
 }) {
   const [previews, setPreviews] = useState<Preview[]>([]);
+  const [mounted, setMounted] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
+    setMounted(true);
+  }, []);
+  useEffect(() => {
+    if (!mounted) return;
     const previous = document.activeElement;
     dialogRef.current?.focus();
     return () => { if (previous instanceof HTMLElement) previous.focus(); };
-  }, []);
+  }, [mounted]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -68,7 +74,8 @@ export default function ChannelImageReview({ requests, onCancel, onApproved }: {
     finally { setSaving(false); }
   };
   const needsWhite = requests.some((request) => request.channel === "amazon");
-  return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" role="dialog" aria-modal="true" aria-labelledby="channel-image-title">
+  if (!mounted) return null;
+  return createPortal(<div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4" role="dialog" aria-modal="true" aria-labelledby="channel-image-title">
     <div ref={dialogRef} tabIndex={-1} onKeyDown={(event) => {
       if (event.key === "Escape" && !saving) onCancel();
       if (event.key !== "Tab") return;
@@ -101,5 +108,5 @@ export default function ChannelImageReview({ requests, onCancel, onApproved }: {
       <div className="mt-6 flex justify-end gap-3"><button onClick={onCancel} disabled={saving} className="rounded border border-slate-600 px-4 py-2 text-slate-200">Cancel</button>
         <button onClick={approve} disabled={loading || saving || !cleanChecked || (needsWhite && !whiteChecked) || !previewsCurrent || !imagesLoaded || imageError} className="rounded bg-emerald-400 px-4 py-2 font-medium text-slate-950 disabled:opacity-40">{saving ? "Approving…" : "Approve photographs & continue"}</button></div>
     </div>
-  </div>;
+  </div>, document.body);
 }

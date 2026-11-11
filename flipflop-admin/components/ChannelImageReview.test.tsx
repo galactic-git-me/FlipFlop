@@ -12,6 +12,8 @@ it("requires photograph and Amazon background review before continuing", async (
   vi.stubGlobal("fetch", fetchMock);
   const onApproved = vi.fn();
   render(<ChannelImageReview requests={requests} onCancel={vi.fn()} onApproved={onApproved} />);
+  const dialog = await screen.findByRole("dialog", { name: "Review channel photographs" });
+  expect(dialog.parentElement).toBe(document.body);
   const image = await screen.findByRole("img");
   const button = screen.getByRole("button", { name: "Approve photographs & continue" });
   expect(button).toBeDisabled();
