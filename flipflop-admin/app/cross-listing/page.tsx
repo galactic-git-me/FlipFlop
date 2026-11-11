@@ -942,6 +942,7 @@ export default function CrossListingPage() {
   const [draftPrice, setDraftPrice] = useState("");
   const [publishing, setPublishing] = useState(false);
   const [channelImageReview, setChannelImageReview] = useState<ImageReviewRequest[] | null>(null);
+  const [directEbayItem, setDirectEbayItem] = useState<GroupedListing | null>(null);
   const [progressJobs, setProgressJobs] = useState<ProgressJob[]>([]);
   const [results, setResults] = useState<ListingResult[]>([]);
   const [imageSelectionRequests, setImageSelectionRequests] = useState<
@@ -1369,7 +1370,7 @@ export default function CrossListingPage() {
     setReviewId(null);
   };
 
-  const relistNow = async (item: GroupedListing) => {
+  const relistNow = (item: GroupedListing) => {
     const build = builds[item.buildId];
     if (!build) return;
     const price = item.listing.price ?? build.ebay_price ?? 0;
@@ -1385,7 +1386,58 @@ export default function CrossListingPage() {
     const draftNote = build.ebay_draft_id
       ? " The earlier incomplete Seller Hub draft will remain in eBay and may be deleted there after the new listing is confirmed."
       : "";
+    const capability = channelCapabilities.find((entry) => entry.channel === "ebay_uk");
+    const photoUrls = (build.photos ?? [])
+      .filter((photo) => photo.kind === "photo" && photo.url)
+      .map((photo) => photo.url);
+    if (!capability || photoUrls.length === 0) {
+      setError("Add at least one product photograph to this build before cross-listing it on eBay.");
+      return;
+    }
     if (!window.confirm(`Publish ${item.listing.title} on eBay at £${price.toFixed(2)}? FlipFlop will verify the saved item first, then ${intendedAction}. If eBay still sees it as active, FlipFlop updates it instead.${draftNote}`)) return;
+
+    const eligibleImages = item.listing.images.filter((image) => photoUrls.includes(image.url));
+    const reviewImages = eligibleImages.length > 0
+      ? eligibleImages
+      : photoUrls.map((url, order) => ({ url, alt: item.title, order }));
+    const reviewItem: CrossListingSource = {
+      ...item.primary,
+      title: item.title,
+      listing: { ...item.listing, images: reviewImages },
+    };
+    setDirectEbayItem(item);
+    if (capability.maxImages !== null && reviewImages.length > capability.maxImages) {
+      const request = { item: reviewItem, capability };
+      const initialUrls = reviewImages
+        .map((image) => image.url)
+        .slice(0, capability.maxImages);
+      setImageSelectionRequests([request]);
+      setImageSelectionIndex(0);
+      setImageSelectionDraft(initialUrls);
+      setImageSelectionMain(initialUrls[0] ?? "");
+      setImageSelections({});
+      return;
+    }
+
+    setChannelImageReview([{
+      buildId: item.buildId,
+      title: item.title,
+      channel: "ebay_uk",
+      urls: reviewImages.map((image) => image.url),
+    }]);
+  };
+
+  const publishApprovedRelist = async (item: GroupedListing, images: string[]) => {
+    const build = builds[item.buildId];
+    if (!build || images.length === 0) {
+      setError("Approve at least one eBay product photograph before publishing.");
+      return;
+    }
+    const price = item.listing.price ?? build.ebay_price ?? 0;
+    if (!price || !Number.isFinite(price)) {
+      setError("Set a valid eBay price before relisting this build.");
+      return;
+    }
     setRelistNowBuild(item.buildId);
     setError(null);
     try {
@@ -1393,7 +1445,7 @@ export default function CrossListingPage() {
         price,
         condition: build.ebay_condition || item.condition || "USED_EXCELLENT",
         publish: true,
-        images: item.listing.images.map((image) => image.url),
+        images,
         title: item.listing.title,
         description: item.listing.description,
       });
@@ -1779,6 +1831,15 @@ export default function CrossListingPage() {
     setImageSelectionDraft([]);
     setImageSelectionMain("");
     setImageSelections({});
+    if (directEbayItem) {
+      setChannelImageReview([{
+        buildId: directEbayItem.buildId,
+        title: directEbayItem.title,
+        channel: "ebay_uk",
+        urls: nextSelections[imageSelectionKey(directEbayItem.buildId, "ebay_uk")] ?? [],
+      }]);
+      return;
+    }
     void executePublish(nextSelections);
   };
 
@@ -1788,6 +1849,7 @@ export default function CrossListingPage() {
     setImageSelectionDraft([]);
     setImageSelectionMain("");
     setImageSelections({});
+    setDirectEbayItem(null);
   };
 
   return (
@@ -2447,10 +2509,18 @@ export default function CrossListingPage() {
                         (
                           <button
                             onClick={() => void relistNow(item)}
-                            disabled={relistNowBuild === item.buildId || publishing}
+                            disabled={
+                              relistNowBuild === item.buildId ||
+                              directEbayItem?.buildId === item.buildId ||
+                              publishing
+                            }
                             className="cursor-pointer rounded border border-emerald-500/50 px-2.5 py-1.5 text-xs text-emerald-300 transition-colors hover:bg-emerald-500/10 disabled:opacity-50"
                           >
-                            {relistNowBuild === item.buildId ? "Publishing…" : "Cross-list"}
+                            {relistNowBuild === item.buildId
+                              ? "Publishing…"
+                              : directEbayItem?.buildId === item.buildId
+                              ? "Reviewing photos…"
+                              : "Cross-list"}
                           </button>
                         )}
                       <button
@@ -2566,9 +2636,21 @@ export default function CrossListingPage() {
         onResult={(id, success) => void recordCodexResult(id, success)}
       />
 
-      {channelImageReview && <ChannelImageReview requests={channelImageReview} onCancel={() => setChannelImageReview(null)} onApproved={(urls) => {
+      {channelImageReview && <ChannelImageReview requests={channelImageReview} onCancel={() => {
         setChannelImageReview(null);
-        void executePublish(urls, true);
+        setDirectEbayItem(null);
+      }} onApproved={(urls) => {
+        const relistItem = directEbayItem;
+        setChannelImageReview(null);
+        setDirectEbayItem(null);
+        if (relistItem) {
+            void publishApprovedRelist(
+              relistItem,
+              urls[imageSelectionKey(relistItem.buildId, "ebay_uk")] ?? []
+            );
+        } else {
+          void executePublish(urls, true);
+        }
       }} />}
       {review && (
         <div
