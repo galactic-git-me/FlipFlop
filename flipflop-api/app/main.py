@@ -40,7 +40,10 @@ from app.api import listings, flips, parts, sources, chat, config, swarms, inven
 from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms, price_evidence, recommendations, commerce_intelligence, upgrades
 from app.api import alerts, reselling, ebay_listings, favourites
 from app.api import email_events
+from app.api import live_builds
 from app.api import cross_listing
+from app.api import browser_listing_jobs
+from app.api import pricewatch
 from app.api import price_alerts
 from app.api import cases_bulk_import
 from app.routes.cases import router as cases_router
@@ -67,6 +70,7 @@ from app.api.configurator_admin import router as configurator_admin_router
 from app.api.public_catalogue import router as public_catalogue_router
 from app.api.public_configurator import router as public_configurator_router
 from app.api.public_studio import router as public_studio_router
+from app.api.pc_parts_compatibility import router as pc_parts_compatibility_router
 from app.api.public_support import router as public_support_router
 
 
@@ -809,7 +813,11 @@ app.include_router(facebook_router, prefix="/api")
 app.include_router(build_wizard_router, prefix="/api")
 app.include_router(alerts.router, prefix="/api")
 app.include_router(email_events.router, prefix="/api")
+app.include_router(live_builds.router, prefix="/api")
+app.include_router(pricewatch.router, prefix="/api")
 app.include_router(cross_listing.router, prefix="/api")
+app.include_router(browser_listing_jobs.router, prefix="/api")
+app.include_router(browser_listing_jobs.worker_router, prefix="/api")
 app.include_router(price_alerts.router, prefix="/api")
 app.include_router(favourites.router, prefix="/api")
 app.include_router(reselling.router, prefix="/api")
@@ -831,6 +839,7 @@ app.include_router(configurator_admin_router, prefix="/api")
 app.include_router(public_catalogue_router, prefix="/api")
 app.include_router(public_configurator_router, prefix="/api")
 app.include_router(public_studio_router, prefix="/api")
+app.include_router(pc_parts_compatibility_router, prefix="/api")
 app.include_router(public_support_router, prefix="/api")
 app.include_router(public_products_router, prefix="/api")
 app.include_router(public_showcase_router, prefix="/api")

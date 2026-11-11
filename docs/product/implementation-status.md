@@ -1,5 +1,11 @@
 # Product implementation status
 
+### Build Studio compatibility, component prices and manuals — 11 November 2026
+
+The Build Studio evaluation now uses FlipFlop's deterministic compatibility service, with explicit hard-fail, warning and unknown states. Component inspection can display recent vendor prices, captured per-vendor history and an exact-match cached manufacturer guide. A resumable Playbook guide backfill is available in Settings; a six-hour worker checks for newly added components using an official-domain allowlist and validates downloaded PDF type, size and checksum.
+
+Implemented in source; runtime, live price coverage and the initial full manual backfill are not yet verified. The GitHub `PCPartsCompatibilityProgram` repository is a 2019 Expo prototype with a CPU specification table and scraper scripts, but no compatibility engine; no unlicensed source code was copied. The service uses FlipFlop's reviewed engineering records and explicit product rules instead.
+
 ### Capability-led Playbook model — 22 October 2026
 
 **Planned runtime migration; draft specification artifacts updated.** The owner approved customer use
@@ -402,3 +408,7 @@ Draft compatibility checks compare complete roles, CPU/board sockets, RAM genera
 Pricing uses matching complete-PC sold records first, then component sold medians with supplier-cost fallback for uncovered roles, then cost plus 10% profit on total cost. The recorded cost floor remains binding. Costs include delivery £15 by default, insurance £15, labour £0, packaging £6, payment fixed £0.20, overhead 10% of parts, payment 3.15%, warranty 5% and returns 2%; VAT assumes current non-registration. Unknown buying postage is explicitly assumed free. All 165,988 sold observations remain. Current exact parts, source links, prices, quantities, checks and assumptions are in the [completed Playbook](../playbook/generated-simple/playbook.md) and adjacent JSON.
 
 Verification: strict `rebuild_simple_playbook.py --apply --require-complete`; saved-artifact arithmetic and role/compatibility checks across all 24 cells; standalone regression checks for identity, quantities, postage and physical conflicts; API imports and running DEV health; frontend TypeScript and targeted lint. The signed-in browser verified the populated matrix, supplier links and multi-unit workstation details. No existing test suite, checkout payment, migration, production deployment or physical assembly test was run. Applied migration history and captured data were preserved; recovery copies are outside the repository at `C:\Users\mclar\CODING\FlipFlop-prd-recovery-20261023`.
+
+### PriceWatch vendor median history — 11 November 2026
+
+PriceWatch uses Amazon Best Sellers only to discover and rank the component products. Rows and chart selections are keyed by CPK; exact manufacturer/MPN aliases include their linked marketplace listings, and Amazon's existing daily price captures are treated as one vendor. Monthly cells show the lowest median across Amazon and linked vendor observations, with the winning vendor displayed. Temu and Vinted are excluded from vendor benchmarks. Products without a CPK link are counted separately until their identity can be resolved; ASIN is not used as the product or price-history key. No separate scraper or price-history table is introduced.

@@ -12,8 +12,9 @@ eBay's documented Trading API XML contract.
 """
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from typing import Optional
+from xml.sax.saxutils import escape
 from xml.etree import ElementTree as ET
 
 import httpx
@@ -221,22 +222,46 @@ async def respond_to_best_offer(
 
 
 async def get_member_messages(
-    token: str, days_back: int = 7, environment: str | None = None
+    token: str, days_back: int = 7, environment: str | None = None,
+    item_id: str | None = None,
 ) -> list[dict]:
-    """Row 47: unanswered buyer messages, for the response-time alert job."""
-    since = (datetime.utcnow().replace(microsecond=0)).isoformat() + "Z"
+    """Read unanswered buyer questions, including body text for the admin inbox."""
+    since = (datetime.now(timezone.utc) - timedelta(days=max(1, min(days_back, 30)))).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    item_filter = f"<ItemID>{escape(item_id)}</ItemID>" if item_id else ""
     body = f"""<MailMessageType>All</MailMessageType>
-<DetailLevel>ReturnHeaders</DetailLevel>
+<StartCreationTime>{since}</StartCreationTime>
+{item_filter}
+<DetailLevel>ReturnMessages</DetailLevel>
 <MessageStatus>Unanswered</MessageStatus>"""
     tree = await _call("GetMemberMessages", body, token, environment=environment)
     messages = []
     for msg_el in tree.findall(f".//{{{_NS}}}MemberMessage"):
         messages.append({
-            "message_id": msg_el.findtext(f"{{{_NS}}}MessageID"),
-            "sender": msg_el.findtext(f"{{{_NS}}}Sender"),
-            "subject": msg_el.findtext(f"{{{_NS}}}Subject"),
-            "item_id": msg_el.findtext(f"{{{_NS}}}ItemID"),
-            "received_at": msg_el.findtext(f"{{{_NS}}}CreationDate"),
+            "message_id": msg_el.findtext(f"{{{_NS}}}MessageID") or msg_el.findtext(f"{{{_NS}}}MemberMessageExchange/{{{_NS}}}Question/{{{_NS}}}MessageID"),
+            "sender": msg_el.findtext(f"{{{_NS}}}Sender") or msg_el.findtext(f"{{{_NS}}}MemberMessageExchange/{{{_NS}}}Question/{{{_NS}}}Sender"),
+            "subject": msg_el.findtext(f"{{{_NS}}}Subject") or msg_el.findtext(f"{{{_NS}}}MemberMessageExchange/{{{_NS}}}Question/{{{_NS}}}Subject"),
+            "body": msg_el.findtext(f"{{{_NS}}}Body") or msg_el.findtext(f"{{{_NS}}}MemberMessageExchange/{{{_NS}}}Question/{{{_NS}}}Body"),
+            "item_id": msg_el.findtext(f"{{{_NS}}}ItemID") or msg_el.findtext(f"{{{_NS}}}Item/{{{_NS}}}ItemID"),
+            "received_at": msg_el.findtext(f"{{{_NS}}}CreationDate") or msg_el.findtext(f"{{{_NS}}}MemberMessageExchange/{{{_NS}}}Question/{{{_NS}}}CreationDate"),
             "response_details": msg_el.findtext(f"{{{_NS}}}ResponseDetails/{{{_NS}}}ResponseEnabled"),
+            "message_type": msg_el.findtext(f"{{{_NS}}}MessageType"),
         })
     return messages
+
+
+async def respond_to_member_message(
+    item_id: str, message_id: str, response: str, token: str,
+    environment: str | None = None,
+) -> bool:
+    """Reply to an unanswered Ask Seller a Question message for an active item."""
+    if not item_id.strip() or not message_id.strip() or not response.strip() or len(response) > 2000:
+        raise ValueError("A listing, unanswered message and reply of at most 2,000 characters are required")
+    body = f"""<ItemID>{escape(item_id)}</ItemID>
+<MemberMessage>
+  <ParentMessageID>{escape(message_id)}</ParentMessageID>
+  <Body>{escape(response.strip())}</Body>
+  <DisplayToPublic>false</DisplayToPublic>
+  <EmailCopyToSender>false</EmailCopyToSender>
+</MemberMessage>"""
+    await _call("AddMemberMessageRTQ", body, token, environment=environment)
+    return True
