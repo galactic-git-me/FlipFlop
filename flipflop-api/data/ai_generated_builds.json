@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-11T10:37:31.831594+00:00",
+  "generated_at": "2026-11-11T11:21:26.584874+00:00",
   "builds": [
     {
       "components": [
         {
-          "id": 85952916,
+          "id": 86039606,
           "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F800385921345%3Fvar%3D657430757573:Intel%20Processors%209th%20Gen%20CPU%20Core%20i7-9700K%2FF%20i5-9600K%2FF%20i3-9100F%20for%20Windows%2011",
           "category": "cpu",
           "title": "Intel Processors 9th Gen CPU Core i7-9700K/F i5-9600K/F i3-9100F for Windows 11",
@@ -18,35 +18,35 @@
           "url": "https://www.ebay.co.uk/itm/800385921345?var=657430757573"
         },
         {
-          "id": 85908878,
-          "listing_id": "327338283795",
+          "id": 85974084,
+          "listing_id": "187716702497",
           "category": "motherboard",
-          "title": "ASUS B150M-A/M.2 Supports 6/7th Gen Motherboard",
+          "title": "Veno Scorp ViperX RGB Gaming Mouse 12,800\u202fDPI with Customizable RGB Backlighting",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/bGgAAeSwDX1qu8Vr/s-l225.jpg",
-          "delivered_price": 33.99,
+          "image_url": "https://i.ebayimg.com/images/g/vmQAAeSwIehpDKn~/s-l225.jpg",
+          "delivered_price": 21.61,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -33.99,
-          "url": "https://www.ebay.co.uk/itm/327338283795"
+          "estimated_profit": -21.61,
+          "url": "https://www.ebay.co.uk/itm/187716702497?_skw=Veno+Scorp&hash=item2bb4c99121:g:vmQAAeSwIehpDKn~&amdata=enc%3AAQALAAAA8Of5zIIojhOf%2BkQK%2Bxzjn7ney4BuyNSSrifFf79d6x7QLcAn84T1wEnlP9kr1Z4vOYONfC3ONK7Z13oXQi%2BPhWjRfx8Ogn1%2FfBPt0EU8Qo8gYzcMR9EZY5YXAP8%2Fu9P6ODx63banw43TK0lrn1Vmcc2QaFU1ApY8%2FywAMYLUqSPWWEHcbussnzkqjbfUGoNyUYddOLOMBSk%2FNzqN%2BL4bcghB3UovafmQi0%2B5ShoER3%2FqVwi2Mb6Zgz53m5L7V%2Btz%2Fw3bnEf8t4rw%2Bwaa8ox5G2sGgVqRKmrHSH5Xy9zeBxBtptcQOHftO0DmwlmEMquVTQ%3D%3D"
         },
         {
-          "id": 85925934,
-          "listing_id": "860095435315",
+          "id": 85971006,
+          "listing_id": "167698982261",
           "category": "gpu",
-          "title": "PowerColor ATI Radeon HD 5870 1GB GDDR5 DirectX 11 PCIe x16 Graphics Card",
+          "title": "XFX Play Hard, AMD Radeon HD6970  GPU Graphics Video Game Card",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/CBYAAeSw6glq44YL/s-l225.jpg",
-          "delivered_price": 34.839999999999996,
+          "image_url": "https://i.ebayimg.com/images/g/CiYAAeSwEA5ok9Fw/s-l225.jpg",
+          "delivered_price": 24.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -34.84,
-          "url": "https://www.ebay.co.uk/itm/860095435315?_skw=Powercolor&hash=itemc841aed233:g:CBYAAeSw6glq44YL"
+          "estimated_profit": -24.99,
+          "url": "https://www.ebay.co.uk/itm/167698982261?_skw=NVIDIA+GPU&hash=item270ba36575:g:CiYAAeSwEA5ok9Fw&amdata=enc%3AAQALAAAA8Of5zIIojhOf%2BkQK%2Bxzjn7kLnvj%2FL7aLt0l9hM9czz5UJVMqz48mcuvDWX9RrxR0u51%2FYdShTFCtanTZ7xomT%2FttnTeIN4ISJHEtsJv%2BFJwzIWULCRIQAZJ6LyjysGg0Jtne4t%2FQLHiCoWxNZCpgx7HGSKpdzV5xX049ZGUZjtYownJgtHTlbY6f1Rst04wkjO8w1y4F%2FYaQAezshKrPkHIJymzS6gYdK4oSsSopls3YFdL7q%2B7OVeXyns1WCSdH5vGMYI2irUP5tan%2BLtfPU7xnMhoKTF9eb2dWQLy8lyAFAWVzB4804ggyPMUzfPe9OQ%3D%3D"
         },
         {
-          "id": 85913845,
+          "id": 86000355,
           "listing_id": "366750376196",
           "category": "ram",
           "title": "Crucial CT8G4DFRA32A 8GB DDR4 3200MHz CL22 UDIMM 288-Pin Desktop RAM",
@@ -60,7 +60,7 @@
           "url": "https://www.ebay.co.uk/itm/366750376196?_skw=DDR4+UDIMM+-sodimm+-laptop+-%22heatsink+only%22+-sticker+-%22empty+box%22+-%22tray+only%22&hash=item556406a104:g:SycAAeSwXvpq2PJb"
         },
         {
-          "id": 85942757,
+          "id": 86029440,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -74,7 +74,7 @@
           "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
         },
         {
-          "id": 85947069,
+          "id": 86033756,
           "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
           "category": "ssd",
           "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
@@ -83,12 +83,12 @@
           "delivered_price": 3.99,
           "market_new_price": null,
           "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
+          "classification": "INELIGIBLE",
           "estimated_profit": -3.99,
           "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
         },
         {
-          "id": 85914858,
+          "id": 86001381,
           "listing_id": "376963632548",
           "category": "cooler",
           "title": "Quick Install Toolless CPU Coolers Locking Clip Inner Outer Metal Retention Kit",
@@ -102,7 +102,7 @@
           "url": "https://www.ebay.co.uk/itm/376963632548?_skw=CPU+cooler&hash=item57c4c88da4:g:dssAAeSwNvVqPCCI"
         },
         {
-          "id": 85930954,
+          "id": 86017627,
           "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
           "category": "case",
           "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
@@ -118,9 +118,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 137.28,
+      "build_cost": 115.05,
       "market": {
-        "query": "gaming pc Core i7-9700K Radeon HD 5870 8gb",
+        "query": "gaming pc Core i7-9700K Radeon HD6970 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -131,61 +131,61 @@
           "available": true,
           "count": 49,
           "min_price": 159.99,
-          "max_price": 1119.99,
-          "average_price": 509.53
+          "max_price": 990.7,
+          "average_price": 481.76
         }
       },
-      "resale_estimate": 509.53,
+      "resale_estimate": 481.76,
       "resale_source": "bin_average",
-      "estimated_profit": 372.25,
+      "estimated_profit": 366.71,
       "rank": 1
     },
     {
       "components": [
         {
-          "id": 85952913,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F800385921345%3F_ul%3DGB%26rb_itemId%3D800385921345%26rb_pgeo%3DGB%26var%3D657430757573%26ff%3D11:Intel%20Processors%209th%20Gen%20CPU%20Core%20i7-9700K%2FF%20i5-9600K%2FF%20i3-9100F%20for%20Windows%2011",
+          "id": 86033913,
+          "listing_id": "google-shopping:AMD%20Athlon%2064%20X2%205600%20ADO5600IAA5DO%202%209GHz%20LGAAM2:23.98:eBay%20-%20pcpartden1",
           "category": "cpu",
-          "title": "Intel Processors 9th Gen CPU Core i7-9700K/F i5-9600K/F i3-9100F for Windows 11",
-          "seller": "ebay.co.uk",
-          "image_url": "https://www.google.com/iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAAD1BMVEVMaXH///////////////9FpdmZAAAABXRSTlMAI6b+V9IpL9cAAAB5SURBVHgBzdMBBoBAFEXRV1pAtIRZQU0LiPa/pyiuXD6AemA4rgE/v93Q+rOEx72lF9Aq6DXktbOAyUUIDAS7gOAQEERAYCAwEBgIDATPAAIDgYHAQKDPCQwEBgIDgWEgcNEIBCOBIHMF+QqYz0DbdDhs1akRzPnrLiR1Pf4dNEJhAAAAAElFTkSuQmCC",
-          "delivered_price": 29.49,
+          "title": "AMD Athlon 64 X2 5600 ADO5600IAA5DO 2 9GHz LGAAM2",
+          "seller": "eBay - pcpartden1",
+          "image_url": null,
+          "delivered_price": 23.98,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -29.49,
-          "url": "https://www.ebay.co.uk/itm/800385921345?_ul=GB&rb_itemId=800385921345&rb_pgeo=GB&var=657430757573&ff=11"
+          "estimated_profit": -23.98,
+          "url": "https://www.google.com/search?q=used+CPUs+AMD+CPU&udm=28&hl=en-GB&gl=GB#ip=1#:~:text=AMD%20Athlon%2064%20X2%205600%20ADO5600IAA5DO%202%209GHz%20LGAAM2"
         },
         {
-          "id": 85908878,
-          "listing_id": "327338283795",
+          "id": 85974084,
+          "listing_id": "187716702497",
           "category": "motherboard",
-          "title": "ASUS B150M-A/M.2 Supports 6/7th Gen Motherboard",
+          "title": "Veno Scorp ViperX RGB Gaming Mouse 12,800\u202fDPI with Customizable RGB Backlighting",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/bGgAAeSwDX1qu8Vr/s-l225.jpg",
-          "delivered_price": 33.99,
+          "image_url": "https://i.ebayimg.com/images/g/vmQAAeSwIehpDKn~/s-l225.jpg",
+          "delivered_price": 21.61,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -33.99,
-          "url": "https://www.ebay.co.uk/itm/327338283795"
+          "estimated_profit": -21.61,
+          "url": "https://www.ebay.co.uk/itm/187716702497?_skw=Veno+Scorp&hash=item2bb4c99121:g:vmQAAeSwIehpDKn~&amdata=enc%3AAQALAAAA8Of5zIIojhOf%2BkQK%2Bxzjn7ney4BuyNSSrifFf79d6x7QLcAn84T1wEnlP9kr1Z4vOYONfC3ONK7Z13oXQi%2BPhWjRfx8Ogn1%2FfBPt0EU8Qo8gYzcMR9EZY5YXAP8%2Fu9P6ODx63banw43TK0lrn1Vmcc2QaFU1ApY8%2FywAMYLUqSPWWEHcbussnzkqjbfUGoNyUYddOLOMBSk%2FNzqN%2BL4bcghB3UovafmQi0%2B5ShoER3%2FqVwi2Mb6Zgz53m5L7V%2Btz%2Fw3bnEf8t4rw%2Bwaa8ox5G2sGgVqRKmrHSH5Xy9zeBxBtptcQOHftO0DmwlmEMquVTQ%3D%3D"
         },
         {
-          "id": 85925934,
-          "listing_id": "860095435315",
+          "id": 85971006,
+          "listing_id": "167698982261",
           "category": "gpu",
-          "title": "PowerColor ATI Radeon HD 5870 1GB GDDR5 DirectX 11 PCIe x16 Graphics Card",
+          "title": "XFX Play Hard, AMD Radeon HD6970  GPU Graphics Video Game Card",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/CBYAAeSw6glq44YL/s-l225.jpg",
-          "delivered_price": 34.839999999999996,
+          "image_url": "https://i.ebayimg.com/images/g/CiYAAeSwEA5ok9Fw/s-l225.jpg",
+          "delivered_price": 24.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -34.84,
-          "url": "https://www.ebay.co.uk/itm/860095435315?_skw=Powercolor&hash=itemc841aed233:g:CBYAAeSw6glq44YL"
+          "estimated_profit": -24.99,
+          "url": "https://www.ebay.co.uk/itm/167698982261?_skw=NVIDIA+GPU&hash=item270ba36575:g:CiYAAeSwEA5ok9Fw&amdata=enc%3AAQALAAAA8Of5zIIojhOf%2BkQK%2Bxzjn7kLnvj%2FL7aLt0l9hM9czz5UJVMqz48mcuvDWX9RrxR0u51%2FYdShTFCtanTZ7xomT%2FttnTeIN4ISJHEtsJv%2BFJwzIWULCRIQAZJ6LyjysGg0Jtne4t%2FQLHiCoWxNZCpgx7HGSKpdzV5xX049ZGUZjtYownJgtHTlbY6f1Rst04wkjO8w1y4F%2FYaQAezshKrPkHIJymzS6gYdK4oSsSopls3YFdL7q%2B7OVeXyns1WCSdH5vGMYI2irUP5tan%2BLtfPU7xnMhoKTF9eb2dWQLy8lyAFAWVzB4804ggyPMUzfPe9OQ%3D%3D"
         },
         {
-          "id": 85913845,
+          "id": 86000355,
           "listing_id": "366750376196",
           "category": "ram",
           "title": "Crucial CT8G4DFRA32A 8GB DDR4 3200MHz CL22 UDIMM 288-Pin Desktop RAM",
@@ -199,7 +199,7 @@
           "url": "https://www.ebay.co.uk/itm/366750376196?_skw=DDR4+UDIMM+-sodimm+-laptop+-%22heatsink+only%22+-sticker+-%22empty+box%22+-%22tray+only%22&hash=item556406a104:g:SycAAeSwXvpq2PJb"
         },
         {
-          "id": 85942757,
+          "id": 86029440,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -213,7 +213,7 @@
           "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
         },
         {
-          "id": 85947069,
+          "id": 86033756,
           "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
           "category": "ssd",
           "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
@@ -222,12 +222,12 @@
           "delivered_price": 3.99,
           "market_new_price": null,
           "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
+          "classification": "INELIGIBLE",
           "estimated_profit": -3.99,
           "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
         },
         {
-          "id": 85914858,
+          "id": 86001381,
           "listing_id": "376963632548",
           "category": "cooler",
           "title": "Quick Install Toolless CPU Coolers Locking Clip Inner Outer Metal Retention Kit",
@@ -241,7 +241,7 @@
           "url": "https://www.ebay.co.uk/itm/376963632548?_skw=CPU+cooler&hash=item57c4c88da4:g:dssAAeSwNvVqPCCI"
         },
         {
-          "id": 85930954,
+          "id": 86017627,
           "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
           "category": "case",
           "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
@@ -257,9 +257,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 141.78,
+      "build_cost": 114.04,
       "market": {
-        "query": "gaming pc Core i7-9700K Radeon HD 5870 8gb",
+        "query": "gaming pc AMD Athlon 64 Radeon HD6970 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -268,341 +268,63 @@
         },
         "bin": {
           "available": true,
-          "count": 49,
-          "min_price": 159.99,
-          "max_price": 1119.99,
-          "average_price": 509.53
+          "count": 7,
+          "min_price": 84.83,
+          "max_price": 312.7,
+          "average_price": 168.87
         }
       },
-      "resale_estimate": 509.53,
+      "resale_estimate": 168.87,
       "resale_source": "bin_average",
-      "estimated_profit": 367.75,
+      "estimated_profit": 54.83,
       "rank": 2
     },
     {
       "components": [
         {
-          "id": 85952916,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F800385921345%3Fvar%3D657430757573:Intel%20Processors%209th%20Gen%20CPU%20Core%20i7-9700K%2FF%20i5-9600K%2FF%20i3-9100F%20for%20Windows%2011",
+          "id": 86028732,
+          "listing_id": "bargain_hardware:6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in",
           "category": "cpu",
-          "title": "Intel Processors 9th Gen CPU Core i7-9700K/F i5-9600K/F i3-9100F for Windows 11",
-          "seller": "ebay GB",
-          "image_url": "https://www.google.com/iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAAD1BMVEVMaXH///////////////9FpdmZAAAABXRSTlMAI6b+V9IpL9cAAAB5SURBVHgBzdMBBoBAFEXRV1pAtIRZQU0LiPa/pyiuXD6AemA4rgE/v93Q+rOEx72lF9Aq6DXktbOAyUUIDAS7gOAQEERAYCAwEBgIDATPAAIDgYHAQKDPCQwEBgIDgWEgcNEIBCOBIHMF+QqYz0DbdDhs1akRzPnrLiR1Pf4dNEJhAAAAAElFTkSuQmCC",
+          "title": "6-Pin PCIe Female to 6-Pin PCIe Male GPU Power Cable Extension 15in",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/2137854c85/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in.webp?width=300&height=300&store=default_uk&image-type=small_image",
+          "delivered_price": 20.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -20.0,
+          "url": "https://www.bargainhardware.co.uk/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in"
+        },
+        {
+          "id": 85974084,
+          "listing_id": "187716702497",
+          "category": "motherboard",
+          "title": "Veno Scorp ViperX RGB Gaming Mouse 12,800\u202fDPI with Customizable RGB Backlighting",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/vmQAAeSwIehpDKn~/s-l225.jpg",
+          "delivered_price": 21.61,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -21.61,
+          "url": "https://www.ebay.co.uk/itm/187716702497?_skw=Veno+Scorp&hash=item2bb4c99121:g:vmQAAeSwIehpDKn~&amdata=enc%3AAQALAAAA8Of5zIIojhOf%2BkQK%2Bxzjn7ney4BuyNSSrifFf79d6x7QLcAn84T1wEnlP9kr1Z4vOYONfC3ONK7Z13oXQi%2BPhWjRfx8Ogn1%2FfBPt0EU8Qo8gYzcMR9EZY5YXAP8%2Fu9P6ODx63banw43TK0lrn1Vmcc2QaFU1ApY8%2FywAMYLUqSPWWEHcbussnzkqjbfUGoNyUYddOLOMBSk%2FNzqN%2BL4bcghB3UovafmQi0%2B5ShoER3%2FqVwi2Mb6Zgz53m5L7V%2Btz%2Fw3bnEf8t4rw%2Bwaa8ox5G2sGgVqRKmrHSH5Xy9zeBxBtptcQOHftO0DmwlmEMquVTQ%3D%3D"
+        },
+        {
+          "id": 85971006,
+          "listing_id": "167698982261",
+          "category": "gpu",
+          "title": "XFX Play Hard, AMD Radeon HD6970  GPU Graphics Video Game Card",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/CiYAAeSwEA5ok9Fw/s-l225.jpg",
           "delivered_price": 24.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -24.99,
-          "url": "https://www.ebay.co.uk/itm/800385921345?var=657430757573"
+          "url": "https://www.ebay.co.uk/itm/167698982261?_skw=NVIDIA+GPU&hash=item270ba36575:g:CiYAAeSwEA5ok9Fw&amdata=enc%3AAQALAAAA8Of5zIIojhOf%2BkQK%2Bxzjn7kLnvj%2FL7aLt0l9hM9czz5UJVMqz48mcuvDWX9RrxR0u51%2FYdShTFCtanTZ7xomT%2FttnTeIN4ISJHEtsJv%2BFJwzIWULCRIQAZJ6LyjysGg0Jtne4t%2FQLHiCoWxNZCpgx7HGSKpdzV5xX049ZGUZjtYownJgtHTlbY6f1Rst04wkjO8w1y4F%2FYaQAezshKrPkHIJymzS6gYdK4oSsSopls3YFdL7q%2B7OVeXyns1WCSdH5vGMYI2irUP5tan%2BLtfPU7xnMhoKTF9eb2dWQLy8lyAFAWVzB4804ggyPMUzfPe9OQ%3D%3D"
         },
         {
-          "id": 85908878,
-          "listing_id": "327338283795",
-          "category": "motherboard",
-          "title": "ASUS B150M-A/M.2 Supports 6/7th Gen Motherboard",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/bGgAAeSwDX1qu8Vr/s-l225.jpg",
-          "delivered_price": 33.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -33.99,
-          "url": "https://www.ebay.co.uk/itm/327338283795"
-        },
-        {
-          "id": 85925934,
-          "listing_id": "860095435315",
-          "category": "gpu",
-          "title": "PowerColor ATI Radeon HD 5870 1GB GDDR5 DirectX 11 PCIe x16 Graphics Card",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/CBYAAeSw6glq44YL/s-l225.jpg",
-          "delivered_price": 34.839999999999996,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -34.84,
-          "url": "https://www.ebay.co.uk/itm/860095435315?_skw=Powercolor&hash=itemc841aed233:g:CBYAAeSw6glq44YL"
-        },
-        {
-          "id": 85895474,
-          "listing_id": "227554962106",
-          "category": "ram",
-          "title": "Crucial 8GB DDR4-3200 UDIMM desktop memory module CT8G4DFRA32A - Brand New",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/XY4AAeSwoyJqxNW0/s-l225.jpg",
-          "delivered_price": 34.839999999999996,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -34.84,
-          "url": "https://www.ebay.co.uk/itm/227554962106"
-        },
-        {
-          "id": 85942757,
-          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
-          "category": "psu",
-          "title": "HP Common Slot HS PSU 460W Gold",
-          "seller": "Bargain Hardware",
-          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp?width=300&height=300&store=default_uk&image-type=small_image",
-          "delivered_price": 4.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -4.0,
-          "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
-        },
-        {
-          "id": 85947069,
-          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
-          "category": "ssd",
-          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
-          "seller": "eBay",
-          "image_url": null,
-          "delivered_price": 3.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -3.99,
-          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
-        },
-        {
-          "id": 85914858,
-          "listing_id": "376963632548",
-          "category": "cooler",
-          "title": "Quick Install Toolless CPU Coolers Locking Clip Inner Outer Metal Retention Kit",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/dssAAeSwNvVqPCCI/s-l225.jpg",
-          "delivered_price": 4.4799999999999995,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "IDENTITY_PENDING",
-          "estimated_profit": -4.48,
-          "url": "https://www.ebay.co.uk/itm/376963632548?_skw=CPU+cooler&hash=item57c4c88da4:g:dssAAeSwNvVqPCCI"
-        },
-        {
-          "id": 85930954,
-          "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
-          "category": "case",
-          "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
-          "seller": "AWD-IT",
-          "image_url": null,
-          "delivered_price": 1.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -1.0,
-          "url": "https://www.awd-it.co.uk/catalogsearch/result/?q=Fractal+Design+Pop+Air+Mid+Tower+Case+Black+No+Window+-+FD-C-POA1A-01"
-        }
-      ],
-      "compatibility_confidence": "unknown",
-      "super_gem_count": 4,
-      "build_cost": 142.13,
-      "market": {
-        "query": "gaming pc Core i7-9700K Radeon HD 5870 8gb",
-        "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "eBay sold-comps scrape failed: 'PlaywrightSoldCompsAdapter' object has no attribute '_STEALTH_JS'"
-        },
-        "bin": {
-          "available": true,
-          "count": 49,
-          "min_price": 159.99,
-          "max_price": 1119.99,
-          "average_price": 507.64
-        }
-      },
-      "resale_estimate": 507.64,
-      "resale_source": "bin_average",
-      "estimated_profit": 365.51,
-      "rank": 3
-    },
-    {
-      "components": [
-        {
-          "id": 85952913,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F800385921345%3F_ul%3DGB%26rb_itemId%3D800385921345%26rb_pgeo%3DGB%26var%3D657430757573%26ff%3D11:Intel%20Processors%209th%20Gen%20CPU%20Core%20i7-9700K%2FF%20i5-9600K%2FF%20i3-9100F%20for%20Windows%2011",
-          "category": "cpu",
-          "title": "Intel Processors 9th Gen CPU Core i7-9700K/F i5-9600K/F i3-9100F for Windows 11",
-          "seller": "ebay.co.uk",
-          "image_url": "https://www.google.com/iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAAD1BMVEVMaXH///////////////9FpdmZAAAABXRSTlMAI6b+V9IpL9cAAAB5SURBVHgBzdMBBoBAFEXRV1pAtIRZQU0LiPa/pyiuXD6AemA4rgE/v93Q+rOEx72lF9Aq6DXktbOAyUUIDAS7gOAQEERAYCAwEBgIDATPAAIDgYHAQKDPCQwEBgIDgWEgcNEIBCOBIHMF+QqYz0DbdDhs1akRzPnrLiR1Pf4dNEJhAAAAAElFTkSuQmCC",
-          "delivered_price": 29.49,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -29.49,
-          "url": "https://www.ebay.co.uk/itm/800385921345?_ul=GB&rb_itemId=800385921345&rb_pgeo=GB&var=657430757573&ff=11"
-        },
-        {
-          "id": 85908878,
-          "listing_id": "327338283795",
-          "category": "motherboard",
-          "title": "ASUS B150M-A/M.2 Supports 6/7th Gen Motherboard",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/bGgAAeSwDX1qu8Vr/s-l225.jpg",
-          "delivered_price": 33.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -33.99,
-          "url": "https://www.ebay.co.uk/itm/327338283795"
-        },
-        {
-          "id": 85925934,
-          "listing_id": "860095435315",
-          "category": "gpu",
-          "title": "PowerColor ATI Radeon HD 5870 1GB GDDR5 DirectX 11 PCIe x16 Graphics Card",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/CBYAAeSw6glq44YL/s-l225.jpg",
-          "delivered_price": 34.839999999999996,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -34.84,
-          "url": "https://www.ebay.co.uk/itm/860095435315?_skw=Powercolor&hash=itemc841aed233:g:CBYAAeSw6glq44YL"
-        },
-        {
-          "id": 85895474,
-          "listing_id": "227554962106",
-          "category": "ram",
-          "title": "Crucial 8GB DDR4-3200 UDIMM desktop memory module CT8G4DFRA32A - Brand New",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/XY4AAeSwoyJqxNW0/s-l225.jpg",
-          "delivered_price": 34.839999999999996,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -34.84,
-          "url": "https://www.ebay.co.uk/itm/227554962106"
-        },
-        {
-          "id": 85942757,
-          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
-          "category": "psu",
-          "title": "HP Common Slot HS PSU 460W Gold",
-          "seller": "Bargain Hardware",
-          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp?width=300&height=300&store=default_uk&image-type=small_image",
-          "delivered_price": 4.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -4.0,
-          "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
-        },
-        {
-          "id": 85947069,
-          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
-          "category": "ssd",
-          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
-          "seller": "eBay",
-          "image_url": null,
-          "delivered_price": 3.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -3.99,
-          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
-        },
-        {
-          "id": 85914858,
-          "listing_id": "376963632548",
-          "category": "cooler",
-          "title": "Quick Install Toolless CPU Coolers Locking Clip Inner Outer Metal Retention Kit",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/dssAAeSwNvVqPCCI/s-l225.jpg",
-          "delivered_price": 4.4799999999999995,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "IDENTITY_PENDING",
-          "estimated_profit": -4.48,
-          "url": "https://www.ebay.co.uk/itm/376963632548?_skw=CPU+cooler&hash=item57c4c88da4:g:dssAAeSwNvVqPCCI"
-        },
-        {
-          "id": 85930954,
-          "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
-          "category": "case",
-          "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
-          "seller": "AWD-IT",
-          "image_url": null,
-          "delivered_price": 1.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -1.0,
-          "url": "https://www.awd-it.co.uk/catalogsearch/result/?q=Fractal+Design+Pop+Air+Mid+Tower+Case+Black+No+Window+-+FD-C-POA1A-01"
-        }
-      ],
-      "compatibility_confidence": "unknown",
-      "super_gem_count": 4,
-      "build_cost": 146.63,
-      "market": {
-        "query": "gaming pc Core i7-9700K Radeon HD 5870 8gb",
-        "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "eBay sold-comps scrape failed: 'PlaywrightSoldCompsAdapter' object has no attribute '_STEALTH_JS'"
-        },
-        "bin": {
-          "available": true,
-          "count": 49,
-          "min_price": 159.99,
-          "max_price": 1119.99,
-          "average_price": 507.64
-        }
-      },
-      "resale_estimate": 507.64,
-      "resale_source": "bin_average",
-      "estimated_profit": 361.01,
-      "rank": 4
-    },
-    {
-      "components": [
-        {
-          "id": 85952916,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F800385921345%3Fvar%3D657430757573:Intel%20Processors%209th%20Gen%20CPU%20Core%20i7-9700K%2FF%20i5-9600K%2FF%20i3-9100F%20for%20Windows%2011",
-          "category": "cpu",
-          "title": "Intel Processors 9th Gen CPU Core i7-9700K/F i5-9600K/F i3-9100F for Windows 11",
-          "seller": "ebay GB",
-          "image_url": "https://www.google.com/iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAAD1BMVEVMaXH///////////////9FpdmZAAAABXRSTlMAI6b+V9IpL9cAAAB5SURBVHgBzdMBBoBAFEXRV1pAtIRZQU0LiPa/pyiuXD6AemA4rgE/v93Q+rOEx72lF9Aq6DXktbOAyUUIDAS7gOAQEERAYCAwEBgIDATPAAIDgYHAQKDPCQwEBgIDgWEgcNEIBCOBIHMF+QqYz0DbdDhs1akRzPnrLiR1Pf4dNEJhAAAAAElFTkSuQmCC",
-          "delivered_price": 24.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -24.99,
-          "url": "https://www.ebay.co.uk/itm/800385921345?var=657430757573"
-        },
-        {
-          "id": 85905115,
-          "listing_id": "298402999146",
-          "category": "motherboard",
-          "title": "ASUS B150M-A/M.2 REV.1.01 LGA1151 6th 7th Gen CPU Support DDR4 Motherboard + VAT",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/AF0AAeSw2BNqKY3N/s-l225.jpg",
-          "delivered_price": 49.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -49.99,
-          "url": "https://www.ebay.co.uk/itm/298402999146?_skw=ASUS+motherboard&hash=item457a346b6a:g:AF0AAeSw2BNqKY3N"
-        },
-        {
-          "id": 85925934,
-          "listing_id": "860095435315",
-          "category": "gpu",
-          "title": "PowerColor ATI Radeon HD 5870 1GB GDDR5 DirectX 11 PCIe x16 Graphics Card",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/CBYAAeSw6glq44YL/s-l225.jpg",
-          "delivered_price": 34.839999999999996,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -34.84,
-          "url": "https://www.ebay.co.uk/itm/860095435315?_skw=Powercolor&hash=itemc841aed233:g:CBYAAeSw6glq44YL"
-        },
-        {
-          "id": 85913845,
+          "id": 86000355,
           "listing_id": "366750376196",
           "category": "ram",
           "title": "Crucial CT8G4DFRA32A 8GB DDR4 3200MHz CL22 UDIMM 288-Pin Desktop RAM",
@@ -616,7 +338,7 @@
           "url": "https://www.ebay.co.uk/itm/366750376196?_skw=DDR4+UDIMM+-sodimm+-laptop+-%22heatsink+only%22+-sticker+-%22empty+box%22+-%22tray+only%22&hash=item556406a104:g:SycAAeSwXvpq2PJb"
         },
         {
-          "id": 85942757,
+          "id": 86029440,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -630,7 +352,7 @@
           "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
         },
         {
-          "id": 85947069,
+          "id": 86033756,
           "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
           "category": "ssd",
           "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
@@ -639,12 +361,12 @@
           "delivered_price": 3.99,
           "market_new_price": null,
           "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
+          "classification": "INELIGIBLE",
           "estimated_profit": -3.99,
           "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
         },
         {
-          "id": 85914858,
+          "id": 86001381,
           "listing_id": "376963632548",
           "category": "cooler",
           "title": "Quick Install Toolless CPU Coolers Locking Clip Inner Outer Metal Retention Kit",
@@ -658,7 +380,7 @@
           "url": "https://www.ebay.co.uk/itm/376963632548?_skw=CPU+cooler&hash=item57c4c88da4:g:dssAAeSwNvVqPCCI"
         },
         {
-          "id": 85930954,
+          "id": 86017627,
           "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
           "category": "case",
           "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
@@ -674,9 +396,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 153.28,
+      "build_cost": 110.06,
       "market": {
-        "query": "gaming pc Core i7-9700K Radeon HD 5870 8gb",
+        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Radeon HD6970 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -684,78 +406,78 @@
           "unavailable_reason": "eBay sold-comps scrape failed: 'PlaywrightSoldCompsAdapter' object has no attribute '_STEALTH_JS'"
         },
         "bin": {
-          "available": true,
-          "count": 49,
-          "min_price": 159.99,
-          "max_price": 1119.99,
-          "average_price": 509.53
+          "available": false,
+          "count": 0,
+          "min_price": null,
+          "max_price": null,
+          "average_price": null
         }
       },
-      "resale_estimate": 509.53,
-      "resale_source": "bin_average",
-      "estimated_profit": 356.25,
-      "rank": 5
+      "resale_estimate": 0.0,
+      "resale_source": "component_estimate",
+      "estimated_profit": -110.06,
+      "rank": 3
     },
     {
       "components": [
         {
-          "id": 85952916,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F800385921345%3Fvar%3D657430757573:Intel%20Processors%209th%20Gen%20CPU%20Core%20i7-9700K%2FF%20i5-9600K%2FF%20i3-9100F%20for%20Windows%2011",
+          "id": 86028732,
+          "listing_id": "bargain_hardware:6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in",
           "category": "cpu",
-          "title": "Intel Processors 9th Gen CPU Core i7-9700K/F i5-9600K/F i3-9100F for Windows 11",
-          "seller": "ebay GB",
-          "image_url": "https://www.google.com/iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAAD1BMVEVMaXH///////////////9FpdmZAAAABXRSTlMAI6b+V9IpL9cAAAB5SURBVHgBzdMBBoBAFEXRV1pAtIRZQU0LiPa/pyiuXD6AemA4rgE/v93Q+rOEx72lF9Aq6DXktbOAyUUIDAS7gOAQEERAYCAwEBgIDATPAAIDgYHAQKDPCQwEBgIDgWEgcNEIBCOBIHMF+QqYz0DbdDhs1akRzPnrLiR1Pf4dNEJhAAAAAElFTkSuQmCC",
+          "title": "6-Pin PCIe Female to 6-Pin PCIe Male GPU Power Cable Extension 15in",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/2137854c85/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in.webp?width=300&height=300&store=default_uk&image-type=small_image",
+          "delivered_price": 20.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -20.0,
+          "url": "https://www.bargainhardware.co.uk/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in"
+        },
+        {
+          "id": 85974084,
+          "listing_id": "187716702497",
+          "category": "motherboard",
+          "title": "Veno Scorp ViperX RGB Gaming Mouse 12,800\u202fDPI with Customizable RGB Backlighting",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/vmQAAeSwIehpDKn~/s-l225.jpg",
+          "delivered_price": 21.61,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -21.61,
+          "url": "https://www.ebay.co.uk/itm/187716702497?_skw=Veno+Scorp&hash=item2bb4c99121:g:vmQAAeSwIehpDKn~&amdata=enc%3AAQALAAAA8Of5zIIojhOf%2BkQK%2Bxzjn7ney4BuyNSSrifFf79d6x7QLcAn84T1wEnlP9kr1Z4vOYONfC3ONK7Z13oXQi%2BPhWjRfx8Ogn1%2FfBPt0EU8Qo8gYzcMR9EZY5YXAP8%2Fu9P6ODx63banw43TK0lrn1Vmcc2QaFU1ApY8%2FywAMYLUqSPWWEHcbussnzkqjbfUGoNyUYddOLOMBSk%2FNzqN%2BL4bcghB3UovafmQi0%2B5ShoER3%2FqVwi2Mb6Zgz53m5L7V%2Btz%2Fw3bnEf8t4rw%2Bwaa8ox5G2sGgVqRKmrHSH5Xy9zeBxBtptcQOHftO0DmwlmEMquVTQ%3D%3D"
+        },
+        {
+          "id": 85971006,
+          "listing_id": "167698982261",
+          "category": "gpu",
+          "title": "XFX Play Hard, AMD Radeon HD6970  GPU Graphics Video Game Card",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/CiYAAeSwEA5ok9Fw/s-l225.jpg",
           "delivered_price": 24.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -24.99,
-          "url": "https://www.ebay.co.uk/itm/800385921345?var=657430757573"
+          "url": "https://www.ebay.co.uk/itm/167698982261?_skw=NVIDIA+GPU&hash=item270ba36575:g:CiYAAeSwEA5ok9Fw&amdata=enc%3AAQALAAAA8Of5zIIojhOf%2BkQK%2Bxzjn7kLnvj%2FL7aLt0l9hM9czz5UJVMqz48mcuvDWX9RrxR0u51%2FYdShTFCtanTZ7xomT%2FttnTeIN4ISJHEtsJv%2BFJwzIWULCRIQAZJ6LyjysGg0Jtne4t%2FQLHiCoWxNZCpgx7HGSKpdzV5xX049ZGUZjtYownJgtHTlbY6f1Rst04wkjO8w1y4F%2FYaQAezshKrPkHIJymzS6gYdK4oSsSopls3YFdL7q%2B7OVeXyns1WCSdH5vGMYI2irUP5tan%2BLtfPU7xnMhoKTF9eb2dWQLy8lyAFAWVzB4804ggyPMUzfPe9OQ%3D%3D"
         },
         {
-          "id": 85908878,
-          "listing_id": "327338283795",
-          "category": "motherboard",
-          "title": "ASUS B150M-A/M.2 Supports 6/7th Gen Motherboard",
+          "id": 85981796,
+          "listing_id": "227554962106",
+          "category": "ram",
+          "title": "Crucial 8GB DDR4-3200 UDIMM desktop memory module CT8G4DFRA32A - Brand New",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/bGgAAeSwDX1qu8Vr/s-l225.jpg",
-          "delivered_price": 33.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -33.99,
-          "url": "https://www.ebay.co.uk/itm/327338283795"
-        },
-        {
-          "id": 85925934,
-          "listing_id": "860095435315",
-          "category": "gpu",
-          "title": "PowerColor ATI Radeon HD 5870 1GB GDDR5 DirectX 11 PCIe x16 Graphics Card",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/CBYAAeSw6glq44YL/s-l225.jpg",
+          "image_url": "https://i.ebayimg.com/images/g/XY4AAeSwoyJqxNW0/s-l225.jpg",
           "delivered_price": 34.839999999999996,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -34.84,
-          "url": "https://www.ebay.co.uk/itm/860095435315?_skw=Powercolor&hash=itemc841aed233:g:CBYAAeSw6glq44YL"
+          "url": "https://www.ebay.co.uk/itm/227554962106"
         },
         {
-          "id": 85893195,
-          "listing_id": "206572860673",
-          "category": "ram",
-          "title": "Crucial 8GB (1 x 8GB) PC4-25600 (DDR4-3200) Memory (CT8G4DFRA32A)",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/JkkAAeSwE01qqWmF/s-l225.jpg",
-          "delivered_price": 50.22,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -50.22,
-          "url": "https://www.ebay.co.uk/itm/206572860673?_skw=crucial+CT8G4DFRA32A&hash=item3018b3b501:g:JkkAAeSwE01qqWmF"
-        },
-        {
-          "id": 85942757,
+          "id": 86029440,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -769,7 +491,7 @@
           "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
         },
         {
-          "id": 85947069,
+          "id": 86033756,
           "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
           "category": "ssd",
           "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
@@ -778,12 +500,12 @@
           "delivered_price": 3.99,
           "market_new_price": null,
           "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
+          "classification": "INELIGIBLE",
           "estimated_profit": -3.99,
           "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
         },
         {
-          "id": 85914858,
+          "id": 86001381,
           "listing_id": "376963632548",
           "category": "cooler",
           "title": "Quick Install Toolless CPU Coolers Locking Clip Inner Outer Metal Retention Kit",
@@ -797,7 +519,7 @@
           "url": "https://www.ebay.co.uk/itm/376963632548?_skw=CPU+cooler&hash=item57c4c88da4:g:dssAAeSwNvVqPCCI"
         },
         {
-          "id": 85930954,
+          "id": 86017627,
           "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
           "category": "case",
           "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
@@ -813,9 +535,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 157.51,
+      "build_cost": 114.91,
       "market": {
-        "query": "gaming pc Core i7-9700K Radeon HD 5870 8gb",
+        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Radeon HD6970 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -823,19 +545,297 @@
           "unavailable_reason": "eBay sold-comps scrape failed: 'PlaywrightSoldCompsAdapter' object has no attribute '_STEALTH_JS'"
         },
         "bin": {
-          "available": true,
-          "count": 49,
-          "min_price": 159.99,
-          "max_price": 1119.99,
-          "average_price": 509.53
+          "available": false,
+          "count": 0,
+          "min_price": null,
+          "max_price": null,
+          "average_price": null
         }
       },
-      "resale_estimate": 509.53,
-      "resale_source": "bin_average",
-      "estimated_profit": 352.02,
+      "resale_estimate": 0.0,
+      "resale_source": "component_estimate",
+      "estimated_profit": -114.91,
+      "rank": 4
+    },
+    {
+      "components": [
+        {
+          "id": 86028732,
+          "listing_id": "bargain_hardware:6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in",
+          "category": "cpu",
+          "title": "6-Pin PCIe Female to 6-Pin PCIe Male GPU Power Cable Extension 15in",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/2137854c85/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in.webp?width=300&height=300&store=default_uk&image-type=small_image",
+          "delivered_price": 20.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -20.0,
+          "url": "https://www.bargainhardware.co.uk/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in"
+        },
+        {
+          "id": 85974084,
+          "listing_id": "187716702497",
+          "category": "motherboard",
+          "title": "Veno Scorp ViperX RGB Gaming Mouse 12,800\u202fDPI with Customizable RGB Backlighting",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/vmQAAeSwIehpDKn~/s-l225.jpg",
+          "delivered_price": 21.61,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -21.61,
+          "url": "https://www.ebay.co.uk/itm/187716702497?_skw=Veno+Scorp&hash=item2bb4c99121:g:vmQAAeSwIehpDKn~&amdata=enc%3AAQALAAAA8Of5zIIojhOf%2BkQK%2Bxzjn7ney4BuyNSSrifFf79d6x7QLcAn84T1wEnlP9kr1Z4vOYONfC3ONK7Z13oXQi%2BPhWjRfx8Ogn1%2FfBPt0EU8Qo8gYzcMR9EZY5YXAP8%2Fu9P6ODx63banw43TK0lrn1Vmcc2QaFU1ApY8%2FywAMYLUqSPWWEHcbussnzkqjbfUGoNyUYddOLOMBSk%2FNzqN%2BL4bcghB3UovafmQi0%2B5ShoER3%2FqVwi2Mb6Zgz53m5L7V%2Btz%2Fw3bnEf8t4rw%2Bwaa8ox5G2sGgVqRKmrHSH5Xy9zeBxBtptcQOHftO0DmwlmEMquVTQ%3D%3D"
+        },
+        {
+          "id": 85964848,
+          "listing_id": "117507497349",
+          "category": "gpu",
+          "title": "XFX Play Hard, AMD Radeon HD6970 2gb HD 6970 GPU Graphics Video Game Card",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/9cwAAeSwELtqxgq4/s-l225.jpg",
+          "delivered_price": 29.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -29.99,
+          "url": "https://www.ebay.co.uk/itm/117507497349?_skw=AMD+GPU&hash=item1b5bfe1d85:g:9cwAAeSwELtqxgq4"
+        },
+        {
+          "id": 86000355,
+          "listing_id": "366750376196",
+          "category": "ram",
+          "title": "Crucial CT8G4DFRA32A 8GB DDR4 3200MHz CL22 UDIMM 288-Pin Desktop RAM",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/SycAAeSwXvpq2PJb/s-l225.jpg",
+          "delivered_price": 29.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -29.99,
+          "url": "https://www.ebay.co.uk/itm/366750376196?_skw=DDR4+UDIMM+-sodimm+-laptop+-%22heatsink+only%22+-sticker+-%22empty+box%22+-%22tray+only%22&hash=item556406a104:g:SycAAeSwXvpq2PJb"
+        },
+        {
+          "id": 86029440,
+          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
+          "category": "psu",
+          "title": "HP Common Slot HS PSU 460W Gold",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp?width=300&height=300&store=default_uk&image-type=small_image",
+          "delivered_price": 4.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -4.0,
+          "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
+        },
+        {
+          "id": 86033756,
+          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
+          "category": "ssd",
+          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
+          "seller": "eBay",
+          "image_url": null,
+          "delivered_price": 3.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INELIGIBLE",
+          "estimated_profit": -3.99,
+          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
+        },
+        {
+          "id": 86001381,
+          "listing_id": "376963632548",
+          "category": "cooler",
+          "title": "Quick Install Toolless CPU Coolers Locking Clip Inner Outer Metal Retention Kit",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/dssAAeSwNvVqPCCI/s-l225.jpg",
+          "delivered_price": 4.4799999999999995,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "IDENTITY_PENDING",
+          "estimated_profit": -4.48,
+          "url": "https://www.ebay.co.uk/itm/376963632548?_skw=CPU+cooler&hash=item57c4c88da4:g:dssAAeSwNvVqPCCI"
+        },
+        {
+          "id": 86017627,
+          "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
+          "category": "case",
+          "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
+          "seller": "AWD-IT",
+          "image_url": null,
+          "delivered_price": 1.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -1.0,
+          "url": "https://www.awd-it.co.uk/catalogsearch/result/?q=Fractal+Design+Pop+Air+Mid+Tower+Case+Black+No+Window+-+FD-C-POA1A-01"
+        }
+      ],
+      "compatibility_confidence": "unknown",
+      "super_gem_count": 4,
+      "build_cost": 115.06,
+      "market": {
+        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Radeon HD6970 8gb",
+        "sold": {
+          "available": false,
+          "count": 0,
+          "average_price": null,
+          "unavailable_reason": "eBay sold-comps scrape failed: 'PlaywrightSoldCompsAdapter' object has no attribute '_STEALTH_JS'"
+        },
+        "bin": {
+          "available": false,
+          "count": 0,
+          "min_price": null,
+          "max_price": null,
+          "average_price": null
+        }
+      },
+      "resale_estimate": 0.0,
+      "resale_source": "component_estimate",
+      "estimated_profit": -115.06,
+      "rank": 5
+    },
+    {
+      "components": [
+        {
+          "id": 86028732,
+          "listing_id": "bargain_hardware:6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in",
+          "category": "cpu",
+          "title": "6-Pin PCIe Female to 6-Pin PCIe Male GPU Power Cable Extension 15in",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/2137854c85/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in.webp?width=300&height=300&store=default_uk&image-type=small_image",
+          "delivered_price": 20.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -20.0,
+          "url": "https://www.bargainhardware.co.uk/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in"
+        },
+        {
+          "id": 85974084,
+          "listing_id": "187716702497",
+          "category": "motherboard",
+          "title": "Veno Scorp ViperX RGB Gaming Mouse 12,800\u202fDPI with Customizable RGB Backlighting",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/vmQAAeSwIehpDKn~/s-l225.jpg",
+          "delivered_price": 21.61,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -21.61,
+          "url": "https://www.ebay.co.uk/itm/187716702497?_skw=Veno+Scorp&hash=item2bb4c99121:g:vmQAAeSwIehpDKn~&amdata=enc%3AAQALAAAA8Of5zIIojhOf%2BkQK%2Bxzjn7ney4BuyNSSrifFf79d6x7QLcAn84T1wEnlP9kr1Z4vOYONfC3ONK7Z13oXQi%2BPhWjRfx8Ogn1%2FfBPt0EU8Qo8gYzcMR9EZY5YXAP8%2Fu9P6ODx63banw43TK0lrn1Vmcc2QaFU1ApY8%2FywAMYLUqSPWWEHcbussnzkqjbfUGoNyUYddOLOMBSk%2FNzqN%2BL4bcghB3UovafmQi0%2B5ShoER3%2FqVwi2Mb6Zgz53m5L7V%2Btz%2Fw3bnEf8t4rw%2Bwaa8ox5G2sGgVqRKmrHSH5Xy9zeBxBtptcQOHftO0DmwlmEMquVTQ%3D%3D"
+        },
+        {
+          "id": 85978591,
+          "listing_id": "206110421381",
+          "category": "gpu",
+          "title": "NVIDIA Quadro 4000 2GB GDDR5 Desktop GPU PCIe 2.0 Grade B EE0403",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/s9MAAeSwa25pqDio/s-l225.jpg",
+          "delivered_price": 29.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -29.99,
+          "url": "https://www.ebay.co.uk/itm/206110421381"
+        },
+        {
+          "id": 86000355,
+          "listing_id": "366750376196",
+          "category": "ram",
+          "title": "Crucial CT8G4DFRA32A 8GB DDR4 3200MHz CL22 UDIMM 288-Pin Desktop RAM",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/SycAAeSwXvpq2PJb/s-l225.jpg",
+          "delivered_price": 29.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -29.99,
+          "url": "https://www.ebay.co.uk/itm/366750376196?_skw=DDR4+UDIMM+-sodimm+-laptop+-%22heatsink+only%22+-sticker+-%22empty+box%22+-%22tray+only%22&hash=item556406a104:g:SycAAeSwXvpq2PJb"
+        },
+        {
+          "id": 86029440,
+          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
+          "category": "psu",
+          "title": "HP Common Slot HS PSU 460W Gold",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp?width=300&height=300&store=default_uk&image-type=small_image",
+          "delivered_price": 4.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -4.0,
+          "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
+        },
+        {
+          "id": 86033756,
+          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
+          "category": "ssd",
+          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
+          "seller": "eBay",
+          "image_url": null,
+          "delivered_price": 3.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INELIGIBLE",
+          "estimated_profit": -3.99,
+          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
+        },
+        {
+          "id": 86001381,
+          "listing_id": "376963632548",
+          "category": "cooler",
+          "title": "Quick Install Toolless CPU Coolers Locking Clip Inner Outer Metal Retention Kit",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/dssAAeSwNvVqPCCI/s-l225.jpg",
+          "delivered_price": 4.4799999999999995,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "IDENTITY_PENDING",
+          "estimated_profit": -4.48,
+          "url": "https://www.ebay.co.uk/itm/376963632548?_skw=CPU+cooler&hash=item57c4c88da4:g:dssAAeSwNvVqPCCI"
+        },
+        {
+          "id": 86017627,
+          "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
+          "category": "case",
+          "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
+          "seller": "AWD-IT",
+          "image_url": null,
+          "delivered_price": 1.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -1.0,
+          "url": "https://www.awd-it.co.uk/catalogsearch/result/?q=Fractal+Design+Pop+Air+Mid+Tower+Case+Black+No+Window+-+FD-C-POA1A-01"
+        }
+      ],
+      "compatibility_confidence": "unknown",
+      "super_gem_count": 4,
+      "build_cost": 115.06,
+      "market": {
+        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Quadro 4000 8gb",
+        "sold": {
+          "available": false,
+          "count": 0,
+          "average_price": null,
+          "unavailable_reason": "eBay sold-comps scrape failed: 'PlaywrightSoldCompsAdapter' object has no attribute '_STEALTH_JS'"
+        },
+        "bin": {
+          "available": false,
+          "count": 0,
+          "min_price": null,
+          "max_price": null,
+          "average_price": null
+        }
+      },
+      "resale_estimate": 0.0,
+      "resale_source": "component_estimate",
+      "estimated_profit": -115.06,
       "rank": 6
     }
   ],
   "candidates_evaluated": 10,
-  "total_compatible_combinations": 1883
+  "total_compatible_combinations": 2685
 }
