@@ -189,6 +189,7 @@ export default function SettingsPage() {
   const [manualFile, setManualFile] = useState<File | null>(null);
   const [manualSourceConfirmed, setManualSourceConfirmed] = useState(false);
   const [manualSaving, setManualSaving] = useState(false);
+  const [manualDiscoveryRunning, setManualDiscoveryRunning] = useState(false);
   const [manualMessage, setManualMessage] = useState("");
   const [aiSetupOffers, setAISetupOffers] = useState<AISetupOffer[]>([]);
   const [aiSetupSaving, setAISetupSaving] = useState(false);
@@ -342,6 +343,21 @@ export default function SettingsPage() {
       setManualMessage(error instanceof Error ? error.message : "Could not save the component manual.");
     } finally {
       setManualSaving(false);
+    }
+  }
+
+  async function discoverPlaybookManuals() {
+    setManualDiscoveryRunning(true);
+    setManualMessage("");
+    try {
+      const result = await api.settings.discoverPlaybookManuals(3);
+      const manuals = await api.settings.componentManuals();
+      setComponentManuals(manuals.items ?? []);
+      setManualMessage(`Manual search checked ${result.attempted} components and saved ${result.downloaded} official PDFs. ${result.search_unavailable ? "The search provider rate-limited requests; retry later or use browser search. " : ""}${result.not_found.length} need another source or manual review; the background job will retry eligible misses later.`);
+    } catch (error) {
+      setManualMessage(error instanceof Error ? error.message : "Could not search Playbook component manuals.");
+    } finally {
+      setManualDiscoveryRunning(false);
     }
   }
 
@@ -649,8 +665,9 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
           <Card>
-            <CardHeader><CardTitle>Component instruction manual cache</CardTitle><p className="text-xs text-slate-400">Add a PDF from the manufacturer’s official support site. A build receives a cached manual only when its full model key occurs in a component record.</p></CardHeader>
+            <CardHeader><CardTitle>Component instruction manual cache</CardTitle><p className="text-xs text-slate-400">Official guides are cached by exact component model. New Playbook parts are checked automatically; manuals are attached to Getting Ready packages only when an exact component key matches.</p></CardHeader>
             <CardContent className="space-y-4 pt-0">
+              <button type="button" onClick={() => void discoverPlaybookManuals()} disabled={manualDiscoveryRunning} className="rounded-lg border border-cyan-400/30 px-3 py-2 text-xs font-semibold text-cyan-200 disabled:opacity-50">{manualDiscoveryRunning ? "Searching official support sites…" : "Find missing Playbook guides"}</button>
               <form onSubmit={saveComponentManual} className="grid gap-3 md:grid-cols-2">
                 <label className="grid gap-1 text-xs text-slate-300">Exact model key<input required minLength={8} maxLength={240} value={manualKey} onChange={event => setManualKey(event.target.value)} placeholder="MSI MAG B650 TOMAHAWK WIFI" className="rounded-lg border border-[#1e2d45] bg-[#0a1119] px-3 py-2 text-sm" /></label>
                 <label className="grid gap-1 text-xs text-slate-300">Component name<input required minLength={2} maxLength={300} value={manualName} onChange={event => setManualName(event.target.value)} placeholder="MSI MAG B650 TOMAHAWK WIFI motherboard" className="rounded-lg border border-[#1e2d45] bg-[#0a1119] px-3 py-2 text-sm" /></label>

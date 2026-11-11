@@ -13,7 +13,7 @@ from app.database import get_db
 from app.models.browser_listing_job import BrowserListingJob
 from app.models.channel_listing import ChannelListing
 from app.models.manual_build import ManualBuild
-from app.services.browser_listing_jobs import enqueue_browser_job, complete_browser_job, seller_pack
+from app.services.browser_listing_jobs import enqueue_browser_job, enqueue_inbox_job, complete_browser_job, seller_pack
 
 router = APIRouter(prefix="/cross-listing/browser-jobs", tags=["cross-listing"], dependencies=[Depends(require_operator)])
 
@@ -32,6 +32,16 @@ class QueueIn(BaseModel):
     channel: str
     operation: Literal["publish", "update", "relist"] = "publish"
     image_urls: list[str] = Field(default_factory=list, max_length=24)
+
+
+class InboxQueueIn(BaseModel):
+    build_id: int
+    channel: str
+
+
+class InboxReplyIn(InboxQueueIn):
+    message_id: str = Field(min_length=1, max_length=200)
+    body: str = Field(min_length=1, max_length=2000)
 
 
 class LeaseIn(BaseModel):
@@ -81,6 +91,27 @@ async def jobs(db: AsyncSession = Depends(get_db)):
     return [summary(row) for row in rows]
 
 
+@router.post("/inbox/check")
+async def queue_inbox_check(body: InboxQueueIn, db: AsyncSession = Depends(get_db)):
+    try:
+        job = await enqueue_inbox_job(db, body.build_id, body.channel, operation="inbox_check")
+        await db.commit()
+        return summary(job)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+
+
+@router.post("/inbox/reply")
+async def queue_inbox_reply(body: InboxReplyIn, db: AsyncSession = Depends(get_db)):
+    try:
+        job = await enqueue_inbox_job(db, body.build_id, body.channel, operation="inbox_reply",
+            message={"message_id": body.message_id, "body": body.body})
+        await db.commit()
+        return summary(job)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+
+
 @router.get("/{job_id}/seller-pack")
 async def pack(job_id: int, db: AsyncSession = Depends(get_db)):
     job = await db.get(BrowserListingJob, job_id)
@@ -117,9 +148,10 @@ async def claim(db: AsyncSession = Depends(get_db)):
         BrowserListingJob.lease_until < now).with_for_update(skip_locked=True))).scalars().all()
     for job in expired:
         await complete_browser_job(db, job, status="needs_review", message="Desktop worker stopped before confirming the outcome. Reconcile the vendor before resuming.")
-    from app.services.browser_listing_jobs import BROWSER_CHANNELS
+    from app.services.browser_listing_jobs import BROWSER_CHANNELS, INBOX_BROWSER_CHANNELS
+    supported_channels = BROWSER_CHANNELS | INBOX_BROWSER_CHANNELS
     job = (await db.execute(select(BrowserListingJob).where(BrowserListingJob.status == "queued",
-        BrowserListingJob.available_at <= now, BrowserListingJob.payload["channel"].as_string().in_(BROWSER_CHANNELS))
+        BrowserListingJob.available_at <= now, BrowserListingJob.payload["channel"].as_string().in_(supported_channels))
         .order_by(case((BrowserListingJob.operation == "withdraw", 0), (BrowserListingJob.operation == "sale_check", 1), else_=2), BrowserListingJob.id)
         .with_for_update(skip_locked=True).limit(1))).scalar_one_or_none()
     if not job:
@@ -128,8 +160,12 @@ async def claim(db: AsyncSession = Depends(get_db)):
     row = await db.get(ChannelListing, job.channel_listing_id)
     build = await db.get(ManualBuild, row.manual_build_id)
     try:
-        # Refresh saved copy/price but retain the reviewed image selection.
-        job.payload = seller_pack(build, row, job.payload["listing"]["images"], operation=job.operation)
+        # Inbox actions carry only the exact listing/thread context; listing jobs
+        # refresh canonical copy while retaining their reviewed image selection.
+        if job.operation not in {"inbox_check", "inbox_reply"}:
+            job.payload = seller_pack(build, row, job.payload["listing"]["images"], operation=job.operation)
+        elif build.status == "sold" or build.is_archived or row.status != "published":
+            raise ValueError("The listing is no longer active; inbox work stopped")
     except ValueError as exc:
         await complete_browser_job(db, job, status="blocked", message=str(exc))
         await db.commit()
@@ -154,11 +190,15 @@ async def preflight(job_id: int, body: LeaseIn, db: AsyncSession = Depends(get_d
     row = await db.get(ChannelListing, job.channel_listing_id)
     build = await db.get(ManualBuild, row.manual_build_id)
     try:
-        current = seller_pack(build, row, job.payload["listing"]["images"], operation=job.operation)
+        if job.operation in {"inbox_check", "inbox_reply"}:
+            if build.status == "sold" or build.is_archived or row.status != "published" or job.payload.get("listing_url") != row.listing_url:
+                raise ValueError("The confirmed listing changed or is no longer active")
+        else:
+            current = seller_pack(build, row, job.payload["listing"]["images"], operation=job.operation)
+            if current != job.payload:
+                raise ValueError("Canonical listing changed during this job; restart with the saved data")
     except ValueError as exc:
         raise HTTPException(409, str(exc)) from exc
-    if current != job.payload:
-        raise HTTPException(409, "Canonical listing changed during this job; restart with the saved data")
     return {"ok": True}
 
 

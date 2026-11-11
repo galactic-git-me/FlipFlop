@@ -239,6 +239,7 @@ async def publish_google_merchant(build_id: int, body: GoogleMerchantPublishIn, 
     try:
         submission = await client.upsert_build(build, body.images or None)
         row.external_listing_id = submission.offer_id
+        row.listing_url = submission.product_url
         row.status = "published"
         row.published_at = row.published_at or datetime.utcnow()
         row.withdrawn_at = None
@@ -390,6 +391,8 @@ async def list_schedules(build_id: int | None = Query(None), db: AsyncSession = 
 async def save_schedule(body: RecreateScheduleIn, db: AsyncSession = Depends(get_db)):
     settings = await _app_settings(db)
     interval_days = settings.relist_interval_days or body.interval_days or 7
+    if body.channel == "google_shopping":
+        raise HTTPException(status_code=409, detail="Google product inputs are maintained by Merchant Center sync and do not use marketplace relisting.")
     build = await db.get(ManualBuild, body.build_id)
     if not build:
         raise HTTPException(status_code=404, detail="Build not found")
@@ -397,17 +400,27 @@ async def save_schedule(body: RecreateScheduleIn, db: AsyncSession = Depends(get
         raise HTTPException(status_code=409, detail="Sold or archived builds cannot be scheduled for relisting")
     row = (await db.execute(select(ChannelListing).where(ChannelListing.manual_build_id == body.build_id, ChannelListing.channel == body.channel).order_by(ChannelListing.created_at.desc()))).scalars().first()
     if not row:
-        row = ChannelListing(
-            manual_build_id=body.build_id,
-            channel=body.channel,
-            status="draft",
-            published_at=build.listed_at or datetime.utcnow(),
-        )
+        if body.channel in {"ebay", "ebay_uk"} and build.ebay_listing_id and build.ebay_listing_status in {"active", "ended"}:
+            row = ChannelListing(manual_build_id=body.build_id, channel=body.channel,
+                status="published" if build.ebay_listing_status == "active" else "ended",
+                external_listing_id=str(build.ebay_listing_id), listing_url=build.ebay_listing_url,
+                published_at=build.listed_at or build.updated_at or datetime.utcnow())
+        elif body.channel in {"storefront", "flipflop_shop"} and build.storefront_product_id:
+            product = await db.get(Product, build.storefront_product_id)
+            if not product or product.status != ProductStatus.LISTED:
+                raise HTTPException(status_code=409, detail="The storefront product is not currently listed.")
+            row = ChannelListing(manual_build_id=body.build_id, channel=body.channel, status="published",
+                external_listing_id=str(product.id), listing_url=f"https://theflipflop.shop/ready-to-ship/{product.id}",
+                published_at=product.created_at or build.listed_at or datetime.utcnow())
+        else:
+            raise HTTPException(status_code=409, detail="Only a channel with a confirmed listing can be scheduled for relisting.")
         db.add(row)
+    if row.status not in {"published", "ended", "withdrawn", "submitted"}:
+        raise HTTPException(status_code=409, detail="Only a channel with a confirmed listing can be scheduled for relisting.")
     row.recreate_enabled = body.enabled
     row.recreate_interval_days = interval_days
     if row.published_at is None:
-        row.published_at = build.listed_at or datetime.utcnow()
+        row.published_at = row.updated_at or build.listed_at or datetime.utcnow()
     row.next_recreate_at = (
         row.published_at + timedelta(days=interval_days) if body.enabled else None
     )

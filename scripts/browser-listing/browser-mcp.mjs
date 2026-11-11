@@ -9,7 +9,7 @@ const job = JSON.parse(await fs.readFile(process.env.FF_BROWSER_JOB_FILE, 'utf8'
 const pack = job.payload;
 const require = createRequire(path.join(process.env.FF_ADMIN_DIR, 'package.json'));
 const { chromium } = require('playwright');
-const domains = { onbuy: ['onbuy.com'], facebook_catalog: ['facebook.com'], vinted: ['vinted.co.uk'] }[pack.channel];
+const domains = { onbuy: ['onbuy.com'], facebook_catalog: ['facebook.com'], vinted: ['vinted.co.uk'], amazon: ['amazon.co.uk'] }[pack.channel];
 let context, page, revision = 0, inspected = false, remoteState = 'unknown', remoteStateNote = '', remoteStateOrderId = null, mayHaveWritten = false;
 const allowed = value => {
   const u = new URL(value);
@@ -52,7 +52,7 @@ async function envLogin(args) {
   const username = args.username_ref ? element(args.username_ref) : null, password = args.password_ref ? element(args.password_ref) : null;
   if (!username && !password) throw new Error('Select the username or password field from the current observation');
   if (password && await password.getAttribute('type') !== 'password') throw new Error('Choose the actual password field');
-  const prefix = { onbuy: 'FF_ONBUY', facebook_catalog: 'FF_FACEBOOK_MARKETPLACE', vinted: 'FF_VINTED' }[pack.channel];
+  const prefix = { onbuy: 'FF_ONBUY', facebook_catalog: 'FF_FACEBOOK_MARKETPLACE', vinted: 'FF_VINTED', amazon: 'FF_AMAZON' }[pack.channel];
   let values;
   try { values = parseEnv(await fs.readFile(process.env.FF_CREDENTIALS_FILE, 'utf8')); }
   catch { throw new Error('The local seller credentials file is unavailable; configure FF_CREDENTIALS_FILE'); }
@@ -65,7 +65,11 @@ async function envLogin(args) {
 
 async function run(name, args) {
   if (name === 'seller_pack') return { ...pack, operation: job.operation,
-    instructions: ['inspect', 'sale_check'].includes(job.operation)
+    instructions: job.operation.startsWith('inbox_')
+      ? job.operation === 'inbox_check'
+        ? 'Read-only inbox check. Match every saved message to this exact listing before calling confirm_messages. Never send a message.'
+        : 'Reply only to the exact queued message. Verify its sender and incoming body in the visible thread, then call reply_message with the queued ID and observed textbox/send references.'
+      : ['inspect', 'sale_check'].includes(job.operation)
       ? 'Read-only status check. Inspect this exact vendor listing and seller orders; mark sold only with an exact seller order and preserve its order ID. Call confirm_observation.'
       : job.operation === 'withdraw'
         ? 'End the exact previous listing in seller tools. Verify it is ended, missing, or sold and call confirm_observation. Do not delete accounts or pay fees.'
@@ -80,6 +84,8 @@ async function run(name, args) {
     if (args.writes_listing && !['active', 'ended', 'missing'].includes(remoteState)) throw new Error('Remote listing state must be verified before a listing write');
     const el = element(args.ref);
     const text = ((await el.innerText()) || await el.getAttribute('aria-label') || '').toLowerCase();
+    if (job.operation.startsWith('inbox_') && /\b(send|reply|respond|submit message)\b/.test(text))
+      throw new Error('Inbox jobs cannot send from generic browser clicks; use the exact queued reply tool after verification');
     if (/pay|purchase|subscribe|boost|promote|delete account|create account|grant access/.test(text)) throw new Error('Paid service or account change requires separate operator review');
     await preflight();
     if (args.writes_listing) mayHaveWritten = true;
@@ -123,6 +129,56 @@ async function run(name, args) {
       evidence: { verified_at: new Date().toISOString(), url: page.url(), note: remoteStateNote } }));
     return { confirmed: true, remote_state: remoteState };
   }
+  if (name === 'confirm_messages') {
+    await browser();
+    if (job.operation !== 'inbox_check') throw new Error('Only inbox-check jobs can save observed messages');
+    const current = await snapshot();
+    if (!current.text || !current.text.trim()) throw new Error('Observe the vendor inbox before saving messages');
+    const messages = Array.isArray(args.messages) ? args.messages.slice(0, 50) : [];
+    const cleaned = messages.map(message => {
+      if (!message.message_id || !message.thread_url || !message.body || message.listing_url !== pack.listing_url || !allowed(message.thread_url))
+        throw new Error('Message must include an observed ID, vendor thread and exact matched listing');
+      if (!current.text.includes(String(message.body).slice(0, Math.min(40, String(message.body).length))))
+        throw new Error('Message body was not visible in the current inbox observation');
+      return { message_id: String(message.message_id), thread_url: String(message.thread_url), listing_url: pack.listing_url,
+        sender: String(message.sender || 'Vendor buyer'), subject: String(message.subject || 'Customer message'),
+        body: String(message.body).slice(0, 5000), received_at: String(message.received_at || '') };
+    });
+    await preflight();
+    await fs.writeFile(process.env.FF_BROWSER_RESULT_FILE, JSON.stringify({ status: 'succeeded',
+      message: `Checked ${cleaned.length} customer conversation(s) in the vendor inbox.`,
+      evidence: { observed_at: new Date().toISOString(), messages: cleaned } }));
+    return { saved: cleaned.length };
+  }
+  if (name === 'reply_message') {
+    await browser();
+    if (job.operation !== 'inbox_reply') throw new Error('Only inbox-reply jobs can send a reply');
+    const reply = pack.reply;
+    if (!reply || String(args.message_id) !== String(reply.message_id) || !allowed(reply.thread_url) || page.url() !== reply.thread_url)
+      throw new Error('Open the exact queued vendor thread before replying');
+    const current = await snapshot();
+    const normalize = value => String(value || '').replace(/\s+/g, ' ').trim();
+    const incoming = normalize(reply.incoming_body);
+    if (!incoming || !normalize(current.text).includes(incoming.slice(0, Math.min(60, incoming.length))))
+      throw new Error('The exact queued incoming message is not visible in this conversation');
+    const textbox = element(args.textbox_ref), send = element(args.send_ref);
+    if (!(await textbox.isVisible()) || !(await send.isVisible())) throw new Error('Reply controls are not visible in the current observation');
+    const tag = await textbox.evaluate(node => node.tagName.toLowerCase());
+    if (!['textarea', 'input'].includes(tag) && await textbox.getAttribute('contenteditable') !== 'true')
+      throw new Error('Choose the visible reply text field');
+    await preflight();
+    await textbox.fill(reply.body);
+    if (await textbox.inputValue().catch(() => '') !== reply.body) throw new Error('The exact saved reply text could not be confirmed in the field');
+    await send.click();
+    await page.waitForTimeout(800);
+    const after = normalize(await page.locator('body').innerText());
+    if (!after.includes(normalize(reply.body))) throw new Error('Vendor page did not show the sent reply; result needs review');
+    await preflight();
+    await fs.writeFile(process.env.FF_BROWSER_RESULT_FILE, JSON.stringify({ status: 'succeeded',
+      message: `Reply sent in the verified ${pack.channel} conversation.`,
+      evidence: { sent: true, message_id: reply.message_id, verified_at: new Date().toISOString(), thread_url: reply.thread_url } }));
+    return { sent: true, verified: true };
+  }
   if (name === 'block_job') {
     const result = { status: mayHaveWritten ? 'needs_review' : 'blocked', message: String(args.reason).slice(0, 500) };
     await fs.writeFile(process.env.FF_BROWSER_RESULT_FILE, JSON.stringify(result));
@@ -144,6 +200,8 @@ const definitions = [
   ['env_login', 'Fill the selected vendor login from the configured local .env.local file without exposing credentials. For two-stage forms provide the currently visible field only.', schema({ username_ref: str, password_ref: str }, [])],
   ['confirm_listing', 'Read back the item page, verify canonical title and price, and persist the real item URL/ID. Call only after remote live state is confirmed.', schema({ url: str, external_id: str })],
   ['confirm_observation', 'Record a verified seller-side listing observation. A sold state requires an order ID.', schema()],
+  ['confirm_messages', 'Save messages visibly observed in an inbox and matched to the exact listing. Read-only.', schema({ messages: { type: 'array', maxItems: 50, items: schema({ message_id: str, thread_url: str, listing_url: str, sender: str, subject: str, body: str, received_at: str }, ['message_id', 'thread_url', 'listing_url', 'body']) } })],
+  ['reply_message', 'Send only the operator-queued reply in the exact verified conversation, using fresh observed references.', schema({ message_id: str, textbox_ref: str, send_ref: str })],
   ['block_job', 'Stop with a precise MFA, CAPTCHA, credentials, seller-policy, account or uncertain-publication blocker.', schema({ reason: str })],
 ].map(([name, description, inputSchema]) => ({ name, description, inputSchema }));
 const lines = readline.createInterface({ input: process.stdin });
