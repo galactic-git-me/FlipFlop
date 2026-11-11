@@ -388,5 +388,23 @@
     "reason": "no_exact_official_pdf",
     "component": "PowerColor Reaper AMD Radeon RX 9070 16GB GDDR6 Graphics Card",
     "retry_after": "2026-12-11T06:54:37.350759"
+  },
+  "e09dc1605b32bd1710dadb7162a3abb9ece16764ea81882425e3545a779aedc5": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ASUS Prime GeForce RTX 5060 Ti 16GB GDDR7 OC Edition Graphics Card (PCIe 5.0, 16GB GDDR7, HDMI/DP 2.1, 2.5 slot, Axial tech f",
+    "retry_after": "2026-12-11T07:55:48.905811"
+  },
+  "fa99e52044c5991b678ae13d7b9a21bb8f0315151a863bee0e483fe43cf16feb": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ASUS Dual GeForce RTX 5060 8GB GDDR7 OC Edition (PCIe 5.0, 8GB GDDR7, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2.5 slot design, A",
+    "retry_after": "2026-12-11T07:55:48.905811"
+  },
+  "27b131bc190efc21eb77f1189399158685bb36d75b88484c4a10790cf456a804": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "MSI GeForce RTX 5050 8G SHADOW 2X OC Graphics Card - RTX 5050 GPU, 8GB GDDR6 (20Gbps/128-bit), PCIe 5.0 - DUAL-Fan Thermal De",
+    "retry_after": "2026-12-11T07:55:48.905811"
   }
 }
