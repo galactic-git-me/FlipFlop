@@ -349,7 +349,7 @@ export function capabilities(
       canUpdate: googleConnected,
       canEnd: googleConnected,
       note: googleConnected
-        ? "Submits and synchronizes the live FlipFlop.shop product through Merchant API. Google processes approval asynchronously."
+        ? "Submit this live FlipFlop.shop product through Merchant API. After submission, the app syncs it while Google reviews eligibility and Shopping visibility."
         : googleMessage || "Connect a verified Google Merchant Center account and Merchant API service account. Google controls free-listing eligibility.",
       officialReference:
         "https://developers.google.com/merchant/api/guides/products/add-manage",
