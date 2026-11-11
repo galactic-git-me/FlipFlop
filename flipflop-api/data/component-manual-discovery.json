@@ -436,5 +436,23 @@
     "reason": "no_exact_official_pdf",
     "component": "Patriot Viper Steel DDR4 16GB (1 x 16GB) 3200MHz Module - PVS416G320C6",
     "retry_after": "2026-12-11T11:10:34.635588"
+  },
+  "fe2bba743764c260b5b48ff5a36639b93416ddcdb57a0b7126207ce2caf1a0aa": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "CiT Flash Gaming PC Case Micro ATX, MATX Computer Case with 4 ARGB Fans | Compact micro atx pc case with 4 pre-installed rain",
+    "retry_after": "2026-12-11T11:13:26.138185"
+  },
+  "f47338c3912ba1d1384472524c5d917e6498aff47f2677bfaa9b533714a794b8": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "iONZ KZ10 PC Gaming Case Mid Tower ATX Tempered Glass With 4 x 120mm ARGB Fans - Black",
+    "retry_after": "2026-12-11T11:13:26.138185"
+  },
+  "d178983174844d9d60d7f821f18b1ef9f2390cca351836fd85e76b6c9759f335": {
+    "status": "not_found",
+    "reason": "ReadError",
+    "component": "MSI MAG FORGE 320R AIRFLOW Mid-Tower PC Case - ATX Capacity, up to 390mm RTX 40 GPU Support, 4 x 120mm ARGB Fans, Magnetic Du",
+    "retry_after": "2026-12-11T11:13:26.138185"
   }
 }
