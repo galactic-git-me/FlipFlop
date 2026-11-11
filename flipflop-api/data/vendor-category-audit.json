@@ -1,0 +1,10 @@
+{
+  "cpu": "CAT-04010000",
+  "gpu": "CAT-33",
+  "motherboard": "CAT-04020000",
+  "ram": "CAT-04050000",
+  "ssd": "CAT-04060000",
+  "psu": "CAT-04040000",
+  "cooler": null,
+  "case": "CAT-05010000"
+}
