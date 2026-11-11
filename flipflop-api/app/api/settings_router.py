@@ -1,5 +1,5 @@
 """Global app settings — single row keyed name='default'."""
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -93,6 +93,13 @@ async def list_component_manuals(db: AsyncSession = Depends(get_db)):
         "source_url": item.source_url, "filename": item.filename, "sha256": item.sha256,
         "size_bytes": item.size_bytes, "is_active": item.is_active,
     } for item in manuals]}
+
+
+@router.post("/component-manuals/discover-playbook", dependencies=[Depends(get_current_admin)])
+async def discover_playbook_manuals(batch_size: int = Query(3, ge=1, le=10), db: AsyncSession = Depends(get_db)):
+    """Backfill official user guides for current Playbook components."""
+    from app.services.component_manual_discovery import discover_playbook_component_manuals
+    return await discover_playbook_component_manuals(db, batch_size=batch_size)
 
 
 @router.post("/component-manuals", status_code=201, dependencies=[Depends(get_current_admin)])

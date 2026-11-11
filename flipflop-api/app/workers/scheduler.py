@@ -267,6 +267,14 @@ async def run_growth_social_publisher() -> dict:
         return {"ok": True, **result}
 
 
+async def run_component_manual_discovery() -> dict:
+    """Fetch a small batch of newly added Playbook component manuals."""
+    from app.services.component_manual_discovery import discover_playbook_component_manuals
+    async for db in get_db():
+        return await discover_playbook_component_manuals(db, batch_size=3)
+    return {"scanned": 0, "attempted": 0, "downloaded": 0}
+
+
 def get_scheduler() -> AsyncIOScheduler:
     global _scheduler
     if _scheduler is None:
@@ -278,6 +286,13 @@ def start_scheduler():
     scheduler = get_scheduler()
 
     now = datetime.now(timezone.utc)
+    scheduler.add_job(
+        _run_job_with_history, trigger=IntervalTrigger(hours=6),
+        id="component_manual_discovery", name="Playbook component user guides",
+        kwargs={"job_id": "component_manual_discovery", "fn": run_component_manual_discovery},
+        replace_existing=True, max_instances=1, coalesce=True,
+        next_run_time=now + timedelta(minutes=3),
+    )
     if settings.commercial_reconciliation_enabled:
         from app.services.playbook_service import (run_scheduled_playbook_refresh,
             run_pending_scheduled_playbook_rebuild)

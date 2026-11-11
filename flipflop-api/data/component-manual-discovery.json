@@ -1,0 +1,410 @@
+{
+  "d7a00a6855817c59755858ce0144cba3f3a53206254c42ef12544277ac1e0bdb": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzensets 5 9600X Processor (radeon graphics included, 6 Cores/12 Threads, 65W TDP, Socket AM5, Cache 38MB, up to 5.4 GHz max boost Frequency, no cooler)",
+    "retry_after": "2026-12-11T06:54:06.105332"
+  },
+  "3ec60f79d8735ac529e09902ff035cc2ee27e8d93b181f641c6cddc28ca62f3f": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Patriot Viper Steel DDR4 RAM 16GB (2X8GB) 3200MHz CL16 UDIMM Desktop Gaming Memory Kit - PVS416G320C6K",
+    "retry_after": "2026-12-11T06:54:06.105332"
+  },
+  "8e74ae30476c8e43b6b43bb27b93d7705dd6c6556b2a5e59fcebeab036832bc1": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR VENGEANCE LPX DDR4 RAM 32GB (2x16GB) Up to 3200MHz CL16-20-20-38 1.35V Intel XMP AMD EXPO Computer Memory \u2013 Black (CMK32GX4M2E3200C16)",
+    "retry_after": "2026-12-11T06:54:06.105332"
+  },
+  "19220a258b7c6386f0e6ee379d633c4d7fbf12472070064ded2085534f392c68": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "MSI GeForce RTX 5060 Ti 8G GAMING TRIO OC Graphics Card - RTX 5060 Ti GPU",
+    "retry_after": "2026-12-11T06:54:06.105332"
+  },
+  "3c44bd30083bfb40d3abeb840f4f03ed19c2926885c51c3216c1e1d8c95a0210": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR FRAME 4000D Modular Mid-Tower ATX PC Case \u2013 High Airflow, InfiniRail\u2122 Fan Mounting System, Dual 360mm Radiator Support, ASUS BTF, MSI Project Zero, Gigabyte Project Stealth \u2013 White",
+    "retry_after": "2026-12-11T06:54:06.105332"
+  },
+  "dc7d59bafdcc315e4573a6c96711892644df9a32fcfb1c083c7a455113b5976e": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "CiT Level 5 Gaming PC Case, Micro ATX PC Case with 3 ARGB Fans, Mesh, White",
+    "retry_after": "2026-12-11T06:54:08.945874"
+  },
+  "e2c6e8ef47f049b453a93d95fd3afefc1e07c231839c14b616bf8dd2e2b2b6d5": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "CiT F3 Curved Glass mATX Gaming PC Case - Panoramic Curved Front & Side Tempered Glass - 3x 120mm ARGB Fans Included - Daisy Chain Lighting - USB 3.0 + USB 2.0-240mm AIO Support | Black",
+    "retry_after": "2026-12-11T06:54:08.945874"
+  },
+  "28538eeb0474df3e90d7b78dd67e87aa937d89ff02ed3c2de724187b881f863d": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "FOIFKIN F300 PC Case ATX with 4 Non-RGB Fans, High Airflow Mid-Tower Computer Case, Gaming PC Case Big Tower, ATX Case Black, with Type-C, 360mm Radiator Computer Case (Black, F300)",
+    "retry_after": "2026-12-11T06:54:08.945874"
+  },
+  "ad6d33f0c9ba4ca8ef7bcc668ac2c420bc51a7f53914d29fbfc669553c4e24f9": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Phanteks XT Pro Ultra ATX Mid Tower Gaming PC Case, D-RGB Fans, Black",
+    "retry_after": "2026-12-11T06:54:08.945874"
+  },
+  "f0f34eef5c01ccfbd63591d9097d055daa93e54aadbd31432e5ecc862185d684": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Fractal Design",
+    "retry_after": "2026-12-11T06:54:08.945874"
+  },
+  "d1e58a4f8efc5a1eeb7c4dac85d33477147c03b53d41a608ae7c56170805d9aa": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Phanteks XT Pro E-ATX Mid Tower PC Case, High Airflow Mesh Front, Black",
+    "retry_after": "2026-12-11T06:54:11.426060"
+  },
+  "6be7a200a389d9ad5d7f18f8c25cd248cbd5016f7aef5fadba3133ccf6aef734": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "Lexar ARES Gen2 RGB DDR5 RAM 32GB Kit (2x16GB) 6000MHz",
+    "retry_after": "2026-12-11T06:54:11.426060"
+  },
+  "00eac502f49a01b2b963d3339bdddcae8f0c53963309005825a7f678a2b11afa": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Sapphire technology Pulse AMD Radeon RX 9060 XT Gaming OC, 8GB Dual HDMI-DP",
+    "retry_after": "2026-12-11T06:54:11.426060"
+  },
+  "1e081c2de873f1faa78ae1efe639545f353d2020bfbdcb3c7ec7dbab0cc5ae1d": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Samsung 990 PRO NVMe M.2 SSD, 4 TB, PCIe 4.0, 7,450 MB/s read, 6,900 MB/s write, Internal SSD, For gaming and video editing, MZ-V9P4T0BW",
+    "retry_after": "2026-12-11T06:54:11.426060"
+  },
+  "ee3fa0e5a07fe170fcc00caa7e9665dfae4e58e18f5246e3834800b32ba980d4": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "iONZ GE336F V2 XL - PC Gaming Case, Tempered Glass - Mid Tower, Airflow Front, EATX | Top I/O Includes 4 ARGB and PWM Fans - Black (V2, New, Black)",
+    "retry_after": "2026-12-11T06:54:11.426060"
+  },
+  "37051d455b0c05012af94a539b648109b50ec967320425d939be5542da791dbe": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "CiT Flash Gaming PC Case Micro ATX, MATX Computer Case with 4 ARGB Fans | Compact micro atx pc case with 4 pre-installed rain",
+    "retry_after": "2026-12-11T06:54:13.970585"
+  },
+  "b39990a0f29b8d107ed657b19e7aec3cd34067c71f6da1110020f75f19fe289e": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "iONZ KZ10 PC Gaming Case Mid Tower ATX Tempered Glass With 4 x 120mm ARGB Fans - Black",
+    "retry_after": "2026-12-11T06:54:13.970585"
+  },
+  "622a2fb021b5f23a926f76f390cd97d481e0774826bb2636cab9f6df3734d12e": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "NZXT H6 Flow | CC-H61FB-01 | Compact Dual-Chamber Mid-Tower Airflow Case | Panoramic Glass Panels | High-Performance Airflow",
+    "retry_after": "2026-12-11T06:54:13.970585"
+  },
+  "9bb10053a56b16305433c06365156d4796beca6424042ab983cdd4ac8e4ad40c": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "MSI MAG FORGE 320R AIRFLOW Mid-Tower PC Case - ATX Capacity, up to 390mm RTX 40 GPU Support, 4 x 120mm ARGB Fans, Magnetic Du",
+    "retry_after": "2026-12-11T06:54:13.970585"
+  },
+  "9c8bff76596511d14b9fcd4efa33fa060c72841cb07f55a1714eca864791bc8f": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Lian Li O11D EVO RGB E-ATX Mid Tower Gaming PC Case, Tempered Glass, Black | Dual chamber modular computer case with custom R",
+    "retry_after": "2026-12-11T06:54:13.970585"
+  },
+  "f0a136883a4bf0df36b282bfdb2410c4d199fbe0ba1fe458ba6bf6134a2cd8ff": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "be quiet! Light Base 600 DX Black PC Case, Fully Windowed Front and Side | Dual Chamber, Aquarium Mid Tower Gaming Computer C",
+    "retry_after": "2026-12-11T06:54:16.503572"
+  },
+  "7a7738718ecdb89d8acb83f61c47e5a8e2d795fa3e7d1e2746cc11b4a52a7a2d": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "darkFlash Micro ATX PC Case, Pre-Install 3 PWM ARGB Fans Computer Case, Full View Dual Tempered Glass MATX Gaming PC Case, Ty",
+    "retry_after": "2026-12-11T06:54:16.503572"
+  },
+  "0cb5932b9b90c35a6628b6ccab88b71cad3e1f211bff06fad1afeab99b60f2ef": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR Frame 4000D RS ARGB Modular Mid-Tower ATX PC Case \u2013 Black | High Airflow, 3x Pre-Installed RS ARGB Fans, InfiniRail F",
+    "retry_after": "2026-12-11T06:54:16.503572"
+  },
+  "2e15a7aa0b994e28f6e2e70e3a1f6ee55bf1ecdbb16ecd4f48ad968f81778f3c": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "FOIFKIN F600 PC Case ATX with 7 PWM ARGB Fans, High Airflow Mid-Tower Computer Case, Gaming PC Case Big Tower, ATX Case Black",
+    "retry_after": "2026-12-11T06:54:16.503572"
+  },
+  "7f72a07b25676b56b484d55787242040ca025cebb96b6aad3cfbdcdcce87d138": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Lian Li Lancool 207 ATX Mid Tower Gaming PC Case, Tempered Glass, Black | ATX and micro ATX compatible computer case with air",
+    "retry_after": "2026-12-11T06:54:16.503572"
+  },
+  "3f7cb2f2341f6028ee33c27a55d727b2083ce4f484333820073b94294e81fd05": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Lian Li O11 Vision Compact ATX Mid Tower Gaming PC Case, Aluminium, Black | Tempered glass fish tank computer case, black des",
+    "retry_after": "2026-12-11T06:54:19.100145"
+  },
+  "0a76565d5f35301653d850dc9203091cc0e7767648701878d5872fd3f8200909": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "NZXT H3 Flow - Micro-ATX Airflow PC Case - Black | Space-efficient Micro-ATX case with optimized airflow, full-size GPU suppo",
+    "retry_after": "2026-12-11T06:54:19.100145"
+  },
+  "00059b47967711715a86008f6c21b5a5ac650738e898c35ee432c8361b352948": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "NZXT H9 Flow - Dual-Chamber ATX PC Case - Black | Dual-chamber ATX flagship with 4 included fans, 420mm top and front radiato",
+    "retry_after": "2026-12-11T06:54:19.100145"
+  },
+  "085439c1e07efedf120d67c8e75fc59defa3a92c5c37b2f2e03909c3527d87dd": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "FOIFKIN M1 PC Case ATX with 4 PWM ARGB Fans, Front in Walnut Wood,Computer Case Mid-Tower,High Airflow,240mm Radiator Support",
+    "retry_after": "2026-12-11T06:54:19.100145"
+  },
+  "5dd06abfbab8dbf22501f867748b41f679233361741a1dd8241eba0a58ec0985": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR FRAME 5000D RS Modular High Airflow Mid-Tower PC Case \u2013 4x Pre-Installed RS Fans, InfiniRail\u2122 Fan Mounting System, GP",
+    "retry_after": "2026-12-11T06:54:19.100145"
+  },
+  "814e851ac097868b8198ebbc3a57e4fcc8becf98b7d76fb707a383675d3238cd": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "FOIFKIN K6 PC Case ATX with 6 PWM ARGB Fans(3X 140mm and 3X 120mm,Computer Case Mid-Tower,High Airflow,240mm Radiator Support",
+    "retry_after": "2026-12-11T06:54:21.679080"
+  },
+  "b4a28f77dbf52b691f1a69d9a7596a137ce6b6d90ee020a11708ba59ac56c526": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Lian Li Lancool 217 ATX Mid Tower Gaming PC Case with 5 Fans, Wood, Black | Walnut wood accent computer case, mesh front, tem",
+    "retry_after": "2026-12-11T06:54:21.679080"
+  },
+  "82f52d8075b7db0b49aeec6a1262bee8521d721c357a4bf4c16d138067cfaa05": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "HYXN H1 ATX PC Case-Pre-Installed 7 PWM ARGB Fans, Dual Chamber Mid-Tower Gaming PC Case, with Type-C, Simultaneous Installat",
+    "retry_after": "2026-12-11T06:54:21.679080"
+  },
+  "37550b5948bd33a931d76e6b90f4bf3a81379a63e52c2f392a1a69e190252414": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "CiT F3 Gaming PC Case \u2013 Micro-ATX Computer Case with Mesh Front & Tempered Glass Side Panels - 3 x 120mm ARGB Fans Included -",
+    "retry_after": "2026-12-11T06:54:21.679080"
+  },
+  "14c288ecd6d3d8c5551c33ac26c2b07a085d126bcba0a3415d402fc1bd65aaf1": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "PCZZOI PC CASE ATX 5 Fans Pre-Installed, Type-C Mid Tower Computer Case with Full-View Dual Tempered Glass, Gaming PC Case,Bl",
+    "retry_after": "2026-12-11T06:54:21.679080"
+  },
+  "8d6a0f148c37270bb309b3f8d93b3ce098ef50caaf29938f903674a224f09f4e": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR FRAME 4500X RS-R ARGB Panoramic Glass Mid-Tower PC Case \u2013 InfiniRail Mounting System, Fits Dual 360mm Radiators, GPU",
+    "retry_after": "2026-12-11T06:54:24.080945"
+  },
+  "94e526a8725749548f1f2a8a4b2d1d2938138d605f92bb54df634e08809e1b6a": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR AIR 5400 RS-R ARGB Triple-Chamber Mid-Tower Panoramic PC Case \u2013 3x Pre-Installed Reverse-Rotor RS120-R ARGB Fans, Low",
+    "retry_after": "2026-12-11T06:54:24.080945"
+  },
+  "167c12579adb697b1f9a8d7325729d5c96c388ef4f422164b091d8eed91021cc": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "NZXT H2 Flow - Mini-ITX 20.7L Airflow PC Case - Black | Compact 20.7L Mini-ITX case with 2 included 120mm top fans and PCIe 5",
+    "retry_after": "2026-12-11T06:54:24.080945"
+  },
+  "3ac29765bb55321bd39045cad6f95af2b6e929faf88c9b67dd9ba85e8b6824a5": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "ANSAITE ATX PC Case Pre-Installed 9 \u00d7 120mm PWM ARGB Fan,Mid Tower Computer Case with Full-View Dual Tempered Glass, Gaming P",
+    "retry_after": "2026-12-11T06:54:24.080945"
+  },
+  "3f64ab0042b2e6cdc10a2b28d7f0402110c108a3a0956b15d5ceaaa713c16baa": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "H2 (2026) HYXN PC Case ATX with 8 Fans (6 x 140 and 2 x 120) Large Dual Chamber Mid-Tower Computer Case Airflow Gaming PC Cas",
+    "retry_after": "2026-12-11T06:54:24.080945"
+  },
+  "2045cf01c73c25455e3f77c07fd6f24a0bb3ba8488609987f5e0464a69f4b91c": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "HYXN H3 ATX PC Case - Pre-Installed with 3 ARGB Fans - Compact Dual Cavity Mid-Tower Gaming PC Case,360mm Radiator Support -",
+    "retry_after": "2026-12-11T06:54:26.649586"
+  },
+  "3343f8f8cb17d5a338503132821a8d8eb95b28ed1f45705c57f11aef950acb33": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Phanteks XT V5 LCD PC Case, ATX Mid-Tower, Tempered Glass | Black, 7-inch LCD, showcase design, side air intake, 360 mm radia",
+    "retry_after": "2026-12-11T06:54:26.649586"
+  },
+  "29f0556c1bad4e7f8a26343b71b2d69b392bd9b12e23b07fa8600a1e626af925": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Wraith Stealth Socket AM4 4-Pin Connector CPU Cooler with Aluminum Heatsink & 3.93-Inch Fan (Slim)",
+    "retry_after": "2026-12-11T06:54:26.649586"
+  },
+  "ea11741cd9a4f07003891a7631d64cf1f2c47bbed69538e3ee93d35e6df01f3c": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ARCTIC Freezer 36 (Black)- Single-tower CPU cooler with push-pull, two pressure-optimised 120 mm P fans, fluid dynamic bearin",
+    "retry_after": "2026-12-11T06:54:26.649586"
+  },
+  "0914662ba115923a44f70ab2d2aa1cac9eb23f14bdcf34b129ca1e33fe906d93": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Thermalright Peerless Assassin 120 SE CPU Air Cooler,PA120 SE,6 Heat Pipes Cpu cooler,Dual 120mm TL-C12C PWM Fan,Aluminium He",
+    "retry_after": "2026-12-11T06:54:26.649586"
+  },
+  "e890f01df06ace7a3df71bf9da2f8a7e8478b82f21389eb3c451394ef4ef8b24": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Thermalright Assassin X120 Refined SE CPU Air Cooler, 4 Heatpipes, TL-C12C PWM Fan, for AMD AM4/AM5 Intel 1700/1150/1151/1200",
+    "retry_after": "2026-12-11T06:54:29.336639"
+  },
+  "d3799deb6ce43f0d9cbed54f60dba4ccd6518c60840e3b90553d0c838fe515c3": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Thermalright Peerless Assassin 120 SE CPU Air Cooler, 6 Heat Pipes CPU Cooler, Dual 12cm PWM Fan, Double Tower Double Fan Coo",
+    "retry_after": "2026-12-11T06:54:29.336639"
+  },
+  "b43b609e900c68f15f84620530db33d37fae524a5681acb6e17a1a44af7ae9e3": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Thermalright AQUA ELITE 240 V3 Liquid CPU Cooler, 240 Cooling Row Size, 2 x 120mm PWM Fans, S-FDB Bearings,for AMD/AM4/AM5, I",
+    "retry_after": "2026-12-11T06:54:29.336639"
+  },
+  "5f380f4a009f6ecb1ed72d2c6729234e79f077825b8f127160621d1824df728e": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Corsair NAUTILUS 360 RS ARGB Liquid CPU Cooler \u2013 360mm AIO \u2013 Low-Noise \u2013 Direct Motherboard Connection \u2013 Daisy-Chain \u2013 Intel",
+    "retry_after": "2026-12-11T06:54:29.336639"
+  },
+  "9f003b89b7bb01c4a2728854c7c449a492433fc86ee36d8cb114e14c640b7b25": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ARCTIC Liquid Freezer III Pro 360 A-RGB - AIO CPU Cooler, 3 x 120 mm Water Cooling, 38 mm Radiator, PWM Pump, VRM Fan, AMD AM",
+    "retry_after": "2026-12-11T06:54:29.336639"
+  },
+  "8de85b34fdc0791f2b093a7936daf53d4873cae224ce8308370cd8e1e7204e2a": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ARCTIC Liquid Freezer III Pro 360 - AIO CPU Cooler, 3 x 120 mm Water Cooling, 38 mm Radiator, PWM Pump, VRM Fan, AMD AM5/AM4,",
+    "retry_after": "2026-12-11T06:54:32.039180"
+  },
+  "01ee8215fd43868a688e34f221be7cb1d79468d24c5ed84cb422bd4bd03dde0b": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Corsair NAUTILUS 360 RS LCD Liquid CPU Cooler \u2013 2.1\" IPS LCD Screen, 360mm AIO, Low-Noise, Daisy-Chain, Intel LGA 1851/1700,",
+    "retry_after": "2026-12-11T06:54:32.039180"
+  },
+  "70b068139b8296be0e4b5f636ae84a4b3f142bfedeb165151da95dbfe680abe3": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzensets 5 5600X Processor (6 Cores/12Threads, 65W TDP, AM4 Socket, 35MB Cache, up to 4.6 GHz Max Boost, Wraith Stealth",
+    "retry_after": "2026-12-11T06:54:32.039180"
+  },
+  "1e3803113b28cbe4eab88683f50797e0fc458128055fa3f18d6640a6e2414b2d": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzensets 7 7800X3D Processor with 3D V Cache technology (integrated Radeon Graphics, 8 cores/16 threads, 120W TDP, AM5 S",
+    "retry_after": "2026-12-11T06:54:32.039180"
+  },
+  "257cfc6aa38877fe931a647084f38ba5aad2031e8af57457457df577dc4aac11": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzensets 7 9700X Processor (8 Cores/16 Threads) 65W DTP, AM5 socket, 40MB Cache, Up to 5.5 GHz max boost frequency, no c",
+    "retry_after": "2026-12-11T06:54:32.039180"
+  },
+  "f40260f1be7bdb08b6674e5498a0c25c8af3324c79cbdc86e6c83bb6ff427139": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzensets 9 9900X Processor (radeon graphics integrated, 12 Cores/24 Threads, 120W DTP, AM5 Socket, 76MB Cache, Up to 5.6",
+    "retry_after": "2026-12-11T06:54:34.682877"
+  },
+  "e8a3a0e3186000d048dfc61ebf706248615ffc0a41c819ec208738143b242526": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzensets 9 9950X Processor (integrated radeon graphics, 16 Cores/32 Threads, 170 W DTP, AM5 Socket, 80MB Cache, Up to 5.",
+    "retry_after": "2026-12-11T06:54:34.682877"
+  },
+  "f7df412812cd8335ee3bfb11dcb1c4332910b760830220ce3cdef49976825151": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD RYZEN \u2122 7 9800X 3D Desktop Processor (8-core/16-thread, 104MB cache, up to 5.2 GHz max boost)",
+    "retry_after": "2026-12-11T06:54:34.682877"
+  },
+  "2e92dd6c43abe527374ec5d39e60b5eb95b6fcefed923befdaf6dcdb6a4ba66d": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD RYZEN\u2122 7 9850X3D",
+    "retry_after": "2026-12-11T06:54:34.682877"
+  },
+  "421411962f01846e7f15c29c8ae6428871cedb7e4d19fe87bb2801045743550d": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Intel Core Ultra 5 Processor 250K Plus, up to 5.3 GHz, LGA1851 Socket, PCIe 5.0, DDR5 Support, 125W TDP",
+    "retry_after": "2026-12-11T06:54:34.682877"
+  },
+  "ded8e02b91402320291d83ffb27cb8591c90ce67a60c2450b53450704000e22a": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Intel Core Ultra 7 Processor 270K Plus, up to 5.5 GHz, LGA1851 Socket, PCIe 5.0, DDR5 Support, 125W TDP",
+    "retry_after": "2026-12-11T06:54:37.350759"
+  },
+  "5861416171ef0c9c4bdd1a5d725f40f30d253b779280dac57262d639f4444360": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzen 7 5800X3D Processeur 10TH ANNIVERSARY (8 Cores/16 Threads, Socket AM4, 105W TDP, 100 Mo Cache, up to 4.5 GHz Freque",
+    "retry_after": "2026-12-11T06:54:37.350759"
+  },
+  "6015a45c21f133125f2c770eb976987e082f10cde3c63e4fd8de18b58a981bea": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "RYZEN 5 5500F",
+    "retry_after": "2026-12-11T06:54:37.350759"
+  },
+  "e61357d835f26e36fcd1172302e0bfdcd32a81c328eed094a12a00a8ad0dc796": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ASUS Dual Radeon RX 9060 XT 16GB GDDR6 Graphics Card (PCIe 5.0, HDMI 2.1b, DisplayPort 2.1a, 2.5-slot design, Axial-tech fan",
+    "retry_after": "2026-12-11T06:54:37.350759"
+  },
+  "bd0c79523c0ff7282a16b2630adac2d0e73ba31ede8d317d2db08a8d69529b79": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "PowerColor Reaper AMD Radeon RX 9070 16GB GDDR6 Graphics Card",
+    "retry_after": "2026-12-11T06:54:37.350759"
+  },
+  "e09dc1605b32bd1710dadb7162a3abb9ece16764ea81882425e3545a779aedc5": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ASUS Prime GeForce RTX 5060 Ti 16GB GDDR7 OC Edition Graphics Card (PCIe 5.0, 16GB GDDR7, HDMI/DP 2.1, 2.5 slot, Axial tech f",
+    "retry_after": "2026-12-11T07:55:48.905811"
+  },
+  "fa99e52044c5991b678ae13d7b9a21bb8f0315151a863bee0e483fe43cf16feb": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ASUS Dual GeForce RTX 5060 8GB GDDR7 OC Edition (PCIe 5.0, 8GB GDDR7, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2.5 slot design, A",
+    "retry_after": "2026-12-11T07:55:48.905811"
+  },
+  "27b131bc190efc21eb77f1189399158685bb36d75b88484c4a10790cf456a804": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "MSI GeForce RTX 5050 8G SHADOW 2X OC Graphics Card - RTX 5050 GPU, 8GB GDDR6 (20Gbps/128-bit), PCIe 5.0 - DUAL-Fan Thermal De",
+    "retry_after": "2026-12-11T07:55:48.905811"
+  }
+}

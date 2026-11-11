@@ -20,6 +20,7 @@ import {
   Truck,
   Wrench,
   CalendarDays,
+  MonitorPlay,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ServiceHealthPanel } from "./service-health-panel";
@@ -27,6 +28,7 @@ import { ServiceHealthPanel } from "./service-health-panel";
 const PRIMARY_NAV = [
   { href: "/sourcing", icon: Search, label: "Sourcing" },
   { href: "/best-sellers", icon: Trophy, label: "Best Sellers" },
+  { href: "/pricewatch", icon: ChartNoAxesCombined, label: "PriceWatch" },
   { href: "/catalogue", icon: Library, label: "Catalogue" },
   { href: "/build-hub", icon: Package, label: "Builds" },
   { href: "/orders", icon: CalendarDays, label: "Workshop Calendar" },
@@ -34,6 +36,7 @@ const PRIMARY_NAV = [
   { href: "/inventory", icon: Warehouse, label: "Inventory" },
   { href: "/demand", icon: ChartNoAxesCombined, label: "Demand" },
   { href: "/cross-listing", icon: Repeat2, label: "Cross-listing" },
+  { href: "/live-builds", icon: MonitorPlay, label: "Live Builds" },
   { href: "/dispatch-zone", icon: Truck, label: "Dispatch Zone" },
   { href: "/email-events", icon: Bell, label: "Email Events" },
   { href: "/advertising-growth", icon: Bell, label: "Advertising & Growth" },

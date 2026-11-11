@@ -17,6 +17,8 @@ SPEC_KEYS = {
     'm2_length', 'sata_bays', 'cooler_type', 'radiator_mm', 'radiator_support',
     'front_radiator_depth_mm', 'installed_fans', 'cooling_capacity_w',
     'bios_cpu_ids', 'reviewed', 'source_url', 'cpu_id', 'm2_slots', 'sata_ports', 'integrated_graphics',
+    'bios_version', 'installed_bios_version', 'bios_versions', 'cpu_bios_versions',
+    'required_bios_version', 'bios_required_version',
 }
 
 

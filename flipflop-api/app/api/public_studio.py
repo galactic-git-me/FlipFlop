@@ -14,7 +14,7 @@ from app.models.benchmark import HardwareBenchmark
 from app.api.public_catalogue import public_playbook_slots, public_list_cases
 from app.services.configurator_compatibility import evaluate_configuration
 from app.services.playbook_pricing import price_playbook_build, InvalidBuildError
-from app.services.studio_fit import evaluate_fit
+from app.services.pc_parts_compatibility import evaluate_pc_parts_compatibility
 
 router = APIRouter(prefix='/public/studio', tags=['public-studio'])
 
@@ -72,7 +72,8 @@ async def evaluate_studio(body: StudioSelection, db: AsyncSession = Depends(get_
         raise HTTPException(409, 'The selected case is no longer available. Choose another case.')
     parts = {slot['slot_type']: lookup[slot['slot_id']][effective_selections[slot['slot_id']]].get('specifications', {})
              for slot in slots if slot['slot_id'] in effective_selections}
-    checks = evaluate_fit(parts, case, gpu_required=gpu_required)
+    compatibility = evaluate_pc_parts_compatibility(parts, case, gpu_required=gpu_required)
+    checks = compatibility["checks"]
     missing = [slot['slot_type'] for slot in slots
                if slot['slot_type'] != 'case' and slot['slot_id'] not in effective_selections
                and not (slot['slot_type'] == 'gpu' and not gpu_required)]

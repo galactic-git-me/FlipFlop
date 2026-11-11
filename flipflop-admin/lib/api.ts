@@ -710,6 +710,8 @@ export const api = {
           summary: string;
           event_type: string;
           marketplace?: string | null;
+          manual_build_id?: number | null;
+          body?: string;
           received_at?: string | null;
           link_url: string;
         }>
@@ -928,6 +930,57 @@ export const api = {
         `/manual-builds/${id}/insurance-policy/reconcile`,
         {method: "POST", body: JSON.stringify(payload)}
       ),
+  },
+  liveBuilds: {
+    ebayActivity: () =>
+      request<{
+        connected: boolean;
+        checked_builds?: number;
+        messages: Array<{
+          build_id: number;
+          channel: "ebay_uk";
+          message_id: string;
+          item_id: string;
+          sender: string;
+          subject: string;
+          body: string;
+          received_at?: string | null;
+          response_enabled: boolean;
+          listing_url?: string | null;
+        }>;
+        offers: Array<{
+          build_id: number;
+          channel: "ebay_uk";
+          best_offer_id: string;
+          buyer: string;
+          price: number;
+          status: string;
+          listing_url?: string | null;
+        }>;
+        offer_check_incomplete_for_builds?: number[];
+        message?: string | null;
+      }>("/live-builds/ebay-activity"),
+    replyToEbayMessage: (buildId: number, messageId: string, body: string) =>
+      request<{ success: boolean; message: string }>(`/live-builds/ebay/${buildId}/messages/reply`, {
+        method: "POST",
+        body: JSON.stringify({ message_id: messageId, body }),
+      }),
+    respondToEbayOffer: (
+      buildId: number,
+      data: { best_offer_id: string; action: "Accept" | "Decline" | "Counter"; counter_price?: number }
+    ) =>
+      request<{ success: boolean; message: string }>(`/live-builds/ebay/${buildId}/offers/respond`, {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+    queueVendorInboxCheck: (buildId: number, channel: string) =>
+      request<{ id: number; status: string; operation: string; channel: string }>("/cross-listing/browser-jobs/inbox/check", {
+        method: "POST", body: JSON.stringify({ build_id: buildId, channel }),
+      }),
+    queueVendorInboxReply: (data: { build_id: number; channel: string; message_id: string; body: string }) =>
+      request<{ id: number; status: string; operation: string; channel: string }>("/cross-listing/browser-jobs/inbox/reply", {
+        method: "POST", body: JSON.stringify(data),
+      }),
   },
   crossListing: {
     googleStatus: () =>
@@ -1739,6 +1792,7 @@ export const api = {
       return request<{ uploaded: boolean; filename: string; sha256: string; size_bytes: number }>("/settings/getting-started-guide", { method: "PUT", body: form });
     },
     componentManuals: () => request<{items: Array<{id: number; component_key: string; component_name: string; source_url: string; filename: string; sha256: string; size_bytes: number; is_active: boolean}>}>("/settings/component-manuals"),
+    discoverPlaybookManuals: (batchSize = 3) => request<{scanned: number; attempted: number; downloaded: number; deferred: number; not_found: string[]; batch_limit: number; search_unavailable?: boolean}>(`/settings/component-manuals/discover-playbook?batch_size=${batchSize}`, {method: "POST"}),
     uploadComponentManual: (data: {component_key: string; component_name: string; source_url: string; file: File; confirm_official_source: boolean}) => {
       const form = new FormData();
       form.set("component_key", data.component_key);

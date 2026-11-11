@@ -942,7 +942,6 @@ export default function CrossListingPage() {
   const [draftPrice, setDraftPrice] = useState("");
   const [publishing, setPublishing] = useState(false);
   const [channelImageReview, setChannelImageReview] = useState<ImageReviewRequest[] | null>(null);
-  const [directEbayItem, setDirectEbayItem] = useState<GroupedListing | null>(null);
   const [progressJobs, setProgressJobs] = useState<ProgressJob[]>([]);
   const [results, setResults] = useState<ListingResult[]>([]);
   const [imageSelectionRequests, setImageSelectionRequests] = useState<
@@ -961,7 +960,6 @@ export default function CrossListingPage() {
     enabledDefault: true,
   });
   const [relistSaving, setRelistSaving] = useState<number | null>(null);
-  const [relistNowBuild, setRelistNowBuild] = useState<number | null>(null);
 
   const channelCapabilities = useMemo(
     () => capabilities(connected, amazonConnected, amazonMessage, googleConnected, googleMessage),
@@ -1050,82 +1048,28 @@ export default function CrossListingPage() {
   const review = reviewId
     ? items.find((item) => item.id === reviewId) ?? null
     : null;
-  const relistAtByBuild = useMemo(() => {
-    const next = new Map<number, string>();
-    const scheduleBuilds = new Set<number>();
-    const buildsById = new Map(
-      Object.values(builds).map((build) => [build.id, build])
-    );
-    const fallbackListedAt = (buildId: number) => {
-      const build = buildsById.get(buildId);
-      if (build?.listed_at) return build.listed_at;
-      // Older listings may not have listed_at populated. Their channel row's
-      // updatedAt is the best available listing timestamp in that case.
-      return (
-        items.find(
-          (source) =>
-            source.buildId === buildId &&
-            (source.status === "live" || source.status === "draft")
-        )?.updatedAt ?? null
-      );
-    };
-    for (const schedule of schedules) {
-      scheduleBuilds.add(schedule.build_id);
-      const listedAt = fallbackListedAt(schedule.build_id);
-      if (!schedule.recreate_enabled) continue;
-      const target =
-        schedule.next_recreate_at ??
-        (schedule.published_at
-          ? new Date(
-              new Date(schedule.published_at).getTime() +
-                relistPolicy.intervalDays * 86_400_000
-            ).toISOString()
-          : listedAt
-          ? new Date(
-              new Date(listedAt).getTime() +
-                relistPolicy.intervalDays * 86_400_000
-            ).toISOString()
-          : null);
-      if (!target) continue;
-      const current = next.get(schedule.build_id);
-      if (
-        !current ||
-        new Date(target).getTime() <
-          new Date(current).getTime()
-      ) {
-        next.set(schedule.build_id, target);
-      }
+  const relistChannelsFor = (item: GroupedListing) => tableChannels.filter((channel) =>
+    channel !== "google_shopping" && ["live", "ended"].includes(item.byChannel[channel]?.status ?? "")
+  );
+  const scheduleFor = (buildId: number, channel: string) => schedules.find((schedule) =>
+    schedule.build_id === buildId && normalizeScheduleChannel(schedule.channel) === channel
+  );
+  const relistEnabledFor = (buildId: number, channel: string) => {
+    const schedule = scheduleFor(buildId, channel);
+    if (schedule) return schedule.recreate_enabled;
+    if (channel === "ebay_uk") return Boolean(builds[buildId]?.next_recreate_at);
+    return false;
+  };
+  const relistTargetFor = (item: GroupedListing, channel: string) => {
+    const schedule = scheduleFor(item.buildId, channel);
+    if (!relistEnabledFor(item.buildId, channel)) return null;
+    if (schedule?.next_recreate_at) return schedule.next_recreate_at;
+    if (schedule?.published_at) {
+      return new Date(new Date(schedule.published_at).getTime() + (schedule.interval_days ?? relistPolicy.intervalDays) * 86_400_000).toISOString();
     }
-    for (const build of Object.values(builds)) {
-      if (scheduleBuilds.has(build.id) || !relistPolicy.enabledDefault) continue;
-      const listedAt = build.next_recreate_at
-        ? null
-        : fallbackListedAt(build.id);
-      if (build.next_recreate_at) {
-        next.set(build.id, build.next_recreate_at);
-        continue;
-      }
-      if (!listedAt) continue;
-      next.set(
-        build.id,
-        new Date(
-          new Date(listedAt).getTime() + relistPolicy.intervalDays * 86_400_000
-        ).toISOString()
-      );
-    }
-    return next;
-  }, [builds, relistPolicy, schedules]);
-
-  const relistEnabledByBuild = useMemo(() => {
-    const state = new Map<number, boolean>();
-    for (const schedule of schedules) {
-      state.set(schedule.build_id, (state.get(schedule.build_id) ?? false) || schedule.recreate_enabled);
-    }
-    for (const build of Object.values(builds)) {
-      if (!state.has(build.id)) state.set(build.id, relistPolicy.enabledDefault);
-    }
-    return state;
-  }, [builds, relistPolicy, schedules]);
+    if (channel === "ebay_uk" && builds[item.buildId]?.next_recreate_at) return builds[item.buildId].next_recreate_at;
+    return null;
+  };
 
   const refresh = useCallback(async () => {
     setRefreshing(true);
@@ -1312,6 +1256,18 @@ export default function CrossListingPage() {
       setDestinations(needsListing);
     }
   };
+  const destinationsForNewListings = (item: GroupedListing) =>
+    channelCapabilities
+      .filter((channel) => {
+        if (!channel.canPublish) return false;
+        const status = item.byChannel[channel.channel]?.status ?? "unavailable";
+        return shouldAutoSelectDestination(status);
+      })
+      .map((channel) => channel.channel);
+  const startCrossListing = (item: GroupedListing) => {
+    setSelected((current) => new Set(current).add(item.id));
+    setDestinations(destinationsForNewListings(item));
+  };
   const toggleDestination = (channel: CrossListingChannel) => {
     if (!channelCapabilities.find((item) => item.channel === channel)?.canPublish) return;
     setDestinations((current) =>
@@ -1329,15 +1285,7 @@ export default function CrossListingPage() {
       return next;
     });
     if (!wasSelected) {
-      const needsListing = channelCapabilities
-        .filter((channel) => {
-          if (!channel.canPublish) return false;
-          const status =
-            item.byChannel[channel.channel]?.status ?? "unavailable";
-          return shouldAutoSelectDestination(status);
-        })
-        .map((channel) => channel.channel);
-      setDestinations(needsListing);
+      setDestinations(destinationsForNewListings(item));
     }
   };
 
@@ -1371,91 +1319,14 @@ export default function CrossListingPage() {
   };
 
   const relistNow = (item: GroupedListing) => {
-    const build = builds[item.buildId];
-    if (!build) return;
-    const price = item.listing.price ?? build.ebay_price ?? 0;
-    if (!price || !Number.isFinite(price)) {
-      setError("Set a valid eBay price before relisting this build.");
+    const channels = relistChannelsFor(item);
+    if (!channels.length) {
+      setError("This build has no active or previously listed channels to relist.");
       return;
     }
-    const oldListingEnded =
-      build.ebay_listing_status === "ended" || item.byChannel.ebay_uk?.status === "ended";
-    const intendedAction = oldListingEnded
-      ? "relist the ended item as a new eBay listing with a fresh item ID"
-      : "create a new eBay listing if the saved item is missing or ended";
-    const draftNote = build.ebay_draft_id
-      ? " The earlier incomplete Seller Hub draft will remain in eBay and may be deleted there after the new listing is confirmed."
-      : "";
-    const capability = channelCapabilities.find((entry) => entry.channel === "ebay_uk");
-    const photoUrls = (build.photos ?? [])
-      .filter((photo) => photo.kind === "photo" && photo.url)
-      .map((photo) => photo.url);
-    if (!capability || photoUrls.length === 0) {
-      setError("Add at least one product photograph to this build before cross-listing it on eBay.");
-      return;
-    }
-    if (!window.confirm(`Publish ${item.listing.title} on eBay at £${price.toFixed(2)}? FlipFlop will verify the saved item first, then ${intendedAction}. If eBay still sees it as active, FlipFlop updates it instead.${draftNote}`)) return;
-
-    const eligibleImages = item.listing.images.filter((image) => photoUrls.includes(image.url));
-    const reviewImages = eligibleImages.length > 0
-      ? eligibleImages
-      : photoUrls.map((url, order) => ({ url, alt: item.title, order }));
-    const reviewItem: CrossListingSource = {
-      ...item.primary,
-      title: item.title,
-      listing: { ...item.listing, images: reviewImages },
-    };
-    setDirectEbayItem(item);
-    if (capability.maxImages !== null && reviewImages.length > capability.maxImages) {
-      const request = { item: reviewItem, capability };
-      const initialUrls = reviewImages
-        .map((image) => image.url)
-        .slice(0, capability.maxImages);
-      setImageSelectionRequests([request]);
-      setImageSelectionIndex(0);
-      setImageSelectionDraft(initialUrls);
-      setImageSelectionMain(initialUrls[0] ?? "");
-      setImageSelections({});
-      return;
-    }
-
-    setChannelImageReview([{
-      buildId: item.buildId,
-      title: item.title,
-      channel: "ebay_uk",
-      urls: reviewImages.map((image) => image.url),
-    }]);
-  };
-
-  const publishApprovedRelist = async (item: GroupedListing, images: string[]) => {
-    const build = builds[item.buildId];
-    if (!build || images.length === 0) {
-      setError("Approve at least one eBay product photograph before publishing.");
-      return;
-    }
-    const price = item.listing.price ?? build.ebay_price ?? 0;
-    if (!price || !Number.isFinite(price)) {
-      setError("Set a valid eBay price before relisting this build.");
-      return;
-    }
-    setRelistNowBuild(item.buildId);
     setError(null);
-    try {
-      const result = await api.manualBuilds.postToEbay(item.buildId, {
-        price,
-        condition: build.ebay_condition || item.condition || "USED_EXCELLENT",
-        publish: true,
-        images,
-        title: item.listing.title,
-        description: item.listing.description,
-      });
-      if (!result.success) throw new Error(result.error || "eBay did not accept the listing.");
-      await refresh();
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Could not publish this build on eBay.");
-    } finally {
-      setRelistNowBuild(null);
-    }
+    setSelected(new Set([item.id]));
+    setDestinations(channels);
   };
 
   const downloadSelectedPacks = async () => {
@@ -1512,20 +1383,10 @@ export default function CrossListingPage() {
     [];
 
   const toggleRelist = async (item: GroupedListing) => {
-    const enabled = !(relistEnabledByBuild.get(item.buildId) ?? relistPolicy.enabledDefault);
-    const channels = tableChannels.filter((channel) => {
-      const source = item.byChannel[channel];
-      return (
-        Boolean(
-          schedules.find(
-            (schedule) =>
-              schedule.build_id === item.buildId &&
-              normalizeScheduleChannel(schedule.channel) === channel
-          )
-        ) || source?.status === "live" || source?.status === "draft"
-      );
-    });
+    const channels = relistChannelsFor(item);
     if (!channels.length) return;
+    const allEnabled = channels.every((channel) => relistEnabledFor(item.buildId, channel));
+    const enabled = !allEnabled;
     setRelistSaving(item.buildId);
     try {
       await Promise.all(
@@ -1831,15 +1692,6 @@ export default function CrossListingPage() {
     setImageSelectionDraft([]);
     setImageSelectionMain("");
     setImageSelections({});
-    if (directEbayItem) {
-      setChannelImageReview([{
-        buildId: directEbayItem.buildId,
-        title: directEbayItem.title,
-        channel: "ebay_uk",
-        urls: nextSelections[imageSelectionKey(directEbayItem.buildId, "ebay_uk")] ?? [],
-      }]);
-      return;
-    }
     void executePublish(nextSelections);
   };
 
@@ -1849,7 +1701,6 @@ export default function CrossListingPage() {
     setImageSelectionDraft([]);
     setImageSelectionMain("");
     setImageSelections({});
-    setDirectEbayItem(null);
   };
 
   return (
@@ -2167,7 +2018,9 @@ export default function CrossListingPage() {
                           }`}
                         >
                           {channel.mode === "api"
-                            ? "AUTOMATIC"
+                            ? channel.channel === "google_shopping"
+                              ? "OPERATOR SUBMIT"
+                              : "API"
                             : channel.mode === "manual" ? "CODEX · CHROME" : labelForStatus(channel.mode)}
                         </span>
                       </div>
@@ -2410,7 +2263,7 @@ export default function CrossListingPage() {
                 ))}
                 <th className="border-l border-slate-800 px-4 py-3">Updated</th>
                 <th className="border-l border-slate-800 px-4 py-3">
-                  Relist in
+                  Relist countdown by channel
                 </th>
                 <th className="px-4 py-3" />
               </tr>
@@ -2476,53 +2329,57 @@ export default function CrossListingPage() {
                   <td className="border-l border-slate-800 px-4 py-3 text-xs text-slate-500">
                     {new Date(item.updatedAt).toLocaleDateString("en-GB")}
                   </td>
-                  <td className="border-l border-slate-800 px-4 py-3 text-center text-xs">
-                    <div className="flex flex-col items-center gap-1.5">
-                      <RelistCountdown target={relistAtByBuild.get(item.buildId)} />
+                  <td className="border-l border-slate-800 px-3 py-3 text-xs">
+                    <div className="flex min-w-36 flex-col gap-1.5">
+                      {relistChannelsFor(item).map((channel) => {
+                        const enabled = relistEnabledFor(item.buildId, channel);
+                        const label = channelCapabilities.find((entry) => entry.channel === channel)?.label ?? channel;
+                        const target = relistTargetFor(item, channel);
+                        return <div key={channel} className="flex items-center justify-between gap-2 rounded bg-slate-950/50 px-2 py-1" title={`${label} has an independent relist schedule`}>
+                          <span className="truncate text-[10px] text-slate-500">{label}</span>
+                          {enabled && target ? <RelistCountdown target={target} /> : enabled ? <span className="text-[10px] text-amber-300">Pending clock</span> : <span className="text-[10px] text-slate-600">Paused</span>}
+                        </div>;
+                      })}
+                      {relistChannelsFor(item).length === 0 && <span className="text-slate-600">—</span>}
                       <button
                         type="button"
                         onClick={() => void toggleRelist(item)}
-                        disabled={relistSaving === item.buildId}
+                        disabled={relistSaving === item.buildId || relistChannelsFor(item).length === 0}
                         className={`rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wider transition-colors disabled:opacity-50 ${
-                          relistEnabledByBuild.get(item.buildId)
+                          relistChannelsFor(item).length > 0 && relistChannelsFor(item).every((channel) => relistEnabledFor(item.buildId, channel))
                             ? "border-emerald-400/40 text-emerald-300 hover:bg-emerald-400/10"
                             : "border-slate-600 text-slate-500 hover:border-slate-400 hover:text-slate-300"
                         }`}
                         title={
-                          relistEnabledByBuild.get(item.buildId)
-                            ? "Disable relisting for this listing"
-                            : "Enable relisting for this listing"
+                          relistChannelsFor(item).length > 0 && relistChannelsFor(item).every((channel) => relistEnabledFor(item.buildId, channel))
+                            ? "Pause relisting on all listed channels"
+                            : "Enable relisting on all listed channels"
                         }
                       >
                         {relistSaving === item.buildId
                           ? "Saving…"
-                          : relistEnabledByBuild.get(item.buildId)
+                          : relistChannelsFor(item).length > 0 && relistChannelsFor(item).every((channel) => relistEnabledFor(item.buildId, channel))
                           ? "On"
-                          : "Off"}
+                          : relistChannelsFor(item).some((channel) => relistEnabledFor(item.buildId, channel)) ? "Mixed" : "Off"}
                       </button>
                     </div>
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex justify-end gap-2">
-                      {(["ended", "unavailable", "draft"].includes(item.byChannel.ebay_uk?.status ?? "") || !item.byChannel.ebay_uk) &&
-                        ["ended", "missing", "never_listed", "draft"].includes(builds[item.buildId]?.ebay_listing_status ?? "never_listed") &&
-                        (
-                          <button
-                            onClick={() => void relistNow(item)}
-                            disabled={
-                              relistNowBuild === item.buildId ||
-                              directEbayItem?.buildId === item.buildId ||
-                              publishing
-                            }
-                            className="cursor-pointer rounded border border-emerald-500/50 px-2.5 py-1.5 text-xs text-emerald-300 transition-colors hover:bg-emerald-500/10 disabled:opacity-50"
-                          >
-                            {relistNowBuild === item.buildId
-                              ? "Publishing…"
-                              : directEbayItem?.buildId === item.buildId
-                              ? "Reviewing photos…"
-                              : "Cross-list"}
-                          </button>
-                        )}
+                      <button
+                        type="button"
+                        onClick={() => startCrossListing(item)}
+                        className="cursor-pointer rounded border border-cyan-500/50 px-2.5 py-1.5 text-xs text-cyan-200 transition-colors hover:bg-cyan-500/10"
+                        title="Select this build and choose any available destination channel"
+                      >
+                        Cross-list
+                      </button>
+                      {relistChannelsFor(item).length > 0 && <button
+                        onClick={() => relistNow(item)}
+                        disabled={publishing}
+                        className="cursor-pointer rounded border border-emerald-500/50 px-2.5 py-1.5 text-xs text-emerald-300 transition-colors hover:bg-emerald-500/10 disabled:opacity-50"
+                        title="Select this build's existing vendor channels for a reviewed relist/update batch"
+                      >Relist</button>}
                       <button
                         onClick={() => openReview(item.byChannel.flipflop_shop ?? item.primary)}
                         className="cursor-pointer rounded border border-slate-700 px-2.5 py-1.5 text-xs text-slate-300 transition-colors hover:border-emerald-400/50 hover:text-emerald-300"
@@ -2636,21 +2493,9 @@ export default function CrossListingPage() {
         onResult={(id, success) => void recordCodexResult(id, success)}
       />
 
-      {channelImageReview && <ChannelImageReview requests={channelImageReview} onCancel={() => {
+      {channelImageReview && <ChannelImageReview requests={channelImageReview} onCancel={() => setChannelImageReview(null)} onApproved={(urls) => {
         setChannelImageReview(null);
-        setDirectEbayItem(null);
-      }} onApproved={(urls) => {
-        const relistItem = directEbayItem;
-        setChannelImageReview(null);
-        setDirectEbayItem(null);
-        if (relistItem) {
-            void publishApprovedRelist(
-              relistItem,
-              urls[imageSelectionKey(relistItem.buildId, "ebay_uk")] ?? []
-            );
-        } else {
-          void executePublish(urls, true);
-        }
+        void executePublish(urls, true);
       }} />}
       {review && (
         <div
