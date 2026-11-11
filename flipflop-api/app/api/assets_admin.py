@@ -1314,6 +1314,17 @@ async def auto_prepare_variant_asset(
     source_urls = await _variant_source_urls(db, listing, slot.slot_type)
     if media_category != "case":
         approved = review.get("main_photo_approved_url")
+        legacy_wireless_approval = (
+            media_category == "wireless_adapter"
+            and review.get("media_family_key") == "wireless_adapter_unclassified"
+            and review.get("main_photo_approved_by")
+            and approved
+        )
+        if legacy_wireless_approval:
+            # Older builds stored wireless adapters under one unclassified
+            # family key. The new identity is per listing, so carry the
+            # owner's existing approval into that narrower scope.
+            review["media_family_key"] = family_key
         if family_key.endswith("_unclassified") or review.get("media_family_key") != family_key or not review.get("main_photo_approved_by") or not approved:
             raise HTTPException(409, "Approve the shared hardware family photo first")
         source_urls = [approved]
