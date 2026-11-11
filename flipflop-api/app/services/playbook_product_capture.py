@@ -114,9 +114,9 @@ def _product_identity(capture):
     manufacturer=(capture.get('manufacturer') or capture.get('product_brand') or capture.get('brand')
         or property_value('manufacturer','brand','brandname'))
     model=(capture.get('model_number') or capture.get('modelNumber') or capture.get('model')
-        or property_value('modelnumber','itemmodelnumber','manufacturermodelnumber'))
+        or property_value('model','modelnumber','itemmodelnumber','manufacturermodelnumber'))
     mpn=(capture.get('manufacturer_part_number') or capture.get('mpn')
-        or property_value('manufacturerpartnumber','manufacturerspartnumber','mpn','partnumber'))
+        or property_value('manufacturerpartnumber','manufacturerspartnumber','mpn','partnumber','itempartnumber'))
     gtin=(capture.get('gtin') or capture.get('gtin14') or capture.get('gtin13')
         or capture.get('gtin12') or capture.get('gtin8')
         or property_value('gtin','gtin14','gtin13','gtin12','gtin8','ean','upc',

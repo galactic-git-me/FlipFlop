@@ -58,8 +58,11 @@ def _raw_identity(listing: Listing) -> dict[str, Any]:
     capture = raw.get("playbook_product_capture") if isinstance(raw.get("playbook_product_capture"), dict) else {}
     engineering = raw.get("playbook_product_engineering_capture") if isinstance(raw.get("playbook_product_engineering_capture"), dict) else {}
     amazon_capture = raw.get("playbook_amazon_catalog_capture") if isinstance(raw.get("playbook_amazon_catalog_capture"), dict) else {}
+    from app.services.playbook_product_capture import _product_identity
+    captured_identities = [_product_identity(source) for source in (capture, engineering, amazon_capture)]
     sources = [
         identity,
+        *captured_identities,
         capture.get("identity") if isinstance(capture.get("identity"), dict) else {},
         engineering.get("identity") if isinstance(engineering.get("identity"), dict) else {},
         capture,

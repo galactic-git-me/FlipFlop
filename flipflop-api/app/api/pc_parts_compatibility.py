@@ -146,6 +146,13 @@ async def get_component_product_info(variant_id: int, db: AsyncSession = Depends
 
     raw_specs = listing.raw_specs if isinstance(listing.raw_specs, dict) else {}
     identity = raw_specs.get("identity") if isinstance(raw_specs.get("identity"), dict) else {}
+    from app.services.playbook_product_capture import _product_identity
+    captured_identity = {}
+    for key in ("playbook_product_capture", "playbook_product_engineering_capture", "playbook_amazon_catalog_capture"):
+        capture = raw_specs.get(key)
+        if isinstance(capture, dict):
+            captured_identity.update(_product_identity(capture))
+    identity = {**captured_identity, **identity}
     manuals = (await db.execute(select(ComponentManual).where(ComponentManual.is_active.is_(True)))).scalars().all()
     manual_identity = {
         "component_name": listing.title,
@@ -163,6 +170,12 @@ async def get_component_product_info(variant_id: int, db: AsyncSession = Depends
         "variant_id": variant.id,
         "title": listing.title,
         "cpk": cpk,
+        "identity": {
+            "manufacturer": identity.get("manufacturer"),
+            "model_number": identity.get("model_number"),
+            "mpn": identity.get("mpn") or identity.get("manufacturer_part_number"),
+            "gtin": identity.get("gtin"),
+        },
         "prices": vendor_prices,
         "history": history,
         "history_days": 180,
