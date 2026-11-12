@@ -395,6 +395,36 @@ def _supplier_fact_is_approvable(part,source):
             and item==0 and postage==0 and source.get('delivery_working_days')==0)
     identity=supplier_identity(source.get('source'),url)
     accepted_identity=identity in {'amazon','overclockers'}
+    source_url_approved=supported_product_url(url)
+    same_product=url==part.get('source_url') or same_listing_product(url,part.get('source_url'))
+    if identity=='aliexpress':
+        # AliExpress can contribute to Flexible only when the extension has
+        # captured the exact product page, selected price, stock and postage.
+        # Do not add AliExpress to supported_product_url(): that allowlist is
+        # consumed by backend product-page capture and must never scrape AE.
+        from urllib.parse import urlsplit
+        import re
+        try:
+            parsed=urlsplit(url)
+            host=(parsed.hostname or '').casefold()
+        except ValueError:
+            parsed=None
+            host=''
+        page_evidence=source.get('marketplace_evidence') if isinstance(source.get('marketplace_evidence'),dict) else source
+        extension_capture=bool(
+            parsed is not None and parsed.scheme=='https' and parsed.username is None and parsed.password is None
+            and (host=='aliexpress.com' or host.endswith('.aliexpress.com'))
+            and re.fullmatch(r'/item/\d{6,}\.html',parsed.path,re.I)
+            and source.get('evidence_source')=='flipflopxtension'
+            and page_evidence.get('source_page_verified') is True
+            and page_evidence.get('selected_price_stable') is True
+            and page_evidence.get('selected_options_capture_complete') is True
+            and page_evidence.get('availability_page_verified') is True
+            and page_evidence.get('shipping_page_verified') is True
+        )
+        accepted_identity=extension_capture
+        source_url_approved=extension_capture
+        same_product=url==part.get('source_url')
     if identity in {'royalcdkeys','gamers_outlet'}:
         # A digital-key offer needs an explicit operator review of the
         # supplier's licence type and UK resale/install terms before its cost
@@ -406,8 +436,8 @@ def _supplier_fact_is_approvable(part,source):
         and source.get('active_listing') and source.get('condition')=='new'
         and source.get('listing_type')=='buy_it_now' and source.get('stock_status')=='available'
         and source.get('stock_evidence') and postage_is_usable
-        and item is not None and item>0 and supported_product_url(url)
-        and accepted_identity and (url==part.get('source_url') or same_listing_product(url,part.get('source_url'))))
+        and item is not None and item>0 and source_url_approved
+        and accepted_identity and same_product)
 
 
 def _supplier_snapshot_matches_current(proposed, current):

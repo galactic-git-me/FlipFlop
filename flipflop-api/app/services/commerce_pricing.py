@@ -118,7 +118,7 @@ def supplier_allowed(mode: FulfilmentMode, offer: SupplierOffer) -> bool:
         return offer.channel == "retail" and offer.supplier.strip().lower() in {"amazon", "overclockers uk", "overclockers"}
     if mode == FulfilmentMode.STANDARD:
         vendor = offer.supplier.strip().lower()
-        flexible_only = vendor.startswith("ebay") or vendor.startswith("vinted")
+        flexible_only = vendor.startswith(("ebay", "vinted", "aliexpress"))
         return offer.channel == "retail" and not flexible_only
     return True
 
@@ -137,7 +137,9 @@ def estimate_delivery_working_days(
     vendor = supplier.strip().lower()
     if vendor.startswith("amazon") and prime_eligible is True:
         return 1, "prime_default"
-    if vendor.startswith("ebay") or vendor.startswith("vinted"):
+    if vendor.startswith(("ebay", "vinted")):
+        return 7, "vendor_default"
+    if vendor.startswith("aliexpress"):
         return 7, "vendor_default"
     return 3, "vendor_default"
 

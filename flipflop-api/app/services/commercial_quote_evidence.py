@@ -21,6 +21,7 @@ def supplier_identity(supplier, reference):
     except ValueError:
         host = ""
     for domain, name in (("amazon.co.uk", "amazon"), ("overclockers.co.uk", "overclockers"),
+                         ("aliexpress.com", "aliexpress"),
                          ("releases.ubuntu.com", "ubuntu"),
                          ("royalcdkeys.com", "royalcdkeys"),
                          ("gamers-outlet.net", "gamers_outlet"),
