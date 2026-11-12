@@ -63,6 +63,7 @@ class ProductDetailsEvidence(CamelModel):
 class ExtractedListing(CamelModel):
     supplier_product_evidence: Optional[SupplierProductEvidence] = None
     product_details: Optional[ProductDetailsEvidence] = None
+    marketplace_filter_evidence: Optional[dict] = None
     source_currency: Optional[Literal['EUR', 'GBP']] = None
     source_item_price: Optional[float] = Field(default=None, gt=0)
     exchange_rate: Optional[float] = Field(default=None, gt=0)
