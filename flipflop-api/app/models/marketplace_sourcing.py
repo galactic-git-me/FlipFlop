@@ -114,6 +114,8 @@ class MarketplaceBundleComponent(Base):
     canonical_part_key: Mapped[str] = mapped_column(String(160), nullable=False, index=True)
     quantity: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     specifications: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    market_reference_price: Mapped[Decimal | None] = mapped_column(Numeric(12, 2))
+    reference_observed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     attributed_cost: Mapped[Decimal | None] = mapped_column(Numeric(12, 2))
     allocation_method: Mapped[str | None] = mapped_column(String(32))
     allocation_confidence: Mapped[Decimal | None] = mapped_column(Numeric(5, 4))

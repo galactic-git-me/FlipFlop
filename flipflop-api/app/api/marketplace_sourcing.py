@@ -23,6 +23,7 @@ from app.models.marketplace_sourcing import (
     MarketplaceBundle, MarketplaceBundleComponent, MarketplaceBundleVariant,
     MarketplaceListing, MarketplaceListingVariant, MarketplaceSupplierOffer,
 )
+from app.services.bundle_costs import allocate_bundle_cost
 
 router = APIRouter(prefix="/gem-radar/sourcing", tags=["marketplace-sourcing"])
 MARKET_HOSTS = {
@@ -45,6 +46,8 @@ class BundlePartInput(SourcingModel):
     quantity: int = Field(default=1, ge=1, le=16)
     specifications: dict = Field(default_factory=dict)
     market_reference_price: Decimal | None = Field(default=None, gt=0)
+    market_reference_currency: Literal["GBP"] = "GBP"
+    reference_observed_at: datetime | None = None
 
 
 class OfferVariantInput(SourcingModel):
@@ -65,6 +68,14 @@ class OfferVariantInput(SourcingModel):
     platform: str | None = Field(default=None, max_length=48)
     socket: str | None = Field(default=None, max_length=24)
     bundle_components: list[BundlePartInput] = Field(default_factory=list, max_length=16)
+
+    @field_validator("source_url")
+    @classmethod
+    def secure_source_url(cls, value: str) -> str:
+        parts = urlsplit(value)
+        if parts.scheme != "https" or not parts.hostname or parts.username or parts.password:
+            raise ValueError("variant source URL must be public HTTPS")
+        return value
 
     @field_validator("currency")
     @classmethod
@@ -175,19 +186,33 @@ async def ingest_extension_results(
                 bundle_count += 1
 
         for item in entry.variants:
+            source_host = (urlsplit(item.source_url).hostname or "").lower()
+            expected_hosts = MARKET_HOSTS[entry.marketplace]
+            if entry.marketplace != "google_shopping" and not any(
+                source_host == host or source_host.endswith("." + host) for host in expected_hosts
+            ):
+                raise HTTPException(422, "variant evidence URL host does not match marketplace")
+            verification_status = item.verification_status
+            if verification_status == "verified" and not (
+                item.evidence.get("source_page_verified") is True
+                and item.evidence.get("selected_price_stable") is True
+            ):
+                verification_status = "needs_verification"
+            if item.bundle_components and verification_status == "verified" and item.evidence.get("bundle_contents_verified") is not True:
+                verification_status = "needs_verification"
             opts = item.selected_options
             variant_fingerprint = fingerprint(opts)
             variant = (await db.execute(select(MarketplaceListingVariant).where(
                 MarketplaceListingVariant.listing_id == listing.id,
                 MarketplaceListingVariant.variant_fingerprint == variant_fingerprint,
             ).with_for_update())).scalar_one_or_none()
-            verified_at = item.observed_at if item.verification_status == "verified" else None
+            verified_at = item.observed_at if verification_status == "verified" else None
             if variant is None:
                 variant = MarketplaceListingVariant(
                     listing_id=listing.id, variant_fingerprint=variant_fingerprint,
                     marketplace_variant_id=item.marketplace_variant_id, selected_options=opts,
                     specifications=item.specifications, availability=item.availability,
-                    verification_status=item.verification_status, verified_at=verified_at,
+                    verification_status=verification_status, verified_at=verified_at,
                     source_url=item.source_url,
                 )
                 db.add(variant)
@@ -197,25 +222,25 @@ async def ingest_extension_results(
                 variant.marketplace_variant_id = item.marketplace_variant_id or variant.marketplace_variant_id
                 variant.specifications = item.specifications or variant.specifications
                 variant.availability = item.availability
-                variant.verification_status = item.verification_status
+                variant.verification_status = verification_status
                 variant.verified_at = verified_at or variant.verified_at
                 variant.source_url = item.source_url
 
+            landed = None
+            if item.currency == "GBP" and item.shipping_price is not None:
+                landed = item.item_price + item.shipping_price + (item.tax_price or Decimal("0"))
             offer_exists = (await db.execute(select(MarketplaceSupplierOffer.id).where(
                 MarketplaceSupplierOffer.variant_id == variant.id,
                 MarketplaceSupplierOffer.observed_at == item.observed_at,
             ))).scalar_one_or_none()
             if offer_exists is None:
-                landed = None
-                if item.currency == "GBP" and item.shipping_price is not None:
-                    landed = item.item_price + item.shipping_price + (item.tax_price or Decimal("0"))
                 # Unverified search-card observations are retained as evidence
                 # but cannot be treated as trusted price offers downstream.
                 db.add(MarketplaceSupplierOffer(
                     variant_id=variant.id, item_price=item.item_price, currency=item.currency,
                     shipping_price=item.shipping_price, tax_price=item.tax_price, landed_cost=landed,
                     condition=item.condition, availability=item.availability,
-                    verification_status=item.verification_status, observed_at=item.observed_at,
+                    verification_status=verification_status, observed_at=item.observed_at,
                     evidence={**item.evidence, "source": "flipflopxtension", "source_url": item.source_url},
                 ))
                 offer_count += 1
@@ -227,12 +252,18 @@ async def ingest_extension_results(
                 if bundle is None:
                     bundle = MarketplaceBundle(
                         listing_id=listing.id, bundle_type=item.bundle_type, platform=item.platform,
-                        socket=item.socket, verification_status=item.verification_status,
+                        socket=item.socket, verification_status=verification_status,
                         seller=entry.seller,
                     )
                     db.add(bundle)
                     await db.flush()
                     bundle_count += 1
+                else:
+                    bundle.bundle_type = item.bundle_type
+                    bundle.platform = item.platform or bundle.platform
+                    bundle.socket = item.socket or bundle.socket
+                    bundle.verification_status = verification_status
+                    bundle.seller = entry.seller or bundle.seller
                 bundle_variant_fp = fingerprint({"options": opts, "marketplace_variant_id": item.marketplace_variant_id})
                 bundle_variant = (await db.execute(select(MarketplaceBundleVariant).where(
                     MarketplaceBundleVariant.bundle_id == bundle.id,
@@ -245,11 +276,23 @@ async def ingest_extension_results(
                         total_price=item.item_price, shipping_price=item.shipping_price,
                         tax_price=item.tax_price,
                         landed_cost=landed if item.currency == "GBP" else None, currency=item.currency,
-                        availability=item.availability, verification_status=item.verification_status,
+                        availability=item.availability, verification_status=verification_status,
                         verified_at=verified_at, evidence=item.evidence,
                     )
                     db.add(bundle_variant)
                     await db.flush()
+                else:
+                    bundle_variant.marketplace_variant_id = item.marketplace_variant_id or bundle_variant.marketplace_variant_id
+                    bundle_variant.selected_configuration = opts
+                    bundle_variant.total_price = item.item_price
+                    bundle_variant.shipping_price = item.shipping_price
+                    bundle_variant.tax_price = item.tax_price
+                    bundle_variant.landed_cost = landed if item.currency == "GBP" else None
+                    bundle_variant.currency = item.currency
+                    bundle_variant.availability = item.availability
+                    bundle_variant.verification_status = verification_status
+                    bundle_variant.verified_at = verified_at or bundle_variant.verified_at
+                    bundle_variant.evidence = item.evidence
                 for part in item.bundle_components:
                     existing = (await db.execute(select(MarketplaceBundleComponent).where(
                         MarketplaceBundleComponent.bundle_variant_id == bundle_variant.id,
@@ -260,7 +303,34 @@ async def ingest_extension_results(
                             bundle_variant_id=bundle_variant.id,
                             canonical_part_key=part.canonical_part_key,
                             quantity=part.quantity, specifications=part.specifications,
+                            market_reference_price=part.market_reference_price,
+                            reference_observed_at=part.reference_observed_at,
                         ))
+                    else:
+                        existing.quantity = part.quantity
+                        existing.specifications = part.specifications
+                        existing.market_reference_price = part.market_reference_price
+                        existing.reference_observed_at = part.reference_observed_at
+                # Proportional allocation is accounting metadata only. It is
+                # emitted when every constituent has a current standalone
+                # market reference and the extension verified the exact bundle.
+                if verification_status == "verified" and item.evidence.get("bundle_contents_verified") is True:
+                    refs = {
+                        part.canonical_part_key: part.market_reference_price * part.quantity
+                        for part in item.bundle_components if part.market_reference_price is not None
+                    }
+                    if len(refs) == len(item.bundle_components) and item.currency == "GBP":
+                        allocation_total = landed if landed is not None else item.item_price
+                        allocations = allocate_bundle_cost(allocation_total, refs)
+                        for part in item.bundle_components:
+                            component_row = (await db.execute(select(MarketplaceBundleComponent).where(
+                                MarketplaceBundleComponent.bundle_variant_id == bundle_variant.id,
+                                MarketplaceBundleComponent.canonical_part_key == part.canonical_part_key,
+                            ))).scalar_one_or_none()
+                            if component_row is not None:
+                                component_row.attributed_cost = allocations[part.canonical_part_key]
+                                component_row.allocation_method = "proportional_standalone_market"
+                                component_row.allocation_confidence = Decimal("1.0000")
         accepted += 1
     await db.commit()
     return DiscoveryResultsResponse(accepted=accepted, variants=variant_count, offers=offer_count, bundles=bundle_count)
@@ -326,6 +396,8 @@ async def get_extension_listing(
         components_by_variant.setdefault(component.bundle_variant_id, []).append({
             "canonical_part_key": component.canonical_part_key, "quantity": component.quantity,
             "specifications": component.specifications, "attributed_cost": component.attributed_cost,
+            "market_reference_price": component.market_reference_price,
+            "reference_observed_at": component.reference_observed_at,
             "allocation_method": component.allocation_method,
             "allocation_confidence": component.allocation_confidence,
         })

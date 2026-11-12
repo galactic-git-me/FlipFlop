@@ -97,7 +97,10 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), primary_key=True),
         sa.Column("bundle_variant_id", sa.Integer(), sa.ForeignKey("marketplace_bundle_variants.id", ondelete="CASCADE"), nullable=False),
         sa.Column("canonical_part_key", sa.String(160), nullable=False), sa.Column("quantity", sa.Integer(), nullable=False),
-        sa.Column("specifications", sa.JSON(), nullable=False), sa.Column("attributed_cost", sa.Numeric(12, 2)),
+        sa.Column("specifications", sa.JSON(), nullable=False),
+        sa.Column("market_reference_price", sa.Numeric(12, 2)),
+        sa.Column("reference_observed_at", sa.DateTime(timezone=True)),
+        sa.Column("attributed_cost", sa.Numeric(12, 2)),
         sa.Column("allocation_method", sa.String(32)), sa.Column("allocation_confidence", sa.Numeric(5, 4)),
         sa.UniqueConstraint("bundle_variant_id", "canonical_part_key", name="uq_marketplace_bundle_component"),
     )
