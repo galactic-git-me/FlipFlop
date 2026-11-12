@@ -256,45 +256,23 @@ async def fetch_sold_benchmarks(
     match_key: str,
     listing_condition: str,
     query: str,
-    sold_adapter: SoldCompsAdapter,
+    sold_adapter: SoldCompsAdapter | None = None,
 ) -> tuple[BenchmarkStat, BenchmarkStat]:
     """New/Used Sold benchmarks. Only fetches the side matching
-    listing_condition. Checks gem_radar_sold_observations (our own past
-    scrapes, averaged over the last _SOLD_LOOKBACK_DAYS days) before ever
-    scraping eBay live — a live scrape only happens when we have zero stored
-    sold comps for this model+condition yet, and its results get stored for
-    every future listing of the same model to reuse."""
+    listing_condition. Uses only FlipFlopXtension observations in
+    gem_radar_sold_observations. The backend never requests eBay sold pages."""
     is_new = listing_condition in ("new", "new_other")
     adapter_condition = "new" if is_new else "used"
 
     stored_prices = await _get_stored_sold_prices(db, match_key, adapter_condition)
-    # Ends the transaction the read above opened before the scrape below
-    # (a real eBay HTTP request) runs — otherwise the DB connection sits
-    # idle-in-transaction for the scrape's whole duration.
     await db.commit()
     if stored_prices:
-        relevant_stat = _sold_comps_to_stat(stored_prices, "our own sold-comps history")
+        relevant_stat = _sold_comps_to_stat(stored_prices, "FlipFlopXtension sold observations")
     else:
-        result = await sold_adapter.fetch(query, adapter_condition)
-        if result.available and result.comps:
-            cpk = await _get_cpk_for_match_key(db, match_key)
-            for comp in result.comps:
-                db.add(
-                    GemRadarSoldObservation(
-                        match_key=match_key,
-                        cpk=cpk,
-                        condition=adapter_condition,
-                        price=comp.price,
-                        postage=comp.postage,
-                        source_url=comp.url,
-                    )
-                )
-            await db.commit()
-            relevant_stat = _sold_comps_to_stat([c.price + c.postage for c in result.comps], "sold-comps adapter (fresh scrape)")
-        else:
-            relevant_stat = _unavailable_stat(
-                "sold-comps adapter", result.unavailable_reason or "unavailable"
-            )
+        relevant_stat = _unavailable_stat(
+            "FlipFlopXtension sold observations",
+            "No matching extension-submitted sold observations are available.",
+        )
 
     not_needed_stat = _unavailable_stat("our own sold-comps history", _NOT_NEEDED_REASON)
     return (relevant_stat, not_needed_stat) if is_new else (not_needed_stat, relevant_stat)
