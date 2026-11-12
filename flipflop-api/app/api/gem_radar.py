@@ -2707,7 +2707,13 @@ async def get_gem_by_component(
     # Internal procurement view: combos stay separate from component gems so
     # they cannot be mistaken for a standalone CPU/GPU/etc listing.
     from app.api.marketplace_sourcing import get_verified_bundle_opportunities
-    gems["combo"] = await get_verified_bundle_opportunities(limit=20, db=db, _=None)
+    bundles = await get_verified_bundle_opportunities(limit=20, db=db, _=None)
+    gems["bundle"] = ({
+        "type": "bundle", "title": bundles[0]["title"], "price": float(bundles[0]["bundle_landed_cost"]),
+        "market_median_price": float(bundles[0]["standalone_market_total"]),
+        "url": bundles[0]["url"], "seller": bundles[0].get("seller"),
+        "condition": "new", "components": bundles[0]["components"],
+    } if bundles else None)
     return gems
 
 

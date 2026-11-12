@@ -469,6 +469,7 @@ async def get_verified_bundle_opportunities(
         .where(
             MarketplaceBundleVariant.verification_status == "verified",
             MarketplaceBundle.verification_status == "verified",
+            MarketplaceBundleVariant.availability == "available",
             MarketplaceBundleVariant.currency == "GBP",
             MarketplaceBundleVariant.landed_cost.is_not(None),
         )
@@ -489,6 +490,7 @@ async def get_verified_bundle_opportunities(
         except ValueError:
             continue
         opportunities.append({
+            "type": "bundle",
             "listing_id": listing.id, "bundle_id": bundle.id, "bundle_variant_id": variant.id,
             "marketplace": listing.marketplace, "title": listing.title, "url": listing.url,
             "seller": listing.seller, "bundle_type": bundle.bundle_type,

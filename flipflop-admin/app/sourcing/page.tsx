@@ -1405,6 +1405,7 @@ function GemSpotlightCard({
 
 function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | null> }) {
   const componentLabels: Record<string, { label: string; emoji: string; accent: keyof typeof GEM_SPOTLIGHT_ACCENTS }> = {
+    bundle: { label: "Gem Bundles", emoji: "📦", accent: "amber" },
     motherboard: { label: "Gem Motherboard", emoji: "🔧", accent: "emerald" },
     cpu: { label: "Gem CPU", emoji: "⚡", accent: "cyan" },
     gpu: { label: "Gem GPU", emoji: "🎮", accent: "purple" },
@@ -1417,7 +1418,7 @@ function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | 
 
   return (
     <>
-      <div className="grid grid-cols-[repeat(8,minmax(200px,1fr))] gap-3 mb-6 mt-6 overflow-x-auto pb-1">
+      <div className="grid grid-cols-[repeat(9,minmax(200px,1fr))] gap-3 mb-6 mt-6 overflow-x-auto pb-1">
         {Object.keys(componentLabels).map((category) => {
           const gem = componentGems?.[category];
           return gem ? (

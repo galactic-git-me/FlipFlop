@@ -3173,6 +3173,162 @@ async def purchase_build_component(
     return build
 
 
+@router.post("/{build_id}/bundle-purchase", response_model=ManualBuildOut)
+async def record_build_bundle_purchase(
+    build_id: int,
+    body: ComboPurchaseInput,
+    db: AsyncSession = Depends(get_db),
+):
+    """Record one confirmed bundle purchase as separate component inventory."""
+    from app.models.marketplace_sourcing import (
+        MarketplaceBundle, MarketplaceBundleComponent, MarketplaceBundleVariant, MarketplaceListing,
+    )
+    from app.services.bundle_costs import allocate_bundle_cost
+    from app.services.inventory_lifecycle import add_event, orchestration_build_for
+
+    build = (await db.execute(select(ManualBuild).where(
+        ManualBuild.id == build_id,
+    ).with_for_update())).scalar_one_or_none()
+    if not build or build.is_archived:
+        raise HTTPException(404, "Build not found")
+    if build.status != "in_progress" or build.creation_method not in {"gem_spotlight", "ai"}:
+        raise HTTPException(409, "Bundle purchases can only be recorded against an active sourcing draft")
+
+    evidence_data = dict(build.evidence_data or {})
+    purchases = list(evidence_data.get("internal_bundle_purchases") or [])
+    if any(int(row.get("bundle_variant_id") or 0) == body.bundle_variant_id for row in purchases):
+        raise HTTPException(409, "This bundle variant has already been recorded against this build")
+    verified = (await db.execute(
+        select(MarketplaceBundleVariant, MarketplaceBundle, MarketplaceListing)
+        .join(MarketplaceBundle, MarketplaceBundle.id == MarketplaceBundleVariant.bundle_id)
+        .join(MarketplaceListing, MarketplaceListing.id == MarketplaceBundle.listing_id)
+        .where(
+            MarketplaceBundleVariant.id == body.bundle_variant_id,
+            MarketplaceBundleVariant.verification_status == "verified",
+            MarketplaceBundle.verification_status == "verified",
+            MarketplaceBundleVariant.availability == "available",
+            MarketplaceBundleVariant.currency == "GBP",
+        )
+    )).first()
+    if not verified:
+        raise HTTPException(409, "Select a currently verified, available GBP bundle from marketplace evidence")
+    variant, bundle, listing = verified
+    bundle_parts = (await db.execute(select(MarketplaceBundleComponent).where(
+        MarketplaceBundleComponent.bundle_variant_id == variant.id,
+    ).order_by(MarketplaceBundleComponent.canonical_part_key))).scalars().all()
+    if not bundle_parts:
+        raise HTTPException(409, "The selected bundle has no verified component mapping")
+    if not body.component_slots:
+        raise HTTPException(422, "Map at least one verified bundle part to a build slot before recording the purchase")
+    keys = {part.canonical_part_key for part in bundle_parts}
+    if set(body.component_slots) - keys:
+        raise HTTPException(422, "Component mapping contains a key not present in the verified bundle")
+
+    components = [dict(component) for component in (build.components or [])]
+    slot_indexes = {str(component.get("slot")): index for index, component in enumerate(components)}
+    for part_key, slot in body.component_slots.items():
+        if slot not in slot_indexes:
+            raise HTTPException(422, f"Build slot {slot} does not exist")
+        component = components[slot_indexes[slot]]
+        if component.get("purchased") or component.get("inventory_item_id"):
+            raise HTTPException(409, f"Build slot {slot} already has a recorded purchase or inventory allocation")
+        expected_model = str(component.get("canonical_model_id") or "").strip().casefold()
+        if not expected_model or expected_model != part_key.strip().casefold():
+            raise HTTPException(409, f"Bundle part {part_key} does not exactly match the selected {slot} model")
+
+    references = {}
+    for part in bundle_parts:
+        reference = part.market_reference_price
+        if reference is None or float(reference) <= 0:
+            raise HTTPException(409, "Every bundle component needs a verified reference price before landed cost can be allocated")
+        references[part.canonical_part_key] = Decimal(reference) * int(part.quantity or 1)
+    try:
+        cost_allocations = allocate_bundle_cost(Decimal(str(body.actual_landed_cost_gbp)), references)
+    except ValueError as error:
+        raise HTTPException(422, str(error)) from error
+
+    orchestration = await orchestration_build_for(db, build)
+    type_by_slot = {
+        "cpu": "cpu", "gpu": "gpu", "ram": "ram", "motherboard": "motherboard",
+        "storage": "ssd", "ssd": "ssd", "psu": "psu", "pc case": "case",
+        "case": "case", "cpu cooler": "cooler", "cooler": "cooler",
+    }
+    purchase = {
+        "bundle_variant_id": variant.id,
+        "marketplace": listing.marketplace,
+        "listing_url": listing.url,
+        "bundle_title": listing.title,
+        "actual_landed_cost_gbp": round(body.actual_landed_cost_gbp, 2),
+        "recorded_at": datetime.utcnow().isoformat(),
+        "inventory_item_ids": [],
+    }
+    for part in bundle_parts:
+        key = part.canonical_part_key
+        quantity = int(part.quantity or 1)
+        unit_cost = float(cost_allocations[key] / quantity)
+        slot = body.component_slots.get(key)
+        component = components[slot_indexes[slot]] if slot else None
+        specifications = part.specifications if isinstance(part.specifications, dict) else {}
+        category = str(specifications.get("category") or specifications.get("component_type") or "").casefold()
+        component_type = type_by_slot.get(str(component.get("slot")).lower()) if component else None
+        if not component_type:
+            component_type = category if category in set(type_by_slot.values()) else "other"
+        component_name = (component.get("name") if component else None) or str(
+            specifications.get("name") or specifications.get("model") or key
+        )
+        item = InventoryItem(
+            component_name=component_name,
+            component_type=component_type,
+            quantity=quantity,
+            base_price=unit_cost,
+            shipping_cost=0,
+            discount_amount=0,
+            purchase_date=datetime.utcnow(),
+            source=body.source or f"{listing.marketplace} bundle",
+            notes=f"Internal bundle purchase {variant.id}; landed cost split across component inventory",
+            listing_url=listing.url,
+            purchase_status="PURCHASED",
+            reconciliation_status="NOT_APPLICABLE",
+        )
+        db.add(item)
+        await db.flush()
+        purchase["inventory_item_ids"].append(item.id)
+        add_event(db, inventory_item_id=item.id, manual_build_id=build.id,
+            event_type="purchased", quantity=quantity,
+            detail={"source": item.source, "bundle_variant_id": variant.id,
+                "canonical_part_key": key, "allocated_bundle_cost_gbp": str(cost_allocations[key])})
+        if component:
+            db.add(InventoryAllocation(
+                inventory_item_id=item.id, build_id=orchestration.id, flip_id=None,
+                quantity_allocated=1, cost_per_unit_at_allocation=item.actual_cost,
+                notes=f"Reserved from internal bundle purchase for draft build: {build.name}",
+            ))
+            component.update({
+                "price_paid": round(item.actual_cost, 2),
+                "source": body.source or f"{listing.marketplace} bundle",
+                "purchased": True,
+                "sourcing_candidate": False,
+                "inventory_item_id": item.id,
+                "bundle_purchase_group_id": variant.id,
+            })
+            add_event(db, inventory_item_id=item.id, manual_build_id=build.id,
+                event_type="reserved", quantity=1,
+                detail={"build_name": build.name, "bundle_variant_id": variant.id})
+
+    build.components = components
+    build.total_cost = round(sum(
+        float(component.get("price_paid") or 0)
+        for component in components if component.get("purchased")
+    ), 2)
+    purchases.append(purchase)
+    evidence_data["internal_bundle_purchases"] = purchases
+    build.evidence_data = evidence_data
+    build.updated_at = datetime.utcnow()
+    await db.flush()
+    await db.refresh(build)
+    return build
+
+
 @router.delete("/{build_id}", status_code=204)
 async def delete_build(build_id: int, db: AsyncSession = Depends(get_db)):
     """Archives the build rather than deleting it.
