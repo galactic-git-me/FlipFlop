@@ -52,6 +52,7 @@ from app.services.email_monitor import EmailMonitor
 from app.services.ebay_sales_tracker import get_tracker as get_ebay_sales_tracker
 from app.database import get_db
 from app.services.growth_social import publish_due_posts
+from app.api.assets_admin import run_playbook_auto_model_generation_job
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -777,6 +778,17 @@ def start_scheduler():
         replace_existing=True,
         max_instances=1,
         next_run_time=now + timedelta(minutes=1),
+    )
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=5),
+        id="playbook_auto_model_generation",
+        name="Generate missing models for current Playbook proposals",
+        kwargs={"job_id": "playbook_auto_model_generation", "fn": run_playbook_auto_model_generation_job},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(minutes=2),
     )
 
     scheduler.add_job(
