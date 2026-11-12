@@ -39,7 +39,7 @@ type WatchCategory = {
 };
 type PriceWatchData = { months: Month[]; days: Day[]; categories: WatchCategory[]; generated_at: string; price_basis: string };
 type CategoryKey = WatchCategory["category"];
-type StorageFilter = "nvme" | "sata" | "unclassified";
+type StorageFilter = "all" | "nvme" | "sata" | "unclassified";
 
 const CATEGORY_TABS: Array<{ key: CategoryKey; label: string; mark: string }> = [
   { key: "cpu", label: "CPUs", mark: "CPU" },
@@ -51,6 +51,13 @@ const CATEGORY_TABS: Array<{ key: CategoryKey; label: string; mark: string }> = 
 const money = (value: number | null | undefined) => value == null ? "—" : `£${value.toFixed(2)}`;
 const signedMoney = (value: number | null | undefined) => value == null ? "—" : `${value < 0 ? "−" : "+"}£${Math.abs(value).toFixed(2)}`;
 const monthPrice = (product: WatchedProduct, key: string | undefined) => key ? product.months[key] : undefined;
+const priceBarWidth = (value: number | null | undefined, max: number) => value == null || max <= 0 ? 0 : Math.max(2, value / max * 100);
+const ramSizeGB = (title: string) => {
+  const kitModules = title.match(/\b(\d+)\s*[x×]\s*(\d+)\s*GB\b/i);
+  if (kitModules) return Number(kitModules[1]) * Number(kitModules[2]);
+  const capacity = title.match(/\b(8|16|24|32|48|64|96|128|256)\s*GB\b/i);
+  return capacity ? Number(capacity[1]) : null;
+};
 
 function monthChangeClass(value: number | null) {
   if (value == null || value === 0) return "text-slate-400";
@@ -70,9 +77,12 @@ function shortProductTitle(title: string) {
 export default function PriceWatchPage() {
   const [data, setData] = useState<PriceWatchData | null>(null);
   const [categoryKey, setCategoryKey] = useState<CategoryKey>("cpu");
-  const [storageFilter, setStorageFilter] = useState<StorageFilter>("nvme");
+  const [storageFilter, setStorageFilter] = useState<StorageFilter>("all");
+  const [ramSizeFilter, setRamSizeFilter] = useState<number | null>(null);
   const [query, setQuery] = useState("");
-  const [rankLimit, setRankLimit] = useState<10 | 100>(10);
+  const [rankLimits, setRankLimits] = useState<Record<CategoryKey, 10 | 100>>({ cpu: 10, motherboard: 10, ram: 100, storage: 100 });
+  const rankLimit = rankLimits[categoryKey];
+  const setRankLimit = (value: 10 | 100) => setRankLimits((current) => ({ ...current, [categoryKey]: value }));
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -98,16 +108,25 @@ export default function PriceWatchPage() {
   const currentCategory = data?.categories.find((category) => category.category === categoryKey);
   const filteredProducts = useMemo(() => {
     let products = currentCategory?.products ?? [];
-    if (categoryKey === "storage") products = products.filter((product) => product.storage_type === storageFilter);
+    if (categoryKey === "storage" && storageFilter !== "all") products = products.filter((product) => product.storage_type === storageFilter);
+    if (categoryKey === "ram" && ramSizeFilter != null) products = products.filter((product) => ramSizeGB(product.title) === ramSizeFilter);
     if (query.trim()) {
       const term = query.toLowerCase();
       products = products.filter((product) => `${product.title} ${product.cpk} ${product.mpn ?? ""} ${product.rank}`.toLowerCase().includes(term));
     }
     return products;
-  }, [categoryKey, currentCategory, query, storageFilter]);
+  }, [categoryKey, currentCategory, query, ramSizeFilter, storageFilter]);
+
+  const ramSizes = [...new Set((currentCategory?.category === "ram" ? currentCategory.products : []).map((product) => ramSizeGB(product.title)).filter((size): size is number => size != null))].sort((a, b) => a - b);
+  const storageCounts = {
+    all: currentCategory?.products.length ?? 0,
+    nvme: currentCategory?.products.filter((product) => product.storage_type === "nvme").length ?? 0,
+    sata: currentCategory?.products.filter((product) => product.storage_type === "sata").length ?? 0,
+    unclassified: currentCategory?.products.filter((product) => product.storage_type === "unclassified").length ?? 0,
+  };
 
   const chartProducts = (currentCategory?.products ?? [])
-    .filter((product) => (categoryKey !== "storage" || product.storage_type === storageFilter) && product.rank <= rankLimit)
+    .filter((product) => (categoryKey !== "storage" || storageFilter === "all" || product.storage_type === storageFilter) && (categoryKey !== "ram" || ramSizeFilter == null || ramSizeGB(product.title) === ramSizeFilter) && product.rank <= rankLimit)
     .map((product) => ({ product, latestPrice: [...(data?.days ?? [])].reverse().map((day) => product.days[day.key]?.median).find((price): price is number => price != null) ?? null }))
     .sort((a, b) => (b.latestPrice ?? -Infinity) - (a.latestPrice ?? -Infinity) || a.product.rank - b.product.rank)
     .map(({ product }) => product);
@@ -119,6 +138,13 @@ export default function PriceWatchPage() {
   const tableMonths = (data?.months ?? []).filter((month) => filteredProducts.some((product) => monthPrice(product, month.key)?.median != null));
   const currentMonth = tableMonths[tableMonths.length - 1];
   const previousMonth = tableMonths[tableMonths.length - 2];
+  const priceBarMax = Math.max(0, ...filteredProducts.flatMap((product) => [
+    ...tableMonths.map((month) => monthPrice(product, month.key)?.median ?? null),
+    monthPrice(product, previousMonth?.key)?.average ?? null,
+    monthPrice(product, previousMonth?.key)?.low ?? null,
+    monthPrice(product, currentMonth?.key)?.average ?? null,
+    monthPrice(product, currentMonth?.key)?.low ?? null,
+  ].filter((value): value is number => value != null && Number.isFinite(value))));
   const latestCapture = currentCategory?.last_captured_at
     ? new Date(currentCategory.last_captured_at).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })
     : null;
@@ -151,15 +177,21 @@ export default function PriceWatchPage() {
         })}
       </nav>
 
+      {categoryKey === "ram" && <div className="flex flex-wrap items-center gap-2 rounded-lg border border-slate-800 bg-slate-950/50 p-3" role="group" aria-label="RAM capacity">
+        <span className="mr-1 text-xs text-slate-500">RAM capacity</span>
+        <button type="button" onClick={() => setRamSizeFilter(null)} aria-pressed={ramSizeFilter === null} className={`rounded-full border px-3 py-1 text-xs ${ramSizeFilter === null ? "border-cyan-300/50 bg-cyan-300/10 text-cyan-100" : "border-slate-700 text-slate-400 hover:text-white"}`}>All sizes</button>
+        {ramSizes.map((size) => <button key={size} type="button" onClick={() => setRamSizeFilter(size)} aria-pressed={ramSizeFilter === size} className={`rounded-full border px-3 py-1 text-xs ${ramSizeFilter === size ? "border-cyan-300/50 bg-cyan-300/10 text-cyan-100" : "border-slate-700 text-slate-400 hover:text-white"}`}>{size}GB</button>)}
+      </div>}
+
       {categoryKey === "storage" && <div className="flex flex-wrap items-center gap-2 rounded-lg border border-slate-800 bg-slate-950/50 p-3">
         <span className="mr-1 text-xs text-slate-500">Storage interface</span>
-        {([ ["nvme", "NVMe"], ["sata", "SATA"], ["unclassified", "Unclassified"] ] as const).map(([key, label]) => <button key={key} type="button" onClick={() => setStorageFilter(key)} aria-pressed={storageFilter === key} className={`rounded-full border px-3 py-1 text-xs ${storageFilter === key ? "border-cyan-300/50 bg-cyan-300/10 text-cyan-100" : "border-slate-700 text-slate-400 hover:text-white"}`}>{label}{key === "unclassified" ? ` · ${currentCategory?.unclassified_storage_count ?? 0}` : ""}</button>)}
+        {([ ["all", "All storage"], ["nvme", "NVMe"], ["sata", "SATA"], ["unclassified", "Unclassified"] ] as const).map(([key, label]) => <button key={key} type="button" onClick={() => setStorageFilter(key)} aria-pressed={storageFilter === key} className={`rounded-full border px-3 py-1 text-xs ${storageFilter === key ? "border-cyan-300/50 bg-cyan-300/10 text-cyan-100" : "border-slate-700 text-slate-400 hover:text-white"}`}>{label} · {storageCounts[key]}</button>)}
         <span className="text-[10px] text-slate-500">Amazon’s broad internal SSD list is classified from product titles; ambiguous titles stay in Unclassified.</span>
       </div>}
 
       <section className="overflow-hidden rounded-xl border border-slate-700 bg-[#0b1119]">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 p-4">
-          <div><h2 className="flex items-center gap-2 text-lg font-semibold text-white"><Trophy className="h-4 w-4 text-amber-300" />{currentCategory?.name ?? "Amazon products"} · {categoryKey === "storage" ? storageFilter.toUpperCase() : "Amazon Best Sellers"}</h2>
+          <div><h2 className="flex items-center gap-2 text-lg font-semibold text-white"><Trophy className="h-4 w-4 text-amber-300" />{currentCategory?.name ?? "Amazon products"} · {categoryKey === "storage" ? (storageFilter === "all" ? "All storage types" : storageFilter.toUpperCase()) : "Amazon Best Sellers"}</h2>
             <p className="mt-1 text-xs text-slate-500">{currentCategory?.last_captured_at ? `Captured ${latestCapture}` : "No bestseller capture has been recorded yet."}{currentCategory?.source_url && <> · <a href={currentCategory.source_url} target="_blank" rel="noreferrer" className="text-cyan-300 hover:underline">Open Amazon list <ExternalLink className="inline h-3 w-3" /></a></>}</p></div>
           <label className="flex min-w-64 items-center gap-2 rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-slate-400"><Search className="h-4 w-4" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search model, MPN or CPK" className="w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-500" /></label>
         </div>
@@ -207,9 +239,9 @@ export default function PriceWatchPage() {
                     const value = monthPrice(product, month.key)?.median ?? null;
                     const previousValue = index > 0 ? monthPrice(product, tableMonths[index - 1].key)?.median ?? null : null;
                     const tone = value != null && previousValue != null ? monthChangeClass(value - previousValue) : "text-slate-300";
-                    return <td key={month.key} className={`border-l border-slate-800/70 px-2 py-2 text-right font-mono ${tone}`} title={`${monthPrice(product, month.key)?.best_vendor ?? "No vendor"} lowest vendor median; ${monthPrice(product, month.key)?.observations ?? 0} price observations`}>{money(value)}{monthPrice(product, month.key)?.best_vendor && <span className="block text-[9px] text-slate-500">{monthPrice(product, month.key)?.best_vendor}</span>}</td>;
+                    return <td key={month.key} className={`relative overflow-hidden border-l border-slate-800/70 px-2 py-2 text-right font-mono ${tone}`} title={`${monthPrice(product, month.key)?.best_vendor ?? "No vendor"} lowest vendor median; ${monthPrice(product, month.key)?.observations ?? 0} price observations`}><span aria-hidden="true" className="absolute inset-y-1 left-1 rounded-sm bg-cyan-400/15" style={{ width: `${priceBarWidth(value, priceBarMax)}%` }} /> <span className="relative z-10">{money(value)}</span>{monthPrice(product, month.key)?.best_vendor && <span className="relative z-10 block text-[9px] text-slate-500">{monthPrice(product, month.key)?.best_vendor}</span>}</td>;
                   })}
-                  <td className="border-l border-slate-800 px-2 py-2 text-right font-mono text-slate-300">{money(prior?.average)}</td><td className="px-2 py-2 text-right font-mono text-slate-300">{money(prior?.low)}</td><td className="border-l border-slate-800 px-2 py-2 text-right font-mono font-semibold text-cyan-100">{money(current?.average)}</td><td className="px-2 py-2 text-right font-mono font-semibold text-cyan-100">{money(current?.low)}</td>
+                  <td className="relative overflow-hidden border-l border-slate-800 px-2 py-2 text-right font-mono text-slate-300"><span aria-hidden="true" className="absolute inset-y-1 left-1 rounded-sm bg-slate-400/15" style={{ width: `${priceBarWidth(prior?.average, priceBarMax)}%` }} /><span className="relative z-10">{money(prior?.average)}</span></td><td className="relative overflow-hidden px-2 py-2 text-right font-mono text-slate-300"><span aria-hidden="true" className="absolute inset-y-1 left-1 rounded-sm bg-slate-400/15" style={{ width: `${priceBarWidth(prior?.low, priceBarMax)}%` }} /><span className="relative z-10">{money(prior?.low)}</span></td><td className="relative overflow-hidden border-l border-slate-800 px-2 py-2 text-right font-mono font-semibold text-cyan-100"><span aria-hidden="true" className="absolute inset-y-1 left-1 rounded-sm bg-cyan-400/15" style={{ width: `${priceBarWidth(current?.average, priceBarMax)}%` }} /><span className="relative z-10">{money(current?.average)}</span></td><td className="relative overflow-hidden px-2 py-2 text-right font-mono font-semibold text-cyan-100"><span aria-hidden="true" className="absolute inset-y-1 left-1 rounded-sm bg-cyan-400/15" style={{ width: `${priceBarWidth(current?.low, priceBarMax)}%` }} /><span className="relative z-10">{money(current?.low)}</span></td>
                   <td className={`px-2 py-2 text-right font-mono ${monthChangeClass(lowChange)}`} title="Current month lowest vendor median minus previous month's lowest vendor median">{signedMoney(lowChange)}</td><td className={`px-2 py-2 text-right font-mono ${changeVsFirst == null ? "text-slate-500" : changeVsFirst > 0 ? "bg-rose-400/10 text-rose-300" : changeVsFirst < 0 ? "bg-emerald-400/10 text-emerald-300" : "text-slate-300"}`}>{signedMoney(changeVsFirst)}</td><td className={`px-2 py-2 text-right font-mono ${percentVsFirst != null && percentVsFirst > 0 ? "bg-rose-400/10 text-rose-300" : "text-slate-300"}`}>{percentVsFirst == null ? "—" : `${percentVsFirst > 0 ? "+" : ""}${percentVsFirst.toFixed(1)}%`}</td>
                 </tr>;
               })}
