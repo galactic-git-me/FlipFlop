@@ -2019,6 +2019,10 @@ function VendorStackedBarChart({ listings, facets }: { listings: Listing[]; face
     }
     return row;
   });
+  const chartTiers = [...VENDOR_CHART_TIERS].sort((a, b) =>
+    chartData.reduce((sum, row) => sum + Number(row[b] ?? 0), 0) -
+    chartData.reduce((sum, row) => sum + Number(row[a] ?? 0), 0)
+  );
 
   return (
     <div className="mb-4 bg-slate-800 rounded-lg border border-slate-700 p-3 lg:w-[420px] lg:shrink-0">
@@ -2031,7 +2035,7 @@ function VendorStackedBarChart({ listings, facets }: { listings: Listing[]; face
             contentStyle={{ background: "#0f172a", border: "1px solid #334155", borderRadius: 6 }}
             labelStyle={{ color: "#e2e8f0" }}
           />
-          {VENDOR_CHART_TIERS.map((tier) => (
+          {chartTiers.map((tier) => (
             <Bar
               key={tier}
               dataKey={tier}
@@ -2043,7 +2047,7 @@ function VendorStackedBarChart({ listings, facets }: { listings: Listing[]; face
         </BarChart>
       </ResponsiveContainer>
       <div className="mt-3 flex flex-wrap justify-center gap-x-3 gap-y-2 border-t border-slate-700 pt-3" aria-label="Classification legend">
-        {VENDOR_CHART_TIERS.map((tier) => (
+        {chartTiers.map((tier) => (
           <div key={tier} className="flex items-center gap-1.5 text-[11px] text-slate-300">
             <span
               className="h-2.5 w-2.5 shrink-0 rounded-sm"
@@ -2942,7 +2946,7 @@ const AnalyticsTab = memo(function AnalyticsTab() {
     <div className="space-y-6">
       <ScanRunsOverTimeChart />
       {analyticsError ? <p role="alert" className="rounded-lg border border-red-700 bg-red-950/30 p-3 text-sm text-red-200">{analyticsError}. Restart the local API if the new analytics endpoint is not active.</p> : !analytics ? <p role="status" className="text-sm text-slate-400">Loading full-population analytics…</p> : <p className="text-sm text-slate-400">Charts use {analytics.items.length.toLocaleString()} stratified points from {analytics.total.toLocaleString()} active listings, independent of Listings filters. Every BSR-linked listing is included.</p>}
-      {analytics && <div className="flex flex-wrap gap-2 text-xs text-slate-300">{CLASSIFICATION_ORDER.map(c => <span key={c} className="rounded border border-slate-700 px-2 py-1">{c.replaceAll("_", " ")}: {(analytics.classification_counts[c] ?? 0).toLocaleString()}</span>)}</div>}
+      {analytics && <div className="flex flex-wrap gap-2 text-xs text-slate-300">{[...CLASSIFICATION_ORDER].sort((a, b) => (analytics.classification_counts[b] ?? 0) - (analytics.classification_counts[a] ?? 0)).map(c => <span key={c} className="rounded border border-slate-700 px-2 py-1">{c.replaceAll("_", " ")}: {(analytics.classification_counts[c] ?? 0).toLocaleString()}</span>)}</div>}
       {analytics && <>
       <div className="grid items-stretch gap-4 xl:grid-cols-2 2xl:grid-cols-3">
         <DealScoreRoiChart listings={analytics.items} />
@@ -2952,7 +2956,7 @@ const AnalyticsTab = memo(function AnalyticsTab() {
         <InsightScatterChart listings={analytics.items} kind="amazonBestsellerVariance" title="Amazon Best Seller Rank vs Price Variance" description="Amazon category position against the gap to market; lower rank numbers are better. Bubble size is the listing price." insight="Look for a positive price gap with a low Amazon rank. Amazon rank is a product-level signal, not a measure of this marketplace listing's demand." />
         <InsightScatterChart listings={analytics.items} kind="priceMedian" title="Listing Price vs Market Median" description="Direct price positioning; the dashed diagonal marks parity with the market median." insight="Points above the diagonal have a listing price below market. The farther above, the larger the discount; use classification colour and bubble profit to judge quality." diagonal />
       </div>
-      <ClassificationLegend classifications={[...CLASSIFICATION_ORDER]} />
+      <ClassificationLegend classifications={[...CLASSIFICATION_ORDER].sort((a, b) => (analytics.classification_counts[b] ?? 0) - (analytics.classification_counts[a] ?? 0))} />
       </>}
 
       <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700/30">

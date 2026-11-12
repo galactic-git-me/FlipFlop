@@ -57,6 +57,16 @@ function monthChangeClass(value: number | null) {
   return value < 0 ? "bg-emerald-400/10 text-emerald-300" : "bg-rose-400/10 text-rose-300";
 }
 
+function shortProductTitle(title: string) {
+  const cpuModel = title.match(/\b(AMD\s+Ryzen\s+[3579]\s+[A-Za-z0-9-]+|Intel\s+Core\s+(?:Ultra\s+)?[3579]\s+[A-Za-z0-9-]+)/i)?.[0];
+  if (cpuModel) return cpuModel.replace(/\s+/g, " ").trim();
+  return title
+    .replace(/\s+(?:processor|with|featuring|integrated|desktop|graphics|technology|technology,).*$/i, "")
+    .split(/\s+/)
+    .slice(0, 7)
+    .join(" ");
+}
+
 export default function PriceWatchPage() {
   const [data, setData] = useState<PriceWatchData | null>(null);
   const [categoryKey, setCategoryKey] = useState<CategoryKey>("cpu");
@@ -98,14 +108,17 @@ export default function PriceWatchPage() {
 
   const chartProducts = (currentCategory?.products ?? [])
     .filter((product) => (categoryKey !== "storage" || product.storage_type === storageFilter) && product.rank <= rankLimit)
-    .sort((a, b) => a.rank - b.rank);
+    .map((product) => ({ product, latestPrice: [...(data?.days ?? [])].reverse().map((day) => product.days[day.key]?.median).find((price): price is number => price != null) ?? null }))
+    .sort((a, b) => (b.latestPrice ?? -Infinity) - (a.latestPrice ?? -Infinity) || a.product.rank - b.product.rank)
+    .map(({ product }) => product);
   const chartRows = (data?.days ?? []).map((day) => {
     const row: Record<string, string | number | null> = { timestamp: day.timestamp };
     for (const product of chartProducts) row[product.cpk] = product.days[day.key]?.median ?? null;
     return row;
-  });
-  const currentMonth = data?.months[data.months.length - 1];
-  const previousMonth = data?.months[data.months.length - 2];
+  }).filter((row) => chartProducts.some((product) => typeof row[product.cpk] === "number"));
+  const tableMonths = (data?.months ?? []).filter((month) => filteredProducts.some((product) => monthPrice(product, month.key)?.median != null));
+  const currentMonth = tableMonths[tableMonths.length - 1];
+  const previousMonth = tableMonths[tableMonths.length - 2];
   const latestCapture = currentCategory?.last_captured_at
     ? new Date(currentCategory.last_captured_at).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })
     : null;
@@ -159,8 +172,13 @@ export default function PriceWatchPage() {
               <XAxis dataKey="timestamp" type="number" scale="time" domain={data?.days.length ? [data.days[0].timestamp, data.days[data.days.length - 1].timestamp] : ["dataMin", "dataMax"]} tickCount={9} tickFormatter={(value: number) => new Date(value).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })} tick={{ fill: "#94a3b8", fontSize: 10 }} tickLine={false} axisLine={{ stroke: "#475569" }} />
               <YAxis width={68} tick={{ fill: "#94a3b8", fontSize: 10 }} tickFormatter={(value: number) => `£${value}`} tickLine={false} axisLine={false} domain={["auto", "auto"]} />
               <Tooltip contentStyle={{ backgroundColor: "#0b1119", border: "1px solid #334155", borderRadius: 8, fontSize: 11 }} labelStyle={{ color: "#cbd5e1" }} labelFormatter={(value) => new Date(Number(value)).toLocaleDateString("en-GB", { dateStyle: "medium" })} formatter={(value) => [money(typeof value === "number" ? value : null), "Daily median"]} />
-              <Legend height={52} wrapperStyle={{ fontSize: 9, overflowY: "auto" }} formatter={(value) => <span className="text-slate-300">{value}</span>} />
-              {chartProducts.map((product) => <Line key={product.cpk} type="monotone" dataKey={product.cpk} name={"#" + product.rank + " " + product.title.slice(0, 34) + (product.mpn ? " · " + product.mpn : "")} stroke={"hsl(" + ((product.rank * 137.508) % 360) + " 72% 62%)"} strokeWidth={rankLimit === 10 ? 2 : 1.35} dot={false} activeDot={{ r: 3 }} connectNulls={false} isAnimationActive={false} />)}
+              <Legend height={52} wrapperStyle={{ fontSize: 9, overflowY: "auto" }} formatter={(value, entry) => {
+                const product = chartProducts.find((item) => item.cpk === entry.dataKey);
+                return product?.url
+                  ? <a href={product.url} target="_blank" rel="noreferrer" title={product.title} className="text-slate-300 hover:text-cyan-300 hover:underline">{value}</a>
+                  : <span className="text-slate-300" title={product?.title}>{value}</span>;
+              }} />
+              {chartProducts.map((product) => <Line key={product.cpk} type="linear" dataKey={product.cpk} name={"#" + product.rank + " " + shortProductTitle(product.title)} stroke={"hsl(" + ((product.rank * 137.508) % 360) + " 72% 62%)"} strokeWidth={rankLimit === 10 ? 2 : 1.35} dot={false} activeDot={{ r: 3 }} connectNulls isAnimationActive={false} />)}
             </LineChart></ResponsiveContainer>
           </div> : <div className="flex h-40 items-center justify-center text-xs text-slate-500">No daily price observations for the selected products yet.</div>}
         </div>
@@ -168,9 +186,9 @@ export default function PriceWatchPage() {
         {loading ? <div className="p-8 text-center text-sm text-slate-400">Loading captured Amazon prices…</div> : filteredProducts.length ? <div className="overflow-x-auto">
           <table className="w-full min-w-[2250px] border-collapse text-left text-xs">
             <thead className="sticky top-0 z-10 bg-slate-800 text-[10px] uppercase tracking-wide text-slate-200">
-              <tr className="border-b border-slate-700"><th className="px-3 py-2" colSpan={3}>Best Sellers product matched to canonical identity</th><th className="px-2 py-2 text-center" colSpan={data?.months.length ?? 0}>Lowest vendor median by month</th><th className="px-2 py-2 text-center" colSpan={7}>Current and prior month comparison · {previousMonth?.label ?? "—"} → {currentMonth?.label ?? "—"}</th></tr>
+              <tr className="border-b border-slate-700"><th className="px-3 py-2" colSpan={3}>Best Sellers product matched to canonical identity</th><th className="px-2 py-2 text-center" colSpan={tableMonths.length}>Lowest vendor median by month</th><th className="px-2 py-2 text-center" colSpan={7}>Current and prior month comparison · {previousMonth?.label ?? "—"} → {currentMonth?.label ?? "—"}</th></tr>
               <tr className="border-b border-slate-700 bg-slate-800/95"><th className="min-w-[430px] px-3 py-3">Product / MPN / CPK</th><th className="w-16 px-3 py-3 text-right">Rank</th>
-                {data?.months.map((month) => <th key={month.key} className="min-w-24 border-l border-slate-700 px-2 py-3 text-right">{month.label}</th>)}
+                {tableMonths.map((month) => <th key={month.key} className="min-w-24 border-l border-slate-700 px-2 py-3 text-right">{month.label}</th>)}
                 <th className="min-w-24 border-l border-slate-700 px-2 py-3 text-right">Avg {previousMonth?.label ?? "Prior"}</th><th className="min-w-24 px-2 py-3 text-right">Low {previousMonth?.label ?? "Prior"}</th><th className="min-w-24 border-l border-slate-700 px-2 py-3 text-right">Avg {currentMonth?.label ?? "Current"} MTD</th><th className="min-w-24 px-2 py-3 text-right">Low {currentMonth?.label ?? "Current"} MTD</th><th className="min-w-28 px-2 py-3 text-right">Low change MoM</th><th className="min-w-28 px-2 py-3 text-right">Change vs first month</th><th className="min-w-28 px-2 py-3 text-right">Change vs first (%)</th>
               </tr>
             </thead>
@@ -179,15 +197,15 @@ export default function PriceWatchPage() {
                 const prior = monthPrice(product, previousMonth?.key);
                 const current = monthPrice(product, currentMonth?.key);
                 const lowChange = prior?.low != null && current?.low != null ? current.low - prior.low : null;
-                const firstObserved = data?.months.map((month) => monthPrice(product, month.key)?.median).find((value): value is number => value != null) ?? null;
+                const firstObserved = tableMonths.map((month) => monthPrice(product, month.key)?.median).find((value): value is number => value != null) ?? null;
                 const changeVsFirst = firstObserved != null && current?.median != null ? current.median - firstObserved : null;
                 const percentVsFirst = firstObserved != null && firstObserved > 0 && changeVsFirst != null ? changeVsFirst / firstObserved * 100 : null;
                 return <tr key={product.cpk} className="hover:bg-slate-800/40">
-                  <td className="max-w-[500px] px-3 py-2"><div className="flex items-center gap-2">{product.image_url && <img src={product.image_url} alt="" className="h-9 w-9 shrink-0 rounded bg-slate-900 object-contain" />}<div className="min-w-0"><a href={product.url ?? undefined} target="_blank" rel="noreferrer" className="line-clamp-2 font-medium text-slate-100 hover:text-cyan-300 hover:underline">{product.title}</a><span className="font-mono text-[10px] text-slate-500">{product.mpn ? `MPN ${product.mpn} · ` : ""}CPK {product.cpk}</span></div></div></td>
+                  <td className="max-w-[500px] px-3 py-2"><div className="flex items-center gap-2">{product.image_url && <img src={product.image_url} alt="" className="h-9 w-9 shrink-0 rounded bg-slate-900 object-contain" />}<div className="min-w-0"><a href={product.url ?? undefined} target="_blank" rel="noreferrer" title={product.title} className="line-clamp-2 font-medium text-slate-100 hover:text-cyan-300 hover:underline">{shortProductTitle(product.title)}</a><span className="font-mono text-[10px] text-slate-500">{product.mpn ? `MPN ${product.mpn} · ` : ""}CPK {product.cpk}</span></div></div></td>
                   <td className="px-3 py-2 text-right font-mono text-slate-400">#{product.rank}</td>
-                  {data?.months.map((month, index) => {
+                  {tableMonths.map((month, index) => {
                     const value = monthPrice(product, month.key)?.median ?? null;
-                    const previousValue = index > 0 ? monthPrice(product, data.months[index - 1].key)?.median ?? null : null;
+                    const previousValue = index > 0 ? monthPrice(product, tableMonths[index - 1].key)?.median ?? null : null;
                     const tone = value != null && previousValue != null ? monthChangeClass(value - previousValue) : "text-slate-300";
                     return <td key={month.key} className={`border-l border-slate-800/70 px-2 py-2 text-right font-mono ${tone}`} title={`${monthPrice(product, month.key)?.best_vendor ?? "No vendor"} lowest vendor median; ${monthPrice(product, month.key)?.observations ?? 0} price observations`}>{money(value)}{monthPrice(product, month.key)?.best_vendor && <span className="block text-[9px] text-slate-500">{monthPrice(product, month.key)?.best_vendor}</span>}</td>;
                   })}

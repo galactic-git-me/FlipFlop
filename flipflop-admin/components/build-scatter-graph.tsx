@@ -239,8 +239,8 @@ export function BuildScatterGraph({
         <div className="flex items-center gap-2">
           <span className="text-slate-600">Demand:</span>
           <div className="flex gap-1">
-            {["Poor", "Moderate", "Good", "Excellent"].map((label, i) => {
-              const score = i * 3.33;
+            {["Excellent", "Good", "Moderate", "Poor"].map((label, i) => {
+              const score = (3 - i) * 3.33;
               const color = getColorFromDemandScore(score);
               return (
                 <div
@@ -261,8 +261,8 @@ export function BuildScatterGraph({
         <div className="flex items-center gap-2">
           <span className="text-slate-600">Risk:</span>
           <div className="flex gap-1">
-            {["Low", "Medium", "High"].map((label, i) => {
-              const score = i * 5;
+            {["High", "Medium", "Low"].map((label, i) => {
+              const score = (2 - i) * 5;
               const size = getSizeFromRiskScore(score);
               return (
                 <div

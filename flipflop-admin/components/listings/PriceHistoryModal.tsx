@@ -101,7 +101,6 @@ export function PriceHistoryModal({
     cpkPrice: cpkMap.get(ts),
     soldPrice: soldMap.get(ts),
   }));
-
   // Stats for listing prices
   const listingPriceValues = sortedListing.map((p) => p.delivered_price);
   const minListingPrice = listingPriceValues.length > 0 ? Math.min(...listingPriceValues) : 0;
@@ -120,6 +119,11 @@ export function PriceHistoryModal({
     cpkPriceValues.length > 0
       ? cpkPriceValues.reduce((sum, p) => sum + p, 0) / cpkPriceValues.length
       : 0;
+  const chartLegend = [
+    { key: "listingPrice", label: "This Listing", color: "bg-blue-400", value: currentListingPrice, visible: listingPrices.length > 0 },
+    { key: "cpkPrice", label: "Market CPK", color: "bg-orange-400", value: currentCpkPrice, visible: sortedCpk.length > 0 },
+    { key: "soldPrice", label: "Completed sales", color: "bg-emerald-400", value: sortedSold[sortedSold.length - 1]?.delivered_price ?? 0, visible: sortedSold.length > 0 },
+  ].filter((item) => item.visible).sort((a, b) => b.value - a.value);
 
   // Premium/discount vs market
   const priceVsMarket = currentListingPrice - currentCpkPrice;
@@ -257,7 +261,7 @@ export function PriceHistoryModal({
                       labelFormatter={(label) => label}
                     />
                     <Line
-                      type="monotone"
+                      type="linear"
                       dataKey="listingPrice"
                       stroke="#3b82f6"
                       dot={listingMap.size === 1 ? { r: 5, fill: "#3b82f6", stroke: "#bfdbfe", strokeWidth: 2 } : false}
@@ -283,7 +287,7 @@ export function PriceHistoryModal({
                     )}
                     {sortedCpk.length > 0 && (
                       <Line
-                        type="monotone"
+                        type="linear"
                         dataKey="cpkPrice"
                         stroke="#f97316"
                         dot={false}
@@ -297,7 +301,7 @@ export function PriceHistoryModal({
                     )}
                     {sortedSold.length > 0 && (
                       <Line
-                        type="monotone"
+                        type="linear"
                         dataKey="soldPrice"
                         stroke="#34d399"
                         dot={false}
@@ -314,20 +318,10 @@ export function PriceHistoryModal({
 
               {/* Legend */}
               <div className="mt-3 flex gap-4 justify-center text-xs">
-                {listingPrices.length > 0 && <div className="flex items-center gap-1">
-                  <div className="w-3 h-0.5 bg-blue-400"></div>
-                  <span className="text-slate-300">This Listing</span>
-                </div>}
-                {sortedCpk.length > 0 && (
-                  <div className="flex items-center gap-1">
-                    <div className="w-3 h-0.5 bg-orange-400"></div>
-                    <span className="text-slate-300">Market CPK</span>
-                  </div>
-                )}
-                {sortedSold.length > 0 && <div className="flex items-center gap-1">
-                  <div className="w-3 h-0.5 bg-emerald-400"></div>
-                  <span className="text-slate-300">Completed sales</span>
-                </div>}
+                {chartLegend.map((item) => <div key={item.key} className="flex items-center gap-1">
+                  <div className={`w-3 h-0.5 ${item.color}`} />
+                  <span className="text-slate-300">{item.label} · £{item.value.toFixed(0)}</span>
+                </div>)}
               </div>
 
               {/* Observations Count */}
