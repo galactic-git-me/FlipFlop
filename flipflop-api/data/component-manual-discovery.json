@@ -544,5 +544,23 @@
     "reason": "no_exact_official_pdf",
     "component": "CORSAIR AIR 5400 RS-R ARGB Triple-Chamber Mid-Tower Panoramic PC Case \u2013 3x Pre-Installed Reverse-Rotor RS120-R ARGB Fans, Low",
     "retry_after": "2026-12-12T10:06:07.841459"
+  },
+  "5480513a48e2a511f1b1a0682829ca02e62cd4101736286ed5341433abe93b73": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Lian Li O11 Dynamic Mini V2 Compact ATX Mid Tower Gaming PC Case, White | Dual-chamber tempered glass computer case with modu",
+    "retry_after": "2026-12-12T14:42:23.483813"
+  },
+  "6831e0d27a4e26850e6ffdba4dca4909f8d04ad65e8d3fb096af05341ab5b5ba": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Lian Li DAN Cases B4 Wood Edition Micro-ATX PC Case, Walnut/Black | 21.3L SFF chassis, 358mm 4-slot GPU, ATX/SFX PSU, 360mm A",
+    "retry_after": "2026-12-12T14:42:23.483813"
+  },
+  "8941e5b888fcd40eb8bc1b48eee07212663488a502435e342bb73099b3209f0e": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "AMD Wraith Stealth Socket AM4 4-Pin Connector CPU Cooler with Aluminum Heatsink & 3.93-Inch Fan (Slim)",
+    "retry_after": "2026-12-12T14:42:23.483813"
   }
 }
