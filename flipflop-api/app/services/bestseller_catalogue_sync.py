@@ -12,6 +12,7 @@ from app.models.amazon_bestseller_observation import AmazonBestsellerObservation
 from app.models.catalogue import CatalogueVariant, PlaybookSlot, CaseCatalogue
 from app.models.listing import Listing
 from app.models.playbook import Playbook
+from app.models.app_settings import AppSettings
 from app.services.amazon_bestsellers import bestseller_item_matches_category
 from app.services.catalogue_service import infer_slot_type, compute_display_price
 
@@ -247,6 +248,12 @@ async def sync_bestseller_catalogues(db, *, check_free_software=True):
     curated_keys = set(range_reasons)
     reviews={(row.category,row.cpk):row.status for row in
         (await db.execute(text('SELECT category,cpk,status FROM curated_bestseller_reviews'))).all()}
+    automation = (await db.execute(select(AppSettings).where(AppSettings.name == 'default'))).scalar_one_or_none()
+    if automation and automation.auto_approve_images:
+        from app.services.bestseller_image_automation import auto_approve_captured_bestseller_images
+        await auto_approve_captured_bestseller_images(db)
+        reviews={(row.category,row.cpk):row.status for row in
+            (await db.execute(text('SELECT category,cpk,status FROM curated_bestseller_reviews'))).all()}
     parents=(await db.execute(select(Playbook).where(Playbook.status=='active'))).scalars().all()
     slots=(await db.execute(select(PlaybookSlot).where(PlaybookSlot.playbook_id.in_([p.id for p in parents])))).scalars().all()
     by_slot={(row.playbook_id,row.slot_type):row for row in slots}

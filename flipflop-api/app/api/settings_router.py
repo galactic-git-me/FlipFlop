@@ -367,6 +367,9 @@ async def update_settings(body: SettingsUpdate, db: AsyncSession = Depends(get_d
         values["storefront_trust_messages"] = [{"title": item.get("title", "").strip(), "text": item["text"].strip(), "audience": item["audience"], "expires_at": item.get("expires_at"), "enabled": item.get("enabled", True), "priority": item.get("priority", False)} for item in messages]
     for field, value in values.items():
         setattr(settings, field, value)
+    if settings.auto_approve_images:
+        from app.services.bestseller_image_automation import auto_approve_captured_bestseller_images
+        await auto_approve_captured_bestseller_images(db)
     if body.relist_interval_days is not None:
         interval = max(1, body.relist_interval_days)
         now = datetime.utcnow()
