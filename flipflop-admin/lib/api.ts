@@ -115,6 +115,8 @@ export interface BuildComponent {
   sourcing_candidate?: boolean;
   gem_classification?: "SUPER_GEM" | "GEM";
   gem_radar_listing_id?: number;
+  canonical_model_id?: string | null;
+  bundle_purchase_group_id?: number;
   purchased?: boolean;
   inventory_item_id?: number;
   condition?: "new" | "new_other" | "refurbished" | "used" | "unknown";
@@ -1512,6 +1514,15 @@ export const api = {
           body: JSON.stringify(data),
         }
       ),
+    purchaseBundle: (id: number, data: {
+      bundle_variant_id: number;
+      actual_landed_cost_gbp: number;
+      component_slots: Record<string, string>;
+    }) => request<ManualBuild>(`/manual-builds/${id}/bundle-purchase`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    }),
     getComponentRatings: (id: number) =>
       request<ComponentRating[]>(`/manual-builds/${id}/component-ratings`),
     saveComponentRatings: (id: number, ratings: ComponentRating[]) =>

@@ -75,6 +75,17 @@ const BUILD_3D_TARGETS = [
   { key: "complete_build", label: "Complete build", hint: "Use clean exterior angles of the finished PC." },
 ] as const;
 
+interface VerifiedBundleOption {
+  bundle_variant_id: number;
+  title: string;
+  url: string;
+  marketplace: string;
+  bundle_landed_cost: string;
+  standalone_market_total: string;
+  absolute_savings: string;
+  components: { canonical_part_key: string; quantity: number; market_reference_price: string }[];
+}
+
 function TabButton({
   label,
   icon: Icon,
@@ -138,6 +149,11 @@ export default function BuildDetailPage() {
   const [actualPurchasePrices, setActualPurchasePrices] = useState<Record<string, string>>({});
   const [purchasePlan, setPurchasePlan] = useState<BuildPurchasePlan | null>(null);
   const [markingSelectedPurchased, setMarkingSelectedPurchased] = useState(false);
+  const [bundleOptions, setBundleOptions] = useState<VerifiedBundleOption[]>([]);
+  const [selectedBundleId, setSelectedBundleId] = useState("");
+  const [bundleActualCost, setBundleActualCost] = useState("");
+  const [bundleSlotMap, setBundleSlotMap] = useState<Record<string, string>>({});
+  const [savingBundle, setSavingBundle] = useState(false);
   const [editingBuildName, setEditingBuildName] = useState(false);
   const [buildNameDraft, setBuildNameDraft] = useState("");
   const [savingBuildName, setSavingBuildName] = useState(false);
@@ -209,6 +225,9 @@ export default function BuildDetailPage() {
         setBuildNameDraft(b.name);
         if (b.creation_method === "gem_spotlight") {
           api.manualBuilds.getPurchasePlan(buildId).then(setPurchasePlan).catch(() => setPurchasePlan(null));
+          fetch("/api/gem-radar/sourcing/bundles/opportunities?limit=100", { cache: "no-store" })
+            .then(response => response.ok ? response.json() as Promise<VerifiedBundleOption[]> : Promise.reject(new Error("Bundle request failed")))
+            .then(setBundleOptions).catch(() => setBundleOptions([]));
         }
         // The declared insurance value and publish price must be the actual
         // saved listing price. The market-evaluation midpoint is only a
@@ -393,6 +412,32 @@ export default function BuildDetailPage() {
       api.manualBuilds.get(buildId).then(setBuild).catch(() => undefined);
     } finally {
       setMarkingSelectedPurchased(false);
+    }
+  };
+
+  const recordBundlePurchase = async () => {
+    if (!build || !selectedBundleId || savingBundle) return;
+    const actualCost = Number(bundleActualCost);
+    const componentSlots = Object.fromEntries(Object.entries(bundleSlotMap).filter(([, slot]) => slot));
+    if (!Number.isFinite(actualCost) || actualCost <= 0 || Object.keys(componentSlots).length === 0) {
+      toast.error("Enter the confirmed bundle landed cost and match at least one component to this build.");
+      return;
+    }
+    setSavingBundle(true);
+    try {
+      const saved = await api.manualBuilds.purchaseBundle(buildId, {
+        bundle_variant_id: Number(selectedBundleId), actual_landed_cost_gbp: actualCost, component_slots: componentSlots,
+      });
+      setBuild(saved);
+      setSelectedBundleId("");
+      setBundleActualCost("");
+      setBundleSlotMap({});
+      refreshFreeInventory();
+      toast.success("Bundle recorded as separate component inventory with its landed cost allocated once.");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not record the bundle purchase.");
+    } finally {
+      setSavingBundle(false);
     }
   };
 
@@ -844,6 +889,7 @@ export default function BuildDetailPage() {
   const purchasedCount = build.components.filter((c) => c.purchased).length;
   const totalCount = build.components.length;
   const allPurchased = totalCount > 0 && purchasedCount === totalCount;
+  const selectedBundle = bundleOptions.find(option => String(option.bundle_variant_id) === selectedBundleId);
   const canMarkBuilt = allPurchased && build.status === "in_progress";
   const canSell = build.status === "built" || build.status === "listed" || build.status === "sold";
   const hasRequiredAspects = [...EBAY_REQUIRED_ASPECTS].every((name) => !!build.generated_aspects?.[name]?.length);
@@ -1056,6 +1102,48 @@ export default function BuildDetailPage() {
                   Mark selected purchased ({selectedPurchaseSlots.filter((slot) => !build.components.find((c) => c.slot === slot)?.purchased).length})
                 </button>
               </div>
+              {bundleOptions.length > 0 && <div className="mb-4 rounded-lg border border-amber-300/20 bg-amber-300/[0.035] p-3">
+                <h3 className="text-xs font-bold uppercase tracking-wide text-amber-200">Verified bundle sources</h3>
+                <p className="mt-1 text-xs text-slate-400">Internal procurement only. The purchase is recorded as separate component inventory; the confirmed landed cost is allocated once across its parts.</p>
+                <div className="mt-3 grid gap-2 md:grid-cols-[minmax(0,1fr)_170px]">
+                  <select aria-label="Verified bundle source" value={selectedBundleId} onChange={event => {
+                    setSelectedBundleId(event.target.value);
+                    setBundleSlotMap({});
+                    const option = bundleOptions.find(item => String(item.bundle_variant_id) === event.target.value);
+                    setBundleActualCost("");
+                  }} className="rounded border border-white/10 bg-[#080e18] px-2 py-2 text-xs text-slate-200">
+                    <option value="">Select a verified bundle source</option>
+                    {bundleOptions.map(option => <option key={option.bundle_variant_id} value={option.bundle_variant_id}>
+                      {option.title} · {option.marketplace} · observed {formatCurrency(Number(option.bundle_landed_cost))} · reference {formatCurrency(Number(option.standalone_market_total))}
+                    </option>)}
+                  </select>
+                  <input aria-label="Confirmed total bundle landed cost" type="number" min="0.01" step="0.01" value={bundleActualCost}
+                    onChange={event => setBundleActualCost(event.target.value)} placeholder={selectedBundle ? `Actual landed cost (observed ${formatCurrency(Number(selectedBundle.bundle_landed_cost))})` : "Actual landed cost (£)"}
+                    className="rounded border border-white/10 bg-[#080e18] px-2 py-2 text-xs text-slate-200" />
+                </div>
+                {selectedBundle && <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                  {selectedBundle.components.map(part => {
+                    const compatibleSlots = build.components.filter(component =>
+                      component.canonical_model_id?.trim().toLowerCase() === part.canonical_part_key.trim().toLowerCase()
+                      && !component.purchased && !component.inventory_item_id);
+                    return <label key={part.canonical_part_key} className="flex items-center gap-2 text-xs text-slate-300">
+                      <span className="min-w-0 flex-1 truncate" title={part.canonical_part_key}>{part.canonical_part_key} × {part.quantity}</span>
+                      <select aria-label={`Build slot for ${part.canonical_part_key}`} value={bundleSlotMap[part.canonical_part_key] ?? ""}
+                        onChange={event => setBundleSlotMap(current => ({ ...current, [part.canonical_part_key]: event.target.value }))}
+                        className="max-w-40 rounded border border-white/10 bg-[#080e18] px-2 py-1.5 text-slate-200">
+                        <option value="">Keep in inventory</option>
+                        {compatibleSlots.map(component => <option key={component.slot} value={component.slot}>{component.slot}</option>)}
+                      </select>
+                    </label>;
+                  })}
+                </div>}
+                <button type="button" disabled={!selectedBundle || savingBundle}
+                  onClick={() => void recordBundlePurchase()}
+                  className="mt-3 inline-flex items-center gap-2 rounded-md border border-amber-300/30 bg-amber-300/10 px-3 py-2 text-xs font-bold text-amber-100 disabled:cursor-not-allowed disabled:opacity-50">
+                  {savingBundle ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ShoppingBag className="h-3.5 w-3.5" />}
+                  Record confirmed bundle purchase
+                </button>
+              </div>}
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[760px] text-left text-xs">
                   <thead className="text-[10px] uppercase tracking-wide text-slate-500">

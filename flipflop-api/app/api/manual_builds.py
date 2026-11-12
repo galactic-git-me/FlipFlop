@@ -3064,7 +3064,7 @@ async def patch_build(build_id: int, body: ManualBuildPatch, db: AsyncSession = 
             build.components = [
                 {**component.model_dump(), **{
                     key: existing.get(key)
-                    for key in ("sourcing_candidate", "gem_classification", "gem_radar_listing_id")
+                    for key in ("sourcing_candidate", "gem_classification", "gem_radar_listing_id", "canonical_model_id")
                     if key in existing
                 }, "purchased": existing.get("purchased", False)}
                 for component, existing in zip(body.components, existing_components)
@@ -3220,6 +3220,8 @@ async def record_build_bundle_purchase(
         raise HTTPException(409, "The selected bundle has no verified component mapping")
     if not body.component_slots:
         raise HTTPException(422, "Map at least one verified bundle part to a build slot before recording the purchase")
+    if len(set(body.component_slots.values())) != len(body.component_slots):
+        raise HTTPException(422, "A build slot can receive only one bundle component")
     keys = {part.canonical_part_key for part in bundle_parts}
     if set(body.component_slots) - keys:
         raise HTTPException(422, "Component mapping contains a key not present in the verified bundle")
