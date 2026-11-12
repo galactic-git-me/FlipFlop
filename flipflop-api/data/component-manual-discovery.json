@@ -472,5 +472,23 @@
     "reason": "no_exact_official_pdf",
     "component": "CORSAIR iCUE LINK 3500X RGB Mid-Tower ATX PC Case \u2013 Panoramic Tempered Glass \u2013 Reverse Connection Motherboard Compatible \u2013 3x",
     "retry_after": "2026-12-12T02:58:09.224242"
+  },
+  "291cc67b9f125cc22313818228a71868594d774dc181754207b24621acb73bcb": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR Frame 4000D RS ARGB Modular Mid-Tower ATX PC Case \u2013 Black | High Airflow, 3x Pre-Installed RS ARGB Fans, InfiniRail F",
+    "retry_after": "2026-12-12T03:36:20.268997"
+  },
+  "33216937d8127afcbfd8394b2c32b11f9fccb22bed63db5410445e6130a38b13": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "NZXT H3 Flow - Micro-ATX Airflow PC Case - Black | Space-efficient Micro-ATX case with optimized airflow, full-size GPU suppo",
+    "retry_after": "2026-12-12T03:36:20.268997"
+  },
+  "7f6e2aacc064f1b44a0cadc9394cfc477f1b69b51b56bfd37fb4eaa5199e0b36": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "NZXT H9 Flow - Dual-Chamber ATX PC Case - Black | Dual-chamber ATX flagship with 4 included fans, 420mm top and front radiato",
+    "retry_after": "2026-12-12T03:36:20.268997"
   }
 }
