@@ -140,13 +140,13 @@ export function Sidebar() {
         <nav className="node-nav">
           <Link
             href="/approvals"
-            aria-label={`Approvals${approvalStatus === null ? ", count unavailable" : `, ${approvalStatus.partial ? "at least " : ""}${approvalStatus.count} waiting`}`}
+            aria-label={`Approvals${approvalStatus === null ? ", count unavailable" : approvalStatus.partial ? approvalStatus.count ? `, at least ${approvalStatus.count} waiting; some queues unavailable` : ", some queue counts unavailable" : `, ${approvalStatus.count} waiting`}`}
             className={cn("node-nav-item-fancy", pathname === "/approvals" && "node-nav-item-fancy-active", approvalStatus !== null && approvalStatus.count > 0 && "approvals-nav-pulse")}
           >
             <ClipboardCheck className={cn("h-4 w-4 flex-shrink-0", approvalStatus !== null && approvalStatus.count > 0 && "approvals-nav-icon")} />
             <span className="flex-1">Approvals</span>
             <span aria-hidden="true" className={cn("rounded-full px-1.5 py-0.5 text-[10px] font-bold tabular-nums", approvalStatus !== null && approvalStatus.count > 0 ? "bg-rose-500 text-white" : approvalStatus === null || approvalStatus.partial ? "bg-amber-500/20 text-amber-200" : "bg-white/10 text-slate-400")}>
-              {approvalStatus === null ? "!" : approvalStatus.count > 99 ? "99+" : `${approvalStatus.count}${approvalStatus.partial && approvalStatus.count > 0 ? "+" : ""}`}
+              {approvalStatus === null || approvalStatus.partial && approvalStatus.count === 0 ? "!" : approvalStatus.count > 99 ? "99+" : `${approvalStatus.count}${approvalStatus.partial ? "+" : ""}`}
             </span>
           </Link>
           {PRIMARY_NAV.map((item) => {
@@ -177,8 +177,9 @@ export function Sidebar() {
           0%, 100% { transform: scale(1); }
           50% { transform: scale(1.24); }
         }
-        .approvals-nav-pulse { color: #fda4af; border-color: rgba(244, 63, 94, 0.32); animation: approvals-nav-pulse 1.25s ease-in-out infinite; }
+        .node-nav-item-fancy.approvals-nav-pulse, .node-nav-item-fancy.approvals-nav-pulse:hover { color: #fda4af; border-color: rgba(244, 63, 94, 0.32); animation: approvals-nav-pulse 1.25s ease-in-out infinite; }
         .approvals-nav-icon { color: #fb7185; animation: approvals-icon-pulse 1.25s ease-in-out infinite; }
+        .node-nav-item-fancy:hover .approvals-nav-icon { color: #fb7185; }
         @media (prefers-reduced-motion: reduce) {
           .approvals-nav-pulse, .approvals-nav-icon { animation: none; }
         }

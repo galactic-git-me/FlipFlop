@@ -1183,7 +1183,7 @@ export default function CommercialReviewWorkspace({
                     </p>
                   </div>
                   <div className="flex flex-col items-end gap-2">
-                  <Link href="/approvals?tab=playbook" className="text-xs text-rose-200 underline decoration-rose-200/40 underline-offset-2">{allReviewableSources.length} source facts awaiting review</Link>
+                  <Link href="/playbooks/commercial?area=suppliers" className="text-xs text-rose-200 underline decoration-rose-200/40 underline-offset-2">{allReviewableSources.length} source facts awaiting review</Link>
                   <button
                     disabled={busy || allReviewableSources.length === 0}
                     onClick={() =>
