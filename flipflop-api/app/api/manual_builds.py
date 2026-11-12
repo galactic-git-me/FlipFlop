@@ -368,6 +368,15 @@ class ComponentPurchaseInput(BaseModel):
     source: str | None = None
 
 
+class ComboPurchaseInput(BaseModel):
+    bundle_variant_id: int = Field(gt=0)
+    actual_landed_cost_gbp: float = Field(gt=0)
+    # Explicit operator mapping from the reviewed extension component key to
+    # this draft's component slot. Unmapped bundle parts remain free inventory.
+    component_slots: dict[str, str] = Field(default_factory=dict, max_length=16)
+    source: str | None = Field(default=None, max_length=100)
+
+
 class AIBuildCreateInput(BaseModel):
     component_ids: list[int] = Field(min_length=4, max_length=8)
     playbook_id: int
@@ -1341,6 +1350,7 @@ async def create_gem_spotlight_draft(body: GemSpotlightDraftInput, db: AsyncSess
             "sourcing_candidate": True,
             "gem_classification": by_category[category].classification,
             "gem_radar_listing_id": by_category[category].id,
+            "canonical_model_id": by_category[category].canonical_model_id,
         }
         for category in required_categories
     ]
