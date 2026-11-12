@@ -1,6 +1,6 @@
 import { api, apiUrl } from "@/lib/api";
 
-export type ApprovalTab = "images" | "models" | "pricing" | "playbook" | "marketing";
+export type ApprovalTab = "images" | "models" | "pricing" | "playbook" | "marketing" | "operations";
 export type ApprovalQueue = {
   id: string;
   title: string;
@@ -101,6 +101,22 @@ const specs: QueueSpec[] = [
     href: "/catalogue?scope=curated&status=pending_review", loadCount: async () => (await api.catalogue.reviewQueue()).length,
   },
   {
+    id: "linked-suppliers", tab: "playbook", title: "Linked supplier listings",
+    description: "Active listings assigned to build cells that still need to be added to the Curated Catalogue.",
+    href: "/pc-builder?tab=playbook&tool=inventory", loadCount: async () => {
+      const response = await fetch("/api/curated-builds", { cache: "no-store" });
+      if (!response.ok) throw new Error(`Curated build queue returned ${response.status}`);
+      const data = await response.json();
+      const seen = new Set<number>();
+      for (const segment of Array.isArray(data.segments) ? data.segments : []) {
+        for (const component of Object.values(segment.component_details ?? {}) as Array<{ id: number; curated_for_builds?: boolean; status?: string } | null>) {
+          if (component && !component.curated_for_builds && component.status === "active") seen.add(component.id);
+        }
+      }
+      return seen.size;
+    },
+  },
+  {
     id: "social-posts", tab: "marketing", title: "Social posts",
     description: "Validated social posts awaiting approval before publishing.",
     href: "/advertising-growth", loadCount: async () => {
@@ -108,6 +124,23 @@ const specs: QueueSpec[] = [
       if (!response.ok) throw new Error(`Social approval queue returned ${response.status}`);
       const data = await response.json();
       return (Array.isArray(data.items) ? data.items : []).filter((post: { status?: string }) => post.status === "review").length;
+    },
+  },
+  {
+    id: "getting-ready-packages", tab: "operations", title: "Getting-ready packages",
+    description: "Generated customer setup packages marked ready for admin review.",
+    href: "/dispatch-zone?tab=getting-ready", loadCount: async () => {
+      const rows = await api.dispatch.list();
+      return rows.filter(row => row.getting_started?.status === "awaiting_admin_review"
+        || (row.getting_started?.manifest as Record<string, unknown> | null | undefined)?.status === "ready_for_admin_review").length;
+    },
+  },
+  {
+    id: "dispatch-evidence", tab: "operations", title: "Dispatch evidence",
+    description: "Uploaded build and packaging photos awaiting operator approval before handover.",
+    href: "/dispatch-zone?tab=evidence", loadCount: async () => {
+      const rows = await api.dispatch.list();
+      return rows.reduce((count, row) => count + (row.getting_started?.shipment_evidence ?? []).filter(item => !item.review_status || item.review_status === "needs_review").length, 0);
     },
   },
 ];

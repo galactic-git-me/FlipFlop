@@ -150,6 +150,10 @@ export default function DispatchZonePage() {
   const [researchVerifiedIdentity, setResearchVerifiedIdentity] = useState<Record<number, Record<number, string>>>({});
   const [researchSearchKey, setResearchSearchKey] = useState<string | null>(null);
   const researchRequestIdentity = useRef<Record<string, string>>({});
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("tab");
+    if (requested === "getting-ready" || requested === "delivery" || requested === "evidence") setTab(requested);
+  }, []);
   const [generated, setGenerated] = useState<Record<number, Generated>>({});
   const [packages, setPackages] = useState<Record<number, {filename: string; version: number; size_bytes: number; sha256: string; workshop_filename?: string; workshop_size_bytes?: number; workshop_sha256?: string; windows_license_helper_required?: boolean}>>({});
   const [busyId, setBusyId] = useState<number | null>(null);

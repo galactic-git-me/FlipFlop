@@ -114,14 +114,14 @@ function StarsCanvas() {
 
 export function Sidebar() {
   const pathname = usePathname();
-  const [approvalCount, setApprovalCount] = useState<number | null>(null);
+  const [approvalStatus, setApprovalStatus] = useState<{ count: number; partial: boolean } | null>(null);
 
   useEffect(() => {
     if (pathname === "/login") return;
     let active = true;
     const refresh = () => void getApprovalSnapshot(true).then(snapshot => {
-      if (active) setApprovalCount(snapshot.queues.reduce((sum, queue) => sum + queue.count, 0));
-    }).catch(() => { if (active) setApprovalCount(null); });
+      if (active) setApprovalStatus({ count: snapshot.queues.reduce((sum, queue) => sum + queue.count, 0), partial: snapshot.unavailable.length > 0 });
+    }).catch(() => { if (active) setApprovalStatus(null); });
     refresh();
     const timer = window.setInterval(refresh, 60_000);
     return () => { active = false; window.clearInterval(timer); };
@@ -140,13 +140,13 @@ export function Sidebar() {
         <nav className="node-nav">
           <Link
             href="/approvals"
-            aria-label={`Approvals${approvalCount === null ? ", count unavailable" : `, ${approvalCount} waiting`}`}
-            className={cn("node-nav-item-fancy", pathname === "/approvals" && "node-nav-item-fancy-active", approvalCount !== null && approvalCount > 0 && "approvals-nav-pulse")}
+            aria-label={`Approvals${approvalStatus === null ? ", count unavailable" : `, ${approvalStatus.partial ? "at least " : ""}${approvalStatus.count} waiting`}`}
+            className={cn("node-nav-item-fancy", pathname === "/approvals" && "node-nav-item-fancy-active", approvalStatus !== null && approvalStatus.count > 0 && "approvals-nav-pulse")}
           >
-            <ClipboardCheck className={cn("h-4 w-4 flex-shrink-0", approvalCount !== null && approvalCount > 0 && "approvals-nav-icon")} />
+            <ClipboardCheck className={cn("h-4 w-4 flex-shrink-0", approvalStatus !== null && approvalStatus.count > 0 && "approvals-nav-icon")} />
             <span className="flex-1">Approvals</span>
-            <span aria-hidden="true" className={cn("rounded-full px-1.5 py-0.5 text-[10px] font-bold tabular-nums", approvalCount !== null && approvalCount > 0 ? "bg-rose-500 text-white" : approvalCount === null ? "bg-amber-500/20 text-amber-200" : "bg-white/10 text-slate-400")}>
-              {approvalCount === null ? "!" : approvalCount > 99 ? "99+" : approvalCount}
+            <span aria-hidden="true" className={cn("rounded-full px-1.5 py-0.5 text-[10px] font-bold tabular-nums", approvalStatus !== null && approvalStatus.count > 0 ? "bg-rose-500 text-white" : approvalStatus === null || approvalStatus.partial ? "bg-amber-500/20 text-amber-200" : "bg-white/10 text-slate-400")}>
+              {approvalStatus === null ? "!" : approvalStatus.count > 99 ? "99+" : `${approvalStatus.count}${approvalStatus.partial && approvalStatus.count > 0 ? "+" : ""}`}
             </span>
           </Link>
           {PRIMARY_NAV.map((item) => {

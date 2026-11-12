@@ -145,6 +145,13 @@ export default function CataloguePage() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(50);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("scope") === "curated") setScope("curated");
+    const requestedStatus = params.get("status");
+    if (["active", "pending_review", "hidden", "all"].includes(requestedStatus || "")) setStatus(requestedStatus!);
+  }, []);
+
   const load = useCallback(async () => {
     setLoading(true);
     try {

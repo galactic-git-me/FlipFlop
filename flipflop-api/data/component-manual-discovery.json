@@ -508,5 +508,23 @@
     "reason": "no_exact_official_pdf",
     "component": "Lian Li Lancool 217 ATX Mid Tower Gaming PC Case with 5 Fans, Wood, Black | Walnut wood accent computer case, mesh front, tem",
     "retry_after": "2026-12-12T03:55:48.181484"
+  },
+  "9c79f2099dbc6abea507b0d4d0c7a717f1b08d7647fa12575db72160cfbddb97": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "CiT Level 5 Gaming PC Case, Micro ATX PC Case with 3 ARGB Fans, Mesh, Black | High airflow mesh computer case with 3 PWM ARGB",
+    "retry_after": "2026-12-12T04:06:08.195946"
+  },
+  "70ee347fcd4c095cc6c044598bbbd746a0e921a1caa31b29a7478daacb13e4e2": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "CiT F3 Gaming PC Case \u2013 Micro-ATX Computer Case with Mesh Front & Tempered Glass Side Panels - 3 x 120mm ARGB Fans Included -",
+    "retry_after": "2026-12-12T04:06:08.195946"
+  },
+  "f69d943a480fc4d7b96d20a48768965f592c23762d12192d40b4ae3f07f69a77": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "CiT F3 Gaming PC Case Micro ATX, Mesh MATX Computer Case with 3 ARGB Fans | Small footprint micro atx pc case with fans inclu",
+    "retry_after": "2026-12-12T04:06:08.195946"
   }
 }

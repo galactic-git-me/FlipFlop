@@ -1419,7 +1419,7 @@ export default function Components3DReviewWorkspace({ variantIds, batchId: reque
           )}
         </div>
         <div className="bg-white/50 rounded-lg px-6 py-2 text-lg font-semibold flex items-center gap-4">
-          <span className="text-orange-500">{draftCount} Draft</span>
+          <a href="/approvals?tab=models" className="text-orange-500 underline decoration-orange-500/40 underline-offset-2">{draftCount} Draft</a>
           <span className="text-purple-500">{validatedCount} Valid</span>
           <span className="text-[#00dc82]">{finalCount} Final</span>
           <span className="text-slate-800">{assets.length} Total</span>

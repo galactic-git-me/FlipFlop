@@ -623,30 +623,18 @@ export default function CommercialReviewWorkspace({
         aria-label="Playbook review areas"
         className="flex flex-wrap gap-2 border-b border-slate-700 pb-3"
       >
-        {reviewAreas.map(([id, label]) => (
-          <button
-            key={id}
-            type="button"
-            aria-pressed={activeArea === id}
-            onClick={() => setActiveArea(id)}
-            className={`rounded px-4 py-2 text-sm ${
-              activeArea === id
-                ? "bg-emerald-700 text-white"
-                : "border border-slate-700 text-slate-300 hover:bg-slate-800"
-            }`}
-          >
-            {label}
-            {id === "builds"
-              ? ` (${offers.length})`
-              : id === "suppliers"
-              ? ` (${allReviewableSources.length})`
-              : id === "compatibility"
-              ? ` (${compatibilityCount}/${offers.length})`
-              : id === "software"
-              ? ` (${licenceCandidates.length})`
-              : ""}
-          </button>
-        ))}
+        {reviewAreas.map(([id, label]) => {
+          const waitingCount = id === "builds" ? offers.length : id === "suppliers" ? allReviewableSources.length : id === "software" ? licenceCandidates.length : null;
+          return <div key={id} className="flex items-center gap-1">
+            <button
+              type="button"
+              aria-pressed={activeArea === id}
+              onClick={() => setActiveArea(id)}
+              className={`rounded px-4 py-2 text-sm ${activeArea === id ? "bg-emerald-700 text-white" : "border border-slate-700 text-slate-300 hover:bg-slate-800"}`}
+            >{label}{id === "compatibility" ? ` (${compatibilityCount}/${offers.length})` : ""}</button>
+            {waitingCount !== null && <Link href={`/playbooks/commercial?area=${id}`} aria-label={`${waitingCount} ${label.toLowerCase()} awaiting review`} className="rounded-full bg-rose-500/15 px-2 py-1 text-xs text-rose-200 underline decoration-rose-200/40 underline-offset-2">{waitingCount}</Link>}
+          </div>;
+        })}
       </nav>
       {loading ? (
         <p role="status">Loading Playbook review data…</p>
@@ -1194,6 +1182,8 @@ export default function CommercialReviewWorkspace({
                       build.
                     </p>
                   </div>
+                  <div className="flex flex-col items-end gap-2">
+                  <Link href="/approvals?tab=playbook" className="text-xs text-rose-200 underline decoration-rose-200/40 underline-offset-2">{allReviewableSources.length} source facts awaiting review</Link>
                   <button
                     disabled={busy || allReviewableSources.length === 0}
                     onClick={() =>
@@ -1203,9 +1193,9 @@ export default function CommercialReviewWorkspace({
                     }
                     className="rounded border border-emerald-500/50 px-4 py-2 text-sm text-emerald-300 disabled:opacity-40"
                   >
-                    Approve all {allReviewableSources.length} reviewed supplier
-                    products
+                    Approve all reviewed supplier products
                   </button>
+                  </div>
                 </div>
                 <div className="mt-4 max-h-[65vh] overflow-auto">
                   <table className="w-full text-left text-sm">

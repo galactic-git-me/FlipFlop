@@ -1,0 +1,58 @@
+- generic [ref=e1]:
+  - complementary [ref=e2]:
+    - generic [ref=e3]:
+      - img "FlipFlop" [ref=e5]
+      - navigation [ref=e6]:
+        - link "Approvals, count unavailable" [ref=e7] [cursor=pointer]:
+          - /url: /approvals
+          - text: Approvals!
+        - link "Sourcing" [ref=e12] [cursor=pointer]:
+          - /url: /sourcing
+        - link "Best Sellers" [ref=e16] [cursor=pointer]:
+          - /url: /best-sellers
+        - link "PriceWatch" [ref=e23] [cursor=pointer]:
+          - /url: /pricewatch
+        - link "Catalogue" [ref=e26] [cursor=pointer]:
+          - /url: /catalogue
+        - link "Builds" [ref=e29] [cursor=pointer]:
+          - /url: /build-hub
+        - link "Workshop Calendar" [ref=e34] [cursor=pointer]:
+          - /url: /orders
+        - link "Upgrade Desk" [ref=e37] [cursor=pointer]:
+          - /url: /upgrade-desk
+        - link "Inventory" [ref=e40] [cursor=pointer]:
+          - /url: /inventory
+        - link "Demand" [ref=e44] [cursor=pointer]:
+          - /url: /demand
+        - link "Cross-listing" [ref=e47] [cursor=pointer]:
+          - /url: /cross-listing
+        - link "Live Builds" [ref=e53] [cursor=pointer]:
+          - /url: /live-builds
+        - link "Dispatch Zone" [ref=e57] [cursor=pointer]:
+          - /url: /dispatch-zone
+        - link "Email Events" [ref=e63] [cursor=pointer]:
+          - /url: /email-events
+        - link "Advertising & Growth" [ref=e67] [cursor=pointer]:
+          - /url: /advertising-growth
+        - link "Photos & 3D models" [ref=e71] [cursor=pointer]:
+          - /url: /catalogue/3d-assets
+        - link "Problems" [ref=e75] [cursor=pointer]:
+          - /url: /problems
+      - region "Service health" [ref=e78]:
+        - generic [ref=e79]:
+          - 'generic "API: checking" [ref=e80]': API
+          - 'generic "DB: checking" [ref=e84]': DB
+          - 'generic "Gem: checking" [ref=e89]': Gem
+          - link "Shop" [ref=e93] [cursor=pointer]:
+            - /url: http://localhost:4313
+  - main [ref=e98]:
+    - generic [ref=e100]:
+      - heading "FlipFlop Admin" [level=1] [ref=e101]
+      - paragraph [ref=e102]: Sign in to continue
+      - generic [ref=e103]: Email
+      - textbox [active] [ref=e104]
+      - generic [ref=e105]: Password
+      - textbox [ref=e106]
+      - button "Sign in" [ref=e107]
+      - paragraph [ref=e108]
+  - button "Open Next.js Dev Tools" [ref=e114] [cursor=pointer]

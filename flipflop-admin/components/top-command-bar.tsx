@@ -208,6 +208,7 @@ export function TopCommandBar() {
         title: `${n.action} Proposal`,
         name: n.playbook_name ?? "Unnamed playbook",
         reason: n.reason ?? "",
+        linkUrl: "/approvals?tab=pricing",
       })),
       ...alerts.map((a) => {
         const code = (a.code ?? "").toLowerCase();
@@ -364,30 +365,14 @@ export function TopCommandBar() {
               {/* Tabs */}
               <div className="flex gap-0 border-b border-white/8 shrink-0">
                 {(["all", "errors", "flips", "proposals", "favourites", "system"] as const).map(tab => (
-                  <button
-                    key={tab}
-                    onClick={() => setNotifTab(tab)}
-                    className={`flex-1 py-1.5 text-[10px] uppercase tracking-wide font-medium transition-colors relative ${
-                      notifTab === tab
-                        ? "text-[#00dc82]"
-                        : "text-slate-500 hover:text-slate-300"
-                    }`}
-                  >
-                    {tab}
-                    {tabCounts[tab] > 0 && (
-                      <span className={`ml-1 px-1 rounded-full text-[9px] font-bold ${
-                        tab === "errors"     ? "bg-red-500/20 text-red-400" :
-                        tab === "flips"      ? "bg-[#00dc82]/20 text-[#00dc82]" :
-                        tab === "favourites" ? "bg-rose-500/20 text-rose-400" :
-                        "bg-slate-700 text-slate-400"
-                      }`}>
-                        {tabCounts[tab]}
-                      </span>
-                    )}
-                    {notifTab === tab && (
-                      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00dc82] rounded-full" />
-                    )}
-                  </button>
+                  <div key={tab} className="relative flex flex-1 items-center justify-center">
+                    <button
+                      onClick={() => setNotifTab(tab)}
+                      className={`py-1.5 text-[10px] uppercase tracking-wide font-medium transition-colors ${notifTab === tab ? "text-[#00dc82]" : "text-slate-500 hover:text-slate-300"}`}
+                    >{tab}</button>
+                    {tabCounts[tab] > 0 && (tab === "proposals" ? <Link href="/approvals?tab=pricing" aria-label={`${tabCounts[tab]} Playbook proposals awaiting approval`} onClick={() => setNotifOpen(false)} className="ml-1 rounded-full bg-rose-500/20 px-1 text-[9px] font-bold text-rose-200 underline decoration-rose-200/40">{tabCounts[tab]}</Link> : <span className={`ml-1 rounded-full px-1 text-[9px] font-bold ${tab === "errors" ? "bg-red-500/20 text-red-400" : tab === "flips" ? "bg-[#00dc82]/20 text-[#00dc82]" : tab === "favourites" ? "bg-rose-500/20 text-rose-400" : "bg-slate-700 text-slate-400"}`}>{tabCounts[tab]}</span>)}
+                    {notifTab === tab && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00dc82] rounded-full" />}
+                  </div>
                 ))}
               </div>
 
