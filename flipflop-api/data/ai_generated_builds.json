@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-12T06:14:29.557365+00:00",
+  "generated_at": "2026-11-12T07:14:25.650839+00:00",
   "builds": [
     {
       "components": [
@@ -132,12 +132,12 @@
           "count": 49,
           "min_price": 159.99,
           "max_price": 1024.79,
-          "average_price": 501.43
+          "average_price": 507.56
         }
       },
-      "resale_estimate": 501.43,
+      "resale_estimate": 507.56,
       "resale_source": "bin_average",
-      "estimated_profit": 386.38,
+      "estimated_profit": 392.51,
       "rank": 1
     },
     {
