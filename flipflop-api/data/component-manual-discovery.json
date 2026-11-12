@@ -490,5 +490,23 @@
     "reason": "no_exact_official_pdf",
     "component": "NZXT H9 Flow - Dual-Chamber ATX PC Case - Black | Dual-chamber ATX flagship with 4 included fans, 420mm top and front radiato",
     "retry_after": "2026-12-12T03:36:20.268997"
+  },
+  "2aab127cbe9a8396bebe84da0ef4acd1cdee4d2eb0e2b9ff6fe4693fcf205fdf": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "CiT Mentor Office PC Case Micro ATX, Compact USB-C Computer Case, Black | Compact professional micro atx case with front USB-",
+    "retry_after": "2026-12-12T03:55:48.181484"
+  },
+  "e50aa3feff49ebecc5159f003a33abf41ecda4eadb8463605e75852d35169efb": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "CiT Academy Office PC Case Micro ATX, Computer Case with 500W PSU, Black | Ready-to-build office computer case with pre-insta",
+    "retry_after": "2026-12-12T03:55:48.181484"
+  },
+  "9a559a11b0a5e2988e9bc86dd7204ceb20bf71f45234fd2fec279cd795a8c8ac": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Lian Li Lancool 217 ATX Mid Tower Gaming PC Case with 5 Fans, Wood, Black | Walnut wood accent computer case, mesh front, tem",
+    "retry_after": "2026-12-12T03:55:48.181484"
   }
 }
