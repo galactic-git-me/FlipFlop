@@ -724,5 +724,23 @@
     "reason": "no_exact_official_pdf",
     "component": "Gigabyte A520M K V2 Motherboard - Supports AMD Ryzen 5000 Series AM4 CPUs, up to 5100MHz DDR4 (OC), PCIe Gen3 x4 M.2, GbE LAN",
     "retry_after": "2026-12-12T20:31:56.902144"
+  },
+  "85e31a9e35b694a1f0078e1259ff774927b04bd976ea75aceeedcf1b40f4973d": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Gigabyte A520M DS3H V2 Motherboard - Supports AMD Ryzen 5000 Series AM4 CPUs, up to 4733MHz DDR4 (OC), PCIe 3.0 x16, GbE LAN,",
+    "retry_after": "2026-12-12T20:36:23.077011"
+  },
+  "56cb0e5a18a000bcbcb086f3b415a8f060ebac462f81c337f0146ff52bba39c7": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ASUS ROG Crosshair X870E Hero, AMD ATX motherboard, 18+2+2 power stages, DDR5 slots, PCIe 5.0 with full support for next-gen",
+    "retry_after": "2026-12-12T20:36:23.077011"
+  },
+  "a2b6f2f8229f6a9a187825030473746fc476b84c656a917bdd194e4c5fe5bb98": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ASUS PRIME X870-P WIFI AMD ATX motherboard, 14+2+1(80A) power stages,PCIe 5.0 x16 slot with full support for next-gen graphic",
+    "retry_after": "2026-12-12T20:36:23.077011"
   }
 }
