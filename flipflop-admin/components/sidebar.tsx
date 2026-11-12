@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Search,
   Zap,
@@ -21,8 +21,10 @@ import {
   Wrench,
   CalendarDays,
   MonitorPlay,
+  ClipboardCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getApprovalSnapshot } from "@/lib/approvals";
 import { ServiceHealthPanel } from "./service-health-panel";
 
 const PRIMARY_NAV = [
@@ -112,6 +114,18 @@ function StarsCanvas() {
 
 export function Sidebar() {
   const pathname = usePathname();
+  const [approvalCount, setApprovalCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (pathname === "/login") return;
+    let active = true;
+    const refresh = () => void getApprovalSnapshot(true).then(snapshot => {
+      if (active) setApprovalCount(snapshot.queues.reduce((sum, queue) => sum + queue.count, 0));
+    }).catch(() => { if (active) setApprovalCount(null); });
+    refresh();
+    const timer = window.setInterval(refresh, 60_000);
+    return () => { active = false; window.clearInterval(timer); };
+  }, [pathname]);
 
   return (
     <aside className="node-sidebar" style={{ overflow: "hidden" }}>
@@ -124,6 +138,17 @@ export function Sidebar() {
         </div>
 
         <nav className="node-nav">
+          <Link
+            href="/approvals"
+            aria-label={`Approvals${approvalCount === null ? ", count unavailable" : `, ${approvalCount} waiting`}`}
+            className={cn("node-nav-item-fancy", pathname === "/approvals" && "node-nav-item-fancy-active", approvalCount !== null && approvalCount > 0 && "approvals-nav-pulse")}
+          >
+            <ClipboardCheck className={cn("h-4 w-4 flex-shrink-0", approvalCount !== null && approvalCount > 0 && "approvals-nav-icon")} />
+            <span className="flex-1">Approvals</span>
+            <span aria-hidden="true" className={cn("rounded-full px-1.5 py-0.5 text-[10px] font-bold tabular-nums", approvalCount !== null && approvalCount > 0 ? "bg-rose-500 text-white" : approvalCount === null ? "bg-amber-500/20 text-amber-200" : "bg-white/10 text-slate-400")}>
+              {approvalCount === null ? "!" : approvalCount > 99 ? "99+" : approvalCount}
+            </span>
+          </Link>
           {PRIMARY_NAV.map((item) => {
             const active = pathname === item.href.split("?")[0] ||
               (item.href.startsWith("/catalogue/3d-assets") && pathname === "/components-3d-review");
@@ -144,6 +169,19 @@ export function Sidebar() {
       </div>
 
       <style jsx global>{`
+        @keyframes approvals-nav-pulse {
+          0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(244, 63, 94, 0); }
+          50% { transform: scale(1.035); box-shadow: 0 0 16px rgba(244, 63, 94, 0.24); }
+        }
+        @keyframes approvals-icon-pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.24); }
+        }
+        .approvals-nav-pulse { color: #fda4af; border-color: rgba(244, 63, 94, 0.32); animation: approvals-nav-pulse 1.25s ease-in-out infinite; }
+        .approvals-nav-icon { color: #fb7185; animation: approvals-icon-pulse 1.25s ease-in-out infinite; }
+        @media (prefers-reduced-motion: reduce) {
+          .approvals-nav-pulse, .approvals-nav-icon { animation: none; }
+        }
         .node-nav-item-fancy {
           display: flex;
           align-items: center;

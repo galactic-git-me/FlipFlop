@@ -53,6 +53,10 @@ _WORKSPACE_ROOT = Path(__file__).resolve().parents[3]
 _REFERENCE_ROOT = _WORKSPACE_ROOT / "assets" / "3d-reference-images" / "catalogue"
 _APP_ENV = get_settings().app_env.strip().lower()
 _DEV_MEDIA_ROOT = _WORKSPACE_ROOT / "flipflop-api" / "data" / "3d-media"
+_ORIGINAL_MEDIA_ROOT = (
+    Path("/app/data") if _APP_ENV != "dev"
+    else _WORKSPACE_ROOT / "flipflop-api" / "data"
+) / "3d-media-originals"
 _PUBLIC_MEDIA_ROOT = (
     _DEV_MEDIA_ROOT
     if _APP_ENV == "dev"
@@ -154,7 +158,7 @@ async def _publish_reference_images(category: str, family_key: str) -> tuple[lis
 
 
 async def _store_generated_glb(family_key: str, version: int, source_url: str) -> tuple[str, int]:
-    filename = f"catalogue-3d-{family_key}-v{version}.glb"
+    filename = f"catalogue-3d-{family_key}-v{version}.compressed.glb"
     public_path = _PUBLIC_MEDIA_ROOT / filename
     public_path.parent.mkdir(parents=True, exist_ok=True)
     try:
@@ -168,10 +172,28 @@ async def _store_generated_glb(family_key: str, version: int, source_url: str) -
         require_embedded_colour_texture(response.content)
     except ValueError as error:
         raise HTTPException(status_code=502, detail=str(error)) from error
-    public_path.write_bytes(response.content)
+    from app.services.glb_optimizer import GlbOptimizationError, persist_optimized_glb
+    try:
+        optimized = await persist_optimized_glb(response.content, public_path, _ORIGINAL_MEDIA_ROOT)
+    except GlbOptimizationError as exc:
+        raise HTTPException(status_code=502, detail=f"Generated GLB could not be safely optimized: {exc}") from exc
+    if not optimized.compressed:
+        public_path.unlink(missing_ok=True)
+        raise HTTPException(status_code=502, detail="Generated GLB could not be reduced for storefront delivery; the original was retained privately")
+    original_path = _ORIGINAL_MEDIA_ROOT / f"{public_path.stem}-{optimized.original_sha256[:16]}.original.glb"
+    if _APP_ENV != "dev":
+        from app.services.media_sync import sync_to_private_media
+        if not await sync_to_private_media(original_path):
+            public_path.unlink(missing_ok=True)
+            original_path.unlink(missing_ok=True)
+            raise HTTPException(status_code=502, detail="Uncompressed source GLB could not be preserved on the production server")
     if not await _sync_asset_media(public_path):
+        public_path.unlink(missing_ok=True)
         raise HTTPException(status_code=502, detail="Generated GLB could not be published")
-    return f"{_PUBLIC_MEDIA_URL}/{filename}", max(1, len(response.content) // 1024)
+    logger.info("catalogue_3d.glb_optimized", family_key=family_key, version=version,
+        original_bytes=optimized.original_bytes, public_bytes=optimized.output_bytes,
+        compressed=optimized.compressed)
+    return f"{_PUBLIC_MEDIA_URL}/{filename}", max(1, optimized.output_bytes // 1024)
 
 
 async def _store_generated_preview(family_key: str, version: int, source_url: str | None) -> str | None:
@@ -1908,7 +1930,7 @@ async def generate_case_asset(
         )
     ).scalar_one_or_none()
     version = (prior_version or 0) + 1
-    local_glb = _PUBLIC_MEDIA_ROOT / f"catalogue-3d-case-{case.id}-v{version}.glb"
+    local_glb = _PUBLIC_MEDIA_ROOT / f"catalogue-3d-case-{case.id}-v{version}.compressed.glb"
     evidence = dict(case.sourcing_3d_evidence or {"schema_version": 1, "stages": {}})
     evidence_stages = dict(evidence.get("stages") or {})
     generation = dict(evidence_stages.get("meshy_generation") or {"attempts": []})
@@ -2167,12 +2189,27 @@ async def upload_variant_glb(
         .limit(1)
     )).scalar_one_or_none()
     version = (prior_version or 0) + 1
-    filename = f"catalogue-variant-{variant_id}-v{version}-{uuid4().hex[:8]}.glb"
+    filename = f"catalogue-variant-{variant_id}-v{version}-{uuid4().hex[:8]}.compressed.glb"
     _PUBLIC_MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
     public_path = _PUBLIC_MEDIA_ROOT / filename
-    public_path.write_bytes(content)
+    from app.services.glb_optimizer import GlbOptimizationError, persist_optimized_glb
+    try:
+        optimized = await persist_optimized_glb(content, public_path, _ORIGINAL_MEDIA_ROOT)
+    except GlbOptimizationError as exc:
+        raise HTTPException(status_code=415, detail=f"Uploaded GLB could not be safely optimized: {exc}") from exc
+    if not optimized.compressed:
+        public_path.unlink(missing_ok=True)
+        raise HTTPException(status_code=415, detail="Uploaded GLB could not be reduced for storefront delivery; the original was retained privately")
+    original_path = _ORIGINAL_MEDIA_ROOT / f"{public_path.stem}-{optimized.original_sha256[:16]}.original.glb"
+    if _APP_ENV != "dev":
+        from app.services.media_sync import sync_to_private_media
+        if not await sync_to_private_media(original_path):
+            public_path.unlink(missing_ok=True)
+            original_path.unlink(missing_ok=True)
+            raise HTTPException(status_code=502, detail="Uncompressed source GLB could not be preserved on the production server")
     if not await _sync_asset_media(public_path):
         public_path.unlink(missing_ok=True)
+        original_path.unlink(missing_ok=True)
         raise HTTPException(status_code=502, detail="The GLB was valid but could not be published to shared media")
 
     asset = Component3DAsset(
@@ -2184,7 +2221,7 @@ async def upload_variant_glb(
         version=version,
         glb_ref=f"{_PUBLIC_MEDIA_URL}/{filename}",
         source_image_refs=model_image_urls,
-        file_size_kb=max(1, len(content) // 1024),
+        file_size_kb=max(1, optimized.output_bytes // 1024),
         notes="Operator-uploaded GLB; validate scale, orientation, geometry and provenance before activation.",
         created_by=getattr(admin, "email", None) or "admin-upload",
         provenance_status="metadata-only",

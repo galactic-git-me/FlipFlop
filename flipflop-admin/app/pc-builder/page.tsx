@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { AlertCircle, Check, ChevronLeft, ChevronRight, Cpu, ExternalLink, ImageIcon, LayoutGrid, List, Loader2, Plus, RefreshCw, Save, Sparkles, Table2, X } from "lucide-react";
 import type { ReactNode } from "react";
 import Shared3DAssetGrid from "@/components/catalogue/Shared3DAssetGrid";
@@ -97,7 +98,10 @@ export default function CuratedBuildsPage() {
   }, []);
   useEffect(() => { void load(); }, [load]);
   useEffect(() => {
-    if (new URLSearchParams(window.location.search).get("tab") === "images") setTab("images");
+    const params = new URLSearchParams(window.location.search);
+    const requestedTab = params.get("tab");
+    if (["segments", "catalogue", "images", "playbook", "inventory", "assets", "live"].includes(requestedTab || "")) setTab(requestedTab as Tab);
+    if (params.get("tool") === "inventory") setSupportingTool("inventory");
   }, []);
   useEffect(() => {
     setSoftwareDraft(selected?.effective_software_profile?.recommended_package_ids ?? selected?.software_profile?.recommended_package_ids ?? []);
@@ -281,7 +285,8 @@ export default function CuratedBuildsPage() {
           <p className="text-sm text-slate-400">Supplier listings are matched automatically to the Playbook’s Amazon ASIN/CPK identities. Only active Curated Catalogue listings are eligible.</p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <button type="button" disabled={busy} onClick={() => { setCurationQueue(pendingCurationCandidates); setCurationQueueIndex(0); }} className="inline-flex items-center gap-2 rounded-lg border border-emerald-400/30 px-3 py-2 text-sm font-semibold text-emerald-200 disabled:opacity-50">Review linked matches ({pendingCurationCandidates.length})</button>
+            <button type="button" disabled={busy} onClick={() => { setCurationQueue(pendingCurationCandidates); setCurationQueueIndex(0); }} className="inline-flex items-center gap-2 rounded-lg border border-emerald-400/30 px-3 py-2 text-sm font-semibold text-emerald-200 disabled:opacity-50">Review linked matches</button>
+            <Link href="/approvals?tab=playbook" aria-label={`${pendingCurationCandidates.length} supplier matches awaiting catalogue review`} className="inline-flex items-center rounded-lg border border-rose-400/30 px-3 py-2 text-sm font-semibold text-rose-200 underline decoration-rose-200/40 underline-offset-2">{pendingCurationCandidates.length} awaiting</Link>
             <button type="button" disabled={busy} onClick={() => void autoLinkBestsellerComponents()} className="inline-flex items-center gap-2 rounded-lg bg-cyan-400 px-3 py-2 text-sm font-semibold text-slate-950 disabled:opacity-50"><RefreshCw className={`h-4 w-4 ${busy ? "animate-spin" : ""}`}/>Auto-link by ASIN / CPK</button>
           </div>
         </div>

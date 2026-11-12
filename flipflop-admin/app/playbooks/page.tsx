@@ -760,6 +760,10 @@ export default function PlaybooksPage() {
   const [showCreate, setShowCreate] = useState(false);
   const [editTarget, setEditTarget] = useState<Playbook | null>(null);
 
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("tab") === "proposals") setTab("proposals");
+  }, []);
+
   const load = useCallback(async () => {
     setLoading(true);
     try {
@@ -907,7 +911,7 @@ export default function PlaybooksPage() {
         {[
           { label: "Active strategies", value: active.length, color: "text-[#00dc82]", icon: <TrendingUp className="w-4 h-4" /> },
           { label: "Candidates", value: candidates.length, color: "text-yellow-400", icon: <Clock className="w-4 h-4" /> },
-          { label: "Pending approvals", value: pending.length, color: "text-orange-400", icon: <AlertTriangle className="w-4 h-4" /> },
+          { label: "Pending approvals", value: <Link href="/approvals?tab=pricing" className="rounded underline decoration-orange-400/50 underline-offset-4 hover:text-orange-300" aria-label={`${pending.length} Playbook proposals waiting for approval`}>{pending.length}</Link>, color: "text-orange-400", icon: <AlertTriangle className="w-4 h-4" /> },
           { label: "Total keywords", value: active.reduce((s, p) => s + (p.search_strategy?.keywords?.length || 0), 0), color: "text-slate-200", icon: <Search className="w-4 h-4" /> },
         ].map(item => (
           <Card key={item.label} className="glass-card">
@@ -974,42 +978,27 @@ export default function PlaybooksPage() {
 
       {/* Pending approval banner */}
       {pending.length > 0 && tab !== "proposals" && (
-        <div
-          className="flex items-center gap-3 bg-orange-500/10 border border-orange-500/30 rounded-xl px-4 py-3 cursor-pointer hover:bg-orange-500/15 transition-colors"
-          onClick={() => setTab("proposals")}
-        >
+        <Link href="/approvals?tab=pricing" className="flex items-center gap-3 bg-orange-500/10 border border-orange-500/30 rounded-xl px-4 py-3 hover:bg-orange-500/15 transition-colors">
           <AlertTriangle className="w-4 h-4 text-orange-400 flex-shrink-0" />
           <p className="text-sm text-orange-300">
             <span className="font-semibold">{pending.length} proposal{pending.length > 1 ? "s" : ""} awaiting approval.</span>
             {" "}Review and approve to apply strategy changes.
           </p>
           <ChevronRight className="w-4 h-4 text-orange-400 ml-auto flex-shrink-0" />
-        </div>
+        </Link>
       )}
 
       {/* Tabs */}
       <div className="flex gap-1 bg-[rgba(15,18,24,0.78)] border border-[var(--nf-border)] rounded-md p-1 w-fit">
-        {tabList.map(t => (
+        {tabList.map(t => <div key={t.key} className="flex items-center rounded-lg">
           <button
-            key={t.key}
             onClick={() => setTab(t.key)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-              tab === t.key
-                ? "bg-[#00dc82]/10 text-[#00dc82] border border-[#00dc82]/20"
-                : "text-slate-500 hover:text-slate-300"
-            }`}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${tab === t.key ? "bg-[#00dc82]/10 text-[#00dc82] border border-[#00dc82]/20" : "text-slate-500 hover:text-slate-300"}`}
           >
-            {t.icon}
-            {t.label}
-            {t.count > 0 && (
-              <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-                tab === t.key ? "bg-[#00dc82]/20 text-[#00dc82]" : "bg-[#1e2d45] text-slate-500"
-              }`}>
-                {t.count}
-              </span>
-            )}
+            {t.icon}{t.label}
           </button>
-        ))}
+          {t.count > 0 && (t.key === "proposals" ? <Link href="/approvals?tab=pricing" aria-label={`${t.count} Playbook proposals awaiting approval`} className="ml-1 rounded-full bg-rose-500/20 px-1.5 py-0.5 text-xs text-rose-200 underline decoration-rose-200/40 underline-offset-2">{t.count}</Link> : <span className="ml-1 rounded-full bg-[#1e2d45] px-1.5 py-0.5 text-xs text-slate-500">{t.count}</span>)}
+        </div>)}
       </div>
 
       {/* Content */}

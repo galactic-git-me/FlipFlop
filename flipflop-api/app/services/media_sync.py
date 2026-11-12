@@ -18,6 +18,7 @@ log = structlog.get_logger(__name__)
 
 _REMOTE_HOST = "mac@andromeda-ts"
 _REMOTE_MEDIA_DIR = "/home/mac/CODING/flipflop-shop/public/media/"
+_REMOTE_PRIVATE_MEDIA_DIR = "/home/mac/CODING/FlipFlop-production/runtime/api-data/3d-media-originals/"
 
 
 async def sync_to_public_media(local_path: Path) -> bool:
@@ -55,4 +56,37 @@ async def sync_to_public_media(local_path: Path) -> bool:
         return False
 
     log.info("media_sync.synced", file=local_path.name)
+    return True
+
+
+async def sync_to_private_media(local_path: Path) -> bool:
+    """Preserve an uncompressed source GLB in production's non-public API data."""
+    if not local_path.is_file() or local_path.name != Path(local_path.name).name:
+        log.error("media_sync.private_source_invalid", path=str(local_path))
+        return False
+
+    def _copy() -> subprocess.CompletedProcess:
+        mkdir = subprocess.run(
+            ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=10", _REMOTE_HOST,
+             f"mkdir -p -- '{_REMOTE_PRIVATE_MEDIA_DIR.rstrip('/')}'"],
+            capture_output=True, text=True, timeout=20,
+        )
+        if mkdir.returncode != 0:
+            return mkdir
+        timeout = min(600, max(30, 30 + math.ceil(local_path.stat().st_size / (512 * 1024))))
+        return subprocess.run(
+            ["scp", "-o", "BatchMode=yes", "-o", "ConnectTimeout=10", str(local_path),
+             f"{_REMOTE_HOST}:{_REMOTE_PRIVATE_MEDIA_DIR}"],
+            capture_output=True, text=True, timeout=timeout,
+        )
+
+    try:
+        result = await asyncio.to_thread(_copy)
+    except (subprocess.TimeoutExpired, OSError) as exc:
+        log.error("media_sync.private_failed", file=local_path.name, error=str(exc))
+        return False
+    if result.returncode != 0:
+        log.error("media_sync.private_failed", file=local_path.name, stderr=result.stderr)
+        return False
+    log.info("media_sync.private_synced", file=local_path.name)
     return True
