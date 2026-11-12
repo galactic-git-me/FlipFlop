@@ -813,13 +813,21 @@ async def _collect_gamers_outlet_capture(url, *, browser_runtime=None):
     if html is None:
         return {'status':'unresolved','reason':http_reason or 'Gamers Outlet page could not be loaded'}
     soup=BeautifulSoup(html,'html.parser')
+    page_title=soup.title.get_text(' ',strip=True).casefold() if soup.title else ''
+    if 'just a moment' in page_title or 'cf-chl-' in html.casefold():
+        return {'status':'unresolved',
+            'reason':'Gamers Outlet presented a Cloudflare verification page; exact licence facts could not be recaptured.'}
     products=[]
     for script in soup.select('script[type="application/ld+json"]'):
         try:
             item=json.loads(script.get_text())
             if isinstance(item,dict) and item.get('@type')=='Product':products.append(item)
         except (ValueError,TypeError):pass
-    if len(products)!=1:return {'status':'unresolved','reason':'One exact software product required'}
+    if len(products)!=1:
+        if http_reason and 'HTTP 403' in http_reason:
+            return {'status':'unresolved',
+                'reason':'Gamers Outlet returned HTTP 403; exact product and licence facts could not be verified.'}
+        return {'status':'unresolved','reason':'One exact software product required'}
     product=products[0];offer=product.get('offers')
     if not isinstance(offer,dict):return {'status':'unresolved','reason':'One exact software offer required'}
     original_currency=offer.get('priceCurrency');original_price=amount(offer.get('price'))

@@ -1520,6 +1520,11 @@ export default function CommercialReviewWorkspace({
                           >
                             Review this source for Playbook consideration
                           </button>
+                          {candidate.review_block_reason && (
+                            <p role="status" className="text-xs text-amber-300">
+                              Approval is unavailable: {candidate.review_block_reason}
+                            </p>
+                          )}
                         </>
                       )}
                     </li>

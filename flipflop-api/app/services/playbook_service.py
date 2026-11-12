@@ -2278,6 +2278,13 @@ async def royalcdkeys_licence_candidates(db):
             .where(CatalogueVariant.listing_id==listing.id,PlaybookSlot.slot_type=='os')
             .order_by(PlaybookSlot.playbook_id))).all()
         review=raw.get('playbook_licence_source_review') or {}
+        review_block_reason=None
+        if observation.get('fresh') is not True:
+            review_block_reason='Exact supplier-page facts are older than the 24-hour review window.'
+        elif not observation.get('licence_review_fingerprint'):
+            last_attempt=capture.get('last_capture_attempt') or {}
+            review_block_reason=(last_attempt.get('reason') or
+                'A fresh exact supplier-page capture with licence facts is required.')
         result.append({'listing_id':listing.id,'title':listing.title,'url':listing.url,
             'supplier_name':listing.source_name,
             'price_gbp':observation.get('item_gbp'),'image_url':(listing.image_urls or [None])[0],
@@ -2285,6 +2292,7 @@ async def royalcdkeys_licence_candidates(db):
             'supplier_handle':capture.get('supplier_product_handle'),
             'digital_product':capture.get('digital_product') is True,
             'licence_review_fingerprint':observation.get('licence_review_fingerprint'),
+            'review_block_reason':review_block_reason,
             'licence_source_reviewed':observation.get('licence_source_reviewed') is True,
             'fresh':observation.get('fresh') is True,'stock_status':observation.get('stock_status'),
             'stock_evidence':observation.get('stock_evidence'),
