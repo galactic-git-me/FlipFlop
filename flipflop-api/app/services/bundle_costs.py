@@ -38,3 +38,28 @@ def allocate_bundle_cost(
     for key in sorted(allocations)[:remainder]:
         allocations[key] += PENNY
     return allocations
+
+
+def compare_bundle_to_standalone_market(
+    bundle_landed_cost: Decimal,
+    standalone_reference_prices: Mapping[str, Decimal],
+) -> dict[str, Decimal]:
+    """Compare an actual bundle purchase with exact-part standalone values.
+
+    This returns bundle economics only; it never creates component offers.
+    """
+    landed = Decimal(bundle_landed_cost).quantize(PENNY)
+    references = {key: Decimal(value) for key, value in standalone_reference_prices.items()}
+    if not references:
+        raise ValueError("at least one standalone reference is required")
+    if landed < 0 or any(not key or value <= 0 for key, value in references.items()):
+        raise ValueError("bundle cost and standalone references must be valid")
+    standalone_total = sum(references.values(), Decimal("0")).quantize(PENNY)
+    savings = standalone_total - landed
+    percentage = (savings * Decimal("100") / standalone_total).quantize(PENNY)
+    return {
+        "bundle_landed_cost": landed,
+        "standalone_market_total": standalone_total,
+        "absolute_savings": savings.quantize(PENNY),
+        "savings_percentage": percentage,
+    }

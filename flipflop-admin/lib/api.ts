@@ -1225,6 +1225,14 @@ export const api = {
       }).toString()}`),
     sourcingListing: (id: number) =>
       requestGemRadar<MarketplaceSourcingListingDetail>(`/sourcing/listings/${id}`),
+    verifiedBundleOpportunities: () =>
+      requestGemRadar<Array<{
+        listing_id: number; title: string; marketplace: string; url: string; seller: string | null;
+        bundle_type: string; selected_configuration: Record<string, string>;
+        bundle_landed_cost: string; standalone_market_total: string;
+        absolute_savings: string; savings_percentage: string;
+        components: Array<{canonical_part_key: string; quantity: number; attributed_cost: string | null}>;
+      }>>("/sourcing/bundles/opportunities?limit=100"),
     currentGem: () => requestGemRadar<unknown>("/current-gem"),
     // This read model belongs to the main API database. Use the main API
     // proxy rather than the separately deployed Gem Radar worker, whose

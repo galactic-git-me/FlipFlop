@@ -23,7 +23,7 @@ from app.models.marketplace_sourcing import (
     MarketplaceBundle, MarketplaceBundleComponent, MarketplaceBundleVariant,
     MarketplaceListing, MarketplaceListingVariant, MarketplaceSupplierOffer,
 )
-from app.services.bundle_costs import allocate_bundle_cost
+from app.services.bundle_costs import allocate_bundle_cost, compare_bundle_to_standalone_market
 
 router = APIRouter(prefix="/gem-radar/sourcing", tags=["marketplace-sourcing"])
 MARKET_HOSTS = {
@@ -440,3 +440,59 @@ async def get_extension_listing(
             } for variant in bundle_variants if variant.bundle_id == bundle.id],
         } for bundle in bundles],
     }
+
+
+@router.get("/bundles/opportunities")
+async def get_verified_bundle_opportunities(
+    limit: int = 100,
+    db: AsyncSession = Depends(get_db),
+    _: None = Depends(require_operator),
+):
+    """Rank only verified bundles with current standalone references."""
+    if not 1 <= limit <= 500:
+        raise HTTPException(422, "limit must be between 1 and 500")
+    bundle_variants = (await db.execute(
+        select(MarketplaceBundleVariant, MarketplaceBundle, MarketplaceListing)
+        .join(MarketplaceBundle, MarketplaceBundle.id == MarketplaceBundleVariant.bundle_id)
+        .join(MarketplaceListing, MarketplaceListing.id == MarketplaceBundle.listing_id)
+        .where(
+            MarketplaceBundleVariant.verification_status == "verified",
+            MarketplaceBundle.verification_status == "verified",
+            MarketplaceBundleVariant.currency == "GBP",
+            MarketplaceBundleVariant.landed_cost.is_not(None),
+        )
+    )).all()
+    opportunities = []
+    for variant, bundle, listing in bundle_variants:
+        components = (await db.execute(select(MarketplaceBundleComponent).where(
+            MarketplaceBundleComponent.bundle_variant_id == variant.id,
+        ))).scalars().all()
+        if not components or any(component.market_reference_price is None for component in components):
+            continue
+        references = {
+            component.canonical_part_key: component.market_reference_price * component.quantity
+            for component in components
+        }
+        try:
+            comparison = compare_bundle_to_standalone_market(variant.landed_cost, references)
+        except ValueError:
+            continue
+        opportunities.append({
+            "listing_id": listing.id, "bundle_id": bundle.id, "bundle_variant_id": variant.id,
+            "marketplace": listing.marketplace, "title": listing.title, "url": listing.url,
+            "seller": listing.seller, "bundle_type": bundle.bundle_type,
+            "platform": bundle.platform, "socket": bundle.socket,
+            "selected_configuration": variant.selected_configuration,
+            **{key: str(value) for key, value in comparison.items()},
+            "verified_at": variant.verified_at,
+            "components": [{
+                "canonical_part_key": component.canonical_part_key,
+                "quantity": component.quantity,
+                "market_reference_price": str(component.market_reference_price),
+                "attributed_cost": str(component.attributed_cost) if component.attributed_cost is not None else None,
+            } for component in components],
+        })
+    opportunities.sort(key=lambda item: (
+        Decimal(item["absolute_savings"]), Decimal(item["savings_percentage"])
+    ), reverse=True)
+    return opportunities[:limit]

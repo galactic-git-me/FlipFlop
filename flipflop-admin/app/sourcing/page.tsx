@@ -1159,7 +1159,7 @@ function ListingThumbnail({ src, alt, size = 40 }: { src?: string | null; alt: s
 }
 
 type ComponentType = "CPU" | "Motherboard" | "RAM" | "PSU" | "SSD" | "GPU" | "Cooler" | "Fan" | "Case" | "Other";
-type MainTab = "stats" | "listings" | "analytics";
+type MainTab = "stats" | "listings" | "marketplace" | "analytics";
 
 const COMPONENT_TABS: ComponentType[] = [
   "CPU",
@@ -3032,6 +3032,70 @@ function QueueStatusBar({ queue }: { queue: QueueStatus | null }) {
   );
 }
 
+function MarketplaceEvidenceTab() {
+  const [marketplace, setMarketplace] = useState("");
+  const [bundleOnly, setBundleOnly] = useState(false);
+  const [rows, setRows] = useState<Awaited<ReturnType<typeof api.gemRadar.sourcingListings>>>([]);
+  const [detail, setDetail] = useState<Awaited<ReturnType<typeof api.gemRadar.sourcingListing>> | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [opportunities, setOpportunities] = useState<Awaited<ReturnType<typeof api.gemRadar.verifiedBundleOpportunities>>>([]);
+
+  const refresh = async () => {
+    setLoading(true); setError("");
+    try { setRows(await api.gemRadar.sourcingListings({ marketplace: marketplace || undefined, bundle_only: bundleOnly, limit: 200 })); }
+    catch (cause) { setError(cause instanceof Error ? cause.message : String(cause)); }
+    finally { setLoading(false); }
+  };
+  useEffect(() => { void refresh(); }, [marketplace, bundleOnly]);
+  useEffect(() => { void api.gemRadar.verifiedBundleOpportunities().then(setOpportunities).catch(() => setOpportunities([])); }, []);
+
+  const openDetail = async (id: number) => {
+    try { setDetail(await api.gemRadar.sourcingListing(id)); setError(""); }
+    catch (cause) { setError(cause instanceof Error ? cause.message : String(cause)); }
+  };
+
+  return <div className="space-y-4 p-4">
+    <div className="flex flex-wrap items-center gap-3">
+      <select aria-label="Marketplace" value={marketplace} onChange={event => setMarketplace(event.target.value)} className="rounded-lg border border-white/15 bg-slate-900 px-3 py-2 text-sm">
+        <option value="">All marketplaces</option>
+        {["aliexpress", "ebay", "amazon", "overclockers", "scan", "awd_it", "computer_orbit", "bargain_hardware", "newegg_uk", "ebuyer", "google_shopping"].map(vendor => <option key={vendor} value={vendor}>{vendor.replaceAll("_", " ")}</option>)}
+      </select>
+      <label className="flex items-center gap-2 text-sm text-slate-200"><input type="checkbox" checked={bundleOnly} onChange={event => setBundleOnly(event.target.checked)} />Bundle candidates</label>
+      <button type="button" onClick={() => void refresh()} className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white disabled:opacity-50" disabled={loading}>{loading ? "Loading…" : "Refresh"}</button>
+      <span className="text-sm text-slate-400">{rows.length} stored extension captures</span>
+    </div>
+    {error && <p role="alert" className="rounded border border-amber-500/40 bg-amber-500/10 p-3 text-sm text-amber-200">{error}</p>}
+    <section className="rounded-xl border border-emerald-400/20 bg-emerald-500/[0.04] p-4">
+      <h2 className="mb-3 font-semibold text-emerald-200">Verified bundle opportunities</h2>
+      {opportunities.length ? <div className="grid gap-3 md:grid-cols-2">{opportunities.map(bundle => <article key={bundle.listing_id} className="rounded-lg border border-white/10 p-3">
+        <a href={bundle.url} target="_blank" rel="noreferrer" className="font-medium text-white hover:underline">{bundle.title}</a>
+        <p className="mt-1 text-sm capitalize text-slate-400">{bundle.marketplace} · {bundle.bundle_type} · {bundle.seller || "Unknown seller"}</p>
+        <p className="mt-2 text-sm text-slate-200">Bundle £{bundle.bundle_landed_cost} · standalone £{bundle.standalone_market_total}</p>
+        <p className="text-sm font-semibold text-emerald-300">Savings £{bundle.absolute_savings} ({bundle.savings_percentage}%)</p>
+        {bundle.components.map(component => <p key={component.canonical_part_key} className="ml-2 text-xs text-slate-400">{component.canonical_part_key} ×{component.quantity} · attributed {component.attributed_cost ?? "n/a"}</p>)}
+      </article>)}</div> : <p className="text-sm text-slate-400">No bundles have verified contents and complete standalone price references yet. Candidate bundle prices stay out of this ranking.</p>}
+    </section>
+    <div className="overflow-x-auto rounded-xl border border-white/10">
+      <table className="w-full text-left text-sm">
+        <thead className="bg-white/[0.05] text-slate-300"><tr><th className="p-3">Listing</th><th className="p-3">Vendor</th><th className="p-3">Seller</th><th className="p-3">Evidence</th><th className="p-3">Seen</th></tr></thead>
+        <tbody>{rows.map(row => <tr key={row.id} className="border-t border-white/10 hover:bg-white/[0.03]">
+          <td className="max-w-xl p-3"><button type="button" onClick={() => void openDetail(row.id)} className="text-left font-medium text-blue-300 hover:underline">{row.title}</button><a className="ml-2 text-xs text-slate-500 hover:text-white" href={row.url} target="_blank" rel="noreferrer">Open listing</a></td>
+          <td className="p-3 capitalize text-slate-300">{row.marketplace.replaceAll("_", " ")}</td><td className="p-3 text-slate-300">{row.seller || "Unknown"}</td>
+          <td className="p-3">{row.bundle_candidate ? <span className="rounded bg-violet-500/20 px-2 py-1 text-violet-200">Bundle candidate</span> : <span className="text-slate-400">Listing</span>}</td>
+          <td className="whitespace-nowrap p-3 text-slate-400">{new Date(row.last_seen_at).toLocaleString()}</td>
+        </tr>)}</tbody>
+      </table>
+      {!rows.length && !loading && <p className="p-6 text-center text-slate-400">No extension captures match these filters yet.</p>}
+    </div>
+    {detail && <section className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+      <div className="mb-3 flex items-start justify-between gap-3"><div><h2 className="font-semibold text-white">{detail.title}</h2><p className="text-sm text-slate-400">{detail.marketplace} · {detail.seller || "Unknown seller"} · {detail.variants.length} captured variants</p></div><button type="button" onClick={() => setDetail(null)} className="text-sm text-slate-400 hover:text-white">Close</button></div>
+      <div className="grid gap-3 md:grid-cols-2">{detail.variants.map(variant => <article key={variant.id} className="rounded-lg border border-white/10 p-3"><h3 className="font-medium text-white">Variant {variant.marketplace_variant_id || variant.id}</h3><p className="text-sm text-slate-400">{Object.entries(variant.selected_options).map(([k,v]) => `${k}: ${v}`).join(" · ") || "No option labels captured"}</p><p className="mt-1 text-sm text-slate-300">{variant.verification_status} · {variant.availability}</p>{variant.offers.map((offer, i) => <p key={i} className="mt-2 text-sm text-emerald-200">{String(offer.item_price)} {String(offer.currency)} · shipping {String(offer.shipping_price ?? "unknown")} · {String(offer.verification_status)}</p>)}</article>)}</div>
+      {detail.bundles.map(bundle => <section key={bundle.id} className="mt-4 rounded-lg border border-violet-400/20 p-3"><h3 className="font-semibold text-violet-200">Bundle: {bundle.bundle_type} · {bundle.verification_status}</h3>{bundle.variants.map(variant => <div key={variant.id} className="mt-2 text-sm text-slate-300"><p>{variant.total_price} {variant.currency} · landed {variant.landed_cost ?? "unknown"} · {variant.verification_status}</p>{variant.components.map((component, i) => <p key={i} className="ml-3 text-slate-400">{String(component.canonical_part_key)} ×{String(component.quantity)} · allocated {String(component.attributed_cost ?? "provisional")}</p>)}</div>)}</section>)}
+    </section>}
+  </div>;
+}
+
 export default function SourcingPage() {
   return (
     <Suspense fallback={null}>
@@ -3319,6 +3383,7 @@ function SourcingPageInner() {
           {[
             { id: "stats", label: "Stats", icon: BarChart3 },
             { id: "listings", label: "Listings", icon: Gem },
+            { id: "marketplace", label: "Marketplace evidence", icon: Gem },
             { id: "analytics", label: "Analytics", icon: BarChart3 },
           ].map(({ id, label }) => (
             <button
@@ -3349,6 +3414,7 @@ function SourcingPageInner() {
           {legacyListingsApi && <p role="status" className="mb-3 rounded border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-sm text-amber-200">The API is still running the old listings code. Restart the local backend to enable global category filters, accurate vendor totals and pagination.</p>}
           <ListingsTab listings={listings} sourceActivity={sourceActivity} facets={listingFacets} total={listingTotal} legacy={legacyListingsApi} highlightListingId={highlightListingId} page={listingPage} hasMore={listingHasMore} onPageChange={setListingPage} onFiltersChange={filters => { setListingPage(1); setListingFilters(current => JSON.stringify(current) === JSON.stringify(filters) ? current : filters); }} />
         </>}
+        {mainTab === "marketplace" && <MarketplaceEvidenceTab />}
         {mainTab === "analytics" && <AnalyticsTab />}
       </div>
     </div>

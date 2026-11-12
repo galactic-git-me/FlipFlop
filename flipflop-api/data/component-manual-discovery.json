@@ -688,5 +688,23 @@
     "reason": "no_exact_official_pdf",
     "component": "MSI B550M PRO-VDH WIFI Motherboard M-ATX - Ryzen 5000, AM4, DDR4, Wi-Fi 6",
     "retry_after": "2026-12-12T20:22:30.334253"
+  },
+  "eeaf9cf7d7b730e7da59563c7230adc9513c152f7ed69fa245b09d790e327bc3": {
+    "status": "not_found",
+    "reason": "ConnectTimeout",
+    "component": "MSI B850 GAMING PLUS WIFI6E Motherboard, ATX - Supports AMD Ryzen 9000/8000 / 7000 Processors, AM5 - DDR5 Memory Boost 8200+",
+    "retry_after": "2026-12-12T20:26:30.617254"
+  },
+  "567d0531b3307a40cfde5f3aa73ce9658522c9aa71817008b5401d2305a77cd2": {
+    "status": "not_found",
+    "reason": "ConnectError",
+    "component": "ASUS ROG STRIX B550-F GAMING WIFI II ATX Motherboard Socket AM4 AMD B550 Chipset -90MB19V0-M0EAY0",
+    "retry_after": "2026-12-12T20:26:30.617254"
+  },
+  "a5f69d689ae1d4103a17cb2172e504ed274f6b455efb3543bc55600cc4ec0bd7": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ASUS ProArt X870E-Creator WiFi AMD AM5 ATX Content Creator Motherboard | PCIe\u00ae 5.0 x16, 16+2+2 power stages, DDR5, dual USB4\u00ae",
+    "retry_after": "2026-12-12T20:26:30.617254"
   }
 }
