@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-12T08:14:51.595261+00:00",
+  "generated_at": "2026-11-12T09:14:38.406666+00:00",
   "builds": [
     {
       "components": [
@@ -403,7 +403,7 @@
           "available": false,
           "count": 0,
           "average_price": null,
-          "unavailable_reason": ""
+          "unavailable_reason": "eBay sold-comps scrape failed: 'PlaywrightSoldCompsAdapter' object has no attribute '_STEALTH_JS'"
         },
         "bin": {
           "available": false,
