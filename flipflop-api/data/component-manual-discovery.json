@@ -580,5 +580,23 @@
     "reason": "no_exact_official_pdf",
     "component": "Thermalright AQUA ELITE 240 V3 Liquid CPU Cooler, 240 Cooling Row Size, 2 x 120mm PWM Fans, S-FDB Bearings,for AMD/AM4/AM5, I",
     "retry_after": "2026-12-12T14:46:46.215351"
+  },
+  "7960e7e625eaaf43011a18806c0de01b86c9acc9583c2f485d85193b5b4faaa6": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ARCTIC Liquid Freezer III Pro 360 A-RGB - AIO CPU Cooler, 3 x 120 mm Water Cooling, 38 mm Radiator, PWM Pump, VRM Fan, AMD AM",
+    "retry_after": "2026-12-12T15:01:35.850255"
+  },
+  "d63e424106bf010ab3bb556469e68f072d4bfff3126131d44030f74e8b14e8f4": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ARCTIC Liquid Freezer III Pro 360 - AIO CPU Cooler, 3 x 120 mm Water Cooling, 38 mm Radiator, PWM Pump, VRM Fan, AMD AM5/AM4,",
+    "retry_after": "2026-12-12T15:01:35.850255"
+  },
+  "f638b731e995ad0e554b8eb870b1772cffa8484615595fbf2b95ece45b1456b3": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Corsair NAUTILUS 360 RS LCD Liquid CPU Cooler \u2013 2.1\" IPS LCD Screen, 360mm AIO, Low-Noise, Daisy-Chain, Intel LGA 1851/1700,",
+    "retry_after": "2026-12-12T15:01:35.850255"
   }
 }

@@ -2253,16 +2253,23 @@ async def approve_royalcdkeys_licence_source(db,listing_id,licence_review_finger
 
 async def royalcdkeys_licence_candidates(db):
     """Return exact captured RoyalCDKeys OS listings for explicit admin review."""
+    from sqlalchemy import func
     from app.models.catalogue import CatalogueVariant, PlaybookSlot
-    rows=(await db.execute(select(Listing).where(Listing.source_name.in_(('RoyalCDKeys','Gamers Outlet')))
-        .order_by(Listing.title,Listing.id))).scalars().all()
+    captured_status = Listing.raw_specs["playbook_product_capture"]["status"].as_string()
+    captured_category = func.coalesce(
+        Listing.raw_specs["gamers_outlet"]["category"].as_string(),
+        Listing.raw_specs["royalcdkeys"]["category"].as_string(),
+    )
+    rows=(await db.execute(select(Listing).where(
+        Listing.source_name.in_(('RoyalCDKeys','Gamers Outlet')),
+        captured_status=='captured',
+        captured_category.in_(('os','office','ai_subscription')),
+    ).order_by(Listing.title,Listing.id))).scalars().all()
     result=[]
     for listing in rows:
         raw=listing.raw_specs if isinstance(listing.raw_specs,dict) else {}
         capture=raw.get('playbook_product_capture') if isinstance(raw.get('playbook_product_capture'),dict) else {}
         royal=(raw.get('gamers_outlet') or raw.get('royalcdkeys') or {})
-        if royal.get('category') not in {'os','office','ai_subscription'} or capture.get('status')!='captured':
-            continue
         observation=await source_preview(db,listing)
         if observation is None:
             continue
