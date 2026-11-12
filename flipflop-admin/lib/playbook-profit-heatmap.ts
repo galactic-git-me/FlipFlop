@@ -22,19 +22,65 @@ export function heatmapValue(cell: BookCell, metric: HeatmapMetric) {
     : isLive ? standard?.estimated_profit_gbp : cell.pricing_guidance?.estimated_profit_gbp ?? standard?.estimated_profit_gbp);
 }
 
-/** Profit uses green intensity; price and sales use red through amber to green. */
-export function profitHeatmap(profit: number | null, min: number, max: number, metric: HeatmapMetric = "profit") {
-  if (profit === null || !Number.isFinite(profit)) return null;
-  const position = max > min ? Math.max(0, Math.min(1, (profit - min) / (max - min))) : 0.5;
+export type HeatmapScale = { low: number; middle: number; high: number; comparative: boolean };
+
+function percentile(sorted: number[], fraction: number) {
+  const position = (sorted.length - 1) * fraction;
+  const lower = Math.floor(position);
+  const upper = Math.ceil(position);
+  return sorted[lower] + (sorted[upper] - sorted[lower]) * (position - lower);
+}
+
+export function heatmapScale(values: number[], metric: HeatmapMetric): HeatmapScale {
+  const sorted = values.filter(Number.isFinite).sort((a, b) => a - b);
   if (metric === "profit") {
-    return {
-      backgroundColor: `rgba(52, 211, 153, ${0.06 + position * 0.34})`,
-      boxShadow: `inset 0 3px 0 rgba(52, 211, 153, ${0.3 + position * 0.7})`,
-    };
+    return { low: Math.min(0, sorted[0] ?? 0), middle: 0, high: Math.max(0, sorted[sorted.length - 1] ?? 0), comparative: true };
   }
-  const stops = [[248, 113, 113], [251, 191, 36], [52, 211, 153]];
-  const [start, end] = position <= 0.5 ? [stops[0], stops[1]] : [stops[1], stops[2]];
-  const fraction = position <= 0.5 ? position * 2 : (position - 0.5) * 2;
-  const rgb = start.map((value, index) => Math.round(value + (end[index] - value) * fraction)).join(", ");
-  return { backgroundColor: `rgba(${rgb}, 0.14)`, boxShadow: `inset 0 3px 0 rgb(${rgb})` };
+  if (!sorted.length) return { low: 0, middle: 0, high: 0, comparative: false };
+  return {
+    low: percentile(sorted, 0.25),
+    middle: percentile(sorted, 0.5),
+    high: percentile(sorted, 0.75),
+    comparative: false,
+  };
+}
+
+function blend(start: number[], end: number[], position: number) {
+  return start.map((channel, index) => Math.round(channel + (end[index] - channel) * position));
+}
+
+export function heatmapColor(value: number, scale: HeatmapScale) {
+  const green = [52, 211, 153];
+  const amber = [251, 191, 36];
+  const red = [248, 113, 113];
+  if (scale.comparative) {
+    if (value === 0) return amber;
+    if (value < 0) {
+      const span = Math.abs(scale.low);
+      return span === 0 ? amber : blend(green, amber, Math.max(0, Math.min(1, (value - scale.low) / span)));
+    }
+    return scale.high === 0 ? amber : blend(amber, red, Math.max(0, Math.min(1, value / scale.high)));
+  }
+  if (scale.low === scale.high) return amber;
+  if (value <= scale.low) return green;
+  if (value >= scale.high) return red;
+  if (value <= scale.middle) {
+    const span = scale.middle - scale.low;
+    return span === 0 ? amber : blend(green, amber, (value - scale.low) / span);
+  }
+  const span = scale.high - scale.middle;
+  return span === 0 ? amber : blend(amber, red, (value - scale.middle) / span);
+}
+
+export function heatmapCssColor(color: number[]) {
+  return `rgb(${color.join(", ")})`;
+}
+
+export function profitHeatmap(value: number | null, scale: HeatmapScale) {
+  if (value === null || !Number.isFinite(value)) return null;
+  const color = heatmapColor(value, scale);
+  return {
+    backgroundColor: `rgba(${color.join(", ")}, 0.14)`,
+    boxShadow: `inset 0 3px 0 ${heatmapCssColor(color)}`,
+  };
 }

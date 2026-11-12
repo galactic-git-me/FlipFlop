@@ -9,7 +9,7 @@ import { customerNeeds } from "@/lib/playbook-customer-needs";
 import { inventoryHealth } from "@/lib/playbook-inventory-health";
 import { modelHealth } from "@/lib/playbook-model-health";
 import { playbookLiveStatus } from "@/lib/playbook-live-status";
-import { heatmapValue, profitHeatmap } from "@/lib/playbook-profit-heatmap";
+import { heatmapColor, heatmapCssColor, heatmapScale, heatmapValue, profitHeatmap } from "@/lib/playbook-profit-heatmap";
 import type { HeatmapMetric } from "@/lib/playbook-profit-heatmap";
 import type { BookCell, BookPage, PlaybookBook as BookData } from "@/lib/playbook-book";
 import ComponentPaceOptions from "./ComponentPaceOptions";
@@ -59,10 +59,12 @@ export default function PlaybookBook(props:Props) {
   },[load,props.refreshKey]);
   const cells=book?.cells ?? [];
   const profits=cells.map(cell=>heatmapValue(cell,heatmapMetric)).filter((value):value is number=>value!==null);
-  const minProfit=profits.length ? Math.min(...profits) : 0;
-  const maxProfit=profits.length ? Math.max(...profits) : 0;
+  const heatScale=heatmapScale(profits,heatmapMetric);
   const heatmapLabel=heatmapMetric === "profit" ? "Estimated profit per build (£)" : heatmapMetric === "price" ? "Recommended price (£)" : "Recorded matching complete-PC sold listings";
   const heatmapNumber=(value:number)=>heatmapMetric === "sales" ? new Intl.NumberFormat("en-GB",{maximumFractionDigits:1}).format(value) : bookMoney(value);
+  const heatmapLegendGradient=heatScale.comparative
+    ? `linear-gradient(to right, ${heatmapCssColor(heatmapColor(heatScale.high,heatScale))}, #fbbf24, ${heatmapCssColor(heatmapColor(heatScale.low,heatScale))})`
+    : "linear-gradient(to right, #f87171, #fbbf24, #34d399)";
   const current=cells.find(cell => cell.cell_id===selected);
   const customers=[...new Set(cells.map(cell=>cell.customer_type))];
   const tiers=["Budget","Mid-range","High-end"];
@@ -79,7 +81,7 @@ export default function PlaybookBook(props:Props) {
     {!book && !error && <p role="status">Loading Playbook…</p>}
     {book && !cells.length && <p>No Playbook builds are configured.</p>}
     <div role="group" aria-label="Heatmap based on" className="flex flex-wrap items-center gap-2 text-xs"><span className="text-slate-400">Heatmap based on</span>{([["profit","Estimated profit"],["price","Recommended price"],["sales","Sales volume"]] as const).map(([metric,label])=><button key={metric} type="button" aria-pressed={heatmapMetric===metric} onClick={()=>setHeatmapMetric(metric)} className={`rounded border px-3 py-2 focus-visible:outline-2 focus-visible:outline-cyan-300 ${heatmapMetric===metric ? "border-cyan-400 bg-cyan-400/15 text-cyan-200" : "border-white/20 text-slate-300"}`}>{label}</button>)}</div>
-    {!!profits.length && <div aria-label="Heatmap legend" className="max-w-xl space-y-1 text-xs text-slate-300"><p>{heatmapLabel} · {heatmapMetric === "profit" ? "strongest green = highest, faint green = lowest" : "green = highest, amber = middle, red = lowest"}</p><div aria-hidden="true" className={`h-2 rounded ${heatmapMetric === "profit" ? "" : "bg-gradient-to-l from-red-400 via-amber-400 to-emerald-400"}`} style={heatmapMetric === "profit" ? {background:"linear-gradient(to left, rgba(52,211,153,0.06), rgba(52,211,153,0.4))"} : undefined} /><div className="flex justify-between tabular-nums"><span>{heatmapNumber(maxProfit)}</span><span>{heatmapNumber((minProfit+maxProfit)/2)}</span><span>{heatmapNumber(minProfit)}</span></div><p className="text-slate-400">Relative to all Playbook builds · missing values are unshaded</p></div>}
+    {!!profits.length && <div aria-label="Heatmap legend" className="max-w-xl space-y-1 text-xs text-slate-300"><p>{heatmapLabel} · {heatScale.comparative ? "red = positive, amber = zero, green = negative" : "red = highest (75th percentile), amber = median, green = lowest (25th percentile)"}</p><div aria-hidden="true" className="h-2 rounded" style={{backgroundImage:heatmapLegendGradient}} /><div className="flex justify-between tabular-nums"><span>{heatmapNumber(heatScale.high)}</span><span>{heatmapNumber(heatScale.middle)}</span><span>{heatmapNumber(heatScale.low)}</span></div><p className="text-slate-400">Relative to all Playbook builds · missing values are unshaded</p></div>}
     {heatmapMetric === "sales" && <p role="status" className="text-xs text-slate-400">{profits.length ? "Counts of distinct matching complete-PC sold listings captured in the last 90 days; not total market sales or component sales." : "No matching complete-PC sales volume is recorded for these builds. Cells remain unshaded."}</p>}
     {!!cells.length && <div className="overflow-x-auto rounded-lg border border-white/10"><table aria-label="Playbook build matrix" className="w-full min-w-[850px] table-fixed text-left">
       <thead className="bg-[#14202d]"><tr><th className="w-36 p-3">Customer type</th>{tiers.map(tier=><th scope="col" key={tier} className="p-3 text-cyan-200">{tier}</th>)}</tr></thead>
@@ -97,7 +99,7 @@ export default function PlaybookBook(props:Props) {
         const inventory=inventoryHealth(cell,offer);
         const models=modelHealth(offer,inventory.total);
         const liveStatus=playbookLiveStatus(cell);
-        return <td key={tier} style={profitHeatmap(heatValue,minProfit,maxProfit,heatmapMetric) ?? undefined} className="space-y-3 border-l border-white/10 p-3 align-top">
+        return <td key={tier} style={profitHeatmap(heatValue,heatScale) ?? undefined} className="space-y-3 border-l border-white/10 p-3 align-top">
           <div><p className="font-semibold">{cell.name}</p><p className="mt-1 text-xs text-slate-300" title={liveStatus.reason} aria-label={`Build status: ${liveStatus.label}`}><span aria-hidden="true" className={`mr-2 inline-block h-2.5 w-2.5 rounded-full ${liveStatus.colour === "green" ? "bg-emerald-400" : liveStatus.colour === "amber" ? "bg-amber-400" : "bg-red-400"}`} />{liveStatus.label}</p></div>
           <details className="text-xs text-slate-300"><summary className="cursor-pointer" aria-label={`Inventory health: ${inventory.label}`}><span aria-hidden="true" className={`mr-2 inline-block h-2.5 w-2.5 rounded-full ${inventory.status === "green" ? "bg-emerald-400" : inventory.status === "amber" ? "bg-amber-400" : "bg-red-400"}`} />{inventory.label} · {inventory.available}/{inventory.total}</summary><p className="mt-2 text-slate-400">Supplier hardware stock recorded within 24 hours; not stock held in our workshop. Quantities must be confirmed when ordering.</p>{!!inventory.issues.length && <ul className="mt-1 space-y-1">{inventory.issues.map(issue=><li key={issue}>{issue}</li>)}</ul>}</details>
           <details className="text-xs text-slate-300"><summary className="cursor-pointer" aria-label={`3D model status: ${models.label}`}><span aria-hidden="true" className={`mr-2 inline-block h-2.5 w-2.5 rounded-full ${models.status === "green" ? "bg-emerald-400" : models.status === "amber" ? "bg-amber-400" : "bg-red-400"}`} />{models.label} · {models.ready}/{models.total}</summary><p className="mt-2 text-slate-400">Approved component models ready for this build.</p>{!!models.issues.length && <ul className="mt-1 space-y-1">{models.issues.map(issue=><li key={issue}>{issue}</li>)}</ul>}</details>
