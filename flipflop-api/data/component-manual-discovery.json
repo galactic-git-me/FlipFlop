@@ -562,5 +562,23 @@
     "reason": "manufacturer_domain_unknown",
     "component": "AMD Wraith Stealth Socket AM4 4-Pin Connector CPU Cooler with Aluminum Heatsink & 3.93-Inch Fan (Slim)",
     "retry_after": "2026-12-12T14:42:23.483813"
+  },
+  "e8be16472d78a4a6fb5befc62457514b7958425d71ffb872d78593d5653041cf": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ARCTIC Freezer 36 (Black)- Single-tower CPU cooler with push-pull, two pressure-optimised 120 mm P fans, fluid dynamic bearin",
+    "retry_after": "2026-12-12T14:46:46.215351"
+  },
+  "0ed06ef77d97318b47b24890cb2524cff4a5d159ec60796a859bfb12dcd6397c": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Thermalright Assassin X120 Refined SE CPU Air Cooler, 4 Heatpipes, TL-C12C PWM Fan, for AMD AM4/AM5 Intel 1700/1150/1151/1200",
+    "retry_after": "2026-12-12T14:46:46.215351"
+  },
+  "4916c3850bca255855297298b60799c72137487c56179c3b7e93bcfe5edd5543": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Thermalright AQUA ELITE 240 V3 Liquid CPU Cooler, 240 Cooling Row Size, 2 x 120mm PWM Fans, S-FDB Bearings,for AMD/AM4/AM5, I",
+    "retry_after": "2026-12-12T14:46:46.215351"
   }
 }
