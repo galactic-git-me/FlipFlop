@@ -112,82 +112,10 @@ async def _fetch_median(
     min_price: float,
     max_price: float,
 ) -> float | None:
-    """
-    Search eBay UK completed/sold listings for a single component.
-    Returns the median sold price, or None if fewer than 2 comps found.
-    Results are cached for the duration of the swarm run.
-    """
+    """Backend sold-page requests are disabled; use FlipFlopXtension captures."""
     cache_key = f"{query}|{int(min_price)}-{int(max_price)}"
-    if cache_key in _cache:
-        return _cache[cache_key]
-
-    params = {
-        "_nkw":      query,
-        "LH_Sold":   "1",
-        "LH_Complete": "1",
-        "_sop":      "12",      # most recent first
-        "LH_PrefLoc": "1",     # UK preferred
-        "_udlo":     str(int(min_price)),
-        "_udhi":     str(int(max_price)),
-        "_ipg":      "48",
-    }
-    headers = {
-        "User-Agent":     ua.random,
-        "Accept-Language": "en-GB,en;q=0.9",
-        "Accept":         "text/html,application/xhtml+xml",
-    }
-
-    try:
-        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
-            resp = await client.get(
-                "https://www.ebay.co.uk/sch/i.html",
-                params=params,
-                headers=headers,
-            )
-        if resp.status_code != 200 or len(resp.text) < 1000:
-            _cache[cache_key] = None
-            return None
-
-        soup = BeautifulSoup(resp.text, "lxml")
-        prices: list[float] = []
-
-        for item in soup.select(".s-item:not(.s-item--placeholder)"):
-            # Skip auction items
-            bid_el = item.select_one(".s-item__bids, [class*='bid']")
-            if bid_el and re.search(r"\d+\s*bid", bid_el.get_text(), re.I):
-                continue
-
-            price_el = (
-                item.select_one(".s-item__price .POSITIVE")
-                or item.select_one(".s-item__price")
-            )
-            if not price_el:
-                continue
-            text = price_el.get_text(strip=True)
-            # Skip ranges ("£50 to £80")
-            if re.search(r"\bto\b|–|—", text, re.I):
-                continue
-            m = re.search(r"[\d,]+\.?\d*", text.replace(",", ""))
-            if not m:
-                continue
-            p = float(m.group(0))
-            if min_price <= p <= max_price:
-                prices.append(p)
-
-        if len(prices) >= 2:
-            prices.sort()
-            median = prices[len(prices) // 2]
-            log.debug("component.price", query=query, median=median, n=len(prices))
-            _cache[cache_key] = median
-            return median
-
-        _cache[cache_key] = None
-        return None
-
-    except Exception as exc:
-        log.warning("component.fetch_error", query=query, error=str(exc))
-        _cache[cache_key] = None
-        return None
+    _cache[cache_key] = None
+    return None
 
 
 # ── Public API ────────────────────────────────────────────────────────────────
