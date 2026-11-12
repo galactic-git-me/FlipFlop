@@ -137,6 +137,26 @@ def fingerprint(data: dict) -> str:
     return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
 
 
+def effective_variant_status(item: OfferVariantInput) -> str:
+    status = item.verification_status
+    evidence = item.evidence
+    if status == "verified" and not (
+        evidence.get("source_page_verified") is True
+        and evidence.get("selected_price_stable") is True
+        and (evidence.get("variant_controls_detected") is not True or (
+            evidence.get("selected_options_capture_complete") is True and bool(item.selected_options)
+        ))
+    ):
+        return "needs_verification"
+    return status
+
+
+def effective_bundle_status(item: OfferVariantInput, variant_status: str) -> str:
+    if variant_status != "verified" or not item.bundle_components or item.evidence.get("bundle_contents_verified") is not True:
+        return "needs_verification"
+    return "verified"
+
+
 @router.post("/results", response_model=DiscoveryResultsResponse)
 async def ingest_extension_results(
     body: DiscoveryResultsInput,
@@ -192,14 +212,7 @@ async def ingest_extension_results(
                 source_host == host or source_host.endswith("." + host) for host in expected_hosts
             ):
                 raise HTTPException(422, "variant evidence URL host does not match marketplace")
-            verification_status = item.verification_status
-            if verification_status == "verified" and not (
-                item.evidence.get("source_page_verified") is True
-                and item.evidence.get("selected_price_stable") is True
-                and (item.evidence.get("variant_controls_detected") is not True
-                     or item.evidence.get("selected_options_capture_complete") is True)
-            ):
-                verification_status = "needs_verification"
+            verification_status = effective_variant_status(item)
             if item.bundle_components and verification_status == "verified" and item.evidence.get("bundle_contents_verified") is not True:
                 verification_status = "needs_verification"
             opts = item.selected_options
@@ -248,9 +261,7 @@ async def ingest_extension_results(
                 offer_count += 1
 
             if item.bundle_type:
-                bundle_verification = verification_status
-                if not item.bundle_components or item.evidence.get("bundle_contents_verified") is not True:
-                    bundle_verification = "needs_verification"
+                bundle_verification = effective_bundle_status(item, verification_status)
                 bundle = (await db.execute(select(MarketplaceBundle).where(
                     MarketplaceBundle.listing_id == listing.id,
                 ).with_for_update())).scalar_one_or_none()
