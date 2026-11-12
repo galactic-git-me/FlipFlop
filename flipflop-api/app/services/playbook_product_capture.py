@@ -789,86 +789,12 @@ async def _collect_royalcdkeys_capture(url):
         return parse_royalcdkeys_capture(response.text,url,product_json)
 
 
-async def _collect_gamers_outlet_capture(url, *, browser_runtime=None):
-    """Capture an exact digital offer, with dated GBP conversion and unapproved rights."""
-    import xml.etree.ElementTree as ET
-    html=None;http_reason=None
-    async with httpx.AsyncClient(timeout=20,follow_redirects=False) as client:
-        response=await client.get(url)
-        if response.status_code==200 and 'text/html' in response.headers.get('content-type',''):
-            html=response.text
-        else:
-            http_reason=f'Gamers Outlet returned HTTP {response.status_code}'
-    if html is None and browser_runtime is not None:
-        _,context=browser_runtime
-        page=await context.new_page()
-        try:
-            response=await page.goto(url,wait_until='domcontentloaded',timeout=45000)
-            if response is not None and response.status==200:
-                try: await page.wait_for_selector('script[type="application/ld+json"]',timeout=8000)
-                except Exception: pass
-                html=await page.content()
-        finally:
-            await page.close()
-    if html is None:
-        return {'status':'unresolved','reason':http_reason or 'Gamers Outlet page could not be loaded'}
-    soup=BeautifulSoup(html,'html.parser')
-    page_title=soup.title.get_text(' ',strip=True).casefold() if soup.title else ''
-    if 'just a moment' in page_title or 'cf-chl-' in html.casefold():
-        return {'status':'unresolved',
-            'reason':'Gamers Outlet presented a Cloudflare verification page; exact licence facts could not be recaptured.'}
-    products=[]
-    for script in soup.select('script[type="application/ld+json"]'):
-        try:
-            item=json.loads(script.get_text())
-            if isinstance(item,dict) and item.get('@type')=='Product':products.append(item)
-        except (ValueError,TypeError):pass
-    if len(products)!=1:
-        if http_reason and 'HTTP 403' in http_reason:
-            return {'status':'unresolved',
-                'reason':'Gamers Outlet returned HTTP 403; exact product and licence facts could not be verified.'}
-        return {'status':'unresolved','reason':'One exact software product required'}
-    product=products[0];offer=product.get('offers')
-    if not isinstance(offer,dict):return {'status':'unresolved','reason':'One exact software offer required'}
-    original_currency=offer.get('priceCurrency');original_price=amount(offer.get('price'))
-    if original_price is None or original_currency not in {'EUR','GBP'}:
-        return {'status':'unresolved','reason':'Software price or supported currency missing'}
-    rate=Decimal(1);rate_date=None
-    if original_currency=='EUR':
-        async with httpx.AsyncClient(timeout=15) as client:
-            rates=await client.get('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml')
-        rates.raise_for_status();root=ET.fromstring(rates.text)
-        rate_date=next(node.attrib['time'] for node in root.iter() if 'time' in node.attrib)
-        rate=Decimal(next(node.attrib['rate'] for node in root.iter() if node.attrib.get('currency')=='GBP'))
-        age=datetime.now(timezone.utc)-datetime.fromisoformat(rate_date).replace(tzinfo=timezone.utc)
-        if not 0<=age.total_seconds()<=7*86400 or rate<=0:
-            return {'status':'unresolved','reason':'Fresh ECB GBP conversion rate required'}
-    offer['priceCurrency']='GBP';offer['price']=str((Decimal(original_price)*rate).quantize(Decimal('.01')))
-    capture=parse_product_capture('<script type="application/ld+json">'+json.dumps(product)+'</script>',url)
-    if capture.get('status')!='captured':return capture
-    # Exact product page's bulk/edition notice; navigation options are not evidence.
-    oem=any('OEM Version' in span.get_text(' ',strip=True) for span in soup.select('span')
-            if 'big amount of copies' in span.get_text(' ',strip=True))
-    properties={'License type (supplier listing)':'oem' if oem else 'unspecified',
-        'Activation region (supplier claim)':'Global' if 'global' in str(product.get('name','')).casefold() else 'unspecified'}
-    licence_facts={'url':url,'properties':properties,'product_name':product.get('name'),
-        'rights_verified':False}
-    capture.update(digital_product=True,delivery_gbp='0.00',postage_verified=True,
-        delivery_working_days=0,delivery_estimate_source='digital_delivery',
-        licence_review_required=True,licence_resale_rights_verified=False,
-        supplier_product_handle=urlsplit(url).path.rsplit('/',1)[-1],
-        product_properties=properties,seller_product_claims=product.get('description'),
-        licence_review_fingerprint=hashlib.sha256(json.dumps(licence_facts,sort_keys=True).encode()).hexdigest(),
-        source_currency=original_currency,source_item_price=str(original_price),exchange_rate=str(rate),
-        exchange_rate_date=rate_date,exchange_rate_source='https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml')
-    return capture
-
-
 async def collect_product_capture(url, *, browser_runtime=None):
     if not supported_product_url(url):
         return {'status':'unsupported','reason':'Only known HTTPS retailer product URLs are supported'}
     if (urlsplit(url).hostname or '').casefold() in {'gamers-outlet.net','www.gamers-outlet.net'}:
-        return await _collect_gamers_outlet_capture(url,browser_runtime=browser_runtime)
+        return {'status':'unsupported',
+            'reason':'Gamers Outlet product evidence is supplied by FlipFlopXtension scans; backend requests are disabled.'}
     if (urlsplit(url).hostname or '').casefold()=='royalcdkeys.com':
         return await _collect_royalcdkeys_capture(url)
     http_reason=None
@@ -1013,15 +939,13 @@ async def refresh_selected_product_facts(db, limit=64, *, listing_ids=None, forc
             *(item.get('component') or {} for item in (proposal.proposed_data or {}).get('upsells',[]))]
         if part.get('listing_id')}
     ids=playbook_capture_listing_ids(proposals,requested_listing_ids=listing_ids)
-    # Software offers are captured from the explicitly selected provider's
-    # exact product pages. Keep legacy RoyalCDKeys records reviewable, while
-    # ensuring the current Gamers Outlet Windows and Office offers are also
-    # refreshed even when a proposal does not currently select them.
+    # RoyalCDKeys offers use the backend's approved direct collector. Gamers
+    # Outlet pages are captured only by FlipFlopXtension and flow through its
+    # normal Gem Radar submission; never request them from the API.
     catalogue_software=(await db.execute(select(Listing).where(
-        Listing.status=='active',Listing.source_name.in_(('Gamers Outlet','RoyalCDKeys'))))).scalars().all()
+        Listing.status=='active',Listing.source_name=='RoyalCDKeys'))).scalars().all()
     ids.update(row.id for row in catalogue_software
-        if ((row.raw_specs or {}).get('gamers_outlet') or
-            (row.raw_specs or {}).get('royalcdkeys') or {}).get('category') in {'os','office'})
+        if ((row.raw_specs or {}).get('royalcdkeys') or {}).get('category') in {'os','office'})
     # Bestseller rows without a ranking-page price still represent real Amazon
     # products. Capture their exact selected offers before syncing them into
     # Playbook slots; never promote the ranking snapshot itself into cost.
@@ -1036,6 +960,8 @@ async def refresh_selected_product_facts(db, limit=64, *, listing_ids=None, forc
     pending=[]
     now=datetime.now(timezone.utc)
     for listing in rows:
+        if (urlsplit(listing.url or '').hostname or '').casefold() in {'gamers-outlet.net','www.gamers-outlet.net'}:
+            continue
         previous=(listing.raw_specs or {}).get('playbook_product_capture') or {}
         if not force and not product_capture_refresh_due(previous,now): continue
         if supported_product_url(listing.url): pending.append(listing)
@@ -1113,7 +1039,6 @@ async def refresh_selected_product_facts(db, limit=64, *, listing_ids=None, forc
             return listing,result
     batch=pending[:limit]
     if batch and any((urlsplit(listing.url).hostname or '').lower().endswith('amazon.co.uk')
-                     or (urlsplit(listing.url).hostname or '').lower().endswith('gamers-outlet.net')
                      for listing in batch):
         from app.services.browser_pool import managed_playwright
         from app.swarms.cases import _make_pw_context

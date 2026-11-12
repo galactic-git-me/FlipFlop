@@ -2197,8 +2197,10 @@ async def approve_royalcdkeys_licence_source(db,listing_id,licence_review_finger
     royal=(raw.get('gamers_outlet') or raw.get('royalcdkeys') or {})
     current=await source_preview(db,listing)
     category=royal.get('category')
-    if (category not in {'os','office','ai_subscription'} or capture.get('status')!='captured'
-            or capture.get('licence_review_required') is not True
+    extension_gamers_outlet=listing.source_name=='Gamers Outlet'
+    if (category not in {'os','office','ai_subscription'}
+            or (not extension_gamers_outlet and (capture.get('status')!='captured'
+                or capture.get('licence_review_required') is not True))
             or current is None or not current.get('fresh')
             or current.get('licence_review_fingerprint')!=licence_review_fingerprint):
         raise HTTPException(409,'The exact software licence facts changed or are stale; refresh them before review')
@@ -2255,20 +2257,17 @@ async def royalcdkeys_licence_candidates(db):
     """Return exact captured RoyalCDKeys OS listings for explicit admin review."""
     from sqlalchemy import func
     from app.models.catalogue import CatalogueVariant, PlaybookSlot
-    captured_status = Listing.raw_specs["playbook_product_capture"]["status"].as_string()
     captured_category = func.coalesce(
         Listing.raw_specs["gamers_outlet"]["category"].as_string(),
         Listing.raw_specs["royalcdkeys"]["category"].as_string(),
     )
     rows=(await db.execute(select(Listing).where(
         Listing.source_name.in_(('RoyalCDKeys','Gamers Outlet')),
-        captured_status=='captured',
         captured_category.in_(('os','office','ai_subscription')),
     ).order_by(Listing.title,Listing.id))).scalars().all()
     result=[]
     for listing in rows:
         raw=listing.raw_specs if isinstance(listing.raw_specs,dict) else {}
-        capture=raw.get('playbook_product_capture') if isinstance(raw.get('playbook_product_capture'),dict) else {}
         royal=(raw.get('gamers_outlet') or raw.get('royalcdkeys') or {})
         observation=await source_preview(db,listing)
         if observation is None:
@@ -2282,15 +2281,13 @@ async def royalcdkeys_licence_candidates(db):
         if observation.get('fresh') is not True:
             review_block_reason='Exact supplier-page facts are older than the 24-hour review window.'
         elif not observation.get('licence_review_fingerprint'):
-            last_attempt=capture.get('last_capture_attempt') or {}
-            review_block_reason=(last_attempt.get('reason') or
-                'A fresh exact supplier-page capture with licence facts is required.')
+            review_block_reason='Waiting for a fresh exact-page licence capture from FlipFlopXtension.'
         result.append({'listing_id':listing.id,'title':listing.title,'url':listing.url,
             'supplier_name':listing.source_name,
             'price_gbp':observation.get('item_gbp'),'image_url':(listing.image_urls or [None])[0],
-            'seller_product_claims':capture.get('seller_product_claims'),
-            'supplier_handle':capture.get('supplier_product_handle'),
-            'digital_product':capture.get('digital_product') is True,
+            'seller_product_claims':observation.get('seller_product_claims'),
+            'supplier_handle':listing.external_id.split(':',1)[-1] if listing.external_id else None,
+            'digital_product':observation.get('digital_product') is True,
             'licence_review_fingerprint':observation.get('licence_review_fingerprint'),
             'review_block_reason':review_block_reason,
             'licence_source_reviewed':observation.get('licence_source_reviewed') is True,
@@ -3224,17 +3221,9 @@ async def run_playbook_refresh(actor_id=0,progress=None):
             # Keep the existing catalogue usable when Amazon blocks a refresh;
             # no approval or publication is implied by source collection.
             bestseller_refresh={'errors':1,'categories':0,'error':type(error).__name__}
-        if progress: progress('Refreshing selected Gamers Outlet software offers')
-        from app.models.listing import Listing
-        software_listings=(await db.execute(select(Listing).where(
-            Listing.status=='active',Listing.source_name=='Gamers Outlet'))).scalars().all()
-        software_ids=[row.id for row in software_listings
-            if ((row.raw_specs or {}).get('gamers_outlet') or {}).get('category') in {'os','office'}]
-        gamers_outlet_refresh=await timed_stage('gamers_outlet_seconds',lambda:
-            refresh_selected_product_facts(db,limit=max(8,len(software_ids)),listing_ids=software_ids,force=True)
-            if software_ids else asyncio.sleep(0,result={'attempted':0,'captured':0,'retained':0,
-                'unresolved':0,'published':False,'reason':'No selected Gamers Outlet software listings'}))
-        await db.commit()
+        if progress: progress('Using the latest FlipFlopXtension software product-page captures')
+        gamers_outlet_refresh={'attempted':0,'captured':0,'retained':0,'unresolved':0,
+            'published':False,'source':'FlipFlopXtension exact-page scans'}
         if progress: progress('Linking captured source products into Playbook catalogues')
         catalogue_sync=await timed_stage('catalogue_sync_seconds',lambda:sync_bestseller_catalogues(db))
         await db.commit()

@@ -335,6 +335,33 @@ def observation_data(listing, observation, score, lifecycle):
     except Exception:
         explicit_paid=False
     data['postage_verified']=bool(capture.get('postage_verified') is True or explicit_free or explicit_paid)
+    extension_evidence=capture.get('supplier_product_evidence') if isinstance(capture,dict) else None
+    if (observation.source=='gamers_outlet' and isinstance(extension_evidence,dict)
+            and same_listing_product(extension_evidence.get('page_url'),data.get('url'))):
+        captured_at=extension_evidence.get('captured_at')
+        product_name=str(extension_evidence.get('product_name') or '').strip()
+        product_description=str(extension_evidence.get('product_description') or '').strip()
+        claim_snippets=[str(value).strip()[:500] for value in extension_evidence.get('claim_snippets',[])
+            if str(value).strip()][:12]
+        if product_name and (product_description or claim_snippets):
+            claim_text='\n'.join([product_name,product_description,*claim_snippets])
+            properties={}
+            if re.search(r'\bOEM\b',claim_text,re.I):
+                properties['License type (supplier listing)']='OEM'
+            elif re.search(r'\bRetail\b',claim_text,re.I):
+                properties['License type (supplier listing)']='Retail'
+            region=re.search(r'\b(Global|Europe|European Union|United Kingdom|UK)\b',claim_text,re.I)
+            if region:
+                properties['Activation region (supplier claim)']=region.group(1)
+            facts={'url':data['url'],'product_name':product_name,
+                'product_description':product_description,'claim_snippets':claim_snippets,
+                'rights_verified':False}
+            data['licence_review_fingerprint']=fingerprint(facts)
+            data['licence_review_captured_at']=captured_at
+            data['product_properties']=properties
+            data['seller_product_claims']='\n'.join(filter(None,[product_description,*claim_snippets]))[:10000]
+            data['digital_product']=bool(re.search(r'\b(?:digital|CD key|activation key|instant delivery)\b',claim_text,re.I))
+            data['licence_evidence_source']='FlipFlopXtension exact product-page scan'
     _apply_unknown_supplier_postage_fallback(data)
     data["fingerprint"] = supplier_capture_fingerprint(data)
     data["fresh"] = _recent(data["observed_at"], datetime.now(timezone.utc), timedelta(hours=24))
@@ -588,6 +615,10 @@ def official_free_software_preview(listing, source):
 async def _product_page_source_preview(db, listing, archived=None):
     """Expose a fresh, identity-bound retailer capture through the same review contract."""
     from urllib.parse import urlsplit
+    if (urlsplit(listing.url or '').hostname or '').casefold() in {'gamers-outlet.net','www.gamers-outlet.net'}:
+        # Gamers Outlet facts enter through exact-page FlipFlopXtension scans.
+        # Do not let an older backend collector record supersede that feed.
+        return None
     capture = (listing.raw_specs or {}).get('playbook_product_capture') or {}
     if capture.get('status') != 'captured' or not listing.url or not same_listing_product(capture.get('url'), listing.url):
         return None
