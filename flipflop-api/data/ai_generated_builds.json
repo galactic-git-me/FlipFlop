@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-12T16:52:27.208394+00:00",
+  "generated_at": "2026-11-12T17:40:29.297677+00:00",
   "builds": [
     {
       "components": [
@@ -125,7 +125,7 @@
           "available": false,
           "count": 0,
           "average_price": null,
-          "unavailable_reason": "eBay sold-comps scrape failed: 'PlaywrightSoldCompsAdapter' object has no attribute '_STEALTH_JS'"
+          "unavailable_reason": "Sold comps must be captured by FlipFlopXtension."
         },
         "bin": {
           "available": false,
@@ -264,7 +264,7 @@
           "available": false,
           "count": 0,
           "average_price": null,
-          "unavailable_reason": "eBay sold-comps scrape failed: 'PlaywrightSoldCompsAdapter' object has no attribute '_STEALTH_JS'"
+          "unavailable_reason": "Sold comps must be captured by FlipFlopXtension."
         },
         "bin": {
           "available": false,
@@ -403,7 +403,7 @@
           "available": false,
           "count": 0,
           "average_price": null,
-          "unavailable_reason": "eBay sold-comps scrape failed: 'PlaywrightSoldCompsAdapter' object has no attribute '_STEALTH_JS'"
+          "unavailable_reason": "Sold comps must be captured by FlipFlopXtension."
         },
         "bin": {
           "available": false,
@@ -542,7 +542,7 @@
           "available": false,
           "count": 0,
           "average_price": null,
-          "unavailable_reason": "eBay sold-comps scrape failed: 'PlaywrightSoldCompsAdapter' object has no attribute '_STEALTH_JS'"
+          "unavailable_reason": "Sold comps must be captured by FlipFlopXtension."
         },
         "bin": {
           "available": false,
@@ -681,7 +681,7 @@
           "available": false,
           "count": 0,
           "average_price": null,
-          "unavailable_reason": "eBay sold-comps scrape failed: 'PlaywrightSoldCompsAdapter' object has no attribute '_STEALTH_JS'"
+          "unavailable_reason": "Sold comps must be captured by FlipFlopXtension."
         },
         "bin": {
           "available": false,
@@ -820,7 +820,7 @@
           "available": false,
           "count": 0,
           "average_price": null,
-          "unavailable_reason": "eBay sold-comps scrape failed: 'PlaywrightSoldCompsAdapter' object has no attribute '_STEALTH_JS'"
+          "unavailable_reason": "Sold comps must be captured by FlipFlopXtension."
         },
         "bin": {
           "available": false,
