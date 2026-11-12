@@ -27,6 +27,8 @@ class AppSettings(Base):
 
     image_gen_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     image_gen_provider: Mapped[str] = mapped_column(String(50), default="pollinations")
+    auto_approve_images: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true", nullable=False)
+    auto_generate_3d_models: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true", nullable=False)
 
     # Paid Getting Ready AI offers are disabled and unpriced until reviewed by
     # an administrator. These are commercial settings, not runtime secrets.

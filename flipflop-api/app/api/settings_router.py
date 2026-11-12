@@ -251,6 +251,8 @@ class SettingsUpdate(BaseModel):
     openrouter_primary_model: str | None = None
     ebay_app_id: str | None = None
     image_gen_enabled: bool | None = None
+    auto_approve_images: bool | None = None
+    auto_generate_3d_models: bool | None = None
     image_gen_provider: str | None = None
     handling_time_days: int | None = None
     returns_accepted: bool | None = None
@@ -345,13 +347,13 @@ async def update_ai_setup_offer_settings(
     return {"offers": normalise_ai_setup_offers(settings.ai_setup_offers)}
 
 
-@router.get("/")
+@router.get("/", dependencies=[Depends(get_current_admin)])
 async def get_settings(db: AsyncSession = Depends(get_db)):
     settings = await _get_or_create(db)
     return _to_dict(settings)
 
 
-@router.put("/")
+@router.put("/", dependencies=[Depends(get_current_admin)])
 async def update_settings(body: SettingsUpdate, db: AsyncSession = Depends(get_db)):
     settings = await _get_or_create(db)
     # API credentials, providers and model endpoints are runtime configuration,
@@ -428,6 +430,8 @@ def _to_dict(s: AppSettings) -> dict:
         "ebay_app_id": "***" if cfg.ebay_app_id else "",
         "image_gen_enabled": s.image_gen_enabled,
         "image_gen_provider": cfg.image_gen_provider,
+        "auto_approve_images": s.auto_approve_images,
+        "auto_generate_3d_models": s.auto_generate_3d_models,
         "handling_time_days": s.handling_time_days,
         "returns_accepted": s.returns_accepted,
         "returns_window_days": s.returns_window_days,

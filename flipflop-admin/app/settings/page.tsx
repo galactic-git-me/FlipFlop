@@ -19,6 +19,8 @@ interface AppSettings {
   openrouter_primary_model: string;
   image_gen_enabled: boolean;
   image_gen_provider: string;
+  auto_approve_images: boolean;
+  auto_generate_3d_models: boolean;
   default_sell_platform: string;
   ebay_app_id: string;
   // Seller Policies (playbook rows 11-15, 43, 44) — configured once, applied
@@ -90,6 +92,8 @@ const DEFAULTS: AppSettings = {
   openrouter_primary_model: "google/gemma-4-31b-it:free",
   image_gen_enabled: true,
   image_gen_provider: "pollinations",
+  auto_approve_images: true,
+  auto_generate_3d_models: true,
   default_sell_platform: "ebay",
   ebay_app_id: "",
   handling_time_days: 2,
@@ -140,7 +144,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
   );
 }
 
-type TabKey = "opportunity" | "seller-policies" | "delivery" | "getting-ready" | "sources" | "extension-logs" | "sold-logs" | "server-logs" | "price-evidence" | "business" | "storefront";
+type TabKey = "opportunity" | "seller-policies" | "delivery" | "getting-ready" | "sources" | "extension-logs" | "sold-logs" | "server-logs" | "price-evidence" | "business" | "storefront" | "automation";
 type ComponentManual = {id: number; component_key: string; component_name: string; source_url: string; filename: string; sha256: string; size_bytes: number; is_active: boolean};
 type AISetupOffer = {id: string; name: string; description: string; requires_vram_gb: number | null; enabled: boolean; price_gbp: number | null; commercial_scope_reviewed: boolean};
 
@@ -545,7 +549,7 @@ export default function SettingsPage() {
           variant="primary"
           size="sm"
           onClick={saveSettings}
-          disabled={saving || (tab !== "opportunity" && tab !== "seller-policies" && tab !== "delivery" && tab !== "storefront")}
+          disabled={saving || (tab !== "opportunity" && tab !== "seller-policies" && tab !== "delivery" && tab !== "storefront" && tab !== "automation")}
         >
           <Save className="w-3.5 h-3.5" />
           {saving ? "Saving…" : saved ? "Saved ✓" : "Save"}
@@ -585,6 +589,7 @@ export default function SettingsPage() {
           { key: "delivery", label: "Delivery" },
           { key: "business", label: "Business & recycling" },
           { key: "storefront", label: "Storefront messages" },
+          { key: "automation", label: "Automation" },
           { key: "getting-ready", label: "Getting Ready" },
           { key: "sources", label: "Data Sources" },
           { key: "extension-logs", label: "Extension Logs" },
@@ -605,6 +610,13 @@ export default function SettingsPage() {
       </div>
 
       {tab === 'business' && <BusinessDetailsSettings />}
+      {tab === "automation" && <Card>
+        <CardHeader><CardTitle>Curated image and 3D automation</CardTitle><p className="text-xs text-slate-400">Automate the current image-match approval action and create draft 3D models from captured product photos. Generated models remain drafts in the 3D review queue.</p></CardHeader>
+        <CardContent className="space-y-5">
+          <label className="flex items-start gap-3 text-sm text-slate-200"><input type="checkbox" checked={settings.auto_approve_images} onChange={event => setSettings(current => ({ ...current, auto_approve_images: event.target.checked }))} className="mt-1 accent-emerald-400" /><span><strong className="block">Auto-approve images</strong><span className="mt-1 block text-xs leading-5 text-slate-400">Approve eligible captured Amazon product matches with usable images, equivalent to the existing bulk approval action.</span></span></label>
+          <label className="flex items-start gap-3 text-sm text-slate-200"><input type="checkbox" checked={settings.auto_generate_3d_models} onChange={event => setSettings(current => ({ ...current, auto_generate_3d_models: event.target.checked }))} className="mt-1 accent-emerald-400" /><span><strong className="block">Auto-generate 3D models</strong><span className="mt-1 block text-xs leading-5 text-slate-400">Select an exact product photo and submit a textured Meshy model draft for eligible physical Playbook components. Drafts still require the existing rights, scale, and final model review.</span></span></label>
+        </CardContent>
+      </Card>}
       {tab === 'storefront' && (
         <Card>
           <CardHeader><CardTitle>Customer trust carousel</CardTitle><p className="text-xs text-slate-400">Add up to 10 messages. Starred priority messages stay visible as fixed calls to action beside the storefront; other messages rotate in the banner. Set an expiry date only when you want a message to stop appearing.</p><p className="text-xs text-slate-500">{settings.storefront_trust_messages.length} of 10 messages · Star = fixed priority message</p></CardHeader>
