@@ -652,5 +652,23 @@
     "reason": "no_exact_official_pdf",
     "component": "AMD Ryzen 7 5800X3D Processeur 10TH ANNIVERSARY (8 Cores/16 Threads, Socket AM4, 105W TDP, 100 Mo Cache, up to 4.5 GHz Freque",
     "retry_after": "2026-12-12T17:33:15.488010"
+  },
+  "22b2c428730e3ec472dc050fe288c9497ea5d98d54637beeca447a0d61fb7f0c": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "PowerColor Reaper AMD Radeon RX 9070 16GB GDDR6 Graphics Card",
+    "retry_after": "2026-12-12T20:00:49.542926"
+  },
+  "e52edbdb310276c7f3c52eddb0bd5659ed5d934f5984eb55a304af445581a718": {
+    "status": "not_found",
+    "reason": "ConnectError",
+    "component": "ASUS Prime GeForce RTX 5060 Ti 16GB GDDR7 OC Edition Graphics Card (PCIe 5.0, 16GB GDDR7, HDMI/DP 2.1, 2.5 slot, Axial tech f",
+    "retry_after": "2026-12-12T20:00:49.542926"
+  },
+  "2bae7fcfce75fd6f983926a6c38d020ed0696a2ad0b6bfe412999f4ed86e6c0e": {
+    "status": "not_found",
+    "reason": "ConnectTimeout",
+    "component": "ASUS Dual GeForce RTX 5060 8GB GDDR7 OC Edition (PCIe 5.0, 8GB GDDR7, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2.5 slot design, A",
+    "retry_after": "2026-12-12T20:00:49.542926"
   }
 }
