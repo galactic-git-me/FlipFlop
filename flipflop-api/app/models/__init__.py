@@ -70,6 +70,10 @@ from app.models.commerce_evidence import (
     SupplierOfferEvidence, PriceQuoteSnapshot, WorkshopCapacityEvidence,
     WorkshopCapacityReservation, WorkshopCapacityReservationEvent,
 )
+from app.models.marketplace_sourcing import (
+    MarketplaceListing, MarketplaceListingVariant, MarketplaceSupplierOffer,
+    MarketplaceBundle, MarketplaceBundleVariant, MarketplaceBundleComponent,
+)
 
 __all__ = [
     "Listing", "ListingStatus",
@@ -257,4 +261,6 @@ __all__ = [
     "NewsletterSubscription",
     "SupplierOfferEvidence", "PriceQuoteSnapshot", "WorkshopCapacityEvidence",
     "WorkshopCapacityReservation", "WorkshopCapacityReservationEvent",
+    "MarketplaceListing", "MarketplaceListingVariant", "MarketplaceSupplierOffer",
+    "MarketplaceBundle", "MarketplaceBundleVariant", "MarketplaceBundleComponent",
 ]
