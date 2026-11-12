@@ -16,6 +16,7 @@ import { formatCurrency, formatRelativeTime } from "@/lib/utils";
 // ── Tab definitions ───────────────────────────────────────────────────────────
 
 const COMPONENT_CATEGORIES = [
+  { id: "bundles",     label: "Bundles",     emoji: "📦" },
   { id: "gpu",         label: "GPU",         emoji: "🎮" },
   { id: "cpu",         label: "CPU",         emoji: "⚡" },
   { id: "ram",         label: "RAM",         emoji: "💾" },
@@ -27,6 +28,17 @@ const COMPONENT_CATEGORIES = [
 
 type ComponentCategory = typeof COMPONENT_CATEGORIES[number]["id"];
 type GemTab = "flip_opportunities" | ComponentCategory;
+
+interface SourcedBundle {
+  bundle_variant_id: number;
+  title: string;
+  url: string;
+  marketplace: string;
+  bundle_landed_cost: string;
+  standalone_market_total: string;
+  absolute_savings: string;
+  components: { canonical_part_key: string; quantity: number }[];
+}
 
 // ── Page ─────────────────────────────────────────────────────────────────────
 
@@ -41,6 +53,8 @@ export default function SuperGemsPage() {
   // Parts data per category (loaded lazily on first visit to that tab)
   const [parts, setParts] = useState<Partial<Record<ComponentCategory, GroupedPart[]>>>({});
   const [partsLoading, setPartsLoading] = useState<Partial<Record<ComponentCategory, boolean>>>({});
+  const [bundles, setBundles] = useState<SourcedBundle[]>([]);
+  const [bundlesLoading, setBundlesLoading] = useState(false);
 
   useEffect(() => {
     // Use only gem-radar scored listings (includes all marketplaces: eBay, Vinted, Overclockers, Temu, Amazon)
@@ -141,6 +155,7 @@ export default function SuperGemsPage() {
   }, []);
 
   const loadCategory = useCallback(async (cat: ComponentCategory) => {
+    if (cat === "bundles") return;
     if (parts[cat] !== undefined) return; // already loaded
     setPartsLoading((p) => ({ ...p, [cat]: true }));
     try {
@@ -163,10 +178,19 @@ export default function SuperGemsPage() {
   }, [parts]);
 
   useEffect(() => {
+    if (activeTab === "bundles" && bundles.length === 0) {
+      setBundlesLoading(true);
+      void fetch("/api/gem-radar/sourcing/bundles/opportunities?limit=100", { cache: "no-store" })
+        .then((response) => response.ok ? response.json() as Promise<SourcedBundle[]> : Promise.reject(new Error("Bundle evidence request failed")))
+        .then(setBundles)
+        .catch(() => setBundles([]))
+        .finally(() => setBundlesLoading(false));
+      return;
+    }
     if (activeTab !== "flip_opportunities") {
       void loadCategory(activeTab as ComponentCategory);
     }
-  }, [activeTab, loadCategory]);
+  }, [activeTab, bundles.length, loadCategory]);
 
   // Count gems per component category (from already-loaded data)
   const partGemCount = (cat: ComponentCategory) => parts[cat]?.length ?? null;
@@ -209,7 +233,7 @@ export default function SuperGemsPage() {
 
         {/* Component category tabs */}
         {COMPONENT_CATEGORIES.map((cat) => {
-          const count = partGemCount(cat.id);
+          const count = cat.id === "bundles" ? bundles.length : partGemCount(cat.id);
           return (
             <button
               key={cat.id}
@@ -236,7 +260,7 @@ export default function SuperGemsPage() {
         <ListingGemsGrid listings={listings} loading={listingsLoading} />
       )}
       {activeTab !== "flip_opportunities" && (
-        <ComponentGemsGrid
+        activeTab === "bundles" ? <BundleGemsGrid bundles={bundles} loading={bundlesLoading} /> : <ComponentGemsGrid
           parts={parts[activeTab as ComponentCategory]}
           loading={!!partsLoading[activeTab as ComponentCategory]}
           category={activeTab as ComponentCategory}
@@ -244,6 +268,19 @@ export default function SuperGemsPage() {
       )}
     </div>
   );
+}
+
+function BundleGemsGrid({ bundles, loading }: { bundles: SourcedBundle[]; loading: boolean }) {
+  if (loading) return <div role="status" className="py-20 text-center text-sm text-slate-400">Loading verified bundles…</div>;
+  if (!bundles.length) return <div className="py-20 text-center text-sm text-slate-400">No verified bundle sources with complete component references yet.</div>;
+  return <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+    {bundles.map(bundle => <a key={bundle.bundle_variant_id} href={bundle.url} target="_blank" rel="noreferrer" className="rounded-xl border border-amber-400/20 bg-amber-400/[0.04] p-4 hover:border-amber-300/50">
+      <div className="flex items-start justify-between gap-3"><h2 className="font-semibold text-slate-100">{bundle.title}</h2><span className="shrink-0 text-xs uppercase text-amber-300">{bundle.marketplace}</span></div>
+      <p className="mt-3 text-sm text-slate-300">Bundle landed cost {formatCurrency(Number(bundle.bundle_landed_cost))} · component reference total {formatCurrency(Number(bundle.standalone_market_total))}</p>
+      <p className="mt-1 text-sm font-semibold text-emerald-300">Difference {formatCurrency(Number(bundle.absolute_savings))}</p>
+      <p className="mt-3 text-xs text-slate-500">Internal buying source · contents are stocked as separate components</p>
+    </a>)}
+  </div>;
 }
 
 // ── Listing gems grid ─────────────────────────────────────────────────────────

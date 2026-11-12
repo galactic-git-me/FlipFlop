@@ -22,8 +22,9 @@ returned listing's identity by themselves.
 FlipFlopXtension Settings can sync these searches, and manual/scheduled sweeps
 refresh them before scanning. Custom searches and disabled choices survive.
 All ten supported Standard vendors supply live observations; eBay also supplies
-separate sold-page captures. Retired AliExpress and Flexible-only Vinted are
-excluded. `POST /api/gem-radar/playbook-market-captures` appends unapproved
+separate sold-page captures. AliExpress and Vinted are Flexible-only sources,
+and are excluded from Standard. AliExpress scans use extension-applied Computer
+Components and seven-day-or-less delivery filters. `POST /api/gem-radar/playbook-market-captures` appends unapproved
 cell-scoped candidates to the existing market review, deduplicated by source
 identity and merged only across the same BOM and a 24-hour capture window.
 Unknown postage, absent sold markers, best-offer ambiguity, wrong condition or
