@@ -196,6 +196,8 @@ async def ingest_extension_results(
             if verification_status == "verified" and not (
                 item.evidence.get("source_page_verified") is True
                 and item.evidence.get("selected_price_stable") is True
+                and (item.evidence.get("variant_controls_detected") is not True
+                     or item.evidence.get("selected_options_capture_complete") is True)
             ):
                 verification_status = "needs_verification"
             if item.bundle_components and verification_status == "verified" and item.evidence.get("bundle_contents_verified") is not True:
@@ -245,14 +247,17 @@ async def ingest_extension_results(
                 ))
                 offer_count += 1
 
-            if item.bundle_type and item.bundle_components:
+            if item.bundle_type:
+                bundle_verification = verification_status
+                if not item.bundle_components or item.evidence.get("bundle_contents_verified") is not True:
+                    bundle_verification = "needs_verification"
                 bundle = (await db.execute(select(MarketplaceBundle).where(
                     MarketplaceBundle.listing_id == listing.id,
                 ).with_for_update())).scalar_one_or_none()
                 if bundle is None:
                     bundle = MarketplaceBundle(
                         listing_id=listing.id, bundle_type=item.bundle_type, platform=item.platform,
-                        socket=item.socket, verification_status=verification_status,
+                        socket=item.socket, verification_status=bundle_verification,
                         seller=entry.seller,
                     )
                     db.add(bundle)
@@ -262,7 +267,7 @@ async def ingest_extension_results(
                     bundle.bundle_type = item.bundle_type
                     bundle.platform = item.platform or bundle.platform
                     bundle.socket = item.socket or bundle.socket
-                    bundle.verification_status = verification_status
+                    bundle.verification_status = bundle_verification
                     bundle.seller = entry.seller or bundle.seller
                 bundle_variant_fp = fingerprint({"options": opts, "marketplace_variant_id": item.marketplace_variant_id})
                 bundle_variant = (await db.execute(select(MarketplaceBundleVariant).where(
@@ -276,7 +281,7 @@ async def ingest_extension_results(
                         total_price=item.item_price, shipping_price=item.shipping_price,
                         tax_price=item.tax_price,
                         landed_cost=landed if item.currency == "GBP" else None, currency=item.currency,
-                        availability=item.availability, verification_status=verification_status,
+                        availability=item.availability, verification_status=bundle_verification,
                         verified_at=verified_at, evidence=item.evidence,
                     )
                     db.add(bundle_variant)
@@ -290,7 +295,7 @@ async def ingest_extension_results(
                     bundle_variant.landed_cost = landed if item.currency == "GBP" else None
                     bundle_variant.currency = item.currency
                     bundle_variant.availability = item.availability
-                    bundle_variant.verification_status = verification_status
+                    bundle_variant.verification_status = bundle_verification
                     bundle_variant.verified_at = verified_at or bundle_variant.verified_at
                     bundle_variant.evidence = item.evidence
                 for part in item.bundle_components:
@@ -314,7 +319,7 @@ async def ingest_extension_results(
                 # Proportional allocation is accounting metadata only. It is
                 # emitted when every constituent has a current standalone
                 # market reference and the extension verified the exact bundle.
-                if verification_status == "verified" and item.evidence.get("bundle_contents_verified") is True:
+                if bundle_verification == "verified" and item.evidence.get("bundle_contents_verified") is True:
                     refs = {
                         part.canonical_part_key: part.market_reference_price * part.quantity
                         for part in item.bundle_components if part.market_reference_price is not None

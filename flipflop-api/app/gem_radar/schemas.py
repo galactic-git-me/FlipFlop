@@ -38,8 +38,31 @@ class SupplierProductEvidence(CamelModel):
     claim_snippets: list[str] = Field(default_factory=list, max_length=12)
 
 
+class SelectedMarketplaceOffer(CamelModel):
+    marketplace_variant_id: Optional[str] = Field(default=None, max_length=160)
+    selected_options: dict[str, str] = Field(default_factory=dict)
+    price: float = Field(gt=0)
+    currency: Literal["GBP", "EUR", "USD"]
+    price_text: str = Field(max_length=120)
+    source_page_verified: bool = False
+    variant_controls_detected: bool = False
+    selected_options_capture_complete: bool = False
+    selected_price_stable: bool = False
+
+
+class ProductDetailsEvidence(CamelModel):
+    status: Literal["ok", "failed"]
+    source_url: str
+    captured_at: datetime
+    specifications: dict[str, list[str]] = Field(default_factory=dict)
+    identifiers: dict[str, str] = Field(default_factory=dict)
+    conflicts: list[str] = Field(default_factory=list)
+    selected_offer: Optional[SelectedMarketplaceOffer] = None
+
+
 class ExtractedListing(CamelModel):
     supplier_product_evidence: Optional[SupplierProductEvidence] = None
+    product_details: Optional[ProductDetailsEvidence] = None
     source_currency: Optional[Literal['EUR', 'GBP']] = None
     source_item_price: Optional[float] = Field(default=None, gt=0)
     exchange_rate: Optional[float] = Field(default=None, gt=0)

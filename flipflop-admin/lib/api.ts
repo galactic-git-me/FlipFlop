@@ -403,6 +403,51 @@ export interface MarketSnapshot {
   soldPricesCount: number;
 }
 
+export interface MarketplaceSourcingListing {
+  id: number;
+  marketplace: string;
+  marketplace_listing_id: string;
+  seller: string | null;
+  title: string;
+  url: string;
+  image_url: string | null;
+  category: string | null;
+  bundle_candidate: boolean;
+  source_evidence: Record<string, unknown>;
+  discovered_at: string;
+  last_seen_at: string;
+}
+
+export interface MarketplaceSourcingListingDetail extends MarketplaceSourcingListing {
+  variants: Array<{
+    id: number;
+    marketplace_variant_id: string | null;
+    selected_options: Record<string, string>;
+    specifications: Record<string, unknown>;
+    availability: string;
+    verification_status: string;
+    verified_at: string | null;
+    offers: Array<Record<string, unknown>>;
+  }>;
+  bundles: Array<{
+    id: number;
+    bundle_type: string;
+    platform: string | null;
+    socket: string | null;
+    seller: string | null;
+    verification_status: string;
+    variants: Array<{
+      id: number;
+      selected_configuration: Record<string, string>;
+      total_price: number;
+      currency: string;
+      landed_cost: number | null;
+      verification_status: string;
+      components: Array<Record<string, unknown>>;
+    }>;
+  }>;
+}
+
 // Real scan cadence derived from actual observation activity — see
 // /gem-radar/scan-schedule-status's docstring for why this is a best-effort
 // estimate rather than a guaranteed backend-scheduled job.
@@ -1172,6 +1217,14 @@ export const api = {
         }`
       ),
     listings: () => requestGemRadar<unknown[]>("/listings"),
+    sourcingListings: (params?: { marketplace?: string; bundle_only?: boolean; limit?: number }) =>
+      requestGemRadar<MarketplaceSourcingListing[]>(`/sourcing/listings?${new URLSearchParams({
+        ...(params?.marketplace ? { marketplace: params.marketplace } : {}),
+        ...(params?.bundle_only ? { bundle_only: "true" } : {}),
+        limit: String(params?.limit ?? 100),
+      }).toString()}`),
+    sourcingListing: (id: number) =>
+      requestGemRadar<MarketplaceSourcingListingDetail>(`/sourcing/listings/${id}`),
     currentGem: () => requestGemRadar<unknown>("/current-gem"),
     // This read model belongs to the main API database. Use the main API
     // proxy rather than the separately deployed Gem Radar worker, whose

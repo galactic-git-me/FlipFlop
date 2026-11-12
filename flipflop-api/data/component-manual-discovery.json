@@ -670,5 +670,23 @@
     "reason": "ConnectTimeout",
     "component": "ASUS Dual GeForce RTX 5060 8GB GDDR7 OC Edition (PCIe 5.0, 8GB GDDR7, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2.5 slot design, A",
     "retry_after": "2026-12-12T20:00:49.542926"
+  },
+  "489b3a1dc2dbaf5dba930b78bea98feda8d092e2e42eedcf0aa41aaa71281a75": {
+    "status": "not_found",
+    "reason": "ConnectError",
+    "component": "MSI GeForce RTX 5050 8G SHADOW 2X OC Graphics Card - RTX 5050 GPU, 8GB GDDR6 (20Gbps/128-bit), PCIe 5.0 - DUAL-Fan Thermal De",
+    "retry_after": "2026-12-12T20:22:30.334253"
+  },
+  "8c4fe3e688adb26ff6894dcd16ba6f5a8b9e03eb997c924dad91d3bbed4fac14": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "MSI GeForce RTX 5080 16G INSPIRE 3X OC BLACK Graphics Card - RTX 5080 GPU, 16GB GDDR7 (30Gbps/256-bit), PCIe 5.0 - Triple Fan",
+    "retry_after": "2026-12-12T20:22:30.334253"
+  },
+  "1d3406876acc5cf273365e7729075ea46c80eb825cd281afc68b9640be986c0c": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "MSI B550M PRO-VDH WIFI Motherboard M-ATX - Ryzen 5000, AM4, DDR4, Wi-Fi 6",
+    "retry_after": "2026-12-12T20:22:30.334253"
   }
 }
