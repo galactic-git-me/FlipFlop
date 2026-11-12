@@ -22,12 +22,7 @@ Key filtering to avoid low auction starting bids:
 """
 
 import re
-import asyncio
-import time
-import httpx
-from bs4 import BeautifulSoup
 from dataclasses import dataclass, field
-from fake_useragent import UserAgent
 import structlog
 
 from app.services.estimator import (
@@ -47,69 +42,9 @@ _FALLBACK_CASE_PREMIUM = 100   # £100 — cases can cost up to £80, themed pre
 _FALLBACK_FLIP_SURCHARGE = 1.20  # 20 % above sum-of-parts for a finished, themed build
 
 log = structlog.get_logger(__name__)
-ua = UserAgent()
 
 # Per-run cache: spec fingerprint → ResaleRange
 _cache: dict[str, "ResaleRange"] = {}
-_RESALE_EBAY_BLOCK_UNTIL_TS: float = 0.0
-_RESALE_EBAY_BLOCK_LOGGED: bool = False
-_RESALE_EBAY_BLOCK_COOLDOWN_SECONDS = 900.0
-_RESALE_LOG_THROTTLE_TS: dict[str, float] = {}
-_RESALE_EBAY_403_THRESHOLD = 2
-_RESALE_EBAY_403_COUNT = 0
-_RESALE_EBAY_BLOCK_LOCK = asyncio.Lock()
-
-# Rate limiting: only allow 2 concurrent eBay requests to avoid overwhelming rate limits
-# Prevents all workers from hammering eBay simultaneously
-_ebay_semaphore: asyncio.Semaphore | None = None
-
-def _get_ebay_semaphore() -> asyncio.Semaphore:
-    """Get or create the eBay rate limit semaphore (max 2 concurrent requests)."""
-    global _ebay_semaphore
-    if _ebay_semaphore is None:
-        _ebay_semaphore = asyncio.Semaphore(2)
-    return _ebay_semaphore
-
-
-def _resale_ebay_is_blocked() -> bool:
-    return time.monotonic() < _RESALE_EBAY_BLOCK_UNTIL_TS
-
-
-async def _record_resale_ebay_response(status: int) -> None:
-    """Open a process-wide cooldown after repeated HTML-scrape blocks.
-
-    A 403 is an anti-bot response, not a transient application error.  Retrying
-    every query multiplies the queue latency and makes the block worse.
-    """
-    global _RESALE_EBAY_403_COUNT, _RESALE_EBAY_BLOCK_UNTIL_TS, _RESALE_EBAY_BLOCK_LOGGED
-    async with _RESALE_EBAY_BLOCK_LOCK:
-        if status == 403:
-            _RESALE_EBAY_403_COUNT += 1
-            if _RESALE_EBAY_403_COUNT >= _RESALE_EBAY_403_THRESHOLD:
-                _RESALE_EBAY_BLOCK_UNTIL_TS = time.monotonic() + _RESALE_EBAY_BLOCK_COOLDOWN_SECONDS
-                if not _RESALE_EBAY_BLOCK_LOGGED:
-                    _RESALE_EBAY_BLOCK_LOGGED = True
-                    log.warning(
-                        "resale_scraper.ebay_circuit_opened",
-                        consecutive_403s=_RESALE_EBAY_403_COUNT,
-                        cooldown_seconds=_RESALE_EBAY_BLOCK_COOLDOWN_SECONDS,
-                    )
-        elif status == 200:
-            _RESALE_EBAY_403_COUNT = 0
-            _RESALE_EBAY_BLOCK_LOGGED = False
-
-
-
-def _info_throttled(event: str, window_seconds: float = 30.0, **kwargs) -> None:
-    key = f"{event}|{kwargs.get('status','')}|{kwargs.get('query','')}"
-    now = time.monotonic()
-    last = _RESALE_LOG_THROTTLE_TS.get(key, 0.0)
-    if now - last < window_seconds:
-        return
-    _RESALE_LOG_THROTTLE_TS[key] = now
-    log.info(event, **kwargs)
-
-
 @dataclass
 class ResaleRange:
     low: float    # 25th-percentile sold price
@@ -139,7 +74,7 @@ class ResaleAudit:
     """
     # ── Step 1: Source data ───────────────────────────────────────────────────
     query: str
-    ebay_url: str                           # the URL that was actually fetched
+    ebay_url: str = ""                      # sold capture is extension-owned
     all_comps: list[SoldComp] = field(default_factory=list)   # ALL items seen
     included_comps: list[SoldComp] = field(default_factory=list)  # passed filters
     excluded_comps: list[SoldComp] = field(default_factory=list)  # failed filters
@@ -212,132 +147,6 @@ def _build_query(cpu: str | None, gpu: str | None) -> str:
     return " ".join(parts)
 
 
-def _extract_prices(soup: BeautifulSoup) -> list[float]:
-    """
-    Extract final sold prices from an eBay completed-listings page.
-    Skips auction items (those with bid counts) and price ranges.
-    """
-    prices: list[float] = []
-
-    # eBay completed listings always use .s-item structure (not the new .s-card)
-    items = soup.select(".s-item:not(.s-item--placeholder)")
-    if not items:
-        # Try new card structure anyway
-        items = soup.select(".s-card[data-listingid]")
-
-    for item in items:
-        try:
-            # ── Skip auction items ───────────────────────────────────────
-            bid_el = item.select_one(
-                ".s-item__bids, .x-bid-count, [class*='bid--'], [class*='bidCount']"
-            )
-            if bid_el:
-                bid_text = bid_el.get_text(strip=True)
-                if re.search(r"\d+\s*bid", bid_text, re.I):
-                    continue
-
-            # ── Extract price ────────────────────────────────────────────
-            price_el = (
-                item.select_one(".s-item__price .POSITIVE")  # green sold price
-                or item.select_one(".s-item__price")
-                or item.select_one("[class*='s-card__price']")
-                or item.select_one("[class*='price--']")
-            )
-            if not price_el:
-                continue
-
-            price_text = price_el.get_text(strip=True)
-
-            # Skip ranges: "£100.00 to £250.00", "£100–£200"
-            if re.search(r"\bto\b|–|—", price_text, re.I):
-                continue
-
-            price = _parse_price(price_text)
-            if 80.0 < price < 1400.0:
-                prices.append(price)
-
-        except Exception:
-            continue
-
-    # ── Fallback: raw scan for any price-looking element ────────────────
-    if not prices:
-        for el in soup.select(".s-item__price, [class*='price--'], [class*='s-card__price']"):
-            text = el.get_text(strip=True)
-            if re.search(r"\bto\b|–|—", text, re.I):
-                continue
-            p = _parse_price(text)
-            if 80.0 < p < 1400.0:
-                prices.append(p)
-
-    return prices
-
-
-async def _fetch_sold_prices(query: str) -> list[float]:
-    """
-    Scrape eBay UK completed/sold listings for fixed-price comps.
-    Two passes: Desktop PCs category (179) first, then all categories.
-    Uses the same approach as get_expected_auction_price().
-
-    Rate limited to max 2 concurrent requests to avoid eBay throttling.
-    """
-    async with _get_ebay_semaphore():
-        prices: list[float] = []
-
-        if _resale_ebay_is_blocked():
-            _info_throttled("resale_scraper.ebay_circuit_open", query=query,
-                            resumes_in_s=round(_RESALE_EBAY_BLOCK_UNTIL_TS - time.monotonic(), 1))
-            return prices
-
-        for sacat in ("179", "0"):
-            params = {
-                "_nkw": query,
-                "LH_Sold": "1",
-                "LH_Complete": "1",
-                "LH_BIN": "1",         # Fixed-price (BIN) only — exclude auction starting bids
-                "_sacat": sacat,
-                "_sop": "12",          # Most recent first
-                "LH_PrefLoc": "1",     # UK sellers preferred
-                "_ipg": "60",
-            }
-            headers = {
-                "User-Agent": ua.random,
-                "Accept-Language": "en-GB,en;q=0.9",
-                "Accept": "text/html,application/xhtml+xml",
-            }
-            try:
-                async with httpx.AsyncClient(timeout=25, follow_redirects=True) as client:
-                    resp = await client.get(
-                        "https://www.ebay.co.uk/sch/i.html",
-                        params=params,
-                        headers=headers,
-                    )
-                if resp.status_code != 200 or len(resp.text) < 2000:
-                    log.debug("resale_scraper.ebay_sold_bad_response",
-                              query=query, sacat=sacat, status=resp.status_code)
-                    await _record_resale_ebay_response(resp.status_code)
-                    if _resale_ebay_is_blocked():
-                        break
-                    continue
-
-                await _record_resale_ebay_response(200)
-
-                soup = BeautifulSoup(resp.text, "lxml")
-                batch = _extract_prices(soup)
-                prices.extend(batch)
-                log.debug("resale_scraper.ebay_sold_pass",
-                          query=query, sacat=sacat, found=len(batch))
-
-            except Exception as exc:
-                log.debug("resale_scraper.ebay_sold_error", query=query, error=str(exc))
-
-            if len(prices) >= 5:
-                break
-
-            await asyncio.sleep(0.3)
-
-        return prices
-
-
 async def _fetch_active_prices(query: str) -> list[float]:
     """
     Scrape current live BIN listings for the same spec — what sellers are
@@ -391,21 +200,7 @@ async def get_resale_range(
     query = _build_query(cpu, gpu)
     case_add = BUDGET_CASE_RESALE_ADD
 
-    # ── Tier 1: eBay sold comps ───────────────────────────────────────────────
-    prices = await _fetch_sold_prices(query)
-    if len(prices) >= 2:
-        prices.sort()
-        n = len(prices)
-        low    = round(prices[n // 4]                + case_add, 2)
-        median = round(prices[n // 2]                + case_add, 2)
-        high   = round(prices[min(n - 1, (n*3)//4)] + case_add, 2)
-        result = ResaleRange(low=low, median=median, high=high, count=n, query=query)
-        log.info("resale_scraper.tier1_sold_comps", query=query, count=n,
-                 low=low, median=median, high=high)
-        _cache[key] = result
-        return result
-
-    # ── Tier 2: eBay active listings × 0.92 ──────────────────────────────────
+    # ── Tier 1: eBay active listings × 0.92 ──────────────────────────────────
     active = await _fetch_active_prices(query)
     if len(active) >= 2:
         active.sort()
@@ -504,96 +299,8 @@ async def get_expected_auction_price(
     gpu: str | None,
     current_bid: float,
 ) -> float:
-    """
-    For an eBay auction listing, estimate the expected final hammer price.
-
-    Searches eBay UK's completed/sold AUCTION listings (LH_Auction=1 + LH_Sold=1)
-    for comparable hardware.  Returns the median of the comp prices — the realistic
-    price a bidder should expect to pay when the gavel falls.
-
-    Falls back to current_bid × 1.35 when fewer than 2 comps are found.
-    (UK PC auctions typically close 25–40% above the opening/current bid.)
-
-    Results are cached per spec for the duration of the scan run.
-    """
-    query = _build_auction_comp_query(cpu, gpu)
-    cache_key = f"auction|{query}"
-    if cache_key in _auction_price_cache:
-        return _auction_price_cache[cache_key]
-
-    prices: list[float] = []
-
-    for sacat in ("179", "0"):      # Desktop PCs → all categories
-        params = {
-            "_nkw": query,
-            "LH_Sold": "1",
-            "LH_Complete": "1",
-            "LH_Auction": "1",      # Auctions ONLY — opposite of resale scraper
-            "_sacat": sacat,
-            "_sop": "12",           # Most recent first
-            "LH_PrefLoc": "1",
-            "_ipg": "60",
-        }
-        headers = {
-            "User-Agent": ua.random,
-            "Accept-Language": "en-GB,en;q=0.9",
-            "Accept": "text/html,application/xhtml+xml",
-        }
-        try:
-            async with httpx.AsyncClient(timeout=25, follow_redirects=True) as client:
-                resp = await client.get(
-                    "https://www.ebay.co.uk/sch/i.html",
-                    params=params,
-                    headers=headers,
-                )
-            if resp.status_code != 200 or len(resp.text) < 2000:
-                continue
-
-            soup = BeautifulSoup(resp.text, "lxml")
-            items = (
-                soup.select(".s-item:not(.s-item--placeholder)")
-                or soup.select(".s-card[data-listingid]")
-            )
-
-            for item in items:
-                try:
-                    price_el = (
-                        item.select_one(".s-item__price .POSITIVE")
-                        or item.select_one(".s-item__price")
-                        or item.select_one("[class*='price--']")
-                    )
-                    if not price_el:
-                        continue
-                    price_text = price_el.get_text(strip=True)
-                    if re.search(r"\bto\b|–|—", price_text, re.I):
-                        continue
-                    price = _parse_price(price_text)
-                    # Sanity bounds: must be ≥ 60 % of current bid (not below)
-                    # and ≤ 5× (not a wildly different spec)
-                    if (current_bid * 0.6) < price < (current_bid * 5.0) and 30.0 < price < 1200.0:
-                        prices.append(price)
-                except Exception:
-                    continue
-
-        except Exception as exc:
-            log.warning("auction_price.fetch_error", query=query, error=str(exc))
-
-        if len(prices) >= 3:
-            break
-        await asyncio.sleep(0.5)
-
-    if len(prices) >= 2:
-        prices.sort()
-        median = round(prices[len(prices) // 2], 2)
-        log.info("auction_price.comps", query=query, count=len(prices), median=median)
-        _auction_price_cache[cache_key] = median
-        return median
-
-    # Fallback: typical UK auction run-up
-    fallback = round(current_bid * 1.35, 2)
-    log.info("auction_price.fallback", query=query, current_bid=current_bid, fallback=fallback)
-    _auction_price_cache[cache_key] = fallback
-    return fallback
+    """Estimate from current bid; backend eBay sold requests are disabled."""
+    return round(current_bid * 1.35, 2)
 
 
 def clear_auction_cache() -> None:
@@ -601,118 +308,6 @@ def clear_auction_cache() -> None:
 
 
 # ── Audit / debug functions ───────────────────────────────────────────────────
-
-async def _fetch_comps_detailed(query: str) -> tuple[list[SoldComp], str]:
-    """
-    Like _fetch_sold_prices() but returns rich SoldComp objects so the caller
-    can see every item, every exclusion, and every price — not just the final
-    filtered list.
-
-    Returns (comps, ebay_url_used).
-    """
-    all_comps: list[SoldComp] = []
-    ebay_url_used = ""
-
-    for sacat in ("179", "0"):
-        params = {
-            "_nkw": query,
-            "LH_Sold": "1",
-            "LH_Complete": "1",
-            "_sacat": sacat,
-            "_sop": "12",
-            "LH_PrefLoc": "1",
-            "_ipg": "60",
-        }
-        headers = {
-            "User-Agent": ua.random,
-            "Accept-Language": "en-GB,en;q=0.9",
-            "Accept": "text/html,application/xhtml+xml",
-        }
-        try:
-            async with httpx.AsyncClient(timeout=25, follow_redirects=True) as client:
-                resp = await client.get(
-                    "https://www.ebay.co.uk/sch/i.html",
-                    params=params,
-                    headers=headers,
-                )
-            ebay_url_used = str(resp.url)
-            if resp.status_code != 200 or len(resp.text) < 2000:
-                continue
-
-            soup = BeautifulSoup(resp.text, "lxml")
-            items = soup.select(".s-item:not(.s-item--placeholder)") or \
-                    soup.select(".s-card[data-listingid]")
-
-            for item in items:
-                try:
-                    title_el = item.select_one(".s-item__title, [class*='s-card__title']")
-                    title    = title_el.get_text(strip=True) if title_el else "(no title)"
-                    link_el  = item.select_one("a[href*='itm/'], a[href*='/p/']")
-                    url      = link_el["href"].split("?")[0] if link_el else ""
-
-                    # ── Auction check ──────────────────────────────────────
-                    bid_el = item.select_one(
-                        ".s-item__bids, .x-bid-count, [class*='bid--'], [class*='bidCount']"
-                    )
-                    if bid_el and re.search(r"\d+\s*bid", bid_el.get_text(), re.I):
-                        all_comps.append(SoldComp(
-                            title=title, price=0, url=url,
-                            excluded=True, exclusion_reason="auction (bid item, not BIN price)"
-                        ))
-                        continue
-
-                    # ── Price extraction ───────────────────────────────────
-                    price_el = (
-                        item.select_one(".s-item__price .POSITIVE")
-                        or item.select_one(".s-item__price")
-                        or item.select_one("[class*='price--']")
-                    )
-                    if not price_el:
-                        all_comps.append(SoldComp(
-                            title=title, price=0, url=url,
-                            excluded=True, exclusion_reason="no price element found"
-                        ))
-                        continue
-
-                    price_text = price_el.get_text(strip=True)
-
-                    if re.search(r"\bto\b|–|—", price_text, re.I):
-                        all_comps.append(SoldComp(
-                            title=title, price=0, url=url,
-                            excluded=True, exclusion_reason=f"price range, not single price: '{price_text}'"
-                        ))
-                        continue
-
-                    price = _parse_price(price_text)
-                    if price <= 80.0:
-                        all_comps.append(SoldComp(
-                            title=title, price=price, url=url,
-                            excluded=True, exclusion_reason=f"£{price:.0f} below £80 floor (likely accessories/parts)"
-                        ))
-                        continue
-                    if price >= 1400.0:
-                        all_comps.append(SoldComp(
-                            title=title, price=price, url=url,
-                            excluded=True, exclusion_reason=f"£{price:.0f} above £1,400 ceiling (likely very high-end / bundle)"
-                        ))
-                        continue
-
-                    all_comps.append(SoldComp(title=title, price=price, url=url,
-                                              excluded=False))
-                except Exception:
-                    continue
-
-        except Exception as exc:
-            log.warning("resale_audit.fetch_error", query=query, error=str(exc))
-
-        included = [c for c in all_comps if not c.excluded]
-        if len(included) >= 5:
-            break
-
-        await asyncio.sleep(0.5)
-
-    return all_comps, ebay_url_used
-
 
 async def get_resale_audit(
     cpu: str | None,
@@ -741,21 +336,8 @@ async def get_resale_audit(
     query  = _build_query(cpu, gpu)
     audit  = ResaleAudit(query=query, buy_price=buy_price)
 
-    # ── Step 1 + 2: Fetch real comps ─────────────────────────────────────────
-    all_comps, ebay_url = await _fetch_comps_detailed(query)
-    audit.ebay_url       = ebay_url
-    audit.all_comps      = all_comps
-    audit.included_comps = [c for c in all_comps if not c.excluded]
-    audit.excluded_comps = [c for c in all_comps if c.excluded]
-
-    prices = [c.price for c in audit.included_comps]
-    audit.prices = sorted(prices)
-
-    if prices:
-        audit.price_min    = min(prices)
-        audit.price_max    = max(prices)
-        audit.price_median = sorted(prices)[len(prices) // 2]
-        audit.price_avg    = round(sum(prices) / len(prices), 2)
+    # Sold evidence is captured in FlipFlopXtension; this backend audit does no sold-page requests.
+    prices: list[float] = []
 
     # ── Step 3: Exact calculation ─────────────────────────────────────────────
     if len(prices) >= 2:

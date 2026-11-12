@@ -3,7 +3,7 @@ Debug / audit endpoints — expose the full resale-estimation trace so every
 valuation can be independently verified.
 
 GET /debug/resale
-  Re-runs the eBay comp scrape for a given spec and returns:
+  Reports resale estimate fallback calculations for a given spec:
     • Every comp seen (title, price, url)
     • Every comp excluded (with reason)
     • The raw price set (min/max/median/avg)
@@ -48,8 +48,8 @@ async def debug_resale(
     Returns every eBay comp seen, every exclusion, and every calculation step
     so the valuation is completely transparent and auditable.
 
-    This re-runs the live eBay scrape on every call — not cached.
-    Allow 5–15 seconds for the response.
+    Sold captures are owned by FlipFlopXtension; this endpoint performs no
+    backend sold-page requests.
     """
     audit: ResaleAudit = await get_resale_audit(
         cpu=cpu, ram_gb=ram_gb, ram_type=ram_type,

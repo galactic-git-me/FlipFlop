@@ -1,25 +1,9 @@
-"""
-Daily component price refresh — keeps ALL estimator prices current.
-
-Fetches live eBay UK *sold* prices for:
-  - Budget upgrade components (what we spend: GPU, RAM, SSD, PSU, case)
-  - GPU standalone resale values (what a GPU adds to a complete PC)
-  - CPU/system baseline values (what a bare system with that CPU sells for)
-
-Writes to data/price_benchmarks.json. estimator.py reads this file at
-runtime so profit calculations always use today's actual market prices.
-
-Fallback: if the file is missing or older than 48 h, estimator.py falls
-back to its hardcoded defaults (which are themselves updated to June 2026
-values and are a reasonable safety net).
-"""
+"""Read legacy component benchmarks; backend sold-price refresh is disabled."""
 from __future__ import annotations
 
 import json
 import time
-from datetime import datetime
 from pathlib import Path
-from statistics import median
 
 import structlog
 
@@ -28,7 +12,7 @@ log = structlog.get_logger(__name__)
 _BENCHMARKS_FILE = Path(__file__).resolve().parents[2] / "data" / "price_benchmarks.json"
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Query definitions
+# Legacy query labels retained for benchmark compatibility; no network collector uses them.
 # Each entry: (key, ebay_query, price_floor, price_ceiling)
 #
 # GPU queries price the STANDALONE card — we derive the "add to system resale"

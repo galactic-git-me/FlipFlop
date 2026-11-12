@@ -164,7 +164,7 @@ _sold_adapter = UnavailableSoldCompsAdapter()
 _amazon_adapter = LiveAmazonPriceAdapter()
 
 
-# score_listing() does a real eBay sold-comps scrape (and, for deep_research
+# score_listing() reads extension-submitted eBay sold observations (and, for deep_research
 # candidates, a Claude call) per listing when uncached. Run sequentially,
 # a 500-listing scan comfortably exceeds the extension's submit timeout
 # before the response can be returned. Bounded concurrency keeps wall-clock
@@ -184,10 +184,7 @@ _amazon_adapter = LiveAmazonPriceAdapter()
 # connections held by scoring) regardless of how many scans overlap —
 # this is what actually keeps it under the connection pool's limit.
 #
-# Raised from 5 to 25: both real network dependencies this loop touches are
-# already failing fast rather than doing genuine rate-limited work — eBay's
-# sold-comps scrape returns 403 in under a second (see LiveSoldCompsAdapter),
-# and the eBay Browse API opens its own circuit breaker after 2 consecutive
+# Raised from 5 to 25: the eBay Browse API opens its own circuit breaker after 2 consecutive
 # 429s and short-circuits instantly thereafter (see ebay_browse.py). With
 # both externally-imposed limits already tripped, a concurrency cap of 5 was
 # no longer protecting anything real — it was just serializing hundreds of

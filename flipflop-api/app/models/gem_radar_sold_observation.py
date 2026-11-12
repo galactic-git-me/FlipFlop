@@ -1,8 +1,7 @@
-"""Scraped eBay sold/completed-listing comparables (see
-app.gem_radar.adapters.sold_comps.LiveSoldCompsAdapter for the scrape itself).
+"""FlipFlopXtension-captured eBay sold/completed-listing comparables.
 
-Persisted so a sold-price lookup for a given model+condition is scraped once
-and reused by every other listing that resolves to the same model within the
+Persisted so extension-captured sold prices for a given model+condition are
+reused by every listing that resolves to the same model within the
 lookback window, instead of every listing independently re-scraping eBay's
 sold-search page for data that's already sitting in this table — the same
 "researched once, referenced twice" principle gem_radar_listing_observations
