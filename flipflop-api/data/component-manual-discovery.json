@@ -526,5 +526,23 @@
     "reason": "manufacturer_domain_unknown",
     "component": "CiT F3 Gaming PC Case Micro ATX, Mesh MATX Computer Case with 3 ARGB Fans | Small footprint micro atx pc case with fans inclu",
     "retry_after": "2026-12-12T04:06:08.195946"
+  },
+  "83c4684c7e43d21b6cdd07ca650810edebee1e9f2ba2c51c01c6e4703c1651d9": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "IONZ APEX EMBER- PC Gaming Case, M/ATX Mid Tower, Dual Chamber - Front I/O Type C, Tempered Glass With Wood Panel and 6 ARGB",
+    "retry_after": "2026-12-12T10:06:07.841459"
+  },
+  "99d5a4ddf7ba5c8303ccf79191ea1e0612822b797bb12049d45f2c37c1c13561": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR FRAME 4500X RS-R ARGB Panoramic Glass Mid-Tower PC Case \u2013 InfiniRail Mounting System, Fits Dual 360mm Radiators, GPU",
+    "retry_after": "2026-12-12T10:06:07.841459"
+  },
+  "e4d6f8a6ea6f86acb0c83c1f646e62b2567032f1d5e7a04433e6f085882faa3a": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR AIR 5400 RS-R ARGB Triple-Chamber Mid-Tower Panoramic PC Case \u2013 3x Pre-Installed Reverse-Rotor RS120-R ARGB Fans, Low",
+    "retry_after": "2026-12-12T10:06:07.841459"
   }
 }
