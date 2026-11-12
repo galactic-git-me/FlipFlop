@@ -30,7 +30,16 @@ BenchmarkStatus = Literal["ok", "insufficient_sample", "unavailable"]
 ConfidenceBand = Literal["high", "medium", "low"]
 
 
+class SupplierProductEvidence(CamelModel):
+    page_url: str = Field(max_length=2000)
+    captured_at: datetime
+    product_name: str = Field(min_length=1, max_length=1000)
+    product_description: Optional[str] = Field(default=None, max_length=4000)
+    claim_snippets: list[str] = Field(default_factory=list, max_length=12)
+
+
 class ExtractedListing(CamelModel):
+    supplier_product_evidence: Optional[SupplierProductEvidence] = None
     source_currency: Optional[Literal['EUR', 'GBP']] = None
     source_item_price: Optional[float] = Field(default=None, gt=0)
     exchange_rate: Optional[float] = Field(default=None, gt=0)
