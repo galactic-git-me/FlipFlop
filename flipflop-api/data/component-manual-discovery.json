@@ -634,5 +634,23 @@
     "reason": "no_exact_official_pdf",
     "component": "AMD RYZEN\u2122 7 9850X3D",
     "retry_after": "2026-12-12T15:44:06.587709"
+  },
+  "92f8c498f9a10d809889042cedc9b7d375146a66ef54220f64f5045043c1b3b2": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Intel Core Ultra 5 Processor 250K Plus, up to 5.3 GHz, LGA1851 Socket, PCIe 5.0, DDR5 Support, 125W TDP",
+    "retry_after": "2026-12-12T17:33:15.488010"
+  },
+  "690b4dd5c5c5723cec807a2f1a72a1b808a0c4e67ed45e061f47e4bfccfbcc7a": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Intel Core Ultra 7 Processor 270K Plus, up to 5.5 GHz, LGA1851 Socket, PCIe 5.0, DDR5 Support, 125W TDP",
+    "retry_after": "2026-12-12T17:33:15.488010"
+  },
+  "3486cb557f56be91904a6b6d141c062c4146b5b857fc4dcf0d47eb7a3359d607": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzen 7 5800X3D Processeur 10TH ANNIVERSARY (8 Cores/16 Threads, Socket AM4, 105W TDP, 100 Mo Cache, up to 4.5 GHz Freque",
+    "retry_after": "2026-12-12T17:33:15.488010"
   }
 }

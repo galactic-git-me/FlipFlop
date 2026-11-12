@@ -6,7 +6,7 @@ at all. We already scrape eBay/Vinted/Overclockers/Temu/Amazon continuously;
 polling eBay's Browse API separately for "what's currently listed" duplicates
 data we're already collecting, and was the single biggest source of avoidable
 eBay API traffic before this rewrite. New/Used Sold comes from a scrape of
-eBay's public sold-listings search (adapters/sold_comps.py) — the one benchmark
+FlipFlopXtension's authenticated sold-listings capture — the one benchmark
 we genuinely have no other source for — persisted to gem_radar_sold_observations
 so it's scraped once per model+condition and reused, not re-scraped per listing.
 Amazon UK New remains "unavailable" in production today (see adapters/) — this

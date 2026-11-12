@@ -699,8 +699,6 @@ async def get_build_pricing(
     market_data: dict = {}
     live_close_comparables: list[MarketComparable] = []
     sold_evidence_status: str | None = None
-    sold_result: SoldCompsResult | None = None
-
     if fetch_sold:
         sold_evidence_status = "Backend sold-page requests are disabled; use FlipFlopXtension captures."
 
