@@ -25,7 +25,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import require_operator
 from app.database import AsyncSessionLocal, get_db
 from app.gem_radar.adapters.amazon_price import UnavailableAmazonPriceAdapter, LiveAmazonPriceAdapter
-from app.gem_radar.adapters.sold_comps import PlaywrightSoldCompsAdapter
+from app.gem_radar.adapters.sold_comps import UnavailableSoldCompsAdapter
 from app.gem_radar.evidence import update_latest_gems
 from app.gem_radar import identity as identity_mod
 from app.gem_radar.inventory_match import fetch_inventory_awareness
@@ -158,13 +158,9 @@ _scan_lock_guard = asyncio.Lock()
 # Precomputed category pricing stats (mean, stdev) for outlier detection
 _category_stats: dict[str, tuple[float, float]] = {}
 
-# Sold comps: uses a real logged-in eBay Playwright session (see
-# PlaywrightSoldCompsAdapter) — unauthenticated HTTP/ScrapingBee scrapes of
-# LH_Sold=1&LH_Complete=1 get 403'd by eBay's anti-bot, but a session with
-# real login cookies gets through. Re-enabled 2026-08-12 after confirming the
-# API-only path (eBay Browse API) has no sold/completed-listings endpoint at
-# all, so this is the only working source for sold comps.
-_sold_adapter = PlaywrightSoldCompsAdapter()
+# Sold observations are captured by FlipFlopXtension in its signed-in browser
+# and submitted to the API. The backend adapter is deliberately unavailable.
+_sold_adapter = UnavailableSoldCompsAdapter()
 _amazon_adapter = LiveAmazonPriceAdapter()
 
 

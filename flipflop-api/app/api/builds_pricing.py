@@ -28,7 +28,6 @@ from app.models.listing import Listing, ListingStatus
 from app.gem_radar.schemas import CamelModel, ExtractedListing
 from app.config import get_settings
 from app.gem_radar.identity import resolve_identity
-from app.gem_radar.adapters.sold_comps import LiveSoldCompsAdapter, PlaywrightSoldCompsAdapter, SoldCompsResult
 from app.services.ebay_browse import search_active_listings
 from app.services.sold_comps_cache import get_sold_comps_cache
 from app.services.figural_insurance import FiguralError, get_insurance_quote
@@ -650,7 +649,7 @@ async def submit_build_sold_comps(payload: BuildSoldCompSubmit) -> BuildSoldComp
 @router.get("/{build_id}/pricing")
 async def get_build_pricing(
     build_id: int,
-    fetch_sold: bool = Query(False, description="If True, fetch fresh sold comps directly from eBay; otherwise use cache only"),
+    fetch_sold: bool = Query(False, description="Compatibility flag; backend sold-page requests are disabled"),
 ) -> PricingBreakdown:
     """
     Fetch a ManualBuild's pricing breakdown, optionally triggering a fresh
@@ -703,51 +702,7 @@ async def get_build_pricing(
     sold_result: SoldCompsResult | None = None
 
     if fetch_sold:
-        sold_queries = list(dict.fromkeys([query, *_build_sold_queries(components)]))
-        log.info("builds_pricing.fetch_sold", build_id=build_id, queries=sold_queries, cache_key=cache_key)
-        try:
-            # Search the combined query plus CPU/GPU anchor queries. Sellers
-            # often omit one identity from a PC title, so a single combined
-            # query can return sold listings that are visible on eBay but are
-            # uselessly absent from our exact CPU+GPU cohort. Every query is
-            # still completed/sold-only; active listings never enter this set.
-            collected: list = []
-            unavailable_reasons: list[str] = []
-            seen_urls: set[str] = set()
-            browser_fallback_attempted = False
-            for sold_query in sold_queries:
-                # Use the same direct eBay completed/sold HTML scrape as
-                # component pricing. No ScrapingBee or active listings.
-                result = await LiveSoldCompsAdapter().fetch(
-                    sold_query, condition=pricing_condition,
-                )
-                if not result.available and not browser_fallback_attempted:
-                    # eBay may block the plain HTTP request with 403. Reuse
-                    # the signed-in eBay browser session, still scraping
-                    # eBay's own sold page directly and never ScrapingBee.
-                    browser_fallback_attempted = True
-                    result = await PlaywrightSoldCompsAdapter().fetch(
-                        sold_query, condition=pricing_condition,
-                    )
-                if result.available:
-                    for comp in result.comps:
-                        key = comp.url or f"{comp.title}|{comp.price}|{comp.sold_at}"
-                        if key not in seen_urls:
-                            seen_urls.add(key)
-                            collected.append(comp)
-                elif result.unavailable_reason:
-                    unavailable_reasons.append(result.unavailable_reason)
-            if collected:
-                sold_result = SoldCompsResult(available=True, comps=collected)
-                await cache.set(cache_key, sold_result)
-            else:
-                sold_evidence_status = (unavailable_reasons[-1] if unavailable_reasons
-                                        else "Sold evidence could not be retrieved")
-        except Exception as exc:
-            # A sold-data outage must not prevent the independent live BIN
-            # search below from supplying useful asking-price evidence.
-            sold_evidence_status = f"Sold evidence fetch failed: {exc}"
-            log.warning("builds_pricing.sold_fetch_failed", build_id=build_id, error=str(exc))
+        sold_evidence_status = "Backend sold-page requests are disabled; use FlipFlopXtension captures."
 
     # Pricing is intentionally sold-only. Current asking prices may be useful
     # as a separate market-context view, but must never become a sale-price

@@ -360,32 +360,7 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
 # ── eBay scraping ─────────────────────────────────────────────────────────────
 
 async def _ebay_sold_median(client: httpx.AsyncClient, search: str) -> tuple[float | None, int]:
-    """Median sold price from eBay completed listings — 3-attempt retry.
-    Returns (median_price, listing_count)."""
-    params = {
-        "_nkw": search, "_sacat": "0",
-        "LH_Sold": "1", "LH_Complete": "1",
-        "_sop": "12", "_ipg": "60",
-    }
-    for attempt in range(1):
-        try:
-            r = await client.get("https://www.ebay.co.uk/sch/i.html", params=params, headers=_EBAY_HEADERS)
-            if r.status_code == 200:
-                prices = _parse_ebay_prices(r.text)
-                if prices:
-                    prices.sort()
-                    return round(prices[len(prices) // 2], 2), len(prices)
-                # got a page but no prices — might be "Access Denied" soft block
-                if "access denied" in r.text.lower() or "interruption" in r.text.lower():
-                    await asyncio.sleep(2.5 * (attempt + 1))
-                    continue
-                return None, 0
-            if r.status_code == 403:
-                await asyncio.sleep(2.5 * (attempt + 1))
-                continue
-        except Exception as exc:
-            log.debug("ebay_sold.request_retry", search=search, attempt=attempt + 1, error=str(exc))
-            await asyncio.sleep(1.5)
+    """Backend sold collection is disabled; capture via FlipFlopXtension."""
     return None, 0
 
 

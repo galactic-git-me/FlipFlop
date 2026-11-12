@@ -4,8 +4,8 @@
 GET  /api/price-benchmarks        → current benchmark values + metadata
 POST /api/price-benchmarks/refresh → trigger an immediate refresh (async; returns job id)
 """
-from fastapi import APIRouter, BackgroundTasks
-from app.services.price_refresh import load_benchmarks, run_price_refresh
+from fastapi import APIRouter, HTTPException
+from app.services.price_refresh import load_benchmarks
 
 router = APIRouter(prefix="/price-benchmarks", tags=["price-benchmarks"])
 
@@ -13,7 +13,7 @@ router = APIRouter(prefix="/price-benchmarks", tags=["price-benchmarks"])
 @router.get("")
 async def get_price_benchmarks():
     """
-    Return the most-recent eBay UK sold price benchmarks.
+    Return the most-recent stored benchmark values (historical data may be stale).
 
     Fields prefixed with:
       cost_  → what WE pay to buy a component (sourcing cost)
@@ -53,10 +53,8 @@ async def get_price_benchmarks():
 
 
 @router.post("/refresh")
-async def trigger_price_refresh(background_tasks: BackgroundTasks):
+async def trigger_price_refresh():
     """
-    Kick off a full price refresh immediately (runs in background, ~3-4 min).
-    The scheduler runs this automatically every 24 h; use this to force an update.
+    Sold-page collection runs only in FlipFlopXtension's signed-in browser.
     """
-    background_tasks.add_task(run_price_refresh)
-    return {"ok": True, "message": "Price refresh started in background. Check /api/price-benchmarks in ~4 min."}
+    raise HTTPException(status_code=410, detail="Backend eBay sold scraping is disabled. Capture sold prices in FlipFlopXtension.")

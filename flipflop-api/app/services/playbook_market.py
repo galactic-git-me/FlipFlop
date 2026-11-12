@@ -207,38 +207,16 @@ async def review_view(db, parent_id, cell_id):
 
 
 async def collect(db, parent_id, cell_id, actor_id, *, sold_timeout_seconds=150):
-    from dataclasses import asdict
-    from app.gem_radar.adapters.sold_comps import LiveSoldCompsAdapter, PlaywrightSoldCompsAdapter
     from app.services.ebay_browse import search_active_listings
     _, definition, parts = await context(db, parent_id, cell_id)
     fingerprint = bom_hash(definition, parts)
     query = search_query(parts)
-    sold_adapter = LiveSoldCompsAdapter()
-    sold_adapter._MAX_PRICE = 10000  # Include the Playbook's premium complete PCs.
-    async def sold_with_browser_fallback():
-        result = await sold_adapter.fetch(query, 'new')
-        if result.available:
-            return result
-        browser_adapter = PlaywrightSoldCompsAdapter()
-        browser_adapter._MAX_PRICE = 10000
-        browser_result = await browser_adapter.fetch(query, 'new')
-        if not browser_result.available and browser_result.unavailable_reason:
-            browser_result.unavailable_reason = f"{result.unavailable_reason}; {browser_result.unavailable_reason}"
-        return browser_result
-
-    # New-build comparisons only; used PCs cannot establish a new-build market.
-    sold, active = await asyncio.gather(
-        asyncio.wait_for(sold_with_browser_fallback(), sold_timeout_seconds),
-        asyncio.wait_for(search_active_listings(query, condition_filter='NEW', limit=30, category_id='179'), 65),
-        return_exceptions=True)
+    # Sold observations are captured in FlipFlopXtension's signed-in browser.
+    # This endpoint may collect current asking prices through Browse API only.
+    sold, active = None, await asyncio.wait_for(
+        search_active_listings(query, condition_filter='NEW', limit=30, category_id='179'), 65)
     rows, errors = [], []
-    if isinstance(sold, BaseException):
-        errors.append('Sold-listing provider unavailable or timed out')
-    else:
-        errors.extend([] if sold.available else [sold.unavailable_reason or 'No sold observations'])
-        rows.extend(candidate({**asdict(row),
-            'postage': row.postage if row.delivery_cost_known else None,
-            'sold_at': row.sold_date_text}, 'sold', 'new', i) for i, row in enumerate(sold.comps[:60]))
+    errors.append('Sold comparisons must be captured by FlipFlopXtension.')
     if isinstance(active, BaseException):
         errors.append('Current-listing provider unavailable or timed out')
     else:

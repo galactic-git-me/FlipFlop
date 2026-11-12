@@ -36,7 +36,6 @@ import structlog
 from sqlalchemy import select
 
 from app.database import AsyncSessionLocal
-from app.gem_radar.adapters.sold_comps import PlaywrightSoldCompsAdapter
 from app.gem_radar.identity import resolve_identity
 from app.gem_radar.marketplace import fallback_listing_url
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
@@ -207,10 +206,7 @@ def _build_query(cpu: GemRadarScoredListing, gpu: GemRadarScoredListing, ram: Ge
 
 
 async def _validate_against_ebay(query: str) -> dict:
-    """Fetch real market comparables for a finished-build query: average sold
-    price (from completed listings) and the active BIN price range/average."""
-    sold_result = await PlaywrightSoldCompsAdapter().fetch(query, condition="used")
-    sold_prices = [c.price for c in sold_result.comps] if sold_result.available else []
+    """Use extension evidence where available and current prices via Browse API."""
 
     bin_items = await search_active_listings(query, condition_filter="USED|EXCELLENT|VERY_GOOD|GOOD|ACCEPTABLE", limit=50)
     bin_prices = [i["price"] for i in bin_items]
@@ -218,10 +214,10 @@ async def _validate_against_ebay(query: str) -> dict:
     return {
         "query": query,
         "sold": {
-            "available": bool(sold_prices),
-            "count": len(sold_prices),
-            "average_price": round(statistics.mean(sold_prices), 2) if sold_prices else None,
-            "unavailable_reason": None if sold_result.available else sold_result.unavailable_reason,
+            "available": False,
+            "count": 0,
+            "average_price": None,
+            "unavailable_reason": "Sold comps must be captured by FlipFlopXtension.",
         },
         "bin": {
             "available": bool(bin_prices),
