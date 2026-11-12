@@ -1149,6 +1149,9 @@ async def _run_variant_auto_media(variant_id: int, source_urls: list[str], creat
             return
         variant, slot, listing = row
         media_category, family_key, sibling_variants = await media_members(db, variant, lock=True)
+        from app.models.app_settings import AppSettings
+        automation = (await db.execute(select(AppSettings).where(AppSettings.name == "default"))).scalar_one_or_none()
+        auto_approve = bool(automation and automation.auto_approve_images)
         sibling_ids = [item.id for item in sibling_variants]
 
         async def update_preparation(status: str, progress: int, error: str | None = None) -> None:
@@ -1177,7 +1180,7 @@ async def _run_variant_auto_media(variant_id: int, source_urls: list[str], creat
                 selected_photo_url = approved_main
                 manifest = {"selected_source_url": approved_main, "source_decision": {"basis": "owner-approved main catalogue photo"}, "candidate_count_reviewed": 1}
             else:
-                if media_category != "case":
+                if media_category != "case" and not auto_approve:
                     raise ValueError("Approve the shared family photo before model generation")
                 await update_preparation("loading_source_photos", 0)
                 selected_photo_url, manifest = await select_component_photo(
@@ -1207,6 +1210,12 @@ async def _run_variant_auto_media(variant_id: int, source_urls: list[str], creat
                 "image_urls": source_urls,
                 "model_image_urls": [selected_photo_url],
                 "model_references_selected_by": (variant.asset_media_review or {}).get("main_photo_approved_by") if use_approved_main else "local_qwen_auto_review",
+                **({
+                    "main_photo_approved_url": selected_photo_url,
+                    "main_photo_approved_at": datetime.utcnow().isoformat(),
+                    "main_photo_approved_by": "automatic exact-photo review (local Qwen)",
+                    "media_family_key": family_key,
+                } if auto_approve and not use_approved_main else {}),
                 "media_preparation": {
                     "status": "READY",
                     "progress": 100,
@@ -1264,6 +1273,9 @@ async def auto_prepare_variant_asset(
     if row is None:
         raise HTTPException(status_code=404, detail="Catalogue component not found")
     variant, slot, listing = row
+    from app.models.app_settings import AppSettings
+    automation = (await db.execute(select(AppSettings).where(AppSettings.name == "default"))).scalar_one_or_none()
+    automatic_image_review = bool(automation and automation.auto_approve_images)
     if slot.slot_type.lower() in {"os", "os_secondary", "software"}:
         raise HTTPException(status_code=409, detail="Software does not need a physical 3D model")
     media_category, family_key, siblings = await media_members(db, variant, lock=True)
@@ -1325,9 +1337,11 @@ async def auto_prepare_variant_asset(
             # family key. The new identity is per listing, so carry the
             # owner's existing approval into that narrower scope.
             review["media_family_key"] = family_key
-        if family_key.endswith("_unclassified") or review.get("media_family_key") != family_key or not review.get("main_photo_approved_by") or not approved:
+        if (not automatic_image_review and
+                (family_key.endswith("_unclassified") or review.get("media_family_key") != family_key or not review.get("main_photo_approved_by") or not approved)):
             raise HTTPException(409, "Approve the shared hardware family photo first")
-        source_urls = [approved]
+        if approved and review.get("media_family_key") == family_key:
+            source_urls = [approved]
     if not source_urls:
         raise HTTPException(status_code=409, detail="No captured product photos are available for this component")
     now = datetime.utcnow().isoformat()
@@ -1341,6 +1355,58 @@ async def auto_prepare_variant_asset(
     await db.commit()
     background_tasks.add_task(_run_variant_auto_media, variant_id, source_urls, getattr(admin, "email", None))
     return {"status": "accepted", "variant_id": variant_id, "message": "The app is selecting one product photo with local Qwen before submitting one textured Meshy model job."}
+
+
+async def run_playbook_auto_model_generation_job() -> dict:
+    """Submit only missing physical model drafts referenced by Playbook proposals."""
+    if _APP_ENV != "dev":
+        return {"status": "skipped", "reason": "DEV-only model generation"}
+    import asyncio
+    from types import SimpleNamespace
+    from fastapi import BackgroundTasks
+    from app.database import AsyncSessionLocal
+    from app.models.app_settings import AppSettings
+    from app.services.playbook_service import current_proposals
+
+    async with AsyncSessionLocal() as db:
+        automation = (await db.execute(select(AppSettings).where(AppSettings.name == "default"))).scalar_one_or_none()
+        if not automation or not automation.auto_generate_3d_models:
+            return {"status": "skipped", "reason": "Auto-generate 3D models is disabled"}
+        proposals = await current_proposals(db)
+        variant_ids = list(dict.fromkeys(
+            int(part["variant_id"])
+            for proposal in proposals
+            for part in proposal.get("components", [])
+            if part.get("variant_id") and not str(part.get("role", "")).startswith("os")
+        ))
+        submitted = skipped = 0
+        for variant_id in variant_ids:
+            variant = await db.get(CatalogueVariant, variant_id)
+            if not variant:
+                skipped += 1
+                continue
+            generation = (variant.asset_media_review or {}).get("generation") or {}
+            if generation.get("status") in {
+                "QUEUED", "PREPARING", "STARTING", "RESUMING", "SUBMITTED",
+                "PENDING", "IN_PROGRESS", "PUBLISHING", "TIMED_OUT",
+            }:
+                skipped += 1
+                continue
+            background = BackgroundTasks()
+            try:
+                await auto_prepare_variant_asset(
+                    variant_id, background,
+                    admin=SimpleNamespace(email="automatic-playbook-media"),
+                    db=db,
+                )
+            except HTTPException:
+                skipped += 1
+                continue
+            await db.commit()
+            for task in background.tasks:
+                asyncio.create_task(task())
+            submitted += 1
+        return {"status": "complete", "submitted": submitted, "skipped": skipped}
 
 
 @router.get("/catalogue/photo-queue")
