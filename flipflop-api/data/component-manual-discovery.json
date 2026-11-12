@@ -454,5 +454,23 @@
     "reason": "ReadError",
     "component": "MSI MAG FORGE 320R AIRFLOW Mid-Tower PC Case - ATX Capacity, up to 390mm RTX 40 GPU Support, 4 x 120mm ARGB Fans, Magnetic Du",
     "retry_after": "2026-12-11T11:13:26.138185"
+  },
+  "a594381688003d2861785de510133c8a469b913d741b80d617bac4bf519d7296": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzen 5 5600G Six Core 3.9GHz (Socket AM4) APU with RX Vega Graphics - Retail",
+    "retry_after": "2026-12-12T02:58:09.224242"
+  },
+  "dcc7a91e898c5448f737f82522ffd96ef94b8a4fe134e8e0d1ecfdd972b3a480": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Lian Li O11D EVO RGB E-ATX Mid Tower Gaming PC Case, Tempered Glass, Black | Dual chamber modular computer case with custom R",
+    "retry_after": "2026-12-12T02:58:09.224242"
+  },
+  "b2bd1a8f7c8cf87afd2350975fbece9de2f85ca5f2ef68712f32d7c8f415ec8d": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR iCUE LINK 3500X RGB Mid-Tower ATX PC Case \u2013 Panoramic Tempered Glass \u2013 Reverse Connection Motherboard Compatible \u2013 3x",
+    "retry_after": "2026-12-12T02:58:09.224242"
   }
 }
