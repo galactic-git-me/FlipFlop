@@ -14,6 +14,7 @@ import {
 } from "recharts";
 
 type Month = { key: string; label: string };
+type Day = { key: string; label: string; timestamp: number };
 type MonthPrice = { median: number | null; best_vendor: string | null; average: number | null; low: number | null; observations: number; vendor_medians: Record<string, number> };
 type WatchedProduct = {
   cpk: string;
@@ -24,6 +25,7 @@ type WatchedProduct = {
   rank: number;
   storage_type: "nvme" | "sata" | "unclassified" | null;
   months: Record<string, MonthPrice>;
+  days: Record<string, MonthPrice>;
 };
 type WatchCategory = {
   category: "cpu" | "motherboard" | "ram" | "storage";
@@ -35,11 +37,10 @@ type WatchCategory = {
   unlinked_product_count: number;
   unclassified_storage_count: number;
 };
-type PriceWatchData = { months: Month[]; categories: WatchCategory[]; generated_at: string; price_basis: string };
+type PriceWatchData = { months: Month[]; days: Day[]; categories: WatchCategory[]; generated_at: string; price_basis: string };
 type CategoryKey = WatchCategory["category"];
 type StorageFilter = "nvme" | "sata" | "unclassified";
 
-const SERIES_COLORS = ["#22d3ee", "#a78bfa", "#34d399", "#fbbf24", "#fb7185", "#60a5fa"];
 const CATEGORY_TABS: Array<{ key: CategoryKey; label: string; mark: string }> = [
   { key: "cpu", label: "CPUs", mark: "CPU" },
   { key: "motherboard", label: "Motherboards", mark: "MB" },
@@ -61,7 +62,7 @@ export default function PriceWatchPage() {
   const [categoryKey, setCategoryKey] = useState<CategoryKey>("cpu");
   const [storageFilter, setStorageFilter] = useState<StorageFilter>("nvme");
   const [query, setQuery] = useState("");
-  const [selection, setSelection] = useState<Partial<Record<CategoryKey, string[]>>>({});
+  const [rankLimit, setRankLimit] = useState<10 | 100>(10);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -95,11 +96,12 @@ export default function PriceWatchPage() {
     return products;
   }, [categoryKey, currentCategory, query, storageFilter]);
 
-  const selectedKeys = selection[categoryKey] ?? filteredProducts.slice(0, 4).map((product) => product.cpk);
-  const selectedProducts = (currentCategory?.products ?? []).filter((product) => selectedKeys.includes(product.cpk));
-  const chartRows = (data?.months ?? []).map((month) => {
-    const row: Record<string, string | number | null> = { month: month.label };
-    for (const product of selectedProducts) row[product.cpk] = monthPrice(product, month.key)?.median ?? null;
+  const chartProducts = (currentCategory?.products ?? [])
+    .filter((product) => (categoryKey !== "storage" || product.storage_type === storageFilter) && product.rank <= rankLimit)
+    .sort((a, b) => a.rank - b.rank);
+  const chartRows = (data?.days ?? []).map((day) => {
+    const row: Record<string, string | number | null> = { timestamp: day.timestamp };
+    for (const product of chartProducts) row[product.cpk] = product.days[day.key]?.median ?? null;
     return row;
   });
   const currentMonth = data?.months[data.months.length - 1];
@@ -107,12 +109,6 @@ export default function PriceWatchPage() {
   const latestCapture = currentCategory?.last_captured_at
     ? new Date(currentCategory.last_captured_at).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })
     : null;
-  const toggleProduct = (cpk: string) => setSelection((current) => {
-    const chosen = current[categoryKey] ?? filteredProducts.slice(0, 4).map((product) => product.cpk);
-    const next = chosen.includes(cpk) ? chosen.filter((value) => value !== cpk) : chosen.length < 6 ? [...chosen, cpk] : chosen;
-    return { ...current, [categoryKey]: next };
-  });
-
   return <main className="min-h-full bg-[#05080d] p-4 text-slate-100 sm:p-6">
     <div className="mx-auto max-w-[1800px] space-y-5">
       <header className="flex flex-wrap items-end justify-between gap-4">
