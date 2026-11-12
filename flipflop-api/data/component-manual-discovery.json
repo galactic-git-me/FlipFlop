@@ -742,5 +742,23 @@
     "reason": "no_exact_official_pdf",
     "component": "ASUS PRIME X870-P WIFI AMD ATX motherboard, 14+2+1(80A) power stages,PCIe 5.0 x16 slot with full support for next-gen graphic",
     "retry_after": "2026-12-12T20:36:23.077011"
+  },
+  "941f4a4710cc1fdfe79a3a10a2920430f0811e538d69b803e2cf6379f2c78431": {
+    "status": "not_found",
+    "reason": "ConnectError",
+    "component": "ASUS TUF GAMING X870-PLUS WIFI AMD ATX motherboard, 16+2+1(80A) power stages, DDR5, PCIe 5.0 w/ full support for next-gen GPU",
+    "retry_after": "2026-12-12T20:41:45.164581"
+  },
+  "49bc8bc499c8f7c795913dce12a7ae428c3633b7ff92cd325b1d1b5c8ff4f8cd": {
+    "status": "not_found",
+    "reason": "ConnectError",
+    "component": "ASUS TUF GAMING B850-PLUS WIFI AMD ATX motherboard, 14+2+1 80A DrMOS power stages, DDR5, PCIe 5.0 Ready, 3xM.2 slots, Wi-Fi 7",
+    "retry_after": "2026-12-12T20:41:45.164581"
+  },
+  "9a95b3db8858f42aa7efaa481c2928d5f378dac923956fec0c0efae7859d15d9": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "MSI MAG B850 TOMAHAWK MAX WIFI Motherboard, ATX - Ryzen 9000/8000/7000, AM5",
+    "retry_after": "2026-12-12T20:41:45.164581"
   }
 }
