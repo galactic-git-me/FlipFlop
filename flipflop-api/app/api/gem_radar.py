@@ -23,6 +23,7 @@ from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import require_operator
+from app.api.marketplace_sourcing import router as marketplace_sourcing_router
 from app.database import AsyncSessionLocal, get_db
 from app.gem_radar.adapters.amazon_price import UnavailableAmazonPriceAdapter, LiveAmazonPriceAdapter
 from app.gem_radar.adapters.sold_comps import UnavailableSoldCompsAdapter
@@ -81,6 +82,7 @@ from app.services.amazon_bestsellers import bestseller_item_matches_category
 from app.services.playbook_extension import bestseller_tags_for_cpks
 
 router = APIRouter(prefix="/gem-radar", tags=["gem-radar"])
+router.include_router(marketplace_sourcing_router)
 
 _GEM_SPOTLIGHT_CACHE: dict[str, tuple[float, dict]] = {}
 
