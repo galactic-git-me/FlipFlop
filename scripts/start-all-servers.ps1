@@ -242,7 +242,9 @@ function Start-DevelopmentServer {
     # Each launcher run gets independent files. An abandoned DEV child can
     # keep its redirected log open after its listening port has gone away.
     $logFile = Join-Path $logsDir "$Name-$launcherRunId.log"
-    $arguments = @('/d', '/s', '/c', "$Command > `"$logFile`" 2>&1")
+    $timestampLogger = Join-Path $PSScriptRoot 'write-timestamped-log.ps1'
+    $logCommand = "$Command 2>&1 | powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File `"$timestampLogger`" > `"$logFile`""
+    $arguments = @('/d', '/s', '/c', $logCommand)
     $process = Start-Process -FilePath 'cmd.exe' -ArgumentList $arguments -WorkingDirectory $WorkingDirectory -NoNewWindow -PassThru
     return @{ Name = $Name; Process = $process; Port = $Port; Color = $Color; LogFile = $logFile }
 }

@@ -598,5 +598,23 @@
     "reason": "no_exact_official_pdf",
     "component": "Corsair NAUTILUS 360 RS LCD Liquid CPU Cooler \u2013 2.1\" IPS LCD Screen, 360mm AIO, Low-Noise, Daisy-Chain, Intel LGA 1851/1700,",
     "retry_after": "2026-12-12T15:01:35.850255"
+  },
+  "b97fde3ab832d9da6ed8c57002f5a7af3afaa16985f2854148495801f7262314": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzensets 7 7800X3D Processor with 3D V Cache technology (integrated Radeon Graphics, 8 cores/16 threads, 120W TDP, AM5 S",
+    "retry_after": "2026-12-12T15:25:47.548658"
+  },
+  "38489795df22e315a1ba910b41f254847791261c826c0143a7cf6cb82424d193": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzensets 7 9700X Processor (8 Cores/16 Threads) 65W DTP, AM5 socket, 40MB Cache, Up to 5.5 GHz max boost frequency, no c",
+    "retry_after": "2026-12-12T15:25:47.548658"
+  },
+  "fd4e5ec79a6e5af65cd26f4b4b81c27e55deff78cf451b4315cb92d9e7229760": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzensets 9 9900X Processor (radeon graphics integrated, 12 Cores/24 Threads, 120W DTP, AM5 Socket, 76MB Cache, Up to 5.6",
+    "retry_after": "2026-12-12T15:25:47.548658"
   }
 }
