@@ -616,5 +616,23 @@
     "reason": "no_exact_official_pdf",
     "component": "AMD Ryzensets 9 9900X Processor (radeon graphics integrated, 12 Cores/24 Threads, 120W DTP, AM5 Socket, 76MB Cache, Up to 5.6",
     "retry_after": "2026-12-12T15:25:47.548658"
+  },
+  "22534304d489fd333bfbcae53694c70dd2a0c3442734a76167bbb39d831818ff": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzensets 9 9950X Processor (integrated radeon graphics, 16 Cores/32 Threads, 170 W DTP, AM5 Socket, 80MB Cache, Up to 5.",
+    "retry_after": "2026-12-12T15:44:06.587709"
+  },
+  "5fb6b3fa8bf6454698c96fc72d56f2a76fb4d36cf51392824cdc28c31f8bd73a": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD RYZEN \u2122 7 9800X 3D Desktop Processor (8-core/16-thread, 104MB cache, up to 5.2 GHz max boost)",
+    "retry_after": "2026-12-12T15:44:06.587709"
+  },
+  "7a0083e9940ada4b9ff5b98ea45e17c29824637c39a7e6c8bf5b30e4d5d7a4e4": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD RYZEN\u2122 7 9850X3D",
+    "retry_after": "2026-12-12T15:44:06.587709"
   }
 }
