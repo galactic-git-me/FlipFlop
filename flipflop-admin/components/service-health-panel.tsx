@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { API_BASE_URL } from "@/lib/api";
 import { Database, Gauge, Gem, Globe } from "lucide-react";
 
-type Service = { name: string; path?: string; url?: string; icon: typeof Gauge };
+type Service = { name: string; path?: string; href?: string; icon: typeof Gauge };
 type ProbeStatus = {
   failures: number;
   lastCheckedAt: string;
@@ -18,7 +18,7 @@ const BASE_SERVICES: Service[] = [
   { name: "API", path: "/health/live", icon: Gauge },
   { name: "DB", path: "/health/database", icon: Database },
   { name: "Gem", path: "/api/gem-radar/health", icon: Gem },
-  { name: "Shop", url: "http://localhost:4313/api/health", icon: Globe },
+  { name: "Shop", path: "/health/shop", icon: Globe },
 ];
 
 export function ServiceHealthPanel() {
@@ -35,16 +35,15 @@ export function ServiceHealthPanel() {
     const check = async () => {
       const local = !liveOperator && ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
       setIsLocalhost(local);
-      const services: Service[] = [
-        ...BASE_SERVICES.slice(0, 3),
-        { name: "Shop", url: local ? "http://localhost:4313/api/health" : "https://www.theflipflop.shop/api/health", icon: Globe },
-      ];
+      const services = BASE_SERVICES.map((service) => service.name === "Shop"
+        ? { ...service, href: local ? "http://localhost:4313" : "https://www.theflipflop.shop" }
+        : service);
       await Promise.all(services.map(async (service) => {
         const checkedAt = new Date().toISOString();
         let healthy = false;
         let detail = "No response";
         try {
-          const target = service.url ?? `${API_BASE_URL}${service.path}`;
+          const target = `${API_BASE_URL}${service.path}`;
           const response = await fetch(target, {
             cache: "no-store",
             mode: "cors",
@@ -89,7 +88,7 @@ export function ServiceHealthPanel() {
           const className = "flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[9px] font-semibold text-slate-300";
           const content = <><Icon className={`h-6 w-6 ${color} ${status?.failures === 0 ? "animate-pulse" : ""}`} />{service.name}</>;
           return service.name === "Shop" ? (
-            <a key={service.name} href={isLocalhost ? "http://localhost:4313" : "https://www.theflipflop.shop"} target="_blank" rel="noreferrer" className={className} title={tooltip} aria-label={tooltip}>
+            <a key={service.name} href={service.href ?? (isLocalhost ? "http://localhost:4313" : "https://www.theflipflop.shop")} target="_blank" rel="noreferrer" className={className} title={tooltip} aria-label={tooltip}>
               {content}
             </a>
           ) : (
