@@ -782,9 +782,8 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
     result = []
     segment_by_cell = {(row.customer_type.casefold(), row.budget_level.casefold()): row for row in cell_segments}
     approved_rows = (await db.execute(text("""
-        WITH latest AS (
-            SELECT DISTINCT ON (category, asin) category, asin, title, url,
-                image_url, rank, cpk, captured_at
+        WITH latest_ids AS (
+            SELECT DISTINCT ON (category, asin) id
             FROM amazon_bestseller_observations
             ORDER BY category, asin, captured_at DESC
         )
@@ -795,7 +794,8 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
             COALESCE(m.url, a.url) AS listing_url,
             COALESCE(m.image_url, a.image_url) AS listing_image_url,
             COALESCE(m.source, 'amazon') AS listing_source
-        FROM latest a
+        FROM latest_ids latest
+        JOIN amazon_bestseller_observations a ON a.id = latest.id
         JOIN curated_bestseller_reviews r
             ON r.category = a.category AND r.cpk = COALESCE(a.cpk, 'asin:' || a.asin)
             AND r.status = 'approved'
