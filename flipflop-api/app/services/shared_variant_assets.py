@@ -51,10 +51,12 @@ async def final_assets_by_variant(db, variants: list[CatalogueVariant]) -> dict[
         return {}
     # Family lookup needs identity only. Loading complete listings once per
     # variant duplicates large source captures across the whole catalogue.
+    variant_ids = [variant.id for variant in variants]
     aliases = (await db.execute(select(CatalogueVariant.id, Listing.id, Listing.title,
         PlaybookSlot.slot_type, Listing.raw_specs['catalogue_deleted'])
         .join(PlaybookSlot, PlaybookSlot.id == CatalogueVariant.slot_id)
-        .join(Listing, Listing.id == CatalogueVariant.listing_id))).all()
+        .join(Listing, Listing.id == CatalogueVariant.listing_id)
+        .where(CatalogueVariant.id.in_(variant_ids)))).all()
     keys = {variant_id: media_key(category, title, listing_id)
         for variant_id, listing_id, title, category, deleted in aliases if not deleted}
     assets = (await db.execute(select(Component3DAsset).where(
