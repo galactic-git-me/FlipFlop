@@ -3267,7 +3267,8 @@ async def record_build_bundle_purchase(
     for part in bundle_parts:
         key = part.canonical_part_key
         quantity = int(part.quantity or 1)
-        unit_cost = float(cost_allocations[key] / quantity)
+        total_pennies = int(cost_allocations[key] * 100)
+        base_pennies, extra_pennies = divmod(total_pennies, quantity)
         slot = body.component_slots.get(key)
         component = components[slot_indexes[slot]] if slot else None
         specifications = part.specifications if isinstance(part.specifications, dict) else {}
@@ -3278,44 +3279,46 @@ async def record_build_bundle_purchase(
         component_name = (component.get("name") if component else None) or str(
             specifications.get("name") or specifications.get("model") or key
         )
-        item = InventoryItem(
-            component_name=component_name,
-            component_type=component_type,
-            quantity=quantity,
-            base_price=unit_cost,
-            shipping_cost=0,
-            discount_amount=0,
-            purchase_date=datetime.utcnow(),
-            source=body.source or f"{listing.marketplace} bundle",
-            notes=f"Internal bundle purchase {variant.id}; landed cost split across component inventory",
-            listing_url=listing.url,
-            purchase_status="PURCHASED",
-            reconciliation_status="NOT_APPLICABLE",
-        )
-        db.add(item)
-        await db.flush()
-        purchase["inventory_item_ids"].append(item.id)
-        add_event(db, inventory_item_id=item.id, manual_build_id=build.id,
-            event_type="purchased", quantity=quantity,
-            detail={"source": item.source, "bundle_variant_id": variant.id,
-                "canonical_part_key": key, "allocated_bundle_cost_gbp": str(cost_allocations[key])})
-        if component:
-            db.add(InventoryAllocation(
-                inventory_item_id=item.id, build_id=orchestration.id, flip_id=None,
-                quantity_allocated=1, cost_per_unit_at_allocation=item.actual_cost,
-                notes=f"Reserved from internal bundle purchase for draft build: {build.name}",
-            ))
-            component.update({
-                "price_paid": round(item.actual_cost, 2),
-                "source": body.source or f"{listing.marketplace} bundle",
-                "purchased": True,
-                "sourcing_candidate": False,
-                "inventory_item_id": item.id,
-                "bundle_purchase_group_id": variant.id,
-            })
+        for unit_index in range(quantity):
+            unit_pennies = base_pennies + (1 if unit_index < extra_pennies else 0)
+            item = InventoryItem(
+                component_name=component_name,
+                component_type=component_type,
+                quantity=1,
+                base_price=unit_pennies / 100,
+                shipping_cost=0,
+                discount_amount=0,
+                purchase_date=datetime.utcnow(),
+                source=body.source or f"{listing.marketplace} bundle",
+                notes=f"Internal bundle purchase {variant.id}; component cost allocated once",
+                listing_url=listing.url,
+                purchase_status="PURCHASED",
+                reconciliation_status="NOT_APPLICABLE",
+            )
+            db.add(item)
+            await db.flush()
+            purchase["inventory_item_ids"].append(item.id)
             add_event(db, inventory_item_id=item.id, manual_build_id=build.id,
-                event_type="reserved", quantity=1,
-                detail={"build_name": build.name, "bundle_variant_id": variant.id})
+                event_type="purchased", quantity=1,
+                detail={"source": item.source, "bundle_variant_id": variant.id,
+                    "canonical_part_key": key, "allocated_component_cost_gbp": f"{unit_pennies / 100:.2f}"})
+            if component and unit_index == 0:
+                db.add(InventoryAllocation(
+                    inventory_item_id=item.id, build_id=orchestration.id, flip_id=None,
+                    quantity_allocated=1, cost_per_unit_at_allocation=item.actual_cost,
+                    notes=f"Reserved from internal bundle purchase for draft build: {build.name}",
+                ))
+                component.update({
+                    "price_paid": round(item.actual_cost, 2),
+                    "source": body.source or f"{listing.marketplace} bundle",
+                    "purchased": True,
+                    "sourcing_candidate": False,
+                    "inventory_item_id": item.id,
+                    "bundle_purchase_group_id": variant.id,
+                })
+                add_event(db, inventory_item_id=item.id, manual_build_id=build.id,
+                    event_type="reserved", quantity=1,
+                    detail={"build_name": build.name, "bundle_variant_id": variant.id})
 
     build.components = components
     build.total_cost = round(sum(
