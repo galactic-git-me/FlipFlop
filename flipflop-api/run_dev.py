@@ -98,7 +98,11 @@ def start_memory_diagnostics() -> None:
             if snapshot_due and now - previous_snapshot_at >= 60:
                 snapshot = tracemalloc.take_snapshot()
                 event["top_python_allocations"] = [
-                    {"trace": str(stat.traceback), "bytes": stat.size, "blocks": stat.count}
+                    {
+                        "trace": stat.traceback.format()[-8:],
+                        "bytes": stat.size,
+                        "blocks": stat.count,
+                    }
                     for stat in snapshot.statistics("traceback")[:20]
                 ]
                 previous_snapshot_at = now
