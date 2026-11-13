@@ -448,5 +448,23 @@
     "reason": "no_exact_official_pdf",
     "component": "Fractal Design Node 804 - Black - Compact Computer Case - mATX - High Airflow - Modular interior - 3x Fractal Design Silent R2 120mm Fans Included - Water-cooling ready - USB 3.0 -Window Side Panel",
     "retry_after": "2026-12-13T18:40:02.461531"
+  },
+  "b195bec55019ddafe2d9a62b5628c087ddfde10bbc383dca59ed6d26c87b1c61": {
+    "status": "not_found",
+    "reason": "ConnectTimeout",
+    "component": "Patriot Viper Venom DDR5 16GB (2 x 8GB) 5600MHz UDIMM Desktop Gaming Memory KIT - PVV516G560C40K",
+    "retry_after": "2026-12-13T18:45:43.926727"
+  },
+  "dccb11beca886558fc06cba337b97ef8fe3d5993f0f1327615e2cad3ea43cefc": {
+    "status": "not_found",
+    "reason": "ConnectError",
+    "component": "AMD Ryzen 5 5600G Six Core 3.9GHz (Socket AM4) APU with RX Vega Graphics - Retail",
+    "retry_after": "2026-12-13T18:45:43.926727"
+  },
+  "68688aa4397c3305a31f84a50238c8b8d639109f2c1a0465c3a61ad9f21890ce": {
+    "status": "not_found",
+    "reason": "ConnectTimeout",
+    "component": "Gigabyte Radeon RX 9070 XT GAMING OC 16G Graphics Card - 16GB GDDR6, 256bit, PCI-E 5.0, 3060 MHz Core Clock, 2 x DisplayPort,",
+    "retry_after": "2026-12-13T18:45:43.926727"
   }
 }
