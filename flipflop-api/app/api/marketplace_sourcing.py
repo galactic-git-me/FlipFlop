@@ -50,6 +50,12 @@ class BundlePartInput(SourcingModel):
     reference_observed_at: datetime | None = None
 
 
+class BundleReviewInput(SourcingModel):
+    bundle_type: str = Field(min_length=1, max_length=48)
+    components: list[BundlePartInput] = Field(min_length=1, max_length=16)
+    verification_note: str = Field(min_length=12, max_length=1000)
+
+
 class OfferVariantInput(SourcingModel):
     marketplace_variant_id: str | None = Field(default=None, max_length=160)
     selected_options: dict[str, str] = Field(default_factory=dict)
@@ -447,10 +453,109 @@ async def get_extension_listing(
                 "shipping_price": variant.shipping_price, "tax_price": variant.tax_price,
                 "landed_cost": variant.landed_cost, "availability": variant.availability,
                 "verification_status": variant.verification_status, "verified_at": variant.verified_at,
+                "evidence": variant.evidence,
                 "components": components_by_variant.get(variant.id, []),
             } for variant in bundle_variants if variant.bundle_id == bundle.id],
         } for bundle in bundles],
     }
+
+
+@router.post("/bundles/variants/{variant_id}/verify")
+async def verify_extension_bundle_variant(
+    variant_id: int,
+    body: BundleReviewInput,
+    db: AsyncSession = Depends(get_db),
+    _: None = Depends(require_operator),
+):
+    """Operator-confirm exact bundle contents from extension-captured product evidence."""
+    variant, bundle, listing = (await db.execute(
+        select(MarketplaceBundleVariant, MarketplaceBundle, MarketplaceListing)
+        .join(MarketplaceBundle, MarketplaceBundle.id == MarketplaceBundleVariant.bundle_id)
+        .join(MarketplaceListing, MarketplaceListing.id == MarketplaceBundle.listing_id)
+        .where(MarketplaceBundleVariant.id == variant_id)
+        .with_for_update()
+    )).one_or_none() or (None, None, None)
+    if variant is None:
+        raise HTTPException(404, "Bundle variant not found")
+    evidence = variant.evidence if isinstance(variant.evidence, dict) else {}
+    listing_evidence = listing.source_evidence if isinstance(listing.source_evidence, dict) else {}
+    if listing_evidence.get("source") != "flipflopxtension":
+        raise HTTPException(409, "Bundle evidence must originate from FlipFlopXtension")
+    if not (evidence.get("source_page_verified") is True
+            and evidence.get("selected_price_stable") is True
+            and evidence.get("selected_options_capture_complete") is True
+            and evidence.get("shipping_page_verified") is True
+            and evidence.get("availability_page_verified") is True):
+        raise HTTPException(409, "The extension must capture a stable selected variant, shipping and availability before review")
+    if variant.currency != "GBP" or variant.landed_cost is None or variant.availability != "available":
+        raise HTTPException(409, "Only available GBP variants with a verified landed cost can be reviewed")
+    if listing.marketplace == "aliexpress":
+        filters = listing_evidence.get("applied_filters") or {}
+        results = filters.get("results") if isinstance(filters, dict) else []
+        required = {"category", "bundleType", "deliveryDays"}
+        applied = {row.get("dimension") for row in results if isinstance(row, dict) and row.get("status") == "applied"}
+        if not required.issubset(applied):
+            raise HTTPException(409, "AliExpress bundle category, bundle type and seven-day delivery filters must all be verified")
+        if int(evidence.get("delivery_working_days") or 99) > 7:
+            raise HTTPException(409, "AliExpress bundle delivery exceeds the seven-day Flexible sourcing limit")
+
+    keys = [part.canonical_part_key.strip() for part in body.components]
+    if len(set(keys)) != len(keys):
+        raise HTTPException(422, "Each bundle component key must be unique")
+    now = datetime.now(timezone.utc)
+    existing = (await db.execute(select(MarketplaceBundleComponent).where(
+        MarketplaceBundleComponent.bundle_variant_id == variant.id,
+    ))).scalars().all()
+    for row in existing:
+        await db.delete(row)
+    references = {
+        part.canonical_part_key.strip(): part.market_reference_price * part.quantity
+        for part in body.components if part.market_reference_price is not None
+    }
+    allocations = {}
+    if len(references) == len(body.components):
+        allocations = allocate_bundle_cost(variant.landed_cost, references)
+    for part in body.components:
+        key = part.canonical_part_key.strip()
+        db.add(MarketplaceBundleComponent(
+            bundle_variant_id=variant.id,
+            canonical_part_key=key,
+            quantity=part.quantity,
+            specifications=part.specifications,
+            market_reference_price=part.market_reference_price,
+            reference_observed_at=part.reference_observed_at or now,
+            attributed_cost=allocations.get(key),
+            allocation_method="proportional_standalone_market" if allocations else None,
+            allocation_confidence=Decimal("1.0000") if allocations else None,
+        ))
+    evidence.update({
+        "bundle_contents_verified": True,
+        "bundle_contents_verified_by_operator": True,
+        "bundle_verification_note": body.verification_note.strip(),
+        "bundle_contents_verified_at": now.isoformat(),
+    })
+    variant.evidence = evidence
+    variant.verification_status = "verified"
+    variant.verified_at = now
+    listing_variant = (await db.execute(select(MarketplaceListingVariant).where(
+        MarketplaceListingVariant.listing_id == listing.id,
+        MarketplaceListingVariant.variant_fingerprint == fingerprint(variant.selected_configuration or {}),
+    ).with_for_update())).scalar_one_or_none()
+    if listing_variant:
+        listing_variant.verification_status = "verified"
+        listing_variant.verified_at = now
+        related_offers = (await db.execute(select(MarketplaceSupplierOffer).where(
+            MarketplaceSupplierOffer.variant_id == listing_variant.id,
+        ).with_for_update())).scalars().all()
+        for offer in related_offers:
+            offer.verification_status = "verified"
+            offer.evidence = {**(offer.evidence or {}), "bundle_contents_verified": True,
+                "bundle_variant_id": variant.id, "bundle_verification_note": body.verification_note.strip()}
+    bundle.bundle_type = body.bundle_type.strip().casefold().replace(" ", "_")[:48]
+    bundle.verification_status = "verified"
+    await db.commit()
+    return {"verified": True, "bundle_variant_id": variant.id, "components": len(body.components),
+        "cost_allocated": bool(allocations)}
 
 
 @router.get("/bundles/opportunities")

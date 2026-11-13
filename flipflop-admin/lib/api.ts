@@ -443,8 +443,10 @@ export interface MarketplaceSourcingListingDetail extends MarketplaceSourcingLis
       selected_configuration: Record<string, string>;
       total_price: number;
       currency: string;
+      shipping_price: number | null;
       landed_cost: number | null;
       verification_status: string;
+      evidence: Record<string, unknown>;
       components: Array<Record<string, unknown>>;
     }>;
   }>;
@@ -1235,6 +1237,14 @@ export const api = {
         absolute_savings: string; savings_percentage: string;
         components: Array<{canonical_part_key: string; quantity: number; attributed_cost: string | null}>;
       }>>("/sourcing/bundles/opportunities?limit=100"),
+    verifyBundleVariant: (variantId: number, data: {
+      bundle_type: string;
+      verification_note: string;
+      components: Array<{ canonical_part_key: string; quantity: number; market_reference_price: number; specifications: Record<string, unknown> }>;
+    }) => requestGemRadar<{ verified: boolean; bundle_variant_id: number; components: number; cost_allocated: boolean }>(
+      `/sourcing/bundles/variants/${variantId}/verify`,
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) },
+    ),
     currentGem: () => requestGemRadar<unknown>("/current-gem"),
     // This read model belongs to the main API database. Use the main API
     // proxy rather than the separately deployed Gem Radar worker, whose

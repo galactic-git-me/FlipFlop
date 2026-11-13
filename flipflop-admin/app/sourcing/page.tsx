@@ -3041,6 +3041,8 @@ function MarketplaceEvidenceTab() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [opportunities, setOpportunities] = useState<Awaited<ReturnType<typeof api.gemRadar.verifiedBundleOpportunities>>>([]);
+  const [bundleReviews, setBundleReviews] = useState<Record<number, { bundleType: string; components: string; note: string }>>({});
+  const [verifyingBundleId, setVerifyingBundleId] = useState<number | null>(null);
 
   const refresh = async () => {
     setLoading(true); setError("");
@@ -3054,6 +3056,30 @@ function MarketplaceEvidenceTab() {
   const openDetail = async (id: number) => {
     try { setDetail(await api.gemRadar.sourcingListing(id)); setError(""); }
     catch (cause) { setError(cause instanceof Error ? cause.message : String(cause)); }
+  };
+
+  const verifyBundle = async (variantId: number, defaultType: string) => {
+    const draft = bundleReviews[variantId] ?? { bundleType: defaultType, components: "", note: "" };
+    const components = draft.components.split(/\r?\n/).filter(line => line.trim()).map(line => {
+      const [canonical_part_key, quantityText, referenceText] = line.split("\t");
+      return { canonical_part_key: canonical_part_key?.trim() ?? "", quantity: Number(quantityText), market_reference_price: Number(referenceText), specifications: {} };
+    });
+    if (!components.length || components.some(part => !part.canonical_part_key || !Number.isInteger(part.quantity) || part.quantity < 1 || !Number.isFinite(part.market_reference_price) || part.market_reference_price <= 0)) {
+      setError("Enter each verified bundle part on its own line as: canonical part key, quantity and GBP market reference separated by tabs.");
+      return;
+    }
+    setVerifyingBundleId(variantId); setError("");
+    try {
+      await api.gemRadar.verifyBundleVariant(variantId, {
+        bundle_type: draft.bundleType,
+        verification_note: draft.note,
+        components,
+      });
+      if (detail) setDetail(await api.gemRadar.sourcingListing(detail.id));
+      setOpportunities(await api.gemRadar.verifiedBundleOpportunities());
+      setError("");
+    } catch (cause) { setError(cause instanceof Error ? cause.message : String(cause)); }
+    finally { setVerifyingBundleId(null); }
   };
 
   return <div className="space-y-4 p-4">
@@ -3092,7 +3118,20 @@ function MarketplaceEvidenceTab() {
     {detail && <section className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
       <div className="mb-3 flex items-start justify-between gap-3"><div><h2 className="font-semibold text-white">{detail.title}</h2><p className="text-sm text-slate-400">{detail.marketplace} · {detail.seller || "Unknown seller"} · {detail.variants.length} captured variants</p></div><button type="button" onClick={() => setDetail(null)} className="text-sm text-slate-400 hover:text-white">Close</button></div>
       <div className="grid gap-3 md:grid-cols-2">{detail.variants.map(variant => <article key={variant.id} className="rounded-lg border border-white/10 p-3"><h3 className="font-medium text-white">Variant {variant.marketplace_variant_id || variant.id}</h3><p className="text-sm text-slate-400">{Object.entries(variant.selected_options).map(([k,v]) => `${k}: ${v}`).join(" · ") || "No option labels captured"}</p><p className="mt-1 text-sm text-slate-300">{variant.verification_status} · {variant.availability}</p>{variant.offers.map((offer, i) => <p key={i} className="mt-2 text-sm text-emerald-200">{String(offer.item_price)} {String(offer.currency)} · shipping {String(offer.shipping_price ?? "unknown")} · {String(offer.verification_status)}</p>)}</article>)}</div>
-      {detail.bundles.map(bundle => <section key={bundle.id} className="mt-4 rounded-lg border border-violet-400/20 p-3"><h3 className="font-semibold text-violet-200">Bundle: {bundle.bundle_type} · {bundle.verification_status}</h3>{bundle.variants.map(variant => <div key={variant.id} className="mt-2 text-sm text-slate-300"><p>{variant.total_price} {variant.currency} · landed {variant.landed_cost ?? "unknown"} · {variant.verification_status}</p>{variant.components.map((component, i) => <p key={i} className="ml-3 text-slate-400">{String(component.canonical_part_key)} ×{String(component.quantity)} · allocated {String(component.attributed_cost ?? "provisional")}</p>)}</div>)}</section>)}
+      {detail.bundles.map(bundle => <section key={bundle.id} className="mt-4 rounded-lg border border-violet-400/20 p-3"><h3 className="font-semibold text-violet-200">Bundle: {bundle.bundle_type} · {bundle.verification_status}</h3>{bundle.variants.map(variant => {
+        const draft = bundleReviews[variant.id] ?? { bundleType: bundle.bundle_type, components: "", note: "" };
+        return <div key={variant.id} className="mt-3 rounded-lg border border-white/10 p-3 text-sm text-slate-300">
+          <p>Variant {variant.id} · {variant.total_price} {variant.currency} · shipping {variant.shipping_price ?? "unknown"} · landed {variant.landed_cost ?? "unknown"} · {variant.verification_status}</p>
+          <p className="mt-1 text-xs text-slate-500">Selected configuration: {Object.entries(variant.selected_configuration).map(([key, value]) => `${key}: ${value}`).join(" · ") || "No option labels captured"}</p>
+          {variant.components.map((component, i) => <p key={i} className="ml-3 text-xs text-slate-400">{String(component.canonical_part_key)} ×{String(component.quantity)} · allocated {String(component.attributed_cost ?? "provisional")}</p>)}
+          {variant.verification_status !== "verified" && <div className="mt-3 grid gap-2">
+            <input aria-label="Verified bundle type" value={draft.bundleType} onChange={event => setBundleReviews(current => ({ ...current, [variant.id]: { ...draft, bundleType: event.target.value } }))} placeholder="Bundle type" className="rounded border border-white/10 bg-slate-950 px-2 py-1.5 text-xs" />
+            <textarea aria-label="Verified bundle component mapping" value={draft.components} onChange={event => setBundleReviews(current => ({ ...current, [variant.id]: { ...draft, components: event.target.value } }))} placeholder={"One exact component per line: canonical part key<TAB>quantity<TAB>GBP market reference\nExample: AMD|Ryzen 5 5600<TAB>1<TAB>90.00"} rows={4} className="rounded border border-white/10 bg-slate-950 px-2 py-2 font-mono text-xs" />
+            <input aria-label="Bundle verification note" value={draft.note} onChange={event => setBundleReviews(current => ({ ...current, [variant.id]: { ...draft, note: event.target.value } }))} placeholder="Note how the product page confirmed these exact contents" className="rounded border border-white/10 bg-slate-950 px-2 py-1.5 text-xs" />
+            <button type="button" disabled={verifyingBundleId === variant.id} onClick={() => void verifyBundle(variant.id, bundle.bundle_type)} className="justify-self-start rounded bg-violet-500/20 px-3 py-2 text-xs font-semibold text-violet-100 disabled:opacity-50">{verifyingBundleId === variant.id ? "Verifying…" : "Verify exact bundle contents"}</button>
+          </div>}
+        </div>;
+      })}</section>)}
     </section>}
   </div>;
 }
