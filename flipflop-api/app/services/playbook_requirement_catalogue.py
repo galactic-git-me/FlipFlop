@@ -108,17 +108,21 @@ async def link_missing_requirements(db, offers):
     if not needs:
         return {'linked':0,'unresolved':[]}
     rows=(await db.execute(text('''
-      SELECT * FROM (
-        SELECT DISTINCT ON (o.listing_id) o.listing_id,o.title,o.source,o.item_price,
-          o.postage_price,o.observed_at,o.commercial_source_evidence,o.image_urls,
-          o.condition_normalised,o.listing_type,c.cpk
+      WITH latest_ids AS (
+        SELECT DISTINCT ON (o.listing_id) o.id
         FROM gem_radar_listing_observations o
-        LEFT JOIN gem_radar_listing_cpk c USING (listing_id)
         WHERE o.observed_at>=:since AND o.source IN
           ('amazon','scan','overclockers','awd_it','computer_orbit','ebuyer','ccl')
         ORDER BY o.listing_id,o.observed_at DESC,o.id DESC
-      ) latest WHERE condition_normalised='new' AND listing_type='buy_it_now'
-        AND item_price>0 AND item_price<'Infinity'::float8
+      )
+      SELECT o.listing_id,o.title,o.source,o.item_price,o.postage_price,
+        o.observed_at,o.commercial_source_evidence,o.image_urls,
+        o.condition_normalised,o.listing_type,c.cpk
+      FROM latest_ids latest
+      JOIN gem_radar_listing_observations o ON o.id=latest.id
+      LEFT JOIN gem_radar_listing_cpk c USING (listing_id)
+      WHERE o.condition_normalised='new' AND o.listing_type='buy_it_now'
+        AND o.item_price>0 AND o.item_price<'Infinity'::float8
     '''),{'since':datetime.utcnow()-timedelta(days=30)})).mappings().all()
     valid=[]
     for row in rows:
