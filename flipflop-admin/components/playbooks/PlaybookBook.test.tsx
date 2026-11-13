@@ -77,19 +77,19 @@ it("keeps the same matrix and selected cell while changing pages and density", a
   await screen.findByRole("table", { name: "Recommended build matrix" });
   expect(screen.getByRole("button", { name: /2\. Market & target pricing/ }))
     .toHaveAttribute("aria-label", expect.stringContaining("requires attention"));
-  fireEvent.click(screen.getByRole("button", { name: "Open Gaming Budget" }));
+  fireEvent.click(screen.getByRole("button", { name: /Open Gaming Budget/ }));
   fireEvent.click(screen.getByRole("button", { name: /2\. Market & target pricing/ }));
   expect(screen.getByRole("button", { name: /2\. Market & target pricing/ })).toHaveAttribute("aria-current", "page");
   expect(
     screen.getByRole("table", { name: "Market & target pricing matrix" })
   ).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: "Open Gaming Budget" }))
+  expect(screen.getByRole("button", { name: /Open Gaming Budget/ }))
     .toHaveAttribute("aria-label", expect.stringContaining("requires attention"));
   expect(
-    screen.getByRole("button", { name: "Open Gaming Budget" })
+    screen.getByRole("button", { name: /Open Gaming Budget/ })
   ).toHaveAttribute("aria-pressed", "true");
   expect(
-    screen.getByRole("button", { name: "Open Office Budget" })
+    screen.getByRole("button", { name: /Open Office Budget/ })
   ).toBeInTheDocument();
   expect(
     within(screen.getByLabelText("Selected Playbook cell")).getByText(
@@ -110,7 +110,7 @@ it("keeps the same matrix and selected cell while changing pages and density", a
   fireEvent.click(screen.getByRole("button", { name: "10. Live status" }));
   expect(screen.getByRole("button", { name: "10. Live status" }))
     .not.toHaveAttribute("aria-description");
-  expect(screen.getByRole("button", { name: "Open Gaming Budget" }))
+  expect(screen.getByRole("button", { name: /Open Gaming Budget/ }))
     .not.toHaveAttribute("aria-description");
   fireEvent.click(screen.getByRole("button", { name: "15. Software" }));
   expect(screen.getByRole("button", { name: "15. Software" }))
@@ -148,7 +148,7 @@ it("reports load failure and can recover without showing an empty matrix as fact
   });
   fireEvent.click(screen.getByRole("button", { name: "Refresh Playbook" }));
   expect(
-    await screen.findByRole("button", { name: "Open Gaming Budget" })
+    await screen.findByRole("button", { name: /Open Gaming Budget/ })
   ).toBeInTheDocument();
   expect(screen.queryByRole("alert")).not.toBeInTheDocument();
 });
@@ -166,7 +166,7 @@ it("does not flag market-comparison context as a blocking pricing issue", async 
   fireEvent.click(screen.getByRole("button", { name: "2. Market & target pricing" }));
   expect(screen.getByRole("button", { name: "2. Market & target pricing" }))
     .not.toHaveAttribute("aria-description");
-  expect(screen.getByRole("button", { name: "Open Gaming Budget" }))
+  expect(screen.getByRole("button", { name: /Open Gaming Budget/ }))
     .not.toHaveAttribute("aria-description");
 });
 
