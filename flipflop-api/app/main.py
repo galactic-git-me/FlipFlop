@@ -957,26 +957,6 @@ async def database_liveness():
     return {"ok": True}
 
 
-@app.get("/health/live")
-async def liveness():
-    """Cheap process liveness probe; deliberately avoids DB and git calls."""
-    return {"ok": True}
-
-
-@app.get("/health/database")
-async def database_liveness():
-    """Check an actual database round trip for the admin service indicator."""
-    from fastapi import HTTPException
-
-    try:
-        async with engine.connect() as connection:
-            await connection.execute(text("SELECT 1"))
-    except Exception as exc:
-        log.warning("health.database_probe_failed", error_type=type(exc).__name__)
-        raise HTTPException(status_code=503, detail="Database health check failed") from exc
-    return {"ok": True}
-
-
 async def _migrate_add_columns():
     """
     Idempotent column migration — adds new nullable columns to existing tables
