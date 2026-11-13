@@ -8,10 +8,6 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: merged-worktree-cleanup-${{ github.event.pull_request.base.ref }}
-  cancel-in-progress: false
-
 jobs:
   cleanup:
     if: github.event.pull_request.merged == true

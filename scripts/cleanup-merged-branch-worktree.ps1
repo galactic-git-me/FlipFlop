@@ -27,7 +27,7 @@ if ($LASTEXITCODE -ne 0 -or [System.IO.Path]::GetFullPath($gitRoot).TrimEnd('\')
     throw "Configured path is not the FlipFlop Git repository root: $repoPath"
 }
 
-if ([string]::IsNullOrWhiteSpace($SourceBranch) -or $SourceBranch -in @('dev', 'main')) {
+if ([string]::IsNullOrWhiteSpace($SourceBranch) -or $SourceBranch -cin @('dev', 'main')) {
     Write-Output "Skipping protected or empty source branch '$SourceBranch'."
     exit 0
 }
@@ -52,7 +52,7 @@ foreach ($line in $worktrees) {
 if ($record.ContainsKey('worktree')) { $records.Add([pscustomobject]$record) }
 
 $matches = @($records | Where-Object {
-    $_.branch -eq $expectedBranch -and $_.HEAD -eq $SourceSha
+    $_.branch -ceq $expectedBranch -and $_.HEAD -ieq $SourceSha
 })
 if ($matches.Count -eq 0) {
     Write-Output "No registered worktree matches $expectedBranch at $SourceSha; nothing removed."
@@ -75,7 +75,7 @@ if (-not $targetPath.StartsWith($cleanupPrefix, [System.StringComparison]::Ordin
 
 $worktreeBranch = (& git -C $targetPath branch --show-current 2>$null).Trim()
 $worktreeHead = (& git -C $targetPath rev-parse HEAD 2>$null).Trim()
-if ($LASTEXITCODE -ne 0 -or $worktreeBranch -ne $SourceBranch -or $worktreeHead -ne $SourceSha) {
+if ($LASTEXITCODE -ne 0 -or $worktreeBranch -cne $SourceBranch -or $worktreeHead -ine $SourceSha) {
     throw "Worktree identity changed during cleanup; preserving $targetPath"
 }
 
