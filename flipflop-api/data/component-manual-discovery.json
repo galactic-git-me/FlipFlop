@@ -430,5 +430,23 @@
     "reason": "manufacturer_domain_unknown",
     "component": "CiT F3 Curved Glass mATX Gaming PC Case - Panoramic Curved Front & Side Tempered Glass - 3x 120mm ARGB Fans Included - Daisy Chain Lighting - USB 3.0 + USB 2.0-240mm AIO Support | Black",
     "retry_after": "2026-12-13T18:31:47.057621"
+  },
+  "b0cc861dc4ebf3a9171ccca7c308210b301115089f0c5e62f945f2dcaf60c847": {
+    "status": "not_found",
+    "reason": "ConnectError",
+    "component": "ASUS TUF Gaming GeForce RTX 5090 32GB GDDR7 OC Edition Gaming Graphics Card (PCIe 5.0, HDMI/DP 2.1, 3.6-slot, military-grade components, protective PCB coating, axial-tech fans, vapor chamber)",
+    "retry_after": "2026-12-13T18:40:02.461531"
+  },
+  "ec691d3dcbc73463fca476655b359cf6b079ae411b63b4bb912cb08d93ecb41c": {
+    "status": "not_found",
+    "reason": "ConnectError",
+    "component": "Corsair iCUE 5000X RGB Tempered Glass Mid-Tower ATX PC Smart Case, White",
+    "retry_after": "2026-12-13T18:40:02.461531"
+  },
+  "1c14c77bc49346f7bdeb2f07b88b72d935b097e6be02adf4a7308f3d16876c9f": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Fractal Design Node 804 - Black - Compact Computer Case - mATX - High Airflow - Modular interior - 3x Fractal Design Silent R2 120mm Fans Included - Water-cooling ready - USB 3.0 -Window Side Panel",
+    "retry_after": "2026-12-13T18:40:02.461531"
   }
 }
