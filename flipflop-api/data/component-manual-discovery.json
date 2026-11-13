@@ -778,5 +778,23 @@
     "reason": "manufacturer_domain_unknown",
     "component": "JUSTOP Black 650W PSU, ATX Switching Power Supply, Computer Desktop PC, With 120mm Fan, 8-Pin 12V, 6+2 Pin PCI-E, 6x SATA (65",
     "retry_after": "2026-12-13T00:46:23.262582"
+  },
+  "110eeeb69813d77a36886415ee2640e26b231afc6256ea6f1360fccddcacd7ef": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Corsair SF750 (2024) Fully Modular SFX Low Noise 80 Plus Platinum Power Supply \u2013 ATX 3.1 Compliant \u2013 PCIe 5.1 Ready \u2013 Small F",
+    "retry_after": "2026-12-13T03:03:12.892930"
+  },
+  "a2725f0ce09e04a36ffcd642ac2f63405d7a5cccc1cbab3a8373321c280f4cfc": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR RM850e (2025) Fully Modular Low-Noise ATX Power Supply \u2013 Black | 12V-2x6 Cable Included, ATX 3.1 & PCIe 5.1 Compliant",
+    "retry_after": "2026-12-13T03:03:12.892930"
+  },
+  "7323092b177f862c2d9a9ad689cf3cdbe005768f1f8b72e6dc9c744abde597f2": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR HX1500i (2025) Fully Modular Ultra-Low Noise ATX Power Supply with 12V-2x6 Cable \u2013 ATX 3.1 & PCIe 5.1 Compliant, Cybe",
+    "retry_after": "2026-12-13T03:03:12.892930"
   }
 }
