@@ -163,6 +163,15 @@ class AmazonSPAPI:
         payload=_json(response) or {}
         return payload if isinstance(payload,dict) else {}
 
+    async def get_catalog_item_by_asin(self, asin: str) -> dict[str, Any]:
+        """Fetch technical catalogue attributes for one exact retail ASIN."""
+        payload = await self.search_catalog_items_by_asin([asin])
+        items = payload.get("items") or []
+        item = next((row for row in items if isinstance(row, dict) and str(row.get("asin", "")).upper() == asin.upper()), None)
+        if item is None:
+            raise AmazonSPAPIError("Amazon Catalog Items API did not return the requested ASIN.", status_code=404)
+        return item
+
     async def upsert_listing(self, *, sku: str, title: str, description: str, bullet_points: list[str], price: float, quantity: int, condition: str, images: list[str]) -> dict[str, Any]:
         if not sku.strip():
             raise AmazonSPAPIError("Amazon listing SKU cannot be empty.")

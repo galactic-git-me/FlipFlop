@@ -111,6 +111,21 @@ async def ebay_item_details(
         raise HTTPException(status_code=error.status_code, detail=str(error)) from error
 
 
+@router.get('/amazon-item-details')
+async def amazon_item_details(
+    asin: str = Query(..., pattern=r'^[A-Za-z0-9]{10}$'),
+    _: None = Depends(require_operator),
+):
+    """Capture Amazon technical product details through SP-API Catalog Items."""
+    from app.services.amazon_product_details import fetch_amazon_item_details
+    from app.services.amazon_sp_api import AmazonSPAPI, AmazonSPAPIError
+
+    try:
+        return await fetch_amazon_item_details(AmazonSPAPI(), asin.upper())
+    except AmazonSPAPIError as error:
+        raise HTTPException(status_code=error.status_code or 502, detail=str(error)) from error
+
+
 from pydantic import Field
 from app.schemas.commercial_quote import StrictModel
 from app.gem_radar.schemas import CamelModel
