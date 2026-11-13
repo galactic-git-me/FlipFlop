@@ -940,7 +940,7 @@ async def health():
 @app.get("/health/live")
 async def liveness():
     """Cheap process liveness probe; deliberately avoids DB and git calls."""
-    return {"ok": True}
+    return {"ok": True, "service": "api", "checked_at": datetime.now(timezone.utc).isoformat()}
 
 
 @app.get("/health/database")
@@ -954,7 +954,7 @@ async def database_liveness():
     except Exception as exc:
         log.warning("health.database_probe_failed", error_type=type(exc).__name__)
         raise HTTPException(status_code=503, detail="Database health check failed") from exc
-    return {"ok": True}
+    return {"ok": True, "service": "database", "checked_at": datetime.now(timezone.utc).isoformat()}
 
 
 async def _migrate_add_columns():
