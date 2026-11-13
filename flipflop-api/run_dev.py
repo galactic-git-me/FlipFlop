@@ -7,6 +7,9 @@ supervisor process to restart it when Python source changes.
 """
 import argparse
 import asyncio
+import ctypes
+import ctypes.wintypes
+import json
 import os
 from pathlib import Path
 import subprocess
@@ -39,9 +42,69 @@ def configure_windows_event_loop() -> None:
 
 
 def serve(host: str, port: int) -> None:
+    if os.environ.get("FLIPFLOP_TRACE_MEMORY") == "1":
+        start_memory_diagnostics()
+
     import uvicorn
 
     uvicorn.run("app.main:app", host=host, port=port, reload=False)
+
+
+def start_memory_diagnostics() -> None:
+    """Opt-in DEV allocation sampler; emits Python allocation stacks near a memory threshold."""
+    import tracemalloc
+
+    tracemalloc.start(5)
+    process_handle = ctypes.windll.kernel32.GetCurrentProcess()
+
+    class ProcessMemoryCounters(ctypes.Structure):
+        _fields_ = [
+            ("cb", ctypes.wintypes.DWORD),
+            ("PageFaultCount", ctypes.wintypes.DWORD),
+            ("PeakWorkingSetSize", ctypes.c_size_t),
+            ("WorkingSetSize", ctypes.c_size_t),
+            ("QuotaPeakPagedPoolUsage", ctypes.c_size_t),
+            ("QuotaPagedPoolUsage", ctypes.c_size_t),
+            ("QuotaPeakNonPagedPoolUsage", ctypes.c_size_t),
+            ("QuotaNonPagedPoolUsage", ctypes.c_size_t),
+            ("PagefileUsage", ctypes.c_size_t),
+            ("PeakPagefileUsage", ctypes.c_size_t),
+            ("PrivateUsage", ctypes.c_size_t),
+        ]
+
+    counters = ProcessMemoryCounters()
+    counters.cb = ctypes.sizeof(counters)
+    get_memory = ctypes.windll.psapi.GetProcessMemoryInfo
+    get_memory.argtypes = [ctypes.wintypes.HANDLE, ctypes.c_void_p, ctypes.wintypes.DWORD]
+    get_memory.restype = ctypes.wintypes.BOOL
+    print("[memory-trace] started; Python allocation tracing depth=5", flush=True)
+
+    def sample() -> None:
+        previous_snapshot_at = 0.0
+        while True:
+            time.sleep(15)
+            if not get_memory(process_handle, ctypes.byref(counters), counters.cb):
+                continue
+            current, peak = tracemalloc.get_traced_memory()
+            private_bytes = counters.PrivateUsage
+            now = time.monotonic()
+            snapshot_due = private_bytes >= 3.5 * 1024**3 or current >= 512 * 1024**2
+            event = {
+                "private_bytes": private_bytes,
+                "working_set_bytes": counters.WorkingSetSize,
+                "python_current_bytes": current,
+                "python_peak_bytes": peak,
+            }
+            if snapshot_due and now - previous_snapshot_at >= 60:
+                snapshot = tracemalloc.take_snapshot()
+                event["top_python_allocations"] = [
+                    {"trace": str(stat.traceback), "bytes": stat.size, "blocks": stat.count}
+                    for stat in snapshot.statistics("traceback")[:20]
+                ]
+                previous_snapshot_at = now
+            print(f"[memory-trace] {json.dumps(event, separators=(',', ':'))}", flush=True)
+
+    threading.Thread(target=sample, name="api-memory-diagnostics", daemon=True).start()
 
 
 def stop_child(child: subprocess.Popen) -> None:
