@@ -938,12 +938,14 @@ async def health():
 
 
 @app.get("/health/live")
+@app.get("/api/health/live")
 async def liveness():
     """Cheap process liveness probe; deliberately avoids DB and git calls."""
     return {"ok": True, "service": "api", "checked_at": datetime.now(timezone.utc).isoformat()}
 
 
 @app.get("/health/database")
+@app.get("/api/health/database")
 async def database_liveness():
     """Check an actual database round trip for the admin service indicator."""
     from fastapi import HTTPException
@@ -958,6 +960,7 @@ async def database_liveness():
 
 
 @app.get("/health/shop")
+@app.get("/api/health/shop")
 async def storefront_liveness():
     """Probe the storefront over HTTP so the admin can read a real status."""
     import httpx

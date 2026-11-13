@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { API_BASE_URL } from "@/lib/api";
 import { Database, Gauge, Gem, Globe } from "lucide-react";
 
-type Service = { name: string; path?: string; href?: string; icon: typeof Gauge };
+type Service = { name: string; path: string; href?: string; icon: typeof Gauge };
 type ProbeStatus = {
   failures: number;
   lastCheckedAt: string;
@@ -17,7 +17,7 @@ const BASE_SERVICES: Service[] = [
   // route runs SELECT 1, and Gem reports its background queue worker pool.
   { name: "API", path: "/health/live", icon: Gauge },
   { name: "DB", path: "/health/database", icon: Database },
-  { name: "Gem", path: "/api/gem-radar/health", icon: Gem },
+  { name: "Gem", path: "/gem-radar/health", icon: Gem },
   { name: "Shop", path: "/health/shop", icon: Globe },
 ];
 
