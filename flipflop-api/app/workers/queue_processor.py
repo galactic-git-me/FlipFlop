@@ -288,6 +288,9 @@ async def process_submission_queue(process_interval_seconds: int = _EMPTY_QUEUE_
     LOCKED (see SubmissionQueueService.claim_next_pending) so workers never
     race for the same row.
     """
+    from app.services.runtime_heartbeats import configure_worker_heartbeats
+
+    configure_worker_heartbeats("gem-radar-queue", _WORKER_COUNT)
     logger.info("queue_processor.started", workers=_WORKER_COUNT)
 
     async with AsyncSessionLocal() as db:
@@ -405,9 +408,11 @@ async def _worker_loop(worker_id: int, poll_interval_seconds: int) -> None:
     Sleeps briefly only when the queue is empty or every pending row belongs
     to a search term already being processed by another worker."""
     from app.gem_radar.schema_guard import require_scan_schema
+    from app.services.runtime_heartbeats import record_worker_heartbeat
     import time
     schema_checked_at = 0.0
     while True:
+        record_worker_heartbeat("gem-radar-queue", str(worker_id))
         try:
             # Reserve one search term and claim its next page atomically from
             # the workers' point of view. The lock is held only over the
