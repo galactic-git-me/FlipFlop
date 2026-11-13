@@ -937,6 +937,59 @@ async def health():
     }
 
 
+@app.get("/health/live")
+@app.get("/api/health/live")
+async def liveness():
+    """Cheap process liveness probe; deliberately avoids DB and git calls."""
+    return {"ok": True, "service": "api", "checked_at": datetime.now(timezone.utc).isoformat()}
+
+
+@app.get("/health/database")
+@app.get("/api/health/database")
+async def database_liveness():
+    """Check an actual database round trip for the admin service indicator."""
+    from fastapi import HTTPException
+
+    try:
+        async with engine.connect() as connection:
+            await connection.execute(text("SELECT 1"))
+    except Exception as exc:
+        log.warning("health.database_probe_failed", error_type=type(exc).__name__)
+        raise HTTPException(status_code=503, detail="Database health check failed") from exc
+    return {"ok": True, "service": "database", "checked_at": datetime.now(timezone.utc).isoformat()}
+
+
+@app.get("/health/shop")
+@app.get("/api/health/shop")
+async def storefront_liveness():
+    """Probe the storefront over HTTP so the admin can read a real status."""
+    import httpx
+    from fastapi import HTTPException
+
+    if settings.app_env.strip().casefold() in {"dev", "development"}:
+        storefront_url = "http://127.0.0.1:4313/"
+    else:
+        storefront_url = settings.google_merchant_store_url.rstrip("/") + "/"
+
+    try:
+        async with httpx.AsyncClient(
+            timeout=httpx.Timeout(3.5, connect=1.5),
+            follow_redirects=True,
+        ) as client:
+            response = await client.get(storefront_url)
+            response.raise_for_status()
+    except (httpx.HTTPError, ValueError) as exc:
+        log.warning("health.shop_probe_failed", error_type=type(exc).__name__)
+        raise HTTPException(status_code=503, detail="Storefront health check failed") from exc
+
+    return {
+        "ok": True,
+        "service": "shop",
+        "status_code": response.status_code,
+        "checked_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+
 async def _migrate_add_columns():
     """
     Idempotent column migration — adds new nullable columns to existing tables

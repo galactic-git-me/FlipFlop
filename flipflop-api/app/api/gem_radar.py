@@ -16,7 +16,8 @@ from datetime import datetime, timedelta, timezone
 from typing import Literal
 
 import structlog
-from fastapi import APIRouter, Depends, Query
+import httpx
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from sqlalchemy import String, any_, bindparam, func, select, text, update
 from sqlalchemy.dialects.postgresql import ARRAY
@@ -89,6 +90,38 @@ _GEM_SPOTLIGHT_CACHE: dict[str, tuple[float, dict]] = {}
 async def playbook_market_searches(db:AsyncSession=Depends(get_db), _:None=Depends(require_operator)):
     from app.services.playbook_extension import search_feed
     return await search_feed(db)
+
+
+@router.get('/ebay-item-details')
+async def ebay_item_details(
+    item_id: str = Query(..., pattern=r'^\d{9,15}$'),
+    variation_id: str | None = Query(default=None, max_length=40, pattern=r'^[A-Za-z0-9_-]+$'),
+    _: None = Depends(require_operator),
+):
+    """Capture eBay item details through the official Browse API."""
+    from app.services.ebay_product_details import EbayBrowseDetailsError, fetch_ebay_item_details
+    from app.services.proxy import apply_httpx_proxy
+
+    try:
+        async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 20, "follow_redirects": False})) as client:
+            return await fetch_ebay_item_details(client, item_id, variation_id)
+    except EbayBrowseDetailsError as error:
+        raise HTTPException(status_code=error.status_code, detail=str(error)) from error
+
+
+@router.get('/amazon-item-details')
+async def amazon_item_details(
+    asin: str = Query(..., pattern=r'^[A-Za-z0-9]{10}$'),
+    _: None = Depends(require_operator),
+):
+    """Capture Amazon technical details through SP-API Catalog Items."""
+    from app.services.amazon_product_details import fetch_amazon_item_details
+    from app.services.amazon_sp_api import AmazonSPAPI, AmazonSPAPIError
+
+    try:
+        return await fetch_amazon_item_details(AmazonSPAPI(), asin.upper())
+    except AmazonSPAPIError as error:
+        raise HTTPException(status_code=error.status_code or 502, detail=str(error)) from error
 
 
 from pydantic import Field
@@ -332,20 +365,14 @@ async def _score_listings_concurrently(
     return [r for r in results if r is not None]
 
 
-# Extension status tracking (ephemeral, in-memory)
-class _ExtensionState(BaseModel):
-    state: Literal["idle", "scanning", "error"]
-    lastScan: datetime | None = None
-    searchesCompleted: int = 0
-    error: str | None = None
-
-
-_extension_status = _ExtensionState(state="idle")
+_extension_status_by_environment: dict[str, "ExtensionStatusResponse"] = {}
 
 
 @router.get("/health")
-async def health() -> dict[str, bool]:
-    return {"ok": True}
+async def health() -> dict[str, object]:
+    from app.services.runtime_heartbeats import worker_heartbeat_status
+
+    return worker_heartbeat_status("gem-radar-queue")
 
 
 @router.get("/pipeline-status")
@@ -4086,28 +4113,55 @@ async def ingest_listings(
 
 
 class ExtensionStatusResponse(BaseModel):
-    """Extension health status for traffic light indicator."""
+    """Last browser extension heartbeat, including explicit staleness state."""
+    state: Literal["offline", "idle", "scanning", "error"]
+    lastScan: datetime | None = None
+    searchesCompleted: int = 0
+    lastHeartbeat: datetime | None = None
+    activeSearches: int = 0
+    extensionVersion: str | None = None
+    environment: Literal["DEV", "LIVE"] | None = None
+    error: str | None = None
+
+
+class ExtensionHeartbeatIn(BaseModel):
     state: Literal["idle", "scanning", "error"]
     lastScan: datetime | None = None
     searchesCompleted: int = 0
+    activeSearches: int = 0
+    extensionVersion: str | None = None
+    environment: Literal["DEV", "LIVE"]
+    error: str | None = None
 
 
 @router.get("/extension-status", response_model=ExtensionStatusResponse)
-async def extension_status(
-    _: None = Depends(require_operator),
-) -> ExtensionStatusResponse:
-    """Return extension connection state for FlipFlop admin traffic light.
+async def extension_status(environment: Literal["DEV", "LIVE"] | None = Query(default=None)) -> ExtensionStatusResponse:
+    """Read the extension heartbeat; mark it offline after three missed minutes."""
+    status = _extension_status_by_environment.get(environment) if environment else None
+    if status is None and environment is None and _extension_status_by_environment:
+        status = max(
+            _extension_status_by_environment.values(),
+            key=lambda item: item.lastHeartbeat or datetime.min.replace(tzinfo=timezone.utc),
+        )
+    if status is None:
+        return ExtensionStatusResponse(state="offline", environment=environment)
+    status = ExtensionStatusResponse.model_validate(status)
+    if status.lastHeartbeat is None:
+        return status
+    age_seconds = (datetime.now(timezone.utc) - status.lastHeartbeat).total_seconds()
+    if age_seconds > 180:
+        return status.model_copy(update={"state": "offline", "activeSearches": 0})
+    return status
 
-    States:
-      - idle: extension connected but not currently scanning
-      - scanning: currently running a scan
-      - error: last scan failed or extension unreachable
-    """
-    return ExtensionStatusResponse(
-        state=_extension_status.state,
-        lastScan=_extension_status.lastScan,
-        searchesCompleted=_extension_status.searchesCompleted,
+
+@router.post("/extension-status/heartbeat", dependencies=[Depends(require_operator)])
+async def update_extension_heartbeat(body: ExtensionHeartbeatIn) -> dict[str, bool]:
+    """Accept a short, authenticated runtime heartbeat from FlipFlopXtension."""
+    _extension_status_by_environment[body.environment] = ExtensionStatusResponse(
+        **body.model_dump(),
+        lastHeartbeat=datetime.now(timezone.utc),
     )
+    return {"ok": True}
 
 
 class ClearListingsResponse(BaseModel):
