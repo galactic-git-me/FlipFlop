@@ -79,12 +79,12 @@ if ($LASTEXITCODE -ne 0 -or $worktreeBranch -cne $SourceBranch -or $worktreeHead
     throw "Worktree identity changed during cleanup; preserving $targetPath"
 }
 
-$changes = @(& git -C $targetPath status --porcelain --untracked-files=all 2>$null)
+$changes = @(& git -C $targetPath status --porcelain --untracked-files=all --ignored=matching 2>$null)
 if ($LASTEXITCODE -ne 0) {
     throw "Could not verify worktree status; preserving $targetPath"
 }
 if ($changes.Count -gt 0) {
-    Write-Warning "Worktree has local changes; preserving $targetPath"
+    Write-Warning "Worktree has local or ignored files; preserving $targetPath"
     exit 0
 }
 
