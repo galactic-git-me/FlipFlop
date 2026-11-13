@@ -1,13 +1,13 @@
 """Select one captured physical component photo for a curated Meshy draft.
 
-Local Qwen ranks the existing product photos and verifies the selected image
-against the exact catalogue title. The original image is passed to Meshy's
-single-image endpoint; no generated views or image edits are made here.
+Local Qwen checks captured photos against the exact catalogue title. The first
+verified original image is passed to Meshy's single-image endpoint.
 """
 from __future__ import annotations
 
 import io
 import json
+from contextlib import aclosing
 from typing import AsyncIterator, Awaitable, Callable
 from urllib.parse import urlsplit
 
@@ -17,8 +17,7 @@ from PIL import Image, UnidentifiedImageError
 from app.services.model_selection_service import ModelSelectionError, model_selection_service
 from app.services.model_reference_images import original_image_url
 
-# Photo review is run inside the API process and retains candidate bytes while
-# Qwen compares them. Keep the total input per component bounded to about 48 MB.
+# Photo review is run inside the API process. Bound its sequential image input.
 _MAX_CANDIDATES = 6
 _MAX_SOURCE_BYTES = 8 * 1024 * 1024
 _ALLOWED_IMAGE_HOSTS = {
@@ -78,7 +77,7 @@ async def _review_image(title: str, image_bytes: bytes, content_type: str) -> di
     return decision
 
 
-async def _download_candidates(urls: list[str]) -> AsyncIterator[tuple[str, bytes, str, int]]:
+async def _download_candidates(urls: list[str]) -> AsyncIterator[tuple[str, bytes, str]]:
     seen: set[str] = set()
     downloaded = 0
     async with httpx.AsyncClient(timeout=25, follow_redirects=False) as client:
@@ -112,6 +111,7 @@ async def _download_candidates(urls: list[str]) -> AsyncIterator[tuple[str, byte
                 if not chunks or content_size > _MAX_SOURCE_BYTES:
                     continue
                 content = b"".join(chunks)
+                chunks.clear()
                 with Image.open(io.BytesIO(content)) as image:
                     image.verify()
                     width, height = image.size
@@ -119,7 +119,8 @@ async def _download_candidates(urls: list[str]) -> AsyncIterator[tuple[str, byte
                 if min(width, height) < 160:
                     continue
                 downloaded += 1
-                yield resolved, content, content_type, width * height
+                yield resolved, content, content_type
+                del content
             except (httpx.HTTPError, UnidentifiedImageError, OSError, Image.DecompressionBombError):
                 continue
 
@@ -135,19 +136,20 @@ async def select_component_photo(
 ) -> tuple[str, dict]:
     """Return one Qwen-verified original photo URL and its selection evidence."""
     reviewed = 0
-    async for url, content, content_type, _pixels in _download_candidates(candidate_urls):
-        reviewed += 1
-        await progress("reviewing_source_photos", min(75, reviewed * 75 // _MAX_CANDIDATES), None)
-        decision = await _review_image(title, content, content_type)
-        if decision["physical_component"] and decision["matches_title"] and not decision["packaging_or_diagram"]:
-            await progress("single_photo_selected", 90, None)
-            return url, {
-                "selection_method": "local_qwen_exact_component_photo_review",
-                "selected_source_url": url,
-                "source_decision": decision,
-                "candidate_count_reviewed": reviewed,
-            }
-        del content
+    async with aclosing(_download_candidates(candidate_urls)) as candidates:
+        async for url, content, content_type in candidates:
+            reviewed += 1
+            await progress("reviewing_source_photos", min(75, reviewed * 75 // _MAX_CANDIDATES), None)
+            decision = await _review_image(title, content, content_type)
+            if decision["physical_component"] and decision["matches_title"] and not decision["packaging_or_diagram"]:
+                await progress("single_photo_selected", 90, None)
+                return url, {
+                    "selection_method": "local_qwen_exact_component_photo_review",
+                    "selected_source_url": url,
+                    "source_decision": decision,
+                    "candidate_count_reviewed": reviewed,
+                }
+            del content
     if reviewed == 0:
         raise MediaPipelineError("No supported, full-size captured product photos are available")
     raise MediaPipelineError("Local Qwen could not verify a captured image as the exact physical component")
