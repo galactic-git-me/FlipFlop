@@ -4138,7 +4138,7 @@ class ExtensionHeartbeatIn(BaseModel):
 async def extension_status(environment: Literal["DEV", "LIVE"] | None = Query(default=None)) -> ExtensionStatusResponse:
     """Read the extension heartbeat; mark it offline after three missed minutes."""
     status = _extension_status_by_environment.get(environment) if environment else None
-    if status is None and _extension_status_by_environment:
+    if status is None and environment is None and _extension_status_by_environment:
         status = max(
             _extension_status_by_environment.values(),
             key=lambda item: item.lastHeartbeat or datetime.min.replace(tzinfo=timezone.utc),
