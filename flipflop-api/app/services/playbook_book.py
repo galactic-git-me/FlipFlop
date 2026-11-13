@@ -1,7 +1,7 @@
 """Read-only, exact-cell operational projection and append-only change records."""
 from datetime import datetime, timedelta, timezone
 from copy import deepcopy
-from sqlalchemy import select
+from sqlalchemy import and_, func, or_, select
 from app.models.playbook import Playbook, PlaybookProposal
 from app.models.curated_build_segment import CuratedBuildSegment
 from app.models.commerce_evidence import PriceQuoteSnapshot
@@ -158,8 +158,31 @@ async def operational_book(db):
                           'tier': segment.budget_level, 'name': f'{segment.customer_type} {segment.budget_level}', 'components': {}})
     keys = [key for row in cells for key in (f"playbook-cell:{row['id']}",
             f"playbook:{parent_by_name[row['segment']].id}:cell:{row['id']}" if row['segment'] in parent_by_name else '') if key]
-    snapshots = (await db.execute(select(PriceQuoteSnapshot).where(
-        PriceQuoteSnapshot.product_key.in_(keys)).order_by(PriceQuoteSnapshot.id.desc()))).scalars().all()
+    ranked_snapshots = select(
+        PriceQuoteSnapshot.id.label('id'),
+        PriceQuoteSnapshot.product_key.label('product_key'),
+        PriceQuoteSnapshot.status.label('status'),
+        func.row_number().over(
+            partition_by=PriceQuoteSnapshot.product_key,
+            order_by=PriceQuoteSnapshot.id.desc(),
+        ).label('history_rank'),
+        func.row_number().over(
+            partition_by=(PriceQuoteSnapshot.product_key, PriceQuoteSnapshot.status),
+            order_by=PriceQuoteSnapshot.id.desc(),
+        ).label('status_rank'),
+    ).where(PriceQuoteSnapshot.product_key.in_(keys)).subquery()
+    snapshots = (await db.execute(
+        select(PriceQuoteSnapshot)
+        .join(ranked_snapshots, ranked_snapshots.c.id == PriceQuoteSnapshot.id)
+        .where(or_(
+            ranked_snapshots.c.history_rank <= 100,
+            and_(
+                ranked_snapshots.c.status.in_(('market_candidates', 'market_approved', 'market_rejected')),
+                ranked_snapshots.c.status_rank == 1,
+            ),
+        ))
+        .order_by(PriceQuoteSnapshot.id.desc())
+    )).scalars().all()
     distribution_records, unassigned = await distribution_evidence(db, cells, parents)
     market_references = await build_market_evidence(db)
     assigned_ids = {int(value) for segment in segments for value in (segment.components or {}).values()
