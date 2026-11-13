@@ -82,7 +82,12 @@ async def run_phase2_classification(
     result = await db.execute(
         text(
             """
-            SELECT DISTINCT ON (lo.listing_id)
+            WITH latest_ids AS (
+                SELECT DISTINCT ON (listing_id) id
+                FROM gem_radar_listing_observations
+                ORDER BY listing_id, observed_at DESC, id DESC
+            )
+            SELECT
                 lo.listing_id, lo.title, lo.seller_name, lo.image_url, lo.image_urls, lo.video_urls,
                 lo.condition_normalised AS condition, lo.item_price, lo.postage_price,
                 lo.delivered_price, lo.source, lo.observed_at,
@@ -92,9 +97,9 @@ async def run_phase2_classification(
                 lo.delivery_working_days, lo.delivery_estimate_source,
                 lo.review_average_rating, lo.review_count,
                 lo.commercial_source_evidence->>'url' AS captured_url
-            FROM gem_radar_listing_observations lo
+            FROM latest_ids latest
+            JOIN gem_radar_listing_observations lo ON lo.id = latest.id
             LEFT JOIN gem_radar_listing_cpk cpk ON lo.listing_id = cpk.listing_id
-            ORDER BY lo.listing_id, lo.observed_at DESC, lo.id DESC
             """
         )
     )
