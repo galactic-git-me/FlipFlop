@@ -365,19 +365,7 @@ async def _score_listings_concurrently(
     return [r for r in results if r is not None]
 
 
-# Extension status tracking (ephemeral, in-memory)
-class _ExtensionState(BaseModel):
-    state: Literal["offline", "idle", "scanning", "error"]
-    lastScan: datetime | None = None
-    searchesCompleted: int = 0
-    error: str | None = None
-    lastHeartbeat: datetime | None = None
-    activeSearches: int = 0
-    extensionVersion: str | None = None
-    environment: Literal["DEV", "LIVE"] | None = None
-
-
-_extension_status = _ExtensionState(state="offline")
+_extension_status_by_environment: dict[str, "ExtensionStatusResponse"] = {}
 
 
 @router.get("/health")
@@ -4147,22 +4135,29 @@ class ExtensionHeartbeatIn(BaseModel):
 
 
 @router.get("/extension-status", response_model=ExtensionStatusResponse)
-async def extension_status(
-) -> ExtensionStatusResponse:
+async def extension_status(environment: Literal["DEV", "LIVE"] | None = Query(default=None)) -> ExtensionStatusResponse:
     """Read the extension heartbeat; mark it offline after three missed minutes."""
-    if _extension_status.lastHeartbeat is None:
-        return _extension_status
-    age_seconds = (datetime.now(timezone.utc) - _extension_status.lastHeartbeat).total_seconds()
+    status = _extension_status_by_environment.get(environment) if environment else None
+    if status is None and _extension_status_by_environment:
+        status = max(
+            _extension_status_by_environment.values(),
+            key=lambda item: item.lastHeartbeat or datetime.min.replace(tzinfo=timezone.utc),
+        )
+    if status is None:
+        return ExtensionStatusResponse(state="offline", environment=environment)
+    status = ExtensionStatusResponse.model_validate(status)
+    if status.lastHeartbeat is None:
+        return status
+    age_seconds = (datetime.now(timezone.utc) - status.lastHeartbeat).total_seconds()
     if age_seconds > 180:
-        return _extension_status.model_copy(update={"state": "offline", "activeSearches": 0})
-    return _extension_status
+        return status.model_copy(update={"state": "offline", "activeSearches": 0})
+    return status
 
 
 @router.post("/extension-status/heartbeat", dependencies=[Depends(require_operator)])
 async def update_extension_heartbeat(body: ExtensionHeartbeatIn) -> dict[str, bool]:
     """Accept a short, authenticated runtime heartbeat from FlipFlopXtension."""
-    global _extension_status
-    _extension_status = ExtensionStatusResponse(
+    _extension_status_by_environment[body.environment] = ExtensionStatusResponse(
         **body.model_dump(),
         lastHeartbeat=datetime.now(timezone.utc),
     )

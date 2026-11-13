@@ -7,11 +7,10 @@ import { Database, Gauge, Gem, Globe } from "lucide-react";
 type Service = { name: string; path?: string; url?: string; icon: typeof Gauge };
 
 const BASE_SERVICES: Service[] = [
-  // Use unauthenticated health endpoints rather than /settings. The latter
-  // is an admin data route and can report a false outage when the session is
-  // still being established.
-  { name: "API", path: "/preflight/health", icon: Gauge },
-  { name: "DB", path: "/preflight/health", icon: Database },
+  // Keep these probes independent: the API route is process liveness, the DB
+  // route runs SELECT 1, and Gem reports its background queue worker pool.
+  { name: "API", path: "/health/live", icon: Gauge },
+  { name: "DB", path: "/health/database", icon: Database },
   { name: "Gem", path: "/gem-radar/health", icon: Gem },
   { name: "Shop", url: "http://localhost:4313", icon: Globe },
 ];
@@ -47,7 +46,12 @@ export function ServiceHealthPanel() {
           });
           // The storefront is cross-origin and may return an opaque response;
           // a completed network request still proves that it is reachable.
-          status = response.ok || response.type === "opaque" ? 0 : (missesRef.current[service.name] ?? 0) + 1;
+          if (response.type === "opaque") {
+            status = 0;
+          } else {
+            const body = await response.clone().json().catch(() => null) as { ok?: boolean } | null;
+            status = response.ok && body?.ok !== false ? 0 : (missesRef.current[service.name] ?? 0) + 1;
+          }
         } catch {
           status = (missesRef.current[service.name] ?? 0) + 1;
         }

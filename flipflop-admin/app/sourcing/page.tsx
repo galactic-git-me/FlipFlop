@@ -3052,6 +3052,13 @@ function SourcingPageInner() {
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
   const [backendConnected, setBackendConnected] = useState(false);
+  const [extensionStatus, setExtensionStatus] = useState<{
+    state: "offline" | "idle" | "scanning" | "error";
+    lastHeartbeat: string | null;
+    activeSearches: number;
+    extensionVersion: string | null;
+    environment: "DEV" | "LIVE" | null;
+  } | null>(null);
   const [sourceActivity, setSourceActivity] = useState<Record<string, string | null>>({});
   const [nextRefreshIn, setNextRefreshIn] = useState(0);
   const [nextScanAt, setNextScanAt] = useState<Date | null>(null);
@@ -3064,6 +3071,21 @@ function SourcingPageInner() {
   const currentTab = useRef(mainTab);
   currentTab.current = mainTab;
   const refreshSeconds = mainTab === "listings" ? 15 : 5;
+
+  useEffect(() => {
+    let active = true;
+    const refreshExtensionStatus = async () => {
+      try {
+        const status = await api.gemRadar.extensionStatus(process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live" ? "LIVE" : "DEV");
+        if (active) setExtensionStatus(status);
+      } catch {
+        if (active) setExtensionStatus(null);
+      }
+    };
+    void refreshExtensionStatus();
+    const timer = window.setInterval(() => void refreshExtensionStatus(), 15_000);
+    return () => { active = false; window.clearInterval(timer); };
+  }, []);
 
   useEffect(() => {
     if (highlightListingId) setMainTab("listings");
@@ -3254,9 +3276,13 @@ function SourcingPageInner() {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="hidden rounded-xl border border-white/10 bg-white/[0.06] px-3 py-2 text-xs text-slate-200 lg:block" title={lastUpdate ? `Last successful API response: ${lastUpdate.toLocaleString()}. Browser extension online status is not tracked here.` : "No successful API response yet. Browser extension online status is not tracked here."}>
+          <div className="hidden rounded-xl border border-white/10 bg-white/[0.06] px-3 py-2 text-xs text-slate-200 lg:block" title={extensionStatus?.lastHeartbeat ? `Extension heartbeat: ${new Date(extensionStatus.lastHeartbeat).toLocaleString()}${extensionStatus.extensionVersion ? ` · v${extensionStatus.extensionVersion}` : ""}${extensionStatus.environment ? ` · ${extensionStatus.environment}` : ""}` : "No browser extension heartbeat has been received."}>
             <span className={backendConnected ? "text-emerald-400" : "text-amber-300"}>●</span> API {backendConnected ? "connected" : "unavailable"}
-            <span className="ml-2 text-slate-400">· Extension status not tracked</span>
+            <span className="ml-2 text-slate-400">·</span>
+            <span className={extensionStatus?.state === "scanning" ? "text-cyan-300" : extensionStatus?.state === "idle" ? "text-emerald-400" : extensionStatus?.state === "error" ? "text-rose-300" : "text-amber-300"}>
+              Extension {extensionStatus?.state ?? "unknown"}
+              {extensionStatus?.state === "scanning" ? ` · ${extensionStatus.activeSearches} active` : ""}
+            </span>
           </div>
           {/* Next scan countdown — estimate only, see fetchScanSchedule's comment */}
           <div

@@ -1226,6 +1226,16 @@ export const api = {
     // client-side in the browser extension) — see the endpoint's docstring.
     scanScheduleStatus: () =>
       requestGemRadar<ScanScheduleStatus>("/scan-schedule-status"),
+    extensionStatus: (environment?: "DEV" | "LIVE") =>
+      requestGemRadar<{
+        state: "offline" | "idle" | "scanning" | "error";
+        lastHeartbeat: string | null;
+        lastScan: string | null;
+        searchesCompleted: number;
+        activeSearches: number;
+        extensionVersion: string | null;
+        environment: "DEV" | "LIVE" | null;
+      }>(`/extension-status${environment ? `?environment=${environment}` : ""}`, { cache: "no-store", signal: AbortSignal.timeout(4_000) }),
   },
 
   flips: {
