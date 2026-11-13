@@ -406,5 +406,11 @@
     "reason": "no_exact_official_pdf",
     "component": "MSI GeForce RTX 5050 8G SHADOW 2X OC Graphics Card - RTX 5050 GPU, 8GB GDDR6 (20Gbps/128-bit), PCIe 5.0 - DUAL-Fan Thermal De",
     "retry_after": "2026-12-11T07:55:48.905811"
+  },
+  "72f8f87ef1fbbfe7bfa2245914489b88917752ea0b7103ef279f18fa977913af": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR VENGEANCE LPX DDR4 RAM 32GB (2x16GB) Up to 3200MHz CL16-20-20-38 1.35V Intel XMP AMD EXPO Computer Memory \u2013 Black (CMK32GX4M2E3200C16)",
+    "retry_after": "2026-12-13T12:44:40.716976"
   }
 }

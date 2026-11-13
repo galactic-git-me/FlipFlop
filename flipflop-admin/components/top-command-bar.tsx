@@ -3,9 +3,10 @@
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Bell, BellRing, Heart, Radio, Search, Settings } from "lucide-react";
+import { Bell, BellRing, ClipboardCheck, Heart, Radio, Search, Settings } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "@/lib/api";
+import { getApprovalSnapshot } from "@/lib/approvals";
 import type { PlaybookProposal } from "@/lib/types";
 import { FavouritesModal } from "./FavouritesModal";
 
@@ -33,6 +34,7 @@ export function TopCommandBar() {
   const [pendingProposals, setPendingProposals] = useState<PlaybookProposal[]>([]);
   const [alerts, setAlerts] = useState<Array<{ id: number; code: string; message: string; link_url?: string | null; created_at?: string | null }>>([]);
   const [priceAlertCount, setPriceAlertCount] = useState(0);
+  const [approvalStatus, setApprovalStatus] = useState<{ count: number; partial: boolean } | null>(null);
   const [toasts, setToasts] = useState<Array<{ id: string; text: string; linkUrl?: string | null; persistent?: boolean }>>([]);
   const [confettiPieces, setConfettiPieces] = useState<Array<{ id: string; left: number; delay: number; duration: number; size: number; color: string; drift: number }>>([]);
   const [isLocalEnvironment, setIsLocalEnvironment] = useState(process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "development");
@@ -73,6 +75,17 @@ export function TopCommandBar() {
   useEffect(() => {
     setIsLocalEnvironment(!liveOperator && ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname));
   }, []);
+
+  useEffect(() => {
+    if (pathname === "/login") return;
+    let active = true;
+    const refresh = () => void getApprovalSnapshot(true).then(snapshot => {
+      if (active) setApprovalStatus({ count: snapshot.queues.reduce((sum, queue) => sum + queue.count, 0), partial: snapshot.unavailable.length > 0 });
+    }).catch(() => { if (active) setApprovalStatus(null); });
+    refresh();
+    const timer = window.setInterval(refresh, 60_000);
+    return () => { active = false; window.clearInterval(timer); };
+  }, [pathname]);
 
   useEffect(() => {
     let active = true;
@@ -323,6 +336,14 @@ export function TopCommandBar() {
               </span>
             )}
           </button>
+          <Link
+            href="/approvals"
+            aria-label={`Approvals${approvalStatus === null ? ", count unavailable" : approvalStatus.partial ? approvalStatus.count ? `, at least ${approvalStatus.count} waiting; some queues unavailable` : ", some queue counts unavailable" : `, ${approvalStatus.count} waiting`}`}
+            title={`Approvals${approvalStatus === null ? "" : ` (${approvalStatus.count}${approvalStatus.partial ? "+" : ""} waiting)`}`}
+            className={`relative inline-flex items-center transition-colors hover:text-rose-300${pathname === "/approvals" ? " text-rose-300" : ""}`}
+          >
+            <ClipboardCheck className={`h-4 w-4${approvalStatus !== null && approvalStatus.count > 0 ? " approvals-header-pulse" : ""}`} />
+          </Link>
           <button
             type="button"
             onClick={() => router.push("/price-alerts")}
@@ -484,6 +505,12 @@ export function TopCommandBar() {
         0% { transform: translate3d(0, -10px, 0) rotate(0deg); opacity: 0.95; }
         100% { transform: translate3d(var(--ff-drift), 110vh, 0) rotate(820deg); opacity: 0.2; }
       }
+      .approvals-header-pulse { color: #fb7185; animation: approvals-header-pulse 1.25s ease-in-out infinite; }
+      @keyframes approvals-header-pulse {
+        0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(244, 63, 94, 0)); }
+        50% { transform: scale(1.24); filter: drop-shadow(0 0 6px rgba(244, 63, 94, 0.75)); }
+      }
+      @media (prefers-reduced-motion: reduce) { .approvals-header-pulse { animation: none; } }
     `}</style>
     </>
   );
