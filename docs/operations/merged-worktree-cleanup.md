@@ -6,7 +6,8 @@ The `Clean up merged branch worktree` workflow runs when a pull request is merge
 
 - Register a repository-scoped Windows runner with the label `flipflop-coding-cleanup`.
 - Set the repository Actions variable `FLIPFLOP_WORKTREE_REPO` to the primary FlipFlop checkout, normally `C:\Users\mclar\CODING\FlipFlop`.
-- Run the runner under the Windows account that owns the checkout and worktrees.
+- Run the runner under the Windows account that owns the checkout and worktrees. On this PC it is registered as `flipflop-coding-cleanup-prometheus` under `PROMETHEUS\mclar`, installed at `C:\Users\mclar\actions-runner`, and started by the `FlipFlop GitHub Cleanup Runner` logon task.
+- The runner is available while `PROMETHEUS\mclar` is signed in. This setup uses a user-level logon task, not a Windows service.
 
 This runner executes repository workflow code on the local machine. Keep it repository-scoped, use GitHub's runner service account with access only to the required checkout, and do not enable it for workflows triggered by untrusted fork pull requests.
 
