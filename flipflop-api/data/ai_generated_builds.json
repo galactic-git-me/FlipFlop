@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-13T01:13:15.409797+00:00",
+  "generated_at": "2026-11-13T02:12:48.015539+00:00",
   "builds": [
     {
       "components": [
         {
-          "id": 86274913,
+          "id": 86358626,
           "listing_id": "bargain_hardware:6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in",
           "category": "cpu",
           "title": "6-Pin PCIe Female to 6-Pin PCIe Male GPU Power Cable Extension 15in",
@@ -18,7 +18,7 @@
           "url": "https://www.bargainhardware.co.uk/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in"
         },
         {
-          "id": 86275313,
+          "id": 86359026,
           "listing_id": "bargain_hardware:dell-precision-t3620-workstation-configure-to-order",
           "category": "motherboard",
           "title": "Dell Precision T3620 Workstation",
@@ -32,7 +32,7 @@
           "url": "https://www.bargainhardware.co.uk/dell-precision-t3620-workstation-configure-to-order"
         },
         {
-          "id": 86216691,
+          "id": 86300215,
           "listing_id": "167698982261",
           "category": "gpu",
           "title": "XFX Play Hard, AMD Radeon HD6970  GPU Graphics Video Game Card",
@@ -46,21 +46,21 @@
           "url": "https://www.ebay.co.uk/itm/167698982261?_skw=AMD+GPU&hash=item270ba36575:g:CiYAAeSwEA5ok9Fw"
         },
         {
-          "id": 86254822,
-          "listing_id": "800812941098",
+          "id": 86328541,
+          "listing_id": "365851449004",
           "category": "ram",
-          "title": "Crucial 16GB (1 x 16GB) PC4-21300 (DDR4-2666) Memory (CT16G4SFRA266)",
+          "title": "CORSAIR VENGEANCE LPX 8GB DDR4 2400 2666 3200 3600 MHZ Desktop Memory New Lot",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/jkQAAOSwHuRgshNm/s-l225.jpg",
-          "delivered_price": 52.7,
+          "image_url": "https://i.ebayimg.com/images/g/0TMAAeSwKCxovoEL/s-l225.jpg",
+          "delivered_price": 65.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -52.7,
-          "url": "https://www.ebay.co.uk/itm/800812941098?_skw=Integral+8GB+DDR4+RAM+3200MHz+DIMM+Desktop+Computer+Memory+Module&hash=itemba742bbf2a:g:jkQAAOSwHuRgshNm&amdata=enc%3AAQALAAABIOf5zIIojhOf%2BkQK%2Bxzjn7nDd8tXCfjsOYMlJrfYAg3Px%2FRNPp8TAo89YdUHmZcDjvK9ERGm2QuA6Uyvr5Au%2F94NLpfkbLAqjXyRnslBi11ceKdPoilmAZPoepjSCooNythAXrETNyVnvUppyihoee3yns%2FSFyRe4S4QY%2BcBkhPw7ohaLifgmekJzLrh1IG2nUZ9eJP%2BRP2TpgSO2RJFy6ohcOq%2F8Gv9YN77d0ThsR1pYtb40JnD9RHLLmkfx3nsIxuFSTQ759nD4Uy6EZ2AjkTonFE5Mt%2F9oe45LM4IOwwE9jIjY3I7TWEOnRMIbBNvSykvTMTCMRgUjBc4Fm8pXYylaUpYG5BGYzW6yEs%2FV6D6aAk8m5UiMqK2JIi46%2BE74A%3D%3D"
+          "estimated_profit": -65.99,
+          "url": "https://www.ebay.co.uk/itm/365851449004?_skw=corsair+CMK32GX4M2E3200C16&hash=item552e7216ac:g:0TMAAeSwKCxovoEL"
         },
         {
-          "id": 86275564,
+          "id": 86359277,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -74,7 +74,7 @@
           "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
         },
         {
-          "id": 86279787,
+          "id": 86363505,
           "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
           "category": "ssd",
           "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
@@ -88,7 +88,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
         },
         {
-          "id": 86278892,
+          "id": 86362605,
           "listing_id": "COO-KLK-01161",
           "category": "cooler",
           "title": "Kolink Umbra EX180 White Edition CPU Cooler - 120mm",
@@ -102,7 +102,7 @@
           "url": "https://www.overclockers.co.uk/kolink-umbra-ex180-white-edition-cpu-cooler-120mm/COO-KLK-01161.html"
         },
         {
-          "id": 86218088,
+          "id": 86301619,
           "listing_id": "176499066653",
           "category": "case",
           "title": "1 x Honor Magic 4 Lite Series PC Case - Black",
@@ -118,9 +118,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 143.16,
+      "build_cost": 156.45,
       "market": {
-        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Radeon HD6970 16gb",
+        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Radeon HD6970 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -137,13 +137,13 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -143.16,
+      "estimated_profit": -156.45,
       "rank": 1
     },
     {
       "components": [
         {
-          "id": 86274913,
+          "id": 86358626,
           "listing_id": "bargain_hardware:6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in",
           "category": "cpu",
           "title": "6-Pin PCIe Female to 6-Pin PCIe Male GPU Power Cable Extension 15in",
@@ -157,146 +157,7 @@
           "url": "https://www.bargainhardware.co.uk/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in"
         },
         {
-          "id": 86275313,
-          "listing_id": "bargain_hardware:dell-precision-t3620-workstation-configure-to-order",
-          "category": "motherboard",
-          "title": "Dell Precision T3620 Workstation",
-          "seller": "Bargain Hardware",
-          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/cache/d78d1d4c9db45efbc945a9efd4ff01f9/image/2001103d1b/dell-precision-t3620-workstation.webp",
-          "delivered_price": 30.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -30.0,
-          "url": "https://www.bargainhardware.co.uk/dell-precision-t3620-workstation-configure-to-order"
-        },
-        {
-          "id": 86216691,
-          "listing_id": "167698982261",
-          "category": "gpu",
-          "title": "XFX Play Hard, AMD Radeon HD6970  GPU Graphics Video Game Card",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/CiYAAeSwEA5ok9Fw/s-l225.jpg",
-          "delivered_price": 24.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -24.99,
-          "url": "https://www.ebay.co.uk/itm/167698982261?_skw=AMD+GPU&hash=item270ba36575:g:CiYAAeSwEA5ok9Fw"
-        },
-        {
-          "id": 86256504,
-          "listing_id": "820276432584",
-          "category": "ram",
-          "title": "Crucial 16GB DDR4-3200 PC4-25600 288-Pin UDIMM Unbuffered RAM CT16G4DFRA32A",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/HTkAAeSwlWdq3heN/s-l225.jpg",
-          "delivered_price": 55.550000000000004,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -55.55,
-          "url": "https://www.ebay.co.uk/itm/820276432584?_skw=DDR4+UDIMM+-sodimm+-laptop+-%22heatsink+only%22+-sticker+-%22empty+box%22+-%22tray+only%22&hash=itembefc490ec8:g:HTkAAeSwlWdq3heN"
-        },
-        {
-          "id": 86275564,
-          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
-          "category": "psu",
-          "title": "HP Common Slot HS PSU 460W Gold",
-          "seller": "Bargain Hardware",
-          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/cache/d78d1d4c9db45efbc945a9efd4ff01f9/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp",
-          "delivered_price": 4.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -4.0,
-          "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
-        },
-        {
-          "id": 86279787,
-          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
-          "category": "ssd",
-          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
-          "seller": "eBay",
-          "image_url": null,
-          "delivered_price": 3.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INELIGIBLE",
-          "estimated_profit": -3.99,
-          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
-        },
-        {
-          "id": 86278892,
-          "listing_id": "COO-KLK-01161",
-          "category": "cooler",
-          "title": "Kolink Umbra EX180 White Edition CPU Cooler - 120mm",
-          "seller": null,
-          "image_url": "https://www.overclockers.co.uk/dw/image/v2/BLRM_PRD/on/demandware.static/-/Sites-master-catalog-ocuk/default/dw0451cbbe/images/data/product/7d/69bade/c425842141182e34bab900e0eaa16c912969f938.jpg?sw=200",
-          "delivered_price": 4.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "OK_DEAL",
-          "estimated_profit": -4.99,
-          "url": "https://www.overclockers.co.uk/kolink-umbra-ex180-white-edition-cpu-cooler-120mm/COO-KLK-01161.html"
-        },
-        {
-          "id": 86218088,
-          "listing_id": "176499066653",
-          "category": "case",
-          "title": "1 x Honor Magic 4 Lite Series PC Case - Black",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/j70AAOSw1IdmqLkL/s-l225.jpg",
-          "delivered_price": 2.49,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -2.49,
-          "url": "https://www.ebay.co.uk/itm/176499066653"
-        }
-      ],
-      "compatibility_confidence": "unknown",
-      "super_gem_count": 4,
-      "build_cost": 146.01,
-      "market": {
-        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Radeon HD6970 16gb",
-        "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "Sold comps must be captured by FlipFlopXtension."
-        },
-        "bin": {
-          "available": false,
-          "count": 0,
-          "min_price": null,
-          "max_price": null,
-          "average_price": null
-        }
-      },
-      "resale_estimate": 0.0,
-      "resale_source": "component_estimate",
-      "estimated_profit": -146.01,
-      "rank": 2
-    },
-    {
-      "components": [
-        {
-          "id": 86274913,
-          "listing_id": "bargain_hardware:6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in",
-          "category": "cpu",
-          "title": "6-Pin PCIe Female to 6-Pin PCIe Male GPU Power Cable Extension 15in",
-          "seller": "Bargain Hardware",
-          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/cache/d78d1d4c9db45efbc945a9efd4ff01f9/image/2137854c85/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in.webp",
-          "delivered_price": 20.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -20.0,
-          "url": "https://www.bargainhardware.co.uk/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in"
-        },
-        {
-          "id": 86260527,
+          "id": 86344194,
           "listing_id": "900057395435",
           "category": "motherboard",
           "title": "Kingston A400 240GB SATA III SSD - Brand new and sealed",
@@ -310,7 +171,7 @@
           "url": "https://www.ebay.co.uk/itm/900057395435?_skw=Lexar+NS100+2.5%22+SATA+III+Internal+256GB+SSD&hash=itemd18f99f0eb:g:~jwAAeSwGhZqy~C4"
         },
         {
-          "id": 86216691,
+          "id": 86300215,
           "listing_id": "167698982261",
           "category": "gpu",
           "title": "XFX Play Hard, AMD Radeon HD6970  GPU Graphics Video Game Card",
@@ -324,21 +185,21 @@
           "url": "https://www.ebay.co.uk/itm/167698982261?_skw=AMD+GPU&hash=item270ba36575:g:CiYAAeSwEA5ok9Fw"
         },
         {
-          "id": 86254822,
-          "listing_id": "800812941098",
+          "id": 86328541,
+          "listing_id": "365851449004",
           "category": "ram",
-          "title": "Crucial 16GB (1 x 16GB) PC4-21300 (DDR4-2666) Memory (CT16G4SFRA266)",
+          "title": "CORSAIR VENGEANCE LPX 8GB DDR4 2400 2666 3200 3600 MHZ Desktop Memory New Lot",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/jkQAAOSwHuRgshNm/s-l225.jpg",
-          "delivered_price": 52.7,
+          "image_url": "https://i.ebayimg.com/images/g/0TMAAeSwKCxovoEL/s-l225.jpg",
+          "delivered_price": 65.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -52.7,
-          "url": "https://www.ebay.co.uk/itm/800812941098?_skw=Integral+8GB+DDR4+RAM+3200MHz+DIMM+Desktop+Computer+Memory+Module&hash=itemba742bbf2a:g:jkQAAOSwHuRgshNm&amdata=enc%3AAQALAAABIOf5zIIojhOf%2BkQK%2Bxzjn7nDd8tXCfjsOYMlJrfYAg3Px%2FRNPp8TAo89YdUHmZcDjvK9ERGm2QuA6Uyvr5Au%2F94NLpfkbLAqjXyRnslBi11ceKdPoilmAZPoepjSCooNythAXrETNyVnvUppyihoee3yns%2FSFyRe4S4QY%2BcBkhPw7ohaLifgmekJzLrh1IG2nUZ9eJP%2BRP2TpgSO2RJFy6ohcOq%2F8Gv9YN77d0ThsR1pYtb40JnD9RHLLmkfx3nsIxuFSTQ759nD4Uy6EZ2AjkTonFE5Mt%2F9oe45LM4IOwwE9jIjY3I7TWEOnRMIbBNvSykvTMTCMRgUjBc4Fm8pXYylaUpYG5BGYzW6yEs%2FV6D6aAk8m5UiMqK2JIi46%2BE74A%3D%3D"
+          "estimated_profit": -65.99,
+          "url": "https://www.ebay.co.uk/itm/365851449004?_skw=corsair+CMK32GX4M2E3200C16&hash=item552e7216ac:g:0TMAAeSwKCxovoEL"
         },
         {
-          "id": 86275564,
+          "id": 86359277,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -352,7 +213,7 @@
           "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
         },
         {
-          "id": 86279787,
+          "id": 86363505,
           "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
           "category": "ssd",
           "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
@@ -366,7 +227,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
         },
         {
-          "id": 86278892,
+          "id": 86362605,
           "listing_id": "COO-KLK-01161",
           "category": "cooler",
           "title": "Kolink Umbra EX180 White Edition CPU Cooler - 120mm",
@@ -380,7 +241,7 @@
           "url": "https://www.overclockers.co.uk/kolink-umbra-ex180-white-edition-cpu-cooler-120mm/COO-KLK-01161.html"
         },
         {
-          "id": 86218088,
+          "id": 86301619,
           "listing_id": "176499066653",
           "category": "case",
           "title": "1 x Honor Magic 4 Lite Series PC Case - Black",
@@ -396,9 +257,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 146.1,
+      "build_cost": 159.39,
       "market": {
-        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Radeon HD6970 16gb",
+        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Radeon HD6970 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -415,13 +276,13 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -146.1,
-      "rank": 3
+      "estimated_profit": -159.39,
+      "rank": 2
     },
     {
       "components": [
         {
-          "id": 86274913,
+          "id": 86358626,
           "listing_id": "bargain_hardware:6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in",
           "category": "cpu",
           "title": "6-Pin PCIe Female to 6-Pin PCIe Male GPU Power Cable Extension 15in",
@@ -435,7 +296,7 @@
           "url": "https://www.bargainhardware.co.uk/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in"
         },
         {
-          "id": 86241179,
+          "id": 86324779,
           "listing_id": "327338283795",
           "category": "motherboard",
           "title": "ASUS B150M-A/M.2 Supports 6/7th Gen Motherboard",
@@ -449,7 +310,7 @@
           "url": "https://www.ebay.co.uk/itm/327338283795"
         },
         {
-          "id": 86216691,
+          "id": 86300215,
           "listing_id": "167698982261",
           "category": "gpu",
           "title": "XFX Play Hard, AMD Radeon HD6970  GPU Graphics Video Game Card",
@@ -463,21 +324,21 @@
           "url": "https://www.ebay.co.uk/itm/167698982261?_skw=AMD+GPU&hash=item270ba36575:g:CiYAAeSwEA5ok9Fw"
         },
         {
-          "id": 86254822,
-          "listing_id": "800812941098",
+          "id": 86328541,
+          "listing_id": "365851449004",
           "category": "ram",
-          "title": "Crucial 16GB (1 x 16GB) PC4-21300 (DDR4-2666) Memory (CT16G4SFRA266)",
+          "title": "CORSAIR VENGEANCE LPX 8GB DDR4 2400 2666 3200 3600 MHZ Desktop Memory New Lot",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/jkQAAOSwHuRgshNm/s-l225.jpg",
-          "delivered_price": 52.7,
+          "image_url": "https://i.ebayimg.com/images/g/0TMAAeSwKCxovoEL/s-l225.jpg",
+          "delivered_price": 65.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -52.7,
-          "url": "https://www.ebay.co.uk/itm/800812941098?_skw=Integral+8GB+DDR4+RAM+3200MHz+DIMM+Desktop+Computer+Memory+Module&hash=itemba742bbf2a:g:jkQAAOSwHuRgshNm&amdata=enc%3AAQALAAABIOf5zIIojhOf%2BkQK%2Bxzjn7nDd8tXCfjsOYMlJrfYAg3Px%2FRNPp8TAo89YdUHmZcDjvK9ERGm2QuA6Uyvr5Au%2F94NLpfkbLAqjXyRnslBi11ceKdPoilmAZPoepjSCooNythAXrETNyVnvUppyihoee3yns%2FSFyRe4S4QY%2BcBkhPw7ohaLifgmekJzLrh1IG2nUZ9eJP%2BRP2TpgSO2RJFy6ohcOq%2F8Gv9YN77d0ThsR1pYtb40JnD9RHLLmkfx3nsIxuFSTQ759nD4Uy6EZ2AjkTonFE5Mt%2F9oe45LM4IOwwE9jIjY3I7TWEOnRMIbBNvSykvTMTCMRgUjBc4Fm8pXYylaUpYG5BGYzW6yEs%2FV6D6aAk8m5UiMqK2JIi46%2BE74A%3D%3D"
+          "estimated_profit": -65.99,
+          "url": "https://www.ebay.co.uk/itm/365851449004?_skw=corsair+CMK32GX4M2E3200C16&hash=item552e7216ac:g:0TMAAeSwKCxovoEL"
         },
         {
-          "id": 86275564,
+          "id": 86359277,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -491,7 +352,7 @@
           "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
         },
         {
-          "id": 86279787,
+          "id": 86363505,
           "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
           "category": "ssd",
           "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
@@ -505,7 +366,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
         },
         {
-          "id": 86278892,
+          "id": 86362605,
           "listing_id": "COO-KLK-01161",
           "category": "cooler",
           "title": "Kolink Umbra EX180 White Edition CPU Cooler - 120mm",
@@ -519,7 +380,7 @@
           "url": "https://www.overclockers.co.uk/kolink-umbra-ex180-white-edition-cpu-cooler-120mm/COO-KLK-01161.html"
         },
         {
-          "id": 86218088,
+          "id": 86301619,
           "listing_id": "176499066653",
           "category": "case",
           "title": "1 x Honor Magic 4 Lite Series PC Case - Black",
@@ -535,9 +396,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 147.15,
+      "build_cost": 160.44,
       "market": {
-        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Radeon HD6970 16gb",
+        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Radeon HD6970 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -554,13 +415,13 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -147.15,
-      "rank": 4
+      "estimated_profit": -160.44,
+      "rank": 3
     },
     {
       "components": [
         {
-          "id": 86274913,
+          "id": 86358626,
           "listing_id": "bargain_hardware:6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in",
           "category": "cpu",
           "title": "6-Pin PCIe Female to 6-Pin PCIe Male GPU Power Cable Extension 15in",
@@ -574,7 +435,7 @@
           "url": "https://www.bargainhardware.co.uk/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in"
         },
         {
-          "id": 86275313,
+          "id": 86359026,
           "listing_id": "bargain_hardware:dell-precision-t3620-workstation-configure-to-order",
           "category": "motherboard",
           "title": "Dell Precision T3620 Workstation",
@@ -588,7 +449,7 @@
           "url": "https://www.bargainhardware.co.uk/dell-precision-t3620-workstation-configure-to-order"
         },
         {
-          "id": 86210437,
+          "id": 86293941,
           "listing_id": "117507497349",
           "category": "gpu",
           "title": "XFX Play Hard, AMD Radeon HD6970 2gb HD 6970 GPU Graphics Video Game Card",
@@ -599,24 +460,24 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -29.99,
-          "url": "https://www.ebay.co.uk/itm/117507497349?_skw=AMD+GPU&hash=item1b5bfe1d85:g:9cwAAeSwELtqxgq4&amdata=enc%3AAQALAAAA4Of5zIIojhOf%2BkQK%2Bxzjn7n0WWovDxZNxNk6zATsYY6m5eb6dXowh0rIPfq4dM4pKSpMdarGaZqzAssRFmPznhEdP7nTON2zZJ6gCsen0DoyOvoV8Wlvzd7TTt8PwVpqKGOTzBe0DDxdmDtrGQgg4NIlwNNNCWrq%2FEXgG2M3A4kfBwqx0rr5wQZe46J56Iv1cDUAmKwgsrxjuo9iptqEV7SI9FRx6z%2F6qsYtQBlE%2FOYZPwyeftRbjZ3gL4BMA%2F2ot4o%2BiQX%2F3PgixzsUAvukU5HbSyj5%2FoT3smdMON9OzGIX"
+          "url": "https://www.ebay.co.uk/itm/117507497349?_skw=NVIDIA+GPU&hash=item1b5bfe1d85:g:9cwAAeSwELtqxgq4&amdata=enc%3AAQALAAAA8Of5zIIojhOf%2BkQK%2Bxzjn7n0WWovDxZNxNk6zATsYY6m5eb6dXowh0rIPfq4dM4pKSpMdarGaZqzAssRFmPznhEdP7nTON2zZJ6gCsen0DoyOvoV8Wlvzd7TTt8PwVpqKGOTzBe0DDxdmDtrGQgg4NJj5nM263zN3JQ7hoWHt5TlUSABrOkne%2FFqS9hJkRXm6SMmjxID17h3KgZ96PsLL789TXjXuI9HranBCBMnK0r%2B9xi9C56YRyjcwCaPEnLEQkv1kVjANyXQOjgwAPam%2BVQEKA6WuauSeh%2Bk4YudfQS6SHXZAXMaqc1JTBZusL15fg%3D%3D"
         },
         {
-          "id": 86254822,
-          "listing_id": "800812941098",
+          "id": 86328541,
+          "listing_id": "365851449004",
           "category": "ram",
-          "title": "Crucial 16GB (1 x 16GB) PC4-21300 (DDR4-2666) Memory (CT16G4SFRA266)",
+          "title": "CORSAIR VENGEANCE LPX 8GB DDR4 2400 2666 3200 3600 MHZ Desktop Memory New Lot",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/jkQAAOSwHuRgshNm/s-l225.jpg",
-          "delivered_price": 52.7,
+          "image_url": "https://i.ebayimg.com/images/g/0TMAAeSwKCxovoEL/s-l225.jpg",
+          "delivered_price": 65.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -52.7,
-          "url": "https://www.ebay.co.uk/itm/800812941098?_skw=Integral+8GB+DDR4+RAM+3200MHz+DIMM+Desktop+Computer+Memory+Module&hash=itemba742bbf2a:g:jkQAAOSwHuRgshNm&amdata=enc%3AAQALAAABIOf5zIIojhOf%2BkQK%2Bxzjn7nDd8tXCfjsOYMlJrfYAg3Px%2FRNPp8TAo89YdUHmZcDjvK9ERGm2QuA6Uyvr5Au%2F94NLpfkbLAqjXyRnslBi11ceKdPoilmAZPoepjSCooNythAXrETNyVnvUppyihoee3yns%2FSFyRe4S4QY%2BcBkhPw7ohaLifgmekJzLrh1IG2nUZ9eJP%2BRP2TpgSO2RJFy6ohcOq%2F8Gv9YN77d0ThsR1pYtb40JnD9RHLLmkfx3nsIxuFSTQ759nD4Uy6EZ2AjkTonFE5Mt%2F9oe45LM4IOwwE9jIjY3I7TWEOnRMIbBNvSykvTMTCMRgUjBc4Fm8pXYylaUpYG5BGYzW6yEs%2FV6D6aAk8m5UiMqK2JIi46%2BE74A%3D%3D"
+          "estimated_profit": -65.99,
+          "url": "https://www.ebay.co.uk/itm/365851449004?_skw=corsair+CMK32GX4M2E3200C16&hash=item552e7216ac:g:0TMAAeSwKCxovoEL"
         },
         {
-          "id": 86275564,
+          "id": 86359277,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -630,7 +491,7 @@
           "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
         },
         {
-          "id": 86279787,
+          "id": 86363505,
           "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
           "category": "ssd",
           "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
@@ -644,7 +505,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
         },
         {
-          "id": 86278892,
+          "id": 86362605,
           "listing_id": "COO-KLK-01161",
           "category": "cooler",
           "title": "Kolink Umbra EX180 White Edition CPU Cooler - 120mm",
@@ -658,7 +519,7 @@
           "url": "https://www.overclockers.co.uk/kolink-umbra-ex180-white-edition-cpu-cooler-120mm/COO-KLK-01161.html"
         },
         {
-          "id": 86218088,
+          "id": 86301619,
           "listing_id": "176499066653",
           "category": "case",
           "title": "1 x Honor Magic 4 Lite Series PC Case - Black",
@@ -674,9 +535,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 148.16,
+      "build_cost": 161.45,
       "market": {
-        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Radeon HD6970 16gb",
+        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Radeon HD6970 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -693,13 +554,13 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -148.16,
-      "rank": 5
+      "estimated_profit": -161.45,
+      "rank": 4
     },
     {
       "components": [
         {
-          "id": 86274913,
+          "id": 86358626,
           "listing_id": "bargain_hardware:6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in",
           "category": "cpu",
           "title": "6-Pin PCIe Female to 6-Pin PCIe Male GPU Power Cable Extension 15in",
@@ -713,7 +574,7 @@
           "url": "https://www.bargainhardware.co.uk/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in"
         },
         {
-          "id": 86275313,
+          "id": 86359026,
           "listing_id": "bargain_hardware:dell-precision-t3620-workstation-configure-to-order",
           "category": "motherboard",
           "title": "Dell Precision T3620 Workstation",
@@ -727,8 +588,8 @@
           "url": "https://www.bargainhardware.co.uk/dell-precision-t3620-workstation-configure-to-order"
         },
         {
-          "id": 86226021,
-          "listing_id": "206677404350",
+          "id": 86307859,
+          "listing_id": "206110421381",
           "category": "gpu",
           "title": "NVIDIA Quadro 4000 2GB GDDR5 Desktop GPU PCIe 2.0 Grade B EE0403",
           "seller": null,
@@ -738,24 +599,24 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -29.99,
-          "url": "https://www.ebay.co.uk/itm/206677404350?_skw=NVIDIA+GPU&hash=item301eeeeabe:g:s9MAAeSwa25pqDio&amdata=enc%3AAQALAAAA8Of5zIIojhOf%2BkQK%2Bxzjn7lQSm179JRx9OdEmoaX66PQO%2FGnf%2FUscjhh0y52JC8sbyYhgpDCoMU7%2BYUdggfee0LOxdsW2%2BuW%2FNpfmfO0kOnCbuZR2v0PoCh%2BGpSHMhc%2BLx2PDhvWX3EBRMGhAj8Hn8d5ZybW6Eji73Pyr3DfnsNqVOwmk39YT8B4upBzvvz0mndNenEMG0q1KREFsMewc0qGUMdNBSH1%2BLncm1F8CfuGhLBhKgzWBtwp1rXRu5F3dLwv8BT6p%2BXvvWgVTaWX8tERykVbEtHcLlsrBX%2BJTuanAgFlM7mvHl7ac%2Biu7zaCyw%3D%3D"
+          "url": "https://www.ebay.co.uk/itm/206110421381"
         },
         {
-          "id": 86254822,
-          "listing_id": "800812941098",
+          "id": 86328541,
+          "listing_id": "365851449004",
           "category": "ram",
-          "title": "Crucial 16GB (1 x 16GB) PC4-21300 (DDR4-2666) Memory (CT16G4SFRA266)",
+          "title": "CORSAIR VENGEANCE LPX 8GB DDR4 2400 2666 3200 3600 MHZ Desktop Memory New Lot",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/jkQAAOSwHuRgshNm/s-l225.jpg",
-          "delivered_price": 52.7,
+          "image_url": "https://i.ebayimg.com/images/g/0TMAAeSwKCxovoEL/s-l225.jpg",
+          "delivered_price": 65.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -52.7,
-          "url": "https://www.ebay.co.uk/itm/800812941098?_skw=Integral+8GB+DDR4+RAM+3200MHz+DIMM+Desktop+Computer+Memory+Module&hash=itemba742bbf2a:g:jkQAAOSwHuRgshNm&amdata=enc%3AAQALAAABIOf5zIIojhOf%2BkQK%2Bxzjn7nDd8tXCfjsOYMlJrfYAg3Px%2FRNPp8TAo89YdUHmZcDjvK9ERGm2QuA6Uyvr5Au%2F94NLpfkbLAqjXyRnslBi11ceKdPoilmAZPoepjSCooNythAXrETNyVnvUppyihoee3yns%2FSFyRe4S4QY%2BcBkhPw7ohaLifgmekJzLrh1IG2nUZ9eJP%2BRP2TpgSO2RJFy6ohcOq%2F8Gv9YN77d0ThsR1pYtb40JnD9RHLLmkfx3nsIxuFSTQ759nD4Uy6EZ2AjkTonFE5Mt%2F9oe45LM4IOwwE9jIjY3I7TWEOnRMIbBNvSykvTMTCMRgUjBc4Fm8pXYylaUpYG5BGYzW6yEs%2FV6D6aAk8m5UiMqK2JIi46%2BE74A%3D%3D"
+          "estimated_profit": -65.99,
+          "url": "https://www.ebay.co.uk/itm/365851449004?_skw=corsair+CMK32GX4M2E3200C16&hash=item552e7216ac:g:0TMAAeSwKCxovoEL"
         },
         {
-          "id": 86275564,
+          "id": 86359277,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -769,7 +630,7 @@
           "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
         },
         {
-          "id": 86279787,
+          "id": 86363505,
           "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
           "category": "ssd",
           "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
@@ -783,7 +644,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
         },
         {
-          "id": 86278892,
+          "id": 86362605,
           "listing_id": "COO-KLK-01161",
           "category": "cooler",
           "title": "Kolink Umbra EX180 White Edition CPU Cooler - 120mm",
@@ -797,7 +658,7 @@
           "url": "https://www.overclockers.co.uk/kolink-umbra-ex180-white-edition-cpu-cooler-120mm/COO-KLK-01161.html"
         },
         {
-          "id": 86218088,
+          "id": 86301619,
           "listing_id": "176499066653",
           "category": "case",
           "title": "1 x Honor Magic 4 Lite Series PC Case - Black",
@@ -813,9 +674,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 148.16,
+      "build_cost": 161.45,
       "market": {
-        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Quadro 4000 16gb",
+        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Quadro 4000 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -832,10 +693,149 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -148.16,
+      "estimated_profit": -161.45,
+      "rank": 5
+    },
+    {
+      "components": [
+        {
+          "id": 86358626,
+          "listing_id": "bargain_hardware:6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in",
+          "category": "cpu",
+          "title": "6-Pin PCIe Female to 6-Pin PCIe Male GPU Power Cable Extension 15in",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/cache/d78d1d4c9db45efbc945a9efd4ff01f9/image/2137854c85/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in.webp",
+          "delivered_price": 20.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -20.0,
+          "url": "https://www.bargainhardware.co.uk/6-pin-pcie-female-to-6-pin-pcie-male-gpu-power-cable-extension-15in"
+        },
+        {
+          "id": 86359026,
+          "listing_id": "bargain_hardware:dell-precision-t3620-workstation-configure-to-order",
+          "category": "motherboard",
+          "title": "Dell Precision T3620 Workstation",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/cache/d78d1d4c9db45efbc945a9efd4ff01f9/image/2001103d1b/dell-precision-t3620-workstation.webp",
+          "delivered_price": 30.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -30.0,
+          "url": "https://www.bargainhardware.co.uk/dell-precision-t3620-workstation-configure-to-order"
+        },
+        {
+          "id": 86308055,
+          "listing_id": "206274014319",
+          "category": "gpu",
+          "title": "NVIDIA Quadro 4000 2GB GDDR5 Desktop GPU PCIe 2.0 Grade B EI1405",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/ix8AAeSwtK1qBapH/s-l225.jpg",
+          "delivered_price": 29.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -29.99,
+          "url": "https://www.ebay.co.uk/itm/206274014319"
+        },
+        {
+          "id": 86328541,
+          "listing_id": "365851449004",
+          "category": "ram",
+          "title": "CORSAIR VENGEANCE LPX 8GB DDR4 2400 2666 3200 3600 MHZ Desktop Memory New Lot",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/0TMAAeSwKCxovoEL/s-l225.jpg",
+          "delivered_price": 65.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -65.99,
+          "url": "https://www.ebay.co.uk/itm/365851449004?_skw=corsair+CMK32GX4M2E3200C16&hash=item552e7216ac:g:0TMAAeSwKCxovoEL"
+        },
+        {
+          "id": 86359277,
+          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
+          "category": "psu",
+          "title": "HP Common Slot HS PSU 460W Gold",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/cache/d78d1d4c9db45efbc945a9efd4ff01f9/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp",
+          "delivered_price": 4.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -4.0,
+          "url": "https://www.bargainhardware.co.uk/hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21"
+        },
+        {
+          "id": 86363505,
+          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
+          "category": "ssd",
+          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
+          "seller": "eBay",
+          "image_url": null,
+          "delivered_price": 3.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INELIGIBLE",
+          "estimated_profit": -3.99,
+          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
+        },
+        {
+          "id": 86362605,
+          "listing_id": "COO-KLK-01161",
+          "category": "cooler",
+          "title": "Kolink Umbra EX180 White Edition CPU Cooler - 120mm",
+          "seller": null,
+          "image_url": "https://www.overclockers.co.uk/dw/image/v2/BLRM_PRD/on/demandware.static/-/Sites-master-catalog-ocuk/default/dw0451cbbe/images/data/product/7d/69bade/c425842141182e34bab900e0eaa16c912969f938.jpg?sw=200",
+          "delivered_price": 4.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "OK_DEAL",
+          "estimated_profit": -4.99,
+          "url": "https://www.overclockers.co.uk/kolink-umbra-ex180-white-edition-cpu-cooler-120mm/COO-KLK-01161.html"
+        },
+        {
+          "id": 86301619,
+          "listing_id": "176499066653",
+          "category": "case",
+          "title": "1 x Honor Magic 4 Lite Series PC Case - Black",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/j70AAOSw1IdmqLkL/s-l225.jpg",
+          "delivered_price": 2.49,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -2.49,
+          "url": "https://www.ebay.co.uk/itm/176499066653"
+        }
+      ],
+      "compatibility_confidence": "unknown",
+      "super_gem_count": 4,
+      "build_cost": 161.45,
+      "market": {
+        "query": "gaming pc 6-Pin PCIe Female to 6-Pin PCI Quadro 4000 8gb",
+        "sold": {
+          "available": false,
+          "count": 0,
+          "average_price": null,
+          "unavailable_reason": "Sold comps must be captured by FlipFlopXtension."
+        },
+        "bin": {
+          "available": false,
+          "count": 0,
+          "min_price": null,
+          "max_price": null,
+          "average_price": null
+        }
+      },
+      "resale_estimate": 0.0,
+      "resale_source": "component_estimate",
+      "estimated_profit": -161.45,
       "rank": 6
     }
   ],
   "candidates_evaluated": 10,
-  "total_compatible_combinations": 2816
+  "total_compatible_combinations": 2915
 }
