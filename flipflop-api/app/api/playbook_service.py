@@ -1,5 +1,5 @@
 """Generated Playbook reviews. Operators never supply component or price values."""
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query
 from pydantic import Field
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -48,9 +48,9 @@ async def decide_market(playbook_id:int, cell_id:str, body:MarketDecision, db:As
 
 
 @router.get('/book')
-async def book(db:AsyncSession=Depends(get_db)):
+async def book(history_limit:int=Query(default=3, ge=1, le=100), db:AsyncSession=Depends(get_db)):
     from app.services.playbook_book import operational_book
-    return await operational_book(db)
+    return await operational_book(db, history_limit=history_limit)
 
 
 @router.post('/pricing-guidance/refresh')
