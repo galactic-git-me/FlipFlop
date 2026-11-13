@@ -167,8 +167,7 @@ const specs: QueueSpec[] = [
     description: "Generated customer setup packages marked ready for admin review.",
     href: "/dispatch-zone?tab=getting-ready", loadCount: async () => {
       const rows = await api.dispatch.list();
-      return rows.filter(row => row.getting_started?.status === "awaiting_admin_review"
-        || (row.getting_started?.manifest as Record<string, unknown> | null | undefined)?.status === "ready_for_admin_review").length;
+      return rows.filter(row => row.getting_started?.status === "awaiting_admin_review").length;
     },
   },
   {
