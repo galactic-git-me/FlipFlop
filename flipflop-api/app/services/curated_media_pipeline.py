@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import io
 import json
-from typing import Awaitable, Callable
+from typing import AsyncIterator, Awaitable, Callable
 from urllib.parse import urlsplit
 
 import httpx
@@ -17,8 +17,10 @@ from PIL import Image, UnidentifiedImageError
 from app.services.model_selection_service import ModelSelectionError, model_selection_service
 from app.services.model_reference_images import original_image_url
 
-_MAX_CANDIDATES = 300
-_MAX_SOURCE_BYTES = 12 * 1024 * 1024
+# Photo review is run inside the API process and retains candidate bytes while
+# Qwen compares them. Keep the total input per component bounded to about 48 MB.
+_MAX_CANDIDATES = 6
+_MAX_SOURCE_BYTES = 8 * 1024 * 1024
 _ALLOWED_IMAGE_HOSTS = {
     "m.media-amazon.com",
     "images-na.ssl-images-amazon.com",
@@ -76,12 +78,12 @@ async def _review_image(title: str, image_bytes: bytes, content_type: str) -> di
     return decision
 
 
-async def _download_candidates(urls: list[str]) -> list[tuple[str, bytes, str, int]]:
-    candidates: list[tuple[str, bytes, str, int]] = []
+async def _download_candidates(urls: list[str]) -> AsyncIterator[tuple[str, bytes, str, int]]:
     seen: set[str] = set()
+    downloaded = 0
     async with httpx.AsyncClient(timeout=25, follow_redirects=False) as client:
         for url in urls:
-            if len(candidates) >= _MAX_CANDIDATES:
+            if downloaded >= _MAX_CANDIDATES:
                 break
             resolved = original_image_url(url)
             try:
@@ -94,21 +96,32 @@ async def _download_candidates(urls: list[str]) -> list[tuple[str, bytes, str, i
                 continue
             seen.add(resolved)
             try:
-                response = await client.get(resolved)
-                response.raise_for_status()
-                content = response.content
-                if not content or len(content) > _MAX_SOURCE_BYTES:
+                chunks: list[bytes] = []
+                content_size = 0
+                async with client.stream("GET", resolved) as response:
+                    response.raise_for_status()
+                    content_length = response.headers.get("content-length", "")
+                    if content_length.isdigit() and int(content_length) > _MAX_SOURCE_BYTES:
+                        continue
+                    async for chunk in response.aiter_bytes():
+                        content_size += len(chunk)
+                        if content_size > _MAX_SOURCE_BYTES:
+                            chunks.clear()
+                            break
+                        chunks.append(chunk)
+                if not chunks or content_size > _MAX_SOURCE_BYTES:
                     continue
+                content = b"".join(chunks)
                 with Image.open(io.BytesIO(content)) as image:
                     image.verify()
                     width, height = image.size
                     content_type = Image.MIME.get(image.format or "", "image/jpeg")
                 if min(width, height) < 160:
                     continue
-                candidates.append((resolved, content, content_type, width * height))
+                downloaded += 1
+                yield resolved, content, content_type, width * height
             except (httpx.HTTPError, UnidentifiedImageError, OSError, Image.DecompressionBombError):
                 continue
-    return candidates
 
 
 Progress = Callable[[str, int, str | None], Awaitable[None]]
@@ -119,30 +132,22 @@ async def select_component_photo(
     title: str,
     candidate_urls: list[str],
     progress: Progress,
-    first_verified: bool = False,
 ) -> tuple[str, dict]:
     """Return one Qwen-verified original photo URL and its selection evidence."""
-    candidates = await _download_candidates(candidate_urls)
-    if not candidates:
-        raise MediaPipelineError("No supported, full-size captured product photos are available")
-
-    ranked: list[tuple[int, str, dict]] = []
-    for index, (url, content, content_type, pixels) in enumerate(candidates, start=1):
-        await progress("reviewing_source_photos", min(75, index * 75 // len(candidates)), None)
+    reviewed = 0
+    async for url, content, content_type, _pixels in _download_candidates(candidate_urls):
+        reviewed += 1
+        await progress("reviewing_source_photos", min(75, reviewed * 75 // _MAX_CANDIDATES), None)
         decision = await _review_image(title, content, content_type)
         if decision["physical_component"] and decision["matches_title"] and not decision["packaging_or_diagram"]:
-            score = decision["quality"] * 100 + min(pixels // 1_000_000, 4) * 5
-            ranked.append((score, url, decision))
-            if first_verified:
-                break
-    if not ranked:
-        raise MediaPipelineError("Local Qwen could not verify a captured image as the exact physical component")
-    ranked.sort(key=lambda item: item[0], reverse=True)
-    _score, selected_url, decision = ranked[0]
-    await progress("single_photo_selected", 90, None)
-    return selected_url, {
-        "selection_method": "local_qwen_exact_component_photo_review",
-        "selected_source_url": selected_url,
-        "source_decision": decision,
-        "candidate_count_reviewed": len(candidates),
-    }
+            await progress("single_photo_selected", 90, None)
+            return url, {
+                "selection_method": "local_qwen_exact_component_photo_review",
+                "selected_source_url": url,
+                "source_decision": decision,
+                "candidate_count_reviewed": reviewed,
+            }
+        del content
+    if reviewed == 0:
+        raise MediaPipelineError("No supported, full-size captured product photos are available")
+    raise MediaPipelineError("Local Qwen could not verify a captured image as the exact physical component")

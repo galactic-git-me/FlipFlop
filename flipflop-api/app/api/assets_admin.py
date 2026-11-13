@@ -1409,7 +1409,7 @@ async def run_playbook_auto_model_generation_job() -> dict:
                 continue
             generation = (variant.asset_media_review or {}).get("generation") or {}
             if generation.get("status") in {
-                "QUEUED", "PREPARING", "STARTING", "RESUMING", "SUBMITTED",
+                "QUEUED", "PREPARING", "STARTING", "RESUMING", "SUBMITTED", "FAILED",
                 "PENDING", "IN_PROGRESS", "PUBLISHING", "TIMED_OUT",
             }:
                 skipped += 1
@@ -1428,6 +1428,9 @@ async def run_playbook_auto_model_generation_job() -> dict:
             for task in background.tasks:
                 asyncio.create_task(task())
             submitted += 1
+            # Start one photo-review pipeline per scheduler tick. Each run can
+            # download several full-size images and call the local vision model.
+            break
         return {"status": "complete", "submitted": submitted, "skipped": skipped}
 
 
