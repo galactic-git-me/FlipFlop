@@ -1231,7 +1231,7 @@ export const api = {
       requestGemRadar<MarketplaceSourcingListingDetail>(`/sourcing/listings/${id}`),
     verifiedBundleOpportunities: () =>
       requestGemRadar<Array<{
-        listing_id: number; title: string; marketplace: string; url: string; seller: string | null;
+        listing_id: number; bundle_variant_id: number; title: string; marketplace: string; url: string; seller: string | null;
         bundle_type: string; selected_configuration: Record<string, string>;
         bundle_landed_cost: string; standalone_market_total: string;
         absolute_savings: string; savings_percentage: string;

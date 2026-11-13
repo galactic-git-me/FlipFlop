@@ -52,8 +52,21 @@ interface GemBuildConcept {
   };
 }
 
+interface BundleOpportunity {
+  bundle_variant_id: number;
+  title: string;
+  marketplace: string;
+  url: string;
+  bundle_landed_cost: string;
+  standalone_market_total: string;
+  absolute_savings: string;
+  savings_percentage: string;
+  components: Array<{ canonical_part_key: string; quantity: number; attributed_cost: string | null }>;
+}
+
 interface GemSpotlightData {
   builds: Record<GemBuildConceptKey, GemBuildConcept>;
+  bundle_options?: BundleOpportunity[];
 }
 
 const componentOrder = ["motherboard", "cpu", "cooler", "ram", "gpu", "ssd", "psu", "case"];
@@ -211,6 +224,17 @@ export default function GemBasedPrebuilds() {
     {loading && <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-5 text-sm text-slate-300"><Loader2 className="h-5 w-5 animate-spin text-cyan-300" /> Loading individually ranked Gem candidates…</div>}
     {!loading && loadError && <div role="alert" className="rounded-xl border border-red-500/30 bg-red-950/30 p-4 text-sm text-red-200">{loadError}</div>}
     {draftError && <div role="alert" className="rounded-xl border border-red-500/30 bg-red-950/30 p-4 text-sm text-red-200">{draftError}</div>}
+
+    <section aria-label="Verified bundle options for pre-built sourcing" className="rounded-2xl border border-amber-400/20 bg-amber-400/[0.035] p-4">
+      <div className="mb-3"><h2 className="text-sm font-bold uppercase tracking-wide text-amber-200">Bundle sourcing options</h2><p className="mt-1 text-xs text-slate-400">Verified bundle costs are compared with the separate component market references. They remain procurement inputs; customer inventory is recorded as individual components.</p></div>
+      {!data ? <p className="text-sm text-slate-500">Bundle comparisons will load with the build concepts.</p> : !data.bundle_options?.length ? <p className="text-sm text-slate-400">No verified bundle options with complete component references yet.</p> : <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">{data.bundle_options.map(bundle => <article key={bundle.bundle_variant_id} className="rounded-xl border border-white/10 bg-slate-950/40 p-3">
+        <a href={bundle.url} target="_blank" rel="noreferrer" className="text-sm font-semibold text-white hover:text-cyan-200">{bundle.title}</a>
+        <p className="mt-1 text-xs uppercase text-amber-300">{bundle.marketplace}</p>
+        <p className="mt-2 text-sm text-slate-300">Bundle £{Number(bundle.bundle_landed_cost).toFixed(2)} · separate component references £{Number(bundle.standalone_market_total).toFixed(2)}</p>
+        <p className="mt-1 text-sm font-semibold text-emerald-300">Difference £{Number(bundle.absolute_savings).toFixed(2)} ({Number(bundle.savings_percentage).toFixed(1)}%)</p>
+        <p className="mt-2 text-[11px] text-slate-400">{bundle.components.map(part => `${part.quantity} × ${part.canonical_part_key}`).join(" · ")}</p>
+      </article>)}</div>}
+    </section>
 
     <section aria-label="Best individual Gems, ranked independently of compatibility" className="rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.035] p-4">
       <div className="mb-3"><h2 className="text-sm font-bold uppercase tracking-wide text-emerald-200">Best individual Gems</h2><p className="mt-1 text-xs text-slate-400">Each slot shows its top Gem by individual deal score. These picks are not filtered or reordered by compatibility with one another.</p></div>

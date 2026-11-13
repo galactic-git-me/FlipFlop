@@ -2957,6 +2957,8 @@ interface SourcingAnalytics {
 const AnalyticsTab = memo(function AnalyticsTab() {
   const [analytics, setAnalytics] = useState<SourcingAnalytics | null>(null);
   const [analyticsError, setAnalyticsError] = useState<string | null>(null);
+  const [bundleOpportunities, setBundleOpportunities] = useState<Awaited<ReturnType<typeof api.gemRadar.verifiedBundleOpportunities>>>([]);
+  const [bundleAnalyticsError, setBundleAnalyticsError] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -2979,8 +2981,28 @@ const AnalyticsTab = memo(function AnalyticsTab() {
     };
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+    void api.gemRadar.verifiedBundleOpportunities().then(rows => {
+      if (!cancelled) { setBundleOpportunities(rows); setBundleAnalyticsError(""); }
+    }).catch(error => {
+      if (!cancelled) setBundleAnalyticsError(error instanceof Error ? error.message : "Could not load bundle analytics.");
+    });
+    return () => { cancelled = true; };
+  }, []);
+
   return (
     <div className="space-y-6">
+      <section aria-label="Bundle sourcing analytics" className="rounded-xl border border-amber-400/20 bg-amber-400/[0.04] p-4">
+        <h2 className="text-sm font-bold uppercase tracking-wide text-amber-200">Bundles</h2>
+        <p className="mt-1 text-xs text-slate-400">Verified internal sourcing opportunities, reported separately from standalone component listings.</p>
+        {bundleAnalyticsError ? <p role="alert" className="mt-3 text-sm text-red-300">{bundleAnalyticsError}</p> : bundleOpportunities.length === 0 ? <p className="mt-3 text-sm text-slate-400">No verified bundle opportunities with complete component references yet.</p> : <div className="mt-3 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-lg border border-slate-700 bg-slate-900/50 p-3"><p className="text-xs text-slate-400">Verified bundles</p><p className="mt-1 text-xl font-bold text-white">{bundleOpportunities.length}</p></div>
+          <div className="rounded-lg border border-slate-700 bg-slate-900/50 p-3"><p className="text-xs text-slate-400">Observed bundle landed cost</p><p className="mt-1 text-xl font-bold text-white">£{bundleOpportunities.reduce((sum, row) => sum + Number(row.bundle_landed_cost), 0).toFixed(2)}</p></div>
+          <div className="rounded-lg border border-slate-700 bg-slate-900/50 p-3"><p className="text-xs text-slate-400">Reference difference</p><p className="mt-1 text-xl font-bold text-emerald-300">£{bundleOpportunities.reduce((sum, row) => sum + Number(row.absolute_savings), 0).toFixed(2)}</p></div>
+        </div>}
+        {bundleOpportunities.length > 0 && <ul className="mt-3 space-y-1 text-xs text-slate-300">{bundleOpportunities.slice(0, 5).map(row => <li key={row.bundle_variant_id}><a href={row.url} target="_blank" rel="noreferrer" className="hover:text-cyan-200">{row.title}</a> · {row.marketplace} · bundle £{Number(row.bundle_landed_cost).toFixed(2)} vs components £{Number(row.standalone_market_total).toFixed(2)}</li>)}</ul>}
+      </section>
       <ScanRunsOverTimeChart />
       {analyticsError ? <p role="alert" className="rounded-lg border border-red-700 bg-red-950/30 p-3 text-sm text-red-200">{analyticsError}. Restart the local API if the new analytics endpoint is not active.</p> : !analytics ? <p role="status" className="text-sm text-slate-400">Loading full-population analytics…</p> : <p className="text-sm text-slate-400">Charts use {analytics.items.length.toLocaleString()} stratified points from {analytics.total.toLocaleString()} active listings, independent of Listings filters. Every BSR-linked listing is included.</p>}
       {analytics && <div className="flex flex-wrap gap-2 text-xs text-slate-300">{[...CLASSIFICATION_ORDER].sort((a, b) => (analytics.classification_counts[b] ?? 0) - (analytics.classification_counts[a] ?? 0)).map(c => <span key={c} className="rounded border border-slate-700 px-2 py-1">{c.replaceAll("_", " ")}: {(analytics.classification_counts[c] ?? 0).toLocaleString()}</span>)}</div>}
