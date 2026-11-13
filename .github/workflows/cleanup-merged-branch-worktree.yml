@@ -13,23 +13,31 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: [self-hosted, Windows, flipflop-coding-cleanup]
     steps:
-      - uses: actions/checkout@v5
-        with:
-          ref: ${{ github.event.pull_request.base.ref }}
-          persist-credentials: false
       - name: Remove the exact clean merged branch worktree
         shell: pwsh
         env:
           FLIPFLOP_WORKTREE_REPO: ${{ vars.FLIPFLOP_WORKTREE_REPO }}
+          REPOSITORY: ${{ github.repository }}
+          SCRIPT_REF: ${{ github.event.pull_request.merge_commit_sha }}
+          GITHUB_TOKEN: ${{ github.token }}
           TARGET_BRANCH: ${{ github.event.pull_request.base.ref }}
           SOURCE_BRANCH: ${{ github.event.pull_request.head.ref }}
           SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
+          $headers = @{
+            Authorization = "Bearer $env:GITHUB_TOKEN"
+            Accept = 'application/vnd.github.raw'
+            'X-GitHub-Api-Version' = '2022-11-28'
+          }
+          $scriptUri = "https://api.github.com/repos/$($env:REPOSITORY)/contents/scripts/cleanup-merged-branch-worktree.ps1?ref=$($env:SCRIPT_REF)"
+          $scriptPath = Join-Path $env:RUNNER_TEMP 'cleanup-merged-branch-worktree.ps1'
+          Invoke-WebRequest -Uri $scriptUri -Headers $headers -OutFile $scriptPath
+
           $repositoryRoot = $env:FLIPFLOP_WORKTREE_REPO
           if ([string]::IsNullOrWhiteSpace($repositoryRoot)) {
             $repositoryRoot = Join-Path $env:USERPROFILE 'CODING\FlipFlop'
           }
-          & "$env:GITHUB_WORKSPACE\scripts\cleanup-merged-branch-worktree.ps1" `
+          & $scriptPath `
             -RepositoryRoot $repositoryRoot `
             -TargetBranch $env:TARGET_BRANCH `
             -SourceBranch $env:SOURCE_BRANCH `
