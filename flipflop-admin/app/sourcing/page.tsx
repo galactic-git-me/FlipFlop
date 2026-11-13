@@ -1158,10 +1158,11 @@ function ListingThumbnail({ src, alt, size = 40 }: { src?: string | null; alt: s
   );
 }
 
-type ComponentType = "CPU" | "Motherboard" | "RAM" | "PSU" | "SSD" | "GPU" | "Cooler" | "Fan" | "Case" | "Other";
+type ComponentType = "Bundles" | "CPU" | "Motherboard" | "RAM" | "PSU" | "SSD" | "GPU" | "Cooler" | "Fan" | "Case" | "Other";
 type MainTab = "stats" | "listings" | "marketplace" | "analytics";
 
 const COMPONENT_TABS: ComponentType[] = [
+  "Bundles",
   "CPU",
   "Motherboard",
   "RAM",
@@ -2116,8 +2117,22 @@ function ListingsTab({ listings, sourceActivity, facets, total, legacy, highligh
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [titleQuery, setTitleQuery] = useState("");
   const [showRowPercentages, setShowRowPercentages] = useState(false);
+  const [bundleOpportunities, setBundleOpportunities] = useState<Awaited<ReturnType<typeof api.gemRadar.verifiedBundleOpportunities>>>([]);
+  const [bundlesLoading, setBundlesLoading] = useState(true);
+  const [bundlesError, setBundlesError] = useState("");
 
   useEffect(() => {
+    let active = true;
+    void api.gemRadar.verifiedBundleOpportunities().then(rows => {
+      if (active) { setBundleOpportunities(rows); setBundlesError(""); }
+    }).catch(error => {
+      if (active) setBundlesError(error instanceof Error ? error.message : "Could not load verified bundles.");
+    }).finally(() => { if (active) setBundlesLoading(false); });
+    return () => { active = false; };
+  }, []);
+
+  useEffect(() => {
+    if (componentTab === "Bundles") return;
     const timer = setTimeout(() => onFiltersChange({ component: componentTab, stockLane, classification: gemFilter, title: titleQuery, sortKey, sortDir }), 250);
     return () => clearTimeout(timer);
   }, [componentTab, stockLane, gemFilter, titleQuery, sortKey, sortDir]);
@@ -2184,12 +2199,33 @@ function ListingsTab({ listings, sourceActivity, facets, total, legacy, highligh
   const visibleListings = filtered;
   const tabCounts = COMPONENT_TABS.map((tab) => ({
     tab,
-    count: facets ? (facets.categories[tab.toLowerCase()] ?? 0) : byLane.filter((l) => listingTab(l) === tab).length,
+    count: tab === "Bundles" ? bundleOpportunities.length : facets ? (facets.categories[tab.toLowerCase()] ?? 0) : byLane.filter((l) => listingTab(l) === tab).length,
   }));
   const classificationCounts = CLASSIFICATION_BADGE_ORDER.map((classification) => ({
     classification,
     count: facets ? (facets.category_classifications[componentTab.toLowerCase()]?.[classification] ?? 0) : byComponent.filter((l) => l.classification === classification).length,
   }));
+
+  if (componentTab === "Bundles") return (
+    <>
+      <div className="flex flex-col lg:flex-row gap-4">
+        <VendorSummaryTable listings={listings} sourceActivity={sourceActivity} facets={facets} />
+        <VendorStackedBarChart listings={listings} facets={facets} />
+      </div>
+      <div className="flex gap-2 overflow-x-auto pb-2 border-b border-slate-700 mb-4">
+        {tabCounts.map(({ tab, count }) => <button key={tab} onClick={() => setComponentTab(tab)} className={`px-4 py-2 rounded whitespace-nowrap transition ${componentTab === tab ? "bg-blue-600 text-white" : "bg-slate-700 text-slate-300 hover:bg-slate-600"}`}>{tab} ({count})</button>)}
+      </div>
+      <section aria-label="Verified internal bundle opportunities" className="space-y-3">
+        <div><h2 className="text-lg font-semibold text-white">Verified bundles</h2><p className="text-sm text-slate-400">Internal sourcing only. Each verified bundle is broken into separate component inventory during build purchasing.</p></div>
+        {bundlesLoading ? <p role="status" className="text-sm text-slate-400">Loading verified bundles…</p> : bundlesError ? <p role="alert" className="text-sm text-red-300">{bundlesError}</p> : bundleOpportunities.length === 0 ? <p className="rounded-lg border border-slate-700 p-5 text-sm text-slate-400">No verified bundle opportunities with complete component references yet.</p> : <div className="grid gap-3 xl:grid-cols-2">{bundleOpportunities.map(bundle => <article key={bundle.bundle_variant_id} className="rounded-xl border border-amber-400/20 bg-amber-400/[0.04] p-4">
+          <div className="flex items-start justify-between gap-3"><a href={bundle.url} target="_blank" rel="noreferrer" className="font-semibold text-slate-100 hover:text-cyan-200">{bundle.title}</a><span className="shrink-0 text-xs uppercase text-amber-300">{bundle.marketplace}</span></div>
+          <p className="mt-2 text-sm text-slate-300">Bundle landed cost £{Number(bundle.bundle_landed_cost).toFixed(2)} · separate component references £{Number(bundle.standalone_market_total).toFixed(2)}</p>
+          <p className="mt-1 text-sm font-semibold text-emerald-300">Reference difference £{Number(bundle.absolute_savings).toFixed(2)} ({Number(bundle.savings_percentage).toFixed(1)}%)</p>
+          <ul className="mt-3 flex flex-wrap gap-2">{bundle.components.map(part => <li key={part.canonical_part_key} className="rounded bg-slate-900/60 px-2 py-1 text-xs text-slate-300">{part.quantity} × {part.canonical_part_key}</li>)}</ul>
+        </article>)}</div>}
+      </section>
+    </>
+  );
 
   return (
     <>

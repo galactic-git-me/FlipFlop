@@ -11,11 +11,12 @@ from app.services.playbook_market import bom_hash, search_query, candidate, core
 from app.services.commercial_readiness import cell_context
 from app.services.amazon_bestsellers import bestseller_item_matches_category
 
-VENDORS = ['ebay','amazon','overclockers','scan','awd_it','computer_orbit','bargain_hardware','newegg_uk','ebuyer','google_shopping']
+VENDORS = ['ebay','amazon','overclockers','scan','awd_it','computer_orbit','bargain_hardware','newegg_uk','ebuyer','google_shopping','aliexpress']
 HOSTS = {'amazon':('amazon.co.uk',), 'overclockers':('overclockers.co.uk',), 'scan':('scan.co.uk',),
     'awd_it':('awd-it.co.uk',), 'computer_orbit':('computerorbit.com',),
     'bargain_hardware':('bargainhardware.co.uk',), 'newegg_uk':('newegg.com',),
-    'ebuyer':('ebuyer.com',), 'google_shopping':('google.com','google.co.uk')}
+    'ebuyer':('ebuyer.com',), 'google_shopping':('google.com','google.co.uk'),
+    'aliexpress':('aliexpress.com',)}
 
 
 def selected_parts(definition,parent,proposals):
@@ -75,7 +76,9 @@ async def searches(db):
         ('wireless-wifi-bluetooth-adapter', 'WiFi Bluetooth adapter'),
     ]
     items = [{'id': search_id, 'label': query, 'query': query,
-              'marketplaces': VENDORS, 'listingMode': 'both'}
+              'marketplaces': VENDORS, 'listingMode': 'both',
+              **({'aliexpressFilters': {'category': 'computer_components', 'deliveryDaysMax': 7}}
+                 if 'aliexpress' in VENDORS else {})}
              for search_id, query in generic]
     return {'items': items, 'count': len(items), 'componentItems': [], 'componentCount': 0}
 
