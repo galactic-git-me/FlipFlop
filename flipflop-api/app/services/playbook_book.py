@@ -1,7 +1,7 @@
 """Read-only, exact-cell operational projection and append-only change records."""
 from datetime import datetime, timedelta, timezone
 from copy import deepcopy
-from sqlalchemy import select
+from sqlalchemy import and_, func, or_, select
 from app.models.playbook import Playbook, PlaybookProposal
 from app.models.curated_build_segment import CuratedBuildSegment
 from app.models.commerce_evidence import PriceQuoteSnapshot
@@ -143,7 +143,7 @@ def project_cell(definition, segment, parent, proposals, snapshots, channels, di
         'distribution_coverage': 'Exact curated_build_id links only; no channel presence inferred from customer type'}
 
 
-async def operational_book(db):
+async def operational_book(db, history_limit=3):
     parents = (await db.execute(select(Playbook))).scalars().all()
     segments = (await db.execute(select(CuratedBuildSegment))).scalars().all()
     proposals = (await db.execute(select(PlaybookProposal).where(
@@ -158,8 +158,31 @@ async def operational_book(db):
                           'tier': segment.budget_level, 'name': f'{segment.customer_type} {segment.budget_level}', 'components': {}})
     keys = [key for row in cells for key in (f"playbook-cell:{row['id']}",
             f"playbook:{parent_by_name[row['segment']].id}:cell:{row['id']}" if row['segment'] in parent_by_name else '') if key]
-    snapshots = (await db.execute(select(PriceQuoteSnapshot).where(
-        PriceQuoteSnapshot.product_key.in_(keys)).order_by(PriceQuoteSnapshot.id.desc()))).scalars().all()
+    ranked_snapshots = select(
+        PriceQuoteSnapshot.id.label('id'),
+        PriceQuoteSnapshot.product_key.label('product_key'),
+        PriceQuoteSnapshot.status.label('status'),
+        func.row_number().over(
+            partition_by=PriceQuoteSnapshot.product_key,
+            order_by=PriceQuoteSnapshot.id.desc(),
+        ).label('history_rank'),
+        func.row_number().over(
+            partition_by=(PriceQuoteSnapshot.product_key, PriceQuoteSnapshot.status),
+            order_by=PriceQuoteSnapshot.id.desc(),
+        ).label('status_rank'),
+    ).where(PriceQuoteSnapshot.product_key.in_(keys)).subquery()
+    snapshots = (await db.execute(
+        select(PriceQuoteSnapshot)
+        .join(ranked_snapshots, ranked_snapshots.c.id == PriceQuoteSnapshot.id)
+        .where(or_(
+            ranked_snapshots.c.history_rank <= history_limit,
+            and_(
+                ranked_snapshots.c.status.in_(('market_candidates', 'market_approved', 'market_rejected')),
+                ranked_snapshots.c.status_rank == 1,
+            ),
+        ))
+        .order_by(PriceQuoteSnapshot.id.desc())
+    )).scalars().all()
     distribution_records, unassigned = await distribution_evidence(db, cells, parents)
     market_references = await build_market_evidence(db)
     assigned_ids = {int(value) for segment in segments for value in (segment.components or {}).values()
@@ -205,3 +228,64 @@ async def operational_book(db):
     return {'observed_at': datetime.now(timezone.utc), 'cells': projected,
         'unassigned_channel_records': len(unassigned),
         'unassigned_distribution': unassigned, 'build_market_references': market_references}
+
+
+async def operational_cell_history(db, cell_id, history_limit=100):
+    """Load expanded audit evidence for one selected cell, never the full book."""
+    parents = (await db.execute(select(Playbook))).scalars().all()
+    segments = (await db.execute(select(CuratedBuildSegment))).scalars().all()
+    cells = list(definitions()['builds'])
+    for segment in segments:
+        if not any(row['segment'] == segment.customer_type and row['tier'] == segment.budget_level for row in cells):
+            cells.append({'id': f'segment:{segment.id}', 'segment': segment.customer_type,
+                          'tier': segment.budget_level, 'name': f'{segment.customer_type} {segment.budget_level}',
+                          'components': {}})
+    definition = next((row for row in cells if row['id'] == cell_id), None)
+    if definition is None:
+        return None
+    parent = next((row for row in parents if row.name == definition['segment']), None)
+    keys = {f'playbook-cell:{cell_id}'}
+    if parent:
+        keys.add(f'playbook:{parent.id}:cell:{cell_id}')
+    ranked_snapshots = select(
+        PriceQuoteSnapshot.id.label('id'),
+        PriceQuoteSnapshot.product_key.label('product_key'),
+        PriceQuoteSnapshot.status.label('status'),
+        func.row_number().over(
+            partition_by=PriceQuoteSnapshot.product_key,
+            order_by=PriceQuoteSnapshot.id.desc(),
+        ).label('history_rank'),
+        func.row_number().over(
+            partition_by=(PriceQuoteSnapshot.product_key, PriceQuoteSnapshot.status),
+            order_by=PriceQuoteSnapshot.id.desc(),
+        ).label('status_rank'),
+    ).where(PriceQuoteSnapshot.product_key.in_(keys)).subquery()
+    snapshots = (await db.execute(
+        select(PriceQuoteSnapshot)
+        .join(ranked_snapshots, ranked_snapshots.c.id == PriceQuoteSnapshot.id)
+        .where(or_(
+            ranked_snapshots.c.history_rank <= history_limit,
+            and_(
+                ranked_snapshots.c.status.in_(('market_candidates', 'market_approved', 'market_rejected')),
+                ranked_snapshots.c.status_rank == 1,
+            ),
+        ))
+        .order_by(PriceQuoteSnapshot.id.desc())
+    )).scalars().all()
+    proposals = (await db.execute(select(PlaybookProposal).where(
+        PlaybookProposal.action == 'UPDATE',
+        PlaybookProposal.proposed_data['cell_id'].as_string() == cell_id,
+    ).order_by(PlaybookProposal.id.desc()).limit(history_limit))).scalars().all()
+    events = []
+    for row in snapshots:
+        evidence = row.evidence_json or {}
+        events.append({'id': f'snapshot:{row.id}', 'at': row.created_at,
+            'event': evidence.get('event', row.status), 'reason': evidence.get('reason'),
+            'actor': (row.decision_json or {}).get('actor', 'automation' if row.created_by_admin_id == 0 else 'admin'),
+            'before': evidence.get('before'), 'after': evidence.get('after')})
+    for row in proposals:
+        events.append({'id': f'proposal:{row.id}', 'at': row.resolved_at or row.proposed_at,
+            'event': f'proposal_{row.status}', 'reason': row.rejection_reason or row.reason,
+            'actor': row.resolved_by or 'automation', 'before': None, 'after': None})
+    events.sort(key=lambda row: row['at'].replace(tzinfo=timezone.utc) if row['at'] else datetime.min.replace(tzinfo=timezone.utc), reverse=True)
+    return events[:history_limit]

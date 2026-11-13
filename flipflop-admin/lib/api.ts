@@ -2168,6 +2168,7 @@ export const api = {
     collectMarket: (parent: number, cell: string) => request<import('@/components/playbooks/PlaybookMarketReview').MarketReview>(`/commerce-intelligence/playbook-service/market/${parent}/${encodeURIComponent(cell)}/collect`, {method:'POST'}),
     reviewMarket: (parent: number, cell: string, body: {batch_id:number;decision:'approve'|'reject';candidate_ids:string[];exact_build_confirmed:boolean}) => request<import('@/components/playbooks/PlaybookMarketReview').MarketReview>(`/commerce-intelligence/playbook-service/market/${parent}/${encodeURIComponent(cell)}/review`, {method:'POST',body:JSON.stringify(body)}),
     book: () => request<import('./playbook-book').PlaybookBook>('/commerce-intelligence/playbook-service/book'),
+    bookHistory: (cellId: string, historyLimit = 100) => request<{cell_id:string;history:import('./playbook-book').BookEvent[]}>(`/commerce-intelligence/playbook-service/book/${encodeURIComponent(cellId)}/history?history_limit=${historyLimit}`),
     refreshPricingGuidance: () => request<{queued:boolean;checkout_changed:false;published:false}>('/commerce-intelligence/playbook-service/pricing-guidance/refresh', {method:'POST'}),
     proposals: () => request<{items:import('./playbook-proposals').PlaybookOffer[]}>('/commerce-intelligence/playbook-service/proposals', {cache:'no-store'}),
     supplierLicences: () => request<{items:import('./playbook-proposals').SupplierLicenceCandidate[]}>('/commerce-intelligence/playbook-service/supplier-licences'),

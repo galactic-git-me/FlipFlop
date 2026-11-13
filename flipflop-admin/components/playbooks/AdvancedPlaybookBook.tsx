@@ -15,6 +15,7 @@ import {
 } from "@/lib/playbook-book";
 import type {
   BookCell,
+  BookEvent,
   BookPage,
   PlaybookBook as BookData,
 } from "@/lib/playbook-book";
@@ -746,6 +747,7 @@ export default function PlaybookBook({
 }: Props) {
   const [mediaCell, setMediaCell] = useState<BookCell | null>(null);
   const [book, setBook] = useState<BookData | null>(null);
+  const [detailedHistory, setDetailedHistory] = useState<{cellId:string;history:BookEvent[]}|null>(null);
   const [page, setPage] = useState<BookPage>("build");
   const [selected, setSelected] = useState<string | null>(null);
   const [density, setDensity] = useState<"compact" | "detailed">("compact");
@@ -777,6 +779,19 @@ export default function PlaybookBook({
   useEffect(() => {
     void load();
   }, [load, refreshKey]);
+  useEffect(() => {
+    if (page !== "history" || density !== "detailed" || !selected) {
+      setDetailedHistory(null);
+      return;
+    }
+    let cancelled = false;
+    void api.commercialReadiness.bookHistory(selected, 100).then((result) => {
+      if (!cancelled) setDetailedHistory({cellId:selected,history:result.history});
+    }).catch((reason) => {
+      if (!cancelled) setError(reason instanceof Error ? reason.message : "Could not load selected cell history");
+    });
+    return () => { cancelled = true; };
+  }, [density, page, selected]);
   const selectPage = (next: BookPage) => {
     setPage(next);
     updateUrl(next, selected, density);
@@ -804,6 +819,9 @@ export default function PlaybookBook({
     ]),
   ];
   const current = cells.find((cell) => cell.cell_id === selected);
+  const currentWithHistory = current && detailedHistory?.cellId === current.cell_id
+    ? {...current, history:detailedHistory.history}
+    : current;
   const pageIndex = BOOK_PAGES.findIndex(([id]) => id === page);
   useEffect(() => {
     if (!current || window.location.hash !== "#selected-playbook-cell") return;
@@ -1081,7 +1099,7 @@ export default function PlaybookBook({
             </button>
           </header>
           {current.offer && <button type="button" onClick={() => setMediaCell(current)} className="rounded border border-cyan-400/40 px-3 py-2 text-sm text-cyan-200">Photos &amp; 3D models</button>}
-          <CellPage cell={current} page={page} detail />
+          <CellPage cell={currentWithHistory ?? current} page={page} detail />
           {(page === "pricing" || page === "approvals") && <PlaybookMarketReview key={current.cell_id} cell={current} onUpdated={() => void load()} />}
           {current.segment_id != null && (
             <button
