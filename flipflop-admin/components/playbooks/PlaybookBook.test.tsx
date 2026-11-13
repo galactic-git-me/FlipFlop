@@ -1,4 +1,4 @@
-import { afterEach, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import {
   cleanup,
   fireEvent,
@@ -8,8 +8,8 @@ import {
 } from "@testing-library/react";
 import PlaybookBook from "./AdvancedPlaybookBook";
 import type { BookCell, PlaybookBook as BookData } from "@/lib/playbook-book";
-const { book } = vi.hoisted(() => ({ book: vi.fn() }));
-vi.mock("@/lib/api", () => ({ api: { commercialReadiness: { book } } }));
+const { book, bookHistory } = vi.hoisted(() => ({ book: vi.fn(), bookHistory: vi.fn() }));
+vi.mock("@/lib/api", () => ({ api: { commercialReadiness: { book, bookHistory } } }));
 vi.mock("./CommercialReviewWorkspace", () => ({
   default: ({ contextCellId }: { contextCellId: string }) => (
     <p>Review tools for {contextCellId}</p>
@@ -59,6 +59,9 @@ afterEach(() => {
   vi.clearAllMocks();
   window.history.replaceState(null, "", "/");
 });
+beforeEach(() => {
+  bookHistory.mockResolvedValue({ history: [] });
+});
 it("keeps the same matrix and selected cell while changing pages and density", async () => {
   const data: BookData = {
     observed_at: "2026-10-15T12:00:00Z",
@@ -72,16 +75,16 @@ it("keeps the same matrix and selected cell while changing pages and density", a
   book.mockResolvedValue(data);
   render(<PlaybookBook onEdit={vi.fn()} />);
   await screen.findByRole("table", { name: "Recommended build matrix" });
-  expect(screen.getByRole("button", { name: "2. Market & target pricing" }))
-    .toHaveAttribute("aria-description", "Requires attention");
+  expect(screen.getByRole("button", { name: /2\. Market & target pricing/ }))
+    .toHaveAttribute("aria-label", expect.stringContaining("requires attention"));
   fireEvent.click(screen.getByRole("button", { name: "Open Gaming Budget" }));
-  fireEvent.click(screen.getByRole("button", { name: "2. Market & target pricing" }));
-  expect(screen.getByRole("button", { name: "2. Market & target pricing" })).toHaveAttribute("aria-current", "page");
+  fireEvent.click(screen.getByRole("button", { name: /2\. Market & target pricing/ }));
+  expect(screen.getByRole("button", { name: /2\. Market & target pricing/ })).toHaveAttribute("aria-current", "page");
   expect(
     screen.getByRole("table", { name: "Market & target pricing matrix" })
   ).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "Open Gaming Budget" }))
-    .toHaveAttribute("aria-description", "Requires attention");
+    .toHaveAttribute("aria-label", expect.stringContaining("requires attention"));
   expect(
     screen.getByRole("button", { name: "Open Gaming Budget" })
   ).toHaveAttribute("aria-pressed", "true");
@@ -122,10 +125,11 @@ it("restores the page and cell from a deep link and does not invent history or d
   });
   render(<PlaybookBook onEdit={vi.fn()} />);
   await screen.findByRole("table", { name: "History & decisions matrix" });
+  expect(bookHistory).toHaveBeenCalledWith("G-1", 100);
   expect(screen.getByLabelText("Selected Playbook cell")).toHaveTextContent(
     "No recorded events for this cell."
   );
-  fireEvent.click(screen.getByRole("button", { name: "13. Distribution" }));
+  fireEvent.click(screen.getByRole("button", { name: /13\. Distribution/ }));
   expect(screen.getByLabelText("Selected Playbook cell")).toHaveTextContent(
     "storefront · offline"
   );
@@ -252,7 +256,7 @@ it("keeps unassigned build market and channel evidence outside the cell prices",
   expect(screen.getByLabelText("Selected Playbook cell")).not.toHaveTextContent(
     "£159"
   );
-  fireEvent.click(screen.getByRole("button", { name: "13. Distribution" }));
+  fireEvent.click(screen.getByRole("button", { name: /13\. Distribution/ }));
   fireEvent.click(
     screen.getByText(/Recorded channel presence requiring a cell assignment/)
   );

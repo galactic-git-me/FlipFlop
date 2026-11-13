@@ -49,22 +49,27 @@ async def final_assets_by_variant(db, variants: list[CatalogueVariant]) -> dict[
     """Return approved family models; cases retain exact listing/photo matching."""
     if not variants:
         return {}
-    # Family lookup needs identity only. Loading complete listings once per
-    # variant duplicates large source captures across the whole catalogue.
-    variant_ids = [variant.id for variant in variants]
-    aliases = (await db.execute(select(CatalogueVariant.id, Listing.id, Listing.title,
-        PlaybookSlot.slot_type, Listing.raw_specs['catalogue_deleted'])
-        .join(PlaybookSlot, PlaybookSlot.id == CatalogueVariant.slot_id)
-        .join(Listing, Listing.id == CatalogueVariant.listing_id)
-        .where(CatalogueVariant.id.in_(variant_ids)))).all()
-    keys = {variant_id: media_key(category, title, listing_id)
-        for variant_id, listing_id, title, category, deleted in aliases if not deleted}
+    variant_ids = {variant.id for variant in variants}
     assets = (await db.execute(select(Component3DAsset).where(
         Component3DAsset.status == Component3DAssetStatus.FINAL,
         Component3DAsset.is_active.is_(True),
         Component3DAsset.glb_ref.is_not(None),
     ).order_by(Component3DAsset.version.desc(), Component3DAsset.id.desc()))).scalars().all()
-    by_key = {}
+    # Family lookup needs identity only. Query the requested variants plus
+    # owners of retained legacy assets so a family model remains available
+    # when its owner is outside this response's variant subset.
+    identity_ids = variant_ids | {
+        asset.subject_id for asset in assets
+        if asset.subject_type == AssetSubjectType.VARIANT and asset.subject_id is not None
+    }
+    aliases = (await db.execute(select(CatalogueVariant.id, Listing.id, Listing.title,
+        PlaybookSlot.slot_type, Listing.raw_specs['catalogue_deleted'])
+        .join(PlaybookSlot, PlaybookSlot.id == CatalogueVariant.slot_id)
+        .join(Listing, Listing.id == CatalogueVariant.listing_id)
+        .where(CatalogueVariant.id.in_(identity_ids)))).all()
+    keys = {variant_id: media_key(category, title, listing_id)
+        for variant_id, listing_id, title, category, deleted in aliases if not deleted}
+    by_key: dict[tuple[str, str], list[Component3DAsset]] = {}
     # Explicit family assets take precedence over retained legacy product assets.
     assets.sort(key=lambda a: a.subject_type != AssetSubjectType.CATEGORY_GENERIC)
     for asset in assets:

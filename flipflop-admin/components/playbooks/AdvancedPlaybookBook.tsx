@@ -780,7 +780,7 @@ export default function PlaybookBook({
     void load();
   }, [load, refreshKey]);
   useEffect(() => {
-    if (page !== "history" || density !== "detailed" || !selected) {
+    if (page !== "history" || !selected) {
       setDetailedHistory(null);
       return;
     }
@@ -791,7 +791,7 @@ export default function PlaybookBook({
       if (!cancelled) setError(reason instanceof Error ? reason.message : "Could not load selected cell history");
     });
     return () => { cancelled = true; };
-  }, [density, page, selected]);
+  }, [page, selected]);
   const selectPage = (next: BookPage) => {
     setPage(next);
     updateUrl(next, selected, density);
