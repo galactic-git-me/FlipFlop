@@ -77,8 +77,7 @@ async def searches(db):
     ]
     items = [{'id': search_id, 'label': query, 'query': query,
               'marketplaces': VENDORS, 'listingMode': 'both',
-              **({'aliexpressFilters': {'category': 'computer_components', 'deliveryDaysMax': 7}}
-                 if 'aliexpress' in VENDORS else {})}
+              'aliexpressFilters': {'category': 'computer_components', 'deliveryDaysMax': 7}}
              for search_id, query in generic]
     return {'items': items, 'count': len(items), 'componentItems': [], 'componentCount': 0}
 

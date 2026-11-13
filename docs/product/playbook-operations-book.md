@@ -26,6 +26,16 @@ separate sold-page captures. AliExpress and Vinted are Flexible-only sources,
 and are excluded from Standard. AliExpress scans use extension-applied Computer
 Components and seven-day-or-less delivery filters. `POST /api/gem-radar/playbook-market-captures` appends unapproved
 cell-scoped candidates to the existing market review, deduplicated by source
+
+Bundle procurement is an internal sourcing input. The extension searches all
+15 non-empty motherboard/CPU/GPU/RAM bundle combinations across the configured
+non-AliExpress hardware vendors. AliExpress has a separate 15-search set: each
+search uses the `bundles` term, Computer Components category, the exact
+component-combination facet, and the shortest exposed delivery facet at or
+under seven days. Missing required facets fail closed. Captured bundle contents
+and costs require operator verification before they can be used in a build;
+the build process records each component as separate inventory and allocates
+the purchase cost once across those parts.
 identity and merged only across the same BOM and a 24-hour capture window.
 Unknown postage, absent sold markers, best-offer ambiguity, wrong condition or
 specifications remain blocked. Repeated searches cannot invent additional sold

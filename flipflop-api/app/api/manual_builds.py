@@ -368,7 +368,7 @@ class ComponentPurchaseInput(BaseModel):
     source: str | None = None
 
 
-class ComboPurchaseInput(BaseModel):
+class BundlePurchaseInput(BaseModel):
     bundle_variant_id: int = Field(gt=0)
     actual_landed_cost_gbp: float = Field(gt=0)
     # Explicit operator mapping from the reviewed extension component key to
@@ -3176,7 +3176,7 @@ async def purchase_build_component(
 @router.post("/{build_id}/bundle-purchase", response_model=ManualBuildOut)
 async def record_build_bundle_purchase(
     build_id: int,
-    body: ComboPurchaseInput,
+    body: BundlePurchaseInput,
     db: AsyncSession = Depends(get_db),
 ):
     """Record one confirmed bundle purchase as separate component inventory."""

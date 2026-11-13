@@ -20,7 +20,7 @@ class TargetTests(TestCase):
         self.assertIn('MSI B550M',row['preciseQuery'])
         self.assertEqual(row['playbookTarget']['bomSha256'],bom_hash(definition,parts))
         self.assertEqual(row['listingMode'],'both')
-        self.assertEqual(len(row['marketplaces']),10)
+        self.assertEqual(len(row['marketplaces']),11)
 
 
 class CaptureTests(IsolatedAsyncioTestCase):
@@ -89,6 +89,11 @@ class GenericSearchFeedTests(IsolatedAsyncioTestCase):
         self.assertEqual(result["componentCount"], 0)
         self.assertEqual(result["componentItems"], [])
         self.assertTrue(all("tags" not in item and "playbookTarget" not in item for item in result["items"]))
+        self.assertIn("aliexpress", extension.VENDORS)
+        self.assertIn("aliexpress.com", extension.HOSTS["aliexpress"])
+        self.assertTrue(all(item["aliexpressFilters"] == {
+            "category": "computer_components", "deliveryDaysMax": 7,
+        } for item in result["items"]))
         db.execute.assert_not_awaited()
 
     async def test_bestseller_tags_are_deduplicated_and_category_checked(self):
