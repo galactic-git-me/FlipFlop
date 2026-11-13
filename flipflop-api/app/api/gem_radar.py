@@ -16,7 +16,8 @@ from datetime import datetime, timedelta, timezone
 from typing import Literal
 
 import structlog
-from fastapi import APIRouter, Depends, Query
+import httpx
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from sqlalchemy import String, any_, bindparam, func, select, text, update
 from sqlalchemy.dialects.postgresql import ARRAY
@@ -91,6 +92,23 @@ _GEM_SPOTLIGHT_CACHE: dict[str, tuple[float, dict]] = {}
 async def playbook_market_searches(db:AsyncSession=Depends(get_db), _:None=Depends(require_operator)):
     from app.services.playbook_extension import search_feed
     return await search_feed(db)
+
+
+@router.get('/ebay-item-details')
+async def ebay_item_details(
+    item_id: str = Query(..., pattern=r'^\d{9,15}$'),
+    variation_id: str | None = Query(default=None, max_length=40, pattern=r'^[A-Za-z0-9_-]+$'),
+    _: None = Depends(require_operator),
+):
+    """Capture exact eBay product details through Browse API, never page HTML."""
+    from app.services.ebay_product_details import EbayBrowseDetailsError, fetch_ebay_item_details
+    from app.services.proxy import apply_httpx_proxy
+
+    try:
+        async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 20, "follow_redirects": False})) as client:
+            return await fetch_ebay_item_details(client, item_id, variation_id)
+    except EbayBrowseDetailsError as error:
+        raise HTTPException(status_code=error.status_code, detail=str(error)) from error
 
 
 from pydantic import Field

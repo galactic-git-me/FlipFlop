@@ -760,5 +760,23 @@
     "reason": "no_exact_official_pdf",
     "component": "MSI MAG B850 TOMAHAWK MAX WIFI Motherboard, ATX - Ryzen 9000/8000/7000, AM5",
     "retry_after": "2026-12-12T20:41:45.164581"
+  },
+  "9056ea43499fc3b8e13d8f79cbabb94bf21b76d812df8eac93197fc9f155554a": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Gigabyte B850 AORUS ELITE WIFI7 Motherboard - AMD Ryzen 9000 Series CPUs, 14+2+2 Phases Digital VRM, up to 8200MHz DDR5 (OC),",
+    "retry_after": "2026-12-13T00:46:23.262582"
+  },
+  "3a5e99b19927e64925920e8530a447d59a1b9493332a004a71dba210f2253a34": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR CX650 80 PLUS Bronze Non Modular Low-Noise ATX 650 Watt Power Supply - UK - Black",
+    "retry_after": "2026-12-13T00:46:23.262582"
+  },
+  "602bfa064303c67f591cd417e734c6fb9f9bb916f5d360c26e928c4bac779634": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "JUSTOP Black 650W PSU, ATX Switching Power Supply, Computer Desktop PC, With 120mm Fan, 8-Pin 12V, 6+2 Pin PCI-E, 6x SATA (65",
+    "retry_after": "2026-12-13T00:46:23.262582"
   }
 }
