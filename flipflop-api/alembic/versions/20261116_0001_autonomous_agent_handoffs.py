@@ -16,6 +16,22 @@ def upgrade() -> None:
     op.add_column("steam_hardware_stats", sa.Column("geography", sa.String(32), nullable=True))
     op.add_column("steam_hardware_stats", sa.Column("platform_filter", sa.String(64), nullable=True))
     op.create_index("ix_steam_hardware_stats_observation_month", "steam_hardware_stats", ["observation_month"])
+
+    # Development startup can create this table from ORM metadata before
+    # Alembic records the migration. Reconcile the two columns added to the
+    # persisted event contract before asking Alembic to adopt the table.
+    if sa.inspect(op.get_bind()).has_table("agent_handoff_events"):
+        existing_columns = {
+            column["name"] for column in sa.inspect(op.get_bind()).get_columns("agent_handoff_events")
+        }
+        if "processing_status" not in existing_columns:
+            op.add_column(
+                "agent_handoff_events",
+                sa.Column("processing_status", sa.String(20), nullable=False, server_default="pending"),
+            )
+        if "processed_at" not in existing_columns:
+            op.add_column("agent_handoff_events", sa.Column("processed_at", sa.DateTime(), nullable=True))
+
     op.create_table(
         "agent_handoff_events",
         sa.Column("event_id", sa.String(36), primary_key=True),

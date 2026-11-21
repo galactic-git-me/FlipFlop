@@ -86,7 +86,11 @@ def main() -> int:
             database="postgres",
         ).render_as_string(hide_password=False)
 
-    run([sys.executable, "-m", "alembic", "upgrade", "head"], cwd=API, env=env)
+    run(
+        [sys.executable, "-m", "alembic", "-x", "reconcile_existing=true", "upgrade", "head"],
+        cwd=API,
+        env=env,
+    )
     run(
         [
             sys.executable,
