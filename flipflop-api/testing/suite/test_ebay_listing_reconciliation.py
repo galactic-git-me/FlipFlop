@@ -123,7 +123,13 @@ async def test_error_17_stays_unknown_if_order_lookup_fails():
 
 
 @pytest.mark.asyncio
-async def test_paid_order_records_sale_provenance_and_queues_dispatch(monkeypatch):
+@pytest.mark.parametrize(("existing_order_id", "initial_dispatch_status", "expected_dispatch_status"), [
+    (None, "not_started", "awaiting_dispatch"),
+    ("05-15450-52548", "dispatched", "dispatched"),
+])
+async def test_paid_order_records_sale_provenance_and_queues_dispatch(
+    monkeypatch, existing_order_id, initial_dispatch_status, expected_dispatch_status,
+):
     from app.services.ebay_listing_reconciliation import reconcile_manual_build_listing
 
     build = SimpleNamespace(
@@ -134,9 +140,9 @@ async def test_paid_order_records_sale_provenance_and_queues_dispatch(monkeypatc
         ebay_listing_status="active",
         ebay_listing_status_checked_at=None,
         ebay_listing_end_reason=None,
-        ebay_order_id=None,
+        ebay_order_id=existing_order_id,
         sale_price_actual=None,
-        dispatch_status="not_started",
+        dispatch_status=initial_dispatch_status,
         ebay_sku="FF-BUILD-12",
         warranty_started_at=None,
         delivered_at=None,
@@ -163,7 +169,7 @@ async def test_paid_order_records_sale_provenance_and_queues_dispatch(monkeypatc
     assert state == "sold"
     assert build.ebay_order_id == order.order_id
     assert build.sale_price_actual == 1400.0
-    assert build.dispatch_status == "awaiting_dispatch"
+    assert build.dispatch_status == expected_dispatch_status
     sale_event.assert_awaited_once_with(
         db,
         build,

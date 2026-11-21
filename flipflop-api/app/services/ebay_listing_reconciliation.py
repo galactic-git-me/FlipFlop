@@ -146,6 +146,7 @@ async def reconcile_manual_build_listing(
             order_found=order is not None,
             confirmed_unavailable=confirmed_unavailable,
         )
+        newly_recorded_order = order is not None and build.ebay_order_id != order.order_id
         if confirmed_unavailable and state == "missing":
             log.info(
                 "manual_build.ebay_listing_missing_confirmed",
@@ -172,7 +173,8 @@ async def reconcile_manual_build_listing(
         if order is not None:
             build.ebay_order_id = order.order_id
             build.sale_price_actual = order.sale_price
-            build.dispatch_status = "awaiting_dispatch"
+            if newly_recorded_order:
+                build.dispatch_status = "awaiting_dispatch"
             from app.models.app_settings import AppSettings
             from app.services.channel_sync import record_confirmed_sale
             settings_row = (await db.execute(

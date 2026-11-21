@@ -715,11 +715,13 @@ def suggested_offer(part, offers):
     # This keeps product identity fixed while allowing supplier substitution.
     from app.services.commerce_pricing import PLAYBOOK_SUPPLIER_ARRIVAL_LIMITS
     standard_limit=PLAYBOOK_SUPPLIER_ARRIVAL_LIMITS.get('standard',6)
+    now=datetime.utcnow()
     standard_choices=[]
     for offer in choices:
         if (offer.get('stock_status') not in {'available','in_stock'}
                 or offer.get('condition')!='new'
-                or offer.get('commercial_capture_verified') is not True):
+                or offer.get('commercial_capture_verified') is not True
+                or not (timedelta(0)<=now-observed(offer)<=timedelta(hours=24))):
             continue
         try:
             days=offer.get('delivery_working_days')
@@ -738,7 +740,6 @@ def suggested_offer(part, offers):
             continue
     if standard_choices:
         return min(standard_choices,key=lambda row:row[:-1])[-1]
-    now=datetime.utcnow()
     def readiness(offer):
         fresh=timedelta(0)<=now-observed(offer)<=timedelta(hours=24)
         return (not (fresh and offer.get('stock_status')=='available'),

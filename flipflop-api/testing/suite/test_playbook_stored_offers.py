@@ -200,3 +200,17 @@ async def test_newer_different_retailer_capture_does_not_invalidate_exact_suppli
 
     assert await _persisted_supplier_snapshot_is_current(db, part, proposed, current_catalogue_capture)
     db.get.assert_awaited_once_with(GemRadarListingObservation, 1051519)
+
+
+def test_stale_cheap_retailer_offer_does_not_replace_fresh_catalogue_offer():
+    now = datetime.utcnow()
+    catalogue_url = 'https://www.overclockers.co.uk/lian-li-rs-1200w/POW-LIA-06175.html'
+    stale_url = 'https://www.scan.co.uk/products/lian-li-rs-1200w'
+    part = _part(catalogue_url, '120.00', now.isoformat())
+    stale = _offer(stale_url, '100.00', (now - timedelta(days=10)).isoformat())
+    stale['source'] = 'scan'
+
+    selected = suggested_offer(part, [stale])
+
+    assert selected['item_gbp'] == '120.00'
+    assert selected['match_basis'] == 'catalogue_identity'
