@@ -61,7 +61,7 @@ async def test_find_order_for_listing_ignores_unpaid_matching_order(monkeypatch)
             return None
 
         async def get(self, *_args, **_kwargs):
-            return SimpleNamespace(json=lambda: {"orders": [
+            return SimpleNamespace(status_code=200, headers={}, json=lambda: {"orders": [
                 {"orderId": "unpaid", "orderPaymentStatus": "PENDING", "lineItems": [{"legacyItemId": "listing-1"}]},
                 {
                     "orderId": "paid",

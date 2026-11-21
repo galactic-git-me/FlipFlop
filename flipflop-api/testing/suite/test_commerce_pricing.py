@@ -13,7 +13,7 @@ def test_condition_requires_explicit_consent():
     assert condition_allowed(ConditionPolicy.NEW_OR_REFURBISHED, Condition.REFURBISHED, True)
 
 
-def test_priority_restricts_marketplaces_stock_capacity_and_delivery():
+def test_priority_restricts_marketplaces_stock_capacity_and_supplier_eta():
     now = datetime(2026, 9, 26, tzinfo=timezone.utc)
     offers = [
         SupplierOffer("Amazon", "retail", Condition.NEW, D("300"), D("0"), D("0"), D("2"), "2026-09-26", True, True, 1),
@@ -22,7 +22,9 @@ def test_priority_restricts_marketplaces_stock_capacity_and_delivery():
     ]
     assert eligible_offers(offers, FulfilmentMode.PRIORITY, ConditionPolicy.NEW_ONLY, False, now=now) == []
     result = eligible_offers(offers, FulfilmentMode.PRIORITY, ConditionPolicy.NEW_ONLY, False, priority_capacity=True, now=now)
-    assert [offer.supplier for offer in result] == ["Amazon", "Overclockers UK"]
+    # The legacy priority path requires supplier arrival within one working
+    # day. The Playbook path uses its reviewed total delivery commitment.
+    assert [offer.supplier for offer in result] == ["Amazon"]
     standard = eligible_offers(offers, FulfilmentMode.STANDARD, ConditionPolicy.NEW_ONLY, False, now=now)
     assert all(offer.channel == "retail" for offer in standard)
 

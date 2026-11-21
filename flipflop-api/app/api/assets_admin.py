@@ -347,8 +347,7 @@ def catalogue_asset_queue_query(catalogue: str, selected_ids: list[int] | None):
         .join(Listing, Listing.id == CatalogueVariant.listing_id)
         .where(
             CatalogueVariant.status.in_(("active", "pending_review")) if selected_ids is None else True,
-            CatalogueVariant.curated_for_builds.is_(True)
-                if selected_ids is not None else membership.is_(True),
+            membership.is_(True) if selected_ids is None else True,
             CatalogueVariant.id.in_(selected_ids) if selected_ids is not None else True,
         )
         .order_by(PlaybookSlot.slot_type, Listing.title, CatalogueVariant.id)

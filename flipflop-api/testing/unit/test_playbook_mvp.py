@@ -91,7 +91,8 @@ class OwnerPhotoChecks(unittest.TestCase):
         sql=str(catalogue_asset_queue_query("curated",[31005,32277]).compile(dialect=postgresql.dialect(),compile_kwargs={"literal_binds":True}))
         where=sql.split("WHERE",1)[1].split("ORDER BY",1)[0]
         self.assertNotIn("status",where)
-        self.assertIn("custom_for_builds",where)
+        self.assertNotIn("curated_for_builds",where)
+        self.assertNotIn("custom_for_builds",where)
         self.assertIn("31005",where)
 
     def test_unscoped_inventory_retains_its_catalogue_and_status_filters(self):

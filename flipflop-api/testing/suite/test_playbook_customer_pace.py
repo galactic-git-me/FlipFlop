@@ -1,5 +1,6 @@
 """Customer pace contracts: per-component coverage and no Flexible deadline."""
 import unittest
+from unittest.mock import AsyncMock
 from datetime import datetime, timezone
 from types import SimpleNamespace
 from app.schemas.commercial_quote import CellCommercialPolicy
@@ -8,7 +9,10 @@ from app.services.commercial_checkout import accepted_delivery, commercial_promi
 from testing.suite.test_playbook_commercial_quote import policy_data
 
 
-class CustomerPaceTests(unittest.TestCase):
+class CustomerPaceTests(unittest.IsolatedAsyncioTestCase):
+    def db(self):
+        result = SimpleNamespace(scalars=lambda: SimpleNamespace(all=lambda: []))
+        return SimpleNamespace(execute=AsyncMock(return_value=result))
     def part(self, days=1):
         url = 'https://www.overclockers.co.uk/test-cpu/PRO-AMD-02677.html'
         source = dict(url=url, source='overclockers', item_gbp='100', delivery_gbp='0',
@@ -20,26 +24,26 @@ class CustomerPaceTests(unittest.TestCase):
         return dict(role='cpu', variant_id=1, listing_id=1, title='AMD Ryzen 5 9600X',
                     source_url=url, source_observation=source)
 
-    def test_each_component_has_three_pace_entries(self):
-        result = component_pace_sources({'cpu': self.part()}, CellCommercialPolicy.model_validate(policy_data()))
+    async def test_each_component_has_three_pace_entries(self):
+        result = await component_pace_sources({'cpu': self.part()}, CellCommercialPolicy.model_validate(policy_data()), self.db())
         self.assertEqual(set(result), {'fast_track', 'standard', 'flexible'})
         self.assertTrue(all(rows[0]['available'] for rows in result.values()))
         self.assertFalse(result['flexible'][0]['delivery_promised'])
 
-    def test_long_arrival_only_flexible(self):
-        result = component_pace_sources({'cpu': self.part(45)}, CellCommercialPolicy.model_validate(policy_data()))
+    async def test_long_arrival_only_flexible(self):
+        result = await component_pace_sources({'cpu': self.part(45)}, CellCommercialPolicy.model_validate(policy_data()), self.db())
         self.assertFalse(result['fast_track'][0]['available'])
         self.assertFalse(result['standard'][0]['available'])
         self.assertTrue(result['flexible'][0]['available'])
 
-    def test_unknown_stock_is_never_an_available_option(self):
+    async def test_unknown_stock_is_never_an_available_option(self):
         part = self.part()
         part['source_observation']['stock_status'] = 'unknown'
-        result = component_pace_sources({'cpu': part}, CellCommercialPolicy.model_validate(policy_data()))
+        result = await component_pace_sources({'cpu': part}, CellCommercialPolicy.model_validate(policy_data()), self.db())
         self.assertTrue(all(not rows[0]['available'] for rows in result.values()))
 
-    def test_missing_policy_does_not_crash_incomplete_build(self):
-        result = component_pace_sources({'cpu': self.part()}, None)
+    async def test_missing_policy_does_not_crash_incomplete_build(self):
+        result = await component_pace_sources({'cpu': self.part()}, None, self.db())
         self.assertTrue(all(not rows[0]['available'] for rows in result.values()))
 
     def test_accepted_flexible_never_inherits_legacy_date(self):

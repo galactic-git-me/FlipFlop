@@ -107,7 +107,7 @@ async def test_build_offer_assesses_approved_evidence_without_importing_supplier
     monkeypatch.setattr(
         playbook_service,
         "estimate_delivery_products",
-        lambda *_args: {
+        lambda *_args, **_kwargs: {
             mode: {
                 "recommended_price_gbp": "100.00",
                 "estimated_profit_gbp": "20.00",
@@ -117,7 +117,7 @@ async def test_build_offer_assesses_approved_evidence_without_importing_supplier
         },
     )
 
-    async def assess(_db, _parent, _definition, _policy, _body):
+    async def assess(_db, _parent, _definition, _policy, _body, **_kwargs):
         return {
             "modes": {
                 mode: {"offerable": False, "reason": "Supplier evidence awaits operator approval"}
@@ -140,8 +140,10 @@ async def test_build_offer_assesses_approved_evidence_without_importing_supplier
     parent = SimpleNamespace(id=7, profit_strategy={}, pricing_model={})
     settings = SimpleNamespace()
 
+    empty_db = SimpleNamespace(execute=AsyncMock(return_value=SimpleNamespace(
+        scalars=lambda: SimpleNamespace(all=lambda: []))))
     offer = await playbook_service.build_cell_offer(
-        object(), definition, parent, settings, [], benchmark_index={}
+        empty_db, definition, parent, settings, [], benchmark_index={}
     )
 
     importer.assert_not_awaited()
@@ -170,7 +172,7 @@ async def test_build_offer_selects_standard_eligible_benchmark_qualified_shared_
         mode: part["source_observation"]["delivery_working_days"] <= limit
         for mode, limit in {"fast_track": 3, "standard": 5, "flexible": 14}.items()
     })
-    monkeypatch.setattr(playbook_service, "estimate_delivery_products", lambda *_args: {
+    monkeypatch.setattr(playbook_service, "estimate_delivery_products", lambda *_args, **_kwargs: {
         mode: {"recommended_price_gbp": None, "reason": "Awaiting reviewed exact supplier costs"}
         for mode in playbook_service.MODES
     })
@@ -202,7 +204,9 @@ async def test_build_offer_selects_standard_eligible_benchmark_qualified_shared_
 
     definition = {"id": "TEST-DELIVERY", "segment": "Gaming", "tier": "Budget", "name": "Test build",
         "components": {"cpu": "AMD Ryzen 5 5600", "gpu": "NVIDIA GeForce RTX 4060"}}
-    offer = await playbook_service.build_cell_offer(object(), definition,
+    empty_db = SimpleNamespace(execute=AsyncMock(return_value=SimpleNamespace(
+        scalars=lambda: SimpleNamespace(all=lambda: []))))
+    offer = await playbook_service.build_cell_offer(empty_db, definition,
         SimpleNamespace(id=7, profit_strategy={}, pricing_model={}), SimpleNamespace(), candidates, benchmark_index={})
 
     selected = {part["role"]: part for part in offer["components"]}

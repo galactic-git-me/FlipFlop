@@ -23,7 +23,7 @@ from app.models.commerce_evidence import SupplierOfferEvidence, WorkshopCapacity
 from app.models.order_checkout_snapshot import OrderCheckoutSnapshot
 from app.schemas.payment import PlaybookBuildConfig, CreatePaymentIntentRequest
 from app.schemas.commercial_quote import CellCommercialPolicy
-from app.services.commercial_quote_evidence import definition_hash
+from app.services.commercial_quote_evidence import definition_hash, supplier_capture_product_key
 from app.services.commercial_checkout import (
     create_checkout_quote, load_checkout_policy, accept_checkout_quote,
     commercial_order_snapshot, accepted_summary,
@@ -128,6 +128,13 @@ class CommercialPostgresTests(unittest.IsolatedAsyncioTestCase):
         self.capacity = WorkshopCapacityEvidence(build_week=f"{iso.year}-W{iso.week:02}", available_builds=20,
             observed_at=self.now, evidence_source="disposable_fixture", evidence_ref="workshop:fixture", captured_by_admin_id=0)
         self.db.add_all([*self.rows, self.capacity])
+        self.db.add_all([PriceQuoteSnapshot(
+            product_key=supplier_capture_product_key(row.part_key,row.evidence_ref,row.observed_at.isoformat()),
+            status="supplier_offer_capture",
+            evidence_json={"title":f"Exact {row.part_key}","listing_type":"buy_it_now",
+                "stock_evidence":"In stock","postage_verified":True},
+            decision_json={"capture_verified":True},created_by_admin_id=0)
+            for row in self.rows])
         await self.db.flush()
         self.patches = [patch("app.services.commercial_checkout.definitions", return_value={"builds":[self.definition]}),
                         patch("app.api.playbook_commercial_quotes.definitions", return_value={"builds":[self.definition]}),

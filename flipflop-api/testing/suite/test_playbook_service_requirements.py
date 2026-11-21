@@ -158,13 +158,14 @@ def test_draft_delivery_exposes_proposed_workshop_allowance_and_failed_fast_dead
     modes=estimate_delivery_products(parts,{'id':'TEST','tier':'Budget','components':{'gpu':'Integrated'}},
         SimpleNamespace(profit_strategy={}, pricing_model={}),settings)
     assert modes['fast_track']['recommended_price_gbp'] is None
-    assert modes['fast_track']['estimated_delivery_working_days']==9
-    assert modes['fast_track']['maximum_delivery_working_days']==7
+    assert modes['fast_track']['expected_delivery_working_days']==10
+    assert modes['fast_track']['maximum_delivery_working_days']==3
     standard=modes['standard']
     assert standard['supplier_arrival_working_days']==7
-    assert standard['workshop_working_days']==6
-    assert standard['courier_working_days']==1
-    assert standard['estimated_delivery_working_days']==14
+    assert standard['workshop_working_days']==1
+    assert standard['courier_working_days']==2
+    assert standard['expected_delivery_working_days']==10
+    assert standard['maximum_delivery_working_days']==5
     assert standard['workshop_wait_working_days'] is None
     assert standard['timing_basis']=='proposed_from_delivery_target'
 
@@ -185,7 +186,7 @@ def test_high_end_price_requires_reviewed_p75_and_keeps_margin_floor_below_cap()
     definition={'id':'HIGH','tier':'High-end','components':{role:role for role in roles}}
     without_market=estimate_delivery_products(parts,definition,parent,settings)
     assert without_market['standard']['recommended_price_gbp'] is None
-    assert 'eight sold comparable' in without_market['standard']['reason']
+    assert 'eight-sale complete-PC P75' in without_market['standard']['reason']
     from app.schemas.commercial_quote import CellCommercialPolicy
     from testing.suite.test_playbook_commercial_quote import policy_data
     from app.services.playbook_commercial_quote import supplier_meets_delivery_commitment
@@ -368,7 +369,7 @@ def test_zero_cost_official_linux_download_completes_the_secondary_os_catalogue_
             ('cpu','motherboard','ram','gpu','storage','case','psu','cooling'),1)]
     candidates.extend([
         {'role':'os','title':'Windows 11 Pro OEM','variant_id':10,'listing_id':20,
-         'listing_price_gbp':'70.00'},
+         'listing_price_gbp':'70.00','source_url':'https://gamers-outlet.net/windows-11-pro'},
         {'role':'os_secondary','title':'Ubuntu 24.04 LTS Desktop (official free download)',
          'variant_id':11,'listing_id':21,'listing_price_gbp':'0.00'},
     ])

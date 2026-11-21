@@ -100,6 +100,7 @@ class AdapterTests(unittest.IsolatedAsyncioTestCase):
         self.db.execute.side_effect = [
             MagicMock(scalar_one_or_none=MagicMock(return_value=self.playbook)),
             MagicMock(scalars=MagicMock(return_value=MagicMock(all=MagicMock(return_value=rows)))),
+            MagicMock(scalars=MagicMock(return_value=MagicMock(all=MagicMock(return_value=[])))),
         ]
         iso = current.date().isocalendar()
         cap = SimpleNamespace(id=5, build_week=f"{iso.year}-W{iso.week:02}", observed_at=current,

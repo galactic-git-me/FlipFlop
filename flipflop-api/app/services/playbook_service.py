@@ -1607,9 +1607,30 @@ def estimate_delivery_products(parts, definition, parent, settings, *, pace_sour
                 'reason':'This delivery option is unavailable because: '+', '.join(ineligible_details),
                 'postage_assumptions':postage_assumptions,
                 'cost_basis':'owner_approved_pilot_and_current_application_delivery_allowance'}
+            supplier_times=[_supplier_arrival_estimate(part)[0] for part in mode_parts.values()]
+            supplier_days=max(supplier_times) if supplier_times and all(
+                isinstance(days,int) and not isinstance(days,bool) and days>=0 for days in supplier_times) else None
+            rule=policy.modes[mode]
+            outputs[mode].update(supplier_arrival_working_days=supplier_days,
+                workshop_wait_working_days=None,workshop_working_days=rule.workshop_working_days,
+                courier_working_days=rule.courier_working_days,
+                maximum_delivery_working_days=rule.maximum_delivery_working_days,
+                delivery_promised=mode!='flexible',
+                estimated_delivery_working_days=(supplier_days+rule.workshop_working_days+rule.courier_working_days)
+                    if mode!='flexible' and supplier_days is not None else None,
+                expected_delivery_working_days=(supplier_days+rule.workshop_working_days+rule.courier_working_days)
+                    if mode!='flexible' and supplier_days is not None else None,
+                timing_basis='proposed_from_delivery_target' if mode!='flexible' else 'flexible_vendor_fallback')
             continue
         economics=mode_economics(policy,policy.modes[mode],landed)
         price=economics['price'];profit=economics['contribution']
+        if (definition.get('tier')=='High-end' and mode=='standard'
+                and (policy.market is None or policy.market.sold_p75_gbp is None
+                    or policy.market.sold_sample_size < 8)):
+            outputs[mode]={'available':False,'recommended_price_gbp':None,
+                'estimated_profit_gbp':None,
+                'reason':'A reviewed eight-sale complete-PC P75 is required before setting a High-end Standard price.'}
+            continue
         market_cap=(policy.market.sold_p75_gbp if policy.market and policy.market.sold_p75_gbp is not None
                     else policy.market.sold_median_gbp if policy.market else None)
         if definition.get('tier') == 'High-end' and mode == 'standard' and (
@@ -1710,7 +1731,7 @@ async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None,variant
         # Bound source lookups and search effort; never fetch the public catalogue
         # here because unpublished cells also need automatically built proposals.
         bounded_items=items[:MAX_CHOICES_PER_ROLE]
-        if role=='storage_secondary':
+        if role=='storage_secondary' and items:
             # The secondary-drive catalogue can contain hundreds of low-capacity
             # options. Preserve candidates that can satisfy an authored 8TB-class
             # data-drive requirement even when bestseller/price ordering places

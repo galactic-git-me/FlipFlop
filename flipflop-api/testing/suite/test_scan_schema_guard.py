@@ -74,5 +74,5 @@ async def test_active_spotlights_do_not_expire_at_twenty_four_hours():
     db.execute.return_value = SimpleNamespace(all=Mock(return_value=[]))
     with patch("app.api.gem_radar._fetch_best_gem_for_category", fetch):
         result = await get_gem_by_component(db, None)
-    assert len(result) == 8
+    assert len(result) == 9
     assert all(call.args[2] == datetime.min for call in fetch.await_args_list)
