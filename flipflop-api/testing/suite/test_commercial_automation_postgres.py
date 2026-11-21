@@ -13,7 +13,7 @@ from alembic.operations import Operations
 from app.models.listing import Listing
 from app.models.commerce_evidence import SupplierOfferEvidence, PriceQuoteSnapshot
 from app.services.commercial_reconciliation import reconcile_commercial
-import test_commercial_checkout_postgres as fixtures
+from testing.suite import test_commercial_checkout_postgres as fixtures
 
 
 class AutomationPostgresTests(unittest.IsolatedAsyncioTestCase):

@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from types import SimpleNamespace
+import pytest
 
 from app.services.playbook_product_capture import (max_working_days_for_calendar_duration,
     parse_product_capture, supported_product_url)

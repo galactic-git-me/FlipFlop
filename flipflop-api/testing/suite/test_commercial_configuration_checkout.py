@@ -12,7 +12,7 @@ from app.services.commercial_configuration import configuration_definition
 from app.services.commercial_quote_evidence import definition_hash
 from app.services.playbook_service import automatic_policy
 from app.api.configuration_commercial_quotes import ConfigurationPriceApproval
-from test_playbook_commercial_quote import policy_data
+from testing.suite.test_playbook_commercial_quote import policy_data
 
 
 class _Result:

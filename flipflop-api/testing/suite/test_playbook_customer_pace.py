@@ -5,7 +5,7 @@ from types import SimpleNamespace
 from app.schemas.commercial_quote import CellCommercialPolicy
 from app.services.playbook_pace_sources import component_pace_sources
 from app.services.commercial_checkout import accepted_delivery, commercial_promised_date
-from test_playbook_commercial_quote import policy_data
+from testing.suite.test_playbook_commercial_quote import policy_data
 
 
 class CustomerPaceTests(unittest.TestCase):
