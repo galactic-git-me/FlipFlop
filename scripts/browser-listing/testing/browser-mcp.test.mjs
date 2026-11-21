@@ -27,7 +27,7 @@ async function harness(t) {
   await fs.writeFile(jobFile, JSON.stringify({ id: 1, lease_token: 'lease', operation: 'publish', payload: {
     channel: 'vinted', seller_url: 'https://www.vinted.co.uk/member/items', listing: { title: 'PROMETHEUS Gaming PC', price: 1400, images: [] },
   } }));
-  const child = spawn(process.execPath, [fileURLToPath(new URL('./browser-mcp.mjs', import.meta.url))], {
+  const child = spawn(process.execPath, [fileURLToPath(new URL('../browser-mcp.mjs', import.meta.url))], {
     env: { ...process.env, FF_ADMIN_DIR: admin, FF_BROWSER_JOB_FILE: jobFile, FF_BROWSER_RESULT_FILE: resultFile,
       FF_CREDENTIALS_FILE: credentialsFile, FF_CHROME_PROFILE: path.join(dir, 'profile'), FF_WORKER_API: 'http://127.0.0.1:1' }, stdio: ['pipe', 'pipe', 'pipe'],
   });
