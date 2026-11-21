@@ -278,26 +278,58 @@ async def _persist_reddit_posts(posts: list[dict], now: datetime) -> int:
 
 # Category markers found in the Steam Hardware Survey HTML
 _STEAM_CATEGORY_MARKERS = [
-    ("GPU", ["video card description", "directx 12 gpu", "directx 11 gpu"]),
-    ("CPU", ["processor information", "cpu vendor", "number of cpus"]),
-    ("RAM", ["system ram", "physical memory"]),
-    ("OS", ["operating system version"]),
+    ("Video Card Description", ["video card description", "directx 12 gpu", "directx 11 gpu"]),
+    ("Processor Information", ["processor information", "cpu vendor"]),
+    ("Physical CPUs", ["physical cpus", "number of cpus"]),
+    ("System RAM", ["system ram", "physical memory"]),
+    ("Operating System Version", ["operating system version"]),
+    ("VRAM", ["vram"]),
+    ("Primary Display Resolution", ["primary display resolution"]),
+    ("Multi-Monitor Desktop Resolution", ["multi-monitor desktop resolution"]),
+    ("Language", ["language"]),
+    ("Free Hard Drive Space", ["free hard drive space"]),
+    ("Total Hard Drive Space", ["total hard drive space"]),
+    ("VR Headsets", ["vr headsets"]),
 ]
 
 # Matches lines like: "NVIDIA GeForce RTX 3060   5.23%   +0.14%"
 _STAT_RE = re.compile(
-    r"([\w\s\(\)\-\.\/]+?)\s{2,}(\d+\.\d+)%\s*([+\-]\d+\.\d+%)?",
+    r"([\w\s\(\)\-\.\/]+?)\s{2,}(\d+(?:\.\d+)?)%\s*([+\-]\d+(?:\.\d+)?%)?",
     re.IGNORECASE,
 )
 
 # Steam publishes a JSON endpoint for hardware survey
 _STEAM_SURVEY_JSON_URL = "https://store.steampowered.com/hwsurvey/Steam-Hardware-Software-Survey-Welcome-to-Steam"
+_STEAM_PARSER_VERSION = "steam-hwsurvey-html-v2"
+_STEAM_SNAPSHOT_FIELDS = {
+    "observation_month", "source_url", "parser_version", "geography", "platform_filter",
+}
 
 
-async def collect_steam_rich(now: datetime) -> dict:
-    """Parse Steam Hardware Survey for real GPU/CPU/RAM percentages."""
+async def collect_steam_rich(now: datetime, *, force: bool = False) -> dict:
+    """Capture the complete available Steam survey dataset at most once per month."""
     stats: list[dict] = []
 
+    if not force:
+        async with AsyncSessionLocal() as db:
+            from sqlalchemy import extract, func
+            existing = await db.execute(
+                select(func.count(SteamHardwareStat.id)).where(
+                    extract("year", SteamHardwareStat.collected_at) == now.year,
+                    extract("month", SteamHardwareStat.collected_at) == now.month,
+                    SteamHardwareStat.parser_version == _STEAM_PARSER_VERSION,
+                )
+            )
+            if (existing.scalar() or 0) > 0:
+                return {"stats_parsed": 0, "inserted": 0, "already_collected": True,
+                        "observation_month": now.strftime("%Y-%m"),
+                        "source_url": _STEAM_SURVEY_JSON_URL,
+                        "retrieved_at": now.isoformat(),
+                        "parser_version": _STEAM_PARSER_VERSION,
+                        "geography": "global", "platform_filter": None}
+
+    fetch_error = None
+    observation_month = now.strftime("%Y-%m")
     async with httpx.AsyncClient(timeout=25, follow_redirects=True) as client:
         try:
             resp = await client.get(
@@ -305,12 +337,83 @@ async def collect_steam_rich(now: datetime) -> dict:
                 headers={"User-Agent": "Mozilla/5.0 (compatible; FlipFlopBot/1.0)"},
             )
             if resp.status_code == 200:
+                observation_month = _extract_steam_observation_month(resp.text, now)
                 stats = _parse_steam_survey(resp.text, now)
-        except Exception:
-            pass
+                platform_filter = _extract_steam_platform_filter(resp.text)
+                for row in stats:
+                    row.update({
+                        "observation_month": observation_month,
+                        "source_url": _STEAM_SURVEY_JSON_URL,
+                        "parser_version": _STEAM_PARSER_VERSION,
+                        "geography": "global",
+                        "platform_filter": platform_filter,
+                    })
+            else:
+                fetch_error = f"HTTP {resp.status_code}"
+        except Exception as exc:
+            fetch_error = type(exc).__name__
 
-    inserted = await _persist_steam_stats(stats, now)
-    return {"stats_parsed": len(stats), "inserted": inserted}
+    category_count = len({row.get("category") for row in stats if row.get("category")})
+    if stats and (category_count < 5 or len(stats) < 10):
+        fetch_error = "Incomplete survey coverage: parsed fewer than 5 categories or 10 item rows"
+        stats = []
+    inserted = await _persist_steam_stats(stats, now, replace_month=force)
+    categories: dict[str, list[dict]] = {}
+    for row in stats:
+        categories.setdefault(row["category"], []).append(row)
+    top = {category: max(values, key=lambda item: item["percentage"])["item_name"]
+           for category, values in categories.items() if values}
+    return {"stats_parsed": len(stats), "inserted": inserted,
+            "observation_month": observation_month if not fetch_error else now.strftime("%Y-%m"),
+            "source_url": _STEAM_SURVEY_JSON_URL,
+            "retrieved_at": now.isoformat(), "parser_version": _STEAM_PARSER_VERSION,
+            "geography": "global", "platform_filter": platform_filter if not fetch_error else None,
+            "top_per_category": top,
+            "error": fetch_error or ("No survey rows parsed" if not stats else None)}
+
+
+def _extract_steam_observation_month(html: str, retrieved_at: datetime) -> str:
+    """Read the survey publication month when exposed; retrieval month is fallback."""
+    from datetime import datetime as dt
+    try:
+        from bs4 import BeautifulSoup
+        searchable_text = BeautifulSoup(html, "html.parser").get_text(" ", strip=True)
+    except Exception:
+        searchable_text = html
+    match = re.search(
+        r"\b(January|February|March|April|May|June|July|August|September|October|November|December)\s+(20\d{2})\b",
+        searchable_text,
+        re.IGNORECASE,
+    )
+    if match:
+        try:
+            return dt.strptime(f"{match.group(1)} {match.group(2)}", "%B %Y").strftime("%Y-%m")
+        except ValueError:
+            pass
+    return retrieved_at.strftime("%Y-%m")
+
+
+def _extract_steam_platform_filter(html: str) -> str | None:
+    """Return a visible selected platform when present; never guess a filter."""
+    try:
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(html, "html.parser")
+        for select_node in soup.select("select"):
+            context = " ".join([
+                select_node.get("id", ""), select_node.get("name", ""),
+                select_node.get("aria-label", ""),
+            ]).lower()
+            if "platform" not in context:
+                continue
+            option = select_node.select_one("option[selected]")
+            if option:
+                return option.get_text(" ", strip=True)[:64] or None
+        page_text = soup.get_text(" ", strip=True).lower()
+        if "windows, mac and linux" in page_text and "view combined stats" in page_text:
+            return "combined"
+    except Exception:
+        pass
+    return None
 
 
 def _parse_steam_survey(html: str, now: datetime) -> list[dict]:
@@ -354,7 +457,7 @@ def _parse_steam_survey(html: str, now: datetime) -> list[dict]:
                         change = float(change_text)
                     except ValueError:
                         pass
-                if name and percentage > 0:
+                if name and 0 <= percentage <= 100:
                     rows.append({
                         "category": category, "item_name": name[:255],
                         "percentage": round(percentage, 4),
@@ -362,7 +465,7 @@ def _parse_steam_survey(html: str, now: datetime) -> list[dict]:
                         "collected_at": now,
                     })
         if rows:
-            return rows
+            return _deduplicate_steam_rows(rows)
     except Exception:
         rows = []
 
@@ -389,7 +492,7 @@ def _parse_steam_survey(html: str, now: datetime) -> list[dict]:
                             change = float(str(change_str).replace("%", "").replace("+", ""))
                         except Exception:
                             pass
-                    if name and pct > 0:
+                    if name and 0 <= pct <= 100:
                         rows.append({
                             "category": category,
                             "item_name": name[:255],
@@ -398,14 +501,13 @@ def _parse_steam_survey(html: str, now: datetime) -> list[dict]:
                             "collected_at": now,
                         })
             if rows:
-                return rows
+                return _deduplicate_steam_rows(rows)
         except Exception:
             pass
 
     # Fallback: regex scan for percentage patterns in page source
     # Look for section headers then collect rows until next header
-    current_category = "GPU"
-    lower = html.lower()
+    current_category = "Unknown"
     for line in html.splitlines():
         line_lower = line.lower()
         for cat, markers in _STEAM_CATEGORY_MARKERS:
@@ -426,7 +528,7 @@ def _parse_steam_survey(html: str, now: datetime) -> list[dict]:
                     change = float(m.group(3).replace("%", "").replace("+", ""))
                 except Exception:
                     pass
-            if name and 0 < pct <= 100 and len(name) > 3:
+            if name and 0 <= pct <= 100 and len(name) > 3:
                 rows.append({
                     "category": current_category,
                     "item_name": name[:255],
@@ -435,30 +537,46 @@ def _parse_steam_survey(html: str, now: datetime) -> list[dict]:
                     "collected_at": now,
                 })
 
-    return rows
+    return _deduplicate_steam_rows(rows)
 
 
 def _map_steam_category(section_name: str) -> str | None:
-    s = section_name.lower()
-    if "video" in s or "directx" in s or "gpu" in s:
-        return "GPU"
-    if "processor" in s or "cpu" in s:
-        return "CPU"
-    if "ram" in s or "memory" in s:
-        return "RAM"
-    if "os" in s or "operating" in s:
-        return "OS"
-    return None
+    label = re.sub(r"\s+", " ", section_name).strip()
+    if not label:
+        return None
+    # Retain each Steam section as its own category. Collapsing e.g. CPU Speeds
+    # and Physical CPUs into one CPU bucket loses the category leaders.
+    return label[:64]
 
 
-async def _persist_steam_stats(stats: list[dict], now: datetime) -> int:
+def _deduplicate_steam_rows(rows: list[dict]) -> list[dict]:
+    unique: dict[tuple[str, str], dict] = {}
+    for row in rows:
+        key = (row["category"], row["item_name"].casefold())
+        unique[key] = row
+    return list(unique.values())
+
+
+async def _persist_steam_stats(stats: list[dict], now: datetime, *, replace_month: bool = False) -> int:
     if not stats:
         return 0
-    cutoff = now - timedelta(days=60)
     async with AsyncSessionLocal() as db:
-        await db.execute(delete(SteamHardwareStat).where(SteamHardwareStat.collected_at < cutoff))
+        if replace_month:
+            from sqlalchemy import extract
+            await db.execute(delete(SteamHardwareStat).where(
+                extract("year", SteamHardwareStat.collected_at) == now.year,
+                extract("month", SteamHardwareStat.collected_at) == now.month,
+            ))
+        supported_snapshot_fields = {
+            field for field in _STEAM_SNAPSHOT_FIELDS
+            if hasattr(SteamHardwareStat, field)
+        }
         for row in stats:
-            db.add(SteamHardwareStat(**row))
+            db.add(SteamHardwareStat(**{
+                key: value for key, value in row.items()
+                if key in {"category", "item_name", "percentage", "change_pct", "collected_at"}
+                or key in supported_snapshot_fields
+            }))
         await db.commit()
     return len(stats)
 

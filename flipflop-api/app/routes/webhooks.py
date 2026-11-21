@@ -798,6 +798,9 @@ async def _handle_product_payment_succeeded(intent: dict, db: AsyncSession) -> N
         manual_build.customer_email = customer.email
         manual_build.sale_price_actual = amount
         from app.services.channel_sync import withdraw_other_channels
+        from app.services.channel_sync import record_confirmed_sale
+        await record_confirmed_sale(db, manual_build, channel="flipflop_shop",
+            order_id=order.order_id, sale_price=amount, source="storefront_payment_webhook", account="FlipFlop.shop")
         await withdraw_other_channels(db, manual_build, "flipflop_shop")
 
     # manual_build.status is deliberately left unset here — withdraw_ebay_for_sold_build's

@@ -15,6 +15,7 @@ import {
 
 type Month = { key: string; label: string };
 type MonthPrice = { median: number | null; best_vendor: string | null; average: number | null; low: number | null; observations: number; vendor_medians: Record<string, number> };
+type DayPrice = MonthPrice;
 type WatchedProduct = {
   cpk: string;
   mpn: string | null;
@@ -24,6 +25,7 @@ type WatchedProduct = {
   rank: number;
   storage_type: "nvme" | "sata" | "unclassified" | null;
   months: Record<string, MonthPrice>;
+  days?: Record<string, DayPrice>;
 };
 type WatchCategory = {
   category: "cpu" | "motherboard" | "ram" | "storage";
@@ -51,6 +53,20 @@ const money = (value: number | null | undefined) => value == null ? "—" : `£$
 const signedMoney = (value: number | null | undefined) => value == null ? "—" : `${value < 0 ? "−" : "+"}£${Math.abs(value).toFixed(2)}`;
 const monthPrice = (product: WatchedProduct, key: string | undefined) => key ? product.months[key] : undefined;
 
+function shortProductName(title: string) {
+  const suffixStart = title.search(/\s+(?:processor|cpu)\b/i);
+  return (suffixStart > 0 ? title.slice(0, suffixStart) : title).trim();
+}
+
+function dateKey(date: Date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function formatDayTick(key: string) {
+  const [year, month, day] = key.split("-").map(Number);
+  return new Date(year, month - 1, day).toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+}
+
 function monthChangeClass(value: number | null) {
   if (value == null || value === 0) return "text-slate-400";
   return value < 0 ? "bg-emerald-400/10 text-emerald-300" : "bg-rose-400/10 text-rose-300";
@@ -61,6 +77,7 @@ export default function PriceWatchPage() {
   const [categoryKey, setCategoryKey] = useState<CategoryKey>("cpu");
   const [storageFilter, setStorageFilter] = useState<StorageFilter>("nvme");
   const [query, setQuery] = useState("");
+  const [chartRankLimit, setChartRankLimit] = useState<10 | 100>(10);
   const [selection, setSelection] = useState<Partial<Record<CategoryKey, string[]>>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -94,14 +111,30 @@ export default function PriceWatchPage() {
     }
     return products;
   }, [categoryKey, currentCategory, query, storageFilter]);
+  const visibleMonths = useMemo(() => {
+    const months = data?.months ?? [];
+    const firstObservedIndex = months.findIndex((month) =>
+      filteredProducts.some((product) => monthPrice(product, month.key)?.median != null),
+    );
+    return firstObservedIndex < 0 ? [] : months.slice(firstObservedIndex);
+  }, [data?.months, filteredProducts]);
 
   const selectedKeys = selection[categoryKey] ?? filteredProducts.slice(0, 4).map((product) => product.cpk);
-  const selectedProducts = (currentCategory?.products ?? []).filter((product) => selectedKeys.includes(product.cpk));
-  const chartRows = (data?.months ?? []).map((month) => {
-    const row: Record<string, string | number | null> = { month: month.label };
-    for (const product of selectedProducts) row[product.cpk] = monthPrice(product, month.key)?.median ?? null;
-    return row;
-  });
+  const selectedProducts = filteredProducts.filter((product) => product.rank <= chartRankLimit && selectedKeys.includes(product.cpk));
+  const chartRows = useMemo(() => {
+    const dates = selectedProducts.flatMap((product) => Object.keys(product.days ?? {})).sort();
+    if (!dates.length) return [];
+    const start = new Date(`${dates[0]}T00:00:00`);
+    const end = new Date(`${dates[dates.length - 1]}T00:00:00`);
+    const rows: Array<Record<string, string | number | null>> = [];
+    for (const date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
+      const key = dateKey(date);
+      const row: Record<string, string | number | null> = { date: key };
+      for (const product of selectedProducts) row[product.cpk] = product.days?.[key]?.median ?? null;
+      rows.push(row);
+    }
+    return rows;
+  }, [selectedProducts]);
   const currentMonth = data?.months[data.months.length - 1];
   const previousMonth = data?.months[data.months.length - 2];
   const latestCapture = currentCategory?.last_captured_at
@@ -112,6 +145,20 @@ export default function PriceWatchPage() {
     const next = chosen.includes(cpk) ? chosen.filter((value) => value !== cpk) : chosen.length < 6 ? [...chosen, cpk] : chosen;
     return { ...current, [categoryKey]: next };
   });
+  const changeChartRankLimit = (limit: 10 | 100) => {
+    setChartRankLimit(limit);
+    if (limit === 10) {
+      const topTenCpks = new Set((currentCategory?.products ?? []).filter((product) => product.rank <= 10).map((product) => product.cpk));
+      setSelection((current) => ({
+        ...current,
+        [categoryKey]: (() => {
+          const selectedTopTen = (current[categoryKey] ?? filteredProducts.slice(0, 4).map((product) => product.cpk))
+            .filter((cpk) => topTenCpks.has(cpk));
+          return selectedTopTen.length ? selectedTopTen : filteredProducts.filter((product) => product.rank <= 10).slice(0, 4).map((product) => product.cpk);
+        })(),
+      }));
+    }
+  };
 
   return <main className="min-h-full bg-[#05080d] p-4 text-slate-100 sm:p-6">
     <div className="mx-auto max-w-[1800px] space-y-5">
@@ -156,25 +203,25 @@ export default function PriceWatchPage() {
         </div>
 
         <div className="border-b border-slate-800 bg-slate-950/50 px-4 py-3">
-          <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2"><div><h3 className="text-xs font-semibold uppercase tracking-wider text-slate-300">Lowest vendor median trends</h3><p className="mt-1 text-[10px] text-slate-500">Each point is the lowest vendor median for that CPK-linked product and month.</p></div><span className="text-[10px] text-slate-500">{selectedProducts.length} selected</span></div>
+          <div className="mb-2 flex flex-wrap items-center justify-between gap-3"><div><h3 className="text-xs font-semibold uppercase tracking-wider text-slate-300">Lowest vendor median trends</h3><p className="mt-1 text-[10px] text-slate-500">Daily prices; the chart begins on the first selected product observation.</p></div><div className="flex items-center gap-3"><div className="inline-flex rounded-md border border-slate-700 bg-slate-950 p-0.5" role="group" aria-label="Chart product rank range">{([10, 100] as const).map((limit) => <button key={limit} type="button" onClick={() => changeChartRankLimit(limit)} aria-pressed={chartRankLimit === limit} className={`rounded px-2.5 py-1 text-[10px] font-semibold transition ${chartRankLimit === limit ? "bg-cyan-300/15 text-cyan-100" : "text-slate-400 hover:text-white"}`}>Top {limit}</button>)}</div><span className="text-[10px] text-slate-500">{selectedProducts.length} selected</span></div></div>
           {selectedProducts.length && chartRows.some((row) => selectedProducts.some((product) => typeof row[product.cpk] === "number")) ? <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%"><LineChart data={chartRows} margin={{ top: 8, right: 18, left: 8, bottom: 4 }}>
               <CartesianGrid stroke="#263344" strokeDasharray="3 3" />
-              <XAxis dataKey="month" tick={{ fill: "#94a3b8", fontSize: 10 }} tickLine={false} axisLine={{ stroke: "#475569" }} />
+              <XAxis dataKey="date" interval={0} angle={-90} height={58} tickMargin={4} tickFormatter={formatDayTick} tick={{ fill: "#94a3b8", fontSize: 8 }} tickLine={false} axisLine={{ stroke: "#475569" }} />
               <YAxis width={68} tick={{ fill: "#94a3b8", fontSize: 10 }} tickFormatter={(value: number) => `£${value}`} tickLine={false} axisLine={false} domain={["auto", "auto"]} />
               <Tooltip contentStyle={{ backgroundColor: "#0b1119", border: "1px solid #334155", borderRadius: 8, fontSize: 11 }} labelStyle={{ color: "#cbd5e1" }} formatter={(value) => [money(typeof value === "number" ? value : null), "Median"]} />
               <Legend wrapperStyle={{ fontSize: 10 }} formatter={(value) => <span className="text-slate-300">{value}</span>} />
-              {selectedProducts.map((product, index) => <Line key={product.cpk} type="monotone" dataKey={product.cpk} name={`${product.title.slice(0, 34)}${product.mpn ? ` · ${product.mpn}` : ""}`} stroke={SERIES_COLORS[index % SERIES_COLORS.length]} strokeWidth={2} dot={{ r: 2 }} activeDot={{ r: 4 }} connectNulls={false} />)}
+              {selectedProducts.map((product, index) => <Line key={product.cpk} type="linear" dataKey={product.cpk} name={`${shortProductName(product.title)}${product.mpn ? ` · ${product.mpn}` : ""}`} stroke={SERIES_COLORS[index % SERIES_COLORS.length]} strokeWidth={2} dot={{ r: 2 }} activeDot={{ r: 4 }} connectNulls />)}
             </LineChart></ResponsiveContainer>
-          </div> : <div className="flex h-40 items-center justify-center text-xs text-slate-500">No monthly Amazon price observations for the selected products yet.</div>}
+          </div> : <div className="flex h-40 items-center justify-center text-xs text-slate-500">No daily price observations for the selected products yet.</div>}
         </div>
 
         {loading ? <div className="p-8 text-center text-sm text-slate-400">Loading captured Amazon prices…</div> : filteredProducts.length ? <div className="overflow-x-auto">
           <table className="w-full min-w-[2250px] border-collapse text-left text-xs">
             <thead className="sticky top-0 z-10 bg-slate-800 text-[10px] uppercase tracking-wide text-slate-200">
-              <tr className="border-b border-slate-700"><th className="px-3 py-2" colSpan={3}>Best Sellers product matched to canonical identity</th><th className="px-2 py-2 text-center" colSpan={data?.months.length ?? 0}>Lowest vendor median by month</th><th className="px-2 py-2 text-center" colSpan={7}>Current and prior month comparison · {previousMonth?.label ?? "—"} → {currentMonth?.label ?? "—"}</th></tr>
+              <tr className="border-b border-slate-700"><th className="px-3 py-2" colSpan={3}>Best Sellers product matched to canonical identity</th><th className="px-2 py-2 text-center" colSpan={visibleMonths.length}>Lowest vendor median by month</th><th className="px-2 py-2 text-center" colSpan={7}>Current and prior month comparison · {previousMonth?.label ?? "—"} → {currentMonth?.label ?? "—"}</th></tr>
               <tr className="border-b border-slate-700 bg-slate-800/95"><th className="w-10 px-2 py-3 text-center">Chart</th><th className="min-w-[430px] px-3 py-3">Product / MPN / CPK</th><th className="w-16 px-3 py-3 text-right">Rank</th>
-                {data?.months.map((month) => <th key={month.key} className="min-w-24 border-l border-slate-700 px-2 py-3 text-right">{month.label}</th>)}
+                {visibleMonths.map((month) => <th key={month.key} className="min-w-24 border-l border-slate-700 px-2 py-3 text-right">{month.label}</th>)}
                 <th className="min-w-24 border-l border-slate-700 px-2 py-3 text-right">Avg {previousMonth?.label ?? "Prior"}</th><th className="min-w-24 px-2 py-3 text-right">Low {previousMonth?.label ?? "Prior"}</th><th className="min-w-24 border-l border-slate-700 px-2 py-3 text-right">Avg {currentMonth?.label ?? "Current"} MTD</th><th className="min-w-24 px-2 py-3 text-right">Low {currentMonth?.label ?? "Current"} MTD</th><th className="min-w-28 px-2 py-3 text-right">Low change MoM</th><th className="min-w-28 px-2 py-3 text-right">Change vs first month</th><th className="min-w-28 px-2 py-3 text-right">Change vs first (%)</th>
               </tr>
             </thead>
@@ -183,17 +230,19 @@ export default function PriceWatchPage() {
                 const prior = monthPrice(product, previousMonth?.key);
                 const current = monthPrice(product, currentMonth?.key);
                 const lowChange = prior?.low != null && current?.low != null ? current.low - prior.low : null;
-                const firstObserved = data?.months.map((month) => monthPrice(product, month.key)?.median).find((value): value is number => value != null) ?? null;
+                const firstObserved = visibleMonths.map((month) => monthPrice(product, month.key)?.median).find((value): value is number => value != null) ?? null;
                 const changeVsFirst = firstObserved != null && current?.median != null ? current.median - firstObserved : null;
                 const percentVsFirst = firstObserved != null && firstObserved > 0 && changeVsFirst != null ? changeVsFirst / firstObserved * 100 : null;
                 const checked = selectedKeys.includes(product.cpk);
                 return <tr key={product.cpk} className={`hover:bg-slate-800/40 ${checked ? "bg-cyan-950/10" : ""}`}>
-                  <td className="px-2 py-2 text-center"><input type="checkbox" checked={checked} disabled={!checked && selectedKeys.length >= 6} onChange={() => toggleProduct(product.cpk)} aria-label={`Chart ${product.title}`} className="accent-cyan-400" /></td>
-                  <td className="max-w-[500px] px-3 py-2"><div className="flex items-center gap-2">{product.image_url && <img src={product.image_url} alt="" className="h-9 w-9 shrink-0 rounded bg-slate-900 object-contain" />}<div className="min-w-0"><a href={product.url ?? undefined} target="_blank" rel="noreferrer" className="line-clamp-2 font-medium text-slate-100 hover:text-cyan-300 hover:underline">{product.title}</a><span className="font-mono text-[10px] text-slate-500">{product.mpn ? `MPN ${product.mpn} · ` : ""}CPK {product.cpk}</span></div></div></td>
+                  <td className="px-2 py-2 text-center"><input type="checkbox" checked={checked} disabled={product.rank > chartRankLimit || (!checked && selectedKeys.length >= 6)} onChange={() => toggleProduct(product.cpk)} aria-label={`Chart ${product.title}`} className="accent-cyan-400" /></td>
+                  <td className="max-w-[500px] px-3 py-2"><div className="flex items-center gap-2">{product.image_url && <img src={product.image_url} alt="" className="h-9 w-9 shrink-0 rounded bg-slate-900 object-contain" />}<div className="min-w-0"><a href={product.url ?? undefined} target="_blank" rel="noreferrer" title={product.title} className="line-clamp-2 font-medium text-slate-100 hover:text-cyan-300 hover:underline">{shortProductName(product.title)}</a><span className="font-mono text-[10px] text-slate-500">{product.mpn ? `MPN ${product.mpn} · ` : ""}CPK {product.cpk}</span></div></div></td>
                   <td className="px-3 py-2 text-right font-mono text-slate-400">#{product.rank}</td>
-                  {data?.months.map((month, index) => {
+                  {visibleMonths.map((month) => {
                     const value = monthPrice(product, month.key)?.median ?? null;
-                    const previousValue = index > 0 ? monthPrice(product, data.months[index - 1].key)?.median ?? null : null;
+                    const monthIndex = data?.months.findIndex((item) => item.key === month.key) ?? -1;
+                    const previousMonthKey = monthIndex > 0 ? data?.months[monthIndex - 1]?.key : undefined;
+                    const previousValue = monthPrice(product, previousMonthKey)?.median ?? null;
                     const tone = value != null && previousValue != null ? monthChangeClass(value - previousValue) : "text-slate-300";
                     return <td key={month.key} className={`border-l border-slate-800/70 px-2 py-2 text-right font-mono ${tone}`} title={`${monthPrice(product, month.key)?.best_vendor ?? "No vendor"} lowest vendor median; ${monthPrice(product, month.key)?.observations ?? 0} price observations`}>{money(value)}{monthPrice(product, month.key)?.best_vendor && <span className="block text-[9px] text-slate-500">{monthPrice(product, month.key)?.best_vendor}</span>}</td>;
                   })}

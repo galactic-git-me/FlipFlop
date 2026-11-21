@@ -86,15 +86,19 @@ def main() -> int:
             database="postgres",
         ).render_as_string(hide_password=False)
 
-    run([sys.executable, "-m", "alembic", "upgrade", "head"], cwd=API, env=env)
+    run(
+        [sys.executable, "-m", "alembic", "-x", "reconcile_existing=true", "upgrade", "head"],
+        cwd=API,
+        env=env,
+    )
     run(
         [
             sys.executable,
             "scripts/run_isolated_tests.py",
             "--",
             "-q",
-            "tests/test_migration_reconciliation.py",
-            "tests/test_startup_schema_idempotency.py",
+            "testing/suite/test_migration_reconciliation.py",
+            "testing/suite/test_startup_schema_idempotency.py",
         ],
         cwd=API,
         env=env,

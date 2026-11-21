@@ -16,9 +16,10 @@ from datetime import datetime, timedelta, timezone
 from typing import Literal
 
 import structlog
-from fastapi import APIRouter, Depends, Query
+import httpx
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
-from sqlalchemy import String, any_, bindparam, func, select, text, update
+from sqlalchemy import String, any_, bindparam, func, or_, select, text, update
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -89,6 +90,67 @@ _GEM_SPOTLIGHT_CACHE: dict[str, tuple[float, dict]] = {}
 async def playbook_market_searches(db:AsyncSession=Depends(get_db), _:None=Depends(require_operator)):
     from app.services.playbook_extension import search_feed
     return await search_feed(db)
+
+
+@router.get('/ebay-item-details')
+async def ebay_item_details(
+    item_id: str = Query(..., pattern=r'^\d{9,15}$'),
+    variation_id: str | None = Query(default=None, max_length=40, pattern=r'^[A-Za-z0-9_-]+$'),
+    _: None = Depends(require_operator),
+):
+    """Capture eBay item details through the official Browse API."""
+    from app.services.ebay_product_details import EbayBrowseDetailsError, fetch_ebay_item_details
+    from app.services.proxy import apply_httpx_proxy
+
+    try:
+        async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 20, "follow_redirects": False})) as client:
+            return await fetch_ebay_item_details(client, item_id, variation_id)
+    except EbayBrowseDetailsError as error:
+        raise HTTPException(status_code=error.status_code, detail=str(error)) from error
+
+
+@router.get('/amazon-item-details')
+async def amazon_item_details(
+    asin: str = Query(..., pattern=r'^[A-Za-z0-9]{10}$'),
+    _: None = Depends(require_operator),
+):
+    """Capture Amazon technical details through SP-API Catalog Items."""
+    from app.services.amazon_product_details import fetch_amazon_item_details
+    from app.services.amazon_sp_api import AmazonSPAPI, AmazonSPAPIError
+
+    try:
+        return await fetch_amazon_item_details(AmazonSPAPI(), asin.upper())
+    except AmazonSPAPIError as error:
+        raise HTTPException(status_code=error.status_code or 502, detail=str(error)) from error
+
+
+@router.get('/amazon-search')
+async def amazon_search(
+    query: str = Query(..., min_length=1, max_length=200),
+    page_token: str | None = Query(default=None, max_length=4000),
+    _: None = Depends(require_operator),
+):
+    """Capture Amazon catalog matches and new consumer offer prices via SP-API."""
+    from app.services.amazon_catalog_search import search_amazon_catalog_with_offers
+    from app.services.amazon_sp_api import AmazonSPAPI, AmazonSPAPIError
+
+    try:
+        return await search_amazon_catalog_with_offers(AmazonSPAPI(), query, page_token=page_token)
+    except AmazonSPAPIError as error:
+        # Keep the failure actionable without returning Amazon's raw response,
+        # headers, request IDs, or token-exchange material.
+        safe = error.safe_diagnostics()
+        status = safe.get("statusCode") or error.status_code or 502
+        messages = [
+            ": ".join(part for part in (row.get("code"), row.get("message"), row.get("details")) if part)
+            for row in safe.get("errors", [])
+        ]
+        detail = str(error)[:300]
+        if messages:
+            detail += " " + " | ".join(messages)[:650]
+        if error.status_code == 403:
+            detail = f"{detail} Verify Product Listing role authorization for Catalog Items and Pricing role authorization for offer prices."
+        raise HTTPException(status_code=status, detail=detail[:900]) from error
 
 
 from pydantic import Field
@@ -332,20 +394,14 @@ async def _score_listings_concurrently(
     return [r for r in results if r is not None]
 
 
-# Extension status tracking (ephemeral, in-memory)
-class _ExtensionState(BaseModel):
-    state: Literal["idle", "scanning", "error"]
-    lastScan: datetime | None = None
-    searchesCompleted: int = 0
-    error: str | None = None
-
-
-_extension_status = _ExtensionState(state="idle")
+_extension_status_by_environment: dict[str, "ExtensionStatusResponse"] = {}
 
 
 @router.get("/health")
-async def health() -> dict[str, bool]:
-    return {"ok": True}
+async def health() -> dict[str, object]:
+    from app.services.runtime_heartbeats import worker_heartbeat_status
+
+    return worker_heartbeat_status("gem-radar-queue")
 
 
 @router.get("/pipeline-status")
@@ -2355,6 +2411,90 @@ async def _fetch_best_gem_for_category(
     }
 
 
+def _is_motherboard_bundle_gem(title: str) -> bool:
+    """Require an actual motherboard + CPU/RAM bundle, not a support kit or compatibility claim."""
+    lowered = title.casefold()
+    has_motherboard = any(term in lowered for term in ("motherboard", "mainboard", "mobo"))
+    has_bundle_label = re.search(r"\b(?:bundle|combo)\b", lowered) is not None
+    has_cpu = re.search(
+        r"\b(?:ryzen\s+[3579]|core\s+i[3579]|i[3579]-\d{4,5}|xeon\s+[a-z0-9-]+)\b",
+        lowered,
+    ) is not None
+    has_memory = re.search(
+        r"\b(?:\d{1,3}\s?gb\s+(?:ddr[45]\s+)?(?:ram|memory)|ddr[45]\s+(?:ram|memory))\b",
+        lowered,
+    ) is not None
+    return has_motherboard and has_bundle_label and (has_cpu or has_memory)
+
+
+async def _fetch_best_motherboard_bundle_gem(
+    db: AsyncSession,
+    actionable_ids: set[str],
+) -> dict | None:
+    """Find the best current, image-backed motherboard bundle that passes Gem safety filters."""
+    from app.services.curated_media import media_urls
+
+    if not actionable_ids:
+        return None
+    active_ids_param = bindparam("actionable_ids", type_=ARRAY(String()))
+    result = await db.execute(
+        select(GemRadarScoredListing)
+        .where(
+            GemRadarScoredListing.listing_id == any_(active_ids_param),
+            GemRadarScoredListing.listing_observed_at >= datetime.min,
+            GemRadarScoredListing.category == "motherboard",
+            GemRadarScoredListing.classification.in_(("GEM", "SUPER_GEM")),
+            or_(
+                GemRadarScoredListing.title.ilike("%motherboard%"),
+                GemRadarScoredListing.title.ilike("%mainboard%"),
+                GemRadarScoredListing.title.ilike("%mobo%"),
+            ),
+            or_(
+                GemRadarScoredListing.title.ilike("%bundle%"),
+                GemRadarScoredListing.title.ilike("%combo%"),
+            ),
+        )
+        .order_by(GemRadarScoredListing.deal_score.desc())
+        .limit(100),
+        {"actionable_ids": list(actionable_ids)},
+    )
+    for candidate in result.scalars():
+        if not _is_motherboard_bundle_gem(candidate.title):
+            continue
+        if (
+            not _is_current_gen(candidate.title, "motherboard")
+            or _is_damaged(candidate.title)
+            or _is_obsolete_socket(candidate.title, candidate.delivered_price)
+            or not _is_reasonable_price("motherboard", candidate.delivered_price)
+            or _is_server_hardware(candidate.title, "motherboard")
+            or _is_complete_system(candidate.title)
+            or _is_component_price_anomaly("motherboard", candidate.title, candidate.delivered_price)
+            or _is_price_misaligned_to_market(
+                candidate.delivered_price, candidate.market_new_price, candidate.market_used_price
+            )
+        ):
+            continue
+        images = media_urls([candidate.image_url, *(candidate.image_urls or [])])
+        if not images:
+            continue
+        return {
+            "id": candidate.id,
+            "title": candidate.title,
+            "price": candidate.delivered_price,
+            "market_median_price": candidate.market_median_price,
+            "seller": candidate.seller_name,
+            "condition": candidate.condition,
+            "url": usable_listing_url(candidate.url, candidate.listing_id, candidate.source, candidate.title),
+            "image_url": images[0],
+            "image_urls": images,
+            "deal_score": candidate.deal_score,
+            "classification": candidate.classification,
+            "category": "bundle",
+            "cpu": None,
+        }
+    return None
+
+
 async def _gem_spotlight_candidates(db: AsyncSession, category: str, actionable_ids: set[str], benchmark_context=None) -> list[dict]:
     """Return a bounded, image-ready candidate pool covering all five build objectives."""
     from app.services.curated_media import media_urls
@@ -2709,6 +2849,7 @@ async def get_gem_by_component(
     for category in categories:
         gems[category] = await _fetch_best_gem_for_category(db, category, datetime.min,
             require_modern=True, actionable_ids=actionable_ids, require_image=True)
+    gems["bundle"] = await _fetch_best_motherboard_bundle_gem(db, actionable_ids)
     return gems
 
 
@@ -3423,6 +3564,16 @@ async def _submit_scan_body(
     ]
     category_hint = max(category_matches, default=(0, None))[1]
 
+    def listing_category_hint(listing):
+        # The extension persists both search and component tags on each result.
+        # Prefer that per-result scope over inferring it again from a generic
+        # query such as "AMD CPU".
+        allowed_categories = {"cpu", "gpu", "motherboard", "ram", "ssd", "psu", "cooler", "case"}
+        for tag in listing.search_tags:
+            if tag.startswith("category:") and tag.removeprefix("category:") in allowed_categories:
+                return tag.removeprefix("category:")
+        return category_hint
+
     excluded_auction_count = 0
     ingested_count = 0
     cpk_assigned_count = 0
@@ -3594,7 +3745,7 @@ async def _submit_scan_body(
                         task_db,
                         listing.listing_id,
                         listing.title,
-                        category=category_hint,
+                        category=listing_category_hint(listing),
                         condition=listing.condition_normalised,
                         price=listing.current_delivered_price,
                         scan_price=listing.scan_price,
@@ -4086,28 +4237,55 @@ async def ingest_listings(
 
 
 class ExtensionStatusResponse(BaseModel):
-    """Extension health status for traffic light indicator."""
+    """Last browser extension heartbeat, including explicit staleness state."""
+    state: Literal["offline", "idle", "scanning", "error"]
+    lastScan: datetime | None = None
+    searchesCompleted: int = 0
+    lastHeartbeat: datetime | None = None
+    activeSearches: int = 0
+    extensionVersion: str | None = None
+    environment: Literal["DEV", "LIVE"] | None = None
+    error: str | None = None
+
+
+class ExtensionHeartbeatIn(BaseModel):
     state: Literal["idle", "scanning", "error"]
     lastScan: datetime | None = None
     searchesCompleted: int = 0
+    activeSearches: int = 0
+    extensionVersion: str | None = None
+    environment: Literal["DEV", "LIVE"]
+    error: str | None = None
 
 
 @router.get("/extension-status", response_model=ExtensionStatusResponse)
-async def extension_status(
-    _: None = Depends(require_operator),
-) -> ExtensionStatusResponse:
-    """Return extension connection state for FlipFlop admin traffic light.
+async def extension_status(environment: Literal["DEV", "LIVE"] | None = Query(default=None)) -> ExtensionStatusResponse:
+    """Read the extension heartbeat; mark it offline after three missed minutes."""
+    status = _extension_status_by_environment.get(environment) if environment else None
+    if status is None and environment is None and _extension_status_by_environment:
+        status = max(
+            _extension_status_by_environment.values(),
+            key=lambda item: item.lastHeartbeat or datetime.min.replace(tzinfo=timezone.utc),
+        )
+    if status is None:
+        return ExtensionStatusResponse(state="offline", environment=environment)
+    status = ExtensionStatusResponse.model_validate(status)
+    if status.lastHeartbeat is None:
+        return status
+    age_seconds = (datetime.now(timezone.utc) - status.lastHeartbeat).total_seconds()
+    if age_seconds > 180:
+        return status.model_copy(update={"state": "offline", "activeSearches": 0})
+    return status
 
-    States:
-      - idle: extension connected but not currently scanning
-      - scanning: currently running a scan
-      - error: last scan failed or extension unreachable
-    """
-    return ExtensionStatusResponse(
-        state=_extension_status.state,
-        lastScan=_extension_status.lastScan,
-        searchesCompleted=_extension_status.searchesCompleted,
+
+@router.post("/extension-status/heartbeat", dependencies=[Depends(require_operator)])
+async def update_extension_heartbeat(body: ExtensionHeartbeatIn) -> dict[str, bool]:
+    """Accept a short, authenticated runtime heartbeat from FlipFlopXtension."""
+    _extension_status_by_environment[body.environment] = ExtensionStatusResponse(
+        **body.model_dump(),
+        lastHeartbeat=datetime.now(timezone.utc),
     )
+    return {"ok": True}
 
 
 class ClearListingsResponse(BaseModel):

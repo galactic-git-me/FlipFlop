@@ -3,6 +3,7 @@
 
 import { AlertTriangle, CheckCircle2, ChevronLeft, ChevronRight, Heart, ListChecks, Monitor, Search, Smartphone, X } from "lucide-react";
 import { useState } from "react";
+import { sanitizeListingHtml } from "@/lib/sanitize-listing-html";
 
 interface EbayListingHTMLPreviewProps {
   title: string;
@@ -134,7 +135,7 @@ export function EbayListingHTMLPreview({
       <section className="border-y border-slate-200 bg-[#f7f7f7] px-5 py-12">
         <div className="mx-auto max-w-[1380px]">
           <h2 className="mb-6 text-2xl font-semibold text-[#191919]">Item description from the seller</h2>
-          <div className="overflow-hidden rounded-sm bg-white shadow-sm" dangerouslySetInnerHTML={{ __html: description }} />
+          <div className="overflow-hidden rounded-sm bg-white shadow-sm" dangerouslySetInnerHTML={{ __html: sanitizeListingHtml(description) }} />
         </div>
       </section>
       <footer className="mx-auto max-w-[1440px] px-5 py-12 text-sm text-slate-600"><strong className="text-lg text-[#191919]">About this seller</strong><p className="mt-4">{isStorefront ? "FlipFlop.shop · Twickenham, London" : "theflipflop_dot_shop · Twickenham, London · 100% positive feedback"}</p></footer>

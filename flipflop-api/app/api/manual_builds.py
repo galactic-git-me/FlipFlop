@@ -30,6 +30,8 @@ from app.models.getting_started_job import GettingStartedJob
 from app.models.ai_setup_purchase import AISetupPurchase
 from app.models.component_manual import ComponentManual
 from app.models.app_settings import AppSettings
+from app.models.channel_listing import ChannelListing
+from app.models.listing_publish_event import ListingPublishEvent
 from app.models.gem_radar_intelligence import ComponentRatingEvent, PreferredComponent
 from app.models.build import Build, BuildType, BuildStatus
 from app.models.product import Product, ProductType, ProductStatus
@@ -1424,6 +1426,114 @@ async def list_builds(include_archived: bool = False, db: AsyncSession = Depends
     return summaries
 
 
+@router.get("/sold-alerts")
+async def list_sold_build_alerts(db: AsyncSession = Depends(get_db)):
+    """Small, local database read for the authenticated admin shell sale alert."""
+    builds = (await db.execute(
+        select(ManualBuild).where(
+            ManualBuild.status == "sold",
+            ManualBuild.dispatch_status.notin_(("dispatched", "delivered")),
+        )
+        .order_by(ManualBuild.updated_at.desc(), ManualBuild.id.desc())
+    )).scalars().all()
+    build_ids = [build.id for build in builds]
+    latest_sales = {}
+    if build_ids:
+        events = (await db.execute(
+            select(ChannelListing.manual_build_id, ChannelListing.channel, ListingPublishEvent)
+            .join(ListingPublishEvent, ListingPublishEvent.channel_listing_id == ChannelListing.id)
+            .where(
+                ChannelListing.manual_build_id.in_(build_ids),
+                ListingPublishEvent.event_type.in_(("sale_confirmed", "seller_state_confirmed")),
+            )
+            .order_by(ListingPublishEvent.created_at.desc(), ListingPublishEvent.id.desc())
+        )).all()
+        for build_id, channel, event in events:
+            if event.event_type == "seller_state_confirmed" and (event.event_metadata or {}).get("state") != "sold":
+                continue
+            latest_sales.setdefault(build_id, (channel, event))
+
+    settings_row = None
+    if any(build.ebay_order_id for build in builds):
+        settings_row = (await db.execute(
+            select(AppSettings).where(AppSettings.name == "default")
+        )).scalar_one_or_none()
+
+    alerts = []
+    for build in builds:
+        sale = latest_sales.get(build.id)
+        channel = sale[0] if sale else None
+        metadata = (sale[1].event_metadata or {}) if sale else {}
+        if not channel and build.ebay_order_id:
+            # Older eBay sales can predate the listing event trail. The saved
+            # order ID is written only after the Fulfillment API confirms it.
+            channel = "ebay_uk"
+            metadata = {
+                "seller_account": settings_row.ebay_seller_username if settings_row else None,
+                "external_listing_id": build.ebay_listing_id,
+                "listing_url": build.ebay_listing_url,
+                "order_id": build.ebay_order_id,
+                "sale_price": build.sale_price_actual,
+                "currency": "GBP",
+                "source": "saved_ebay_fulfillment_order",
+            }
+        alerts.append({
+            "id": build.id,
+            "name": build.name,
+            "creation_method": build.creation_method or "manual",
+            "total_cost": build.total_cost,
+            "ebay_price": build.ebay_price,
+            "component_count": len(build.components or []),
+            "status": build.status,
+            "dispatch_status": build.dispatch_status,
+            "updated_at": build.updated_at,
+            "sale_channel": channel or metadata.get("channel"),
+            "sale_account": metadata.get("seller_account"),
+            "sale_order_id": metadata.get("order_id"),
+            "sale_listing_url": metadata.get("listing_url") or (build.ebay_listing_url if channel == "ebay_uk" else None),
+            "sale_price": metadata.get("sale_price") or build.sale_price_actual,
+            "sale_currency": metadata.get("currency") or "GBP",
+            "sale_source": metadata.get("source") or ("sale_confirmed_event" if sale else None),
+            "sale_confirmed_at": sale[1].created_at if sale else None,
+        })
+    return alerts
+
+
+@router.post("/{build_id}/reconcile-ebay-relist")
+async def reconcile_ebay_relist(
+    build_id: int,
+    admin: AdminUser = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    """Read eBay's exact-SKU offer and persist a confirmed replacement listing."""
+    build = (await db.execute(select(ManualBuild).where(
+        ManualBuild.id == build_id,
+    ).with_for_update())).scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if not build.ebay_sku:
+        raise HTTPException(409, "This build has no eBay SKU to match a relisted offer")
+    from app.config import get_settings
+    from app.services.ebay_relisted_listing import find_active_listing_for_sku
+    from app.services.ebay_token_manager import get_valid_ebay_access_token
+    settings = get_settings()
+    environment = settings.ebay_listing_environment
+    try:
+        token = await get_valid_ebay_access_token(environment, db=db)
+        listing = await find_active_listing_for_sku(build.ebay_sku, token, environment)
+    except Exception as exc:
+        log.warning("manual_build.relist_reconcile_failed", build_id=build.id, error=str(exc))
+        raise HTTPException(502, "Could not verify a live eBay offer for this build") from exc
+    if not listing:
+        return {"ok": True, "relisted": False, "reason": "no_active_exact_sku_offer"}
+    from app.services.channel_sync import record_relisted_channel
+    await record_relisted_channel(db, build, channel="ebay_uk",
+        external_listing_id=listing["listing_id"], listing_url=listing["listing_url"],
+        source="admin_reconciliation")
+    await db.commit()
+    return {"ok": True, "relisted": True, **listing, "build_id": build.id}
+
+
 @router.get("/deletion-audit")
 async def get_manual_build_deletion_audit(
     limit: int = Query(default=100, ge=1, le=500),
@@ -1624,7 +1734,7 @@ async def dispatch_zone(db: AsyncSession = Depends(get_db)):
         response_rows.append({"id": b.id, "name": b.name, "status": b.status, "dispatch_status": b.dispatch_status,
              "has_physical_handover": _manual_build_has_physical_handover(b),
              "playbook_assignment": (b.evidence_data or {}).get("playbook_assignment"),
-             "sale_price": b.sale_price_actual or b.ebay_price, "buyer_name": b.buyer_name or (linked_order_name if portal_is_direct else None),
+             "sale_price": b.sale_price_actual if b.status == "sold" else b.ebay_price, "buyer_name": b.buyer_name or (linked_order_name if portal_is_direct else None),
              "customer_email": (linked_order_email if portal_is_direct else None) or b.customer_email,
              "portal_order_id": linked_order_id if portal_is_direct else None,
              "portal_grant_id": portal_grant.id if portal_grant else None,
@@ -2925,7 +3035,7 @@ async def get_build(build_id: int, db: AsyncSession = Depends(get_db)):
         except Exception as exc:
             log.warning("manual_build.ebay_reconcile_on_read_failed", build_id=build.id, error=str(exc))
             build.ebay_listing_status = "unknown"
-        if build.status == "listed":
+        if build.status == "listed" and build.ebay_listing_status != "active":
             build.status = "built"
     build.ebay_live = build.ebay_listing_status == "active"
     build.storefront_live = False
@@ -2938,7 +3048,7 @@ async def get_build(build_id: int, db: AsyncSession = Depends(get_db)):
         build.storefront_live = bool(product and product.status == ProductStatus.LISTED)
     if build.ebay_live or build.storefront_live:
         build.status = "listed"
-    elif build.status == "listed":
+    elif build.status == "listed" and build.ebay_listing_status != "active":
         # "listed" is reserved for a currently live sales channel. Keep
         # historical eBay state in ebay_listing_status instead.
         build.status = "built"
@@ -4205,6 +4315,52 @@ async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
             customer.phone = build.buyer_address_json.get("phone")
     build.sale_price_actual = order.sale_price
     build.status = "sold"
+    build.dispatch_status = "awaiting_dispatch"
+    build.ebay_listing_status = "sold"
+    build.ebay_listing_status_checked_at = datetime.utcnow()
+    channel_listing = (await db.execute(
+        select(ChannelListing).where(
+            ChannelListing.manual_build_id == build.id,
+            ChannelListing.channel.in_(("ebay_uk", "ebay")),
+        ).order_by(ChannelListing.id.desc()).limit(1)
+    )).scalars().first()
+    if channel_listing is None:
+        channel_listing = ChannelListing(
+            manual_build_id=build.id,
+            channel="ebay_uk",
+            status="sold",
+            external_listing_id=build.ebay_listing_id,
+            listing_url=build.ebay_listing_url,
+        )
+        db.add(channel_listing)
+        await db.flush()
+    else:
+        channel_listing.status = "sold"
+        channel_listing.external_listing_id = build.ebay_listing_id
+        channel_listing.listing_url = build.ebay_listing_url or channel_listing.listing_url
+    prior_sale_event = (await db.execute(select(ListingPublishEvent).where(
+        ListingPublishEvent.channel_listing_id == channel_listing.id,
+        ListingPublishEvent.event_type == "sale_confirmed",
+    ).order_by(ListingPublishEvent.id.desc()).limit(1))).scalars().first()
+    if not prior_sale_event or (prior_sale_event.event_metadata or {}).get("order_id") != order.order_id:
+        settings_row = (await db.execute(select(AppSettings).where(AppSettings.name == "default"))).scalar_one_or_none()
+        db.add(ListingPublishEvent(
+            channel_listing_id=channel_listing.id,
+            event_type="sale_confirmed",
+            message="eBay order matched to this exact listing and synced to the build.",
+            event_metadata={
+                "build_id": build.id,
+                "channel": "ebay_uk",
+                "seller_account": settings_row.ebay_seller_username if settings_row else None,
+                "external_listing_id": build.ebay_listing_id,
+                "listing_url": build.ebay_listing_url,
+                "order_id": order.order_id,
+                "line_item_id": order.line_item_id,
+                "sale_price": order.sale_price,
+                "currency": order.currency,
+                "source": "ebay_fulfillment_order_api",
+            },
+        ))
     from app.services.getting_started_jobs import ensure_manual_build_job
     await ensure_manual_build_job(db, manual_build_id=build.id)
     if build.warranty_started_at or build.delivered_at:
@@ -4216,6 +4372,11 @@ async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
             await recalculate_reserve_status(db, reserve)
     from app.services.inventory_lifecycle import record_sale
     await record_sale(db, build, order.sale_price)
+    from app.services.channel_sync import record_confirmed_sale
+    settings_row = (await db.execute(select(AppSettings).where(AppSettings.name == "default"))).scalar_one_or_none()
+    await record_confirmed_sale(db, build, channel="ebay_uk", order_id=order.order_id,
+        sale_price=order.sale_price, source="ebay_fulfillment_order_api",
+        account=settings_row.ebay_seller_username if settings_row else None)
     build.updated_at = datetime.utcnow()
     await db.flush()
 

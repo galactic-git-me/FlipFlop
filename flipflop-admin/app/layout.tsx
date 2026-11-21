@@ -6,6 +6,7 @@ import { AnimatedGradientBackground } from "@/components/animated-gradient-bg";
 import { TopCommandBar } from "@/components/top-command-bar";
 import { FaviconAnimator } from "@/components/favicon-animator";
 import { HermesProvider } from "@/components/hermes-context";
+import { HermesCompanion } from "@/components/hermes-companion";
 
 export const metadata: Metadata = {
   title: "FlipFlop",
@@ -42,6 +43,7 @@ export default function RootLayout({
           <main className="node-content">
             <HermesProvider>
               {children}
+              <HermesCompanion />
             </HermesProvider>
           </main>
         </div>

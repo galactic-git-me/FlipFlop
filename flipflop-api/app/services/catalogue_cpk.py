@@ -218,6 +218,13 @@ async def reconcile_active_catalogue_cpks(db: AsyncSession, *, allow_model_extra
         resolved = await resolve_identifiers(db, title=title, category=category,
             gtin=raw.get("gtin"), mpn=raw.get("mpn"), source_url=row["url"])
         if resolved:
+            if resolved.get("status") == "deferred":
+                # Identifier alias locks are deliberately non-blocking. A
+                # concurrent resolver can defer this row; leave it untouched
+                # for the next reconciliation pass instead of treating the
+                # lock response as a resolved identity payload.
+                counts["deferred"] = counts.get("deferred", 0) + 1
+                continue
             if resolved["status"] == "conflict":
                 from app.gem_radar.cpk_market import remove_listing_price
                 await remove_listing_price(db, external_id)

@@ -20,12 +20,13 @@ function backendForPath(path: string[]): string {
   return backendUrl;
 }
 
-// Same-origin REST proxy. proxy attaches Authorization from the
-// httpOnly admin_session cookie before this handler forwards to FastAPI.
+// Same-origin REST proxy. Authorization comes only from the verified
+// httpOnly admin_session cookie.
 async function forward(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
   const { path } = await context.params;
   const pathValue = path.join("/");
   const target = `${backendForPath(path)}/api/${pathValue}${request.nextUrl.search}`;
+  const backendOrigin = new URL(target).origin;
   // The Gem build route waits for a local compatibility review that can take
   // up to 120 seconds. Keep the longer deadline scoped to this one endpoint.
   const upstreamTimeout = pathValue === "gem-radar/gem-build-concepts" ? 180_000 : 120_000;
@@ -46,7 +47,7 @@ async function forward(request: NextRequest, context: { params: Promise<{ path: 
       .map((part) => part.trim())
       .find((part) => part.startsWith(`${name}=`))
       ?.slice(name.length + 1);
-    const token = cookieValue("admin_session") ?? cookieValue("admin_token");
+    const token = cookieValue("admin_session");
     if (token) headers.set("authorization", `Bearer ${token}`);
   }
 
@@ -61,15 +62,16 @@ async function forward(request: NextRequest, context: { params: Promise<{ path: 
   // reset an idle HTTP connection. Retry once so a transient reset does not
   // surface to the browser as the opaque `TypeError: Failed to fetch`.
   let response: Response;
+  let currentTarget = target;
   try {
-    response = await fetch(target, fetchOptions);
+    response = await fetch(currentTarget, fetchOptions);
   } catch (error) {
     try {
-      response = await fetch(target, fetchOptions);
+      response = await fetch(currentTarget, fetchOptions);
     } catch (retryError) {
-      console.error(`[proxy-api] upstream unavailable: ${target}`, retryError ?? error);
+      console.error(`[proxy-api] upstream unavailable for ${request.method} /api/${pathValue}`, retryError ?? error);
       return NextResponse.json(
-        { detail: "Backend API is unavailable", upstream: target },
+        { detail: "Backend API is unavailable" },
         { status: 502 },
       );
     }
@@ -80,7 +82,22 @@ async function forward(request: NextRequest, context: { params: Promise<{ path: 
   for (let hop = 0; hop < 3 && response.status >= 300 && response.status < 400; hop += 1) {
     const location = response.headers.get("location");
     if (!location) break;
-    response = await fetch(new URL(location, target), fetchOptions);
+    let redirectTarget: URL;
+    try {
+      redirectTarget = new URL(location, currentTarget);
+    } catch {
+      return NextResponse.json({ detail: "Backend redirect rejected" }, { status: 502 });
+    }
+    if (
+      redirectTarget.origin !== backendOrigin ||
+      !redirectTarget.pathname.startsWith("/api/") ||
+      redirectTarget.username ||
+      redirectTarget.password
+    ) {
+      return NextResponse.json({ detail: "Backend redirect rejected" }, { status: 502 });
+    }
+    currentTarget = redirectTarget.toString();
+    response = await fetch(currentTarget, fetchOptions);
   }
 
   const responseHeaders = new Headers();

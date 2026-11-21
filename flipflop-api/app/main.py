@@ -579,6 +579,7 @@ async def lifespan(app: FastAPI):
             "ALTER TABLE app_settings ADD COLUMN IF NOT EXISTS relist_enabled_default BOOLEAN DEFAULT TRUE",
             "ALTER TABLE app_settings ADD COLUMN IF NOT EXISTS storefront_trust_messages JSON DEFAULT '[]'",
             "ALTER TABLE app_settings ADD COLUMN IF NOT EXISTS storefront_trust_message_seconds INTEGER DEFAULT 6",
+            "ALTER TABLE app_settings ADD COLUMN IF NOT EXISTS approved_vendors JSON NOT NULL DEFAULT '[\"eBay UK\",\"Amazon UK\",\"AWD-IT\",\"Overclockers UK\",\"Scan\",\"Computer Orbit\",\"Bargain Hardware\",\"Newegg UK\",\"Ebuyer\",\"Very\",\"Vinted\",\"AliExpress\",\"PCPartPicker UK\",\"Google Shopping\",\"Currys\",\"Tesco\",\"CCL\",\"Box.co.uk\",\"Corsair UK\",\"Joybuy UK\",\"CPC Farnell\",\"CeX\"]'",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS recreate_enabled BOOLEAN DEFAULT FALSE",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS recreate_interval_days INTEGER",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS next_recreate_at TIMESTAMP",
@@ -707,11 +708,15 @@ async def _queue_unevaluated_gems():
         log.warning("startup.gem_queue_backfill_failed", error=str(exc))
 
 
+_docs_enabled = settings.app_env.strip().casefold() in {"dev", "development", "test", "testing"}
 app = FastAPI(
     title="PC Flip Profit Maximizer API",
     version="5.0.0",
     description="AI-powered PC flipping intelligence platform",
     lifespan=lifespan,
+    docs_url="/docs" if _docs_enabled else None,
+    redoc_url="/redoc" if _docs_enabled else None,
+    openapi_url="/openapi.json" if _docs_enabled else None,
 )
 
 # Locally-stored build photos / branded cards (spec card, registration plate).
@@ -934,6 +939,59 @@ async def health():
             "stripe": "test" if settings.stripe_secret_key.startswith("sk_test_") else "live" if settings.stripe_secret_key.startswith("sk_live_") else "unconfigured",
         },
         "started_at": _startup_time.isoformat(),
+    }
+
+
+@app.get("/health/live")
+@app.get("/api/health/live")
+async def liveness():
+    """Cheap process liveness probe; deliberately avoids DB and git calls."""
+    return {"ok": True, "service": "api", "checked_at": datetime.now(timezone.utc).isoformat()}
+
+
+@app.get("/health/database")
+@app.get("/api/health/database")
+async def database_liveness():
+    """Check an actual database round trip for the admin service indicator."""
+    from fastapi import HTTPException
+
+    try:
+        async with engine.connect() as connection:
+            await connection.execute(text("SELECT 1"))
+    except Exception as exc:
+        log.warning("health.database_probe_failed", error_type=type(exc).__name__)
+        raise HTTPException(status_code=503, detail="Database health check failed") from exc
+    return {"ok": True, "service": "database", "checked_at": datetime.now(timezone.utc).isoformat()}
+
+
+@app.get("/health/shop")
+@app.get("/api/health/shop")
+async def storefront_liveness():
+    """Probe the storefront over HTTP so the admin can read a real status."""
+    import httpx
+    from fastapi import HTTPException
+
+    if settings.app_env.strip().casefold() in {"dev", "development"}:
+        storefront_url = "http://127.0.0.1:4313/"
+    else:
+        storefront_url = settings.google_merchant_store_url.rstrip("/") + "/"
+
+    try:
+        async with httpx.AsyncClient(
+            timeout=httpx.Timeout(3.5, connect=1.5),
+            follow_redirects=True,
+        ) as client:
+            response = await client.get(storefront_url)
+            response.raise_for_status()
+    except (httpx.HTTPError, ValueError) as exc:
+        log.warning("health.shop_probe_failed", error_type=type(exc).__name__)
+        raise HTTPException(status_code=503, detail="Storefront health check failed") from exc
+
+    return {
+        "ok": True,
+        "service": "shop",
+        "status_code": response.status_code,
+        "checked_at": datetime.now(timezone.utc).isoformat(),
     }
 
 

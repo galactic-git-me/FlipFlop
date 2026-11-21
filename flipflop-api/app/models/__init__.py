@@ -10,6 +10,8 @@ from app.models.flip_intelligence import FlipIntelligence
 from app.models.app_settings import AppSettings
 from app.models.search_telemetry import SearchTelemetry
 from app.models.external_demand_signal import ExternalDemandSignal
+from app.models.agent_handoff_event import AgentHandoffEvent
+from app.models.component_price_range_snapshot import ComponentPriceRangeSnapshot
 from app.models.demand_rich import (
     GoogleTrendsTimeSeries,
     GoogleTrendsGeo,
@@ -83,6 +85,8 @@ __all__ = [
     "AppSettings",
     "SearchTelemetry",
     "ExternalDemandSignal",
+    "AgentHandoffEvent",
+    "ComponentPriceRangeSnapshot",
     "GoogleTrendsTimeSeries",
     "GoogleTrendsGeo",
     "RedditPost",

@@ -47,7 +47,9 @@ async def plan_sync(db):
                 # worker and does not expose checkout/order state here.
                 continue
             else:
-                check_minutes = max(5, int(os.getenv("CROSS_LISTING_BROWSER_POLL_MINUTES", "15"))) if channel in BROWSER_CHANNELS else 5
+                # Keep API and browser observations on the same five-minute
+                # cadence. Browser worker availability can still add delay.
+                check_minutes = 5
             operation = "update" if row.last_payload_hash != fingerprint and row.status == "published" else "inspect"
             if operation == "inspect" and row.last_checked_at and row.last_checked_at > now - timedelta(minutes=check_minutes):
                 continue
@@ -64,7 +66,16 @@ async def execute_api_job(db, job, row, build):
     global _amazon_order_cache
     channel = ALIASES.get(row.channel, row.channel)
     now = datetime.utcnow()
-    if job.operation != "withdraw" and await build_is_unavailable(db, build):
+    if job.operation == "inspect" and build.status == "sold" and channel == "ebay_uk":
+        from app.services.ebay_listing_reconciliation import reconcile_manual_build_listing
+        state = await reconcile_manual_build_listing(build, db, force=True)
+        if state == "active":
+            row.status = "published"
+        elif state == "unknown":
+            raise ValueError("eBay state is unverified; no relist or sale state was inferred")
+        else:
+            row.status = {"sold": "sold", "ended": "ended", "missing": "ended"}.get(state, row.status)
+    elif job.operation != "withdraw" and await build_is_unavailable(db, build):
         job.status, job.message = "cancelled", "Build sold or archived; publication/update cancelled."
         await withdraw_other_channels(db, build)
         return
@@ -107,7 +118,11 @@ async def execute_api_job(db, job, row, build):
             if sku in orders:
                 build.status, build.dispatch_status, row.status = "sold", "awaiting_dispatch", "sold"
                 await withdraw_other_channels(db, build, channel)
-                db.add(ListingPublishEvent(channel_listing_id=row.id, event_type="sale_confirmed", message="Amazon confirmed a paid order for the exact seller SKU.", event_metadata={"order_id": orders[sku]}))
+                db.add(ListingPublishEvent(channel_listing_id=row.id, event_type="sale_confirmed", message="Amazon confirmed a paid order for the exact seller SKU.", event_metadata={
+                    "build_id": build.id, "channel": channel, "seller_account": client.seller_id or None,
+                    "external_listing_id": row.external_listing_id or sku, "listing_url": row.listing_url,
+                    "order_id": str(orders[sku]), "source": "amazon_sp_api_paid_order",
+                }))
             else:
                 item = await client.get_listing(sku=sku)
                 if any("BUYABLE" in (s.get("status") or []) for s in item.get("summaries", [])):

@@ -7,6 +7,7 @@ from app.database import get_db
 from app.schemas.admin_auth import AdminLoginRequest, AdminTokenResponse, AdminUserResponse
 from app.services.admin_auth_service import admin_login, get_admin_by_token
 from app.models.admin_user import AdminUser
+from app.config import get_settings
 
 log = structlog.get_logger(__name__)
 
@@ -20,13 +21,13 @@ async def get_current_admin(
 ) -> AdminUser:
     """Resolve the admin identity.
 
-    The admin UI is a personal tool running on this PC, so loopback requests
-    do not require a login. Requests arriving from any other machine still
-    require a valid admin JWT; binding the dev server to 0.0.0.0 must not turn
-    into an unauthenticated LAN-facing administration API.
+    Loopback requests are trusted only in explicit local development and test
+    environments. In production, reverse proxies commonly connect over
+    loopback, so trusting the socket address would bypass admin authentication.
     """
     client_host = request.client.host if request.client else None
-    if client_host in {"127.0.0.1", "::1", "localhost"}:
+    app_env = str(get_settings().app_env or "").strip().casefold()
+    if client_host in {"127.0.0.1", "::1", "localhost"} and app_env in {"dev", "test", "testing"}:
         result = await db.execute(
             select(AdminUser).where(AdminUser.is_active.is_(True)).order_by(AdminUser.id)
         )

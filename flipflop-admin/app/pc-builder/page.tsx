@@ -143,7 +143,9 @@ export default function CuratedBuildsPage() {
     Boolean(item.marketplace_image_url || item.image_url)
   ), [bestsellerMatches, reviewFilter, categoryFilter, filter]);
   const actionableImageCandidates = imageReviewCandidates.filter(item => item.review_status !== "approved");
-  const selectedActionableImageCount = actionableImageCandidates.filter(item => selectedImageMatches.has(imageMatchKey(item))).length;
+  const selectedActionableImageCount = new Set(actionableImageCandidates
+    .filter(item => selectedImageMatches.has(imageMatchKey(item)))
+    .map(imageMatchKey)).size;
   const allImageCandidatesSelected = actionableImageCandidates.length > 0 && actionableImageCandidates.every(item => selectedImageMatches.has(imageMatchKey(item)));
   const toggleAllImageMatches = () => setSelectedImageMatches(current => {
     const next = new Set(current);
@@ -152,7 +154,13 @@ export default function CuratedBuildsPage() {
     return next;
   });
   const bulkApproveImageMatches = async () => {
-    const items = actionableImageCandidates.filter(item => selectedImageMatches.has(imageMatchKey(item)));
+    const selectedKeys = new Set<string>();
+    const items = actionableImageCandidates.filter(item => {
+      const key = imageMatchKey(item);
+      if (!selectedImageMatches.has(key) || selectedKeys.has(key)) return false;
+      selectedKeys.add(key);
+      return true;
+    });
     if (!items.length) return;
     setBusy(true); setError(""); setMessage("");
     try {

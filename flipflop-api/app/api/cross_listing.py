@@ -213,7 +213,7 @@ async def publish_google_merchant(build_id: int, body: GoogleMerchantPublishIn, 
     build = await db.get(ManualBuild, build_id)
     if not build:
         raise HTTPException(404, "Build not found")
-    if build.status == "sold":
+    if build.status == "sold" and build.ebay_listing_status != "active":
         raise HTTPException(409, "Sold builds cannot be submitted to Merchant Center.")
     if not build.storefront_product_id:
         raise HTTPException(409, "Publish the FlipFlop.shop product first so Google has a live product page to link to.")
@@ -292,7 +292,7 @@ async def publish_amazon(build_id: int, body: AmazonPublishIn, db: AsyncSession 
     build = await db.get(ManualBuild, build_id)
     if not build:
         raise HTTPException(status_code=404, detail="Build not found")
-    if build.status == "sold" or body.quantity == 0:
+    if (build.status == "sold" and build.ebay_listing_status != "active") or body.quantity == 0:
         raise HTTPException(status_code=409, detail="Sold or zero-quantity builds cannot be listed on Amazon")
 
     sku = body.sku or f"FF-BUILD-{build_id}"

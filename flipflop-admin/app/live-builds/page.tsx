@@ -232,7 +232,7 @@ export default function LiveBuildsPage() {
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-300">Sales floor</p>
-          <h1 className="mt-1 text-3xl font-semibold text-white">Live Builds</h1>
+          <h1 className="mt-1 text-3xl font-semibold text-white">Live Listings</h1>
           <p className="mt-2 max-w-3xl text-sm text-slate-400">Builds currently available for sale, the vendor channels carrying each one, and the customer activity recorded against them.</p>
         </div>
         <button type="button" onClick={() => void refresh()} disabled={loading || refreshing} className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-slate-600 px-3 py-2 text-sm text-slate-200 hover:border-emerald-400/50 disabled:cursor-wait disabled:opacity-60">

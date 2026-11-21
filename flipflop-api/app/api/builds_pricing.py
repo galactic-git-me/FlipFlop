@@ -15,6 +15,7 @@ from __future__ import annotations
 import re
 import statistics
 from datetime import datetime, timedelta, timezone
+from urllib.parse import parse_qs, urlsplit
 
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
@@ -40,6 +41,30 @@ router = APIRouter(prefix="/api/builds", tags=["builds"])
 _RAM_GB_PATTERN = re.compile(r"(\d+)\s*(?:gb|gig|gigabyte)\b", re.IGNORECASE)
 _STORAGE_CAPACITY_PATTERN = re.compile(r"(\d+)\s*(tb|gb)\b", re.IGNORECASE)
 _RAM_TOLERANCE_GB = 8  # comps within +/- this many GB of the build's actual RAM are treated as comparable
+
+
+def _canonical_ebay_item_id(url: str | None) -> str | None:
+    try:
+        parsed = urlsplit(str(url or ""))
+    except ValueError:
+        return None
+    if parsed.scheme != "https" or parsed.hostname not in {"ebay.co.uk", "www.ebay.co.uk"}:
+        return None
+    match = re.search(r"/itm/(?:[^/?]+/)?(\d{9,15})(?:[/?]|$)", parsed.path + "/")
+    return match.group(1) if match else None
+
+
+def _verified_build_sold_item_id(comp: ExtractedListing) -> str | None:
+    """Require explicit sold-card evidence; reject active Buy It Now results."""
+    item_id = _canonical_ebay_item_id(comp.url)
+    try:
+        query = parse_qs(urlsplit(comp.url).query)
+    except ValueError:
+        return None
+    if (not item_id or query.get("LH_BIN") == ["1"] or comp.sold_confirmed is not True
+            or not re.search(r"\bsold\b", str(comp.sold_date_text or ""), re.IGNORECASE)):
+        return None
+    return item_id
 
 
 def _extract_ram_gb(title: str | None) -> int | None:
@@ -618,11 +643,17 @@ async def submit_build_sold_comps(payload: BuildSoldCompSubmit) -> BuildSoldComp
         cpu_key = re.sub(r"[^a-z0-9]", "", (cpu_short.group(0) if cpu_short else cpu_model or "").lower())
         gpu_short = re.search(r"\b(?:RTX|GTX|RX)\s*\d{3,4}(?:\s*(?:Ti|Super|XT|XTX))?\b", gpu_model or "", re.IGNORECASE)
         gpu_key = re.sub(r"[^a-z0-9]", "", (gpu_short.group(0) if gpu_short else gpu_model or "").lower())
-        existing_urls = set((await db.execute(
+        existing_urls = (await db.execute(
             select(BuildSoldObservation.source_url).where(BuildSoldObservation.build_id == build.id)
-        )).scalars().all())
+        )).scalars().all()
+        existing_item_ids = {item_id for url in existing_urls
+                             if (item_id := _canonical_ebay_item_id(url))}
         inserted = skipped = 0
         for comp in payload.comps:
+            item_id = _verified_build_sold_item_id(comp)
+            if not item_id:
+                skipped += 1
+                continue
             title_key = re.sub(r"[^a-z0-9]", "", comp.title.lower())
             has_cpu = bool(cpu_key and cpu_key in title_key)
             has_gpu = bool(gpu_key and gpu_key in title_key)
@@ -632,16 +663,16 @@ async def submit_build_sold_comps(payload: BuildSoldCompSubmit) -> BuildSoldComp
             if comp.listing_type == "auction" or not is_pc or not (has_cpu and has_gpu) or comp.current_delivered_price < 400:
                 skipped += 1
                 continue
-            if comp.url in existing_urls:
+            if item_id in existing_item_ids:
                 skipped += 1
                 continue
             basis = "same CPU and GPU"
             db.add(BuildSoldObservation(
                 build_id=build.id, title=comp.title, price=comp.item_price,
-                postage=comp.postage_price, condition=comp.condition_normalised, sold_at=comp.extracted_at.isoformat(),
+                postage=comp.postage_price, condition=comp.condition_normalised, sold_at=comp.sold_date_text,
                 source_url=comp.url, match_basis=f"Extension sold search: {basis}",
             ))
-            existing_urls.add(comp.url)
+            existing_item_ids.add(item_id)
             inserted += 1
         await db.commit()
     return BuildSoldCompSubmitResponse(inserted=inserted, skipped=skipped)

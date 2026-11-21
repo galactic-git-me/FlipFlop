@@ -354,6 +354,90 @@ class EmailMonitor:
             link_url=f"/email-events/{event.id}",
         )
 
+        # Link refund requests to the saved eBay order/listing before they
+        # enter the shared operator alert feed. Email indicates a request,
+        # never that a refund has been issued.
+        lifecycle_text = f"{msg['subject']} {body}".lower()
+        ebay_refund_request = marketplace == "ebay" and any(term in lifecycle_text for term in (
+            "refund request", "requested a refund", "requesting a refund",
+            "return request", "opened a return", "buyer wants a refund",
+        ))
+        if ebay_refund_request:
+            order_match = re.search(r"(?:order\s*(?:number|id)?\s*[:#]?\s*)(\d{2}-\d{5}-\d{5})", lifecycle_text, re.I)
+            listing_match = re.search(r"(?:item\s*(?:number|id)?\s*[:#]?\s*)(\d{9,15})", lifecycle_text, re.I)
+            matched_refund_build = None
+            if order_match or listing_match:
+                candidate_query = select(ManualBuild)
+                if order_match:
+                    candidate_query = candidate_query.where(ManualBuild.ebay_order_id == order_match.group(1))
+                else:
+                    candidate_query = candidate_query.where(ManualBuild.ebay_listing_id == listing_match.group(1))
+                candidates = (await db.execute(candidate_query)).scalars().all()
+                if len(candidates) == 1:
+                    matched_refund_build = candidates[0]
+            if matched_refund_build:
+                event.event_type = "refund_requested"
+                event.manual_build_id = matched_refund_build.id
+                event.payload = {"order_id": matched_refund_build.ebay_order_id,
+                    "listing_id": matched_refund_build.ebay_listing_id, "source": "email"}
+                event.summary = f"URGENT: eBay buyer refund/return request for {matched_refund_build.name}. Verify the request in eBay."
+                event_url = f"/email-events/{event.id}"
+                await emit_alert(code=f"manual_build_refund_requested_{matched_refund_build.id}",
+                    source=f"email_event:{event.id}", severity="critical",
+                    message=event.summary, link_url=event_url)
+        ebay_refund_resolution = marketplace == "ebay" and any(term in lifecycle_text for term in (
+            "refund issued", "refund sent", "refund has been processed", "return closed",
+            "return request closed", "refund request was declined", "refund request denied",
+        ))
+        if ebay_refund_resolution:
+            order_match = re.search(r"(?:order\s*(?:number|id)?\s*[:#]?\s*)(\d{2}-\d{5}-\d{5})", lifecycle_text, re.I)
+            if order_match:
+                candidates = (await db.execute(select(ManualBuild).where(
+                    ManualBuild.ebay_order_id == order_match.group(1),
+                ))).scalars().all()
+                if len(candidates) == 1:
+                    resolved_build = candidates[0]
+                    event.event_type = "refund_issued" if any(term in lifecycle_text for term in ("refund issued", "refund sent", "refund has been processed")) else "return_closed"
+                    event.manual_build_id = resolved_build.id
+                    event.payload = {"order_id": resolved_build.ebay_order_id, "source": "email"}
+                    event.summary = f"eBay refund/return update for {resolved_build.name}: {msg['subject']}"
+
+        relist_match = re.search(r"(?:item\s*(?:number|id)?\s*[:#]?\s*)(\d{9,15})", lifecycle_text, re.I)
+        relist_notice = marketplace == "ebay" and (
+            "relisted" in lifecycle_text or "item is now live" in lifecycle_text
+            or "listing is now active" in lifecycle_text
+        )
+        if relist_notice and relist_match:
+            listing_id = relist_match.group(1)
+            prior_rows = (await db.execute(select(ChannelListing).where(
+                ChannelListing.channel.in_(("ebay", "ebay_uk")),
+                ChannelListing.status == "sold",
+                ChannelListing.external_listing_id != listing_id,
+            ))).scalars().all()
+            build_ids = {row.manual_build_id for row in prior_rows}
+            builds = (await db.execute(select(ManualBuild).where(
+                ManualBuild.id.in_(build_ids), ManualBuild.status == "sold",
+            ))).scalars().all() if build_ids else []
+            if len(builds) == 1 and (order_match := re.search(r"(?:order\s*(?:number|id)?\s*[:#]?\s*)(\d{2}-\d{5}-\d{5})", lifecycle_text, re.I)):
+                relisted_build = builds[0]
+                if relisted_build.ebay_order_id and relisted_build.ebay_order_id != order_match.group(1):
+                    relisted_build = None
+            elif len(builds) == 1 and len(build_ids) == 1:
+                # Use a uniquely attributable sold eBay build only when this
+                # account has exactly one candidate; ambiguous notices stay unlinked.
+                relisted_build = builds[0]
+            else:
+                relisted_build = None
+            if relisted_build:
+                listing_url = f"https://www.ebay.co.uk/itm/{listing_id}"
+                from app.services.channel_sync import record_relisted_channel
+                await record_relisted_channel(db, relisted_build, channel="ebay_uk",
+                    external_listing_id=listing_id, listing_url=listing_url, source="ebay_relist_email")
+                event.event_type = "relisted"
+                event.manual_build_id = relisted_build.id
+                event.payload = {"listing_id": listing_id, "listing_url": listing_url, "source": "email"}
+                event.summary = f"eBay relisting confirmed for {relisted_build.name}: {listing_url}"
+
         # Try to parse as purchase receipt
         receipt = None
         for parser in [
