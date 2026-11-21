@@ -19,11 +19,11 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     op.add_column(
         "app_settings",
-        sa.Column("auto_approve_images", sa.Boolean(), server_default=sa.true(), nullable=False),
+        sa.Column("auto_approve_images", sa.Boolean(), server_default=sa.false(), nullable=False),
     )
     op.add_column(
         "app_settings",
-        sa.Column("auto_generate_3d_models", sa.Boolean(), server_default=sa.true(), nullable=False),
+        sa.Column("auto_generate_3d_models", sa.Boolean(), server_default=sa.false(), nullable=False),
     )
 
 
