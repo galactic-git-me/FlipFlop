@@ -17,10 +17,11 @@ All intended changes must arrive through a pull request targeting `dev`; raw
 branches are never merged automatically. GitHub auto-merge is enabled for
 non-draft pull requests from branches in this repository that target `dev`.
 The workflow queues the PR and GitHub merges it only after the required
-`checks` status succeeds and branch protection is satisfied. Fork PRs, draft
-PRs, conflicts, and PRs targeting `main` are not auto-queued. Keep unrelated
-or unfinished work in its own branch/PR rather than combining every dirty
-worktree into one release.
+`checks` status succeeds and branch protection is satisfied. Fork PRs and
+drafts are not auto-queued. Conflicts and stale branches remain blocked until
+they are resolved and the PR is updated. PRs targeting `main` are not
+auto-queued. Keep unrelated or unfinished work in its own branch/PR rather
+than combining every dirty worktree into one release.
 
 Local `dev` is a separate copy from GitHub's `origin/dev`. Before starting
 services, `scripts/start-all-servers.ps1` fast-forwards a clean local `dev`
