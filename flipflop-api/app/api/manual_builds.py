@@ -4300,6 +4300,8 @@ async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
     if not build:
         raise HTTPException(404, "Build not found")
 
+    if build.ebay_order_id != order.order_id:
+        build.dispatch_status = "awaiting_dispatch"
     build.ebay_order_id = order.order_id
     if order.ship_by_date is not None:
         build.ebay_ship_by_date = order.ship_by_date
@@ -4315,7 +4317,6 @@ async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
             customer.phone = build.buyer_address_json.get("phone")
     build.sale_price_actual = order.sale_price
     build.status = "sold"
-    build.dispatch_status = "awaiting_dispatch"
     build.ebay_listing_status = "sold"
     build.ebay_listing_status_checked_at = datetime.utcnow()
     channel_listing = (await db.execute(

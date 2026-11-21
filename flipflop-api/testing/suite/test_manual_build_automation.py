@@ -119,6 +119,66 @@ async def test_mark_built_fires_demand_check_and_pricing(client, test_db):
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("existing_order_id", "initial_dispatch_status", "expected_dispatch_status"),
+    [
+        ("05-12345-67890", "dispatched", "dispatched"),
+        ("05-12345-67890", "delivered", "delivered"),
+        ("05-00000-00000", "delivered", "awaiting_dispatch"),
+    ],
+)
+async def test_syncing_ebay_order_preserves_progress_for_same_order(
+    client, test_db, monkeypatch, existing_order_id, initial_dispatch_status, expected_dispatch_status,
+):
+    from app.models.manual_build import ManualBuild
+    import app.api.manual_builds as manual_builds
+
+    build = ManualBuild(
+        name="Synced eBay build",
+        status="sold",
+        ebay_listing_id="111111111111",
+        ebay_listing_url="https://www.ebay.co.uk/itm/111111111111",
+        ebay_order_id=existing_order_id,
+        dispatch_status=initial_dispatch_status,
+    )
+    async with test_db() as db:
+        db.add(build)
+        await db.commit()
+        build_id = build.id
+
+    address = SimpleNamespace(
+        contact_name="Buyer",
+        to_dict=lambda: {
+            "contact_name": "Buyer",
+            "country_code": "GB",
+        },
+    )
+    order = SimpleNamespace(
+        order_id="05-12345-67890",
+        ship_by_date=None,
+        buyer_address=address,
+        line_item_id="line-item-1",
+        sale_price=800.0,
+        currency="GBP",
+    )
+    monkeypatch.setattr(manual_builds, "get_settings", lambda: SimpleNamespace(ebay_listing_environment="production"))
+    monkeypatch.setattr(manual_builds, "find_order_for_listing", AsyncMock(return_value=order))
+    monkeypatch.setattr("app.services.getting_started_jobs.ensure_manual_build_job", AsyncMock())
+    monkeypatch.setattr("app.services.inventory_lifecycle.record_sale", AsyncMock())
+    monkeypatch.setattr("app.services.channel_sync.record_confirmed_sale", AsyncMock())
+    monkeypatch.setattr("app.services.cross_channel_guard.withdraw_storefront_for_sold_build", AsyncMock())
+    monkeypatch.setattr("app.services.cross_channel_guard.withdraw_google_for_sold_build", AsyncMock())
+
+    response = client.post(f"/api/manual-builds/{build_id}/sync-ebay-order")
+
+    assert response.status_code == 200
+    async with test_db() as db:
+        refreshed = await db.get(ManualBuild, build_id)
+        assert refreshed.ebay_order_id == order.order_id
+        assert refreshed.dispatch_status == expected_dispatch_status
+
+
+@pytest.mark.asyncio
 @pytest.mark.parametrize("prior_status", ["listed", "sold"])
 async def test_mark_built_rejects_rewinding_a_listed_or_sold_build(client, test_db, prior_status):
     build_id = await _built_build(client, test_db)

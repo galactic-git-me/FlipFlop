@@ -22,6 +22,7 @@ from app.models import (
     WarrantyClaim,
     WarrantyReserve,
 )
+from app.models.channel_listing import ChannelListing
 from app.services import email_monitor as email_monitor_module
 from app.services import parcel2go_notifications as tracking_notifications
 from app.services.email_monitor import EmailMonitor
@@ -229,6 +230,115 @@ async def test_delivery_email_with_ambiguous_order_ownership_creates_no_warranty
         )).scalar_one()
         assert timeline_event.manual_build_id == build_record.id
         assert timeline_event.material is False
+
+    await engine.dispose()
+
+
+@pytest.mark.asyncio
+async def test_ebay_relist_email_without_order_id_does_not_reassign_the_only_sold_build(monkeypatch):
+    engine = create_async_engine(
+        "sqlite+aiosqlite:///:memory:",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+    async with engine.begin() as connection:
+        await connection.run_sync(Base.metadata.create_all)
+    session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    monkeypatch.setattr(email_monitor_module, "emit_alert", AsyncMock())
+
+    async with session_factory() as db:
+        build = ManualBuild(
+            name="Previously sold eBay build",
+            status="sold",
+            ebay_listing_id="111111111111",
+            ebay_listing_url="https://www.ebay.co.uk/itm/111111111111",
+            ebay_order_id="05-12345-67890",
+            dispatch_status="awaiting_dispatch",
+        )
+        db.add(build)
+        await db.flush()
+        db.add(ChannelListing(
+            manual_build_id=build.id,
+            channel="ebay_uk",
+            status="sold",
+            external_listing_id="111111111111",
+            listing_url=build.ebay_listing_url,
+        ))
+        await db.commit()
+        build_id = build.id
+
+        await EmailMonitor().process_message({
+            "msg_id": "ebay-relist-without-order-1",
+            "subject": "Your eBay item has been relisted",
+            "sender": "eBay <notification@ebay.co.uk>",
+            "body": "Your item is now live. Item number 222222222222.",
+        }, db)
+
+        await db.refresh(build)
+        listing = (await db.execute(select(ChannelListing).where(
+            ChannelListing.manual_build_id == build_id,
+        ))).scalar_one()
+        event = (await db.execute(select(EmailEvent).where(
+            EmailEvent.message_id == "ebay-relist-without-order-1",
+        ))).scalar_one()
+        assert build.status == "sold"
+        assert build.ebay_listing_id == "111111111111"
+        assert listing.external_listing_id == "111111111111"
+        assert event.event_type == "listing_update"
+        assert event.manual_build_id is None
+
+    await engine.dispose()
+
+
+@pytest.mark.asyncio
+async def test_ebay_relist_email_requires_and_uses_the_exact_saved_order_id(monkeypatch):
+    engine = create_async_engine(
+        "sqlite+aiosqlite:///:memory:",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+    async with engine.begin() as connection:
+        await connection.run_sync(Base.metadata.create_all)
+    session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    monkeypatch.setattr(email_monitor_module, "emit_alert", AsyncMock())
+    relisted = AsyncMock()
+    monkeypatch.setattr("app.services.channel_sync.record_relisted_channel", relisted)
+
+    async with session_factory() as db:
+        build = ManualBuild(
+            name="Matched sold eBay build",
+            status="sold",
+            ebay_listing_id="111111111111",
+            ebay_listing_url="https://www.ebay.co.uk/itm/111111111111",
+            ebay_order_id="05-12345-67890",
+            dispatch_status="awaiting_dispatch",
+        )
+        db.add(build)
+        await db.flush()
+        db.add(ChannelListing(
+            manual_build_id=build.id,
+            channel="ebay_uk",
+            status="sold",
+            external_listing_id="111111111111",
+            listing_url=build.ebay_listing_url,
+        ))
+        await db.commit()
+        build_id = build.id
+
+        await EmailMonitor().process_message({
+            "msg_id": "ebay-relist-with-matching-order-1",
+            "subject": "Your eBay item has been relisted",
+            "sender": "eBay <notification@ebay.co.uk>",
+            "body": "Your item is now live. Item number 222222222222. Order number 05-12345-67890.",
+        }, db)
+
+        event = (await db.execute(select(EmailEvent).where(
+            EmailEvent.message_id == "ebay-relist-with-matching-order-1",
+        ))).scalar_one()
+        assert event.event_type == "relisted"
+        assert event.manual_build_id == build_id
+        assert event.payload["listing_id"] == "222222222222"
+        relisted.assert_awaited_once()
 
     await engine.dispose()
 
