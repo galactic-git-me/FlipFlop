@@ -50,8 +50,13 @@ class SteamHardwareStat(Base):
     __tablename__ = "steam_hardware_stats"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    category: Mapped[str] = mapped_column(String(64), index=True)  # GPU | CPU | RAM | OS
+    category: Mapped[str] = mapped_column(String(64), index=True)  # Full Steam survey section label
     item_name: Mapped[str] = mapped_column(String(255))
     percentage: Mapped[float] = mapped_column(Float)
     change_pct: Mapped[float | None] = mapped_column(Float)
     collected_at: Mapped[datetime] = mapped_column(DateTime, index=True)
+    observation_month: Mapped[str | None] = mapped_column(String(7), index=True)
+    source_url: Mapped[str | None] = mapped_column(Text)
+    parser_version: Mapped[str | None] = mapped_column(String(64))
+    geography: Mapped[str | None] = mapped_column(String(32))
+    platform_filter: Mapped[str | None] = mapped_column(String(64))

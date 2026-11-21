@@ -9,6 +9,7 @@ import { api } from "@/lib/api";
 import { getApprovalSnapshot } from "@/lib/approvals";
 import type { PlaybookProposal } from "@/lib/types";
 import { FavouritesModal } from "./FavouritesModal";
+import { SoldBuildAlerts } from "./sold-build-alerts";
 
 const PLACEHOLDERS: Record<string, string> = {
   "/": "QUERY MARKET DATA...",
@@ -308,6 +309,7 @@ export function TopCommandBar() {
           </span>
         </div>
         <div className="node-top-icons relative">
+          <SoldBuildAlerts />
           <button
             type="button"
             onClick={() => router.push("/sources")}

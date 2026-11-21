@@ -1405,6 +1405,7 @@ function GemSpotlightCard({
 
 function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | null> }) {
   const componentLabels: Record<string, { label: string; emoji: string; accent: keyof typeof GEM_SPOTLIGHT_ACCENTS }> = {
+    bundle: { label: "Gem Bundle", emoji: "💎", accent: "amber" },
     motherboard: { label: "Gem Motherboard", emoji: "🔧", accent: "emerald" },
     cpu: { label: "Gem CPU", emoji: "⚡", accent: "cyan" },
     gpu: { label: "Gem GPU", emoji: "🎮", accent: "purple" },
@@ -1417,7 +1418,7 @@ function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | 
 
   return (
     <>
-      <div className="grid grid-cols-[repeat(8,minmax(200px,1fr))] gap-3 mb-6 mt-6 overflow-x-auto pb-1">
+      <div className="grid grid-cols-[repeat(9,minmax(200px,1fr))] gap-3 mb-6 mt-6 overflow-x-auto pb-1">
         {Object.keys(componentLabels).map((category) => {
           const gem = componentGems?.[category];
           return gem ? (
@@ -1430,7 +1431,7 @@ function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | 
           ) : (
             <div key={category} className="aspect-square min-w-0 rounded-2xl border border-white/10 bg-white/[0.03] p-3 flex flex-col justify-between">
               <span className="text-[10px] uppercase tracking-wide font-semibold text-slate-400">{componentLabels[category].label}</span>
-              <p className="text-sm text-slate-500">No qualifying gem in the current snapshot</p>
+              <p className="text-sm text-slate-500">{category === "bundle" ? "No qualifying motherboard bundle Gem in the current snapshot" : "No qualifying gem in the current snapshot"}</p>
             </div>
           );
         })}
@@ -1441,6 +1442,8 @@ function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | 
 
 const SOURCE_LABELS: Record<string, string> = {
   ebay: "eBay",
+  vinted: "Vinted",
+  google_shopping: "Google Shopping",
   overclockers: "Overclockers",
   amazon: "Amazon",
   ebuyer: "eBuyer",
@@ -1451,6 +1454,8 @@ const SOURCE_LABELS: Record<string, string> = {
 };
 const SOURCE_COLORS: Record<string, string> = {
   ebay: "bg-sky-600 text-white",
+  vinted: "bg-teal-700 text-white",
+  google_shopping: "bg-blue-700 text-white",
   overclockers: "bg-orange-600 text-white",
   amazon: "bg-amber-700 text-white",
   ebuyer: "bg-orange-500 text-white",
@@ -1465,6 +1470,8 @@ const SOURCE_COLORS: Record<string, string> = {
 // bundled SVG under /public if a proper wordmark is ever wanted instead.
 const SOURCE_DOMAINS: Record<string, string> = {
   ebay: "ebay.co.uk",
+  vinted: "vinted.co.uk",
+  google_shopping: "google.co.uk",
   overclockers: "overclockers.co.uk",
   amazon: "amazon.co.uk",
   ebuyer: "ebuyer.com",
@@ -1474,7 +1481,7 @@ const SOURCE_DOMAINS: Record<string, string> = {
   bargain_hardware: "bargainhardware.co.uk",
 };
 
-function SourceBadge({ source }: { source: string }) {
+function SourceBadge({ source, merchant }: { source: string; merchant?: string | null }) {
   const domain = SOURCE_DOMAINS[source];
   return (
     <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs font-semibold whitespace-nowrap ${SOURCE_COLORS[source] || "bg-slate-600 text-slate-200"}`}>
@@ -1492,6 +1499,11 @@ function SourceBadge({ source }: { source: string }) {
         />
       )}
       {SOURCE_LABELS[source] || source}
+      {source === "google_shopping" && merchant && (
+        <span className="ml-1 max-w-36 truncate border-l border-white/30 pl-1" title={`Merchant: ${merchant}`}>
+          {merchant}
+        </span>
+      )}
     </span>
   );
 }
@@ -2333,7 +2345,7 @@ function ListingsTab({ listings, sourceActivity, facets, total, legacy, highligh
                       <ListingThumbnail src={listing.image_url} alt={listing.title} />
                     </td>
                     <td className="p-3">
-                      <SourceBadge source={listing.source} />
+                      <SourceBadge source={listing.source} merchant={listing.seller} />
                     </td>
                     <td className="p-3 text-slate-100 max-w-xs break-words">
                       {latestRunId && listing.search_run_id === latestRunId && (

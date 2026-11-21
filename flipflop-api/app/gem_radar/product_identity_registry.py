@@ -11,6 +11,7 @@ from sqlalchemy import text
 from app.gem_radar.product_identifiers import (
     extract_asin, normalise_gtin, normalise_brand, normalise_mpn,
     title_part_numbers, title_brand, variant_facts, identity_conflicts,
+    canonical_cpu_model,
 )
 
 VERSION = 2
@@ -44,9 +45,7 @@ def identifier_claims(*, title, category=None, brand=None, gtin=None, mpn=None,
     # identifier types. It is deliberately available only where the existing
     # resolver can form an exact product/variant key (not fuzzy title text).
     from app.gem_radar.search_identity import last_resort_title_key
-    from app.gem_radar.identity import resolve_identity
-    resolved_category = category or resolve_identity(title).category
-    title_key = last_resort_title_key(title, resolved_category) if include_title_alias else None
+    title_key = last_resort_title_key(title, category) if include_title_alias else None
     if title_key:
         value=json.dumps(title_key[2:],separators=(',',':'),ensure_ascii=True)
         if len(value)<=255:
@@ -116,18 +115,75 @@ async def resolve_identifiers(db, *, title, category=None, brand=None, gtin=None
     '''),{'claims':json.dumps(claims)})).mappings().all()
     cpks={row['cpk'] for row in rows}
     if len(cpks)>1:
-        # A normalized title is a bridge alias, weaker than an exact product
-        # identifier. If the exact IDs agree with each other, use them and
-        # leave a conflicting title alias untouched for review.
-        strong_cpks={row['cpk'] for row in rows if row['kind']!='title_product'}
-        if len(strong_cpks)==1:
-            rows=[row for row in rows if row['cpk'] in strong_cpks]
-            cpks=strong_cpks
+        # Manufacturer identifiers and model numbers have an explicit order;
+        # marketplace-scoped aliases must not block a matching manufacturer
+        # model. Conflicting GTIN/MPN groups remain review cases, as do two
+        # different model-number groups.
+        manufacturer_rows = [row for row in rows if row['kind'] in {'gtin', 'mpn'}]
+        model_rows = [row for row in rows if row['kind'] == 'model_number']
+        if manufacturer_rows:
+            manufacturer_cpks = {row['cpk'] for row in manufacturer_rows}
+            if len(manufacturer_cpks) != 1:
+                return {'status':'conflict','reason':'manufacturer_identifiers_disagree',
+                        'claims':claims,'cpks':sorted(manufacturer_cpks)}
+            best_cpk = next(iter(manufacturer_cpks))
+            best_rows = [row for row in manufacturer_rows if row['cpk'] == best_cpk]
+        elif model_rows:
+            model_cpks = {row['cpk'] for row in model_rows}
+            if len(model_cpks) != 1:
+                return {'status':'conflict','reason':'model_number_identifiers_disagree',
+                        'claims':claims,'cpks':sorted(model_cpks)}
+            best_cpk = next(iter(model_cpks))
+            best_rows = [row for row in model_rows if row['cpk'] == best_cpk]
         else:
-            return {'status':'conflict','reason':'strong_identifiers_disagree','claims':claims,'cpks':sorted(cpks)}
+            # A compatible manufacturer + model title alias is the cross-vendor
+            # identity key when vendor metadata omits an MPN/model number.
+            # Marketplace-scoped IDs must not split that product. Explicit
+            # GTIN/MPN conflicts remain hard conflicts above.
+            title_rows = [row for row in rows if row['kind'] == 'title_product'
+                          and not identity_conflicts(title, row.get('identity'), category)]
+            title_cpks = {row['cpk'] for row in title_rows}
+            if len(title_cpks) > 1:
+                return {'status':'conflict','reason':'title_product_identifiers_disagree',
+                        'claims':claims,'cpks':sorted(title_cpks)}
+            if len(title_cpks) == 1:
+                best_cpk = next(iter(title_cpks))
+                best_rows = [row for row in title_rows if row['cpk'] == best_cpk]
+            else:
+                # With no compatible title alias, retain cautious treatment of
+                # marketplace IDs rather than guessing between source groups.
+                strong_cpks={row['cpk'] for row in rows if row['kind']!='title_product'}
+                if len(strong_cpks) != 1:
+                    return {'status':'conflict','reason':'strong_identifiers_disagree',
+                            'claims':claims,'cpks':sorted(cpks)}
+                best_cpk = next(iter(strong_cpks))
+                best_rows = [row for row in rows if row['cpk'] == best_cpk]
+
+        best_identity = best_rows[0].get('identity') or {}
+        if identity_conflicts(title, best_identity, category):
+            # A stale identifier can be ignored only when the actual title maps
+            # to one compatible exact product alias. Variant mismatches remain
+            # quarantined.
+            title_rows = [row for row in rows if row['kind'] == 'title_product'
+                          and not identity_conflicts(title, row.get('identity'), category)]
+            title_cpks = {row['cpk'] for row in title_rows}
+            if len(title_cpks) != 1:
+                return {'status':'conflict','reason':'strong_identifier_disagrees_with_title',
+                        'claims':claims,'cpks':sorted(cpks)}
+            best_cpk = next(iter(title_cpks))
+            best_rows = [row for row in title_rows if row['cpk'] == best_cpk]
+        rows = best_rows
+        cpks = {best_cpk}
     if existing_cpk and cpks and cpks != {existing_cpk}:
-        return {'status':'conflict','reason':'existing_identity_disagrees','claims':claims,
-                'cpks':sorted(cpks | {existing_cpk})}
+        matched_identity = next((row['identity'] for row in rows if row['cpk'] in cpks), None)
+        # Reconcile only this listing. Do not redirect an entire historical
+        # CPK group: those buckets may contain unrelated variants. The caller
+        # updates this listing assignment and the price ledger independently.
+        if (matched_identity is None or not existing_data
+                or identity_conflicts(title, matched_identity, category)
+                or identity_conflicts(title, existing_data, category)):
+            return {'status':'conflict','reason':'existing_identity_disagrees','claims':claims,
+                    'cpks':sorted(cpks | {existing_cpk})}
     if rows:
         cpk=rows[0]['cpk'];data=dict(rows[0]['identity'])
         conflicts=identity_conflicts(title,data,category)
@@ -174,9 +230,20 @@ async def resolve_identifiers(db, *, title, category=None, brand=None, gtin=None
                 from app.gem_radar.identity import resolve_identity
                 parsed=resolve_identity(title)
                 facts=variant_facts(title,category or parsed.category)
+                resolved_category = category or parsed.category
+                resolved_model = normalise_mpn(mpn) or normalise_mpn(model_number)
+                if resolved_category == 'cpu' and parsed.model:
+                    # Normalize on the exact processor designation. The Ryzen
+                    # or Core tier is frequently omitted from retailer titles;
+                    # the model number still identifies the same CPU.
+                    from app.services.benchmark_normaliser import normalise_cpu
+                    resolved_model = canonical_cpu_model(title, brand or title_brand(title)) or normalise_cpu(title)
+                elif not resolved_model:
+                    resolved_model = (next(iter(title_part_numbers(title)))
+                                      if len(title_part_numbers(title)) == 1 else parsed.model)
                 data={'cpk':cpk,'category':category or parsed.category,
                       'brand':brand or title_brand(title) or parsed.brand,
-                      'model':normalise_mpn(mpn) or normalise_mpn(model_number) or (next(iter(title_part_numbers(title))) if len(title_part_numbers(title))==1 else parsed.model),
+                      'model':resolved_model,
                       'specs':{'capacity_gb':facts.get('capacity_gb'),'module_count':facts.get('modules'),
                                'speed_mhz':facts.get('speed'),'type':f"ddr{facts['ddr']}" if facts.get('ddr') else None},
                       'variant_facts':facts,'resolver_version':VERSION,'extraction_method':'identifier_registry'}
@@ -195,4 +262,7 @@ async def resolve_identifiers(db, *, title, category=None, brand=None, gtin=None
                 VALUES(:kind,:namespace,:value,:cpk,CAST(:evidence AS jsonb))
                 ON CONFLICT(kind,namespace,value) DO NOTHING'''),
                 {**claim,'cpk':cpk,'evidence':json.dumps(evidence)})
-    return {'status':status,'cpk':cpk,'data':{**data,'identity_match_rule':rule,'resolver_version':VERSION},'claims':claims}
+    result = {'status':status,'cpk':cpk,'data':{**data,'identity_match_rule':rule,'resolver_version':VERSION},'claims':claims}
+    if existing_cpk and existing_cpk != cpk:
+        result['previous_cpk'] = existing_cpk
+    return result

@@ -162,6 +162,19 @@ def extract_official_board_facts(markup: str, listing_title: str, source_url: st
         facts["sata_ports"] = int(sata.group(1) or sata.group(2))
         evidence["sata_ports"] = _snippet(text, sata.group(0)) or sata.group(0)
 
+    # A physical PCIe x16 expansion slot is the relevant motherboard-side
+    # interface check for a discrete graphics card. Keep this separate from
+    # M.2 PCIe lanes and from x1 slots. The spec count is a conservative
+    # presence value because slot counts can vary by supported CPU generation.
+    gpu_slot = re.search(
+        r"\b(?:PCIe|PCI\s+Express)\s*(?:[345](?:\.\d)?\s*)?x\s*16\s+slots?\b",
+        text,
+        re.I,
+    )
+    if gpu_slot:
+        facts["pcie_x16_slots"] = 1
+        evidence["pcie_x16_slots"] = _snippet(text, gpu_slot.group(0)) or gpu_slot.group(0)
+
     wifi = re.search(r"\bWi\s*[- ]?Fi\s*[4567]\b", text, re.I)
     if wifi:
         facts["wifi"] = True

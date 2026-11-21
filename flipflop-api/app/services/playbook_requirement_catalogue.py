@@ -34,6 +34,10 @@ def matches_requirement(role, title, specification):
         actual=re.search(r'\b(\d{3,4})\s*w\b',title,re.I)
         return bool(wanted and actual and int(actual[1])>=int(wanted[1]))
     if role=='ram':
+        # Keep discovery/linking consistent with the Playbook assembler. A
+        # same-capacity kit is not an acceptable match when the authored BOM
+        # specifies a particular stick layout, transfer rate or CAS latency.
+        from app.services.playbook_service import _ram_layout_facts
         generation=re.search(r'\bDDR[345]\b',specification,re.I)
         rdimm=bool(re.search(r'\bRDIMM\b',specification,re.I))
         if rdimm != bool(re.search(r'\bRDIMM\b|registered',title,re.I)):
@@ -45,8 +49,25 @@ def matches_requirement(role, title, specification):
         capacity=_capacity_gb(title) or 0
         minimum=_capacity_gb(specification) or 0
         # Eight identical single RDIMMs are eight separately costed units.
-        return capacity>=minimum or bool(rdimm and capacity and minimum%capacity==0
-            and minimum/capacity<=8 and re.search(r'\b1\s*x\s*\d+\s*GB\b',title,re.I))
+        layout=re.search(r'(?<!\d)(\d+)\s*[x×]\s*(\d+(?:\.\d+)?)\s*GB\b',specification,re.I)
+        required=_ram_layout_facts(specification)
+        actual=_ram_layout_facts(title)
+        quantity=1
+        if capacity<minimum:
+            if not (rdimm and capacity and minimum%capacity==0
+                    and minimum/capacity<=8 and re.search(r'\b1\s*x\s*\d+\s*GB\b',title,re.I)):
+                return False
+            quantity=int(minimum/capacity)
+        if layout and (required['modules'] is None or required['module_gb'] is None
+                or actual['modules'] is None or actual['module_gb'] is None
+                or actual['modules']*quantity!=required['modules']
+                or actual['module_gb']!=required['module_gb']):
+            return False
+        if required['speed'] is not None and actual['speed']!=required['speed']:
+            return False
+        if required['cas_latency'] is not None and actual['cas_latency']!=required['cas_latency']:
+            return False
+        return capacity*quantity==minimum if rdimm else capacity>=minimum
     if _matches_requirement(role,title,specification):
         return True
     if role in {'case','motherboard','cooling'}:

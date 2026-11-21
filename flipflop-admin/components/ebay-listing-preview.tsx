@@ -76,7 +76,9 @@ export function EbayListingPreview({ listing, heroVideoUrl, heroImageUrl }: Ebay
           {listing.keyFeatures.map((feature, idx) => (
             <li key={idx} style={{ fontSize: 14, lineHeight: 1.7, color: "#333", marginBottom: 12, paddingLeft: 24, position: "relative" }}>
               <span style={{ position: "absolute", left: 0, color: "#0066ff", fontWeight: "bold" }}>▸</span>
-              <span dangerouslySetInnerHTML={{ __html: feature.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>") }} />
+              <span>{feature.split(/\*\*(.+?)\*\*/g).map((part, partIndex) =>
+                partIndex % 2 === 1 ? <strong key={partIndex}>{part}</strong> : part
+              )}</span>
             </li>
           ))}
         </ul>

@@ -44,6 +44,9 @@ def manufacturer_facts(role,title):
                 'power_reference_url':'https://www.nvidia.com/en-ph/geforce/graphics-cards/50-series/rtx-5050/',
                 'gpu_interface':'pcie','vram_gb':8,'length_mm':203,'power_w':130,'recommended_psu_w':550,
                 'gpu_power_connectors':{'8pin':1}}
+    if role=='gpu' and re.search(r'\barc\s+b580\b',text):
+        return {'source_url':'https://www.intel.com/content/www/us/en/products/sku/241598/intel-arc-b580-graphics/specifications.html',
+                'gpu_interface':'pcie','vram_gb':12,'power_w':190,'reviewed':True}
     if role in {'storage','storage_secondary'} and 'kingston' in text and re.search(r'\bnv3\b',text) and re.search(r'\b2280\b|\bsnv3s/',text):
         return {'source_url':'https://www.kingston.com/en/ssd/nv3-nvme-pcie-ssd',
                 'storage_interface':'nvme','m2_length':2280}
@@ -56,6 +59,10 @@ def manufacturer_facts(role,title):
                     if is_250k else 'https://www.intel.com/content/www/us/en/products/sku/245692/intel-core-ultra-7-processor-270k-plus-36m-cache-up-to-5-50-ghz/specifications.html'),
                 'socket':'lga1851','integrated_graphics':True,
                 'cpu_id':'250k plus' if is_250k else '270k plus'}
+    if role=='cpu' and re.search(r'\bryzen\s*5\s+5600g\b',text):
+        return {'source_url':'https://www.amd.com/en/support/downloads/drivers.html/processors/ryzen/ryzen-5000-series/amd-ryzen-5-5600g.html',
+                'socket':'am4','power_w':65,'cpu_id':'5600g','integrated_graphics':True,
+                'ram_type':'ddr4','memory_speed_mts':3200,'graphics_model':'radeon graphics'}
     if role=='cpu':
         match=re.search(r'\b(9600x|9700x|9800x3d|9850x3d)\b',text)
         if match:

@@ -24,6 +24,26 @@ class AmazonSPAPIError(RuntimeError):
         self.status_code = status_code
         self.details = details
 
+    def safe_diagnostics(self) -> dict[str, Any]:
+        """Return only bounded Amazon error codes/messages, never raw bodies."""
+        raw_errors = self.details.get("errors") if isinstance(self.details, dict) else None
+        errors: list[dict[str, str]] = []
+        if isinstance(raw_errors, list):
+            for row in raw_errors[:3]:
+                if not isinstance(row, dict):
+                    continue
+                safe: dict[str, str] = {}
+                for key in ("code", "message", "details"):
+                    value = row.get(key)
+                    if isinstance(value, str):
+                        # Strip control characters and cap server-provided text.
+                        cleaned = " ".join(value.split())[:240]
+                        if cleaned:
+                            safe[key] = cleaned
+                if safe:
+                    errors.append(safe)
+        return {"statusCode": self.status_code, "errors": errors}
+
 
 class AmazonSPAPI:
     def __init__(self) -> None:
@@ -73,7 +93,7 @@ class AmazonSPAPI:
             response = await client.request(method, f"{self.endpoint}{path}", headers=headers, **kwargs)
         if response.status_code >= 400:
             raise AmazonSPAPIError(
-                f"Amazon SP-API returned HTTP {response.status_code}.",
+                f"Amazon SP-API {method} {path} returned HTTP {response.status_code}.",
                 status_code=response.status_code,
                 details=_json(response),
             )
@@ -162,6 +182,50 @@ class AmazonSPAPI:
         })
         payload=_json(response) or {}
         return payload if isinstance(payload,dict) else {}
+
+    async def search_catalog_items_by_keywords(self, query: str, *, page_token: str | None = None) -> dict[str, Any]:
+        """Search the UK Amazon catalog by keywords; offer pricing is separate."""
+        normalized = " ".join(query.split())
+        if not normalized or len(normalized) > 200:
+            raise AmazonSPAPIError("Amazon Catalog Items keyword search requires a query of 1 to 200 characters.", status_code=422)
+        params: dict[str, Any] = {
+            "marketplaceIds": self.marketplace_id,
+            # SP-API defines keywords as a CSV query array, not a phrase
+            # string. Send each search token as an array element.
+            "keywords": ",".join(normalized.split()),
+            "keywordsLocale": "en_GB",
+            "locale": "en_GB",
+            "includedData": "summaries,identifiers,images,attributes",
+            "pageSize": 20,
+        }
+        if page_token:
+            params["pageToken"] = page_token
+        response = await self._request("GET", "/catalog/2022-04-01/items", params=params)
+        payload = _json(response) or {}
+        return payload if isinstance(payload, dict) else {}
+
+    async def get_competitive_summaries(self, asins: list[str]) -> dict[str, Any]:
+        """Fetch new consumer offer prices for up to 20 catalog ASINs."""
+        normalized = list(dict.fromkeys(str(value).strip().upper() for value in asins))
+        if not normalized or len(normalized) > 20 or any(not re.fullmatch(r"[A-Z0-9]{10}", value) for value in normalized):
+            raise AmazonSPAPIError("Amazon competitive pricing requires one to twenty valid ASINs.", status_code=422)
+        response = await self._request(
+            "POST",
+            "/batches/products/pricing/2022-05-01/items/competitiveSummary",
+            json={"requests": [
+                {
+                    "asin": asin,
+                    "marketplaceId": self.marketplace_id,
+                    "includedData": ["featuredBuyingOptions", "lowestPricedOffers"],
+                    "lowestPricedOffersInputs": [{"itemCondition": "New", "offerType": "Consumer"}],
+                    "uri": "/products/pricing/2022-05-01/items/competitiveSummary",
+                    "method": "GET",
+                }
+                for asin in normalized
+            ]},
+        )
+        payload = _json(response) or {}
+        return payload if isinstance(payload, dict) else {}
 
     async def get_catalog_item_by_asin(self, asin: str) -> dict[str, Any]:
         """Return one exact Catalog Items match, never a neighboring result."""

@@ -1057,6 +1057,35 @@ function KpiChip({ label, value, color }: { label: string; value: string | numbe
   );
 }
 
+function editDistanceWithin(left: string, right: string, limit: number): boolean {
+  if (Math.abs(left.length - right.length) > limit) return false;
+  let previous = Array.from({ length: right.length + 1 }, (_, index) => index);
+  for (let i = 1; i <= left.length; i += 1) {
+    const current = [i];
+    let rowMin = i;
+    for (let j = 1; j <= right.length; j += 1) {
+      current[j] = Math.min(current[j - 1] + 1, previous[j] + 1, previous[j - 1] + (left[i - 1] === right[j - 1] ? 0 : 1));
+      rowMin = Math.min(rowMin, current[j]);
+    }
+    if (rowMin > limit) return false;
+    previous = current;
+  }
+  return previous[right.length] <= limit;
+}
+
+function fuzzySoldItemMatch(name: string, query: string): boolean {
+  const terms = query.toLowerCase().match(/[a-z0-9]+/g) ?? [];
+  if (!terms.length) return true;
+  const normalizedName = name.toLowerCase().replace(/[^a-z0-9]+/g, " ");
+  if (normalizedName.includes(terms.join(" ")) || normalizedName.replace(/\s/g, "").includes(terms.join(""))) return true;
+  const nameTokens = normalizedName.split(/\s+/).filter(Boolean);
+  return terms.every((term) => nameTokens.some((token) => {
+    if (token.includes(term) || term.includes(token)) return true;
+    const tolerance = term.length < 5 ? 1 : term.length < 9 ? 2 : 3;
+    return editDistanceWithin(term, token, tolerance);
+  }));
+}
+
 function SoldMarketTab({ data, insight, loading, error, refreshingInsight, onRetry, onRefreshInsight }: {
   data: SoldMarketDemand | null;
   insight: SoldMarketInsight | null;
@@ -1072,9 +1101,22 @@ function SoldMarketTab({ data, insight, loading, error, refreshingInsight, onRet
     { value: "case", label: "PC Cases" }, { value: "psu", label: "PSUs" },
   ];
   const [soldCategory, setSoldCategory] = useState<SoldComponentCategory>("cpu");
+  const [topProductsCategory, setTopProductsCategory] = useState("all");
+  const [soldItemQuery, setSoldItemQuery] = useState("");
+  const [topProductsPage, setTopProductsPage] = useState(0);
   const [soldRows, setSoldRows] = useState<SoldMarketListing[]>([]);
   const [soldRowsLoading, setSoldRowsLoading] = useState(true);
   const [soldRowsError, setSoldRowsError] = useState<string | null>(null);
+  const topProductsPageSize = 10;
+  const filteredTopProducts = useMemo(() => {
+    const products = data?.top_products ?? [];
+    return topProductsCategory === "all" ? products : products.filter((product) => product.category === topProductsCategory);
+  }, [data?.top_products, topProductsCategory]);
+  const topProductsPageCount = Math.max(1, Math.ceil(filteredTopProducts.length / topProductsPageSize));
+  const visibleTopProducts = filteredTopProducts.slice(topProductsPage * topProductsPageSize, (topProductsPage + 1) * topProductsPageSize);
+  const filteredSoldRows = useMemo(() => soldItemQuery.trim()
+    ? soldRows.filter((row) => fuzzySoldItemMatch(row.name, soldItemQuery))
+    : soldRows, [soldRows, soldItemQuery]);
 
   useEffect(() => {
     let cancelled = false;
@@ -1159,14 +1201,18 @@ function SoldMarketTab({ data, insight, loading, error, refreshingInsight, onRet
       </div>
 
       <section className="rounded-lg border border-white/10 bg-[#070e1a] p-4">
-        <div className="mb-3 flex items-center gap-2"><Database className="h-4 w-4 text-purple-300" /><h2 className="text-sm font-bold text-slate-200">Products with the strongest completed-sale evidence</h2></div>
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2"><div className="flex items-center gap-2"><Database className="h-4 w-4 text-purple-300" /><h2 className="text-sm font-bold text-slate-200">Products with the strongest completed-sale evidence</h2></div><div className="flex items-center gap-2"><span className="text-[10px] text-slate-500">Ranked by matched completed sales · {filteredTopProducts.length.toLocaleString()} products</span><label htmlFor="top-products-component-type" className="sr-only">Filter strongest sale evidence by component type</label><select id="top-products-component-type" value={topProductsCategory} onChange={(event) => { setTopProductsCategory(event.target.value); setTopProductsPage(0); }} className="cursor-pointer rounded-md border border-white/15 bg-[#0a1628] px-2.5 py-1.5 text-xs text-slate-200 outline-none hover:border-emerald-300/40 focus-visible:ring-2 focus-visible:ring-emerald-300"><option value="all">All components</option><option value="cpu">CPU</option><option value="gpu">GPU</option><option value="motherboard">Motherboard</option><option value="ram">RAM</option><option value="ssd">Storage</option><option value="psu">PSU</option><option value="cooler">Cooling</option><option value="case">PC case</option></select></div></div>
         <div className="grid gap-2 md:grid-cols-2">
-          {data.top_products.slice(0, 10).map((product) => (
+          {visibleTopProducts.length === 0 ? <p className="col-span-full rounded-md border border-white/[0.07] px-3 py-6 text-center text-xs text-slate-500">No completed-sale products are available for this component type yet.</p> : visibleTopProducts.map((product) => (
             <div key={product.cpk} className="flex items-center gap-3 rounded-md border border-white/[0.07] bg-white/[0.02] px-3 py-2.5">
               <div className="min-w-0 flex-1"><div className="truncate text-xs font-semibold text-slate-200" title={product.name}>{product.name}</div><div className="mt-0.5 text-[10px] uppercase text-slate-500">{product.category}</div></div>
               <div className="text-right"><div className="text-xs text-emerald-300">{product.sold_observations} completed</div><div className="text-[10px] text-slate-500">{product.active_listings} live · {fmt(product.median_sold_price)}</div></div>
             </div>
           ))}
+        </div>
+        <div className="mt-3 flex items-center justify-between border-t border-white/[0.07] pt-3 text-xs">
+          <span className="text-slate-500">Showing {filteredTopProducts.length ? topProductsPage * topProductsPageSize + 1 : 0}–{Math.min((topProductsPage + 1) * topProductsPageSize, filteredTopProducts.length)} of {filteredTopProducts.length.toLocaleString()}</span>
+          <div className="flex items-center gap-2"><button type="button" onClick={() => setTopProductsPage(page => Math.max(0, page - 1))} disabled={topProductsPage === 0} className="rounded border border-white/10 px-2.5 py-1.5 text-slate-300 hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40">Previous</button><span className="text-slate-400">Page {topProductsPage + 1} of {topProductsPageCount}</span><button type="button" onClick={() => setTopProductsPage(page => Math.min(topProductsPageCount - 1, page + 1))} disabled={topProductsPage >= topProductsPageCount - 1} className="rounded border border-white/10 px-2.5 py-1.5 text-slate-300 hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40">Next</button></div>
         </div>
       </section>
 
@@ -1198,10 +1244,10 @@ function SoldMarketTab({ data, insight, loading, error, refreshingInsight, onRet
           <div className="max-h-[560px] overflow-auto">
             <table className="w-full min-w-[820px] text-left text-xs">
               <thead className="sticky top-0 z-10 bg-[#0a1628] text-[10px] uppercase tracking-wider text-slate-500">
-                <tr>{["Sold item", "Condition", "Item price", "Postage", "Delivered", "Observed", "Source"].map((heading) => <th key={heading} className="px-3 py-2.5">{heading}</th>)}</tr>
+                <tr><th className="min-w-[230px] px-3 py-2.5 text-left"><label htmlFor="sold-item-filter">Sold item</label><input id="sold-item-filter" type="search" value={soldItemQuery} onChange={(event) => setSoldItemQuery(event.target.value)} placeholder="Fuzzy search sold items…" aria-label="Fuzzy search sold item names" className="mt-1.5 w-full rounded border border-white/10 bg-[#07101d] px-2 py-1.5 text-[11px] font-normal normal-case tracking-normal text-slate-200 placeholder:text-slate-600 outline-none focus:border-emerald-300/50 focus:ring-1 focus:ring-emerald-300/40" /></th>{["Condition", "Item price", "Postage", "Delivered", "Observed", "Source"].map((heading) => <th key={heading} className="px-3 py-2.5">{heading}</th>)}</tr>
               </thead>
               <tbody className="divide-y divide-white/[0.06]">
-                {soldRows.map((row) => (
+                {filteredSoldRows.length === 0 ? <tr><td colSpan={7} className="px-3 py-8 text-center text-slate-500">No sold items match “{soldItemQuery}”. Try fewer words or a different spelling.</td></tr> : filteredSoldRows.map((row) => (
                   <tr key={row.id} className="transition-colors hover:bg-white/[0.025]">
                     <td className="max-w-[360px] px-3 py-3 font-medium text-slate-200"><span className="line-clamp-2" title={row.name}>{row.name}</span></td>
                     <td className="px-3 py-3 capitalize text-slate-400">{row.condition}</td>
@@ -1216,7 +1262,7 @@ function SoldMarketTab({ data, insight, loading, error, refreshingInsight, onRet
             </table>
           </div>
         )}
-        <div className="border-t border-white/[0.07] px-4 py-2 text-[10px] text-slate-500">Showing {soldRows.length.toLocaleString()} most recent matched observations (maximum 250).</div>
+        <div className="border-t border-white/[0.07] px-4 py-2 text-[10px] text-slate-500">Showing {filteredSoldRows.length.toLocaleString()}{soldItemQuery.trim() ? ` of ${soldRows.length.toLocaleString()} filtered` : ""} most recent matched observations (maximum 250).</div>
       </section>
 
       <p className="rounded-md border border-amber-400/15 bg-amber-400/[0.05] px-3 py-2 text-xs leading-5 text-amber-100/70">{data.methodology}</p>
@@ -1253,7 +1299,7 @@ function Movement({ value }: { value: number }) {
   return <span className="inline-flex items-center gap-1 text-slate-400"><Minus className="h-3.5 w-3.5" />stable</span>;
 }
 
-function DemandIntelligenceOverview({ rich, sold, loading }: { rich: RichSignals; sold: SoldMarketDemand | null; loading: boolean }) {
+function DemandIntelligenceOverview({ rich, sold, loading, soldError }: { rich: RichSignals; sold: SoldMarketDemand | null; loading: boolean; soldError: string | null }) {
   const intelligence = useMemo(() => {
     const buildTypes = [
       groupedTrend(rich.google_trends, "Gaming", ["gaming pc", "custom pc"]),
@@ -1279,19 +1325,19 @@ function DemandIntelligenceOverview({ rich, sold, loading }: { rich: RichSignals
       const steam = rich.steam.stats.find(stat => stat.category.toLowerCase().includes("video") && stat.name.toLowerCase().includes(query.replace("rtx ", "")));
       return { name: query.toUpperCase(), interest: Math.round(trend.interest), movement: trend.movement, sold: soldCount, steam: steam?.percentage ?? null };
     });
-    const currentSold = sold?.categories.reduce((sum, row) => sum + row.recent_30d, 0) ?? 0;
+    const currentSold = sold?.categories.reduce((sum, row) => sum + row.recent_30d, 0) ?? null;
     const previousSold = sold?.categories.reduce((sum, row) => sum + row.previous_30d, 0) ?? 0;
-    const marketMovement = previousSold ? ((currentSold - previousSold) / previousSold) * 100 : 0;
+    const marketMovement = currentSold != null && previousSold ? ((currentSold - previousSold) / previousSold) * 100 : 0;
     const aiPosts = rich.reddit.posts.filter(post => /\b(ai|llm|ollama|stable diffusion|machine learning)\b/i.test(`${post.query} ${post.title}`));
     const ai = buildTypes.find(row => row.name === "AI / local LLM")!;
     const coverage = [
       { name: "Google Trends", value: rich.google_trends.queries.length, detail: "tracked searches" },
-      { name: "eBay sold", value: sold?.totals.matched_sold_observations ?? 0, detail: "matched sales" },
+      { name: "eBay sold", value: soldError ? "Unavailable" : sold?.totals.matched_sold_observations ?? "—", detail: "matched sales" },
       { name: "Reddit", value: rich.reddit.posts.length, detail: "discussion posts" },
       { name: "Steam", value: new Set(rich.steam.stats.map(row => `${row.category}|${row.name}`)).size, detail: "hardware measures" },
     ];
     return { buildTypes, tiers, platforms, gpuRows, currentSold, marketMovement, aiPosts, ai, coverage };
-  }, [rich, sold]);
+  }, [rich, sold, soldError]);
 
   if (loading) return <Spinner />;
 
@@ -1299,6 +1345,7 @@ function DemandIntelligenceOverview({ rich, sold, loading }: { rich: RichSignals
   const anyBuildGrowing = intelligence.buildTypes.some(row => row.movement > 1);
   return (
     <div className="space-y-5">
+      {soldError && <div role="status" className="rounded-lg border border-amber-400/25 bg-amber-400/[0.06] px-4 py-3 text-xs text-amber-100">eBay sold evidence is unavailable: {soldError}. Other demand signals are still shown.</div>}
       <section className="rounded-xl border border-cyan-300/15 bg-gradient-to-r from-cyan-400/[0.07] via-blue-500/[0.04] to-transparent p-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div><div className="flex items-center gap-2 text-cyan-300"><Gauge className="h-4 w-4" /><span className="text-xs font-semibold uppercase tracking-[0.18em]">Market answer board</span></div><h2 className="mt-2 text-lg font-bold text-slate-100">What should we build next?</h2><p className="mt-1 max-w-3xl text-xs leading-5 text-slate-400">Search momentum is combined with completed eBay sales, Reddit discussion and Steam hardware adoption. Google values are comparable within their tracked topic group; movement compares each term with its own preceding period.</p></div>
@@ -1307,10 +1354,10 @@ function DemandIntelligenceOverview({ rich, sold, loading }: { rich: RichSignals
       </section>
 
       <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-xl border border-white/10 bg-[#08111f] p-4"><div className="flex items-center gap-2 text-slate-500"><ShoppingCart className="h-4 w-4" /><span className="text-[10px] uppercase tracking-wider">Completed-sale sample</span></div><div className="mt-3 text-2xl font-bold">{intelligence.currentSold.toLocaleString()}</div><div className="mt-1 text-xs text-slate-500">latest 30d collection · market-wide total unavailable</div></div>
+        <div className="rounded-xl border border-white/10 bg-[#08111f] p-4"><div className="flex items-center gap-2 text-slate-500"><ShoppingCart className="h-4 w-4" /><span className="text-[10px] uppercase tracking-wider">Completed-sale sample</span></div><div className="mt-3 text-2xl font-bold">{intelligence.currentSold?.toLocaleString() ?? "—"}</div><div className="mt-1 text-xs text-slate-500">latest 30d collection · market-wide total unavailable</div></div>
         <div className="rounded-xl border border-white/10 bg-[#08111f] p-4"><div className="flex items-center gap-2 text-slate-500"><Search className="h-4 w-4" /><span className="text-[10px] uppercase tracking-wider">{anyBuildGrowing ? "Fastest-growing build intent" : "Most resilient build intent"}</span></div><div className="mt-3 text-lg font-bold text-cyan-200">{strongestBuild?.name ?? "No signal"}</div><div className="mt-1 text-xs">{strongestBuild && <Movement value={strongestBuild.movement} />}</div></div>
         <div className="rounded-xl border border-white/10 bg-[#08111f] p-4"><div className="flex items-center gap-2 text-slate-500"><Bot className="h-4 w-4" /><span className="text-[10px] uppercase tracking-wider">AI build interest</span></div><div className="mt-3 text-2xl font-bold text-purple-200">{intelligence.ai.interest}</div><div className="mt-1 flex items-center gap-2 text-xs"><Movement value={intelligence.ai.movement} /><span className="text-slate-500">· {intelligence.aiPosts.length} Reddit posts</span></div></div>
-        <div className="rounded-xl border border-white/10 bg-[#08111f] p-4"><div className="flex items-center gap-2 text-slate-500"><Database className="h-4 w-4" /><span className="text-[10px] uppercase tracking-wider">Sold evidence coverage</span></div><div className="mt-3 text-2xl font-bold text-emerald-200">{sold?.totals.products_with_sold_evidence.toLocaleString() ?? "—"}</div><div className="mt-1 text-xs text-slate-500">products with matched completed sales</div></div>
+        <div className="rounded-xl border border-white/10 bg-[#08111f] p-4"><div className="flex items-center gap-2 text-slate-500"><Database className="h-4 w-4" /><span className="text-[10px] uppercase tracking-wider">Sold evidence coverage</span></div><div className="mt-3 text-2xl font-bold text-emerald-200">{soldError ? "Unavailable" : sold?.totals.products_with_sold_evidence.toLocaleString() ?? "—"}</div><div className="mt-1 text-xs text-slate-500">products with matched completed sales</div></div>
       </section>
 
       <section className="grid gap-4 xl:grid-cols-2">
@@ -1363,10 +1410,15 @@ export default function DemandPage() {
     setErrorAuc(null);
     setErrorSold(null);
 
-    Promise.all([api.demand.soldMarket(90), api.demand.soldMarketInsights(90)])
-      .then(([market, insight]) => { setSoldMarket(market); setSoldInsight(insight); })
-      .catch((e: Error) => setErrorSold(e.message))
+    api.demand.soldMarket(90)
+      .then((market) => { setSoldMarket(market); setErrorSold(null); })
+      .catch((e: Error) => { setSoldMarket(null); setErrorSold(e.message); })
       .finally(() => setLoadingSold(false));
+
+    // AI commentary is optional; its failure must not hide completed-sale data.
+    api.demand.soldMarketInsights(90)
+      .then(setSoldInsight)
+      .catch(() => setSoldInsight(null));
 
     api.demand.summary()
       .then(setSummary)
@@ -1467,7 +1519,7 @@ export default function DemandPage() {
       {/* Tab content */}
       <div>
         {tab === "overview" && (
-          <DemandIntelligenceOverview rich={richSignals} sold={soldMarket} loading={loadingSig || loadingSold} />
+          <DemandIntelligenceOverview rich={richSignals} sold={soldMarket} loading={loadingSig || loadingSold} soldError={errorSold} />
         )}
         {tab === "sold" && (
           <SoldMarketTab data={soldMarket} insight={soldInsight} loading={loadingSold} error={errorSold} refreshingInsight={refreshingInsight} onRetry={fetchAll} onRefreshInsight={refreshSoldInsight} />

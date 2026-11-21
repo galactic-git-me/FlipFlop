@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import JSZip from "jszip";
-import DOMPurify from "dompurify";
+import { sanitizeListingHtml } from "@/lib/sanitize-listing-html";
 import BrowserListingJobs from "@/components/BrowserListingJobs";
 import ChannelImageReview, { type ImageReviewRequest } from "@/components/ChannelImageReview";
 import {
@@ -733,14 +733,7 @@ function escapeHtml(value: string): string {
 }
 
 function sanitizeListingDescription(value: string): string {
-  return DOMPurify.sanitize(value, {
-    ALLOWED_TAGS: [
-      "h1", "h2", "h3", "h4", "h5", "h6", "p", "ul", "ol", "li",
-      "blockquote", "strong", "b", "em", "i", "u", "a", "br", "hr",
-      "span", "div", "table", "tr", "td", "th", "tbody", "thead",
-    ],
-    ALLOWED_ATTR: ["style", "href", "target", "rel", "class"],
-  });
+  return sanitizeListingHtml(value);
 }
 
 function openBrowserAssist({
@@ -1259,12 +1252,17 @@ export default function CrossListingPage() {
   const destinationsForNewListings = (item: GroupedListing) =>
     channelCapabilities
       .filter((channel) => {
+        if (builds[item.buildId]?.status === "sold") return false;
         if (!channel.canPublish) return false;
         const status = item.byChannel[channel.channel]?.status ?? "unavailable";
         return shouldAutoSelectDestination(status);
       })
       .map((channel) => channel.channel);
   const startCrossListing = (item: GroupedListing) => {
+    if (builds[item.buildId]?.status === "sold") {
+      setError("This build remains sold. Verify the approved return and current eBay relisting on its build page before cross-listing it.");
+      return;
+    }
     setSelected((current) => new Set(current).add(item.id));
     setDestinations(destinationsForNewListings(item));
   };
@@ -1409,6 +1407,10 @@ export default function CrossListingPage() {
 
   const publish = () => {
     if (!selectedItems.length || !destinations.length) return;
+    if (selectedGroups.some((item) => builds[item.buildId]?.status === "sold")) {
+      setError("Sold builds cannot be cross-listed. Confirm the return and verify the active eBay relisting from the build page first.");
+      return;
+    }
     const requests = selectedItems.flatMap((item) =>
       destinations.flatMap((destination) => {
         const capability = channelCapabilities.find(
@@ -1438,6 +1440,10 @@ export default function CrossListingPage() {
 
   const executePublish = async (selectedImageMap: Record<string, string[]> = {}, imagesApproved = false) => {
     if (!selectedItems.length || !destinations.length) return;
+    if (selectedGroups.some((item) => builds[item.buildId]?.status === "sold")) {
+      setError("Sold builds cannot be cross-listed. Confirm the return and verify the active eBay relisting from the build page first.");
+      return;
+    }
     if (!imagesApproved) {
       setChannelImageReview(selectedItems.flatMap((item) => destinations.map((channel) => {
         const regularPhotos = new Set((builds[item.buildId]?.photos ?? []).filter((photo) => photo.kind === "photo").map((photo) => photo.url));

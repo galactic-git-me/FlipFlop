@@ -32,6 +32,7 @@ class AppSettings(Base):
     # an administrator. These are commercial settings, not runtime secrets.
     ai_setup_offers: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
     storefront_trust_messages: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
+    approved_vendors: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
     storefront_trust_message_seconds: Mapped[int] = mapped_column(Integer, default=6, nullable=False)
 
     # ── Seller Policies (playbook rows 11-15, 43, 44) — configured once here,
