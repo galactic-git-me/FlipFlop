@@ -15,12 +15,12 @@ from app.config import get_settings
 # Cases swarm: feeds PC case data for 3D model sourcing workflow
 # Other swarms (flip_opportunities, upgrade_parts, accessories) are handled by FlipFlopXtension
 from app.swarms.cases import run_cases_swarm
-from app.services.external_demand import ingest_external_demand_signals
+from app.services.demand_agent import run_demand_agent_cycle
 from app.services.playbook_evolution import run_playbook_evolution
 from app.services.autonomous_loop import run_autonomous_cycle
 from app.services.outcome_capture import capture_outcomes_and_check_retrain
 from app.services.retraining_pipeline import run_retraining_if_ready
-from app.services.alerts import emit_alert, check_stale_retrain_checkpoint
+from app.services.alerts import emit_alert, check_stale_retrain_checkpoint, send_manual_build_activity_digest, send_daily_activity_digest
 from app.services.compliant_market_ingestion import run_compliant_market_ingestion
 from app.services.benchmark_refresh_job import run_benchmark_refresh
 from app.services.ram_watcher import run_ram_watcher
@@ -66,6 +66,9 @@ _job_history: dict[str, deque[dict]] = {
     "amazon_case_bestsellers": deque(maxlen=50),
     "amazon_component_bestsellers": deque(maxlen=50),
     "external_demand": deque(maxlen=50),
+    "pricing_agent": deque(maxlen=50),
+    "extension_batch_agent": deque(maxlen=50),
+    "agent_handoff_dispatch": deque(maxlen=50),
     "playbook_evolution": deque(maxlen=50),
     "autonomous": deque(maxlen=50),
     "outcome_capture": deque(maxlen=50),
@@ -92,6 +95,7 @@ _job_history: dict[str, deque[dict]] = {
     "ai_build_generator": deque(maxlen=50),
     "email_monitor": deque(maxlen=50),
     "ebay_sales_tracker": deque(maxlen=50),
+    "channel_sync": deque(maxlen=50),
     "warranty_reserve": deque(maxlen=50),
     "dispatch_notification_retry": deque(maxlen=50),
     "customer_problem_notification_retry": deque(maxlen=50),
@@ -286,6 +290,9 @@ def start_scheduler():
     scheduler = get_scheduler()
 
     now = datetime.now(timezone.utc)
+    from app.services.pricing_agent import run_pricing_agent_cycle
+    from app.services.extension_batch_agent import run_extension_batch_handoff
+    from app.services.autonomous_agent_handoffs import run_pending_agent_handoffs
     scheduler.add_job(
         _run_job_with_history, trigger=IntervalTrigger(hours=6),
         id="component_manual_discovery", name="Playbook component user guides",
@@ -426,10 +433,46 @@ def start_scheduler():
         trigger=IntervalTrigger(hours=1),
         id="external_demand",
         name="External Demand Signals",
-        kwargs={"job_id": "external_demand", "fn": ingest_external_demand_signals},
+        kwargs={"job_id": "external_demand", "fn": run_demand_agent_cycle},
         replace_existing=True,
         max_instances=1,
         next_run_time=external_demand_start,
+    )
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(days=1),
+        id="pricing_agent",
+        name="Autonomous component pricing evidence",
+        kwargs={"job_id": "pricing_agent", "fn": run_pricing_agent_cycle},
+        replace_existing=True,
+        max_instances=1,
+        coalesce=True,
+        next_run_time=now + timedelta(minutes=4),
+    )
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=5),
+        id="extension_batch_agent",
+        name="Debounced Extension batch Playbook handoff",
+        kwargs={"job_id": "extension_batch_agent", "fn": run_extension_batch_handoff},
+        replace_existing=True,
+        max_instances=1,
+        coalesce=True,
+        next_run_time=now + timedelta(minutes=6),
+    )
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=1),
+        id="agent_handoff_dispatch",
+        name="Retry durable autonomous agent handoffs",
+        kwargs={"job_id": "agent_handoff_dispatch", "fn": run_pending_agent_handoffs},
+        replace_existing=True,
+        max_instances=1,
+        coalesce=True,
+        next_run_time=now + timedelta(minutes=2),
     )
 
     scheduler.add_job(
@@ -564,6 +607,31 @@ def start_scheduler():
         id="catalogue_digest",
         name="Catalogue Review Digest",
         kwargs={"job_id": "catalogue_digest", "fn": run_catalogue_digest_job},
+        replace_existing=True,
+        max_instances=1,
+    )
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger="cron",
+        hour=8,
+        minute=5,
+        timezone="Europe/London",
+        id="manual_build_activity_digest",
+        name="Manual Build Sales and Refund Activity Digest",
+        kwargs={"job_id": "manual_build_activity_digest", "fn": send_manual_build_activity_digest},
+        replace_existing=True,
+        max_instances=1,
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger="cron",
+        hour=8,
+        minute=10,
+        timezone="Europe/London",
+        id="daily_urgent_activity_digest",
+        name="Daily urgent activity digest",
+        kwargs={"job_id": "daily_urgent_activity_digest", "fn": send_daily_activity_digest},
         replace_existing=True,
         max_instances=1,
     )
@@ -740,7 +808,7 @@ def start_scheduler():
     if settings.email_monitor_enabled:
         scheduler.add_job(
             _run_job_with_history,
-            trigger=IntervalTrigger(seconds=settings.email_monitor_interval_seconds),
+            trigger=IntervalTrigger(minutes=5),
             id="email_monitor",
             name="Email Monitor (receipts + sales)",
             kwargs={"job_id": "email_monitor", "fn": run_email_monitor},
@@ -748,6 +816,19 @@ def start_scheduler():
             max_instances=1,
             next_run_time=now + timedelta(minutes=1),
         )
+
+    from app.workers.channel_sync import run_channel_sync_job
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=5),
+        id="channel_sync",
+        name="Cross-channel listing reconciliation",
+        kwargs={"job_id": "channel_sync", "fn": run_channel_sync_job},
+        replace_existing=True,
+        max_instances=1,
+        coalesce=True,
+        next_run_time=now + timedelta(minutes=1),
+    )
 
     scheduler.add_job(
         _run_job_with_history,
@@ -815,7 +896,7 @@ def start_scheduler():
     if settings.ebay_reselling_enabled:
         scheduler.add_job(
             _run_job_with_history,
-            trigger=IntervalTrigger(seconds=settings.ebay_sales_poll_interval_seconds),
+            trigger=IntervalTrigger(minutes=5),
             id="ebay_sales_tracker",
             name="eBay Sales Tracker (order API poll)",
             kwargs={"job_id": "ebay_sales_tracker", "fn": run_ebay_sales_tracker},
@@ -853,7 +934,7 @@ async def run_startup_bootstrap() -> dict:
 
     demand = None
     try:
-        demand = await _run_job_with_history("external_demand", ingest_external_demand_signals)
+        demand = await _run_job_with_history("external_demand", run_demand_agent_cycle)
         log.info("startup_bootstrap.external_demand_done", status=demand.get("ok"))
     except Exception as e:
         log.error("startup_bootstrap.external_demand_failed", error=str(e))
@@ -899,7 +980,7 @@ async def trigger_swarm(swarm_id: str) -> dict:
     if swarm_id in ("amazon_case_bestsellers", "amazon_component_bestsellers"):
         return await _run_job_with_history("amazon_component_bestsellers", scrape_amazon_component_bestsellers)
     if swarm_id == "external_demand":
-        return await _run_job_with_history("external_demand", ingest_external_demand_signals)
+        return await _run_job_with_history("external_demand", run_demand_agent_cycle)
     if swarm_id == "playbook_evolution":
         return await _run_job_with_history("playbook_evolution", run_playbook_evolution)
     if swarm_id == "autonomous":

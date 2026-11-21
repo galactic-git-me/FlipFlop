@@ -2,15 +2,18 @@
 from copy import deepcopy
 from decimal import Decimal
 
-MINIMUM_PROFIT_MARGIN = Decimal("0.10")
+MINIMUM_PROFIT_MARGIN = Decimal("0.15")
 
 APPROVED_TIER_FLOORS = {
-    'Budget': ('60.00','0.10'),
-    'Mid-range': ('100.00','0.12'),
+    'Budget': ('60.00','0.15'),
+    'Mid-range': ('100.00','0.15'),
     # Canonical catalogue name for the premium tier in the decision pack.
     'High-end': ('175.00','0.15'),
 }
-DELIVERY_CEILINGS = {'fast_track':7,'standard':14,'flexible':28}
+# Match the customer promise: approximately 3 working days for Fast Track and
+# 5 for Standard. Supplier arrival is assessed together with workshop and
+# courier time, so the procurement component must fit inside this total.
+DELIVERY_CEILINGS = {'fast_track':3,'standard':5,'flexible':None}
 
 
 def apply_pilot_rules(draft, tier):
@@ -26,7 +29,7 @@ def apply_pilot_rules(draft, tier):
     for name,mode in result['modes'].items():
         if floor:
             mode['minimum_contribution_gbp'],mode['minimum_margin_fraction'] = floor
-        mode['maximum_delivery_working_days'] = None if name=='flexible' else DELIVERY_CEILINGS[name]
+        mode['maximum_delivery_working_days'] = DELIVERY_CEILINGS[name]
         mode['costs'].update(build_labour='0.00', packaging='10.00',
                              insurance='15.00', payment_fixed='0.20')
         # Fast premium depends on an assessed Standard total; no invented total.

@@ -87,6 +87,6 @@ These examples are captured asks, not independently reverified current offers. S
 
 ## Validation and implementation boundary
 
-Verified by reading source and existing focused tests, and by read-only Python aggregation of snapshots. Existing [market tests](../../flipflop-api/tests/test_playbook_market.py) cover condition/postage blocking, sold/active separation, eight-item P75, suffix/capacity checks, BOM freshness and approval persistence. This audit did not run tests or independently reproduce provider fetches; no new code was introduced.
+Verified by reading source and existing focused tests, and by read-only Python aggregation of snapshots. Existing [market tests](../../flipflop-api/testing/suite/test_playbook_market.py) cover condition/postage blocking, sold/active separation, eight-item P75, suffix/capacity checks, BOM freshness and approval persistence. This audit did not run tests or independently reproduce provider fetches; no new code was introduced.
 
 Next implementation should first repair detail/configuration capture and transaction semantics, then add reproducible deduplication/cohort diagnostics. Outlier sophistication cannot rescue component cards, unknown totals or hidden accepted offers. Automated research may prepare proposed evidence/spec revisions; approval, purchasing and publication remain separate owner-controlled actions.

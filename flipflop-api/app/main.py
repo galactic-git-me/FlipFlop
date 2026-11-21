@@ -579,6 +579,7 @@ async def lifespan(app: FastAPI):
             "ALTER TABLE app_settings ADD COLUMN IF NOT EXISTS relist_enabled_default BOOLEAN DEFAULT TRUE",
             "ALTER TABLE app_settings ADD COLUMN IF NOT EXISTS storefront_trust_messages JSON DEFAULT '[]'",
             "ALTER TABLE app_settings ADD COLUMN IF NOT EXISTS storefront_trust_message_seconds INTEGER DEFAULT 6",
+            "ALTER TABLE app_settings ADD COLUMN IF NOT EXISTS approved_vendors JSON NOT NULL DEFAULT '[\"eBay UK\",\"Amazon UK\",\"AWD-IT\",\"Overclockers UK\",\"Scan\",\"Computer Orbit\",\"Bargain Hardware\",\"Newegg UK\",\"Ebuyer\",\"Very\",\"Vinted\",\"AliExpress\",\"PCPartPicker UK\",\"Google Shopping\",\"Currys\",\"Tesco\",\"CCL\",\"Box.co.uk\",\"Corsair UK\",\"Joybuy UK\",\"CPC Farnell\",\"CeX\"]'",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS recreate_enabled BOOLEAN DEFAULT FALSE",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS recreate_interval_days INTEGER",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS next_recreate_at TIMESTAMP",
@@ -707,11 +708,15 @@ async def _queue_unevaluated_gems():
         log.warning("startup.gem_queue_backfill_failed", error=str(exc))
 
 
+_docs_enabled = settings.app_env.strip().casefold() in {"dev", "development", "test", "testing"}
 app = FastAPI(
     title="PC Flip Profit Maximizer API",
     version="5.0.0",
     description="AI-powered PC flipping intelligence platform",
     lifespan=lifespan,
+    docs_url="/docs" if _docs_enabled else None,
+    redoc_url="/redoc" if _docs_enabled else None,
+    openapi_url="/openapi.json" if _docs_enabled else None,
 )
 
 # Locally-stored build photos / branded cards (spec card, registration plate).

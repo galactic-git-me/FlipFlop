@@ -24,7 +24,7 @@ require_test_database SYNC_DATABASE_URL
 require_test_database TEST_DATABASE_URL
 
 log "Checking Codex browser tools"
-node --test "$ROOT_DIR/scripts/browser-listing/browser-mcp.test.mjs"
+node --test "$ROOT_DIR/scripts/browser-listing/testing/browser-mcp.test.mjs"
 
 log "Installing API dependencies"
 python -m pip install --disable-pip-version-check -q \
@@ -49,16 +49,16 @@ log "Running API tests"
   cd "$ROOT_DIR/flipflop-api"
   export FLIPFLOP_TEST_ADMIN_DATABASE_URL="${FLIPFLOP_TEST_ADMIN_DATABASE_URL:-${SYNC_DATABASE_URL%/*}/postgres}"
   if [[ "${FLIPFLOP_CI_FULL_API_TESTS:-0}" == "1" ]]; then
-    python scripts/run_isolated_tests.py -- tests -q
+    python scripts/run_isolated_tests.py -- testing/suite testing/unit -q
   else
     python scripts/run_isolated_tests.py -- -q \
-      tests/test_browser_listing_jobs.py \
-      tests/test_curated_availability_public.py \
-      tests/test_curated_build_policy.py \
-      tests/test_curated_upgrade_benchmarks.py \
-      tests/test_public_playbook_fit.py \
-      tests/test_public_catalogue_api.py::test_analytics_event_does_not_trust_caller_customer_id \
-      tests/test_production_scheduler_runtime.py
+      testing/suite/test_browser_listing_jobs.py \
+      testing/suite/test_curated_availability_public.py \
+      testing/suite/test_curated_build_policy.py \
+      testing/suite/test_curated_upgrade_benchmarks.py \
+      testing/suite/test_public_playbook_fit.py \
+      testing/suite/test_public_catalogue_api.py::test_analytics_event_does_not_trust_caller_customer_id \
+      testing/suite/test_production_scheduler_runtime.py
   fi
 )
 

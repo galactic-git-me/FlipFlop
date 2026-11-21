@@ -113,6 +113,32 @@ def title_brand(title: str) -> str | None:
     return min(matches)[1] if matches else None
 
 
+def canonical_cpu_model(title: str, brand: str | None = None) -> str | None:
+    """Return a CPU product key based on manufacturer and exact model code.
+
+    Retail titles often omit the Ryzen/Core tier (for example, ``Ryzen
+    9800X3D`` instead of ``Ryzen 7 9800X3D``). The tier is not needed to
+    distinguish the actual processor once its full model code is present.
+    """
+    manufacturer = normalise_brand(brand or title_brand(title))
+    value = str(title or "")
+    if manufacturer == "amd":
+        slug = re.sub(r"[^a-z0-9]+", "_", value.casefold()).strip("_")
+        if m := re.search(r"\b(?:amd\s+)?(?:ryzen(?:sets)?\s+|r\s*)(?:[3579]\s+)?(\d{4,5}\s*(?:x3d|xt|x|ge|gt|g|kf|ks|k|hx|hs|h|u|f|t)?)\b", value, re.I):
+            code = re.sub(r"[^a-z0-9]", "", m[1].casefold())
+            return f"amd_ryzen_{code}"
+        if m := re.fullmatch(r"amd_ryzen(?:_[3579])?_(\d{4,5}[a-z0-9]*)", slug):
+            return f"amd_ryzen_{m[1]}"
+    elif manufacturer == "intel":
+        slug = re.sub(r"[^a-z0-9]+", "_", value.casefold()).strip("_")
+        if m := re.search(r"\b(?:intel\s+)?(?:core\s+)?i[3579][- ]?(\d{4,5}[a-z]{0,3})\b|\b(?:intel\s+)?core\s+(\d{4,5}[a-z]{0,3})\b", value, re.I):
+            code = re.sub(r"[^a-z0-9]", "", (m[1] or m[2]).casefold())
+            return f"intel_core_{code}"
+        if m := re.fullmatch(r"intel_core(?:_i[3579])?_(\d{4,5}[a-z0-9]*)", slug):
+            return f"intel_core_{m[1]}"
+    return None
+
+
 def variant_facts(title: str, category: str | None) -> dict:
     """Only explicit identity fields. Unknown fields remain absent."""
     value = title.casefold()
@@ -129,6 +155,13 @@ def variant_facts(title: str, category: str | None) -> dict:
         for key, pattern in [('ddr',r'\bddr\s*([345])\b'), ('speed',r'\b(\d{4,5})\s*(?:mhz|mt/s)\b'),
                              ('cl',r'\b(?:cl|c)\s*(\d{2})\b')]:
             if match := re.search(pattern,value): facts[key] = int(match[1])
+        if 'speed' not in facts:
+            # Retail titles commonly abbreviate the data rate as "DDR5-6000"
+            # or "DDR4 3200" without writing MHz/MT/s. Anchor the fallback to
+            # the generation token so capacities and unrelated numbers cannot
+            # be mistaken for memory speed.
+            if match := re.search(r'\bddr[345][\s-]+(\d{3,5})\b', value):
+                facts['speed'] = int(match[1])
         for family in (r'vengeance\s*rgb\s*pro\s*sl',r'vengeance\s*rgb\s*pro',r'vengeance\s*rgb\s*rs',r'vengeance\s*lpx',
                        r'vengeance\s*rgb',r'vengeance',r'dominator\s*titanium',r'fury\s*beast',r'viper\s*venom'):
             if match := re.search(family,value):
@@ -152,13 +185,23 @@ def identity_conflicts(title: str, data: dict | None, category: str | None = Non
     expected.update(data.get('variant_facts') or {})
     if (category or data.get('category')) == 'cpu':
         from app.services.benchmark_normaliser import normalise_cpu
-        model = str(data.get('model') or '').replace('-',' ')
-        if data.get('identity_claims') and data.get('identity_source_title'):
-            model = data['identity_source_title']
         clean = lambda text: re.sub(r'\bryzensets\b','Ryzen',text,flags=re.I)
-        left,right=normalise_cpu(clean(title)),normalise_cpu(clean(model))
         known = r'ryzen|core|xeon|epyc|threadripper|pentium|celeron|athlon'
-        if left and right and re.search(known,left) and re.search(known,right) and left!=right:
+        model = str(data.get('model') or '').replace('-',' ')
+        claims = data.get('identity_claims') or []
+        model_is_part_number = any(
+            claim.get('kind') in {'mpn', 'model_number'}
+            and str(claim.get('value') or '').casefold() == str(data.get('model') or '').casefold()
+            for claim in claims
+        )
+        comparison_model = data.get('identity_source_title') if model_is_part_number else model
+        actual_cpu = canonical_cpu_model(clean(title), actual_brand or data.get('brand'))
+        expected_cpu = canonical_cpu_model(clean(str(comparison_model or '')), data.get('brand'))
+        left, right = normalise_cpu(clean(title)), normalise_cpu(clean(str(comparison_model or '')))
+        if actual_cpu and expected_cpu:
+            if actual_cpu != expected_cpu:
+                conflicts.append('cpu_model')
+        elif left and re.search(known, left) and (not right or not re.search(known, right) or left != right):
             conflicts.append('cpu_model')
     for target, aliases in {'capacity_gb':('capacity_gb',),'modules':('modules','module_count','sticks'),
                             'speed':('speed_mhz',),'cl':('cl','cas_latency')}.items():

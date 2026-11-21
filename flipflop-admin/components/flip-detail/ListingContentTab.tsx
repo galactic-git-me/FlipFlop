@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Loader2, Zap } from "lucide-react";
 import { api } from "@/lib/api";
+import { sanitizeListingHtml } from "@/lib/sanitize-listing-html";
 import type { TabProps } from "./types";
 
 // Row 4/24: title generation is prompt-level (item + key specs first, filler
@@ -64,7 +65,7 @@ export function ListingContentTab({ flip, onFlipUpdated }: TabProps) {
                 <p className="text-[10px] text-slate-600 uppercase tracking-wider mb-1">Description preview</p>
                 <div
                   className="text-xs text-slate-400 bg-slate-800/50 rounded p-2 max-h-40 overflow-y-auto leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: description }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeListingHtml(description) }}
                 />
               </div>
             )}

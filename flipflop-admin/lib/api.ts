@@ -1,5 +1,3 @@
-import { getAdminToken } from "@/lib/admin-token";
-
 // ── Build Wizard types ────────────────────────────────────────────────────────
 
 export interface WizardPlaybook {
@@ -425,6 +423,18 @@ export interface ManualBuildSummary {
   updated_at: string;
 }
 
+export interface ManualBuildSaleAlert extends ManualBuildSummary {
+  dispatch_status: string;
+  sale_channel: string | null;
+  sale_account: string | null;
+  sale_order_id: string | null;
+  sale_listing_url: string | null;
+  sale_price: number | null;
+  sale_currency: string;
+  sale_source: string | null;
+  sale_confirmed_at: string | null;
+}
+
 export interface AiReadyToShipProposal {
   build_name: string;
   rationale: string;
@@ -558,7 +568,7 @@ export interface SourceSearchTerm {
 
 // REST calls stay same-origin. The dedicated Next route forwards them to the
 // backend after middleware has attached the httpOnly admin_session token.
-// NEXT_PUBLIC_API_URL remains reserved for browser-only SSE/websocket callers.
+// SSE callers use the same-origin /api rewrite so the admin session is forwarded.
 export const API_BASE_URL = "/proxy-api";
 
 export function apiUrl(path: string): string {
@@ -605,13 +615,11 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   // Add trailing slash to path only (not end of query string) — backend handles both
   // NOTE: the old regex /([^/])(\?|$)/ was corrupting query params like status=active → status=active/
   const url = apiUrl(path).replace(/([^/])(\?)/, "$1/$2");
-  const token = getAdminToken();
   const isMultipart = typeof FormData !== "undefined" && init?.body instanceof FormData;
   const res = await fetch(url, {
     credentials: "include",
     headers: {
       ...(!isMultipart ? { "Content-Type": "application/json" } : {}),
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...init?.headers,
     },
     signal: AbortSignal.timeout(120_000),
@@ -694,6 +702,8 @@ function qs(params?: Record<string, string | undefined>): string {
 }
 
 export const api = {
+  getStorefrontPolicies: () => request<{ policies: Record<string, { title: string; content: string }> }>("/settings/storefront-policies"),
+  saveStorefrontPolicies: (value: { policies: Record<string, { title: string; content: string }> }) => request<{ policies: Record<string, { title: string; content: string }> }>("/settings/storefront-policies", { method: "PUT", body: JSON.stringify(value) }),
   marketingCopy: {
     status: () => request<{ total: number; ready: number; remaining: number; enriched: number; source_guides: number }>("/catalogue/marketing-copy/status"),
     generateBatch: (limit = 4) => request<{ total: number; ready: number; remaining: number; enriched: number; source_guides: number; attempted: number; generated: number; failed: { task_key: string; error: string }[] }>(
@@ -844,11 +854,9 @@ export const api = {
       }),
     packageDownloadUrl: (id: number, version: number) => apiUrl(`/manual-builds/${id}/getting-ready/package/${version}`),
     downloadSoftwareInstallScript: async (id: number) => {
-      const token = getAdminToken();
       const response = await fetch(apiUrl(`/manual-builds/${id}/getting-ready/software-script`), {
         credentials: "include",
         cache: "no-store",
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       if (!response.ok) {
         const message = await response.text();
@@ -863,14 +871,12 @@ export const api = {
     },
     dispatchChecklistDownloadUrl: (id: number) => apiUrl(`/manual-builds/${id}/getting-ready/dispatch-checklist`),
     downloadWindowsLicenseHelper: async (id: number) => {
-      const token = getAdminToken();
       const response = await fetch(apiUrl(`/manual-builds/${id}/getting-ready/windows-license-helper`), {
         method: "POST",
         credentials: "include",
         cache: "no-store",
         headers: {
           "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({ confirm_private_key_release: true }),
       });
@@ -916,11 +922,9 @@ export const api = {
         body: JSON.stringify({ approved, note }),
       }),
     getEvidenceFile: async (id: number, artifactId: string) => {
-      const token = getAdminToken();
       const response = await fetch(apiUrl(`/manual-builds/${id}/getting-ready/evidence/${encodeURIComponent(artifactId)}`), {
         credentials: "include",
         cache: "no-store",
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       if (!response.ok) throw new Error(`Could not retrieve evidence (${response.status})`);
       return response.blob();
@@ -1390,6 +1394,8 @@ export const api = {
 
   manualBuilds: {
     list: () => request<ManualBuildSummary[]>("/manual-builds/"),
+    soldAlerts: () => request<ManualBuildSaleAlert[]>("/manual-builds/sold-alerts"),
+    reconcileEbayRelist: (id: number) => request<{ ok: boolean; relisted: boolean; listing_id?: string; listing_url?: string }>(`/manual-builds/${id}/reconcile-ebay-relist`, { method: "POST" }),
     get: (id: number) => request<ManualBuild>(`/manual-builds/${id}`),
     getPurchasePlan: (id: number) => request<BuildPurchasePlan>(`/manual-builds/${id}/purchase-plan`),
     generateAi: () => request<AiReadyToShipProposal>("/manual-builds/ai-generate", { method: "POST" }),
@@ -1620,12 +1626,10 @@ export const api = {
       const formData = new FormData();
       for (const f of files) formData.append("files", f);
       formData.append("kind", kind);
-      const token = getAdminToken();
       const res = await fetch(`${API_BASE_URL}/manual-builds/${id}/photos`, {
         method: "POST",
         body: formData,
         credentials: "include",
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
       if (!res.ok) throw new Error(`API upload photos → ${res.status}`);
       return res.json();
@@ -1646,14 +1650,12 @@ export const api = {
     ): Promise<ManualBuild> => {
       const formData = new FormData();
       formData.append("file", blob, `${kind}.png`);
-      const token = getAdminToken();
       const res = await fetch(
         `${API_BASE_URL}/manual-builds/${id}/photos/branded?kind=${kind}`,
         {
           method: "POST",
           body: formData,
           credentials: "include",
-          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         }
       );
       if (!res.ok) throw new Error(`API upload branded asset → ${res.status}`);
@@ -1662,12 +1664,10 @@ export const api = {
     upload3dModel: async (id: number, file: File): Promise<ManualBuild> => {
       const formData = new FormData();
       formData.append("file", file);
-      const token = getAdminToken();
       const res = await fetch(`${API_BASE_URL}/manual-builds/${id}/model-3d`, {
         method: "POST",
         body: formData,
         credentials: "include",
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
       if (!res.ok) {
         const detail = await res
@@ -1696,14 +1696,12 @@ export const api = {
       const formData = new FormData();
       formData.append("selected_urls", JSON.stringify(selectedUrls));
       for (const file of files) formData.append("files", file);
-      const token = getAdminToken();
       const res = await fetch(
         `${API_BASE_URL}/manual-builds/${id}/model-3d/generate-upload`,
         {
           method: "POST",
           body: formData,
           credentials: "include",
-          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         }
       );
       if (!res.ok) {
@@ -2348,14 +2346,9 @@ export const api = {
         }>
       >(`/benchmarks/refresh-runs?limit=${limit}`),
     triggerRefresh: async (run_type = "manual") => {
-      const base = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-      const token = getAdminToken();
       const resp = await fetch(
-        `${base}/api/benchmarks/refresh?run_type=${run_type}`,
-        {
-          method: "POST",
-          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-        }
+        `${apiUrl("/benchmarks/refresh")}?run_type=${encodeURIComponent(run_type)}`,
+        { method: "POST", credentials: "include" },
       );
       return resp.json();
     },
@@ -2820,8 +2813,9 @@ export async function streamCompanion(
   onEvent: (event: CompanionSSEEvent) => void,
   signal?: AbortSignal
 ): Promise<void> {
-  const res = await fetch(apiUrl("/companion/stream"), {
+  const res = await fetch("/api/companion/stream", {
     method: "POST",
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ message, history, page_context: pageContext }),
     signal,

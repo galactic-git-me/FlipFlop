@@ -124,14 +124,16 @@ const sourceStatus = (
   build: ManualBuild,
   source: SourcePlatform
 ): CrossListingSource["status"] => {
-  if (build.status === "sold") return "sold";
   if (source === "ebay_uk") {
     if (build.ebay_listing_status === "active" || build.ebay_live)
       return "live";
+    if (build.status === "sold") return "sold";
     if (build.ebay_listing_status === "draft") return "draft";
     if (build.ebay_listing_status === "ended") return "ended";
     return "unavailable";
   }
+  if (build.ebay_listing_status === "active") return "unavailable";
+  if (build.status === "sold") return "sold";
   if (build.status === "in_progress" && !build.storefront_product_id)
     return "draft";
   return build.storefront_product_id
@@ -182,7 +184,7 @@ export function canonicalFromBuild(build: ManualBuild): CanonicalListing {
     // price has been set.
     price: build.ebay_price ?? build.last_evaluation?.mid ?? null,
     currency: "GBP",
-    quantity: build.status === "sold" ? 0 : 1,
+    quantity: build.status === "sold" && build.ebay_listing_status !== "active" ? 0 : 1,
     condition: build.ebay_condition || "Used",
     images: photos,
     specifications: specifications(build),
@@ -243,7 +245,7 @@ export function sourcesFromBuild(build: ManualBuild): CrossListingSource[] {
       currency: "GBP",
       quantity: listing.quantity,
       condition: listing.condition,
-      status: sourceStatus(build, "flipflop_shop"),
+      status: build.ebay_listing_status === "active" ? "ended" : sourceStatus(build, "flipflop_shop"),
       url: null,
       updatedAt: build.updated_at,
       listing,

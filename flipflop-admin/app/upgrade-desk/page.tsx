@@ -18,8 +18,7 @@ type Assessment = {
 const adviceOptions = ["KEEP", "UPGRADE", "OPTIONAL", "DONT_SPEND_HERE", "TRANSFORM"];
 
 function headers(): HeadersInit {
-  const token = typeof window !== "undefined" ? window.localStorage.getItem("admin_token") : null;
-  return { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}) };
+  return { "Content-Type": "application/json" };
 }
 
 export default function UpgradeDeskPage() {

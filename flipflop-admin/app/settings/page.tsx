@@ -9,6 +9,7 @@ import { api, API_BASE_URL } from "@/lib/api";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 interface AppSettings {
+  approved_vendors: string[];
   storefront_trust_messages: { title: string; text: string; audience: 'all' | 'new_users' | 'returning_users'; expires_at?: string | null; enabled?: boolean; priority?: boolean }[];
   max_concurrent_flips: number;
   auto_buy_autonomous: boolean;
@@ -70,6 +71,7 @@ interface DataSource {
 const CLASSIFICATION_COLORS = ["#f97316", "#3b82f6", "#a78bfa", "#22c55e", "#eab308", "#ef4444", "#64748b", "#94a3b8"];
 
 const DEFAULTS: AppSettings = {
+  approved_vendors: ["eBay UK", "Amazon UK", "AWD-IT", "Overclockers UK", "Scan", "Computer Orbit", "Bargain Hardware", "Newegg UK", "Ebuyer", "Very", "Vinted", "AliExpress", "PCPartPicker UK", "Google Shopping", "Currys", "Tesco", "CCL", "Box.co.uk", "Corsair UK", "Joybuy UK", "CPC Farnell", "CeX"],
   storefront_trust_messages: [
     { title: '🛡️ Trust & Protection 🛡️', text: "Buy with confidence! Free UK delivery, 28-day returns, 12-month flipflop warranty and insured shipping. We've got you covered!", audience: 'all', expires_at: null, enabled: true, priority: false },
     { title: '🖥️ Three Ways to Buy 🖥️', text: 'Your PC. Your rules! Choose Ready-to-Go, Curated-for-You or Built-by-You. Your perfect machine starts here!', audience: 'all', expires_at: null, enabled: true },
@@ -140,7 +142,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
   );
 }
 
-type TabKey = "opportunity" | "seller-policies" | "delivery" | "getting-ready" | "sources" | "extension-logs" | "sold-logs" | "server-logs" | "price-evidence" | "business" | "storefront";
+type TabKey = "opportunity" | "seller-policies" | "delivery" | "getting-ready" | "sources" | "extension-logs" | "sold-logs" | "server-logs" | "price-evidence" | "business" | "storefront" | "approved-vendors";
 type ComponentManual = {id: number; component_key: string; component_name: string; source_url: string; filename: string; sha256: string; size_bytes: number; is_active: boolean};
 type AISetupOffer = {id: string; name: string; description: string; requires_vram_gb: number | null; enabled: boolean; price_gbp: number | null; commercial_scope_reviewed: boolean};
 
@@ -155,6 +157,7 @@ export default function SettingsPage() {
 
   const [newSourceName, setNewSourceName] = useState("");
   const [newSourceUrl, setNewSourceUrl] = useState("");
+  const [newApprovedVendor, setNewApprovedVendor] = useState("");
   const [extensionLogs, setExtensionLogs] = useState<import("@/lib/api").SearchTelemetryItem[]>([]);
   const [soldLogs, setSoldLogs] = useState<import("@/lib/api").SoldScrapingItem[]>([]);
   const [soldLogNote, setSoldLogNote] = useState("");
@@ -545,7 +548,7 @@ export default function SettingsPage() {
           variant="primary"
           size="sm"
           onClick={saveSettings}
-          disabled={saving || (tab !== "opportunity" && tab !== "seller-policies" && tab !== "delivery" && tab !== "storefront")}
+          disabled={saving || (tab !== "opportunity" && tab !== "seller-policies" && tab !== "delivery" && tab !== "storefront" && tab !== "approved-vendors")}
         >
           <Save className="w-3.5 h-3.5" />
           {saving ? "Saving…" : saved ? "Saved ✓" : "Save"}
@@ -587,6 +590,7 @@ export default function SettingsPage() {
           { key: "storefront", label: "Storefront messages" },
           { key: "getting-ready", label: "Getting Ready" },
           { key: "sources", label: "Data Sources" },
+          { key: "approved-vendors", label: "Approved Vendors" },
           { key: "extension-logs", label: "Extension Logs" },
           { key: "sold-logs", label: "Sold Scraping" },
           { key: "server-logs", label: "Server Logs" },
@@ -956,6 +960,37 @@ export default function SettingsPage() {
         </div>
       )}
 
+
+      {tab === "approved-vendors" && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Approved vendors</CardTitle>
+            <p className="text-xs text-slate-400">Maintain the vendor names available to your sourcing workflow. Add or remove entries, then use Save to persist your changes.</p>
+            <p className="text-xs text-slate-500">{settings.approved_vendors.length} approved vendors</p>
+          </CardHeader>
+          <CardContent className="space-y-4 pt-0">
+            <form className="grid grid-cols-1 gap-2 md:grid-cols-[minmax(0,1fr)_auto]" onSubmit={event => {
+              event.preventDefault();
+              const name = newApprovedVendor.trim().replace(/\s+/g, " ");
+              if (!name || settings.approved_vendors.some(vendor => vendor.localeCompare(name, undefined, { sensitivity: "accent" }) === 0)) return;
+              setSettings(current => ({ ...current, approved_vendors: [...current.approved_vendors, name] }));
+              setNewApprovedVendor("");
+            }}>
+              <input aria-label="Vendor name" maxLength={120} value={newApprovedVendor} onChange={event => setNewApprovedVendor(event.target.value)} placeholder="Vendor name" className="px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
+              <Button type="submit" variant="primary" size="sm" disabled={!newApprovedVendor.trim()}><Plus className="w-3.5 h-3.5" /> Add vendor</Button>
+            </form>
+            <div className="space-y-2">
+              {settings.approved_vendors.map((vendor, index) => (
+                <div key={`${vendor.toLowerCase()}-${index}`} className="flex items-center justify-between gap-3 p-3 rounded-xl border border-[#1e2d45] bg-[#0a1119]">
+                  <span className="text-sm text-slate-200">{vendor}</span>
+                  <button type="button" aria-label={`Remove ${vendor}`} className="p-1.5 rounded border border-red-500/30 text-red-400 hover:bg-red-500/10" onClick={() => setSettings(current => ({ ...current, approved_vendors: current.approved_vendors.filter((_, itemIndex) => itemIndex !== index) }))}><Trash2 className="w-4 h-4" /></button>
+                </div>
+              ))}
+              {settings.approved_vendors.length === 0 && <p className="text-sm text-slate-500">No approved vendors yet.</p>}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {tab === "sources" && (
         <Card>

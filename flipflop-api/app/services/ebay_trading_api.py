@@ -19,6 +19,7 @@ from xml.etree import ElementTree as ET
 
 import httpx
 import structlog
+import asyncio
 
 from app.config import get_settings
 
@@ -30,6 +31,14 @@ _TRADING_API_BASE = {
 }
 
 _NS = "urn:ebay:apis:eBLBaseComponents"
+_RATE_LIMIT_UNTIL: dict[str, datetime] = {}
+
+
+async def _wait_for_rate_limit(environment: str) -> None:
+    until = _RATE_LIMIT_UNTIL.get(environment)
+    now = datetime.now(timezone.utc)
+    if until and until > now:
+        await asyncio.sleep((until - now).total_seconds())
 
 
 class EbayTradingApiError(RuntimeError):
@@ -70,8 +79,16 @@ async def _call(
 {body_xml}
 </{call_name}Request>"""
 
+    await _wait_for_rate_limit(target_environment)
     async with httpx.AsyncClient(timeout=20) as client:
         resp = await client.post(root_url, content=envelope, headers=_headers(call_name, token))
+
+    if resp.status_code == 429:
+        try:
+            retry_after = max(1, min(900, int(resp.headers.get("Retry-After", "60"))))
+        except ValueError:
+            retry_after = 60
+        _RATE_LIMIT_UNTIL[target_environment] = datetime.now(timezone.utc) + timedelta(seconds=retry_after)
 
     if resp.status_code != 200:
         raise RuntimeError(f"eBay Trading API {call_name} returned HTTP {resp.status_code}: {resp.text[:300]}")

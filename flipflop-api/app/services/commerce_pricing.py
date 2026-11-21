@@ -31,6 +31,15 @@ class FulfilmentMode(str, Enum):
     READY_TO_SHIP = "ready_to_ship"
 
 
+# Playbook uses its versioned total customer delivery commitment, including
+# supplier ETA, workshop time and courier. This bound is only a sanity ceiling;
+# the customer promise remains the stricter authority.
+PLAYBOOK_SUPPLIER_ARRIVAL_LIMITS = {
+    FulfilmentMode.PRIORITY: 30,
+    FulfilmentMode.STANDARD: 30,
+}
+
+
 @dataclass(frozen=True)
 class SupplierOffer:
     supplier: str
@@ -115,7 +124,10 @@ def supplier_allowed(mode: FulfilmentMode, offer: SupplierOffer) -> bool:
                 and offer.fees_gbp == Decimal("0") and offer.delivery_working_days == 0)
         return False
     if mode == FulfilmentMode.PRIORITY:
-        return offer.channel == "retail" and offer.supplier.strip().lower() in {"amazon", "overclockers uk", "overclockers"}
+        # Fast Track is limited to approved retailer channels; current stock,
+        # condition, confidence, total delivery commitment and capacity remain
+        # enforced by the quote and checkout policy.
+        return offer.channel == "retail"
     if mode == FulfilmentMode.STANDARD:
         vendor = offer.supplier.strip().lower()
         flexible_only = vendor.startswith("ebay") or vendor.startswith("vinted")
@@ -145,20 +157,30 @@ def estimate_delivery_working_days(
 def eligible_offers(
     offers: list[SupplierOffer], mode: FulfilmentMode, policy: ConditionPolicy, consent: bool,
     *, priority_capacity: bool = False, now: datetime | None = None,
+    supplier_arrival_limits: dict[FulfilmentMode, int] | None = None,
 ) -> list[SupplierOffer]:
     if mode == FulfilmentMode.PRIORITY and not priority_capacity:
         return []
     if mode == FulfilmentMode.READY_TO_SHIP:
         return []
     now = now or datetime.now(timezone.utc)
+    # Legacy callers retain historical caps. Playbook quote callers supply
+    # explicit supplier-arrival bounds and separately enforce total customer
+    # delivery time, including workshop and courier.
+    if supplier_arrival_limits is None:
+        supplier_arrival_limits = {
+            FulfilmentMode.PRIORITY: 1,
+            FulfilmentMode.STANDARD: 3,
+        }
+    arrival_limit = supplier_arrival_limits.get(mode)
     filtered = [
         offer for offer in offers
         if offer.stock_confirmed
         and _recent(offer.observed_at, now, timedelta(hours=24))
         and supplier_allowed(mode, offer)
         and condition_allowed(policy, offer.condition, consent)
-        and (mode != FulfilmentMode.PRIORITY or (offer.delivery_working_days is not None and offer.delivery_working_days <= 1))
-        and (mode != FulfilmentMode.STANDARD or (offer.delivery_working_days is not None and offer.delivery_working_days <= 3))
+        and (arrival_limit is None or (offer.delivery_working_days is not None
+            and 0 <= offer.delivery_working_days <= arrival_limit))
     ]
     return sorted(filtered, key=lambda offer: offer.landed_gbp + offer.risk_gbp)
 

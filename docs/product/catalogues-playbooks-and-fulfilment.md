@@ -15,6 +15,8 @@ not a definition of capability. Prices follow validated configuration, landed co
 and comparable-market evidence. See [product strategy](./product-strategy.md) and the
 [draft capability matrix](../playbook/specifications/2026-10-22/matrix.md).
 
+For the operational budget cells, a missing `budget_max` keeps the cell paused; a delivery pace above that cell's configured `budget_max` is unavailable and blocks the proposal from approval. The system must not lower the authored BOM or margin to force a price under the ceiling; a revised BOM must be proposed and rechecked separately.
+
 The operational budget matrix, upgrade price rules and declared budget-tier software mapping below
 describe the current implementation. They remain in force until an explicit migration. Legacy labels
 are compatibility mappings, not the new customer proposition. No cell ID, order snapshot, profit floor,
@@ -90,7 +92,7 @@ Supplier delivery logic uses this precedence:
 3. An administrator override for the listing or vendor.
 4. Vendor default.
 
-Amazon Prime status should be scraped when it is visible and reliable. Prime listings receive the rapid default; non-Prime Amazon listings use Amazon's configured default. All ordinary vendors default to the three-day supplier group. Vinted, eBay marketplace, and auctions default to seven days. Defaults are assumptions and must remain distinguishable from scraped evidence.
+Amazon Prime status should be scraped when it is visible and reliable. Prime listings receive the rapid default; non-Prime Amazon listings use Amazon's configured default. Any approved retail supplier can qualify for Fast Track when a current listing-specific estimate confirms supplier arrival within two working days; otherwise ordinary vendors default to the three-day supplier group. Vinted, eBay marketplace, and auctions default to seven days and remain Flexible-only. Defaults are assumptions and must remain distinguishable from scraped evidence.
 
 Supplier arrival groups do not equal the customer delivery promise. The latter also includes procurement, workshop capacity, build, QA, packing, and courier time.
 

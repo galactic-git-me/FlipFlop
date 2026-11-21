@@ -7,7 +7,7 @@ import hashlib
 import re
 from app.gem_radar.product_identifiers import (
     normalise_brand, normalise_mpn, normalise_gtin, title_brand,
-    title_part_numbers, variant_facts,
+    title_part_numbers, variant_facts, canonical_cpu_model,
 )
 
 SEARCH_IDENTITY_VERSION = 3
@@ -135,15 +135,41 @@ def preferred_search_query(title, data=None, role=None):
 def last_resort_title_key(title, category, identity=None):
     """Exact product-name/spec key, never arbitrary fuzzy string similarity."""
     from app.gem_radar.identity import is_full_system_listing, resolve_identity
+    from app.gem_radar.opportunity_scoring import identity_gates
     if is_full_system_listing(title):
         return None
     brand = title_brand(title)
     if not brand:
         return None
-    category = {'storage':'ssd','storage_secondary':'ssd','cooling':'cooler'}.get(category, category) or resolve_identity(title).category
-    if category == 'cpu':
+    category = {'storage':'ssd','storage_secondary':'ssd','cooling':'cooler'}.get(category, category)
+    if not category:
+        category = resolve_identity(title).category
+    if not category:
+        # The category extractor can miss a clearly named CPU when a title
+        # also contains included cooler/thermal-paste copy. Recover only a
+        # recognized CPU family/model, and keep the existing full-system,
+        # bundle, and accessory gates in force.
         from app.services.benchmark_normaliser import normalise_cpu
-        model = normalise_cpu(re.sub(r'\bryzensets\b','Ryzen',title,flags=re.I))
+        model = canonical_cpu_model(title, brand) or normalise_cpu(title)
+        if re.match(r'^(?:amd_ryzen_|amd_threadripper_|intel_core_i[3579]_|intel_core_ultra_[3579]_|intel_xeon_)', model):
+            provisional = {'category':'cpu','brand':brand,'model':model}
+            blocked = {'accessory_or_parts_listing','bundle_listing',
+                       'whole_system_misclassified_as_component','category_identity_conflict'}
+            if not blocked.intersection(identity_gates(title, provisional)):
+                category = 'cpu'
+    if category == 'cpu':
+        # Explicit CPU-category captures must not turn a CPU-only accessory or
+        # complete PC into a component identity alias.
+        from app.services.benchmark_normaliser import normalise_cpu
+        model = canonical_cpu_model(title, brand) or normalise_cpu(title)
+        provisional = {'category':'cpu','brand':brand,'model':model}
+        blocked = {'accessory_or_parts_listing','bundle_listing',
+                   'whole_system_misclassified_as_component','category_identity_conflict'}
+        if blocked.intersection(identity_gates(title, provisional)):
+            return None
+        from app.services.benchmark_normaliser import normalise_cpu
+        model = canonical_cpu_model(re.sub(r'\bryzensets\b','Ryzen',title,flags=re.I), brand)
+        model = model or normalise_cpu(re.sub(r'\bryzensets\b','Ryzen',title,flags=re.I))
         return ('title_product','cpu',brand,model) if model else None
     if category == 'gpu':
         # Brand/chip/VRAM can still describe different board editions.
