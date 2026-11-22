@@ -79,8 +79,13 @@ async def store_reviewed_sources(db, pending, admin_id):
             SupplierOfferEvidence.evidence_source == values["evidence_source"],
         ).order_by(SupplierOfferEvidence.id.desc()).limit(1))).scalar_one_or_none()
         if existing and all(getattr(existing, key) == value for key, value in values.items()):
-            reused.append(existing.id)
-            continue
+            # An operator approval must remain visible even when automation
+            # already captured the identical immutable supplier facts. Keep
+            # the automated row intact and append one operator-attributed row;
+            # retries then reuse that reviewed row as usual.
+            if admin_id <= 0 or existing.captured_by_admin_id > 0:
+                reused.append(existing.id)
+                continue
         row = SupplierOfferEvidence(**values, captured_by_admin_id=admin_id)
         db.add(row)
         await db.flush()

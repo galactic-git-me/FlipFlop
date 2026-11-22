@@ -7,6 +7,47 @@ from app.database import AsyncSessionLocal
 from app.models.alert_event import AlertEvent
 
 _URGENT_REFUND_CODE_PREFIX = "manual_build_refund_requested_"
+_REFUND_RESOLUTION_TYPES = ("refund_approved", "refund_issued", "return_closed", "refund_denied")
+
+
+def _latest_unresolved_refund_requests(refund_events, resolution_events):
+    """Keep each build's newest request unless a later matching resolution exists."""
+    latest_requests = {}
+    for event in refund_events:
+        current = latest_requests.get(event.manual_build_id)
+        if current is None or event.received_at > current.received_at:
+            latest_requests[event.manual_build_id] = event
+
+    resolutions_by_build = {}
+    for event in resolution_events:
+        resolutions_by_build.setdefault(event.manual_build_id, []).append(event)
+
+    unresolved = {}
+    for build_id, request in latest_requests.items():
+        request_payload = request.payload or {}
+        request_order = request_payload.get("order_id")
+        request_listing = request_payload.get("listing_id")
+        resolved = False
+        for resolution in resolutions_by_build.get(build_id, []):
+            if resolution.received_at <= request.received_at:
+                continue
+            resolution_payload = resolution.payload or {}
+            resolution_order = resolution_payload.get("order_id")
+            resolution_listing = resolution_payload.get("listing_id")
+            if request_order or resolution_order:
+                matches_request = bool(request_order and resolution_order and request_order == resolution_order)
+            elif request_listing or resolution_listing:
+                matches_request = bool(request_listing and resolution_listing and request_listing == resolution_listing)
+            else:
+                # Legacy events without order/listing references can only be
+                # correlated by build and chronology.
+                matches_request = True
+            if matches_request:
+                resolved = True
+                break
+        if not resolved:
+            unresolved[build_id] = request
+    return unresolved
 
 
 async def emit_alert(code: str, source: str, message: str, severity: str = "warning", link_url: str | None = None) -> dict:
@@ -97,17 +138,12 @@ async def send_manual_build_activity_digest() -> dict:
             EmailEvent.event_type == "refund_requested",
             EmailEvent.manual_build_id.is_not(None),
         ).order_by(EmailEvent.received_at.desc()).limit(50))).scalars().all()
-        unresolved_refund_build_ids = {event.manual_build_id for event in refund_events}
+        refund_build_ids = {event.manual_build_id for event in refund_events}
         resolution_events = (await db.execute(select(EmailEvent).where(
-            EmailEvent.event_type.in_(("refund_approved", "refund_issued", "return_closed", "refund_denied")),
-            EmailEvent.manual_build_id.in_(unresolved_refund_build_ids) if unresolved_refund_build_ids else False,
-        ).order_by(EmailEvent.received_at.desc()))).scalars().all() if unresolved_refund_build_ids else []
-        resolved_ids = {event.manual_build_id for event in resolution_events}
-        by_build = {}
-        for event in refund_events:
-            if event.manual_build_id not in by_build and event.manual_build_id not in resolved_ids:
-                by_build[event.manual_build_id] = event
-        urgent = list(by_build.values())
+            EmailEvent.event_type.in_(_REFUND_RESOLUTION_TYPES),
+            EmailEvent.manual_build_id.in_(refund_build_ids) if refund_build_ids else False,
+        ).order_by(EmailEvent.received_at.desc()))).scalars().all() if refund_build_ids else []
+        urgent = list(_latest_unresolved_refund_requests(refund_events, resolution_events).values())
         if not builds and not urgent:
             return {"ok": True, "sent": False, "reason": "empty"}
         lines = ["<h2>FlipFlop daily build activity</h2>"]
@@ -138,14 +174,10 @@ async def send_daily_activity_digest() -> dict:
         ).order_by(EmailEvent.received_at.desc()).limit(50))).scalars().all()
         build_ids = {event.manual_build_id for event in refund_events}
         resolutions = (await db.execute(select(EmailEvent).where(
-            EmailEvent.event_type.in_(("refund_approved", "refund_issued", "return_closed", "refund_denied")),
+            EmailEvent.event_type.in_(_REFUND_RESOLUTION_TYPES),
             EmailEvent.manual_build_id.in_(build_ids) if build_ids else False,
         ).order_by(EmailEvent.received_at.desc()))).scalars().all() if build_ids else []
-        resolved_ids = {event.manual_build_id for event in resolutions}
-        latest = {}
-        for event in refund_events:
-            if event.manual_build_id not in latest and event.manual_build_id not in resolved_ids:
-                latest[event.manual_build_id] = event
+        latest = _latest_unresolved_refund_requests(refund_events, resolutions)
         if not latest:
             return {"ok": True, "sent": False, "reason": "empty"}
         builds = (await db.execute(select(ManualBuild).where(ManualBuild.id.in_(latest)))).scalars().all()
