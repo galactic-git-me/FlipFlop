@@ -121,16 +121,32 @@ async def run_playbook_manager_cycle(event: Any):
             existing.error = None
         await db.commit()
 
+    cycle_task = asyncio.current_task()
+
     async def heartbeat():
         from app.database import AsyncSessionLocal
+        last_success = asyncio.get_running_loop().time()
         while True:
             await asyncio.sleep(PLAYBOOK_MANAGER_HEARTBEAT_SECONDS)
-            async with AsyncSessionLocal() as heartbeat_db:
-                run = await heartbeat_db.get(PlaybookRefreshRun, job_id)
-                if run is None or run.status != "running":
+            try:
+                async with AsyncSessionLocal() as heartbeat_db:
+                    run = await heartbeat_db.get(PlaybookRefreshRun, job_id)
+                    if run is None or run.status != "running":
+                        return
+                    run.heartbeat_at = _utcnow()
+                    await heartbeat_db.commit()
+                last_success = asyncio.get_running_loop().time()
+            except asyncio.CancelledError:
+                raise
+            except Exception:
+                # A transient DB/pool failure must not permanently kill the
+                # lease heartbeat. If we cannot renew before another worker
+                # would consider this run stale, stop this cycle so it cannot
+                # continue concurrently with a recovered/retried worker.
+                if asyncio.get_running_loop().time() - last_success >= PLAYBOOK_MANAGER_STALE_AFTER.total_seconds():
+                    if cycle_task is not None:
+                        cycle_task.cancel()
                     return
-                run.heartbeat_at = _utcnow()
-                await heartbeat_db.commit()
 
     heartbeat_task = asyncio.create_task(heartbeat())
     try:

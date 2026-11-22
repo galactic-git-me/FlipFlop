@@ -83,3 +83,67 @@ async def test_interrupted_duplicate_does_not_emit_completion_or_mark_source_com
 
     autonomous_agent_handoffs.mark_agent_event.assert_not_awaited()
     autonomous_agent_handoffs.persist_agent_event.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_heartbeat_retries_transient_db_failures_then_stops_expired_owner(monkeypatch):
+    import asyncio
+    from app import database
+    from app.models.playbook_refresh_run import PlaybookRefreshRun
+    from app.services import agent_skill_loader, playbook_management_agent
+    from app.services import playbook_service
+
+    monkeypatch.setattr(playbook_management_agent, "PLAYBOOK_MANAGER_STALE_AFTER", timedelta(milliseconds=20))
+    monkeypatch.setattr(playbook_management_agent, "PLAYBOOK_MANAGER_HEARTBEAT_SECONDS", 0.001)
+    monkeypatch.setattr(agent_skill_loader, "load_agent_skill", lambda _name: "skill")
+
+    run = None
+    heartbeat_attempts = 0
+
+    class _ManagerSession(_Session):
+        async def execute(self, _statement):
+            return None
+
+        async def get(self, model, _job_id):
+            nonlocal heartbeat_attempts
+            if model is PlaybookRefreshRun:
+                heartbeat_attempts += 1
+                if heartbeat_attempts == 1:
+                    return run
+                raise RuntimeError("temporary database outage")
+            return None
+
+        def add(self, value):
+            nonlocal run
+            run = value
+
+        async def commit(self):
+            return None
+
+    monkeypatch.setattr(database, "AsyncSessionLocal", _ManagerSession)
+    refresh_started = asyncio.Event()
+    refresh_cancelled = asyncio.Event()
+
+    async def blocked_refresh(*_args, **_kwargs):
+        refresh_started.set()
+        try:
+            await asyncio.Event().wait()
+        except asyncio.CancelledError:
+            refresh_cancelled.set()
+            raise
+
+    monkeypatch.setattr(playbook_service, "refresh_playbooks", blocked_refresh)
+    event = AgentEvent(
+        event_id="source-event-heartbeat",
+        event_type="playbook_refresh_requested",
+        producer="system",
+        occurred_at=datetime.now(timezone.utc),
+        idempotency_key="source-key-heartbeat",
+    )
+
+    with pytest.raises(asyncio.CancelledError):
+        await playbook_management_agent.run_playbook_manager_cycle(event)
+
+    assert refresh_started.is_set()
+    assert refresh_cancelled.is_set()
+    assert heartbeat_attempts > 1
