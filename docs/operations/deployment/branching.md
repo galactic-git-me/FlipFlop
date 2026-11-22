@@ -23,6 +23,12 @@ they are resolved and the PR is updated. PRs targeting `main` are not
 auto-queued. Keep unrelated or unfinished work in its own branch/PR rather
 than combining every dirty worktree into one release.
 
+DEV auto-merge uses the repository secret `FLIPFLOP_DEV_MERGE_TOKEN` so the
+merge still triggers the normal post-merge DEV validation and worktree cleanup
+workflows. Set it to a fine-grained token with read/write access to Contents and
+Pull requests for this repository. Without this secret the automation safely
+skips and leaves PRs available for manual merge.
+
 Local `dev` is a separate copy from GitHub's `origin/dev`. Before starting
 services, `scripts/start-all-servers.ps1` fast-forwards a clean local `dev`
 from `origin/dev`. It preserves dirty work and starts other branches without
