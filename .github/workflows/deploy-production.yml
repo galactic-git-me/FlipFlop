@@ -123,6 +123,7 @@ jobs:
         run: >-
           python scripts/run_isolated_tests.py -- -q
           testing/suite/test_ebay_oauth.py
+          testing/unit/test_secret_key_rotation.py
           testing/suite/test_browser_listing_jobs.py
           testing/suite/test_component_price_alert_matching.py
       - name: Build release admin bundle
@@ -177,6 +178,16 @@ jobs:
               -p "${ANDROMEDA_PORT:-22}" \
               "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
               provision-browser-worker-key
+      - name: Rotate an invalid production customer secret safely
+        env:
+          ANDROMEDA_HOST: ${{ secrets.ANDROMEDA_HOST }}
+          ANDROMEDA_USER: ${{ secrets.ANDROMEDA_USER }}
+          ANDROMEDA_PORT: ${{ secrets.ANDROMEDA_PORT }}
+        run: |
+          ssh -i ~/.ssh/andromeda \
+            -p "${ANDROMEDA_PORT:-22}" \
+            "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
+            rotate-production-secret-key
       - name: Deploy tagged Andromeda services
         env:
           ANDROMEDA_HOST: ${{ secrets.ANDROMEDA_HOST }}

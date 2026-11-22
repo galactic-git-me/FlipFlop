@@ -5,6 +5,9 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 log() { printf '[flipflop-ci] %s\n' "$*"; }
 
+log "Checking the restricted production deployment command syntax"
+bash -n "$ROOT_DIR/deploy/github-deploy-command.sh"
+
 log "Checking environment boundaries"
 bash "$ROOT_DIR/scripts/validate-environments.sh"
 
@@ -53,6 +56,7 @@ log "Running API tests"
   else
     python scripts/run_isolated_tests.py -- -q \
       testing/suite/test_browser_listing_jobs.py \
+      testing/unit/test_secret_key_rotation.py \
       testing/suite/test_curated_availability_public.py \
       testing/suite/test_curated_build_policy.py \
       testing/suite/test_curated_upgrade_benchmarks.py \
