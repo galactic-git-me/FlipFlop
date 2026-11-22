@@ -7,11 +7,27 @@ its existing deterministic policy gates.
 """
 from __future__ import annotations
 
-from datetime import datetime, timezone
+import asyncio
+from datetime import datetime, timedelta, timezone
 from hashlib import sha256
 from typing import Any
 from uuid import NAMESPACE_URL, uuid5
 from sqlalchemy import text
+
+
+PLAYBOOK_MANAGER_STALE_AFTER = timedelta(minutes=5)
+PLAYBOOK_MANAGER_HEARTBEAT_SECONDS = 15
+
+
+class PlaybookRefreshInProgress(RuntimeError):
+    """A duplicate handoff must remain unsettled while its refresh is active."""
+
+
+def _manager_run_is_fresh(run: Any, now: datetime) -> bool:
+    if run.status not in {"queued", "running"}:
+        return False
+    last_progress = run.heartbeat_at or run.started_at
+    return bool(last_progress and now - last_progress <= PLAYBOOK_MANAGER_STALE_AFTER)
 
 
 def _event_dump(event: Any) -> dict[str, Any]:
@@ -72,7 +88,7 @@ async def run_playbook_manager_cycle(event: Any):
     async with AsyncSessionLocal() as db:
         await db.execute(text("SELECT pg_advisory_xact_lock(61311, 9)"))
         existing = await db.get(PlaybookRefreshRun, job_id)
-        if existing and existing.status in {"queued", "running", "succeeded"}:
+        if existing and existing.status == "succeeded":
             prior = existing.result if isinstance(existing.result, dict) else {}
             return AgentEvent(
                 event_type="playbook_refresh_completed",
@@ -84,6 +100,10 @@ async def run_playbook_manager_cycle(event: Any):
                 evidence_refs=[*normalized.evidence_refs, job_id],
                 payload={"job_id": job_id, "status": existing.status, "duplicate": True,
                          "result": prior, "blockers": prior.get("blockers", [])},
+            )
+        if existing and _manager_run_is_fresh(existing, now):
+            raise PlaybookRefreshInProgress(
+                "A matching Playbook refresh is still active; the source event remains unsettled."
             )
         if existing is None:
             existing = PlaybookRefreshRun(
@@ -101,6 +121,18 @@ async def run_playbook_manager_cycle(event: Any):
             existing.error = None
         await db.commit()
 
+    async def heartbeat():
+        from app.database import AsyncSessionLocal
+        while True:
+            await asyncio.sleep(PLAYBOOK_MANAGER_HEARTBEAT_SECONDS)
+            async with AsyncSessionLocal() as heartbeat_db:
+                run = await heartbeat_db.get(PlaybookRefreshRun, job_id)
+                if run is None or run.status != "running":
+                    return
+                run.heartbeat_at = _utcnow()
+                await heartbeat_db.commit()
+
+    heartbeat_task = asyncio.create_task(heartbeat())
     try:
         async with AsyncSessionLocal() as db:
             result = await refresh_playbooks(db, actor_id=0, maintain_live_offers=True)
@@ -170,3 +202,9 @@ async def run_playbook_manager_cycle(event: Any):
                 run.error = f"{type(error).__name__}: {error}"
                 await db.commit()
         raise
+    finally:
+        heartbeat_task.cancel()
+        try:
+            await heartbeat_task
+        except asyncio.CancelledError:
+            pass

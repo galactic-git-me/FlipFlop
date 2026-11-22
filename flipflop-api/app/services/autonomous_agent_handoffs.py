@@ -8,6 +8,7 @@ from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.database import AsyncSessionLocal
 from app.models.agent_handoff_event import AgentHandoffEvent
 from app.schemas.autonomous_agents import AgentEvent
 
@@ -38,6 +39,7 @@ async def pending_agent_events(db: AsyncSession, *, event_types: tuple[str, ...]
 
 async def run_pending_agent_handoffs() -> dict:
     """Retry durable Playbook handoffs after backend or provider interruptions."""
+    from app.services.playbook_management_agent import PlaybookRefreshInProgress
     handled = 0
     failures = 0
     async with AsyncSessionLocal() as db:
@@ -48,6 +50,10 @@ async def run_pending_agent_handoffs() -> dict:
         try:
             await process_playbook_event(event)
             handled += 1
+        except PlaybookRefreshInProgress:
+            # A concurrent worker owns this event's active refresh. Leave the
+            # durable event pending/failed so a later pass can settle it.
+            continue
         except Exception as exc:
             async with AsyncSessionLocal() as db:
                 await mark_agent_event(db, event.event_id, status="failed", error=f"{type(exc).__name__}: {exc}")

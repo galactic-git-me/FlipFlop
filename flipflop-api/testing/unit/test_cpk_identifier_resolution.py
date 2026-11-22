@@ -140,4 +140,22 @@ class IdentityChecks(unittest.TestCase):
                 'Model: B550M PRO-VDH WIFI motherboard; Model Number: 7C95-001R')}}
         self.assertFalse(same_product(part,bundle))
 
+    def test_motherboard_supplier_matching_preserves_ddr_generation(self):
+        ddr4='ASUS PRIME B760-PLUS DDR4 Motherboard LGA1700'
+        ddr5='ASUS PRIME B760-PLUS DDR5 Motherboard LGA1700'
+        self.assertIn(('supplier_model','motherboard','asus','primeb760plus'),
+            product_keys('motherboard',ddr4))
+        self.assertEqual(
+            {key for key in product_keys('motherboard',ddr4) if key[0] == 'supplier_model'},
+            {key for key in product_keys('motherboard',ddr5) if key[0] == 'supplier_model'},
+            'Supplier model key intentionally omits memory generation; matcher must retain it separately',
+        )
+        self.assertFalse(same_product({'role':'motherboard','title':ddr4},{'title':ddr5}))
+        self.assertTrue(same_product({'role':'motherboard','title':ddr5},
+            {'title':'ASUS PRIME B760-PLUS DDR5 ATX Motherboard LGA1700'}))
+        self.assertFalse(same_product({'role':'motherboard','title':ddr5},
+            {'title':'ASUS PRIME B760-PLUS ATX Motherboard LGA1700'}))
+        self.assertFalse(same_product({'role':'motherboard','title':ddr5},
+            {'title':'ASUS PRIME B760-PLUS DDR4/DDR5 ATX Motherboard LGA1700'}))
+
 if __name__=='__main__':unittest.main()
