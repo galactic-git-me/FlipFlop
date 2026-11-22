@@ -31,7 +31,9 @@ def _sheet_sync_status(states: list[str]) -> str:
 def _sheet_retry_status(final_sync: str, attempts: int) -> str:
     if final_sync != "write_failed":
         return "completed"
-    return "queued" if attempts < _MAX_ATTEMPTS else "failed"
+    # Keep the event leased until the stale-processing timeout so a persistent
+    # Sheets outage cannot burn all retries in the worker's five-second loop.
+    return "processing" if attempts < _MAX_ATTEMPTS else "failed"
 
 
 async def enqueue_completed_sweep_qa(db, *, environment: str, requested_at) -> str | None:
@@ -114,9 +116,10 @@ async def process_pending_gem_build_qa_events(limit: int = 1) -> dict:
                 event = await db.get(GemRadarBuildQAEvent, event_id, with_for_update=True)
                 if event is not None:
                     # Retry partial Sheets failures with the persisted snapshot.
-                    # Successful tabs deduplicate by sweep run ID on retry.
+                    # Successful tabs deduplicate by sweep run ID on retry;
+                    # processing_started_at provides the ten-minute backoff.
                     event.status = _sheet_retry_status(final_sync, event.attempts)
-                    event.processing_started_at = None
+                    event.processing_started_at = now if event.status == "processing" else None
                     event.sheet_sync_status = final_sync
                     await db.commit()
             if final_sync != "write_failed":
