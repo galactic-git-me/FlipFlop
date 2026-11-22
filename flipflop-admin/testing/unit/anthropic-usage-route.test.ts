@@ -11,7 +11,7 @@ describe("Anthropic usage report route", () => {
 
   it("uses the documented messages and web search report paths", async () => {
     vi.stubEnv("ANTHROPIC_ADMIN_API_KEY", "test-admin-key");
-    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ data: [], has_more: false }), {
+    const fetchMock = vi.fn().mockImplementation(async () => new Response(JSON.stringify({ data: [], has_more: false }), {
       status: 200,
       headers: { "content-type": "application/json" },
     }));
