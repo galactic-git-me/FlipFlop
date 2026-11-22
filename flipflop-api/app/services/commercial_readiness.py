@@ -670,17 +670,35 @@ async def _product_page_source_preview(db, listing, archived=None):
 
 
 def same_listing_product(left, right):
-    """Amazon tracking paths may differ; the exact ASIN must be identical."""
+    """Match an exact product page while ignoring retailer tracking parameters."""
     if left == right:
         return True
     import re
-    from urllib.parse import urlsplit
+    from urllib.parse import parse_qs, urlsplit
     try:
         urls=[urlsplit(value or '') for value in (left,right)]
     except ValueError:
         return False
-    if any(url.scheme!='https' or not ((url.hostname or '')=='amazon.co.uk'
-        or (url.hostname or '').endswith('.amazon.co.uk')) or url.username or url.password for url in urls):
+    if any(url.scheme!='https' or url.username or url.password for url in urls):
+        return False
+    hosts=[(url.hostname or '').casefold() for url in urls]
+    if hosts[0] == hosts[1] and hosts[0].removeprefix('www.') in {
+            'overclockers.co.uk','scan.co.uk','ebuyer.com','computerorbit.com',
+            'awd-it.co.uk','cclonline.com','corsair.com','alphacomponents.co.uk',
+            'senetic.co.uk'}:
+        paths=[url.path.rstrip('/').casefold() or '/' for url in urls]
+        if paths[0] != paths[1]:
+            return False
+        queries=[parse_qs(url.query,keep_blank_values=True) for url in urls]
+        # Variant selectors identify different sellable products. Tracking
+        # parameters (_pos, _sid, _ss, campaign tags) do not.
+        for key in ('variant','sku'):
+            left_values=queries[0].get(key)
+            right_values=queries[1].get(key)
+            if left_values and right_values and left_values != right_values:
+                return False
+        return True
+    if any(host!='amazon.co.uk' and not host.endswith('.amazon.co.uk') for host in hosts):
         return False
     ids=[re.search(r'/(?:dp|gp/product)/([A-Z0-9]{10})(?:[/?]|$)',url.path,re.I) for url in urls]
     return bool(all(ids) and ids[0].group(1).upper()==ids[1].group(1).upper())

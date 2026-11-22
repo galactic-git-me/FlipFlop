@@ -1,6 +1,6 @@
 # Playbook sourcing and competitor evidence
 
-Observed 22 October 2026 (Europe/London). Research only: no catalogue, supplier allowlist, offers or published prices changed. Read `PRODUCT.md` and current catalogue/fulfilment rules first. Retailers outside approved component hosts are competitive comparisons, not newly approved procurement sources.
+Observed 22 October 2026 (Europe/London). Research only: no catalogue, supplier allowlist, offers or published prices changed. Read `../routers/product-router.md` and current catalogue/fulfilment rules first. Retailers outside approved component hosts are competitive comparisons, not newly approved procurement sources.
 
 ## Fresh opened primary pages
 

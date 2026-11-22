@@ -5,7 +5,7 @@ const webServerCommand = process.platform === 'win32'
   : 'NEXT_PUBLIC_API_URL=/api ADMIN_JWT_SECRET=playwright-test-secret PLAYWRIGHT_TEST=1 npm run build && NEXT_PUBLIC_API_URL=/api ADMIN_JWT_SECRET=playwright-test-secret PLAYWRIGHT_TEST=1 npm run start -- -p 4173 -H 127.0.0.1';
 
 export default defineConfig({
-  testDir: './tests/e2e',
+  testDir: './testing/e2e',
   fullyParallel: true,
   retries: 1,
   timeout: 45_000,

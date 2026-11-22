@@ -35,19 +35,17 @@ async def main(apply=False):
             checked=await source_preview(db,listing)
             if not checked.get('licence_source_reviewed'):
                 raise RuntimeError('The original Windows licence review did not persist in this transaction')
-        # Rebuild current identity-bound evidence before applying the owner's
-        # existing approval. Fingerprints legitimately change when DEV IDs are
-        # remapped; the normal source-review function revalidates every capture.
-        from app.services.catalogue_price_import import import_current_catalogue_prices
-        source_rows={}
-        for original in proposals:
-            for part in original['components']:
-                listing=await db.get(Listing,part['listing_id'])
-                source=await source_preview(db,listing)
-                key=f"case:{listing.case_catalogue_id}" if part['role']=='case' and listing.case_catalogue_id else f"variant:{part['variant_id']}"
-                source_rows[key]={'role':part['role'],'part_key':key,'source':source}
-        imported=await import_current_catalogue_prices(db,list(source_rows.values()),0)
-        if imported['blocked']:raise RuntimeError(imported['blocked'])
+        # Import only the exact source observations already attached to the
+        # current proposals. Re-reading a raw catalogue listing here can select
+        # stale condition, price or stock facts and incorrectly block a source
+        # that passed the fingerprint-bound proposal review.
+        expected=[{'proposal_id':p['proposal_id'],'revision_sha256':p['revision_sha256'],
+            'source_evidence':[{'role':part['role'],'listing_id':part['listing_id'],
+                'fingerprint':part['source_observation']['fingerprint']} for part in p['components']]}
+            for p in proposals]
+        reviewed=await service.approve_all_current_supplier_sources(db,expected,0)
+        if reviewed['pending_roles']:
+            raise RuntimeError(f"Supplier observations still need review: {reviewed['pending_roles']}")
         for original in proposals:
             parent=await db.get(Playbook,original['playbook_id'])
             pool=await service._catalogue_candidates(db,parent.id,'curated',
@@ -60,12 +58,6 @@ async def main(apply=False):
             proposal=await db.get(PlaybookProposal,original['proposal_id'])
             proposal.proposed_data=current
         await db.flush()
-        proposals=await service.current_proposals(db)
-        expected=[{'proposal_id':p['proposal_id'],'revision_sha256':p['revision_sha256'],
-            'source_evidence':[{'role':part['role'],'listing_id':part['listing_id'],
-                'fingerprint':part['source_observation']['fingerprint']} for part in p['components']]}
-            for p in proposals]
-        await service.approve_all_current_supplier_sources(db,expected,0)
         for original in proposals:
             parent=await db.get(Playbook,original['playbook_id'])
             pool=await service._catalogue_candidates(db,parent.id,'curated',

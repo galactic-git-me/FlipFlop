@@ -81,8 +81,18 @@ async def searches(db):
 
 
 async def search_feed(db):
-    """Return generic hardware searches and no per-Playbook/tagged searches."""
-    return await searches(db)
+    """Return generic searches plus exact parts currently missing Fast Track sources."""
+    from app.models.playbook import PlaybookProposal
+    result=await searches(db)
+    proposals=(await db.execute(select(PlaybookProposal).where(
+        PlaybookProposal.status=='pending'))).scalars().all()
+    proposals=[proposal for proposal in proposals
+        if isinstance(proposal.demand_signals,dict)
+        and proposal.demand_signals.get('source')=='catalogue_playbook_service_v1']
+    components=await component_searches(db,proposals)
+    result['componentItems']=components
+    result['componentCount']=len(components)
+    return result
 
 
 async def bestseller_tags_for_cpks(db, cpks, *, now=None):
@@ -170,17 +180,20 @@ async def ingest(db, body):
 
 
 async def component_searches(db, proposals):
-    """Current active curated identities, shared across segments; no provider calls."""
+    """Find exact active BOM parts that lack Fast Track supplier evidence."""
     from sqlalchemy import text
     from app.services.catalogue_cpk import identity_is_usable
-    selected={part.get('listing_id') for proposal in proposals
-        for part in (proposal.proposed_data or {}).get('components',[])}
-    attention={part.get('listing_id') for proposal in proposals
-        for part in (proposal.proposed_data or {}).get('components',[])
-        if not ((part.get('source_observation') or {}).get('fresh')
-            and (part.get('source_observation') or {}).get('active_listing')
-            and (part.get('source_observation') or {}).get('stock_status')=='available'
-            and (part.get('source_observation') or {}).get('condition')=='new')}
+    fast_track_gaps=set()
+    for proposal in proposals:
+        data=proposal.proposed_data or {}
+        ineligible={'storage' if role=='storage_secondary' else role
+            for role in (((data.get('delivery_products') or {}).get('fast_track') or {}).get(
+                'ineligible_component_roles') or [])}
+        for part in data.get('components',[]):
+            listing_id=part.get('listing_id')
+            role='storage' if part.get('role')=='storage_secondary' else part.get('role')
+            if listing_id and role in ineligible:
+                fast_track_gaps.add((listing_id,role))
     rows=(await db.execute(text("""
       SELECT DISTINCT l.id,l.title,l.external_id,s.slot_type AS role,c.cpk,c.cpk_data
       FROM catalogue_variants v
@@ -211,11 +224,12 @@ async def component_searches(db, proposals):
         asin_match=re.search(r'(?:amazon-bestseller:)?\b(B0[A-Z0-9]{8})\b',row['external_id'] or '',re.I)
         asin=asin_match[1].upper() if asin_match else None
         identity=asin or cpk or str(row['id'])
-        group=grouped.setdefault((role,identity),{'row':row,'cpk':cpk,'asin':asin,'used':False,'attention':False})
-        group['used'] |= row['id'] in selected
-        group['attention'] |= row['id'] in attention
+        group=grouped.setdefault((role,identity),{'row':row,'cpk':cpk,'asin':asin,'fast_track_gap':False})
+        group['fast_track_gap'] |= (row['id'],role) in fast_track_gaps
     items=[]
     for (role,identity),g in grouped.items():
+        if not g['fast_track_gap']:
+            continue
         row=g['row'];digest=hashlib.sha256(f'{role}:{identity}'.encode()).hexdigest()[:20]
         data=row['cpk_data'] or {}
         tags=['curated','Managed-catalogue',f'Role:{role}']
@@ -228,7 +242,6 @@ async def component_searches(db, proposals):
         from app.gem_radar.search_identity import preferred_search_query
         query = preferred_search_query(row['title'], data, role)
         items.append({'id':f'catalogue-component-{digest}','label':query,'query':query,
-            'tags':tags,'marketplaces':[v for v in VENDORS if v!='bargain_hardware'],
-            'ebayCategory':categories[role],'priority':0 if g['attention'] else 1 if g['used'] else 2,
-            'intervalMinutes':180 if g['used'] else 1440})
+            'tags':tags,'marketplaces':VENDORS,
+            'ebayCategory':categories[role],'priority':0,'intervalMinutes':180})
     return sorted(items,key=lambda item:(item['priority'],item['label'].casefold()))

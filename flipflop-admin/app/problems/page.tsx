@@ -98,7 +98,7 @@ export default function ProblemsPage() {
 
   return <main className="mx-auto max-w-6xl p-6 text-slate-100">
     <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-      <div className="flex items-center gap-3"><AlertTriangle className="h-6 w-6 text-amber-300" /><div><h1 className="text-2xl font-bold">Customer problems</h1><p className="text-sm text-slate-400">Delivery, warranty and support reports submitted from customer portals.</p></div></div>
+      <div className="flex items-center gap-3"><AlertTriangle className="h-6 w-6 text-amber-300" /><div><h1 className="text-2xl font-bold">Issues &amp; Exceptions</h1><p className="text-sm text-slate-400">Review customer delivery, warranty and support reports.</p></div></div>
       <Link href="/warranty-reserves" className="rounded-lg border border-cyan-400/30 bg-cyan-400/10 px-3 py-2 text-sm font-semibold text-cyan-200">Review warranty reserves</Link>
     </div>
     {error && <p role="alert" className="mb-4 rounded border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">{error}</p>}

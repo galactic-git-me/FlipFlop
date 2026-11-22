@@ -43,12 +43,8 @@ export async function POST(request: NextRequest) {
   // actual request protocol instead of NODE_ENV.
   const secure = request.nextUrl.protocol === "https:";
 
-  // Two cookies, same token: `admin_session` (httpOnly) is what proxy.ts
-  // trusts for page-gating and for injecting the Authorization header on
-  // proxied /api/* rewrites. `admin_token` (readable by client JS) exists only
-  // because lib/api.ts calls the backend directly at an absolute origin
-  // (NEXT_PUBLIC_API_URL) for some endpoints, which never passes through
-  // proxy — those calls need the token themselves to set the header.
+  // Keep the admin JWT exclusively in an httpOnly cookie. API calls go through
+  // the same-origin proxy, which attaches the bearer token server-side.
   response.cookies.set(ADMIN_SESSION_COOKIE, access_token, {
     httpOnly: true,
     secure,
@@ -56,12 +52,6 @@ export async function POST(request: NextRequest) {
     path: "/",
     maxAge,
   });
-  response.cookies.set("admin_token", access_token, {
-    httpOnly: false,
-    secure,
-    sameSite: "lax",
-    path: "/",
-    maxAge,
-  });
+  response.cookies.delete("admin_token");
   return response;
 }

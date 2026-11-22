@@ -11,14 +11,36 @@ Docs: https://developer.ebay.com/api-docs/sell/fulfillment/resources/order/metho
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import httpx
 import structlog
+import asyncio
 
 from app.services.ebay_token_manager import get_valid_ebay_access_token
 
 log = structlog.get_logger(__name__)
+
+_rate_limit_until: dict[str, datetime] = {}
+
+
+async def _wait_for_ebay_rate_limit(environment: str) -> None:
+    """Honor a server Retry-After hint shared by eBay order lookups."""
+    until = _rate_limit_until.get(environment)
+    now = datetime.now(timezone.utc)
+    if until and until > now:
+        await asyncio.sleep((until - now).total_seconds())
+
+
+def _record_ebay_rate_limit(environment: str, response: httpx.Response) -> None:
+    if response.status_code != 429:
+        return
+    retry_after = response.headers.get("Retry-After", "60")
+    try:
+        delay = max(1, min(900, int(retry_after)))
+    except ValueError:
+        delay = 60
+    _rate_limit_until[environment] = datetime.now(timezone.utc) + timedelta(seconds=delay)
 
 _EBAY_API_BASE = {
     "sandbox": "https://api.sandbox.ebay.com",
@@ -128,6 +150,7 @@ async def get_order(
     base_url = _EBAY_API_BASE[environment]
 
     async with httpx.AsyncClient(timeout=30.0) as client:
+        await _wait_for_ebay_rate_limit(environment)
         resp = await client.get(
             f"{base_url}/sell/fulfillment/v1/order/{order_id}",
             headers={
@@ -135,6 +158,8 @@ async def get_order(
                 "Accept": "application/json",
             },
         )
+
+    _record_ebay_rate_limit(environment, resp)
 
     if resp.status_code != 200:
         try:
@@ -172,6 +197,7 @@ async def find_order_for_listing(
     date_from = (datetime.now(timezone.utc) - timedelta(days=lookback_days)).strftime("%Y-%m-%dT%H:%M:%S.000Z")
 
     async with httpx.AsyncClient(timeout=30.0) as client:
+        await _wait_for_ebay_rate_limit(environment)
         resp = await client.get(
             f"{base_url}/sell/fulfillment/v1/order",
             params={
@@ -183,6 +209,8 @@ async def find_order_for_listing(
                 "Accept": "application/json",
             },
         )
+
+    _record_ebay_rate_limit(environment, resp)
 
     if resp.status_code != 200:
         try:
@@ -197,6 +225,9 @@ async def find_order_for_listing(
     orders = resp.json().get("orders", [])
     for order in orders:
         line_items = order.get("lineItems", [])
-        if any(item.get("legacyItemId") == ebay_listing_id for item in line_items):
+        if (
+            order.get("orderPaymentStatus") == "PAID"
+            and any(item.get("legacyItemId") == ebay_listing_id for item in line_items)
+        ):
             return _parse_order(order, matching_legacy_item_id=ebay_listing_id)
     return None

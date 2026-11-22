@@ -162,6 +162,7 @@ export default function BuildDetailPage() {
   const [showEbayPreview, setShowEbayPreview] = useState(false);
   const [showEndEbayConfirm, setShowEndEbayConfirm] = useState(false);
   const [endingEbayListing, setEndingEbayListing] = useState(false);
+  const [reconcilingRelist, setReconcilingRelist] = useState(false);
   const [componentRatings, setComponentRatings] = useState<Record<string, number>>({});
   const [savingRatings, setSavingRatings] = useState(false);
   const [faqBank, setFaqBank] = useState<ProductFaq[]>([]);
@@ -781,6 +782,23 @@ export default function BuildDetailPage() {
       toast.error(error instanceof Error ? error.message : "Could not end the eBay listing");
     } finally {
       setEndingEbayListing(false);
+    }
+  };
+
+  const reconcileEbayRelist = async () => {
+    setReconcilingRelist(true);
+    try {
+      const result = await api.manualBuilds.reconcileEbayRelist(buildId);
+      if (result.relisted) {
+        await refreshBuild();
+        toast.success("eBay confirmed this build is live again and available for cross-listing.");
+      } else {
+        toast.message("No active eBay offer with this build's exact SKU was found.");
+      }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not verify the eBay relisting");
+    } finally {
+      setReconcilingRelist(false);
     }
   };
 
@@ -2026,6 +2044,17 @@ export default function BuildDetailPage() {
             saving={savingEbayConfig}
           />
 
+          {build.status === "sold" && build.ebay_listing_status === "sold" && (
+            <div className="rounded-xl border border-amber-400/25 bg-amber-400/[0.04] p-4">
+              <p className="text-sm font-semibold text-amber-100">This build was sold on eBay</p>
+              <p className="mt-1 text-xs text-slate-400">After an eBay-approved return and relist, verify the exact saved build SKU to restore it to Listed and make it available for cross-listing.</p>
+              <button type="button" onClick={() => void reconcileEbayRelist()} disabled={reconcilingRelist} className="mt-3 inline-flex items-center gap-2 rounded-lg border border-amber-300/30 bg-amber-300/10 px-3 py-2 text-xs font-semibold text-amber-100 hover:bg-amber-300/15 disabled:opacity-50">
+                {reconcilingRelist && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                {reconcilingRelist ? "Checking eBay…" : "Check eBay for relisted item"}
+              </button>
+            </div>
+          )}
+
           {/* Shipping Configuration */}
           <EbayShippingSection
             build={build}
@@ -2036,7 +2065,6 @@ export default function BuildDetailPage() {
           />
         </div>
       )}
-
       {/* Tab 6: Fulfillment */}
       {(build.status === "sold" || !!build.ebay_order_id) && activeTab === "fulfillment" && (
         <div className="flex flex-col gap-6 mb-6">

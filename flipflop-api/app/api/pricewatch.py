@@ -72,6 +72,16 @@ def _add_month_stats(target: dict, cpk: str, month_key: str, vendor: str,
                                       float(low if low is not None else median), int(observations)))
 
 
+def _add_day_stats(target: dict, cpk: str, day_key: str, vendor: str,
+                   median: float | None, average: float | None,
+                   low: float | None, observations: int) -> None:
+    if median is None:
+        return
+    name = VENDOR_LABELS.get(vendor.casefold(), vendor.replace("_", " ").replace("-", " ").title())
+    target[cpk][day_key].setdefault(name, []).append((float(median), float(average or median),
+        float(low if low is not None else median), int(observations)))
+
+
 @router.get("")
 async def get_pricewatch(db: AsyncSession = Depends(get_db)) -> dict:
     """Use Best Sellers to select products, then price by CPK and verified MPN aliases."""
@@ -104,10 +114,11 @@ async def get_pricewatch(db: AsyncSession = Depends(get_db)) -> dict:
         products_by_cpk = {cpk: {"cpk": cpk, "title": row["title"], "url": row["url"],
                                   "image_url": row["image_url"], "rank": row["rank"],
                                   "mpn": None, "storage_type": _storage_type(row["title"] or "") if category == "storage" else None,
-                                  "months": {}}
+                                  "months": {}, "days": {}}
                            for cpk, row in zip(cpks, current_rows)}
 
         price_rows: dict[str, dict[str, dict[str, list[tuple[float, float, float, int]]]]] = defaultdict(lambda: defaultdict(dict))
+        day_rows: dict[str, dict[str, dict[str, list[tuple[float, float, float, int]]]]] = defaultdict(lambda: defaultdict(dict))
         alias_targets: dict[str, str] = {cpk: cpk for cpk in cpks}
         if cpks:
             identity_rows = (await db.execute(text("""
@@ -156,16 +167,27 @@ async def get_pricewatch(db: AsyncSession = Depends(get_db)) -> dict:
                 WITH aliases AS (
                     SELECT * FROM jsonb_to_recordset(CAST(:aliases AS jsonb)) AS x(cpk text, target_cpk text)
                 )
-                SELECT aliases.target_cpk, to_char(date_trunc('month', a.captured_at), 'YYYY-MM') AS month_key,
+                SELECT aliases.target_cpk,
+                       CASE WHEN GROUPING(date_trunc('day', a.captured_at)) = 1
+                            THEN to_char(date_trunc('month', a.captured_at), 'YYYY-MM') END AS month_key,
+                       CASE WHEN GROUPING(date_trunc('month', a.captured_at)) = 1
+                            THEN to_char(date_trunc('day', a.captured_at), 'YYYY-MM-DD') END AS day_key,
                        percentile_cont(0.5) WITHIN GROUP (ORDER BY a.price) AS median_price,
                        AVG(a.price) AS average_price, MIN(a.price) AS low_price, COUNT(*) AS observations
                 FROM aliases JOIN amazon_bestseller_observations a ON a.cpk = aliases.cpk
                 WHERE a.captured_at >= :first_month AND a.price > 0
-                GROUP BY aliases.target_cpk, date_trunc('month', a.captured_at)
+                GROUP BY GROUPING SETS (
+                    (aliases.target_cpk, date_trunc('month', a.captured_at)),
+                    (aliases.target_cpk, date_trunc('day', a.captured_at))
+                )
             """), {"aliases": alias_payload, "first_month": first_month})).mappings().all()
             for row in amazon_rows:
-                _add_month_stats(price_rows, str(row["target_cpk"]), str(row["month_key"]), "amazon",
-                                 row["median_price"], row["average_price"], row["low_price"], row["observations"])
+                if row["month_key"]:
+                    _add_month_stats(price_rows, str(row["target_cpk"]), str(row["month_key"]), "amazon",
+                                     row["median_price"], row["average_price"], row["low_price"], row["observations"])
+                else:
+                    _add_day_stats(day_rows, str(row["target_cpk"]), str(row["day_key"]), "amazon",
+                                   row["median_price"], row["average_price"], row["low_price"], row["observations"])
 
             listing_payload = json.dumps([{"listing_id": listing_id, "target_cpk": cpk}
                                           for cpk, listing_ids in linked_listings.items() for listing_id in listing_ids])
@@ -183,15 +205,26 @@ async def get_pricewatch(db: AsyncSession = Depends(get_db)) -> dict:
                           AND COALESCE(NULLIF(o.source, ''), NULLIF(split_part(o.listing_id, ':', 1), ''), 'other')
                               NOT IN ('temu', 'vinted')
                     )
-                    SELECT target_cpk, vendor, to_char(date_trunc('month', observed_at), 'YYYY-MM') AS month_key,
+                    SELECT target_cpk, vendor,
+                           CASE WHEN GROUPING(date_trunc('day', observed_at)) = 1
+                                THEN to_char(date_trunc('month', observed_at), 'YYYY-MM') END AS month_key,
+                           CASE WHEN GROUPING(date_trunc('month', observed_at)) = 1
+                                THEN to_char(date_trunc('day', observed_at), 'YYYY-MM-DD') END AS day_key,
                            percentile_cont(0.5) WITHIN GROUP (ORDER BY delivered_price) AS median_price,
                            AVG(delivered_price) AS average_price, MIN(delivered_price) AS low_price,
                            COUNT(*) AS observations
-                    FROM observations GROUP BY target_cpk, vendor, date_trunc('month', observed_at)
+                    FROM observations GROUP BY GROUPING SETS (
+                        (target_cpk, vendor, date_trunc('month', observed_at)),
+                        (target_cpk, vendor, date_trunc('day', observed_at))
+                    )
                 """), {"linked": listing_payload, "first_month": first_month})).mappings().all()
                 for row in market_rows:
-                    _add_month_stats(price_rows, str(row["target_cpk"]), str(row["month_key"]), str(row["vendor"]),
-                                     row["median_price"], row["average_price"], row["low_price"], row["observations"])
+                    if row["month_key"]:
+                        _add_month_stats(price_rows, str(row["target_cpk"]), str(row["month_key"]), str(row["vendor"]),
+                                         row["median_price"], row["average_price"], row["low_price"], row["observations"])
+                    else:
+                        _add_day_stats(day_rows, str(row["target_cpk"]), str(row["day_key"]), str(row["vendor"]),
+                                       row["median_price"], row["average_price"], row["low_price"], row["observations"])
 
         for cpk, product in products_by_cpk.items():
             for month_key, vendor_rows in price_rows.get(cpk, {}).items():
@@ -204,6 +237,21 @@ async def get_pricewatch(db: AsyncSession = Depends(get_db)) -> dict:
                     continue
                 best_vendor, best = min(combined.items(), key=lambda item: item[1][0])
                 product["months"][month_key] = {
+                    "median": round(best[0], 2),
+                    "best_vendor": best_vendor,
+                    "average": round(sum(value[1] for value in combined.values()) / len(combined), 2),
+                    "low": round(min(value[2] for value in combined.values()), 2),
+                    "observations": sum(value[3] for value in combined.values()),
+                    "vendor_medians": {vendor: round(value[0], 2) for vendor, value in sorted(combined.items())},
+                }
+
+            for day_key, vendor_rows in day_rows.get(cpk, {}).items():
+                combined = {vendor: sorted(summaries, key=lambda value: value[0])[0]
+                            for vendor, summaries in vendor_rows.items()}
+                if not combined:
+                    continue
+                best_vendor, best = min(combined.items(), key=lambda item: item[1][0])
+                product["days"][day_key] = {
                     "median": round(best[0], 2),
                     "best_vendor": best_vendor,
                     "average": round(sum(value[1] for value in combined.values()) / len(combined), 2),

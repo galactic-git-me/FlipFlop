@@ -50,7 +50,7 @@ def publication_limit_reason(parent, definition, offer):
 
 def source_facts_can_be_verified(suggestion, now=None):
     if (not suggestion or suggestion.get("status") != "review_ready"
-            or suggestion.get("conflicted_fields")
+            or suggestion.get("missing_fields") or suggestion.get("conflicted_fields")
             or suggestion.get("reviewed_value_changes") or not suggestion.get("suggested_specs")
             or not trusted_url(suggestion.get("source_url"))):
         return False

@@ -288,6 +288,9 @@ async def process_submission_queue(process_interval_seconds: int = _EMPTY_QUEUE_
     LOCKED (see SubmissionQueueService.claim_next_pending) so workers never
     race for the same row.
     """
+    from app.services.runtime_heartbeats import configure_worker_heartbeats
+
+    configure_worker_heartbeats("gem-radar-queue", _WORKER_COUNT)
     logger.info("queue_processor.started", workers=_WORKER_COUNT)
 
     async with AsyncSessionLocal() as db:
@@ -407,36 +410,49 @@ async def _worker_loop(worker_id: int, poll_interval_seconds: int) -> None:
     from app.gem_radar.schema_guard import require_scan_schema
     import time
     schema_checked_at = 0.0
-    while True:
-        try:
-            # Reserve one search term and claim its next page atomically from
-            # the workers' point of view. The lock is held only over the
-            # short DB claim; expensive processing runs fully concurrently.
-            async with _active_search_lock:
-                async with AsyncSessionLocal() as db:
-                    # Check before claiming: incompatible code must leave work
-                    # pending rather than consuming every submission's retries.
-                    if time.monotonic() - schema_checked_at >= 30:
-                        await require_scan_schema(db)
-                        schema_checked_at = time.monotonic()
-                    submission = await SubmissionQueueService.claim_next_pending(
-                        db,
-                        excluded_search_ids=_active_search_ids,
-                    )
-                if submission is not None:
-                    _active_search_ids.add(submission.search_id)
+    heartbeat_task = asyncio.create_task(_worker_heartbeat_loop(worker_id))
+    try:
+        while True:
+            try:
+                # Reserve one search term and claim its next page atomically from
+                # the workers' point of view. The lock is held only over the
+                # short DB claim; expensive processing runs fully concurrently.
+                async with _active_search_lock:
+                    async with AsyncSessionLocal() as db:
+                        # Check before claiming: incompatible code must leave work
+                        # pending rather than consuming every submission's retries.
+                        if time.monotonic() - schema_checked_at >= 30:
+                            await require_scan_schema(db)
+                            schema_checked_at = time.monotonic()
+                        submission = await SubmissionQueueService.claim_next_pending(
+                            db,
+                            excluded_search_ids=_active_search_ids,
+                        )
+                    if submission is not None:
+                        _active_search_ids.add(submission.search_id)
 
-            if submission is None:
+                if submission is None:
+                    await asyncio.sleep(poll_interval_seconds)
+                    continue
+
+                await _process_single_submission(submission)
+
+            except Exception as e:
+                logger.exception("queue_processor.worker_error", worker=worker_id, error=str(e))
+                # Avoid a tight error loop if DB briefly becomes unreachable.
                 await asyncio.sleep(poll_interval_seconds)
-                continue
+    finally:
+        heartbeat_task.cancel()
+        await asyncio.gather(heartbeat_task, return_exceptions=True)
 
-            await _process_single_submission(submission)
 
-        except Exception as e:
-            logger.exception("queue_processor.worker_error", worker=worker_id, error=str(e))
-            # Avoid a tight error loop if something is systematically broken
-            # (e.g. DB briefly unreachable) — back off before retrying.
-            await asyncio.sleep(poll_interval_seconds)
+async def _worker_heartbeat_loop(worker_id: int) -> None:
+    """Keep long-running submissions alive in monitoring without DB writes."""
+    from app.services.runtime_heartbeats import record_worker_heartbeat
+
+    while True:
+        record_worker_heartbeat("gem-radar-queue", str(worker_id))
+        await asyncio.sleep(10)
 
 
 async def _process_single_submission(submission):

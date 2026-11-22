@@ -58,6 +58,7 @@ interface GemSpotlightData {
 
 const componentOrder = ["motherboard", "cpu", "cooler", "ram", "gpu", "ssd", "psu", "case"];
 const componentLabels: Record<string, string> = {
+  bundle: "Motherboard bundle",
   motherboard: "Motherboard",
   cpu: "CPU",
   cooler: "CPU cooler",
@@ -84,9 +85,9 @@ const accents = {
   orange: { label: "text-orange-300", price: "text-orange-200", border: "ring-orange-400/30" },
 } as const;
 
-function GemCard({ gem, label, accent, details, onSelect }: { gem: GemData | null; label: string; accent: keyof typeof accents; details?: string; onSelect: (gem: GemData) => void }) {
+function GemCard({ gem, label, accent, details, emptyMessage = "No compatible Gem", onSelect }: { gem: GemData | null; label: string; accent: keyof typeof accents; details?: string; emptyMessage?: string; onSelect: (gem: GemData) => void }) {
   const colors = accents[accent];
-  if (!gem) return <div className="flex aspect-square min-w-0 flex-col justify-between rounded-xl border border-white/10 bg-white/[0.03] p-3"><span className="truncate text-[10px] font-semibold uppercase tracking-wide text-slate-400">{label}</span><p className="text-xs text-slate-500">No compatible Gem</p></div>;
+  if (!gem) return <div className="flex aspect-square min-w-0 flex-col justify-between rounded-xl border border-white/10 bg-white/[0.03] p-3"><span className="truncate text-[10px] font-semibold uppercase tracking-wide text-slate-400">{label}</span><p className="text-xs text-slate-500">{emptyMessage}</p></div>;
   const medianDifference = gem.market_median_price != null && gem.market_median_price > 0
     ? gem.price - gem.market_median_price
     : null;
@@ -113,6 +114,8 @@ function GemCard({ gem, label, accent, details, onSelect }: { gem: GemData | nul
 export default function GemBasedPrebuilds() {
   const router = useRouter();
   const [data, setData] = useState<GemSpotlightData | null>(null);
+  const [bundleGem, setBundleGem] = useState<GemData | null>(null);
+  const [bundleFeedStatus, setBundleFeedStatus] = useState<"loading" | "ready" | "error">("loading");
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
   const [saving, setSaving] = useState<GemBuildConceptKey | null>(null);
@@ -157,6 +160,24 @@ export default function GemBasedPrebuilds() {
     void load();
     const interval = setInterval(load, 5 * 60_000);
     return () => { active = false; clearInterval(interval); };
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    void fetch("/proxy-api/gem-radar/gem-by-component", {
+      cache: "no-store",
+      signal: AbortSignal.timeout(30_000),
+    }).then(async response => {
+      if (!response.ok) throw new Error(`Bundle Gem feed returned ${response.status}.`);
+      return await response.json() as Record<string, GemData | null>;
+    }).then(gems => {
+      if (!active) return;
+      setBundleGem(gems.bundle ?? null);
+      setBundleFeedStatus("ready");
+    }).catch(() => {
+      if (active) setBundleFeedStatus("error");
+    });
+    return () => { active = false; };
   }, []);
 
   useEffect(() => {
@@ -211,6 +232,14 @@ export default function GemBasedPrebuilds() {
     {loading && <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-5 text-sm text-slate-300"><Loader2 className="h-5 w-5 animate-spin text-cyan-300" /> Loading individually ranked Gem candidates…</div>}
     {!loading && loadError && <div role="alert" className="rounded-xl border border-red-500/30 bg-red-950/30 p-4 text-sm text-red-200">{loadError}</div>}
     {draftError && <div role="alert" className="rounded-xl border border-red-500/30 bg-red-950/30 p-4 text-sm text-red-200">{draftError}</div>}
+
+    <section aria-label="Motherboard bundle Gems" className="rounded-2xl border border-amber-400/20 bg-amber-400/[0.035] p-4">
+      <div className="mb-3"><h2 className="text-sm font-bold uppercase tracking-wide text-amber-200">Motherboard Bundle Gem</h2><p className="mt-1 text-xs text-slate-400">A bundle offer is shown separately from the eight individual-part concepts, so its combined price is never counted as one component.</p></div>
+      <div className="grid w-full max-w-[220px] grid-cols-1 gap-2">
+        <GemCard gem={bundleGem} label="Gem Bundle" accent="orange" onSelect={setSelectedGem}
+          emptyMessage={bundleFeedStatus === "loading" ? "Loading bundle Gems…" : bundleFeedStatus === "error" ? "Bundle Gem feed unavailable" : "No qualifying motherboard bundle Gem in the current snapshot"} />
+      </div>
+    </section>
 
     <section aria-label="Best individual Gems, ranked independently of compatibility" className="rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.035] p-4">
       <div className="mb-3"><h2 className="text-sm font-bold uppercase tracking-wide text-emerald-200">Best individual Gems</h2><p className="mt-1 text-xs text-slate-400">Each slot shows its top Gem by individual deal score. These picks are not filtered or reordered by compatibility with one another.</p></div>

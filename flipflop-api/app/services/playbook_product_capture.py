@@ -8,9 +8,20 @@ from decimal import Decimal, InvalidOperation
 from urllib.parse import urlsplit
 import httpx
 from bs4 import BeautifulSoup
+from urllib.parse import urljoin
 
 RETAILERS=('amazon.co.uk','overclockers.co.uk','royalcdkeys.com')
-PARSER_VERSION=12
+CAPTURED_SUPPLIER_HOSTS={
+    'scan.co.uk','www.scan.co.uk','ebuyer.com','www.ebuyer.com',
+    'computerorbit.com','www.computerorbit.com','awd-it.co.uk','www.awd-it.co.uk',
+    'cclonline.com','www.cclonline.com','corsair.com','www.corsair.com',
+    'alphacomponents.co.uk','www.alphacomponents.co.uk',
+    'morecoco.co.uk','www.morecoco.co.uk',
+    'pcupgrade.co.uk','www.pcupgrade.co.uk',
+    'hardvance.co.uk','www.hardvance.co.uk',
+    'senetic.co.uk','www.senetic.co.uk',
+}
+PARSER_VERSION=17
 
 
 def max_working_days_for_calendar_duration(calendar_days):
@@ -42,8 +53,15 @@ def supported_product_url(url):
             return bool(re.fullmatch(r'/en/buy-[a-z0-9-]+',parsed.path.casefold()))
         if host=='royalcdkeys.com':
             return bool(re.fullmatch(r'/en-gb/products/[a-z0-9][a-z0-9-]*',parsed.path.casefold()))
+        if host in {'corsair.com','www.corsair.com'}:
+            return bool(re.fullmatch(r'/uk/en/p/memory/[a-z0-9-]+/[a-z0-9-]+',parsed.path.casefold()))
         if host in {'awd-it.co.uk','www.awd-it.co.uk'}:
             return bool(re.fullmatch(r'/[a-z0-9][a-z0-9-]+\.html',parsed.path.casefold()))
+        if host in CAPTURED_SUPPLIER_HOSTS:
+            path=parsed.path.casefold().rstrip('/')
+            if not path or re.search(r'/(?:search|category|categories|brands|deals|offers)(?:/|$)',path):
+                return False
+            return len([part for part in path.split('/') if part]) >= 1
         return False
     except ValueError:
         return False
@@ -60,6 +78,29 @@ def amount(value):
 def _price_from_text(value):
     matched=re.search(r'£\s*([\d,]+(?:\.\d{1,2})?)',str(value or ''))
     return amount(matched.group(1).replace(',','')) if matched else None
+
+
+def _overclockers_premium_delivery_price(html):
+    """Read OcUK's current UK mainland, one-parcel Premium Delivery tariff."""
+    soup=BeautifulSoup(html,'html.parser')
+    for row in soup.select('tr'):
+        cells=row.find_all(['th','td'],recursive=False)
+        if not cells:
+            continue
+        label=' '.join(cells[0].get_text(' ',strip=True).split())
+        if label.casefold()!='premium delivery (mon-fri)':
+            continue
+        # Delivery page lists the UK tariff first, then a separate Highlands
+        # and Northern Ireland tariff. Its first numeric price cell is the
+        # one-parcel price used for a single product order.
+        for cell in cells[1:]:
+            price=_price_from_text(cell.get_text(' ',strip=True))
+            if price is not None:
+                return price
+            numeric=re.search(r'\b(\d+\.\d{2})\b',cell.get_text(' ',strip=True))
+            if numeric:
+                return amount(numeric.group(1))
+    return None
 
 
 def _add_product_property(properties,name,value):
@@ -493,6 +534,57 @@ def _amazon_dom_capture(soup,url):
 
 def parse_product_capture(html,url):
     soup=BeautifulSoup(html,'html.parser')
+    host=(urlsplit(url).hostname or '').casefold()
+    if host in {'senetic.co.uk','www.senetic.co.uk'}:
+        # Senetic's Product JSON-LD is ex-VAT. Use the exact product page's
+        # tax-inclusive price, visible availability and displayed UK delivery.
+        canonical=soup.select_one('link[rel="canonical"]')
+        heading=soup.select_one('h1[itemprop="name"]')
+        price_nodes=soup.select('[itemprop="price"][content]')
+        availability=soup.select_one('.stock-info meta[itemprop="availability"]')
+        stock_node=soup.select_one('.stock-info .stock-indicator')
+        shipping=soup.select_one('.product-shipping')
+        sku_match=re.search(r'/product/([A-Z0-9-]+)/*$',urlsplit(url).path,re.I)
+        from app.services.commercial_readiness import same_listing_product
+        exact=bool(canonical and same_listing_product(canonical.get('href'),url))
+        prices={str(node.get('content') or '').strip() for node in price_nodes}
+        title=' '.join(heading.get_text(' ',strip=True).split()) if heading else ''
+        stock_text=' '.join(stock_node.get_text(' ',strip=True).split()) if stock_node else ''
+        page_text=' '.join(shipping.get_text(' ',strip=True).split()) if shipping else ''
+        # Ignore hidden cart/toast text: only the product's stock block counts.
+        available=availability and availability.get('content')=='InStock' and bool(re.search(r'\b\d+\b',stock_text))
+        out_of_stock=availability and availability.get('content') in {'OutOfStock','SoldOut'}
+        if (exact and heading and sku_match and sku_match.group(1).casefold() in title.casefold()
+                and len(prices)==1 and re.fullmatch(r'\d+(?:\.\d{1,2})?',next(iter(prices)) or '')
+                and (available or out_of_stock)):
+            stock='unavailable' if out_of_stock else 'available'
+            delivery_row=shipping.select_one('.product-shipping__row--cheepest-shipping') if shipping else None
+            delivery_text=' '.join(delivery_row.get_text(' ',strip=True).split()) if delivery_row else ''
+            postage_match=re.search(r'£\s*([\d,]+(?:\.\d{1,2})?)',delivery_text)
+            date_match=re.search(r'\bDelivery\s+(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s*(\d{1,2})\s+([A-Z][a-z]+)\s+(\d{4})\b',delivery_text,re.I)
+            calendar_days=None; working_days=None
+            if date_match:
+                try:
+                    today=datetime.now(timezone.utc).date()
+                    target=datetime.strptime(' '.join(date_match.groups()),'%d %B %Y').date()
+                    if target>=today:
+                        calendar_days=(target-today).days
+                        working_days=max_working_days_for_calendar_duration(calendar_days)
+                except ValueError:
+                    pass
+            return {'status':'captured','url':url,'observed_at':datetime.now(timezone.utc).isoformat(),
+                'title':title,'sku':sku_match.group(1).upper(),'mpn':sku_match.group(1).upper(),
+                'product_brand':'PNY','condition':'new',
+                'condition_evidence':'first_party_retail_default_new_no_second_hand_designation',
+                'item_gbp':amount(next(iter(prices))),'delivery_gbp':amount(postage_match.group(1).replace(',','')) if postage_match else None,
+                'postage_verified':bool(postage_match),'delivery_calendar_days':calendar_days,
+                'delivery_working_days':working_days,
+                'delivery_estimate_source':'retailer_page_displayed_estimate' if working_days is not None else None,
+                'delivery_destination':'UK delivery estimate','stock_status':stock,
+                'stock_evidence':stock_text if available else 'Out of stock',
+                'product_properties':{'Manufacturer Part Number':sku_match.group(1).upper()},
+                'product_image_urls':[],'engineering_reviewed':False,'prime_eligible':None}
+        return {'status':'unresolved','reason':'Exact Senetic product, VAT-inclusive price, stock or delivery evidence is missing'}
     products=[]
     def visit(value):
         if isinstance(value,list):
@@ -505,6 +597,127 @@ def parse_product_capture(html,url):
         try: visit(json.loads(script.string or script.get_text()))
         except (ValueError,TypeError): continue
     if len(products)!=1:
+        if host=='www.morecoco.co.uk':
+            # MoreCoCo's product pages expose the current price, stock, MPN,
+            # and delivery date in a dedicated product panel rather than a
+            # Product JSON-LD record. Bind every extracted value to the SKU
+            # in the product URL and the matching visible MPN.
+            from urllib.parse import parse_qs
+            query=parse_qs(urlsplit(url).query)
+            requested_sku=str((query.get('pid') or [''])[0]).split('>>',1)[0].strip().upper()
+            title_node=soup.select_one('#Main_Section_Content_MainprodTitle')
+            mpn_node=soup.select_one('#Main_Section_Content_MPNSpan')
+            price_node=soup.select_one('#Main_Section_Content_SellPriceSpan')
+            buybox=soup.select_one('#Main_Section_Content_PriceArea_ManiDiv')
+            delivery_node=soup.select_one('#Main_Section_Content_ExpectedDeliveryDate')
+            title=' '.join(title_node.get_text(' ',strip=True).split()) if title_node else ''
+            mpn=' '.join(mpn_node.get_text(' ',strip=True).split()).upper() if mpn_node else ''
+            price_text=' '.join(price_node.get_text(' ',strip=True).split()) if price_node else ''
+            panel_text=' '.join(buybox.get_text(' ',strip=True).split()) if buybox else ''
+            delivery_text=' '.join(delivery_node.get_text(' ',strip=True).split()) if delivery_node else ''
+            price=amount(price_text)
+            stock='available' if re.search(r'\bIn Stock\b',panel_text,re.I) else (
+                'unavailable' if re.search(r'\b(?:Out of Stock|Sold Out)\b',panel_text,re.I) else 'unknown')
+            date_match=re.search(
+                r'\b(?:get it|Expected Delivery)\s+(?:tomorrow\s*,?\s*)?'
+                r'(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+'
+                r'(\d{1,2})(?:st|nd|rd|th)?\s+([A-Z][a-z]+)\b',delivery_text,re.I)
+            target=None
+            if date_match:
+                today=datetime.now(timezone.utc).date()
+                try:
+                    target=datetime.strptime(
+                        f"{date_match.group(1)} {date_match.group(2)} {today.year}",
+                        '%d %B %Y').date()
+                    if target<today and (today-target).days>300:
+                        target=target.replace(year=today.year+1)
+                except ValueError:
+                    target=None
+            requested=urlsplit(url)
+            exact=(requested.scheme=='https' and requested.hostname=='www.morecoco.co.uk'
+                and requested_sku and mpn==requested_sku and bool(title)
+                and bool(re.search(r'\bSystem\s+Power\s+11\s+750W\b',title,re.I))
+                and price is not None and Decimal(price)>0 and stock=='available'
+                and target is not None and target>=datetime.now(timezone.utc).date())
+            if exact:
+                today=datetime.now(timezone.utc).date()
+                calendar_days=(target-today).days
+                return {'status':'captured','url':url,
+                    'observed_at':datetime.now(timezone.utc).isoformat(),
+                    'title':title,'sku':requested_sku,'mpn':mpn,'product_brand':'be quiet!',
+                    'condition':'new',
+                    'condition_evidence':'first_party_retail_default_new_no_second_hand_designation',
+                    'item_gbp':price,'delivery_gbp':None,'postage_verified':False,
+                    'delivery_calendar_days':calendar_days,
+                    'delivery_working_days':max_working_days_for_calendar_duration(calendar_days),
+                    'delivery_estimate_source':'retailer_page_displayed_estimate',
+                    'stock_status':'available','stock_evidence':'MoreCoCo product panel reports In Stock',
+                    'product_image_urls':[],
+                    'product_properties':{'Manufacturer Part Number':mpn,
+                        'Supplier SKU':requested_sku,'Delivery estimate text':delivery_text},
+                    'engineering_reviewed':False,'prime_eligible':None}
+        if (urlsplit(url).hostname or '').casefold() in {'alphacomponents.co.uk','www.alphacomponents.co.uk'}:
+            # Alpha Components publishes its exact product, manufacturer code,
+            # live price, and stock label in product-page HTML rather than
+            # Product JSON-LD. Bind every extracted field to the requested
+            # canonical product URL and refuse ambiguous/missing values.
+            canonical=soup.select_one('link[rel="canonical"]')
+            heading=(soup.select_one('#mobiletitle .h35') or soup.select_one('h1'))
+            price_nodes=soup.select('input#price[name="price"]')
+            stock_node=soup.select_one('.stock-sku .available')
+            page_title=soup.title.get_text(' ',strip=True) if soup.title else ''
+            exact_page=False
+            if canonical and canonical.get('href'):
+                from app.services.commercial_readiness import same_listing_product
+                exact_page=same_listing_product(canonical.get('href'),url)
+            visible=' '.join(soup.get_text(' ',strip=True).split())
+            quick_find=re.search(r'\bQuick\s+Find:\s*(\d+)\b',visible,re.I)
+            requested_quick_find=re.search(r'/(\d+)-[^/]+/?$',urlsplit(url).path)
+            exact_page=exact_page or bool(quick_find and requested_quick_find
+                and quick_find.group(1)==requested_quick_find.group(1))
+            mpn_match=re.search(r'\bMfr\s+Code:\s*([A-Z0-9][A-Z0-9-]{5,})\b',visible,re.I)
+            stock_text=' '.join(stock_node.get_text(' ',strip=True).split()) if stock_node else ''
+            price_values={str(node.get('value') or '').strip() for node in price_nodes}
+            if (exact_page and heading and page_title and len(price_values)==1
+                    and re.fullmatch(r'\d+(?:\.\d{1,2})?',next(iter(price_values)))
+                    and mpn_match and stock_text.casefold() in {'in stock','out of stock','sold out'}):
+                title=' '.join(heading.get_text(' ',strip=True).split())
+                if re.search(r'\b(?:used|refurbished|refurb|pre[- ]?owned|open[- ]?box|b[- ]?grade|b[- ]?stock)\b',title,re.I):
+                    return {'status':'unresolved','reason':'Alpha Components product is not explicitly ordinary retail stock'}
+                stock='unavailable' if stock_text.casefold() in {'out of stock','sold out'} else 'available'
+                stock_code=re.search(r'\bStock\s+Code:\s*([A-Z0-9][A-Z0-9-]{3,})\b',visible,re.I)
+                images=[]
+                from urllib.parse import urljoin
+                for node in soup.select('img[alt]'):
+                    src=node.get('src') or node.get('data-src')
+                    image_alt=' '.join(str(node.get('alt') or '').split())
+                    if (isinstance(src,str) and src.strip()
+                            and re.search(r'\bRyzen\s+5\s+5600G\b',image_alt,re.I)):
+                        image_url=urljoin(url,src.strip())
+                        if image_url.startswith('https://'):
+                            images.append(image_url)
+                captured_properties={'Manufacturer Part Number':mpn_match.group(1)}
+                for row in soup.select('table tr'):
+                    cells=[node.get_text(' ',strip=True) for node in row.select('th,td')]
+                    if len(cells)>=2 and cells[0] in {'Socket','Type','Base Clock Speed','Turbo Boost Speed',
+                            'Threads','Max TDP','Integrated Graphics','Graphics Details','Memory Type Supported',
+                            'Included Heatsink/Fan','Other Information','Package Type'}:
+                        captured_properties[cells[0]]=cells[1][:300]
+                description=next((value for key,value in captured_properties.items()
+                    if key=='Product Description'),title)
+                return {'status':'captured','url':url,'observed_at':datetime.now(timezone.utc).isoformat(),
+                    'title':title,'sku':stock_code.group(1) if stock_code else mpn_match.group(1),
+                    'mpn':mpn_match.group(1),'product_brand':'AMD',
+                    'product_description':description[:4000],'condition':'new',
+                    'condition_evidence':'first_party_retail_default_new_no_second_hand_designation',
+                    'item_gbp':amount(next(iter(price_values))),'delivery_gbp':None,
+                    'postage_verified':False,'delivery_calendar_days':None,
+                    'delivery_working_days':None,'delivery_estimate_source':None,
+                    'stock_status':stock,'stock_evidence':stock_text,
+                    'product_image_urls':list(dict.fromkeys(images))[:20],
+                    'product_properties':{**captured_properties,
+                        **({'Retailer Stock Code':stock_code.group(1)} if stock_code else {})},
+                    'engineering_reviewed':False,'prime_eligible':None}
         if (urlsplit(url).hostname or '').casefold() in {'awd-it.co.uk','www.awd-it.co.uk'}:
             main=soup.select_one('.product-info-main')
             canonical=soup.select_one('link[rel="canonical"]')
@@ -554,7 +767,8 @@ def parse_product_capture(html,url):
         detail=shipping[0]
         rate=detail.get('shippingRate') or {}
         destination=detail.get('shippingDestination') or {}
-        if destination.get('addressCountry')=='GB' and rate.get('currency')=='GBP':
+        country=destination.get('addressCountry')
+        if (country=='GB' or isinstance(country,list) and 'GB' in country) and rate.get('currency')=='GBP':
             postage=amount(rate.get('value'))
         delivery=detail.get('deliveryTime') or {}
         intervals=[delivery.get(name) or {} for name in ('handlingTime','transitTime')]
@@ -579,7 +793,9 @@ def parse_product_capture(html,url):
     condition_evidence=offer.get('itemCondition') or product.get('itemCondition')
     condition=str(condition_evidence or 'unknown').rsplit('/',1)[-1]
     if condition=='unknown' and (urlsplit(url).hostname or '').casefold() in {
-            'overclockers.co.uk','www.overclockers.co.uk','awd-it.co.uk','www.awd-it.co.uk'}:
+            'overclockers.co.uk','www.overclockers.co.uk','awd-it.co.uk','www.awd-it.co.uk',
+            'alphacomponents.co.uk','www.alphacomponents.co.uk',
+            'pcupgrade.co.uk','www.pcupgrade.co.uk'}:
         # These allowlisted first-party retail product pages sell ordinary
         # retail stock by default; second-hand/B-grade/refurbished stock is
         # separately labelled. Preserve the basis so source review can audit
@@ -592,7 +808,7 @@ def parse_product_capture(html,url):
             condition_evidence='first_party_retail_default_new_no_second_hand_designation'
     brand=product.get('brand') or {}
     brand=brand.get('name') if isinstance(brand,dict) else brand
-    return {'status':'captured','url':url,'observed_at':datetime.now(timezone.utc).isoformat(),
+    captured={'status':'captured','url':url,'observed_at':datetime.now(timezone.utc).isoformat(),
         'title':product.get('name'),'sku':product.get('sku'),'mpn':product.get('mpn'),
         'product_brand':brand,'product_description':str(product.get('description') or '')[:4000],
         'condition':{'NewCondition':'new','UsedCondition':'used','RefurbishedCondition':'refurbished'}.get(condition,'unknown'),
@@ -607,6 +823,65 @@ def parse_product_capture(html,url):
         'product_properties':captured_properties,
         'engineering_reviewed':False,
         'prime_eligible':_amazon_prime_eligibility(soup) if (urlsplit(url).hostname or '').lower().endswith('amazon.co.uk') else None}
+    host=(urlsplit(url).hostname or '').casefold()
+    if host in {'hardvance.co.uk','www.hardvance.co.uk'}:
+        page_text=' '.join(soup.get_text(' ',strip=True).split())
+        # Bind the displayed delivery estimate to the exact fetched product page.
+        # A product JSON-LD offer alone does not include this retailer's delivery promise.
+        free_delivery=bool(re.search(r'\bFree Premium delivery on UK mainland orders\b',page_text,re.I))
+        estimate=re.search(
+            r'\bOrder (?:today|now),\s*get it by\s+(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s+(\d{1,2})\s+([A-Z][a-z]{2})\b',
+            page_text,re.I)
+        if free_delivery:
+            captured.update(delivery_gbp='0.00',postage_verified=True,delivery_destination='UK mainland')
+        if estimate:
+            try:
+                target=datetime.strptime(f"{estimate.group(1)} {estimate.group(2)} {datetime.now(timezone.utc).year}",
+                    '%d %b %Y').date()
+                today=datetime.now(timezone.utc).date()
+                if target<today and (today-target).days>300:
+                    target=target.replace(year=target.year+1)
+                if target>=today:
+                    days=sum(1 for offset in range(1,(target-today).days+1)
+                        if (today.weekday()+offset)%7<5)
+                    captured.update(delivery_calendar_days=(target-today).days,
+                        delivery_working_days=days,
+                        delivery_estimate_source='retailer_page_displayed_estimate')
+            except ValueError:
+                pass
+    if host in {'overclockers.co.uk','www.overclockers.co.uk'}:
+        # OcUK publishes the exact delivery date and service on the product
+        # page, outside Product JSON-LD. Prefer that date to the generic
+        # three-day supplier default; only use it when the exact offer is
+        # currently in stock and the text explicitly binds it to Premium
+        # Delivery within the UK.
+        page_text=' '.join(soup.get_text(' ',strip=True).split())
+        estimate=re.search(
+            r'Order within\s+[^.]{0,100}?\s+to get it on\s+'
+            r'(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s*'
+            r'(\d{1,2})(?:st|nd|rd|th)?\s+of\s+([A-Z][a-z]+)',
+            page_text,re.I)
+        premium_uk=bool(re.search(
+            r'applies to Premium Delivery within United Kingdom',page_text,re.I))
+        if (captured.get('stock_status')=='available' and estimate and premium_uk):
+            try:
+                today=datetime.now(timezone.utc).date()
+                target=datetime.strptime(
+                    f"{estimate.group(1)} {estimate.group(2)} {today.year}",
+                    '%d %B %Y').date()
+                if target < today and (today-target).days > 300:
+                    target=target.replace(year=target.year+1)
+                if target >= today:
+                    calendar_days=(target-today).days
+                    captured.update(
+                        delivery_calendar_days=calendar_days,
+                        delivery_working_days=max_working_days_for_calendar_duration(calendar_days),
+                        delivery_estimate_source='retailer_page_displayed_estimate',
+                        delivery_destination='UK (excluding Channel Islands)',
+                    )
+            except ValueError:
+                pass
+    return captured
 
 
 def _amazon_prime_eligibility(soup):
@@ -731,8 +1006,14 @@ async def _collect_gamers_outlet_capture(url, *, browser_runtime=None):
         try:
             response=await page.goto(url,wait_until='domcontentloaded',timeout=45000)
             if response is not None and response.status==200:
+                # The product pages can initially expose only their related
+                # product JSON-LD. Wait for the page's own product data to
+                # settle before parsing, while keeping this capture bounded.
+                try:await page.wait_for_load_state('networkidle',timeout=8000)
+                except Exception:pass
                 try: await page.wait_for_selector('script[type="application/ld+json"]',timeout=8000)
                 except Exception: pass
+                await page.wait_for_timeout(750)
                 html=await page.content()
         finally:
             await page.close()
@@ -740,13 +1021,49 @@ async def _collect_gamers_outlet_capture(url, *, browser_runtime=None):
         return {'status':'unresolved','reason':http_reason or 'Gamers Outlet page could not be loaded'}
     soup=BeautifulSoup(html,'html.parser')
     products=[]
+    def visit(value):
+        if isinstance(value,list):
+            for item in value:visit(item)
+        elif isinstance(value,dict):
+            kind=value.get('@type',[])
+            if 'Product' in ([kind] if isinstance(kind,str) else kind if isinstance(kind,list) else []):
+                products.append(value)
+            if '@graph' in value:visit(value['@graph'])
     for script in soup.select('script[type="application/ld+json"]'):
-        try:
-            item=json.loads(script.get_text())
-            if isinstance(item,dict) and item.get('@type')=='Product':products.append(item)
+        try:visit(json.loads(script.string or script.get_text()))
         except (ValueError,TypeError):pass
-    if len(products)!=1:return {'status':'unresolved','reason':'One exact software product required'}
-    product=products[0];offer=product.get('offers')
+    # Some Gamers Outlet pages expose the same Product in multiple JSON-LD
+    # blocks. Accept repeated records only when they name this exact page and
+    # agree on the single offered item; conflicting or related-product offers
+    # remain unresolved.
+    from urllib.parse import urlsplit
+    requested=urlsplit(url)
+    def exact_page(value):
+        try:observed=urlsplit(str(value or ''))
+        except ValueError:return False
+        return (observed.scheme=='https' and observed.hostname==requested.hostname
+            and observed.path.rstrip('/')==requested.path.rstrip('/'))
+    exact=[]
+    for candidate in products:
+        offers=candidate.get('offers',[])
+        offers=offers if isinstance(offers,list) else [offers]
+        if len(offers)==1 and isinstance(offers[0],dict) and (
+                exact_page(candidate.get('url')) or exact_page(offers[0].get('url'))):
+            offer=offers[0]
+            availability=str(offer.get('availability') or '').rsplit('/',1)[-1].casefold()
+            identity=(str(offer.get('url') or candidate.get('url') or url),
+                str(offer.get('priceCurrency') or '').upper(),amount(offer.get('price')),
+                availability)
+            exact.append((identity,str(offer.get('itemCondition') or '').rsplit('/',1)[-1],candidate))
+    unique={}
+    for identity,condition,candidate in exact:
+        entry=unique.setdefault(identity,{'conditions':set(),'product':candidate})
+        if condition:entry['conditions'].add(condition.casefold())
+        if len(json.dumps(candidate,ensure_ascii=True))>len(json.dumps(entry['product'],ensure_ascii=True)):
+            entry['product']=candidate
+    if len(unique)!=1 or any(len(entry['conditions'])>1 for entry in unique.values()):
+        return {'status':'unresolved','reason':'One exact software product required'}
+    product=next(iter(unique.values()))['product'];offer=product.get('offers')
     if not isinstance(offer,dict):return {'status':'unresolved','reason':'One exact software offer required'}
     original_currency=offer.get('priceCurrency');original_price=amount(offer.get('price'))
     if original_price is None or original_currency not in {'EUR','GBP'}:
@@ -785,30 +1102,75 @@ async def _collect_gamers_outlet_capture(url, *, browser_runtime=None):
 async def collect_product_capture(url, *, browser_runtime=None):
     if not supported_product_url(url):
         return {'status':'unsupported','reason':'Only known HTTPS retailer product URLs are supported'}
+    if (urlsplit(url).hostname or '').casefold() in {'alphacomponents.co.uk','www.alphacomponents.co.uk'}:
+        # Alpha Components exposes the exact listing through its product HTML
+        # rather than Product JSON-LD. Use the same strict parser as the
+        # scheduled capture and require a successful retailer response.
+        try:
+            async with httpx.AsyncClient(timeout=15,follow_redirects=False) as client:
+                response=await client.get(url,headers={'Accept':'text/html'})
+            if response.status_code!=200 or 'text/html' not in response.headers.get('content-type',''):
+                return {'status':'unresolved','reason':f'Retailer returned HTTP {response.status_code}'}
+            return parse_product_capture(response.text,url)
+        except httpx.HTTPError as error:
+            return {'status':'unresolved','reason':f'Retailer request failed: {type(error).__name__}'}
     if (urlsplit(url).hostname or '').casefold() in {'gamers-outlet.net','www.gamers-outlet.net'}:
         return await _collect_gamers_outlet_capture(url,browser_runtime=browser_runtime)
     if (urlsplit(url).hostname or '').casefold()=='royalcdkeys.com':
         return await _collect_royalcdkeys_capture(url)
     http_reason=None
-    async with httpx.AsyncClient(timeout=15,follow_redirects=False) as client:
-        async with client.stream('GET',url,headers={'Accept':'text/html'}) as response:
-            if response.status_code==200 and 'text/html' in response.headers.get('content-type',''):
-                payload=bytearray()
-                async for chunk in response.aiter_bytes():
-                    payload.extend(chunk)
-                    if len(payload)>3_000_000:
-                        break
-                if len(payload)<=3_000_000:
-                    captured=parse_product_capture(payload.decode('utf-8',errors='replace'),url)
-                    if captured.get('status')=='captured':
-                        return captured
-                    http_reason=captured.get('reason')
+    try:
+        async with httpx.AsyncClient(timeout=15,follow_redirects=False) as client:
+            async with client.stream('GET',url,headers={'Accept':'text/html'}) as response:
+                if response.status_code==200 and 'text/html' in response.headers.get('content-type',''):
+                    payload=bytearray()
+                    async for chunk in response.aiter_bytes():
+                        payload.extend(chunk)
+                        if len(payload)>3_000_000:
+                            break
+                    if len(payload)<=3_000_000:
+                        captured=parse_product_capture(payload.decode('utf-8',errors='replace'),url)
+                        if captured.get('status')=='captured':
+                            host=(urlsplit(url).hostname or '').casefold()
+                            if (host in {'overclockers.co.uk','www.overclockers.co.uk'}
+                                    and captured.get('delivery_estimate_source')=='retailer_page_displayed_estimate'):
+                                # The product page's displayed date is for
+                                # Premium Delivery. Product JSON-LD can expose
+                                # the cheaper standard service at the same
+                                # time, so don't pair its price with the
+                                # premium ETA. Resolve the matching service
+                                # price from OcUK's official UK delivery tariff.
+                                try:
+                                    tariff=await client.get(
+                                        'https://www.overclockers.co.uk/delivery.html',
+                                        headers={'Accept':'text/html'})
+                                    if (tariff.status_code==200 and
+                                            'text/html' in tariff.headers.get('content-type','')):
+                                        premium_price=_overclockers_premium_delivery_price(tariff.text)
+                                        if premium_price is not None:
+                                            captured.update(delivery_gbp=premium_price,
+                                                postage_verified=True,
+                                                delivery_cost_evidence_url='https://www.overclockers.co.uk/delivery.html',
+                                                delivery_cost_evidence_text='Premium Delivery (Mon-Fri), one parcel')
+                                        else:
+                                            captured.update(delivery_gbp=None,postage_verified=False)
+                                    else:
+                                        captured.update(delivery_gbp=None,postage_verified=False)
+                                except httpx.HTTPError:
+                                    captured.update(delivery_gbp=None,postage_verified=False)
+                            return captured
+                        http_reason=captured.get('reason')
+                    else:
+                        http_reason='Product page exceeds capture size limit'
+                elif response.status_code!=200:
+                    http_reason=f'Retailer returned HTTP {response.status_code}'
                 else:
-                    http_reason='Product page exceeds capture size limit'
-            elif response.status_code!=200:
-                http_reason=f'Retailer returned HTTP {response.status_code}'
-            else:
-                http_reason='Retailer response is not an HTML product page'
+                    http_reason='Retailer response is not an HTML product page'
+    except httpx.HTTPError as error:
+        # A connection-level failure must not skip Amazon's browser fallback.
+        # Keep the original transport failure for diagnostics if the fallback
+        # also fails, while allowing retailer-specific recovery below.
+        http_reason=f'Retailer request failed: {type(error).__name__}'
     # Amazon often renders the selected offer only after client-side scripts.
     # Retry unresolved pages through the serialized browser already used for
     # Amazon bestseller sourcing. Exact ASIN/offer checks still run in parser.
@@ -949,6 +1311,15 @@ async def refresh_selected_product_facts(db, limit=64, *, listing_ids=None, forc
     ids.update(row.id for row in unpriced_bestsellers
         if ((row.raw_specs or {}).get('bestseller') or {}).get('category')
             in {'cpu','gpu','ram','storage','motherboard','psu','cooler','case'})
+    # Requirement discovery creates pending-review catalogue variants after
+    # the previous proposal snapshot was built. Search prices establish only
+    # product identity, so these exact ASIN pages must be captured before the
+    # next proposal rebuild can use them. Include both discovery-created
+    # candidates and retailer-capture candidates linked from stored offers.
+    for evidence_key in ('playbook_requirement_discovery', 'playbook_requirement_source'):
+        linked_ids=(await db.execute(select(Listing.id).where(
+            Listing.status=='active',Listing.raw_specs[evidence_key].is_not(None)))).scalars().all()
+        ids.update(linked_ids)
     rows=(await db.execute(select(Listing).where(Listing.id.in_(ids)).order_by(Listing.id))).scalars().all() if ids else []
     if listing_ids is not None:rows=[listing for listing in rows if listing.id in listing_ids]
     pending=[]
@@ -1003,14 +1374,17 @@ async def refresh_selected_product_facts(db, limit=64, *, listing_ids=None, forc
     def capture_priority(listing):
         raw=listing.raw_specs or {}
         software=raw.get('gamers_outlet') or raw.get('royalcdkeys') or {}
+        requirement_source=bool(raw.get('playbook_requirement_discovery')
+            or raw.get('playbook_requirement_source'))
         return (0 if software.get('category')=='os' and listing.source_name=='Gamers Outlet' else
             1 if software.get('category')=='office' and listing.source_name=='Gamers Outlet' else
             2 if (raw.get('bestseller') or {}).get('category')=='os'
                 and 'windows 11' in listing.title.casefold() else
-            3 if listing.price is None and exact_authored_target(listing,missing_targets) else
-            4 if listing.price is None and _benchmark_qualified_missing_alternative(
+            3 if requirement_source else
+            4 if listing.price is None and exact_authored_target(listing,missing_targets) else
+            5 if listing.price is None and _benchmark_qualified_missing_alternative(
                 listing,missing_targets,benchmark_index,target_constraints) else
-            5 if listing.price is None and exact_authored_target(listing) else 6)
+            6 if listing.price is None and exact_authored_target(listing) else 7)
 
     # Within each importance tier, give untouched and oldest-attempted pages
     # first access to the bounded capture budget. A gated page must not starve

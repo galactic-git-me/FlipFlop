@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.routes.admin_auth import get_current_admin
 from app.services.companion_service import stream_companion
 
 router = APIRouter(prefix="/companion", tags=["companion"])
@@ -23,7 +24,11 @@ class CompanionRequest(BaseModel):
 
 
 @router.post("/stream")
-async def companion_stream(body: CompanionRequest, db: AsyncSession = Depends(get_db)):
+async def companion_stream(
+    body: CompanionRequest,
+    db: AsyncSession = Depends(get_db),
+    _: object = Depends(get_current_admin),
+):
     history = [{"role": m.role, "content": m.content} for m in body.history]
     return StreamingResponse(
         stream_companion(body.message, history, body.page_context, db),

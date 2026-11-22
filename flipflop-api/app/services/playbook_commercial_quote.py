@@ -5,7 +5,8 @@ from decimal import Decimal, ROUND_CEILING, ROUND_FLOOR
 
 from app.schemas.commercial_quote import CellCommercialPolicy
 from app.services.commerce_pricing import (
-    ConditionPolicy, FulfilmentMode, SupplierOffer, _recent, eligible_offers,
+    ConditionPolicy, FulfilmentMode,
+    SupplierOffer, _recent, eligible_offers,
 )
 
 from app.services.commercial_pilot_policy import MINIMUM_PROFIT_MARGIN
@@ -20,6 +21,7 @@ class PartEvidence:
     evidence_id: int
     part_key: str
     offer: SupplierOffer
+    listing_type: str | None = None
 
 
 @dataclass(frozen=True)
@@ -66,6 +68,7 @@ def quote_delivery_modes(
     policy: CellCommercialPolicy, parts: list[PartEvidence],
     capacities: dict[str, CapacityEvidence | None], *,
     nonnew_consent: bool = False, now: datetime | None = None,
+    flexible_auction_available: bool = False,
 ) -> dict:
     """Assess approved core BOM keys. Availability here is not payment authority.
 
@@ -97,6 +100,8 @@ def quote_delivery_modes(
         selected = []
         for key in policy.required_part_keys:
             candidates = [part for part in parts if part.part_key == key
+                          and (name != "flexible" or part.offer.channel != "marketplace"
+                               or str(part.listing_type or "").casefold() in {"buy_it_now", "fixed_price"})
                           and part.offer.condition == policy.condition
                           and part.offer.supplier_confidence.is_finite()
                           and Decimal(0) <= part.offer.supplier_confidence <= Decimal(1)
@@ -107,10 +112,20 @@ def quote_delivery_modes(
             valid = eligible_offers(
                 [part.offer for part in candidates], fulfilment, condition_policy,
                 nonnew_consent, priority_capacity=True, now=now,
+                # Customer total-time rules below already include supplier ETA,
+                # workshop time and courier; do not add a separate ETA cap.
+                supplier_arrival_limits={FulfilmentMode.PRIORITY: None,
+                    FulfilmentMode.STANDARD: None},
             )
-            # Unknown/negative supplier time cannot support an end-to-end estimate.
-            valid = [offer for offer in valid if name=='flexible' or supplier_meets_delivery_commitment(
-                offer.delivery_working_days,mode,workshop_wait_days=workshop_wait_days)]
+            # Every pace needs a usable internal arrival estimate. Flexible has
+            # no promised deadline, but its expected date and fallback plan
+            # still require a non-negative supplier ETA.
+            valid = [offer for offer in valid
+                if isinstance(offer.delivery_working_days, int)
+                and not isinstance(offer.delivery_working_days, bool)
+                and offer.delivery_working_days >= 0
+                and (name == 'flexible' or supplier_meets_delivery_commitment(
+                    offer.delivery_working_days, mode, workshop_wait_days=workshop_wait_days))]
             if not valid:
                 selected = []
                 break
@@ -176,6 +191,14 @@ def quote_delivery_modes(
             "delivery_working_days": None if name=='flexible' else max(max(part.offer.delivery_working_days for part in selected),
                                          capacity.wait_working_days if capacity is not None else 0)
                                      + mode.workshop_working_days + mode.courier_working_days,
+            "expected_delivery_working_days": (17 if flexible_auction_available else max(
+                max(part.offer.delivery_working_days for part in selected),
+                capacity.wait_working_days if capacity is not None else 0)
+                + mode.workshop_working_days + mode.courier_working_days
+            ) if name=='flexible' else max(
+                max(part.offer.delivery_working_days for part in selected),
+                capacity.wait_working_days if capacity is not None else 0)
+                + mode.workshop_working_days + mode.courier_working_days,
             "expires_at": expiry.isoformat(),
             "reason": "Exact specification, evidence, delivery and profit checks passed",
             "market_check": "comparable_sold_evidence" if market else "not_configured",
@@ -186,17 +209,9 @@ def quote_delivery_modes(
         if quote["offerable"] and standard["offerable"]:
             difference = Decimal(quote["price_gbp"]) - Decimal(standard["price_gbp"])
             quote["difference_from_standard_gbp"] = str(difference)
-            if name == "flexible" and difference >= 0:
-                quote.update(offerable=False, price_gbp=None,
-                             reason="Flexible does not provide a genuine saving against Standard")
             if name == "fast_track" and (difference <= 0 or quote["delivery_working_days"] >= standard["delivery_working_days"]):
                 quote.update(offerable=False, price_gbp=None,
                              reason="Fast Track must be faster and priced above Standard")
-        elif name == "flexible" and quote["offerable"]:
-            # A missing/invalid Standard mode must not leave an apparent saving
-            # comparison available to callers that only inspect offerable modes.
-            quote.update(offerable=False, price_gbp=None,
-                         reason="A valid Standard quote is required to evidence Flexible savings")
     return result
 
 

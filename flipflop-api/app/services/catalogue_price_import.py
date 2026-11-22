@@ -4,12 +4,15 @@ from app.models.commerce_evidence import SupplierOfferEvidence
 
 
 async def import_current_catalogue_prices(db, parts, admin_id):
+    import hashlib
+    import json
     from app.api.commercial_readiness import store_reviewed_sources
+    from app.models.commerce_evidence import PriceQuoteSnapshot
     from types import SimpleNamespace
     from datetime import datetime, timezone
     from decimal import Decimal
     from urllib.parse import urlsplit
-    from app.services.commercial_quote_evidence import supplier_identity
+    from app.services.commercial_quote_evidence import supplier_identity, supplier_capture_product_key
     from app.services.commercial_source_validation import delivery_estimate_source_label, bounded_evidence_reference
     pending, blocked = [], []
     for part in parts:
@@ -89,4 +92,35 @@ async def import_current_catalogue_prices(db, parts, admin_id):
         if not confirmed:
             blocked.append(f"{part['role']}: the current listing does not confirm available stock")
     imported, reused = await store_reviewed_sources(db, pending, admin_id)
+    # The quote table intentionally keeps normalized money/stock facts only.
+    # Retain the exact captured product identity and the evidence needed to
+    # validate a different retailer URL when that same component is offered
+    # under another delivery pace.
+    for part in parts:
+        source, part_key = part.get('source'), part.get('part_key')
+        if not source or not part_key or not source.get('fresh') or not source.get('commercial_capture_verified'):
+            continue
+        evidence_ref=bounded_evidence_reference(str(source.get('url') or ''))
+        observed_at=str(source.get('observed_at') or '')
+        if not evidence_ref or not observed_at:
+            continue
+        product_key=supplier_capture_product_key(part_key,evidence_ref,observed_at)
+        existing=(await db.execute(select(PriceQuoteSnapshot).where(
+            PriceQuoteSnapshot.product_key==product_key,
+            PriceQuoteSnapshot.status=='supplier_offer_capture'
+        ).limit(1))).scalar_one_or_none()
+        if existing:
+            continue
+        capture={key:source.get(key) for key in (
+            'title','mpn','cpk','cpk_data','condition','condition_evidence','listing_type','stock_status',
+            'stock_evidence','item_gbp','delivery_gbp','postage_verified',
+            'delivery_working_days','delivery_estimate_source','observed_at','url')}
+        capture.update({'part_key':part_key,'evidence_ref':evidence_ref,
+            'commercial_capture_verified':True,'active_listing':bool(source.get('active_listing'))})
+        digest=hashlib.sha256(json.dumps(capture,sort_keys=True,default=str).encode()).hexdigest()
+        db.add(PriceQuoteSnapshot(product_key=product_key,status='supplier_offer_capture',
+            evidence_json=capture,decision_json={'capture_verified':True,
+                'source_fingerprint':source.get('fingerprint') or digest,
+                'price_published':False},created_by_admin_id=admin_id))
+        await db.flush()
     return {'imported': len(imported), 'reused': len(reused), 'blocked': blocked}

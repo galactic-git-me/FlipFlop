@@ -28,6 +28,7 @@ def delivery_estimate_source_label(value: str | None) -> str:
     aliases = {
         "amazon_displayed_default_destination": "amazon_default_destination",
         "structured_product_offer_calendar_days": "structured_offer_calendar",
+        "retailer_page_displayed_estimate": "retailer_page_estimate",
     }
     label = aliases.get(label, label)
     return label if len(label) <= 32 else "captured_supplier_offer"
