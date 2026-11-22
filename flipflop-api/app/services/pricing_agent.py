@@ -17,6 +17,11 @@ from app.services.autonomous_agent_handoffs import mark_agent_event, persist_age
 from app.services.market_pricing_agent import load_component_price_cohorts, price_change_signal
 
 
+def _pricing_correlation_id(idempotency_key: str) -> str:
+    """Return a deterministic correlation ID within AgentEvent's 64-char limit."""
+    return str(uuid5(NAMESPACE_URL, f"pricing-correlation:{idempotency_key}"))
+
+
 async def run_pricing_agent_cycle() -> dict:
     skill = load_agent_skill("pricing")
     if not skill.strip():
@@ -95,7 +100,8 @@ async def run_pricing_agent_cycle() -> dict:
                 event = AgentEvent(
                     event_id=str(uuid5(NAMESPACE_URL, signal["idempotency_key"])),
                     event_type="component_market_price_changed", producer="pricing", occurred_at=now,
-                    idempotency_key=signal["idempotency_key"], correlation_id=signal["idempotency_key"],
+                    idempotency_key=signal["idempotency_key"],
+                    correlation_id=_pricing_correlation_id(signal["idempotency_key"]),
                     evidence_refs=list(evidence.references),
                     payload={k: v for k, v in signal.items() if k not in {"event_type", "idempotency_key"}},
                 )

@@ -9,7 +9,7 @@ from types import SimpleNamespace
 from unittest.mock import patch
 from app.services.playbook_pace_sources import component_pace_sources
 
-from app.services.playbook_service import estimate_delivery_products
+from app.services.playbook_service import _parts_for_delivery_pace, estimate_delivery_products
 from app.schemas.commercial_quote import CellCommercialPolicy
 from app.services.commerce_pricing import Condition, SupplierOffer
 from app.services.playbook_commercial_quote import PartEvidence, quote_delivery_modes
@@ -20,6 +20,28 @@ from decimal import Decimal
 
 
 class PaceQuoteChecks(unittest.TestCase):
+    def test_pace_supplier_costs_preserve_bom_quantity_and_unit_source_costs(self):
+        part = {
+            "role": "ram",
+            "variant_id": 12,
+            "quantity": 4,
+            "listing_price_gbp": "400",
+            "supplier_postage_gbp": "20",
+            "source_observation": {"item_gbp": "100", "delivery_gbp": "5"},
+        }
+        source = {"url": "https://supplier.example/dimm", "item_gbp": "100",
+            "delivery_gbp": "5", "postage_verified": True, "listing_type": "buy_it_now"}
+        pace_sources = {"standard": [{"role": "ram", "variant_id": 12,
+            "quantity": 4, "available": True, "sources": [source]}]}
+
+        selected = _parts_for_delivery_pace({"ram": part}, "standard", pace_sources)["ram"]
+
+        self.assertEqual(selected["listing_price_gbp"], "400.00")
+        self.assertEqual(selected["unit_price_gbp"], "100.00")
+        self.assertEqual(selected["supplier_postage_gbp"], "20.00")
+        self.assertEqual(selected["source_observation"]["item_gbp"], "100")
+        self.assertEqual(selected["source_observation"]["delivery_gbp"], "5")
+
     def test_pilot_delivery_ceilings_match_customer_promises(self):
         self.assertEqual(DELIVERY_CEILINGS, {
             "fast_track": 3, "standard": 5, "flexible": None})

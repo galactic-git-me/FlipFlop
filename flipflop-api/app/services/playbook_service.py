@@ -129,16 +129,6 @@ async def run_playbook_refresh_job(job_id,actor_id):
     async def heartbeat():
         while True:
             await asyncio.sleep(PLAYBOOK_REFRESH_HEARTBEAT_SECONDS)
-            if mode=='refresh':
-                async with AsyncSessionLocal() as db:
-                    queued_rebuild=(await db.execute(select(PlaybookRefreshRun.job_id).where(
-                        PlaybookRefreshRun.actor_id==0,PlaybookRefreshRun.mode=='rebuild',
-                        PlaybookRefreshRun.status=='queued'
-                    ).limit(1))).scalar_one_or_none()
-                if queued_rebuild:
-                    if job_task and not job_task.done():
-                        job_task.cancel()
-                    return
             await _update_playbook_refresh_run(job_id,phase=phase_state['phase'],heartbeat_at=_utcnow())
 
     job_task=asyncio.current_task()
@@ -1507,11 +1497,17 @@ def _parts_for_delivery_pace(parts, mode, pace_sources):
             part['suggested_supplier_offer'] = None
             part['pace_source_missing'] = True
             continue
+        quantity = int(option.get('quantity') or part.get('quantity') or 1)
+        if quantity < 1:
+            quantity = 1
+        item_total = item * quantity
+        postage_total = postage * quantity
         snapshot = {**source, 'fresh': True, 'active_listing': True,
             'stock_status': 'available', 'condition': 'new', 'listing_type': 'buy_it_now',
             'commercial_capture_verified': True}
-        part.update(listing_price_gbp=str(item),
-            supplier_postage_gbp=str(postage) if source.get('postage_verified') is True else None,
+        part.update(listing_price_gbp=_money(item_total),
+            unit_price_gbp=_money(item),
+            supplier_postage_gbp=_money(postage_total) if source.get('postage_verified') is True else None,
             supplier_postage_assumption=(None if source.get('postage_verified') is True
                 else source.get('postage_assumption') or 'owner-approved-zero-fallback'),
             source_url=source.get('url'), source_observation=snapshot,
@@ -2920,6 +2916,53 @@ async def current_proposals(db):
     return sorted(items,key=lambda row:positions.get(row['cell_id'],10000))
 
 
+async def annotate_supplier_cost_reviews(db, proposals):
+    """Expose whether an operator saved the exact capture shown in each proposal."""
+    from copy import deepcopy
+    from app.models.commerce_evidence import SupplierOfferEvidence
+    from app.services.commercial_source_validation import bounded_evidence_reference
+
+    proposals = deepcopy(proposals)
+    expected = {}
+    for proposal in proposals:
+        for part in proposal.get('components', []):
+            source = part.get('source_observation') or {}
+            fingerprint = source.get('fingerprint')
+            observation_id = source.get('observation_id')
+            url = source.get('url')
+            if not fingerprint or not observation_id or not url:
+                continue
+            part_key = (f"case:{part['case_catalogue_id']}" if part.get('role') == 'case'
+                and part.get('case_catalogue_id') else f"variant:{part.get('variant_id')}")
+            evidence_ref = bounded_evidence_reference(str(url))
+            evidence_source = f"catalogue_import:{observation_id}:{fingerprint[:16]}"
+            expected[(part_key, evidence_ref, evidence_source)] = source
+
+    if not expected:
+        return proposals
+    rows = (await db.execute(select(SupplierOfferEvidence).where(
+        SupplierOfferEvidence.part_key.in_({key[0] for key in expected}),
+        SupplierOfferEvidence.evidence_ref.in_({key[1] for key in expected}),
+        SupplierOfferEvidence.evidence_source.in_({key[2] for key in expected}),
+        SupplierOfferEvidence.captured_by_admin_id > 0,
+    ))).scalars().all()
+    saved = {(row.part_key, row.evidence_ref, row.evidence_source): row for row in rows}
+    for proposal in proposals:
+        for part in proposal.get('components', []):
+            source = part.get('source_observation')
+            if not isinstance(source, dict):
+                continue
+            part_key = (f"case:{part['case_catalogue_id']}" if part.get('role') == 'case'
+                and part.get('case_catalogue_id') else f"variant:{part.get('variant_id')}")
+            evidence_ref = bounded_evidence_reference(str(source.get('url') or ''))
+            evidence_source = f"catalogue_import:{source.get('observation_id')}:{str(source.get('fingerprint') or '')[:16]}"
+            row = saved.get((part_key, evidence_ref, evidence_source))
+            part['source_observation'] = {**source,
+                'supplier_cost_reviewed': bool(row),
+                'supplier_cost_reviewed_at': row.captured_at.isoformat() if row else None}
+    return proposals
+
+
 async def list_motherboard_engineering_suggestions(db):
     """Expose only Playbook-linked, unreviewed research for operator review."""
     rows=(await db.execute(select(MotherboardSpec).where(MotherboardSpec.source.in_(('ai_generated','manufacturer_capture','listing_title')),
@@ -3161,6 +3204,11 @@ def _playbook_engineering_suggestion(listing,role):
             engineering_capture.get('observed_at') if engineering_capture_matches else capture.get('observed_at')),
         'retailer_properties':retailer_properties,'amazon_catalog_properties':catalog_properties,
         'amazon_catalog_capture':catalog_capture,'suggested_specs':values,
+        'previously_reviewed_specs':({key:value for key,value in current.items()
+            if key in required_fields and key not in {'reviewed'} }
+            if current.get('reviewed') is True and current.get('source_url')==listing.url else {}),
+        'previously_reviewed_at':current.get('reviewed_at') if current.get('reviewed') is True
+            and current.get('source_url')==listing.url else None,
         'missing_fields':sorted(required_fields-set(values)),
         'capture_status':('captured' if commercial_capture_matches else
             capture.get('status') if capture.get('url')==listing.url else 'not_captured_for_current_url'),
