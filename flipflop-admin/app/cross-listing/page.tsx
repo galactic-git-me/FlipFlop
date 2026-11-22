@@ -916,7 +916,7 @@ export default function CrossListingPage() {
   const [googleMessage, setGoogleMessage] = useState<string | undefined>();
   const [warnings, setWarnings] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [refreshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(true);
   const [refreshedAt, setRefreshedAt] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [destinations, setDestinations] = useState<CrossListingChannel[]>([]);
@@ -1438,7 +1438,7 @@ export default function CrossListingPage() {
     setImageSelections({});
   };
 
-  const executePublish = async (selectedImageMap: Record<string, string[]> = {}, imagesApproved = false) => {
+  const executePublishBatch = async (selectedImageMap: Record<string, string[]> = {}, imagesApproved = false) => {
     if (!selectedItems.length || !destinations.length) return;
     if (selectedGroups.some((item) => builds[item.buildId]?.status === "sold")) {
       setError("Sold builds cannot be cross-listed. Confirm the return and verify the active eBay relisting from the build page first.");
@@ -1665,6 +1665,26 @@ export default function CrossListingPage() {
     }
     setPublishing(false);
     await refresh();
+  };
+
+  const executePublish = async (
+    selectedImageMap: Record<string, string[]> = {},
+    imagesApproved = false
+  ) => {
+    try {
+      await executePublishBatch(selectedImageMap, imagesApproved);
+    } catch (cause) {
+      const message = cause instanceof Error
+        ? cause.message
+        : "Cross-listing stopped before it could finish.";
+      setError(message);
+      setProgressJobs((current) => current.map((job) =>
+        job.status === "pending" || job.status === "running"
+          ? { ...job, status: "failed", message }
+          : job
+      ));
+      setPublishing(false);
+    }
   };
 
   const imageSelectionRequest = imageSelectionRequests[imageSelectionIndex];
@@ -1920,6 +1940,32 @@ export default function CrossListingPage() {
         </button>
       </header>
 
+      {(refreshing || error) && (
+        <div
+          role={error ? "alert" : "status"}
+          aria-live={error ? "assertive" : "polite"}
+          className={`flex items-center justify-between gap-3 rounded-lg border p-3 text-sm ${
+            error
+              ? "border-red-400/30 bg-red-400/10 text-red-100"
+              : "border-sky-400/30 bg-sky-400/10 text-sky-100"
+          }`}
+        >
+          <span className="flex items-center gap-2">
+            {refreshing && <Loader2 className="h-4 w-4 shrink-0 animate-spin" />}
+            {error ?? "Loading cross-listing data…"}
+          </span>
+          {error && (
+            <button
+              onClick={() => void refresh()}
+              disabled={refreshing}
+              className="cursor-pointer underline disabled:opacity-60"
+            >
+              Retry
+            </button>
+          )}
+        </div>
+      )}
+
       {results.length > 0 && (
         <section aria-label="Cross-listing results" className="space-y-3 rounded-xl border border-slate-700 bg-slate-900/70 p-4">
           <h2 className="text-sm font-semibold text-white">Latest cross-listing results</h2>
@@ -2156,18 +2202,6 @@ export default function CrossListingPage() {
           </div>
         </div>
       )}
-      {error && (
-        <div className="flex items-center justify-between gap-3 rounded-lg border border-red-400/30 bg-red-400/10 p-3 text-sm text-red-100">
-          <span>{error}</span>
-          <button
-            onClick={() => void refresh()}
-            className="cursor-pointer underline"
-          >
-            Retry
-          </button>
-        </div>
-      )}
-
       <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 shadow-2xl shadow-black/10">
         <div className="flex flex-col gap-3 border-b border-slate-700/70 p-4 xl:flex-row xl:items-center">
           <div className="relative min-w-64 flex-1">
