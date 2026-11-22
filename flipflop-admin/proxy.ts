@@ -6,6 +6,14 @@ function clearLegacyAdminCookie(response: NextResponse): NextResponse {
   return response;
 }
 
+function expectedRequestOrigin(request: NextRequest): string {
+  const publicHost = process.env.PUBLIC_HOST?.trim();
+  if (!publicHost) return request.nextUrl.origin;
+
+  const publicUrl = new URL(publicHost.includes("://") ? publicHost : `https://${publicHost}`);
+  return publicUrl.origin;
+}
+
 // Page routes stay ungated for development, but /api/* is proxied (see
 // next.config.ts rewrites) straight through to flipflop-api, which requires
 // a Bearer admin token on its admin routers (get_current_admin). The browser
@@ -25,7 +33,7 @@ export async function proxy(request: NextRequest) {
     if (
       stateChanging &&
       !playwrightTestMode &&
-      request.headers.get("origin") !== request.nextUrl.origin
+      request.headers.get("origin") !== expectedRequestOrigin(request)
     ) {
       return clearLegacyAdminCookie(NextResponse.json(
         { detail: "Cross-origin request rejected" },
