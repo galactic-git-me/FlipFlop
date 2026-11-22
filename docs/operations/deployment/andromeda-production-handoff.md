@@ -34,11 +34,11 @@ production workflow rotates a too-short key atomically before deployment and
 never prints either key.
 
 If an older production `.env.local` has no explicit `SECRET_KEY`, the guarded
-rotation step provisions a new strong key and retains the historical built-in
-fallback as `SECRET_KEY_PREVIOUS`. This preserves verification/decryption for
-existing values while ensuring the new production configuration uses an
-explicit key. A previous key without a current key still stops the release for
-manual review.
+rotation step provisions a new strong key without retaining the public built-in
+fallback. Customer tokens signed with that public fallback become invalid and
+customers must sign in again. A previous key without a current key, or an
+ambiguous key assignment, still stops the release for manual review. Explicit
+short keys are rotated with the former key retained as `SECRET_KEY_PREVIOUS`.
 
 The production checkout must contain the storefront repository at either:
 
