@@ -136,6 +136,9 @@ jobs:
     env:
       EXTENSION_DISPATCH_TOKEN: ${{ secrets.FLIPFLOP_EXTENSION_DISPATCH_TOKEN }}
     steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.tag }}
       - name: Configure SSH
         env:
           SSH_PRIVATE_KEY: ${{ secrets.ANDROMEDA_SSH_KEY }}
@@ -177,6 +180,17 @@ jobs:
               -p "${ANDROMEDA_PORT:-22}" \
               "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
               provision-browser-worker-key
+      - name: Rotate an invalid production customer secret safely
+        env:
+          ANDROMEDA_HOST: ${{ secrets.ANDROMEDA_HOST }}
+          ANDROMEDA_USER: ${{ secrets.ANDROMEDA_USER }}
+          ANDROMEDA_PORT: ${{ secrets.ANDROMEDA_PORT }}
+        run: |
+          ssh -i ~/.ssh/andromeda \
+            -p "${ANDROMEDA_PORT:-22}" \
+            "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
+            "python3 - /home/mac/CODING/FlipFlop-production/.env.local" \
+            < deploy/rotate-production-secret-key.py
       - name: Deploy tagged Andromeda services
         env:
           ANDROMEDA_HOST: ${{ secrets.ANDROMEDA_HOST }}

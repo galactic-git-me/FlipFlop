@@ -257,6 +257,9 @@ class Settings(BaseSettings):
 
     # Auth
     secret_key: str = "dev-secret-key-change-in-production"  # MUST be set via environment in production
+    # Previous application key is read-only compatibility for tokens and
+    # encrypted values created before an intentional SECRET_KEY rotation.
+    secret_key_previous: str = ""
     # Admin JWTs use a dedicated key so enabling admin sessions does not reuse
     # the customer/portal signing key or its licence-encryption dependency.
     admin_jwt_secret: str = ""

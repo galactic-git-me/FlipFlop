@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
 from app.models.customer import Customer
+from app.services.rotating_secret import decode_application_token
 
 log = structlog.get_logger(__name__)
 
@@ -54,11 +55,7 @@ def verify_token(token: str) -> int | None:
     Returns customer_id if valid, None if invalid.
     """
     try:
-        payload = jwt.decode(
-            token,
-            settings.secret_key,
-            algorithms=[settings.jwt_algorithm]
-        )
+        payload = decode_application_token(token, settings)
         customer_id_str = payload.get("sub")
         if customer_id_str is None:
             log.warning("auth.token_verify_failed", reason="missing_sub")

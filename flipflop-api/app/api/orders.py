@@ -42,6 +42,7 @@ from app.services.customer_problem_notifications import deliver_customer_problem
 from app.services.parcel2go_notifications import deliver_tracking_event_notification
 from app.services.payment_service import PaymentService
 from app.services.parcel2go_booking import _safe_provider_tracking_url
+from app.services.rotating_secret import decode_application_token
 from app.schemas.order import (
     CapacitySlotsOut,
     AdminOrderOut,
@@ -387,7 +388,7 @@ async def get_portal_preview(
 ):
     actor_type, actor = await _portal_actor(authorization, db)
     try:
-        claims = jwt.decode(preview_token, get_settings().secret_key, algorithms=[get_settings().jwt_algorithm])
+        claims = decode_application_token(preview_token, get_settings())
     except JWTError:
         raise HTTPException(status_code=401, detail="Preview expired or invalid")
     if claims.get("typ") != "portal_preview" or claims.get("scope") != "read":

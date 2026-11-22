@@ -84,6 +84,18 @@ def _token_cipher() -> Fernet:
     return Fernet(key)
 
 
+def _previous_token_cipher() -> Fernet | None:
+    """Return the previous SECRET_KEY cipher when it was the active fallback."""
+    settings = get_settings()
+    if settings.ebay_token_encryption_key or settings.ebay_client_secret:
+        return None
+    previous = getattr(settings, "secret_key_previous", "")
+    if not previous or previous == settings.secret_key:
+        return None
+    key = base64.urlsafe_b64encode(hashlib.sha256(previous.encode("utf-8")).digest())
+    return Fernet(key)
+
+
 def _encrypt_token(token: str) -> str:
     if not token:
         return ""
@@ -99,12 +111,22 @@ def _decrypt_token(token: str) -> tuple[str, bool]:
         return "", False
     if not token.startswith(_ENCRYPTED_PREFIX):
         return token, True
-    try:
-        plaintext = _token_cipher().decrypt(
-            token.removeprefix(_ENCRYPTED_PREFIX).encode("ascii")
-        )
-    except (InvalidToken, ValueError) as exc:
-        raise EbayOAuthError("Stored eBay OAuth token could not be decrypted") from exc
+    encrypted = token.removeprefix(_ENCRYPTED_PREFIX).encode("ascii")
+    ciphers = [_token_cipher()]
+    previous_cipher = _previous_token_cipher()
+    if previous_cipher is not None:
+        ciphers.append(previous_cipher)
+    plaintext = None
+    for cipher in ciphers:
+        try:
+            plaintext = cipher.decrypt(encrypted)
+            break
+        except InvalidToken:
+            continue
+        except ValueError as exc:
+            raise EbayOAuthError("Stored eBay OAuth token could not be decrypted") from exc
+    if plaintext is None:
+        raise EbayOAuthError("Stored eBay OAuth token could not be decrypted")
     return plaintext.decode("utf-8"), False
 
 
