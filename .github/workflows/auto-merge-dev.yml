@@ -1,0 +1,83 @@
+name: Auto-queue eligible DEV pull requests
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review]
+    branches: [dev]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  queue:
+    if: >-
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    env:
+      FLIPFLOP_DEV_MERGE_TOKEN: ${{ secrets.FLIPFLOP_DEV_MERGE_TOKEN }}
+    steps:
+      - name: Enable GitHub auto-merge
+        if: env.FLIPFLOP_DEV_MERGE_TOKEN != ''
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ env.FLIPFLOP_DEV_MERGE_TOKEN }}
+          script: |
+            const pullRequestNumber = context.payload.pull_request.number;
+            let pullRequest;
+            for (let attempt = 0; attempt < 5; attempt += 1) {
+              const response = await github.rest.pulls.get({
+                ...context.repo,
+                pull_number: pullRequestNumber,
+              });
+              pullRequest = response.data;
+              if (pullRequest.mergeable !== null) break;
+              await new Promise((resolve) => setTimeout(resolve, 3000));
+            }
+
+            if (pullRequest.mergeable_state === 'dirty' || pullRequest.mergeable === false) {
+              core.notice('Auto-merge is waiting for this PR conflict to be resolved.');
+              return;
+            }
+            if (pullRequest.mergeable_state === 'behind') {
+              core.notice('Auto-merge is waiting for this PR branch to be updated with the latest DEV.');
+              return;
+            }
+            if (pullRequest.mergeable === null) {
+              core.notice('GitHub has not computed mergeability yet. Push a new commit or reopen the PR to retry.');
+              return;
+            }
+
+            const pullRequestId = context.payload.pull_request.node_id;
+            if (pullRequest.mergeable_state === 'clean') {
+              await github.graphql(
+                `mutation($pullRequestId: ID!, $headSha: GitObjectID!) {
+                  mergePullRequest(input: {
+                    pullRequestId: $pullRequestId,
+                    mergeMethod: MERGE,
+                    expectedHeadOid: $headSha
+                  }) {
+                    pullRequest { number mergedAt }
+                  }
+                }`,
+                { pullRequestId, headSha: pullRequest.head.sha },
+              );
+              return;
+            }
+
+            await github.graphql(
+              `mutation($pullRequestId: ID!) {
+                enablePullRequestAutoMerge(input: {
+                  pullRequestId: $pullRequestId,
+                  mergeMethod: MERGE
+                }) {
+                  pullRequest { number }
+                }
+              }`,
+              { pullRequestId },
+            );
+
+      - name: Explain missing merge token
+        if: env.FLIPFLOP_DEV_MERGE_TOKEN == ''
+        run: echo "::notice::Set the FLIPFLOP_DEV_MERGE_TOKEN repository secret to enable DEV auto-merge with post-merge workflows."
