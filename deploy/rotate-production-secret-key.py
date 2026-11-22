@@ -11,7 +11,8 @@ import sys
 import tempfile
 
 
-KEY_LINE = re.compile(r"^(?:export\s+)?(SECRET_KEY|SECRET_KEY_PREVIOUS)\s*=\s*(.*)$")
+KEY_LINE = re.compile(r"^\s*(?:export\s+)?(SECRET_KEY|SECRET_KEY_PREVIOUS)\s*=\s*(.*)$", re.IGNORECASE)
+KEY_ASSIGNMENT_PREFIX = re.compile(r"^\s*(?:export\s+)?(SECRET_KEY|SECRET_KEY_PREVIOUS)\b", re.IGNORECASE)
 
 
 def parse_value(raw: str, name: str) -> str:
@@ -27,11 +28,28 @@ def rotate(path: Path) -> str:
     lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
     found: dict[str, list[tuple[int, str]]] = {"SECRET_KEY": [], "SECRET_KEY_PREVIOUS": []}
     for index, line in enumerate(lines):
-        match = KEY_LINE.match(line.rstrip("\r\n"))
+        content = line.rstrip("\r\n")
+        match = KEY_LINE.match(content)
         if match:
-            found[match.group(1)].append((index, parse_value(match.group(2), match.group(1))))
-    if len(found["SECRET_KEY"]) != 1 or len(found["SECRET_KEY_PREVIOUS"]) > 1:
+            name = match.group(1).upper()
+            found[name].append((index, parse_value(match.group(2), name)))
+        elif KEY_ASSIGNMENT_PREFIX.match(content):
+            raise ValueError("A customer key assignment uses unsupported syntax; no changes made")
+    if len(found["SECRET_KEY"]) > 1 or len(found["SECRET_KEY_PREVIOUS"]) > 1:
         raise ValueError("Expected exactly one SECRET_KEY and at most one previous key; no changes made")
+
+    if not found["SECRET_KEY"]:
+        if found["SECRET_KEY_PREVIOUS"]:
+            raise ValueError("A previous key exists without a current key; manual review required")
+        # The old built-in key is public, so never accept it as a verification
+        # key. Existing customer tokens signed with it will need to be renewed.
+        new_current = secrets.token_urlsafe(48)
+        line_ending = "\r\n" if lines and lines[-1].endswith("\r\n") else "\n"
+        if lines and not lines[-1].endswith(("\n", "\r")):
+            lines[-1] += line_ending
+        lines.append(f"SECRET_KEY={new_current}{line_ending}")
+        _atomic_write(path, lines)
+        return "Missing production key replaced safely; tokens signed with the public fallback must be renewed."
 
     current = found["SECRET_KEY"][0][1]
     if len(current) >= 32:
@@ -47,6 +65,11 @@ def rotate(path: Path) -> str:
         lines[-1] += line_ending
     lines.append(f"SECRET_KEY_PREVIOUS={current}{line_ending}")
 
+    _atomic_write(path, lines)
+    return "Production key rotated atomically; previous key retained for verification and decryption."
+
+
+def _atomic_write(path: Path, lines: list[str]) -> None:
     mode = stat.S_IMODE(path.stat().st_mode)
     temp_path: Path | None = None
     try:
@@ -68,7 +91,6 @@ def rotate(path: Path) -> str:
         if temp_path is not None:
             temp_path.unlink(missing_ok=True)
         raise
-    return "Production key rotated atomically; previous key retained for verification and decryption."
 
 
 def main() -> int:
