@@ -13,6 +13,7 @@ from app.models.portal_access_grant import PortalAccessGrant
 from app.models.getting_started_job import GettingStartedJob
 from app.models.order import Order
 from app.services.getting_ready_package import create_portal_leaflet
+from app.services.rotating_secret import decode_application_token
 
 GUEST_PORTAL_TOKEN_DAYS = 400
 
@@ -183,7 +184,7 @@ async def record_portal_claim_email_result(
 async def verify_guest_portal_token(db: AsyncSession, token: str) -> PortalAccessGrant | None:
     settings = get_settings()
     try:
-        claims = jwt.decode(token, settings.secret_key, algorithms=[settings.jwt_algorithm])
+        claims = decode_application_token(token, settings)
     except JWTError:
         return None
     if claims.get("typ") != "guest_portal" or claims.get("scope") != "portal:read":
@@ -200,7 +201,7 @@ def guest_portal_token_has_capability(token: str, capability: str) -> bool:
     """Check one narrowly-scoped guest portal write capability."""
     settings = get_settings()
     try:
-        claims = jwt.decode(token, settings.secret_key, algorithms=[settings.jwt_algorithm])
+        claims = decode_application_token(token, settings)
     except JWTError:
         return False
     return (

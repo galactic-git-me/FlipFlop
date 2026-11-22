@@ -25,6 +25,13 @@ PY
 Keep this file stable across deploys. Admin JWTs expire after 12 hours; existing
 admin sessions must sign in again after changing this key. Customer and guest
 portal token signing and licence-key encryption use the separate `SECRET_KEY`.
+For a controlled rotation, set the new strong value as `SECRET_KEY` and retain
+the old value as `SECRET_KEY_PREVIOUS`. New tokens and encrypted values use the
+current key; verification/decryption accepts the previous key for existing
+data. Remove `SECRET_KEY_PREVIOUS` only after old customer and guest tokens
+have expired and stored licence/eBay credentials have been re-encrypted. The
+production workflow rotates a too-short key atomically before deployment and
+never prints either key.
 
 The production checkout must contain the storefront repository at either:
 
