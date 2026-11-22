@@ -168,6 +168,18 @@ it('requires an explicit acknowledgement before approving a Windows source into 
   expect(approveSupplierLicence).toHaveBeenCalledWith(candidate);
 });
 
+it('explains that acknowledgement cannot approve a stale software licence capture',async()=>{
+  const candidate={listing_id:62,title:'Windows 11 Home OEM Key',url:'https://royalcdkeys.com/en-gb/products/windows-11-home-oem-key',price_gbp:'4.12',image_url:null,seller_product_claims:'One PC, non-transferable.',supplier_handle:'windows-11-home-oem-key',digital_product:true,category:'os',customer_offering_enabled:false,licence_review_fingerprint:'f'.repeat(64),licence_source_reviewed:false,fresh:false,stock_status:'available',stock_evidence:'Royal product feed reports available=true',product_properties:{'License type (supplier listing)':'OEM','Device scope (supplier claim)':'One device'},catalogue_statuses:[{playbook_id:1,status:'pending_review'}],terms_url:'https://royalcdkeys.com/pages/terms-conditions'};
+  proposals.mockResolvedValue({items:[]});
+  supplierLicences.mockResolvedValue({items:[candidate]});
+  await renderPage();
+  fireEvent.click(await screen.findByRole('button',{name:/^Software licences/}));
+  const button=await screen.findByRole('button',{name:'Review this source for Playbook consideration'});
+  fireEvent.click(screen.getByRole('checkbox'));
+  expect(button).toBeDisabled();
+  expect(screen.getByRole('status')).toHaveTextContent(/capture is stale.*acknowledging the review cannot refresh/i);
+});
+
 it('shows unique supplier facts across all builds and offers one explicit batch approval',async()=>{
   const mode={available:false,recommended_price_gbp:null,reason:'Source research pending'};
   const offer={proposal_id:32,cell_id:'BATCH',revision_sha256:'d'.repeat(64),segment:'Gaming',tier:'Budget',name:'Generated gaming build',description:'',required_hardware_count:1,
