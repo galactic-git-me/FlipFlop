@@ -413,6 +413,14 @@ def same_product(part, offer):
     from app.services.playbook_service import _plausible_role_candidate
     if not _plausible_role_candidate(part['role'], offer['title']):
         return False
+    if part['role'] == 'motherboard':
+        left_generation = _motherboard_memory_generation(part['title'])
+        right_generation = _motherboard_memory_generation(offer['title'])
+        # A supplier-model match is insufficient if either title explicitly
+        # identifies a different (or ambiguous) DDR generation. Do not let a
+        # DDR4 board's price or stock support a DDR5 build, or vice versa.
+        if left_generation != right_generation and (left_generation or right_generation):
+            return False
     from app.gem_radar.product_identifiers import title_part_numbers, variant_facts
     left_codes, right_codes = title_part_numbers(part['title']), title_part_numbers(offer['title'])
     product_evidence = offer.get('playbook_product_capture') or offer.get('product_capture')
@@ -513,6 +521,14 @@ def same_product(part, offer):
         model = normalise_cpu(part['title'])
         return bool(model and model == normalise_cpu(offer['title']))
     return False
+
+
+def _motherboard_memory_generation(title):
+    """Return an explicit DDR generation, or None when title evidence is absent/ambiguous."""
+    generations = set(re.findall(r'\bDDR\s*([345])\b', str(title or ''), re.I))
+    if len(generations) > 1:
+        return tuple(sorted(generations))
+    return next(iter(generations)) if generations else None
 
 
 def _same_specific_cpk_product(part, offer):
