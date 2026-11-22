@@ -54,7 +54,16 @@ provision_worker_key() {
 
 rotate_production_secret() {
   local repository="/home/mac/CODING/FlipFlop-production"
-  exec python3 "$repository/deploy/rotate-production-secret-key.py" "$repository/.env.local"
+  local helper="$repository/deploy/rotate-production-secret-key.py"
+  local status=0
+  python3 "$helper" "$repository/.env.local" || status=$?
+  # The installed deploy script may predate this helper. Remove only the
+  # exact bootstrap utility after running it so its clean-worktree guard can
+  # pass; the tagged deployment then restores the tracked release copy.
+  if ! git -C "$repository" ls-files --error-unmatch -- deploy/rotate-production-secret-key.py >/dev/null 2>&1; then
+    rm -f -- "$helper"
+  fi
+  return "$status"
 }
 
 if [[ "$original" == "provision-google-merchant-key" ]]; then
