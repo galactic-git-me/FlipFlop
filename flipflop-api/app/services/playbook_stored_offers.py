@@ -207,8 +207,13 @@ def offers_for_part(part, index):
             if len(strong)>1:
                 continue
         choices=[*choices,*matches]
+    # The same observation can be reached through the CPK, identity-key and
+    # title-product indexes. Keep one deterministic entry per observation.
+    unique={}
+    for row in choices:
+        unique.setdefault(row['observation_id'],row)
     return [{**row,'match_basis':'exact_cpk_and_product' if part.get('cpk') and row.get('cpk')==part['cpk']
-             else 'exact_product_identity'} for row in {row['observation_id']:row for row in choices}.values()]
+             else 'exact_product_identity'} for row in unique.values()]
 
 
 def recorded_offer(row):
