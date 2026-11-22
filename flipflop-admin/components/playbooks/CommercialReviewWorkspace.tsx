@@ -1518,6 +1518,20 @@ export default function CommercialReviewWorkspace({
                               independent entitlement or resale authorization.
                             </span>
                           </label>
+                          {!candidate.fresh ? (
+                            <p role="status" className="text-sm text-amber-300">
+                              This supplier capture is stale. Refresh the exact
+                              supplier listing before it can be considered;
+                              acknowledging the review cannot refresh its price,
+                              stock or licence terms.
+                            </p>
+                          ) : !candidate.licence_review_fingerprint ? (
+                            <p role="status" className="text-sm text-amber-300">
+                              This listing is missing its exact review
+                              fingerprint. Refresh supplier listings before
+                              reviewing it.
+                            </p>
+                          ) : null}
                           <button
                             disabled={
                               busy ||
