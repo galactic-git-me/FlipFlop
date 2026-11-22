@@ -37,3 +37,20 @@ class ReadinessPostgresTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0].observed_at, self.pending[0]['observed_at'])
         self.assertEqual(str(rows[0].item_gbp), '123.45')
+
+    async def test_operator_review_is_recorded_when_automation_already_captured_same_facts(self):
+        await store_reviewed_sources(self.db, self.pending, 0)
+        await self.db.commit()
+
+        reviewed, reused = await store_reviewed_sources(self.db, self.pending, 42)
+        await self.db.commit()
+        retried, reused_after_review = await store_reviewed_sources(self.db, self.pending, 42)
+        await self.db.commit()
+
+        rows = (await self.db.execute(select(SupplierOfferEvidence).where(
+            SupplierOfferEvidence.part_key == self.key
+        ).order_by(SupplierOfferEvidence.id))).scalars().all()
+        self.assertEqual((len(reviewed), reused), (1, 0))
+        self.assertEqual((len(retried), len(reused_after_review)), (0, 1))
+        self.assertEqual([row.captured_by_admin_id for row in rows], [0, 42])
+        self.assertEqual(rows[0].observed_at, rows[1].observed_at)
