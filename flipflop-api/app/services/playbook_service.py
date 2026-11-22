@@ -2936,6 +2936,8 @@ async def annotate_supplier_cost_reviews(db, proposals):
         return proposals
     rows = (await db.execute(select(SupplierOfferEvidence).where(
         SupplierOfferEvidence.part_key.in_({key[0] for key in expected}),
+        SupplierOfferEvidence.evidence_ref.in_({key[1] for key in expected}),
+        SupplierOfferEvidence.evidence_source.in_({key[2] for key in expected}),
         SupplierOfferEvidence.captured_by_admin_id > 0,
     ))).scalars().all()
     saved = {(row.part_key, row.evidence_ref, row.evidence_source): row for row in rows}
