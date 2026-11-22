@@ -26,6 +26,9 @@ def test_cpu_model_number_and_motherboard_compatibility_are_not_a_full_build():
 
 def test_attached_gpu_suffix_still_counts_as_a_build_component():
     assert is_full_system_listing("Ryzen 5 5600 RTX 3060Ti 16GB DDR4")
+    assert is_full_system_listing(
+        "Ryzen 7 9800X3D/5060TI 16Gb/32GB 6000/1TB Nvme/Lian Li A3"
+    )
 
 
 def test_explicit_product_type_beats_compatibility_specs():
