@@ -60,7 +60,9 @@ rotate_production_secret() {
   # The installed deploy script may predate this helper. Remove only the
   # exact bootstrap utility after running it so its clean-worktree guard can
   # pass; the tagged deployment then restores the tracked release copy.
-  rm -f -- "$helper"
+  if ! git -C "$repository" ls-files --error-unmatch -- deploy/rotate-production-secret-key.py >/dev/null 2>&1; then
+    rm -f -- "$helper"
+  fi
   return "$status"
 }
 
