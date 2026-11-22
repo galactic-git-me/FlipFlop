@@ -33,6 +33,13 @@ have expired and stored licence/eBay credentials have been re-encrypted. The
 production workflow rotates a too-short key atomically before deployment and
 never prints either key.
 
+If an older production `.env.local` has no explicit `SECRET_KEY`, the guarded
+rotation step provisions a new strong key and retains the historical built-in
+fallback as `SECRET_KEY_PREVIOUS`. This preserves verification/decryption for
+existing values while ensuring the new production configuration uses an
+explicit key. A previous key without a current key still stops the release for
+manual review.
+
 The production checkout must contain the storefront repository at either:
 
 ```text

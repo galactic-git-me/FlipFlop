@@ -93,3 +93,42 @@ def test_production_rotation_is_atomic_and_idempotent(tmp_path):
     assert "short-old-key" not in result
     assert "no rotation needed" in module.rotate(env_file)
 
+
+def test_production_rotation_bootstraps_missing_key_and_preserves_builtin_fallback(tmp_path):
+    script_path = Path(__file__).resolve().parents[3] / "deploy" / "rotate-production-secret-key.py"
+    spec = importlib.util.spec_from_file_location("rotate_production_secret_key_missing", script_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec and spec.loader
+    spec.loader.exec_module(module)
+
+    env_file = tmp_path / ".env.local"
+    env_file.write_text("APP_ENV=production\n", encoding="utf-8")
+    result = module.rotate(env_file)
+    contents = env_file.read_text(encoding="utf-8")
+    keys = dict(line.split("=", 1) for line in contents.splitlines() if "=" in line)
+
+    assert "Missing production key replaced safely" in result
+    assert len(keys["SECRET_KEY"]) >= 32
+    assert keys["SECRET_KEY_PREVIOUS"] == "dev-secret-key-change-in-production"
+    assert "no rotation needed" in module.rotate(env_file)
+
+
+def test_production_rotation_rejects_previous_key_without_current_key(tmp_path):
+    script_path = Path(__file__).resolve().parents[3] / "deploy" / "rotate-production-secret-key.py"
+    spec = importlib.util.spec_from_file_location("rotate_production_secret_key_orphan_previous", script_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec and spec.loader
+    spec.loader.exec_module(module)
+
+    env_file = tmp_path / ".env.local"
+    original = "APP_ENV=production\nSECRET_KEY_PREVIOUS=old-value\n"
+    env_file.write_text(original, encoding="utf-8")
+
+    try:
+        module.rotate(env_file)
+    except ValueError as error:
+        assert "previous key exists without a current key" in str(error)
+    else:
+        raise AssertionError("orphan previous key must require manual review")
+    assert env_file.read_text(encoding="utf-8") == original
+
