@@ -2,7 +2,11 @@ from types import SimpleNamespace
 
 import pytest
 
-from app.services.channel_sync import build_is_unavailable, record_relisted_channel
+from app.services.channel_sync import (
+    build_is_unavailable,
+    confirm_browser_observation,
+    record_relisted_channel,
+)
 
 
 @pytest.mark.asyncio
@@ -19,6 +23,59 @@ async def test_confirmed_relist_restores_build_availability():
                             storefront_product_id=None)
 
     assert await build_is_unavailable(None, build) is False
+
+
+@pytest.mark.asyncio
+async def test_active_browser_listing_for_sold_build_queues_withdrawal_even_if_ebay_status_active(monkeypatch):
+    from unittest.mock import AsyncMock, Mock
+
+    row = SimpleNamespace(
+        id=44,
+        manual_build_id=9,
+        channel="facebook_catalog",
+        external_listing_id="fb-listing-1",
+        listing_url="https://www.facebook.com/marketplace/item/1",
+        status="published",
+        recreate_enabled=True,
+        next_recreate_at=None,
+    )
+    build = SimpleNamespace(
+        id=9,
+        status="sold",
+        ebay_listing_status="active",
+        is_archived=False,
+        ebay_price=100,
+        storefront_product_id=None,
+    )
+    job = SimpleNamespace(
+        id=55,
+        channel_listing_id=row.id,
+        operation="observe",
+        status="running",
+        message=None,
+        lease_token="lease",
+        lease_until=None,
+    )
+    db = SimpleNamespace(
+        get=AsyncMock(return_value=row),
+        execute=AsyncMock(return_value=SimpleNamespace(scalar_one=lambda: build)),
+        flush=AsyncMock(),
+        add=Mock(),
+    )
+    withdraw = AsyncMock()
+    update = AsyncMock()
+    monkeypatch.setattr("app.services.channel_sync.withdraw_other_channels", withdraw)
+    monkeypatch.setattr("app.services.channel_sync.enqueue_operation", update)
+
+    await confirm_browser_observation(
+        db,
+        job,
+        state="active",
+        evidence={"verified_at": "now", "url": row.listing_url, "note": "seller page checked", "price": 120},
+    )
+
+    withdraw.assert_awaited_once_with(db, build)
+    update.assert_not_awaited()
 
 
 @pytest.mark.asyncio
