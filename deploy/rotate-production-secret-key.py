@@ -43,6 +43,8 @@ def rotate(path: Path) -> str:
     key_index = found["SECRET_KEY"][0][0]
     line_ending = "\r\n" if lines[key_index].endswith("\r\n") else "\n"
     lines[key_index] = f"SECRET_KEY={new_current}{line_ending}"
+    if lines and not lines[-1].endswith(("\n", "\r")):
+        lines[-1] += line_ending
     lines.append(f"SECRET_KEY_PREVIOUS={current}{line_ending}")
 
     mode = stat.S_IMODE(path.stat().st_mode)

@@ -82,11 +82,12 @@ def test_production_rotation_is_atomic_and_idempotent(tmp_path):
     spec.loader.exec_module(module)
 
     env_file = tmp_path / ".env.local"
-    env_file.write_text("APP_ENV=production\nSECRET_KEY=short-old-key\n", encoding="utf-8")
+    env_file.write_text("SECRET_KEY=short-old-key\nAPP_ENV=production", encoding="utf-8")
     result = module.rotate(env_file)
     contents = env_file.read_text(encoding="utf-8")
     assert "rotated atomically" in result
     assert "SECRET_KEY_PREVIOUS=short-old-key" in contents
+    assert "APP_ENV=production\nSECRET_KEY_PREVIOUS=short-old-key" in contents
     new_value = next(line.split("=", 1)[1] for line in contents.splitlines() if line.startswith("SECRET_KEY="))
     assert len(new_value) >= 32
     assert "short-old-key" not in result

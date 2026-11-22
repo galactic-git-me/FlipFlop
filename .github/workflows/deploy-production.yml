@@ -190,7 +190,7 @@ jobs:
           ssh -i ~/.ssh/andromeda \
             -p "${ANDROMEDA_PORT:-22}" \
             "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
-            "python3 - /home/mac/CODING/FlipFlop-production/.env.local" \
+            rotate-production-secret-key \
             < deploy/rotate-production-secret-key.py
       - name: Deploy tagged Andromeda services
         env:
