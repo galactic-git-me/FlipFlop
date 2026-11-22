@@ -54,7 +54,7 @@ provision_worker_key() {
 
 rotate_production_secret() {
   local repository="/home/mac/CODING/FlipFlop-production"
-  python3 - "$repository/.env.local" || return
+  exec python3 "$repository/deploy/rotate-production-secret-key.py" "$repository/.env.local"
 }
 
 if [[ "$original" == "provision-google-merchant-key" ]]; then

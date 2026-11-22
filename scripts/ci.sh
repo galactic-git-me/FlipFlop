@@ -5,6 +5,9 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 log() { printf '[flipflop-ci] %s\n' "$*"; }
 
+log "Checking the restricted production deployment command syntax"
+bash -n "$ROOT_DIR/deploy/github-deploy-command.sh"
+
 log "Checking environment boundaries"
 bash "$ROOT_DIR/scripts/validate-environments.sh"
 
