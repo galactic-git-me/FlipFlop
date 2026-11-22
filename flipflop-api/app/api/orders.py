@@ -63,7 +63,7 @@ from app.schemas.customer_portal import (
     CustomerRepairShipmentEventOut,
     CustomerRepairShipmentOut,
 )
-from jose import jwt, JWTError
+from jose import JWTError
 from app.config import get_settings
 from app.services.software_catalogue import SOFTWARE_CATALOGUE, SOFTWARE_BY_ID, estimate_saved_minutes
 from app.services.getting_started_service import (
