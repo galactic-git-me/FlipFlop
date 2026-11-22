@@ -7,13 +7,13 @@ type UsageResult = { data?: Array<Record<string, unknown>>; has_more?: boolean; 
 async function fetchReport(kind: "messages" | "web_search", start: string, end: string) {
   const key = process.env.ANTHROPIC_ADMIN_API_KEY;
   if (!key) throw new Error("ANTHROPIC_ADMIN_API_KEY is not configured on the admin server");
-  const endpoint = kind === "messages" ? "messages" : "web_search";
+  const endpoint = kind === "messages" ? "usage_report/messages" : "usage_report/web_search";
   const rows: Array<Record<string, unknown>> = [];
   let page: string | null = null;
   for (let i = 0; i < 100; i++) {
     const query = new URLSearchParams({ starting_at: start, ending_at: end, bucket_width: "1d", limit: "31" });
     if (page) query.set("page", page);
-    const response = await fetch(`https://api.anthropic.com/v1/organizations/${endpoint}/usage_report?${query}`, {
+    const response = await fetch(`https://api.anthropic.com/v1/organizations/${endpoint}?${query}`, {
       headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "anthropic-beta": "organizations-usage-2025-04-22" },
       cache: "no-store",
     });
