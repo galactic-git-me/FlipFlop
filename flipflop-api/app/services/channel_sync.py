@@ -15,7 +15,10 @@ PENDING = ("queued", "running", "blocked", "needs_review")
 
 
 async def build_is_unavailable(db, build):
-    if (build.status == "sold" and build.ebay_listing_status != "active") or build.is_archived:
+    # A confirmed sale is authoritative even if another channel's listing is
+    # still active while withdrawal is queued or retrying. Relisting is the
+    # only path that restores the build to listed availability.
+    if build.status == "sold" or build.is_archived:
         return True
     if build.storefront_product_id:
         product = (await db.execute(select(Product).where(Product.id == build.storefront_product_id).with_for_update())).scalar_one_or_none()

@@ -915,9 +915,9 @@ export default function CommercialReviewWorkspace({
                                   {!!part.supplier_offers?.length && (
                                     <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs">
                                       <span className="text-slate-400">Matched vendor listings:</span>
-                                      {part.supplier_offers.map((vendorOffer) => (
+                                      {part.supplier_offers.map((vendorOffer, vendorOfferIndex) => (
                                         <a
-                                          key={`${vendorOffer.url}-${vendorOffer.source}`}
+                                          key={`${vendorOffer.url}-${vendorOffer.source}-${vendorOfferIndex}`}
                                           href={sourceLink(vendorOffer.url)}
                                           target="_blank"
                                           rel="noopener noreferrer"
@@ -1274,9 +1274,9 @@ export default function CommercialReviewWorkspace({
                               )}
                               {!!part.supplier_offers?.length && (
                                 <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs">
-                                  {part.supplier_offers.map((vendorOffer) => (
+                                  {part.supplier_offers.map((vendorOffer, vendorOfferIndex) => (
                                     <a
-                                      key={`${vendorOffer.url}-${vendorOffer.source}`}
+                                      key={`${vendorOffer.url}-${vendorOffer.source}-${vendorOfferIndex}`}
                                       href={sourceLink(vendorOffer.url)}
                                       target="_blank"
                                       rel="noopener noreferrer"
