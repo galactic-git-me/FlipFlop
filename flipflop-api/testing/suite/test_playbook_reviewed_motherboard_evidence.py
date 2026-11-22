@@ -228,6 +228,9 @@ async def test_product_spec_suggestion_requires_exact_unchanged_capture_and_expl
         SimpleNamespace(email='operator@example.test'))
     assert approved['reviewed'] is True and approved['published'] is False
     assert listing.raw_specs['configurator']['reviewed'] is True
+    suggestion=_playbook_engineering_suggestion(listing,'cpu')
+    assert suggestion['previously_reviewed_specs']=={'socket':'am5','power_w':65}
+    assert suggestion['previously_reviewed_at']==listing.raw_specs['configurator']['reviewed_at']
     assert listing.raw_specs['configurator']['socket']=='am5'
     assert listing.raw_specs['configurator']['power_w']==65
     assert listing.raw_specs['configurator']['source_url']==url

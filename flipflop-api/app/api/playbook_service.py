@@ -11,7 +11,7 @@ from app.models.playbook import PlaybookProposal
 from app.routes.admin_auth import get_current_admin
 from app.config import get_settings
 from app.schemas.commercial_quote import StrictModel
-from app.services.playbook_service import (current_proposals, reject_proposal,
+from app.services.playbook_service import (current_proposals, annotate_supplier_cost_reviews, reject_proposal,
     approve_proposal, approve_current_supplier_sources, approve_all_current_supplier_sources,
     list_motherboard_engineering_suggestions, research_playbook_motherboard_specs,
     approve_playbook_motherboard_spec, list_playbook_product_engineering_suggestions,
@@ -99,7 +99,8 @@ class EngineeringSourceApproval(StrictModel):
 
 @router.get('/proposals')
 async def proposals(db:AsyncSession=Depends(get_db)):
-    return {'items':await current_proposals(db)}
+    items=await current_proposals(db)
+    return {'items':await annotate_supplier_cost_reviews(db,items)}
 
 
 @router.get('/automation')
