@@ -106,6 +106,38 @@ describe("admin session proxy", () => {
     expect(response.headers.get("x-middleware-request-authorization")).toBe("Bearer valid-token");
   });
 
+  it("allows writes from the configured public origin behind an internal proxy", async () => {
+    vi.stubEnv("PUBLIC_HOST", "admin.theflipflop.shop");
+    verifyAdminToken.mockResolvedValue({ adminId: 7 });
+    const request = new NextRequest("http://0.0.0.0:3000/api/assets-3d", {
+      method: "POST",
+      headers: {
+        cookie: "admin_session=valid-token",
+        origin: "https://admin.theflipflop.shop",
+      },
+    });
+
+    const response = await proxy(request);
+
+    expect(response.headers.get("x-middleware-request-authorization")).toBe("Bearer valid-token");
+  });
+
+  it("rejects a different public origin even when the proxy host is internal", async () => {
+    vi.stubEnv("PUBLIC_HOST", "admin.theflipflop.shop");
+    verifyAdminToken.mockResolvedValue({ adminId: 7 });
+    const request = new NextRequest("http://0.0.0.0:3000/api/assets-3d", {
+      method: "POST",
+      headers: {
+        cookie: "admin_session=valid-token",
+        origin: "https://evil.example.test",
+      },
+    });
+
+    const response = await proxy(request);
+
+    expect(response.status).toBe(403);
+  });
+
   it("does not allow the Playwright bypass to disable production API authentication", async () => {
     process.env.PLAYWRIGHT_TEST = "1";
     vi.stubEnv("NODE_ENV", "production");
