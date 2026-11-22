@@ -50,7 +50,7 @@ class ReadinessPostgresTests(unittest.IsolatedAsyncioTestCase):
         rows = (await self.db.execute(select(SupplierOfferEvidence).where(
             SupplierOfferEvidence.part_key == self.key
         ).order_by(SupplierOfferEvidence.id))).scalars().all()
-        self.assertEqual((len(reviewed), reused), (1, 0))
+        self.assertEqual((len(reviewed), len(reused)), (1, 0))
         self.assertEqual((len(retried), len(reused_after_review)), (0, 1))
         self.assertEqual([row.captured_by_admin_id for row in rows], [0, 42])
         self.assertEqual(rows[0].observed_at, rows[1].observed_at)
