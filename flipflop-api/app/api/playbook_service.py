@@ -1,5 +1,5 @@
 """Generated Playbook reviews. Operators never supply component or price values."""
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query
 from pydantic import Field
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -11,7 +11,7 @@ from app.models.playbook import PlaybookProposal
 from app.routes.admin_auth import get_current_admin
 from app.config import get_settings
 from app.schemas.commercial_quote import StrictModel
-from app.services.playbook_service import (current_proposals, reject_proposal,
+from app.services.playbook_service import (current_proposals, annotate_supplier_cost_reviews, reject_proposal,
     approve_proposal, approve_current_supplier_sources, approve_all_current_supplier_sources,
     list_motherboard_engineering_suggestions, research_playbook_motherboard_specs,
     approve_playbook_motherboard_spec, list_playbook_product_engineering_suggestions,
@@ -50,7 +50,16 @@ async def decide_market(playbook_id:int, cell_id:str, body:MarketDecision, db:As
 @router.get('/book')
 async def book(db:AsyncSession=Depends(get_db)):
     from app.services.playbook_book import operational_book
-    return await operational_book(db)
+    return await operational_book(db, history_limit=3)
+
+
+@router.get('/book/{cell_id}/history')
+async def book_history(cell_id:str, history_limit:int=Query(default=100, ge=1, le=100), db:AsyncSession=Depends(get_db)):
+    from app.services.playbook_book import operational_cell_history
+    history=await operational_cell_history(db, cell_id, history_limit=history_limit)
+    if history is None:
+        raise HTTPException(status_code=404, detail='Playbook cell not found')
+    return {'cell_id':cell_id,'history':history}
 
 
 @router.post('/pricing-guidance/refresh')
@@ -90,7 +99,8 @@ class EngineeringSourceApproval(StrictModel):
 
 @router.get('/proposals')
 async def proposals(db:AsyncSession=Depends(get_db)):
-    return {'items':await current_proposals(db)}
+    items=await current_proposals(db)
+    return {'items':await annotate_supplier_cost_reviews(db,items)}
 
 
 @router.get('/automation')

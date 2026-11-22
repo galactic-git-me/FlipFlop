@@ -28,7 +28,7 @@ import structlog
 
 from app.services.proxy import apply_httpx_proxy, playwright_proxy_config
 from app.services.browser_pool import BACKGROUND_HEADED_ARGS, focus_page_for_human, managed_playwright
-from app.services.playwright_scraper import chromium_available
+from app.services.playwright_scraper import _STEALTH_JS, chromium_available
 
 log = structlog.get_logger(__name__)
 ua = UserAgent()
@@ -427,7 +427,7 @@ class PlaywrightSoldCompsAdapter(SoldCompsAdapter):
                     context = browser.contexts[0]
                 else:
                     context = await browser.new_context(**context_kwargs)
-                await context.add_init_script(self._STEALTH_JS)
+                await context.add_init_script(_STEALTH_JS)
                 page = await context.new_page()
                 try:
                     await self._ensure_ebay_login(page, query=query, headless=headless)

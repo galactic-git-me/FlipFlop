@@ -15,6 +15,9 @@ PENDING = ("queued", "running", "blocked", "needs_review")
 
 
 async def build_is_unavailable(db, build):
+    # A confirmed sale is authoritative even if another channel's listing is
+    # still active while withdrawal is queued or retrying. Relisting is the
+    # only path that restores the build to listed availability.
     if build.status == "sold" or build.is_archived:
         return True
     if build.storefront_product_id:
@@ -28,6 +31,108 @@ def canonical_hash(build):
         "components", "photos", "hero_photo_url", "shipping_cost", "shipping_method", "return_days", "selected_faq_ids", "selected_faq_answer_overrides")
     data = {field: getattr(build, field, None) for field in fields}
     return hashlib.sha256(json.dumps(data, sort_keys=True, default=str).encode()).hexdigest()
+
+
+async def record_confirmed_sale(db, build, *, channel, order_id, sale_price, source, account=None):
+    """Persist the verified channel, seller, listing and order for a real sale."""
+    aliases = [channel]
+    if channel == "flipflop_shop": aliases.append("storefront")
+    if channel == "ebay_uk": aliases.append("ebay")
+    row = (await db.execute(select(ChannelListing).where(
+        ChannelListing.manual_build_id == build.id,
+        ChannelListing.channel.in_(aliases),
+    ).order_by(ChannelListing.id.desc()).limit(1))).scalars().first()
+    if row is None:
+        if channel == "ebay_uk":
+            external_id, listing_url = build.ebay_listing_id, build.ebay_listing_url
+        elif channel == "flipflop_shop" and build.storefront_product_id:
+            external_id = str(build.storefront_product_id)
+            listing_url = f"https://www.theflipflop.shop/ready-to-ship/{build.storefront_product_id}"
+        else:
+            external_id, listing_url = None, None
+        row = ChannelListing(manual_build_id=build.id, channel=channel, status="sold",
+            external_listing_id=external_id, listing_url=listing_url)
+        db.add(row)
+        await db.flush()
+    else:
+        row.status = "sold"
+    prior = (await db.execute(select(ListingPublishEvent).where(
+        ListingPublishEvent.channel_listing_id == row.id,
+        ListingPublishEvent.event_type == "sale_confirmed",
+    ).order_by(ListingPublishEvent.id.desc()).limit(1))).scalars().first()
+    if prior and (prior.event_metadata or {}).get("order_id") == str(order_id):
+        return row
+    db.add(ListingPublishEvent(channel_listing_id=row.id, event_type="sale_confirmed",
+        message=f"Confirmed paid sale recorded from {channel}.", event_metadata={
+            "build_id": build.id, "channel": channel, "seller_account": account,
+            "external_listing_id": row.external_listing_id, "listing_url": row.listing_url,
+            "order_id": str(order_id), "sale_price": sale_price, "source": source,
+        }))
+    return row
+
+
+async def record_relisted_channel(db, build, *, channel, external_listing_id, listing_url, source):
+    """Record a provider-confirmed replacement listing and restore cross-list eligibility."""
+    channel = ALIASES.get(channel, channel)
+    external_listing_id = str(external_listing_id)
+    if channel == "ebay_uk" and build.ebay_listing_id and str(build.ebay_listing_id) == external_listing_id:
+        raise ValueError("The confirmed eBay offer is the original listing, not a replacement")
+    old_listing_id = build.ebay_listing_id if channel == "ebay_uk" else None
+    old_rows = []
+    pending_jobs = []
+    if old_listing_id and str(old_listing_id) != external_listing_id:
+        old_rows = (await db.execute(select(ChannelListing).where(
+            ChannelListing.manual_build_id == build.id,
+            ChannelListing.channel.in_(("ebay", "ebay_uk")),
+            ChannelListing.external_listing_id == str(old_listing_id),
+        ).with_for_update())).scalars().all()
+        if old_rows:
+            old_row_ids = [old_row.id for old_row in old_rows]
+            pending_jobs = (await db.execute(select(BrowserListingJob).where(
+                BrowserListingJob.channel_listing_id.in_(old_row_ids),
+                BrowserListingJob.operation == "withdraw",
+                BrowserListingJob.status.in_(PENDING),
+            ).with_for_update())).scalars().all()
+            # Check before creating or changing the replacement row. The
+            # reconciliation caller may catch this refusal and commit its
+            # original-listing observation in the same transaction.
+            if any(job.status == "running" for job in pending_jobs):
+                raise ValueError("An eBay withdrawal is already running for the original listing")
+    row = (await db.execute(select(ChannelListing).where(
+        ChannelListing.manual_build_id == build.id,
+        ChannelListing.channel.in_([channel] + [key for key, value in ALIASES.items() if value == channel]),
+        ChannelListing.external_listing_id == external_listing_id,
+    ).order_by(ChannelListing.id.desc()).limit(1))).scalars().first()
+    if row is None:
+        row = ChannelListing(manual_build_id=build.id, channel=channel)
+        db.add(row)
+        await db.flush()
+    row.external_listing_id = str(external_listing_id)
+    row.listing_url = listing_url
+    row.status = "published"
+    row.withdrawn_at = None
+    row.last_checked_at = datetime.utcnow()
+    if channel == "ebay_uk":
+        for job in pending_jobs:
+            job.status, job.lease_token, job.lease_until = "cancelled", None, None
+            job.message = "Superseded by a provider-confirmed replacement listing."
+        for old_row in old_rows:
+            old_row.status = "sold"
+        build.ebay_listing_id = str(external_listing_id)
+        build.ebay_listing_url = listing_url
+        build.ebay_listing_status = "active"
+        build.ebay_listing_status_checked_at = datetime.utcnow()
+    build.status = "listed"
+    build.dispatch_status = "awaiting_dispatch"
+    build.relist_enabled = True
+    build.updated_at = datetime.utcnow()
+    db.add(ListingPublishEvent(channel_listing_id=row.id, event_type="relisted_confirmed",
+        message=f"Replacement listing confirmed on {channel}.", event_metadata={
+            "build_id": build.id, "channel": channel,
+            "external_listing_id": str(external_listing_id), "listing_url": listing_url,
+            "source": source, "previous_status": "sold",
+        }))
+    return row
 
 
 async def enqueue_operation(db, build, row, operation):
@@ -68,7 +173,7 @@ async def withdraw_other_channels(db, build, source_channel=None):
     for row in rows:
         row.recreate_enabled, row.next_recreate_at = False, None
         channel = ALIASES.get(row.channel, row.channel)
-        if channel == source_channel or row.status == "sold" or (channel == "ebay_uk" and build.ebay_listing_status == "sold"):
+        if channel == source_channel or row.status == "sold":
             row.status = "sold"
             continue
         if channel == "flipflop_shop":
@@ -128,8 +233,18 @@ async def confirm_browser_observation(db, job, *, state, external_id=None, listi
             await enqueue_operation(db, build, row, "update")
     else:
         job.status, job.message = "needs_review", "Seller state is unverified; no sale or withdrawal was inferred."
+    event_metadata = {"job_id": job.id, "state": state, "order_id": order_id,
+        "build_id": build.id, "channel": row.channel, "external_listing_id": row.external_listing_id,
+        "listing_url": row.listing_url, "sale_price": evidence.get("price"),
+        "currency": "GBP", "source": "seller_page_observation", "evidence": evidence}
+    if state == "sold" and row.channel in {"ebay", "ebay_uk"}:
+        from app.models.app_settings import AppSettings
+        settings = (await db.execute(select(AppSettings).where(AppSettings.name == "default"))).scalar_one_or_none()
+        event_metadata["seller_account"] = settings.ebay_seller_username if settings else None
+    elif state == "sold" and row.channel in {"flipflop_shop", "storefront"}:
+        event_metadata["seller_account"] = "FlipFlop.shop"
     db.add(ListingPublishEvent(channel_listing_id=row.id, event_type="seller_state_confirmed",
-        message=job.message, event_metadata={"job_id": job.id, "state": state, "order_id": order_id, "evidence": evidence}))
+        message=job.message, event_metadata=event_metadata))
 
 
 async def queue_email_checks(db, sale, body):

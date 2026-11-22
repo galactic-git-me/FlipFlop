@@ -165,6 +165,28 @@ class eBaySalesTracker:
                             error=str(exc),
                         )
 
+                # Previously sold builds remain on eBay's active-SKU poll so
+                # a seller relist can be observed after an approved return.
+                # The relist detector is read-only and requires an exact SKU.
+                sold_manual_rows = (await db.execute(select(ManualBuild).where(
+                    ManualBuild.status == "sold",
+                    ManualBuild.ebay_sku.is_not(None),
+                    ManualBuild.ebay_listing_id.is_not(None),
+                ))).scalars().all()
+                result["sold_relist_builds_checked"] = len(sold_manual_rows)
+                for build in sold_manual_rows:
+                    try:
+                        previous_id = build.ebay_listing_id
+                        state = await reconcile_manual_build_listing(
+                            build, db, force=True, access_token=access_token,
+                            environment=settings.ebay_listing_environment,
+                        )
+                        if state == "active" and build.ebay_listing_id != previous_id:
+                            result["manual_builds_changed"] += 1
+                    except Exception as exc:
+                        log.warning("ebay_sales_tracker.sold_relist_reconcile_failed",
+                            build_id=build.id, error=str(exc))
+
                 await db.commit()
 
             log.info(

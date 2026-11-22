@@ -12,10 +12,9 @@ export function BackendStatus() {
   const check = async () => {
     setChecking(true);
     try {
-      // Use the API itself as the heartbeat — avoids any URL-stripping logic
-      // and works correctly whether API_BASE_URL is absolute or relative.
-      const res = await fetch(`${API_BASE_URL}/settings`, { signal: AbortSignal.timeout(8000) });
-      // Any response (even 4xx) means the backend is reachable.
+      const res = await fetch(`${API_BASE_URL}/health/live`, { signal: AbortSignal.timeout(4000), cache: "no-store" });
+      const body = await res.json().catch(() => null) as { ok?: boolean } | null;
+      if (!res.ok || body?.ok !== true) throw new Error(`API liveness returned ${res.status}`);
       setOffline(false);
       setDismissed(false);
     } catch {

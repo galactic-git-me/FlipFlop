@@ -55,9 +55,9 @@ No policy was populated in a live database. No customer payment, provider call o
 Run from `flipflop-api` with `PYTHONPATH` set to that directory:
 
 ```powershell
-.venv\Scripts\python.exe tests/test_playbook_commercial_quote.py
+.venv\Scripts\python.exe testing/suite/test_playbook_commercial_quote.py
 $env:DATABASE_URL = 'postgresql+asyncpg://unused:unused@127.0.0.1:1/commercial_unit_test'
-.venv\Scripts\python.exe tests/test_playbook_commercial_quote_adapter.py
+.venv\Scripts\python.exe testing/suite/test_playbook_commercial_quote_adapter.py
 ```
 
 The first suite imports only pure pricing/schema modules. The second uses mocked sessions and a minimal in-memory FastAPI app, never application startup or database connections. The unreachable `_test` URL guards against accidentally using the developer database during imports. The repository-wide pytest fixtures are not loaded.

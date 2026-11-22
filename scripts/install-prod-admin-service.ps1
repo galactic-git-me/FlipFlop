@@ -43,8 +43,22 @@ nssm set FlipFlopProdAdmin AppRotateBytes 10485760
 # directly here instead of relying on Next.js's env-file precedence.
 # .env.production.local is kept as documentation/ready-to-use once next
 # build && next start works again and env-file precedence applies normally.
-nssm set FlipFlopProdAdmin AppEnvironmentExtra `
-    "NODE_ENV=development`r`nNEXT_DIST_DIR=.next-prod`r`nADMIN_JWT_SECRET=Pab8fb732opFtOTDyar7V0XQsf64nZ9Lo3H2fvF5sCk`r`nBACKEND_URL=https://www.theflipflop.shop`r`nNEXT_PUBLIC_API_URL=https://www.theflipflop.shop`r`nEBAY_OPS_BACKEND_URL=https://www.theflipflop.shop`r`nGEMRADAR_URL=https://www.theflipflop.shop`r`nNEXT_PUBLIC_APP_MODE=live`r`nNEXT_PUBLIC_FLIPFLOP_ENV=live"
+$adminJwtSecret = $env:ADMIN_JWT_SECRET
+if ([string]::IsNullOrWhiteSpace($adminJwtSecret) -or $adminJwtSecret.Length -lt 32) {
+    throw 'Set ADMIN_JWT_SECRET in the invoking environment to a stable secret of at least 32 characters.'
+}
+$serviceEnvironment = @(
+    'NODE_ENV=development'
+    'NEXT_DIST_DIR=.next-prod'
+    "ADMIN_JWT_SECRET=$adminJwtSecret"
+    'BACKEND_URL=https://www.theflipflop.shop'
+    'NEXT_PUBLIC_API_URL=https://www.theflipflop.shop'
+    'EBAY_OPS_BACKEND_URL=https://www.theflipflop.shop'
+    'GEMRADAR_URL=https://www.theflipflop.shop'
+    'NEXT_PUBLIC_APP_MODE=live'
+    'NEXT_PUBLIC_FLIPFLOP_ENV=live'
+) -join "`r`n"
+nssm set FlipFlopProdAdmin AppEnvironmentExtra $serviceEnvironment
 nssm restart FlipFlopProdAdmin
 
 Start-Sleep -Seconds 5

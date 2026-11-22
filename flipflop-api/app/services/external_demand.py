@@ -5,8 +5,6 @@ from datetime import datetime, timedelta
 from typing import Iterable
 
 import httpx
-import re
-import json
 from sqlalchemy import delete, select
 
 from app.database import AsyncSessionLocal
@@ -49,7 +47,6 @@ async def ingest_external_demand_signals() -> dict:
     for topic, queries in TOPIC_QUERIES.items():
         signals.extend(await _fetch_reddit_signals(topic, queries, now))
         signals.extend(await _fetch_google_trends_signals(topic, queries, now))
-        signals.extend(await _fetch_steam_signals(topic, queries, now))
 
     inserted = await _persist_signals(signals)
     await _prune_old(days=30)
@@ -224,7 +221,7 @@ async def _google_trends_interest_for_query(client: httpx.AsyncClient, query: st
                 try:
                     val = float(raw_val)
                 except Exception:
-                    val = 0.0
+                    continue
                 if region_name and val > 0:
                     ranked.append((str(region_name), val))
             ranked.sort(key=lambda t: t[1], reverse=True)
@@ -241,47 +238,6 @@ async def _google_trends_interest_for_query(client: httpx.AsyncClient, query: st
         "sample_size": len(values),
         "notes": notes,
     }
-
-
-async def _fetch_steam_signals(topic: str, queries: Iterable[str], now: datetime) -> list[DemandSignal]:
-    """
-    Real adapter (no API key):
-      - Scrapes public Steam Hardware Survey page text.
-      - Uses keyword mention frequency as relative demand proxy.
-    """
-    out: list[DemandSignal] = []
-    body = ""
-    async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
-        try:
-            resp = await client.get(
-                "https://store.steampowered.com/hwsurvey/Steam-Hardware-Software-Survey-Welcome-to-Steam",
-                headers={"User-Agent": "FlipFlopDemandBot/1.0"},
-            )
-            if resp.status_code == 200:
-                body = resp.text.lower()
-        except Exception:
-            body = ""
-
-    for q in queries:
-        ql = q.lower().strip()
-        if not ql:
-            continue
-        tokens = [t for t in re.split(r"\s+", ql) if len(t) >= 3]
-        hits = sum(body.count(t) for t in tokens) if body else 0
-        score = min(100.0, hits * 2.5)
-        out.append(
-            DemandSignal(
-                source="steam_hardware",
-                topic=topic,
-                query=q,
-                score=round(score, 2),
-                confidence=0.45 if body else 0.15,
-                sample_size=len(tokens) if tokens else None,
-                signal_time=now,
-                notes="Steam Hardware Survey keyword incidence proxy",
-            )
-        )
-    return out
 
 
 async def _persist_signals(signals: list[DemandSignal]) -> int:

@@ -34,6 +34,7 @@ _DOMAIN_TO_MARKETPLACE: dict[str, str] = {
     "vinted.co.uk": "vinted",
     "vinted.com": "vinted",
     "overclockers.co.uk": "overclockers",
+    "corsair.com": "corsair",
     "temu.com": "temu",
     # Amazon was missing entirely despite being one of the 5 marketplaces
     # the extension actually scrapes — every Amazon-sourced observation

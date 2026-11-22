@@ -4,6 +4,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 
 import structlog
+from sqlalchemy import select
 
 from app.models.manual_build import ManualBuild
 
@@ -49,6 +50,31 @@ async def reconcile_manual_build_listing(
         build.ebay_listing_status = "never_listed"
         build.ebay_listing_status_checked_at = datetime.utcnow()
         return build.ebay_listing_status
+
+    # A confirmed sale remains authoritative until a *new* eBay listing is
+    # discovered after an eBay sale. An active original offer can be stale
+    # because cross-channel withdrawal failed; the same offer is not proof
+    # that the sold physical unit has returned to stock.
+    if build.status == "sold" and build.ebay_listing_status == "sold" and build.ebay_sku:
+        try:
+            from app.services.ebay_token_manager import get_valid_ebay_access_token
+            from app.config import get_settings
+            from app.services.ebay_relisted_listing import find_active_listing_for_sku
+            settings = get_settings()
+            env = environment or settings.ebay_listing_environment
+            token = access_token or await get_valid_ebay_access_token(env, db=db)
+            active = await find_active_listing_for_sku(build.ebay_sku, token, env)
+            if active and str(active["listing_id"]) != str(build.ebay_listing_id):
+                from app.services.channel_sync import record_relisted_channel
+                await record_relisted_channel(db, build, channel="ebay_uk",
+                    external_listing_id=active["listing_id"], listing_url=active["listing_url"],
+                    source="ebay_inventory_api")
+                return "active"
+            if active:
+                log.info("manual_build.ebay_relist_ignored", build_id=build.id,
+                    listing_id=active["listing_id"], reason="matches_sold_listing")
+        except Exception as exc:
+            log.warning("manual_build.ebay_relist_discovery_failed", build_id=build.id, error=str(exc))
     if not str(build.ebay_listing_id).isdecimal():
         # Trading API GetItem and Fulfillment legacyItemId lookups require
         # eBay's numeric legacy listing ID; placeholder/local IDs are not live listings.
@@ -124,6 +150,7 @@ async def reconcile_manual_build_listing(
             order_found=order is not None,
             confirmed_unavailable=confirmed_unavailable,
         )
+        newly_recorded_order = order is not None and build.ebay_order_id != order.order_id
         if confirmed_unavailable and state == "missing":
             log.info(
                 "manual_build.ebay_listing_missing_confirmed",
@@ -139,11 +166,32 @@ async def reconcile_manual_build_listing(
     build.ebay_listing_status = state
     build.ebay_listing_status_checked_at = checked_at
     if state == "active":
-        build.status = "listed"
+        # Remote activity informs withdrawal workers, but never restores a
+        # confirmed physical unit to stock. Only record_relisted_channel,
+        # after a distinct replacement listing is discovered, can do that.
         build.ebay_listing_end_reason = None
     elif state == "sold":
         build.status = "sold"
         build.ebay_listing_end_reason = "sold"
+        if order is not None:
+            build.ebay_order_id = order.order_id
+            build.sale_price_actual = order.sale_price
+            if newly_recorded_order:
+                build.dispatch_status = "awaiting_dispatch"
+            from app.models.app_settings import AppSettings
+            from app.services.channel_sync import record_confirmed_sale
+            settings_row = (await db.execute(
+                select(AppSettings).where(AppSettings.name == "default")
+            )).scalar_one_or_none()
+            await record_confirmed_sale(
+                db,
+                build,
+                channel="ebay_uk",
+                order_id=order.order_id,
+                sale_price=order.sale_price,
+                source="ebay_fulfillment_order_api",
+                account=settings_row.ebay_seller_username if settings_row else None,
+            )
         from app.services.getting_started_jobs import ensure_manual_build_job
         await ensure_manual_build_job(db, manual_build_id=build.id)
         from app.services.inventory_lifecycle import record_sale

@@ -18,6 +18,9 @@ from app.services.component_manual_library import normalize_manual_key
 from app.services.ai_setup_offers import normalise_ai_setup_offers, validate_ai_setup_offers
 from app.services.getting_started_guide import normalize_guide_text
 from app.services.business_details import BusinessDetails, read_business_details, save_business_details
+from app.services.storefront_policies import PolicySet, read_admin_policies, read_policies, save_policies
+
+DEFAULT_APPROVED_VENDORS = ['eBay UK', 'Amazon UK', 'AWD-IT', 'Overclockers UK', 'Scan', 'Computer Orbit', 'Bargain Hardware', 'Newegg UK', 'Ebuyer', 'Very', 'Vinted', 'AliExpress', 'PCPartPicker UK', 'Google Shopping', 'Currys', 'Tesco', 'CCL', 'Box.co.uk', 'Corsair UK', 'Joybuy UK', 'CPC Farnell', 'CeX']
 
 router = APIRouter(prefix="/settings", tags=["settings"])
 public_router = APIRouter(prefix="/public", tags=["public-business-details"])
@@ -78,6 +81,24 @@ async def update_business_details_settings(body: BusinessDetails):
 @public_router.get('/business-details')
 async def public_business_details():
     return read_business_details().model_dump()
+
+
+@router.get('/storefront-policies', dependencies=[Depends(get_current_admin)])
+async def admin_storefront_policies():
+    return read_admin_policies()
+
+
+@router.put('/storefront-policies', dependencies=[Depends(get_current_admin)])
+async def update_storefront_policies(body: PolicySet):
+    try:
+        return save_policies(body)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+
+
+@storefront_public_router.get('/storefront-policies')
+async def public_storefront_policies():
+    return read_policies()
 
 GETTING_STARTED_GUIDE_PATH = Path(__file__).resolve().parents[2] / "data" / "getting-started-guide.md"
 GETTING_STARTED_GUIDE_LIMIT = 1_000_000
@@ -239,6 +260,7 @@ ENV_BACKED_SETTINGS = {
 
 
 class SettingsUpdate(BaseModel):
+    approved_vendors: list[str] | None = Field(default=None, max_length=100)
     storefront_trust_messages: list[dict] | None = None
     storefront_trust_message_seconds: int | None = Field(default=None, ge=2, le=30)
     max_concurrent_flips: int | None = None
@@ -345,6 +367,27 @@ async def update_ai_setup_offer_settings(
     return {"offers": normalise_ai_setup_offers(settings.ai_setup_offers)}
 
 
+def normalize_approved_vendors(vendors: list[str]) -> list[str]:
+    """Trim vendor labels and remove duplicates without changing first-seen order."""
+    if len(vendors) > 100:
+        raise ValueError("Keep no more than 100 approved vendors")
+    result: list[str] = []
+    seen: set[str] = set()
+    for vendor in vendors:
+        if not isinstance(vendor, str):
+            raise ValueError("Vendor names must be text")
+        name = " ".join(vendor.split())
+        if not name:
+            raise ValueError("Vendor names cannot be empty")
+        if len(name) > 120:
+            raise ValueError("Vendor names must be 120 characters or fewer")
+        key = name.casefold()
+        if key not in seen:
+            result.append(name)
+            seen.add(key)
+    return result
+
+
 @router.get("/")
 async def get_settings(db: AsyncSession = Depends(get_db)):
     settings = await _get_or_create(db)
@@ -357,6 +400,11 @@ async def update_settings(body: SettingsUpdate, db: AsyncSession = Depends(get_d
     # API credentials, providers and model endpoints are runtime configuration,
     # never user preferences. Ignore legacy fields so DB rows cannot shadow env.
     values = body.model_dump(exclude_none=True, exclude=ENV_BACKED_SETTINGS)
+    if "approved_vendors" in values:
+        try:
+            values["approved_vendors"] = normalize_approved_vendors(values["approved_vendors"])
+        except ValueError as error:
+            raise HTTPException(422, str(error)) from error
     if "storefront_trust_messages" in values:
         messages = values["storefront_trust_messages"]
         allowed_audiences = {"all", "new_users", "returning_users"}
@@ -399,7 +447,7 @@ async def _get_or_create(db: AsyncSession) -> AppSettings:
     result = await db.execute(select(AppSettings).where(AppSettings.name == "default"))
     settings = result.scalar_one_or_none()
     if not settings:
-        settings = AppSettings(name="default")
+        settings = AppSettings(name="default", approved_vendors=DEFAULT_APPROVED_VENDORS.copy())
         db.add(settings)
         await db.flush()
         await db.refresh(settings)
@@ -413,6 +461,7 @@ def _to_dict(s: AppSettings) -> dict:
     return {
         "max_concurrent_flips": s.max_concurrent_flips,
         "default_sell_platform": s.default_sell_platform,
+        "approved_vendors": s.approved_vendors if s.approved_vendors is not None else DEFAULT_APPROVED_VENDORS.copy(),
         "auto_buy_autonomous": s.auto_buy_autonomous,
         "auto_buy_daily_limit": s.auto_buy_daily_limit,
         "ollama_base_url": cfg.ollama_base_url,

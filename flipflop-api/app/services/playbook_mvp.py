@@ -50,7 +50,7 @@ def publication_limit_reason(parent, definition, offer):
 
 def source_facts_can_be_verified(suggestion, now=None):
     if (not suggestion or suggestion.get("status") != "review_ready"
-            or suggestion.get("conflicted_fields")
+            or suggestion.get("missing_fields") or suggestion.get("conflicted_fields")
             or suggestion.get("reviewed_value_changes") or not suggestion.get("suggested_specs")
             or not trusted_url(suggestion.get("source_url"))):
         return False
@@ -161,7 +161,8 @@ async def withdraw_unsafe_offers(db, parents):
     from app.services.commercial_readiness import source_preview_many
     from app.services.shared_variant_assets import approved_model_photos
     from app.services.playbook_service import invalidate_conflicting_product_engineering
-    from app.services.studio_fit import engineering_specs, evaluate_playbook_fit as evaluate_fit
+    from app.services.studio_fit import engineering_specs
+    from app.services.build_compatibility_gate import evaluate_playbook_build_compatibility
     from app.services.playbook_book import record_cell_event
     from app.schemas.commercial_quote import CellCommercialPolicy
     from pydantic import ValidationError
@@ -205,7 +206,8 @@ async def withdraw_unsafe_offers(db, parents):
                         chassis={**specs,"engineering":specs}
                     else:
                         engineering[role]=specs
-            checks=evaluate_fit(engineering,chassis,gpu_required="gpu" in (segment.components or {}))
+            checks=evaluate_playbook_build_compatibility(engineering,chassis,
+                gpu_required="gpu" in (segment.components or {}))["checks"]
             if any(check["severity"] in {"error","unknown"} for check in checks):
                 reason="The published build's current compatibility facts are incomplete or conflicting"
             try:

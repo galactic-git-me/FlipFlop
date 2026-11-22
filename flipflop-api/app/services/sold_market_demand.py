@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import statistics
+import asyncio
 from collections import defaultdict
 from datetime import datetime, timedelta
 
@@ -25,6 +26,9 @@ _CATEGORY_LABELS = {
 }
 _AI_CACHE: dict[str, object] = {"at": None, "data": None}
 _AI_CACHE_TTL = timedelta(hours=6)
+_SNAPSHOT_CACHE: dict[int, tuple[datetime, dict]] = {}
+_SNAPSHOT_CACHE_TTL = timedelta(minutes=5)
+_SNAPSHOT_CACHE_LOCK = asyncio.Lock()
 
 
 def _median(values: list[float]) -> float | None:
@@ -36,7 +40,24 @@ def _strength(score: float) -> str:
 
 
 async def build_sold_market_snapshot(db: AsyncSession, days: int = 90) -> dict:
+    cached = _SNAPSHOT_CACHE.get(days)
     now = datetime.utcnow()
+    if cached and now - cached[0] < _SNAPSHOT_CACHE_TTL:
+        return cached[1]
+
+    # The dashboard requests the snapshot and its AI summary at the same time.
+    # Coalesce those requests so a large evidence table is read only once.
+    async with _SNAPSHOT_CACHE_LOCK:
+        cached = _SNAPSHOT_CACHE.get(days)
+        now = datetime.utcnow()
+        if cached and now - cached[0] < _SNAPSHOT_CACHE_TTL:
+            return cached[1]
+        snapshot = await _build_sold_market_snapshot(db, days, now)
+        _SNAPSHOT_CACHE[days] = (now, snapshot)
+        return snapshot
+
+
+async def _build_sold_market_snapshot(db: AsyncSession, days: int, now: datetime) -> dict:
     cutoff = now - timedelta(days=days)
     sold = list((await db.execute(
         select(GemRadarSoldObservation).where(
@@ -158,7 +179,7 @@ async def build_sold_market_snapshot(db: AsyncSession, days: int = 90) -> dict:
             "unmatched_sold_observations": unmatched, "active_listings": len(active_by_id),
             "products_with_sold_evidence": len(product_sold),
         },
-        "categories": categories, "top_products": products[:100], "weekly": weekly,
+        "categories": categories, "top_products": products, "weekly": weekly,
     }
 
 

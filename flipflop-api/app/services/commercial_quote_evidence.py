@@ -5,10 +5,17 @@ from datetime import date, datetime, timezone
 from decimal import Decimal
 from urllib.parse import urlsplit
 from sqlalchemy import select
-from app.models.commerce_evidence import SupplierOfferEvidence, WorkshopCapacityEvidence
+from app.models.commerce_evidence import (PriceQuoteSnapshot, SupplierOfferEvidence,
+                                          WorkshopCapacityEvidence)
 from app.services.commerce_pricing import Condition, SupplierOffer
 from app.services.playbook_commercial_quote import CapacityEvidence, PartEvidence, quote_delivery_modes
 from app.services.workshop_capacity import active_hold_count, capacity_evidence_is_current, latest_capacity_evidence
+
+
+def supplier_capture_product_key(part_key: str, evidence_ref: str, observed_at: str) -> str:
+    """Stable bounded key for immutable supplier-page capture metadata."""
+    value = "|".join((str(part_key), str(evidence_ref), str(observed_at)))
+    return "supplier_capture:" + hashlib.sha256(value.encode("utf-8")).hexdigest()[:48]
 
 def definition_hash(definition: dict) -> str:
     return hashlib.sha256(json.dumps(definition, sort_keys=True, separators=(",", ":"),
@@ -21,6 +28,14 @@ def supplier_identity(supplier, reference):
     except ValueError:
         host = ""
     for domain, name in (("amazon.co.uk", "amazon"), ("overclockers.co.uk", "overclockers"),
+                         ("scan.co.uk", "scan"), ("ebuyer.com", "ebuyer"),
+                         ("computerorbit.com", "computer_orbit"),
+                         ("awd-it.co.uk", "awd_it"), ("cclonline.com", "ccl"),
+                         ("corsair.com", "corsair"),
+                         ("alphacomponents.co.uk", "alpha_components"),
+                         ("pcupgrade.co.uk", "pcupgrade"),
+                         ("senetic.co.uk", "senetic"),
+                         ("morecoco.co.uk", "morecoco"),
                          ("releases.ubuntu.com", "ubuntu"),
                          ("royalcdkeys.com", "royalcdkeys"),
                          ("gamers-outlet.net", "gamers_outlet"),
@@ -47,10 +62,21 @@ def _working_days_until(start: date, target: date) -> int:
     return sum((start.weekday() + offset) % 7 < 5 for offset in range(1, days + 1))
 
 
-async def assess_stored_cell(db, playbook, definition, policy, body):
+async def assess_stored_cell(db, playbook, definition, policy, body, *,
+                             flexible_auction_available: bool = False):
     rows = latest_listing_observations((await db.execute(select(SupplierOfferEvidence).where(
         SupplierOfferEvidence.part_key.in_(policy.required_part_keys),
     ))).scalars().all())
+    capture_keys={supplier_capture_product_key(row.part_key,row.evidence_ref,row.observed_at.isoformat())
+        for row in rows}
+    capture_metadata={}
+    if capture_keys:
+        snapshots=(await db.execute(select(PriceQuoteSnapshot).where(
+            PriceQuoteSnapshot.product_key.in_(list(capture_keys)),
+            PriceQuoteSnapshot.status=='supplier_offer_capture'))).scalars().all()
+        capture_metadata={snapshot.product_key:snapshot.evidence_json for snapshot in snapshots
+            if isinstance(snapshot.evidence_json,dict)
+            and (snapshot.decision_json or {}).get('capture_verified') is True}
     parts = [PartEvidence(row.id, row.part_key, SupplierOffer(
         supplier=row.supplier, channel=row.channel, condition=Condition(row.condition),
         item_gbp=Decimal(row.item_gbp), delivery_gbp=Decimal(row.delivery_gbp),
@@ -58,7 +84,9 @@ async def assess_stored_cell(db, playbook, definition, policy, body):
         observed_at=row.observed_at.isoformat(), stock_confirmed=row.stock_confirmed,
         approved=True, delivery_working_days=row.delivery_working_days,
         supplier_confidence=Decimal(row.supplier_confidence), prime_eligible=row.prime_eligible,
-    )) for row in rows]
+    ), listing_type=(capture_metadata.get(supplier_capture_product_key(
+        row.part_key,row.evidence_ref,row.observed_at.isoformat()),{}).get('listing_type')))
+        for row in rows]
     now = datetime.now(timezone.utc)
     capacities = {}
     capacity_snapshot = {}
@@ -83,7 +111,9 @@ async def assess_stored_cell(db, playbook, definition, policy, body):
             "sales_limit_applied": False,
             "evidence_source": capacity.evidence_source, "evidence_ref": capacity.evidence_ref,
         }
-    result = quote_delivery_modes(policy, parts, capacities, nonnew_consent=body.nonnew_consent, now=now)
+    result = quote_delivery_modes(policy, parts, capacities,
+        nonnew_consent=body.nonnew_consent, now=now,
+        flexible_auction_available=flexible_auction_available)
     result.update(playbook_id=playbook.id, curated_build_id=body.curated_build_id,
                   definition_sha256=policy.definition_sha256,
                   policy_sha256=hashlib.sha256(json.dumps(policy.model_dump(mode="json"),
@@ -100,6 +130,8 @@ async def assess_stored_cell(db, playbook, definition, policy, body):
                 "fees_gbp": str(row.fees_gbp), "risk_gbp": str(row.risk_gbp),
                 "delivery_working_days": row.delivery_working_days,
                 "delivery_estimate_source": row.delivery_estimate_source,
+                "listing_type": capture_metadata.get(supplier_capture_product_key(
+                    row.part_key,row.evidence_ref,row.observed_at.isoformat()),{}).get('listing_type'),
                 "supplier_confidence": str(row.supplier_confidence),
                 "evidence_source": row.evidence_source, "evidence_ref": row.evidence_ref,
             } for row in rows],

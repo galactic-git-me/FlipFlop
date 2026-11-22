@@ -306,8 +306,8 @@ _FULL_SYSTEM_KEYWORDS = re.compile(
     # "desktop pc" and got its category force-cleared to None before the
     # category keyword scan ever ran, since this check short-circuits ahead
     # of it entirely.
-    r"(?:desktop|gaming|workstation|tower)\s*pc(?!\s*(?:case(?:\s*fan)?|cooler|fan|psu|power\s*supply))|"
-    r"prebuilt|pre-built|"
+    r"(?:desktop|gaming|workstation|tower)\s*pc(?!\s*(?:(?:gaming\s*)?case(?:\s*fan)?|cooler|fan|psu|power\s*supply|cpu|processor))|"
+    r"prebuilt|pre-built|sff\s*pc|pc\s+builder|collectible\s+pc|"
     r"all-in-one|aio\s*pc|mini\s*pc|complete\s*(?:pc|system|build)|"
     r"full\s*(?:pc|system|build)|"
     # Not every full-system listing names itself a "PC"/"laptop" (e.g. "HP
@@ -332,8 +332,61 @@ def is_full_system_listing(title: str) -> bool:
     installed_storage = re.search(r'\b\d+(?:\.\d+)?\s*(?:tb|gb)\s*(?:ssd|nvme|hdd)\b',title,re.I)
     if installed_ram and installed_storage and re.search(r'\b(?:pc|computer|desktop|workstation|laptop|notebook|win(?:dows)?\s*(?:10|11)|w11)\b',title,re.I):
         return True
-    # Product-type words describe the item being sold; "for laptop" or
-    # "gaming PC" compatibility copy must not turn an SSD/cooler into a PC.
+    # A title can describe a PC case or CPU as intended for a gaming PC,
+    # rather than advertise a complete computer. Remove only compatibility
+    # text that follows an explicit component noun before testing system terms.
+    component_noun = re.search(r'\b(?:motherboard|mainboard|graphics\s+card|video\s+card|'
+                 r'(?:cpu|liquid|air)\s+(?:(?:liquid|water|air)\s+)?cooler|'
+                 r'processor|cpu|gpu|psu|power\s+supply|fan|'
+                 r'case|chassis|cooler|watercooling|'
+                 r'ssd|solid[ -]state\s+drive|hard\s+drive|'
+                 r'(?:ddr[345]|sodimm|dimm)\b.*\b(?:ram|memory)|'
+                 r'(?:ram|memory)\b.*\b(?:ddr[345]|sodimm)|'
+                 r'(?:licen[cs]e|activation|product)\s+key)\b', title, re.I)
+    system_probe = title
+    if component_noun and (compatibility := re.search(r'\bfor\b', title[component_noun.start():], re.I)):
+        system_probe = title[:component_noun.start() + compatibility.start()]
+
+    # "All-in-One" names are common on liquid coolers, and Windows licence
+    # keys contain OS version text. Neither phrase establishes a computer.
+    if component_noun and re.search(r'\b(?:cpu\s+)?(?:liquid|air)?\s*cooler\b', title, re.I):
+        system_probe = re.sub(r'\ball[ -]in[ -]one\b', '', system_probe, flags=re.I)
+    if component_noun and re.search(r'\b(?:licen[cs]e|activation|product)\s+key\b', title, re.I):
+        system_probe = re.sub(r'\bwin(?:dows)?\s*(?:10|11)\b', '', system_probe, flags=re.I)
+
+    # Recognize an unlabelled parts list as a whole build: a CPU plus at least
+    # two separately listed installed component groups is not a CPU offer.
+    has_cpu = bool(re.search('|'.join(CPU_PATTERNS), title, re.I))
+    other_build_parts = sum((
+        bool(re.search(r'\b(?:rtx\s*\d{4}(?:\s*(?:ti|super))?|gtx\s*\d{3,4}(?:\s*ti)?|rx\s*\d{3,4}(?:\s*xt)?|arc\s+[ab]\d{3,4}|\d{4}\s*(?:ti|super)|graphics\s+card|video\s+card|gpu)\b', title, re.I)),
+        bool(re.search(r'\b\d+\s*(?:gb|tb)\s*(?:ram|ddr[345])\b', title, re.I)),
+        bool(re.search(r'\b\d+(?:\.\d+)?\s*(?:tb|gb)\s*(?:ssd|nvme|hdd)\b', title, re.I)),
+        bool(re.search(r'\bmotherboard\b', title, re.I)),
+        bool(re.search(r'\b(?:case|chassis)\b', title, re.I)),
+        bool(re.search(r'\b(?:psu|power\s+supply)\b', title, re.I)),
+    ))
+    if has_cpu and other_build_parts >= 2:
+        return True
+
+    trailing_system_marker = _FULL_SYSTEM_KEYWORDS.search(system_probe)
+    if (component_noun and trailing_system_marker
+            and trailing_system_marker.start() > component_noun.start()):
+        # Marketplace titles often append "Gaming PC" or "Desktop PC" as a
+        # compatibility phrase after naming the standalone part (for example,
+        # "CPU Cooler ... Gaming PC" or "Processor ... Desktop PC"). A real
+        # PC title places the system wording first and is retained above.
+        system_probe = system_probe[:trailing_system_marker.start()]
+
+    # A case with "Gaming PC" compatibility copy is still a case, including
+    # titles where the phrase order is "Gaming PC Computer Mini Tower Case".
+    if component_noun and re.search(r'\b(?:case|chassis)\b', title, re.I) and not has_cpu and not installed_ram:
+        system_probe = re.sub(r'\b(?:desktop|gaming|workstation|tower)\s*pc\b', '', system_probe, flags=re.I)
+
+    if _FULL_SYSTEM_KEYWORDS.search(system_probe):
+        return True
+
+    # Product-type words describe the item being sold; they override a bare
+    # "desktop PC"/"laptop" compatibility mention after system phrases above.
     if re.search(r'\b(?:motherboard|mainboard|graphics\s+card|video\s+card|'
                  r'(?:cpu|liquid|air)\s+(?:(?:liquid|water|air)\s+)?cooler|'
                  r'processor|cpu|gpu|psu|power\s+supply|fan|'

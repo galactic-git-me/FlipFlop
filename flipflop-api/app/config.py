@@ -124,7 +124,7 @@ class Settings(BaseSettings):
     amazon_sp_api_sandbox_endpoint: str = "https://sandbox.sellingpartnerapi-eu.amazon.com"
     amazon_sp_api_product_type: str = "COMPUTER"
     ebay_message_poll_interval_seconds: int = 300
-    ebay_sales_poll_interval_seconds: int = 1800
+    ebay_sales_poll_interval_seconds: int = 300
     ebay_walkaway_margin_pct: float = 0.15
     # Set to 0.0 when eBay is running a fee promotion (e.g. private sellers pay 0%)
     ebay_final_value_fee_pct: float = 0.127
@@ -318,6 +318,16 @@ class Settings(BaseSettings):
             host = parsed.hostname
             self.ollama_base_url = urlunsplit((parsed.scheme, f"{host}:11435", parsed.path,
                 parsed.query, parsed.fragment))
+        return self
+
+    @model_validator(mode="after")
+    def require_customer_jwt_secret_in_production(self):
+        """Fail closed outside local/test environments rather than use the public dev key."""
+        app_env = str(self.app_env or "").strip().casefold()
+        if app_env not in {"dev", "development", "test", "testing"}:
+            configured_secret = self.secret_key.strip()
+            if len(configured_secret) < 32 or configured_secret == "dev-secret-key-change-in-production":
+                raise ValueError("SECRET_KEY must be configured with at least 32 characters outside dev/test")
         return self
 
     @field_validator("ebay_environment", "ebay_listing_environment", "parcel2go_environment", mode="before")

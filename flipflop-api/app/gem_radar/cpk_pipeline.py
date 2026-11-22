@@ -44,8 +44,18 @@ def _deterministic_identity(title: str, category: str | None, price: float | Non
     """
     resolved = resolve_identity(title, delivered_price=price)
     resolved_category = (resolved.category or category or "").lower()
+    # A search category is an explicit scope constraint. Don't let a noisy
+    # title override a CPU search and create (for example) a 650W PSU CPK.
+    if category and resolved.category and resolved.category.lower() != category.lower():
+        return None
     brand = (resolved.brand or "").strip().lower()
-    model = re.sub(r"[^a-z0-9]+", "-", (resolved.model or "").lower()).strip("-")
+    model_value = (resolved.model or "").lower()
+    if resolved_category == "cpu":
+        # CPU_PATTERNS can include the optional manufacturer prefix in the
+        # model match. Brand is already stored separately, so strip it to
+        # keep "AMD Ryzen 7 ..." and "Ryzen 7 ..." on one canonical CPK.
+        model_value = re.sub(r"^(?:amd|intel)\s+", "", model_value)
+    model = re.sub(r"[^a-z0-9]+", "-", model_value).strip("-")
     if not resolved_category or not brand or not model:
         return None
     data = {"category": resolved_category, "brand": brand, "model": model, "specs": {}, "confidence": resolved.exact_sku_confidence}
@@ -160,6 +170,22 @@ async def assign_cpk_and_accumulate_price(
             evidence_reason='complete_system_not_component',
             reasoning_summary='Complete computer; excluded from component matching and pricing.'
             WHERE listing_id=:id AND cpk IS NOT NULL'''), {'id':listing_id})
+        return None
+
+    # A category-tagged search is a scope boundary. A PSU, motherboard, or
+    # other component mentioned in a CPU result must not acquire a CPU CPK.
+    resolved_category = resolve_identity(title, delivered_price=price).category
+    if category and resolved_category and resolved_category.lower() != category.lower():
+        await remove_listing_price(db, listing_id)
+        await db.execute(text("DELETE FROM gem_radar_listing_cpk WHERE listing_id=:id"), {"id": listing_id})
+        return None
+
+    # Reject titles that resolve to a different component from the search
+    # scope before cached CPKs or cross-vendor aliases can override it.
+    title_category = resolve_identity(title, delivered_price=price).category
+    if category and title_category and title_category.lower() != category.lower():
+        await remove_listing_price(db, listing_id)
+        await db.execute(text("DELETE FROM gem_radar_listing_cpk WHERE listing_id=:id"), {"id": listing_id})
         return None
 
     existing = await db.execute(

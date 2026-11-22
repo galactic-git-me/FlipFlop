@@ -26,12 +26,21 @@ from app.models.app_settings import AppSettings
 from app.services.curated_build_policy import definitions
 from app.services.commercial_readiness import fingerprint, source_preview, source_preview_many
 from app.services.commercial_pilot_policy import APPROVED_TIER_FLOORS
+from app.services.commercial_pilot_policy import DELIVERY_CEILINGS
 from app.services.studio_fit import engineering_specs, evaluate_playbook_fit as evaluate_fit
+
 from app.services.playbook_mvp import mvp_enabled, mvp_mode, prepare_candidates, publication_limit_reason, commercial_revision_payload
 from app.services.compatibility_engine import _infer_cpu_socket, _extract_ram_type
 from app.services.benchmark_normaliser import normalise_cpu, normalise_gpu
 from app.services.bestseller_catalogue_sync import HARDWARE_ROLES, sync_bestseller_catalogues, amazon_asin
 from app.services.amazon_bestsellers import bestseller_item_matches_category
+
+
+def _evaluate_playbook_fit(parts, case, *, gpu_required=True):
+    # Preserve the established Playbook publication/workshop severity policy.
+    # The stricter shared physical-fit gate is used for Gem QA snapshots.
+    return evaluate_fit(parts, case, gpu_required=gpu_required)
+
 
 MODES=('fast_track','standard','flexible')
 SOURCE='catalogue_playbook_service_v1'
@@ -39,6 +48,7 @@ MAX_CHOICES_PER_ROLE=100
 
 PLAYBOOK_REFRESH_HEARTBEAT_SECONDS=15
 PLAYBOOK_REFRESH_STALE_AFTER=timedelta(minutes=5)
+PLAYBOOK_PROPOSAL_REBUILD_TIMEOUT_SECONDS=600
 
 
 def _utcnow():
@@ -127,16 +137,6 @@ async def run_playbook_refresh_job(job_id,actor_id):
     async def heartbeat():
         while True:
             await asyncio.sleep(PLAYBOOK_REFRESH_HEARTBEAT_SECONDS)
-            if mode=='refresh':
-                async with AsyncSessionLocal() as db:
-                    queued_rebuild=(await db.execute(select(PlaybookRefreshRun.job_id).where(
-                        PlaybookRefreshRun.actor_id==0,PlaybookRefreshRun.mode=='rebuild',
-                        PlaybookRefreshRun.status=='queued'
-                    ).limit(1))).scalar_one_or_none()
-                if queued_rebuild:
-                    if job_task and not job_task.done():
-                        job_task.cancel()
-                    return
             await _update_playbook_refresh_run(job_id,phase=phase_state['phase'],heartbeat_at=_utcnow())
 
     job_task=asyncio.current_task()
@@ -255,7 +255,8 @@ async def run_playbook_rebuild(actor_id=0,progress=None):
     # operator-triggered rebuild does not require another retailer scrape.
     async with AsyncSessionLocal() as db:
         catalogue_sync=await sync_bestseller_catalogues(db,check_free_software=False)
-        result=await asyncio.wait_for(refresh_playbooks(db,actor_id,progress=progress,catalogue_sync=catalogue_sync,maintain_live_offers=False),timeout=600)
+        result=await asyncio.wait_for(refresh_playbooks(db,actor_id,progress=progress,catalogue_sync=catalogue_sync,maintain_live_offers=False),
+            timeout=PLAYBOOK_PROPOSAL_REBUILD_TIMEOUT_SECONDS)
         await db.commit()
     return {'cells':result['cells'],'complete_hardware':result['complete_hardware'],
         'ready_for_approval':result['ready_for_approval'],'catalogue_sync':catalogue_sync,
@@ -275,6 +276,57 @@ def _money(value):
     return str(Decimal(str(value)).quantize(Decimal('.01'),rounding=ROUND_CEILING))
 
 
+def apply_cell_budget_gate(offer, budget_max):
+    """Do not mark a complete-build quote ready above its configured tier cap.
+
+    Budget filters an offer; it does not authorize the proposal builder to
+    silently lower the authored capability or exceed the customer's ceiling.
+    Keep the quote visible for review while disabling the over-budget pace.
+    """
+    if budget_max is None and str(offer.get('tier') or '').casefold() == 'high-end':
+        # The authored 24-cell budget matrix defines High-end as unbounded.
+        # A NULL cap is therefore intentional for this tier, not missing
+        # configuration. The minimum range and commercial/margin checks remain
+        # independently enforced by their existing gates.
+        return offer
+    if budget_max is None:
+        reason = 'Configured cell budget ceiling is missing'
+        if reason not in offer.setdefault('blockers', []):
+            offer['blockers'].append(reason)
+        for quote in (offer.get('delivery_products') or {}).values():
+            quote['available'] = False
+            quote['reason'] = '; '.join(filter(None, (quote.get('reason'), reason)))
+        return offer
+    ceiling = _decimal(budget_max)
+    if ceiling is None:
+        offer.setdefault('blockers', []).append('Configured cell budget ceiling is invalid')
+        return offer
+    for mode, quote in (offer.get('delivery_products') or {}).items():
+        price = _decimal(quote.get('recommended_price_gbp'))
+        if price is None or price <= ceiling:
+            continue
+        quote['available'] = False
+        budget_reason=(f"Full-build price £{_money(price)} exceeds the {offer.get('tier', 'cell')} "
+                       f"budget ceiling £{_money(ceiling)}")
+        quote['reason']='; '.join(filter(None,(quote.get('reason'),budget_reason)))
+        offer.setdefault('blockers', []).append(f'{mode}: {budget_reason}')
+    return offer
+
+
+async def apply_configured_cell_budget_gate(db, definition, parent, offer):
+    """Apply the current cell cap consistently when creating and approving drafts."""
+    cell_budget=(await db.execute(select(CuratedBuildSegment).where(
+        CuratedBuildSegment.customer_type==definition['segment'],
+        CuratedBuildSegment.budget_level==definition['tier']))).scalar_one_or_none()
+    if cell_budget is None:
+        offer.setdefault('blockers', []).append('Configured customer budget range is missing')
+    else:
+        apply_cell_budget_gate(offer,cell_budget.budget_max)
+    offer['revision_sha256']=fingerprint(
+        commercial_revision_payload(offer) if mvp_mode(parent) else offer)
+    return offer
+
+
 def _candidate_source_prices(_catalogue_price, source):
     """Use captured prices for planning; freshness remains visible for procurement."""
     current = _decimal(source.get('item_gbp')) if source else None
@@ -287,11 +339,11 @@ def _candidate_source_prices(_catalogue_price, source):
     return item, postage, verified
 
 
-def _apply_exact_source_core_engineering(role,listing,source,engineering):
+def _apply_exact_source_core_engineering(role,listing,source,engineering,*,allow_title_facts=True):
     """Use only explicitly stated core fit facts from the exact product source."""
     if not isinstance(source,dict) or source.get('url')!=listing.url:
         return engineering
-    values=_source_engineering_values(role,source.get('product_properties'),listing.title)
+    values=_source_engineering_values(role,source.get('product_properties'),listing.title if allow_title_facts else None)
     core_fields={
         'cpu':{'socket','integrated_graphics'},
         'motherboard':{'socket','ram_type','form_factor','gpu_interfaces'},
@@ -357,6 +409,11 @@ def _current_suggested_supplier_source(part):
         'listing_db_id':offer.get('listing_db_id'),
         'listing_id':str(offer.get('listing_id') or part.get('listing_id') or ''),
         'observation_id':offer.get('observation_id'),
+        'title':offer.get('title'),
+        'mpn':offer.get('mpn'),
+        'cpk':offer.get('cpk'),
+        'cpk_data':offer.get('cpk_data'),
+        'playbook_product_capture':offer.get('playbook_product_capture'),
         'observed_at':observed.astimezone(timezone.utc).isoformat(),
         'url':url,'source':offer.get('source'),'condition':'new','listing_type':'buy_it_now',
         'item_gbp':str(item.quantize(Decimal('.01'))),
@@ -365,6 +422,8 @@ def _current_suggested_supplier_source(part):
         'postage_assumption':None if delivery is not None else 'owner-approved-zero-fallback',
         'stock_status':'available','stock_evidence':offer.get('stock_evidence'),
         'active_listing':True,'commercial_capture_verified':True,
+        'licence_source_reviewed':offer.get('licence_source_reviewed') is True,
+        'licence_review_fingerprint':offer.get('licence_review_fingerprint'),
         'delivery_working_days':delivery_days,
         'delivery_estimate_source':delivery_source or (
             'owner_fallback' if delivery is None else 'captured_supplier_observation'),
@@ -394,7 +453,11 @@ def _supplier_fact_is_approvable(part,source):
             and source.get('active_listing') and source.get('stock_status')=='available'
             and item==0 and postage==0 and source.get('delivery_working_days')==0)
     identity=supplier_identity(source.get('source'),url)
-    accepted_identity=identity in {'amazon','overclockers'}
+    # Gem Radar can supply exact, current UK retailer captures from these
+    # configured sources. Keep the same evidence gates for every source; do
+    # not require a particular retailer when the product identity is exact.
+    accepted_identity=identity in {'amazon','overclockers','scan','ebuyer',
+        'computer_orbit','awd_it','ccl','corsair','alpha_components','hardvance','senetic','morecoco'}
     if identity in {'royalcdkeys','gamers_outlet'}:
         # A digital-key offer needs an explicit operator review of the
         # supplier's licence type and UK resale/install terms before its cost
@@ -402,12 +465,20 @@ def _supplier_fact_is_approvable(part,source):
         accepted_identity=bool(part.get('role','').startswith('os') and source.get('licence_source_reviewed'))
     postage_is_usable=(source.get('postage_verified') is True and postage is not None
         or source.get('postage_assumption')=='owner-approved-zero-fallback' and postage==0)
+    exact_product=(url==part.get('source_url') or same_listing_product(url,part.get('source_url')))
+    if not exact_product and source.get('title'):
+        # Cross-retailer evidence must prove the same exact model. The source
+        # URL cannot be compared with the catalogue retailer URL, so validate
+        # the captured supplier title through the same strict product matcher
+        # used to build the offer index.
+        from app.services.playbook_stored_offers import same_product
+        exact_product=same_product({**part,'role':part.get('role')},source)
     return bool(source.get('fresh') and source.get('commercial_capture_verified')
         and source.get('active_listing') and source.get('condition')=='new'
         and source.get('listing_type')=='buy_it_now' and source.get('stock_status')=='available'
         and source.get('stock_evidence') and postage_is_usable
         and item is not None and item>0 and supported_product_url(url)
-        and accepted_identity and (url==part.get('source_url') or same_listing_product(url,part.get('source_url'))))
+        and accepted_identity and exact_product)
 
 
 def _supplier_snapshot_matches_current(proposed, current):
@@ -475,6 +546,30 @@ async def _persisted_supplier_snapshot_is_current(db, part, proposed, current):
     from app.models.gem_radar_observation import GemRadarListingObservation
     from app.services.commercial_quote_evidence import supplier_identity
     from app.services.playbook_product_capture import supported_product_url
+    if proposed.get('listing_db_id'):
+        try:
+            captured_listing=await db.get(Listing,int(proposed['listing_db_id']))
+        except (TypeError,ValueError):
+            captured_listing=None
+        if captured_listing is not None:
+            from app.services.commercial_readiness import source_preview,same_listing_product
+            page=await source_preview(db,captured_listing)
+            page_url=str((page or {}).get('url') or '')
+            proposed_url=str(proposed.get('url') or '')
+            if (page and page.get('identity_source')=='exact_retailer_product_page'
+                    and page.get('fresh') is True
+                    and page.get('commercial_capture_verified') is True
+                    and page.get('condition')=='new'
+                    and page.get('listing_type')=='buy_it_now'
+                    and page.get('stock_status')=='available'
+                    and page.get('active_listing') is True
+                    and page.get('stock_evidence')
+                    and same_listing_product(page_url,captured_listing.url)
+                    and same_listing_product(page_url,proposed_url)
+                    and supplier_identity(captured_listing.source_name,page_url)
+                        ==supplier_identity(proposed.get('source'),proposed_url)
+                    and supported_product_url(page_url)):
+                return _supplier_snapshot_matches_current(proposed,page)
     try:
         observation=await db.get(GemRadarListingObservation,int(proposed.get('observation_id')))
         observed=datetime.fromisoformat(str(proposed['observed_at']).replace('Z','+00:00'))
@@ -667,12 +762,24 @@ def _plausible_role_candidate(role,title):
     if role=='ram':
         if re.search(r'\b(?:processor|motherboard|mainboard)\b',text,re.I):
             return False
-        return bool(re.search(r'\bddr[345]\b',text,re.I)
-            and re.search(r'\b\d+\s*gb\b|\b\d+\s*x\s*\d+\s*gb\b',text,re.I)
-            and re.search(r'\b(?:ram|memory|dimm|rdimm|sodimm)\b|\b(?:single|dual|quad|octa)[ -]channel\s+kit\b',text,re.I))
+        capacity=bool(re.search(r'\b\d+\s*gb\b|\b\d+\s*x\s*\d+\s*gb\b',text,re.I))
+        memory_label=bool(re.search(r'\b(?:ram|memory|dimm|rdimm|sodimm)\b',text,re.I))
+        channel_kit=bool(re.search(r'\b(?:single|dual|quad|octa)[ -]channel(?:\s+kit)?\b',text,re.I))
+        explicit_kit=bool(re.search(r'\bddr[345]\b',text,re.I)
+            and re.search(r'\b\d{4,5}\s*(?:mhz|mt\s*/?\s*s)\b',text,re.I)
+            and re.search(r'\bcl\s*\d{1,2}\b',text,re.I)
+            and re.search(r'\(\s*\d+\s*x\s*\d+\s*gb\s*\)',text,re.I))
+        return capacity and (memory_label or channel_kit or explicit_kit)
     if role in {'storage','storage_secondary'}:
-        return bool(re.search(r'\b(?:ssd|nvme|hdd|hard\s+drive|solid\s+state\s+drive)\b',text,re.I)
-            and not re.search(r'\b(?:heatsink|heat\s+sink|cover\s+only|enclosure|adapter|docking\s+station|hub|case\s+only)\b',text,re.I))
+        has_drive_identity=bool(re.search(r'\b(?:ssd|nvme|hdd|hard\s+drive|solid\s+state\s+drive)\b',text,re.I))
+        accessory=bool(re.search(r'\b(?:cover\s+only|enclosure|adapter|docking\s+station|hub|case\s+only)\b',text,re.I))
+        external=bool(re.search(r'\b(?:external|portable|USB)\b',text,re.I))
+        heatsink_only=bool(re.search(r'\b(?:heatsink|heat\s+sink)\b',text,re.I))
+        # Product SSD listings often include a factory heatsink in the title.
+        # Reject heatsink accessories, but keep a capacity-bearing drive whose
+        # own title identifies it as an SSD/NVMe/HDD.
+        capacity_bearing_drive=bool(re.search(r'(?<!\d)\d+(?:\.\d+)?\s*(?:TB|GB)\b',text,re.I))
+        return has_drive_identity and not external and not accessory and (not heatsink_only or capacity_bearing_drive)
     if role=='gpu':
         identity=(r'\b(?:geforce\s+)?(?:rtx|gtx)\s*(?:\d{3,4}|a\s*\d{3,4})\b'
             r'|\b(?:radeon\s+)?rx\s*\d{4}\b|\b(?:radeon\s+)?(?:ai\s+pro|pro)\s+r?\d{3,5}\b'
@@ -855,6 +962,37 @@ def _candidate_capacity(candidate):
     return (_capacity_gb(candidate.get('title') or '') or 0)*(candidate.get('quantity') or 1)
 
 
+def _ram_layout_facts(title, properties=None, quantity=1):
+    """Read the physical kit layout and rated profile without guessing missing facts."""
+    text_value=str(title or '')
+    layout=re.search(r'(?<!\d)(\d+)\s*[x×]\s*(\d+(?:\.\d+)?)\s*GB\b',text_value,re.I)
+    module_count=int(layout.group(1))*max(1,int(quantity or 1)) if layout else None
+    module_gb=Decimal(layout.group(2)) if layout else None
+    properties=properties if isinstance(properties,dict) else {}
+    if module_count is None:
+        for key,value in properties.items():
+            normalized=re.sub(r'[^a-z]','',str(key).casefold())
+            if normalized in {'numberofmodules','numberofmemorymodules','memorylayoutmodulesxsize'}:
+                match=re.search(r'(\d+)\s*[x×]\s*(\d+(?:\.\d+)?)\s*GB',str(value),re.I)
+                if match:
+                    module_count=int(match.group(1))*max(1,int(quantity or 1))
+                    module_gb=Decimal(match.group(2))
+                    break
+    speed_match=re.search(r'(?<!\d)(\d{4,5})\s*(?:MT\s*/?\s*S|MTS|MHz)\b',text_value,re.I)
+    speed=int(speed_match.group(1)) if speed_match else None
+    latency_match=re.search(r'\bCL\s*(\d{1,3})\b',text_value,re.I)
+    latency=int(latency_match.group(1)) if latency_match else None
+    for key,value in properties.items():
+        normalized=re.sub(r'[^a-z]','',str(key).casefold())
+        if speed is None and normalized in {'memoryspeed','datatransferrate','memoryclockspeed'}:
+            found=re.search(r'(?<!\d)(\d{4,5})\b',str(value))
+            if found:speed=int(found.group(1))
+        if latency is None and normalized in {'columnaddressstrobelatency','caslatency'}:
+            found=re.search(r'\b(\d{1,3})\b',str(value))
+            if found:latency=int(found.group(1))
+    return {'modules':module_count,'module_gb':module_gb,'speed':speed,'cas_latency':latency}
+
+
 def _ram_quantity(candidate, minimum):
     """Represent separately purchased identical server DIMMs explicitly."""
     capacity=_candidate_capacity(candidate)
@@ -946,6 +1084,12 @@ def assemble_components(definition, candidates, *, delivery_mode=None, performan
         if role=='os':
             os_requirement=str(definition.get('components',{}).get('os') or '')
             edition='pro' if re.search(r'\bpro\b',os_requirement,re.I) else 'home'
+            # The owner explicitly retained Gamers Outlet as the Windows
+            # supplier. Do not silently switch the Playbook to another key
+            # seller when a cheaper or otherwise eligible listing exists.
+            from urllib.parse import urlsplit
+            values=[row for row in values if (urlsplit(str(row.get('source_url') or '')).hostname or '').casefold()
+                in {'gamers-outlet.net','www.gamers-outlet.net'}]
             values=[row for row in values if 'windows 11' in row['title'].casefold()
                 and re.search(r'\b'+edition+r'\b',row['title'],re.I)]
         if role=='os_secondary':
@@ -959,7 +1103,15 @@ def assemble_components(definition, candidates, *, delivery_mode=None, performan
             metric=baseline.get('metric') if baseline else None
             target=baseline.get(metric) if baseline and metric else None
             substitutes=[]
-            if target is not None and baseline.get('benchmark_source'):
+            exact_has_authored_source=any(
+                _candidate_key(row,preferred)[0]==0
+                and ((row.get('suggested_supplier_offer') or {}).get('stock_status')
+                    or (row.get('source_observation') or {}).get('stock_status')) in {'available','in_stock'}
+                and _planning_socket(row)==_infer_cpu_socket(preferred)
+                and (role!='cpu' or 'gpu' in required_roles(definition)
+                    or _planning_integrated_graphics(row))
+                for row in exact)
+            if not exact_has_authored_source and target is not None and baseline.get('benchmark_source'):
                 substitutes=[row for row in values if (evidence:=row.get('performance_evidence'))
                     and normalise(row['title'])!=target_model
                     and evidence.get('benchmark_source')==baseline['benchmark_source']
@@ -967,14 +1119,21 @@ def assemble_components(definition, candidates, *, delivery_mode=None, performan
                     and evidence.get(metric) is not None and evidence[metric]>=target]
                 substitutes.sort(key=lambda row:(row['performance_evidence'][metric]-target,
                     *_candidate_key(row,preferred)))
-            if exact:
-                # An unavailable exact model must not hide a demonstrably
-                # capable, fresh in-stock alternative. Unknown or stale stock
-                # is never promoted by this replacement path.
-                available_substitutes=[row for row in substitutes if _candidate_key(row,preferred)[0]==0]
-                values=(sorted([*exact,*available_substitutes],key=lambda row:_candidate_key(row,preferred))
-                    if available_substitutes and not any(_candidate_key(row,preferred)[0]==0 for row in exact)
-                    else exact)
+            if exact and exact_has_authored_source:
+                # Keep the authored model identity ahead of benchmark-based
+                # alternatives while the exact model has current in-stock
+                # supplier evidence.
+                values=sorted(exact,key=lambda row:_candidate_key(row,preferred))
+            elif substitutes:
+                # A catalogue row alone does not prove that the exact model
+                # can be bought. When its supplier source is missing, stale or
+                # out of stock, use the compatible benchmark-qualified models
+                # instead of letting the stale exact row hide them.
+                values=substitutes
+            elif exact:
+                # Preserve the exact model as a visible blocked fallback when
+                # no verified performance-qualified replacement exists.
+                values=sorted(exact,key=lambda row:_candidate_key(row,preferred))
             else:
                 values=substitutes
                 if 'gpu' not in required_roles(definition):
@@ -986,13 +1145,54 @@ def assemble_components(definition, candidates, *, delivery_mode=None, performan
                     values=[row for row in values if (_planning_vram(row) or 0)>=minimum_vram]
         if role=='cpu' and 'gpu' not in required_roles(definition):
             values=[row for row in values if _planning_integrated_graphics(row)]
+        if role=='cpu' and normalise_cpu(preferred)=='5600g':
+            # This exact authored integrated-graphics CPU has a fresh Alpha
+            # capture in the local catalogue. Prefer it over the OOS OCUK
+            # duplicate while keeping the exact-model requirement unchanged.
+            alpha=[row for row in values if (row.get('external_listing_id') or '')=='alpha-components:9002'
+                and row.get('source_observation',{}).get('stock_status') in {'available','in_stock'}
+                and row.get('catalogue_approved')]
+            if alpha:
+                values=alpha+ [row for row in values if row not in alpha]
         if role in {'ram','storage'}:
             from app.services.curated_build_policy import _capacity_gb
             minimum=_capacity_gb(preferred)
             if minimum:
                 if role=='ram':
                     values=[_ram_quantity(row,minimum) for row in values]
-                values=[row for row in values if _candidate_capacity(row)>=minimum]
+                    required_layout=_ram_layout_facts(preferred)
+                    required_capacity=minimum
+                    required_generation=re.search(r'\bDDR\s*([345])\b',preferred,re.I)
+                    required_speed_match=re.search(r'\bDDR\s*[345]\s*[- ]\s*(\d{4,5})\b',preferred,re.I)
+                    required_speed=int(required_speed_match.group(1)) if required_speed_match else None
+                    required_latency_match=re.search(r'\bCL\s*(\d{1,3})\b',preferred,re.I)
+                    required_latency=int(required_latency_match.group(1)) if required_latency_match else None
+                    matched=[]
+                    for row in values:
+                        properties=(row.get('source_observation') or {}).get('product_properties') or {}
+                        actual=_ram_layout_facts(row.get('title'),properties,row.get('quantity') or 1)
+                        if _candidate_capacity(row)!=required_capacity:
+                            continue
+                        if required_layout['modules'] is not None and actual['modules']!=required_layout['modules']:
+                            continue
+                        if required_layout['module_gb'] is not None and actual['module_gb']!=required_layout['module_gb']:
+                            continue
+                        if required_generation and not re.search(r'\bDDR\s*'+required_generation.group(1)+r'\b',row['title'],re.I):
+                            continue
+                        if required_speed is not None and actual['speed']!=required_speed:
+                            continue
+                        # At the same memory generation, capacity, kit layout,
+                        # and rated speed, a lower CAS latency is a valid
+                        # equal-or-better substitute (e.g. CL32 for CL38).
+                        # A higher latency or an unknown CL must not satisfy
+                        # the authored requirement.
+                        if required_latency is not None and (actual['cas_latency'] is None
+                                or actual['cas_latency']>required_latency):
+                            continue
+                        matched.append(row)
+                    values=matched
+                else:
+                    values=[row for row in values if _candidate_capacity(row)>=minimum]
         if role=='ram':
             server_memory=bool(re.search(r'\b(?:threadripper|rdimm)\b',
                 str(definition.get('components',{}).get('cpu',''))+' '+str(preferred),re.I))
@@ -1099,7 +1299,9 @@ def assemble_components(definition, candidates, *, delivery_mode=None, performan
     # publication gate. Storage, cooling and PSU measurement gaps stay visible
     # as workshop work and must not exhaust the compatible-candidate search.
     core_roles={'cpu','motherboard','ram','gpu'}
-    if any(not any((row.get('engineering') or {}).get('reviewed') is True for row in pools[role])
+    if any(not any((row.get('engineering') or {}).get('reviewed') is True
+            or (row.get('manufacturer_facts') or {}).get('reviewed') is True
+            for row in pools[role])
             for role in roles if role in core_roles):
         return chosen,blockers
     # Check motherboard-to-case fit before walking combinations of storage,
@@ -1112,7 +1314,9 @@ def assemble_components(definition, candidates, *, delivery_mode=None, performan
         if index==len(search_roles):return deepcopy(selected) if fit_check(selected,True) else None
         role=search_roles[index]
         for value in choices(role,selected):
-            if role in core_roles and (value.get('engineering') or {}).get('reviewed') is not True:
+            if role in core_roles and not (
+                    (value.get('engineering') or {}).get('reviewed') is True
+                    or (value.get('manufacturer_facts') or {}).get('reviewed') is True):
                 continue
             if remaining<=0:return None
             remaining-=1
@@ -1142,20 +1346,23 @@ def automatic_policy(parts, definition, parent, settings, *, definition_sha256_o
         courier = Decimal('20.00')
     if not parts:
         return None
-    source_days=max((days for part in parts.values()
-        if isinstance(days:=(part.get('source_observation') or {}).get('delivery_working_days'),int)
-        and not isinstance(days,bool) and days>=0),default=0)
     modes={}
     for mode in MODES:
-        target_days=getattr(settings,{'fast_track':'speedy_curated_custom_days','standard':'standard_curated_custom_days','flexible':'standard_curated_custom_days'}[mode],None)
-        if not isinstance(target_days,int) or isinstance(target_days,bool) or target_days<1:
+        configured_days=getattr(settings,{'fast_track':'speedy_curated_custom_days','standard':'standard_curated_custom_days','flexible':'flexible_curated_custom_days'}[mode],None)
+        target_days=(None if mode=='flexible' else min(configured_days,DELIVERY_CEILINGS[mode])
+            if isinstance(configured_days,int) and not isinstance(configured_days,bool) else None)
+        if mode=='flexible':
+            # Flexible is explicitly unpromised; its arrival estimate is internal
+            # sourcing evidence and the legacy settings field is not a gate.
+            target_days=None
+        if mode!='flexible' and (not isinstance(target_days,int) or isinstance(target_days,bool) or target_days<1):
             return None
         modes[mode]={'costs':{'build_labour':'0.00','packaging':'6.00','outbound_delivery':_money(courier),
             'insurance':'15.00','payment_fixed':'0.20','expected_failure_cost':'0.00',
             'allocated_overhead':_money(landed*Decimal('.10')),'other_variable_costs':'0.00'},
             'minimum_contribution_gbp':str(floor if mode=='flexible' else target),
             'minimum_margin_fraction':margin,'premium_gbp':str(getattr(settings,'speedy_delivery_price_gbp',0) if mode=='fast_track' else 0),
-            'workshop_working_days':max(1,target_days-source_days-1),'courier_working_days':1,
+            'workshop_working_days':1,'courier_working_days':2,
             'maximum_delivery_working_days':None if mode=='flexible' else target_days}
     mappings={part['slot_id']:(part['variant_id'],f"variant:{part['variant_id']}") for role,part in parts.items() if role!='case'}
     case=parts.get('case') or {}
@@ -1240,33 +1447,146 @@ def _store_supplier_arrival_default(part):
             'delivery_estimate_source':estimate_source or 'vendor_default'}
 
 
-def estimate_delivery_products(parts, definition, parent, settings):
+def _parts_for_delivery_pace(parts, mode, pace_sources):
+    """Price the exact BOM from the best current supplier source for one pace.
+
+    ``component_pace_sources`` has already enforced exact identity, freshness,
+    stock, condition, vendor, postage, and delivery eligibility. Keep the
+    selected component variants fixed while allowing the supplier offer (and
+    therefore the landed cost) to differ by delivery pace.
+    """
+    selected = {role: dict(part) for role, part in parts.items()}
+    if pace_sources is None:
+        return selected
+    offers = pace_sources.get(mode) or []
+    by_role = {str(option.get('role')): option for option in offers}
+    for role, part in selected.items():
+        option = by_role.get(str(role))
+        same_variant = bool(option and option.get('variant_id') == part.get('variant_id'))
+        sources = list(option.get('sources') or []) if same_variant and option.get('available') else []
+        if mode == 'flexible':
+            # Flexible may attempt an auction for up to a week, but its price
+            # must be safe if no auction is won. Base the quote on a confirmed
+            # fixed-price/retail fallback, never an unawarded auction amount.
+            fallbacks = [source for source in sources
+                if str(source.get('listing_type') or '').casefold() in {
+                    'buy_it_now', 'fixed_price', 'retail', 'software_download'}]
+            if not fallbacks:
+                standard_option = next((row for row in pace_sources.get('standard', [])
+                    if row.get('role') == role and row.get('variant_id') == part.get('variant_id')), None)
+                fallbacks = list(standard_option.get('sources') or []) if standard_option else []
+            sources = fallbacks
+        if not sources:
+            part['source_observation'] = {'fresh': False, 'active_listing': False,
+                'stock_status': 'unknown', 'condition': None}
+            part['suggested_supplier_offer'] = None
+            part['pace_source_missing'] = True
+            continue
+        source = min(sources, key=lambda row: (
+            _decimal(row.get('item_gbp')) is None,
+            (_decimal(row.get('item_gbp')) or Decimal('Infinity'))
+            + (_decimal(row.get('delivery_gbp')) or Decimal(0))))
+        item = _decimal(source.get('item_gbp'))
+        postage = _decimal(source.get('delivery_gbp'))
+        official_free_software = False
+        if str(role).startswith('os') and item == 0 and postage == 0:
+            from urllib.parse import urlsplit
+            try:
+                official_free_software = (
+                    urlsplit(str(source.get('url') or '')).hostname == 'releases.ubuntu.com'
+                    and source.get('source') == 'Ubuntu'
+                    and source.get('listing_type') == 'software_download')
+            except ValueError:
+                official_free_software = False
+        if (item is None or item < 0 or (item == 0 and not official_free_software)
+                or postage is None or postage < 0):
+            part['source_observation'] = {'fresh': False, 'active_listing': False,
+                'stock_status': 'unknown', 'condition': None}
+            part['suggested_supplier_offer'] = None
+            part['pace_source_missing'] = True
+            continue
+        quantity = int(option.get('quantity') or part.get('quantity') or 1)
+        if quantity < 1:
+            quantity = 1
+        item_total = item * quantity
+        postage_total = postage * quantity
+        snapshot = {**source, 'fresh': True, 'active_listing': True,
+            'stock_status': 'available', 'condition': 'new', 'listing_type': 'buy_it_now',
+            'commercial_capture_verified': True}
+        part.update(listing_price_gbp=_money(item_total),
+            unit_price_gbp=_money(item),
+            supplier_postage_gbp=_money(postage_total) if source.get('postage_verified') is True else None,
+            supplier_postage_assumption=(None if source.get('postage_verified') is True
+                else source.get('postage_assumption') or 'owner-approved-zero-fallback'),
+            source_url=source.get('url'), source_observation=snapshot,
+            suggested_supplier_offer=None, pace_source_missing=False)
+    return selected
+
+
+def _eligible_flexible_auctions(parts, pace_sources, *, now=None):
+    """Return exact selected-part auctions that are active and end within 7 days."""
+    now=now or datetime.now(timezone.utc)
+    latest=now+timedelta(days=7)
+    eligible=[]
+    for option in (pace_sources or {}).get('flexible',[]):
+        role=option.get('role')
+        selected=parts.get(role)
+        if (not option.get('available') or selected is None
+                or option.get('variant_id')!=selected.get('variant_id')):
+            continue
+        for source in option.get('sources') or []:
+            if str(source.get('listing_type') or '').casefold()!='auction':
+                continue
+            try:
+                ends_at=datetime.fromisoformat(str(source['listing_ends_at']).replace('Z','+00:00'))
+            except (KeyError,TypeError,ValueError):
+                continue
+            if ends_at.tzinfo is None:
+                continue
+            ends_at=ends_at.astimezone(timezone.utc)
+            if not now<ends_at<=latest or not source.get('url'):
+                continue
+            eligible.append({'role':role,'variant_id':option.get('variant_id'),
+                'source':source.get('source'),'url':source['url'],
+                'item_gbp':source.get('item_gbp'),'delivery_working_days':source.get('delivery_working_days'),
+                'listing_ends_at':ends_at.isoformat()})
+    return eligible
+
+
+def estimate_delivery_products(parts, definition, parent, settings, *, pace_sources=None):
     from app.services.playbook_commercial_quote import mode_economics
     required=set(required_parts(definition))
-    missing=[f'{role}: catalogue product' for role in sorted(required-set(parts))]
-    for role,part in parts.items():
-        if _decimal(part.get('listing_price_gbp')) is None:
-            missing.append(f'{role}: current item price')
-    # Unknown component postage is an owner-approved £0 costing fallback.
-    # Preserve supplier evidence as unknown; only the proposal's landed-cost
-    # calculation uses zero. Supplier stock and ETA checks remain separate.
-    values=[(_decimal(part.get('listing_price_gbp')) or Decimal(0))
-        + (_decimal(part.get('supplier_postage_gbp')) or Decimal(0)) for part in parts.values()]
     allowed_roles=required | ({'wireless_adapter'} if 'wireless_adapter' in parts else set())
-    if missing or set(parts)!=allowed_roles or any(value is None for value in values):
-        reason='Current exact supplier data is missing: '+', '.join(missing or ['complete landed costs'])
+    missing_roles=required-set(parts)
+    if missing_roles or set(parts)!=allowed_roles:
+        reason='Current exact supplier data is missing: '+', '.join(
+            [f'{role}: catalogue product' for role in sorted(missing_roles)] or ['complete landed costs'])
         return {mode:{'available':False,'recommended_price_gbp':None,
                      'reason':reason} for mode in MODES}
-    policy=automatic_policy(parts,definition,parent,settings)
-    if policy is None:
-        return {mode:{'available':False,'recommended_price_gbp':None,'reason':'Automatic business rule refresh is required'} for mode in MODES}
-    landed=sum(values,Decimal(0));outputs={}
+    outputs={}
     for mode in MODES:
-        ineligible=[role for role,part in parts.items() if not component_delivery_eligibility(part,policy)[mode]]
+        mode_parts=_parts_for_delivery_pace(parts,mode,pace_sources)
+        missing_prices=[role for role,part in mode_parts.items()
+            if _decimal(part.get('listing_price_gbp')) is None]
+        if missing_prices:
+            outputs[mode]={'available':False,'recommended_price_gbp':None,
+                'reason':'Current exact supplier item price is missing for: '+', '.join(sorted(missing_prices))}
+            continue
+        # Unknown inbound postage remains a labelled £0 costing fallback.
+        landed=sum((_decimal(part.get('listing_price_gbp')) or Decimal(0))
+            + (_decimal(part.get('supplier_postage_gbp')) or Decimal(0))
+            for part in mode_parts.values())
+        policy=automatic_policy(mode_parts,definition,parent,settings)
+        if policy is None:
+            outputs[mode]={'available':False,'recommended_price_gbp':None,
+                'reason':'Automatic business rule refresh is required'}
+            continue
+        ineligible=[role for role,part in mode_parts.items()
+            if part.get('pace_source_missing') or not component_delivery_eligibility(part,policy)[mode]]
         ineligible_details=[]
         for role in ineligible:
-            source=(parts[role].get('source_observation') or {})
-            days,arrival_source=_supplier_arrival_estimate(parts[role],source)
+            source=(mode_parts[role].get('source_observation') or {})
+            days,arrival_source=_supplier_arrival_estimate(mode_parts[role],source)
             if (source.get('fresh') and source.get('active_listing')
                     and source.get('stock_status')=='available'
                     and isinstance(days,int) and not isinstance(days,bool) and days>=0):
@@ -1277,11 +1597,7 @@ def estimate_delivery_products(parts, definition, parent, settings):
                 )
             else:
                 ineligible_details.append(f'{role} (fresh in-stock offer and arrival estimate required)')
-        delivery_evidence_complete=all(
-            _decimal(part.get('supplier_postage_gbp')) is not None
-            and bool((part.get('source_observation') or {}).get('postage_verified'))
-            for part in parts.values())
-        postage_assumptions=[f"{part.get('role') or role}: £0.00 fallback" for role,part in parts.items()
+        postage_assumptions=[f"{part.get('role') or role}: £0.00 fallback" for role,part in mode_parts.items()
             if (part.get('supplier_postage_assumption')=='owner-approved-zero-fallback'
                 or (part.get('source_observation') or {}).get('postage_verified') is not True)]
         if ineligible:
@@ -1295,18 +1611,32 @@ def estimate_delivery_products(parts, definition, parent, settings):
                 'reason':'This delivery option is unavailable because: '+', '.join(ineligible_details),
                 'postage_assumptions':postage_assumptions,
                 'cost_basis':'owner_approved_pilot_and_current_application_delivery_allowance'}
+            supplier_times=[_supplier_arrival_estimate(part)[0] for part in mode_parts.values()]
+            supplier_days=max(supplier_times) if supplier_times and all(
+                isinstance(days,int) and not isinstance(days,bool) and days>=0 for days in supplier_times) else None
+            rule=policy.modes[mode]
+            outputs[mode].update(supplier_arrival_working_days=supplier_days,
+                workshop_wait_working_days=None,workshop_working_days=rule.workshop_working_days,
+                courier_working_days=rule.courier_working_days,
+                maximum_delivery_working_days=rule.maximum_delivery_working_days,
+                delivery_promised=mode!='flexible',
+                estimated_delivery_working_days=(supplier_days+rule.workshop_working_days+rule.courier_working_days)
+                    if mode!='flexible' and supplier_days is not None else None,
+                expected_delivery_working_days=(supplier_days+rule.workshop_working_days+rule.courier_working_days)
+                    if mode!='flexible' and supplier_days is not None else None,
+                timing_basis='proposed_from_delivery_target' if mode!='flexible' else 'flexible_vendor_fallback')
             continue
         economics=mode_economics(policy,policy.modes[mode],landed)
         price=economics['price'];profit=economics['contribution']
+        if (definition.get('tier')=='High-end' and mode=='standard'
+                and (policy.market is None or policy.market.sold_p75_gbp is None
+                    or policy.market.sold_sample_size < 8)):
+            outputs[mode]={'available':False,'recommended_price_gbp':None,
+                'estimated_profit_gbp':None,
+                'reason':'A reviewed eight-sale complete-PC P75 is required before setting a High-end Standard price.'}
+            continue
         market_cap=(policy.market.sold_p75_gbp if policy.market and policy.market.sold_p75_gbp is not None
                     else policy.market.sold_median_gbp if policy.market else None)
-        if (definition.get('tier') == 'High-end' and mode == 'standard'
-                and (policy.market is None or policy.market.sold_p75_gbp is None)):
-            outputs[mode]={'available':False,'recommended_price_gbp':None,'estimated_profit_gbp':None,
-                'profit_floor_gbp':_money(economics['floor']),
-                'estimated_total_cost_gbp':_money(economics['true_cost']),
-                'reason':'At least eight sold comparable complete-PC records and a reviewed P75 are required for High-end pricing.'}
-            continue
         if definition.get('tier') == 'High-end' and mode == 'standard' and (
                 policy.market is not None and policy.market.sold_p75_gbp is not None
                 and price > policy.market.sold_p75_gbp):
@@ -1334,39 +1664,60 @@ def estimate_delivery_products(parts, definition, parent, settings):
                 and (policy.market is None or policy.market.sold_p75_gbp is None) else None),
             'postage_assumptions':postage_assumptions,
             'cost_basis':'owner_approved_pilot_and_current_application_delivery_allowance'}
-    supplier_times=[_supplier_arrival_estimate(part)[0] for part in parts.values()]
-    supplier_days=max(supplier_times) if supplier_times and all(
-        isinstance(days,int) and not isinstance(days,bool) and days>=0 for days in supplier_times) else None
-    for mode,product in outputs.items():
+        supplier_times=[_supplier_arrival_estimate(part)[0] for part in mode_parts.values()]
+        supplier_days=max(supplier_times) if supplier_times and all(
+            isinstance(days,int) and not isinstance(days,bool) and days>=0 for days in supplier_times) else None
         rule=policy.modes[mode]
+        product=outputs[mode]
+        auction_options=(_eligible_flexible_auctions(mode_parts,pace_sources)
+            if mode=='flexible' and pace_sources is not None else [])
+        flexible_expected=(17 if auction_options else
+            supplier_days+rule.workshop_working_days+rule.courier_working_days
+            if supplier_days is not None else None)
         product.update(supplier_arrival_working_days=supplier_days,workshop_wait_working_days=None,
             workshop_working_days=rule.workshop_working_days,courier_working_days=rule.courier_working_days,
             maximum_delivery_working_days=rule.maximum_delivery_working_days,
             delivery_promised=mode!='flexible',
             estimated_delivery_working_days=(supplier_days+rule.workshop_working_days+rule.courier_working_days)
-                if mode!='flexible' and supplier_days is not None else None,
-            timing_basis='proposed_from_delivery_target')
+                if mode!='flexible' and supplier_days is not None else (flexible_expected if mode=='flexible' else None),
+            expected_delivery_working_days=(supplier_days+rule.workshop_working_days+rule.courier_working_days)
+                if mode!='flexible' and supplier_days is not None else (flexible_expected if mode=='flexible' else None),
+            timing_basis=(('flexible_auction_then_vendor_fallback' if auction_options else 'flexible_vendor_fallback') if mode=='flexible'
+                else 'proposed_from_delivery_target'),
+            selected_supplier_sources=[{'role':role,'variant_id':part.get('variant_id'),
+                'url':(part.get('source_observation') or {}).get('url'),
+                'source':(part.get('source_observation') or {}).get('source'),
+                'listing_type':(part.get('source_observation') or {}).get('listing_type'),
+                'item_gbp':part.get('listing_price_gbp'),
+                'delivery_gbp':(part.get('source_observation') or {}).get('delivery_gbp'),
+                'postage_verified':(part.get('source_observation') or {}).get('postage_verified'),
+                'delivery_working_days':_supplier_arrival_estimate(part)[0]}
+                for role,part in mode_parts.items()])
+        if mode == 'flexible':
+            product['auction_options']=auction_options
     standard_price=outputs['standard']['recommended_price_gbp']
     standard=Decimal(standard_price) if standard_price is not None else None
     for mode,offer in outputs.items():
         offer['difference_from_standard_gbp']=_money(Decimal(offer['recommended_price_gbp'])-standard) if standard is not None and offer['recommended_price_gbp'] is not None else None
-    flexible_price=outputs['flexible']['recommended_price_gbp']
-    if flexible_price is not None and (standard is None or Decimal(flexible_price)>=standard):
-        outputs['flexible'].update(recommended_price_gbp=None,estimated_profit_gbp=None,
-            difference_from_standard_gbp=None,
-            reason='Current full-cost margin floors do not support a genuine Flex saving')
     return outputs
 
 
-async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None):
+async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None,variant_ids=None):
     source_cache={} if source_cache is None else source_cache
     from sqlalchemy import or_
+    filters=[
+        PlaybookSlot.playbook_id==parent_id,
+        CatalogueVariant.curated_for_builds.is_(True),
+        CatalogueVariant.status.in_(('active','pending_review')),
+        or_(Listing.price.is_(None),Listing.price>0,(PlaybookSlot.slot_type=='os_secondary')&(Listing.price==0)),
+        Listing.status=='active',
+    ]
+    if variant_ids is not None:
+        # Release reassessment must use the exact BOM just reviewed; an empty
+        # set deliberately returns no candidates rather than widening scope.
+        filters.append(CatalogueVariant.id.in_(set(variant_ids)))
     rows=(await db.execute(select(CatalogueVariant,Listing,PlaybookSlot).join(Listing,Listing.id==CatalogueVariant.listing_id)
-        .join(PlaybookSlot,PlaybookSlot.id==CatalogueVariant.slot_id).where(
-            PlaybookSlot.playbook_id==parent_id,CatalogueVariant.curated_for_builds.is_(True),
-            CatalogueVariant.status.in_(('active','pending_review')),
-            or_(Listing.price.is_(None),Listing.price>0,(PlaybookSlot.slot_type=='os_secondary')&(Listing.price==0)),
-            Listing.status=='active'))).all()
+        .join(PlaybookSlot,PlaybookSlot.id==CatalogueVariant.slot_id).where(*filters))).all()
     # Reuse only exact, human-reviewed reference-board evidence. Fuzzy board
     # matches are useful for exploratory configurator warnings, but cannot
     # certify a Playbook component for sale.
@@ -1383,7 +1734,36 @@ async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None):
             row[1].price is None, row[1].price if row[1].price is not None else 0, row[0].id))
         # Bound source lookups and search effort; never fetch the public catalogue
         # here because unpublished cells also need automatically built proposals.
-        for variant,listing,slot,bestseller in items[:MAX_CHOICES_PER_ROLE]:
+        bounded_items=items[:MAX_CHOICES_PER_ROLE]
+        if role=='storage_secondary' and items:
+            # The secondary-drive catalogue can contain hundreds of low-capacity
+            # options. Preserve candidates that can satisfy an authored 8TB-class
+            # data-drive requirement even when bestseller/price ordering places
+            # them beyond the generic per-role limit.
+            from app.services.curated_build_policy import _capacity_gb
+            capacities=[]
+            playbook=(await db.execute(select(Playbook).where(Playbook.id==parent_id))).scalar_one_or_none()
+            for definition in definitions()['builds']:
+                if playbook is None or definition.get('segment')!=playbook.name:
+                    continue
+                storage=[item.strip() for item in str(
+                    definition.get('components',{}).get('storage') or '').split('+') if item.strip()]
+                if len(storage)>1:
+                    capacity=_capacity_gb(storage[1])
+                    if capacity:
+                        capacities.append(capacity)
+            minimum=max(capacities,default=None)
+            if minimum:
+                existing_ids={row[0].id for row in bounded_items}
+                for row in items[MAX_CHOICES_PER_ROLE:]:
+                    title=row[1].title or ''
+                    if (_capacity_gb(title) or 0)>=minimum and not re.search(
+                            r'\b(?:external|portable|USB)\b',title,re.I) and re.search(
+                            r'\b(?:NVMe|SATA|M\.2|PCIe)\b',title,re.I):
+                        if row[0].id not in existing_ids:
+                            bounded_items.append(row)
+                            existing_ids.add(row[0].id)
+        for variant,listing,slot,bestseller in bounded_items:
             if not _plausible_role_candidate(slot.slot_type,listing.title):
                 continue
             if slot.slot_type=='os' and not _verified_windows_licence_listing(listing):
@@ -1441,13 +1821,16 @@ async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None):
             if board:
                 reference={'socket':board.socket,'ram_type':board.ram_type,'ram_slots':board.ram_slots,
                     'form_factor':board.form_factor,'m2_slots':board.m2_slots,'reviewed':True}
+                if isinstance(board.pcie_x16_slots,int) and board.pcie_x16_slots>0:
+                    reference['gpu_interfaces']=['pcie']
                 capture=((board.raw_ai_response or {}).get('manufacturer_source_capture') or {})
                 capture_evidence=capture.get('field_evidence') or {}
                 wireless_evidence=str(capture_evidence.get('wifi') or '')
                 wireless_url=str(capture.get('source_url') or '')
                 wireless_host=(urlsplit(wireless_url).hostname or '').casefold()
                 if (board.wifi is True and re.search(r'\bbluetooth\b',wireless_evidence,re.I)
-                        and wireless_host in {'asus.com','www.asus.com','rog.asus.com'}):
+                        and wireless_host in {'asus.com','www.asus.com','rog.asus.com',
+                                              'msi.com','www.msi.com'}):
                     reference.update(wifi=True,bluetooth=True,wireless_reference_url=wireless_url)
                 # A conflict between two approved records is still unknown
                 # to this service; never silently choose one source.
@@ -1548,10 +1931,11 @@ async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None):
             +Decimal(str(offer.get('delivery_gbp') or '0')),
             str(offer.get('source') or ''),str(offer.get('url') or '')))
         part['supplier_offers']=[{key:offer.get(key) for key in (
-            'source','title','url','item_gbp','delivery_gbp','postage_verified',
+            'source','title','url','item_gbp','delivery_gbp','postage_verified','mpn','cpk','cpk_data',
             'postage_assumption','observed_at','stock_status','condition','match_basis',
             'observation_id','listing_id','listing_type','stock_evidence','commercial_capture_verified',
-            'delivery_working_days','delivery_estimate_source','prime_eligible')}
+            'delivery_working_days','delivery_estimate_source','prime_eligible','listing_db_id',
+            'playbook_product_capture')}
             for offer in valid_supplier_offers]
         from app.gem_radar.product_identity_registry import registry_available
         if part.get('cpk') and not part.get('cpk_data') and not await registry_available(db):
@@ -1699,7 +2083,7 @@ async def build_cell_offer(db,definition,parent,settings,candidates,benchmark_in
         specs=fit_engineering(part)
         return {**chassis,**specs,'engineering':specs}
     def fit_check(selected,complete):
-        checks=evaluate_fit({role:fit_engineering(part) for role,part in selected.items()
+        checks=_evaluate_playbook_fit({role:fit_engineering(part) for role,part in selected.items()
             if role!='case' and not role.startswith('os')},chassis_for(selected),
             gpu_required='gpu' in required_roles(definition))
         return _selected_fit_passes(checks,set(selected),complete)
@@ -1787,7 +2171,7 @@ async def build_cell_offer(db,definition,parent,settings,candidates,benchmark_in
             blockers.append(f"{role}: approve the product photos in the Playbook")
     engineering={role:fit_engineering(part) for role,part in parts.items() if role!='case' and not role.startswith('os')}
     chassis=chassis_for(parts)
-    checks=evaluate_fit(engineering,chassis,gpu_required='gpu' in required_roles(definition))
+    checks=_evaluate_playbook_fit(engineering,chassis,gpu_required='gpu' in required_roles(definition))
     compatible=not any(check['severity'] in {'error','unknown'} for check in checks)
     if not compatible:
         blockers.append('Compatibility facts still need confirmation before publication')
@@ -1820,7 +2204,10 @@ async def build_cell_offer(db,definition,parent,settings,candidates,benchmark_in
         blockers.append('Automatic sourcing must link the operating-system licence and its cost from the catalogue')
     unmodelled_components=unmodelled_required_components(definition)
     blockers.extend(unmodelled_components)
-    delivery=estimate_delivery_products(parts,definition,parent,settings)
+    from app.services.playbook_pace_sources import component_pace_sources
+    commercial_policy=automatic_policy(parts,definition,parent,settings)
+    pace_sources=await component_pace_sources(parts,commercial_policy,db)
+    delivery=estimate_delivery_products(parts,definition,parent,settings,pace_sources=pace_sources)
     delivery=withhold_incomplete_bom_prices(delivery,[*unmodelled_components,*wireless_missing_bom])
     if definition.get('components',{}).get('os') and 'os' not in parts:
         for row in delivery.values():
@@ -1843,14 +2230,17 @@ async def build_cell_offer(db,definition,parent,settings,candidates,benchmark_in
         capacities=await current_capacity_ids(db)
         body=SimpleNamespace(curated_build_id=definition['id'],capacity_evidence_ids=capacities,nonnew_consent=False,
             model_dump=lambda **_: {'curated_build_id':definition['id'],'capacity_evidence_ids':capacities})
-        assessed,_=await assess_stored_cell(db,parent,definition,policy,body)
+        flexible_auction_available=bool(_eligible_flexible_auctions(parts,pace_sources))
+        assessed,_=await assess_stored_cell(db,parent,definition,policy,body,
+            flexible_auction_available=flexible_auction_available)
         for mode,quote in assessed['modes'].items():
             if mode not in policy.enabled_modes:
                 delivery[mode].update(available=False, recommended_price_gbp=None, reason='Not offered in the MVP')
                 continue
             if not quote['offerable']:
                 delivery[mode].update(available=False,reason=quote['reason'],recommended_price_gbp=None)
-                if mode=='standard':blockers.append(f"{mode}: {quote['reason']}")
+                if mode in policy.enabled_modes:
+                    blockers.append(f"{mode}: {quote['reason']}")
             else:
                 delivery[mode].update(available=True,recommended_price_gbp=quote['price_gbp'],
                     estimated_profit_gbp=quote['contribution_gbp'],
@@ -1863,10 +2253,14 @@ async def build_cell_offer(db,definition,parent,settings,candidates,benchmark_in
                     reason='Exact source, full cost, compatibility and workshop checks passed; awaiting approval')
                 delivery[mode].update({key:quote[key] for key in (
                     'supplier_arrival_working_days','workshop_wait_working_days','workshop_working_days',
-                    'courier_working_days','maximum_delivery_working_days') if key in quote})
-                delivery[mode].update(estimated_delivery_working_days=quote['delivery_working_days'],
+                    'courier_working_days','maximum_delivery_working_days',
+                    'expected_delivery_working_days') if key in quote})
+                delivery[mode].update(estimated_delivery_working_days=quote.get(
+                    'expected_delivery_working_days',quote['delivery_working_days']),
                     delivery_promised=mode!='flexible',
-                    timing_basis='reviewed_workshop_policy')
+                    timing_basis=(('flexible_auction_then_vendor_fallback' if flexible_auction_available
+                        else 'flexible_vendor_fallback') if mode=='flexible'
+                        else 'reviewed_workshop_policy'))
     upsells=[]
     for role,selected in ([] if unmodelled_components or mvp_mode(parent) else parts.items()):
         if role=='case' or role.startswith('os'):
@@ -1876,7 +2270,7 @@ async def build_cell_offer(db,definition,parent,settings,candidates,benchmark_in
         for alternative in sorted(alternatives,key=lambda row:(not _upgrade_quality_verified(role,selected,row,metric),
                 *_candidate_key(row,definition.get('components',{}).get(role,''))))[:3]:
             upgraded={**parts,role:alternative}
-            upgraded_checks=evaluate_fit({key:value['engineering'] for key,value in upgraded.items() if key not in {'case','os'}},
+            upgraded_checks=_evaluate_playbook_fit({key:value['engineering'] for key,value in upgraded.items() if key not in {'case','os'}},
                 {**alternative['engineering'],'engineering':alternative['engineering']} if role=='case' else chassis,
                 gpu_required='gpu' in required_roles(definition))
             if not _distinct_storage_devices(upgraded):
@@ -1884,8 +2278,10 @@ async def build_cell_offer(db,definition,parent,settings,candidates,benchmark_in
                     'message':'Each authored drive requires a separately represented catalogue device.',
                     'affected':['storage','storage_secondary']})
             quality_verified=_upgrade_quality_verified(role,selected,alternative,metric)
-            upgraded_quotes=estimate_delivery_products(upgraded,definition,parent,settings)
             upgraded_policy=automatic_policy(upgraded,definition,parent,settings)
+            upgraded_pace_sources=await component_pace_sources(upgraded,upgraded_policy,db)
+            upgraded_quotes=estimate_delivery_products(upgraded,definition,parent,settings,
+                pace_sources=upgraded_pace_sources)
             alternative={**alternative,'delivery_eligibility':component_delivery_eligibility(alternative,upgraded_policy) if upgraded_policy else {mode:False for mode in MODES}}
             upsells.append({'role':role,'component':alternative,'delivery_products':upgraded_quotes,
                 'compatibility_verified':not any(check['severity'] in {'error','unknown'} for check in upgraded_checks),
@@ -1895,8 +2291,6 @@ async def build_cell_offer(db,definition,parent,settings,candidates,benchmark_in
         # A shared BOM must never masquerade as a Fast Track recommendation
         # when even one of its parts misses the customer commitment.
         product['recommended_component_variant_ids']=[part['variant_id'] for part in parts.values()] if product['recommended_price_gbp'] is not None else []
-    from app.services.playbook_pace_sources import component_pace_sources
-    pace_sources=component_pace_sources(parts,automatic_policy(parts,definition,parent,settings))
     offer={'cell_id':definition['id'],'playbook_id':parent.id,'segment':definition['segment'],'tier':definition['tier'],
         'name':definition['name'],'description':definition.get('description'),'intended_use':definition.get('use'),
         'components':list(parts.values()),'case_choices':[] if mvp_mode(parent) else [part for part in candidates if part['role']=='case'],
@@ -1954,6 +2348,7 @@ async def approve_proposal(db,proposal_id,revision,actor_id):
         candidates,benchmark_index,
         await paid_component_sales(db))
     current=await _stock_replacements(db,current,parent,candidates)
+    current=await apply_configured_cell_budget_gate(db,definition,parent,current)
     if current['revision_sha256']!=revision:
         raise HTTPException(409,'Catalogue products, prices or availability changed; refresh and review the new proposal')
     limit_reason=publication_limit_reason(parent,definition,current) if mvp_enabled(parent) else None
@@ -2128,8 +2523,9 @@ async def approve_current_supplier_sources(db,proposal_id,revision,actor_id,sour
                 pending_roles.append(role)
                 continue
         review_source=current
+        persisted_supplier_snapshot = await _persisted_supplier_snapshot_is_current(db,part,proposed,current)
         if current is None:
-            if await _persisted_supplier_snapshot_is_current(db,part,proposed,current):
+            if persisted_supplier_snapshot:
                 current={};review_source=proposed
             elif source_evidence is not None:
                 pending_roles.append(role)
@@ -2138,7 +2534,7 @@ async def approve_current_supplier_sources(db,proposal_id,revision,actor_id,sour
                 raise HTTPException(409,'A supplier capture changed or disappeared; refresh before approving source evidence')
         if (current.get('fingerprint')!=proposed.get('fingerprint')
                 and not _supplier_snapshot_matches_current(proposed,current)
-                and not await _persisted_supplier_snapshot_is_current(db,part,proposed,current)):
+                and not persisted_supplier_snapshot):
             # A changed component must not invalidate evidence already reviewed
             # for the other parts in this build. Keep it pending so the UI can
             # report partial progress and load a fresh capture for this role.
@@ -2146,7 +2542,15 @@ async def approve_current_supplier_sources(db,proposal_id,revision,actor_id,sour
                 pending_roles.append(role)
                 continue
             raise HTTPException(409,'A supplier capture changed; refresh before approving source evidence')
-        if current.get('fingerprint')!=proposed.get('fingerprint') and not _supplier_snapshot_matches_current(proposed,current):
+        if persisted_supplier_snapshot:
+            # A freshly observed exact cross-vendor offer can be newer than
+            # the catalogue listing preview. Import the source that was
+            # reviewed and revalidated from its immutable observation rather
+            # than the catalogue's older retailer snapshot.
+            review_source=proposed
+        if (current.get('fingerprint')!=proposed.get('fingerprint')
+                and not _supplier_snapshot_matches_current(proposed,current)
+                and not persisted_supplier_snapshot):
             review_source=proposed
         if not _supplier_fact_is_approvable(part,review_source):
             pending_roles.append(role);continue
@@ -2226,7 +2630,9 @@ async def approve_royalcdkeys_licence_source(db,listing_id,licence_review_finger
         .with_for_update())).all()
     activated=[]
     for variant,playbook_id in variants:
-        if variant.status!='pending_review':
+        approved_hidden_candidate=(variant.status=='hidden'
+            and variant.reject_reason=='operator_approval_required')
+        if variant.status!='pending_review' and not approved_hidden_candidate:
             continue
         variant.status='active'
         variant.reviewed_at=reviewed_at
@@ -2357,6 +2763,7 @@ async def refresh_playbooks(db,actor_id=0,progress=None,*,catalogue_sync=None, m
         if progress: progress(f"Rechecking {definition['id']} compatibility and delivery prices")
         offer=await build_cell_offer(db,definition,parent,settings,pools[parent.id],benchmark_index,paid_sales)
         offer=await _stock_replacements(db,offer,parent,pools[parent.id])
+        offer=await apply_configured_cell_budget_gate(db,definition,parent,offer)
         history=(await db.execute(select(PlaybookProposal).where(PlaybookProposal.playbook_id==parent.id,
             PlaybookProposal.action=='UPDATE').order_by(PlaybookProposal.id.desc()))).scalars().all()
         previous=next((row for row in history if (row.demand_signals or {}).get('source')==SOURCE
@@ -2515,6 +2922,53 @@ async def current_proposals(db):
         item['consented_journey']=journey_counts.get(item['cell_id'],{
             'view_sessions':0,'configured_sessions':0,'cart_sessions':0,'checkout_sessions':0})
     return sorted(items,key=lambda row:positions.get(row['cell_id'],10000))
+
+
+async def annotate_supplier_cost_reviews(db, proposals):
+    """Expose whether an operator saved the exact capture shown in each proposal."""
+    from copy import deepcopy
+    from app.models.commerce_evidence import SupplierOfferEvidence
+    from app.services.commercial_source_validation import bounded_evidence_reference
+
+    proposals = deepcopy(proposals)
+    expected = {}
+    for proposal in proposals:
+        for part in proposal.get('components', []):
+            source = part.get('source_observation') or {}
+            fingerprint = source.get('fingerprint')
+            observation_id = source.get('observation_id')
+            url = source.get('url')
+            if not fingerprint or not observation_id or not url:
+                continue
+            part_key = (f"case:{part['case_catalogue_id']}" if part.get('role') == 'case'
+                and part.get('case_catalogue_id') else f"variant:{part.get('variant_id')}")
+            evidence_ref = bounded_evidence_reference(str(url))
+            evidence_source = f"catalogue_import:{observation_id}:{fingerprint[:16]}"
+            expected[(part_key, evidence_ref, evidence_source)] = source
+
+    if not expected:
+        return proposals
+    rows = (await db.execute(select(SupplierOfferEvidence).where(
+        SupplierOfferEvidence.part_key.in_({key[0] for key in expected}),
+        SupplierOfferEvidence.evidence_ref.in_({key[1] for key in expected}),
+        SupplierOfferEvidence.evidence_source.in_({key[2] for key in expected}),
+        SupplierOfferEvidence.captured_by_admin_id > 0,
+    ))).scalars().all()
+    saved = {(row.part_key, row.evidence_ref, row.evidence_source): row for row in rows}
+    for proposal in proposals:
+        for part in proposal.get('components', []):
+            source = part.get('source_observation')
+            if not isinstance(source, dict):
+                continue
+            part_key = (f"case:{part['case_catalogue_id']}" if part.get('role') == 'case'
+                and part.get('case_catalogue_id') else f"variant:{part.get('variant_id')}")
+            evidence_ref = bounded_evidence_reference(str(source.get('url') or ''))
+            evidence_source = f"catalogue_import:{source.get('observation_id')}:{str(source.get('fingerprint') or '')[:16]}"
+            row = saved.get((part_key, evidence_ref, evidence_source))
+            part['source_observation'] = {**source,
+                'supplier_cost_reviewed': bool(row),
+                'supplier_cost_reviewed_at': row.captured_at.isoformat() if row else None}
+    return proposals
 
 
 async def list_motherboard_engineering_suggestions(db):
@@ -2758,6 +3212,11 @@ def _playbook_engineering_suggestion(listing,role):
             engineering_capture.get('observed_at') if engineering_capture_matches else capture.get('observed_at')),
         'retailer_properties':retailer_properties,'amazon_catalog_properties':catalog_properties,
         'amazon_catalog_capture':catalog_capture,'suggested_specs':values,
+        'previously_reviewed_specs':({key:value for key,value in current.items()
+            if key in required_fields and key not in {'reviewed'} }
+            if current.get('reviewed') is True and current.get('source_url')==listing.url else {}),
+        'previously_reviewed_at':current.get('reviewed_at') if current.get('reviewed') is True
+            and current.get('source_url')==listing.url else None,
         'missing_fields':sorted(required_fields-set(values)),
         'capture_status':('captured' if commercial_capture_matches else
             capture.get('status') if capture.get('url')==listing.url else 'not_captured_for_current_url'),
@@ -3236,7 +3695,7 @@ async def run_playbook_refresh(actor_id=0,progress=None):
         await db.commit()
         if progress: progress('Rebuilding all segment proposals and compatibility checks')
         result=await timed_stage('proposal_rebuild_seconds',lambda:
-            asyncio.wait_for(refresh_playbooks(db,actor_id),timeout=300))
+            asyncio.wait_for(refresh_playbooks(db,actor_id),timeout=PLAYBOOK_PROPOSAL_REBUILD_TIMEOUT_SECONDS))
         await db.commit()
         # Compatibility research is part of Playbook's refresh loop. Store
         # generated motherboard facts only as review-required suggestions; this

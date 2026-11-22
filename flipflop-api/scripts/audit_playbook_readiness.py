@@ -42,11 +42,18 @@ async def audit(output: Path):
         counts = {}
         for table in ('supplier_offer_evidence','workshop_capacity_evidence','price_quote_snapshots'):
             counts[table] = (await db.execute(text(f'SELECT count(*) FROM {table}'))).scalar_one()
-        counts['playbook_motherboard_specs_awaiting_review'] = (await db.execute(text('''
-            SELECT count(*) FROM motherboard_specs
-            WHERE source='ai_generated' AND reviewed=false
+        motherboard_review_rows = (await db.execute(text('''
+            SELECT source, count(*) AS count FROM motherboard_specs
+            WHERE source IN ('ai_generated','manufacturer_capture','listing_title')
+              AND reviewed=false
               AND raw_ai_response->>'playbook_source_url' IS NOT NULL
-        '''))).scalar_one()
+              AND raw_ai_response->>'playbook_source_title' IS NOT NULL
+            GROUP BY source ORDER BY source
+        '''))).mappings().all()
+        counts['playbook_motherboard_specs_awaiting_review'] = sum(row['count'] for row in motherboard_review_rows)
+        counts['playbook_motherboard_specs_awaiting_review_by_source'] = {
+            row['source']: row['count'] for row in motherboard_review_rows
+        }
         async with AsyncSessionLocal() as session:
             product_engineering_reviews=await list_playbook_product_engineering_suggestions(session)
         counts['playbook_product_engineering_suggestions_awaiting_review']=len(product_engineering_reviews)
@@ -172,7 +179,8 @@ async def audit(output: Path):
             'proposal_complete_hardware':bool(proposal.get('complete_hardware')),
             'proposal_compatibility_verified':bool((proposal.get('compatibility') or {}).get('verified')),
             'proposal_priced_modes':[mode for mode in ('fast_track','standard','flexible')
-                if (delivery_products.get(mode) or {}).get('recommended_price_gbp') is not None],
+                if (delivery_products.get(mode) or {}).get('available') is True
+                and (delivery_products.get(mode) or {}).get('recommended_price_gbp') is not None],
             'proposal_blocker_count':len(proposal.get('blockers') or []),
             'fully_verified':False})
     summary={'builds':len(build_report),'segments':len({item['segment'] for item in build_report}),
@@ -215,7 +223,8 @@ async def audit(output: Path):
         'complete_hardware_proposals':sum(bool(row['complete_hardware']) for row in proposal_report),
         'proposals_missing_required_roles':sum(bool(row['missing_required_roles']) for row in proposal_report),
         'compatibility_verified_proposals':sum(row['compatibility_verified'] for row in proposal_report),
-        'proposals_with_all_delivery_prices':sum(all((row['delivery_products'].get(mode) or {}).get('recommended_price_gbp') is not None
+        'proposals_with_all_delivery_prices':sum(all((row['delivery_products'].get(mode) or {}).get('available') is True
+            and (row['delivery_products'].get(mode) or {}).get('recommended_price_gbp') is not None
             for mode in ('fast_track','standard','flexible')) for row in proposal_report),
         'missing_catalogue_os_proposals':sum(any('matching os catalogue product' in blocker for blocker in row['blockers'])
             for row in proposal_report),
@@ -284,7 +293,7 @@ async def audit(output: Path):
         '', '### Human review and approvals', '',
         f"- Review the {summary['distinct_supplier_products_ready_for_review']} distinct hardware supplier listings in the Supplier listings area (the {summary['supplier_component_appearances_ready_for_review']} proposal appearances reuse those listings). Confirm the exact listing, new condition, stock statement, item price, postage and arrival estimate. This records cost evidence; it does not set a selling price or publish a build.",
         f"- Review {summary['gamers_outlet_windows_licence_candidates']} Windows and {summary['gamers_outlet_office_candidates']} Office offers in the Software licences area. Gamers Outlet captures only establish the seller's current product and pricing claims; they do not establish independent licence entitlement or resale rights.",
-        f"- Review the {summary['playbook_motherboard_specs_awaiting_review']} automatically researched motherboard suggestions in the Compatibility area against their linked source evidence. Use “Approve reviewed specs” only for facts the source confirms. Unreviewed suggestions never count as compatibility proof.",
+        f"- Review the {summary['playbook_motherboard_specs_awaiting_review']} Playbook-linked motherboard specification records in the Compatibility area against their linked source evidence (AI-generated: {summary['playbook_motherboard_specs_awaiting_review_by_source'].get('ai_generated', 0)}, listing-title: {summary['playbook_motherboard_specs_awaiting_review_by_source'].get('listing_title', 0)}, manufacturer-captured: {summary['playbook_motherboard_specs_awaiting_review_by_source'].get('manufacturer_capture', 0)}). Use “Approve reviewed specs” only for facts the source confirms. Unreviewed specifications never count as compatibility proof.",
         f"- Review {summary['playbook_product_engineering_suggestions_awaiting_review']} exact-product engineering suggestions in the Compatibility area (by role: {summary['playbook_product_engineering_suggestions_by_role']}). Suggestions use captured listing facts and remain unverified until you approve them.",
         f"- Review photo choices for {summary['distinct_proposal_listings_missing_photo_approval']} exact proposal listings ({summary['proposal_photo_approval_appearances']} build-role appearances) in Admin → PC Builder (`/pc-builder`) → Listing Images. Review generated product models separately in Catalogue → 3D Assets (`/catalogue/3d-assets`); a photo approval alone does not approve a model or publish a product.",
         '', '### Playbook service work after review', '',
@@ -302,6 +311,7 @@ async def audit(output: Path):
             'proposal_components_without_final_model','distinct_proposal_products_without_final_model',
             'missing_catalogue_os_proposals','distinct_supplier_products_ready_for_review',
             'supplier_component_appearances_ready_for_review','playbook_motherboard_specs_awaiting_review',
+            'playbook_motherboard_specs_awaiting_review_by_source',
             'playbook_product_engineering_suggestions_awaiting_review','playbook_product_engineering_suggestions_by_role',
             'proposals_missing_separate_storage_devices','proposals_missing_dual_boot_products',
             'wireless_adapter_builds','pending_wireless_adapter_variants',
