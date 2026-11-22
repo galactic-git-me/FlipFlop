@@ -66,7 +66,7 @@ def test_active_relisted_offer_is_discovered_for_previously_sold_build(monkeypat
 
 
 @pytest.mark.asyncio
-async def test_active_original_listing_does_not_restore_a_confirmed_sale(monkeypatch):
+async def test_active_original_listing_stays_sold_and_is_reported_for_withdrawal(monkeypatch):
     from app.services.ebay_listing_reconciliation import reconcile_manual_build_listing
 
     listing_id = "198786792744"
@@ -83,10 +83,13 @@ async def test_active_original_listing_does_not_restore_a_confirmed_sale(monkeyp
         "listing_id": listing_id, "listing_url": f"https://www.ebay.co.uk/itm/{listing_id}",
     }))
     monkeypatch.setattr("app.services.channel_sync.record_relisted_channel", relisted)
+    monkeypatch.setattr("app.services.ebay_trading_api.get_item_status", AsyncMock(return_value={
+        "listing_status": "Active", "quantity_sold": 0,
+    }))
 
     state = await reconcile_manual_build_listing(build, db, force=True)
 
-    assert state == "sold"
+    assert state == "active"
     assert build.status == "sold"
     relisted.assert_not_awaited()
     db.flush.assert_awaited_once()
@@ -105,11 +108,15 @@ async def test_cross_channel_sale_does_not_use_ebay_active_offer_as_relist(monke
     discover = AsyncMock(return_value={
         "listing_id": "198786792745", "listing_url": "https://www.ebay.co.uk/itm/198786792745",
     })
+    monkeypatch.setattr("app.config.get_settings", lambda: SimpleNamespace(ebay_listing_environment="production"))
     monkeypatch.setattr("app.services.ebay_relisted_listing.find_active_listing_for_sku", discover)
+    monkeypatch.setattr("app.services.ebay_trading_api.get_item_status", AsyncMock(return_value={
+        "listing_status": "Active", "quantity_sold": 0,
+    }))
 
     state = await reconcile_manual_build_listing(build, db, force=True)
 
-    assert state == "sold"
+    assert state == "active"
     assert build.status == "sold"
     discover.assert_not_awaited()
 
