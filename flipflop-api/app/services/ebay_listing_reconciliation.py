@@ -51,26 +51,34 @@ async def reconcile_manual_build_listing(
         build.ebay_listing_status_checked_at = datetime.utcnow()
         return build.ebay_listing_status
 
-    # A relisted build keeps its original sale in ebay_order_id. Search active
-    # inventory offers before interpreting the sold listing's final state as
-    # the current build state; only an exact SKU match is accepted.
-    if (build.status == "sold" or build.ebay_listing_status == "sold") and build.ebay_sku:
-        try:
-            from app.services.ebay_token_manager import get_valid_ebay_access_token
-            from app.config import get_settings
-            from app.services.ebay_relisted_listing import find_active_listing_for_sku
-            settings = get_settings()
-            env = environment or settings.ebay_listing_environment
-            token = access_token or await get_valid_ebay_access_token(env, db=db)
-            active = await find_active_listing_for_sku(build.ebay_sku, token, env)
-            if active:
-                from app.services.channel_sync import record_relisted_channel
-                await record_relisted_channel(db, build, channel="ebay_uk",
-                    external_listing_id=active["listing_id"], listing_url=active["listing_url"],
-                    source="ebay_inventory_api")
-                return "active"
-        except Exception as exc:
-            log.warning("manual_build.ebay_relist_discovery_failed", build_id=build.id, error=str(exc))
+    # A confirmed sale remains authoritative until a *new* eBay listing is
+    # discovered after an eBay sale. An active original offer can be stale
+    # because cross-channel withdrawal failed; the same offer is not proof
+    # that the sold physical unit has returned to stock.
+    if build.status == "sold":
+        if build.ebay_listing_status == "sold" and build.ebay_order_id and build.ebay_sku:
+            try:
+                from app.services.ebay_token_manager import get_valid_ebay_access_token
+                from app.config import get_settings
+                from app.services.ebay_relisted_listing import find_active_listing_for_sku
+                settings = get_settings()
+                env = environment or settings.ebay_listing_environment
+                token = access_token or await get_valid_ebay_access_token(env, db=db)
+                active = await find_active_listing_for_sku(build.ebay_sku, token, env)
+                if active and str(active["listing_id"]) != str(build.ebay_listing_id):
+                    from app.services.channel_sync import record_relisted_channel
+                    await record_relisted_channel(db, build, channel="ebay_uk",
+                        external_listing_id=active["listing_id"], listing_url=active["listing_url"],
+                        source="ebay_inventory_api")
+                    return "active"
+                if active:
+                    log.info("manual_build.ebay_relist_ignored", build_id=build.id,
+                        listing_id=active["listing_id"], reason="matches_sold_listing")
+            except Exception as exc:
+                log.warning("manual_build.ebay_relist_discovery_failed", build_id=build.id, error=str(exc))
+        build.ebay_listing_status_checked_at = datetime.utcnow()
+        await db.flush()
+        return "sold"
     if not str(build.ebay_listing_id).isdecimal():
         # Trading API GetItem and Fulfillment legacyItemId lookups require
         # eBay's numeric legacy listing ID; placeholder/local IDs are not live listings.
