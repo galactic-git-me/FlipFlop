@@ -30,6 +30,19 @@ def _cipher() -> Fernet:
     return Fernet(derived_key)
 
 
+def _ciphers() -> list[Fernet]:
+    """Current encryption key first, followed by the optional old key."""
+    settings = get_settings()
+    ciphers = [_cipher()]
+    previous = getattr(settings, "secret_key_previous", "")
+    if previous and previous != settings.secret_key:
+        derived_key = base64.urlsafe_b64encode(
+            hashlib.sha256(b"flipflop:os-component-license:v1:" + previous.encode("utf-8")).digest()
+        )
+        ciphers.append(Fernet(derived_key))
+    return ciphers
+
+
 def encrypt_license_key(value: str | None) -> str | None:
     if value is None or not value:
         return value
@@ -50,6 +63,12 @@ def decrypt_license_key(value: str | None) -> str | None:
         # is applied; new ORM writes are encrypted by EncryptedLicenseKey.
         return value
     try:
-        return _cipher().decrypt(value[len(_PREFIX):].encode("ascii")).decode("utf-8")
+        encrypted = value[len(_PREFIX):].encode("ascii")
+        for cipher in _ciphers():
+            try:
+                return cipher.decrypt(encrypted).decode("utf-8")
+            except InvalidToken:
+                continue
+        raise InvalidToken
     except (InvalidToken, UnicodeDecodeError, ValueError) as error:
         raise LicenseKeyEncryptionError("Stored Windows licence key could not be decrypted") from error

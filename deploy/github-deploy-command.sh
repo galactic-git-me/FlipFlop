@@ -52,6 +52,11 @@ provision_worker_key() {
   printf 'Browser worker key installed.\n'
 }
 
+rotate_production_secret() {
+  local repository="/home/mac/CODING/FlipFlop-production"
+  exec python3 "$repository/deploy/rotate-production-secret-key.py" "$repository/.env.local"
+}
+
 if [[ "$original" == "provision-google-merchant-key" ]]; then
   provision_google_key
   exit
@@ -59,6 +64,11 @@ fi
 
 if [[ "$original" == "provision-browser-worker-key" ]]; then
   provision_worker_key
+  exit
+fi
+
+if [[ "$original" == "rotate-production-secret-key" ]]; then
+  rotate_production_secret
   exit
 fi
 
