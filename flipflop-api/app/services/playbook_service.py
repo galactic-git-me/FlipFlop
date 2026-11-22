@@ -1497,11 +1497,17 @@ def _parts_for_delivery_pace(parts, mode, pace_sources):
             part['suggested_supplier_offer'] = None
             part['pace_source_missing'] = True
             continue
+        quantity = int(option.get('quantity') or part.get('quantity') or 1)
+        if quantity < 1:
+            quantity = 1
+        item_total = item * quantity
+        postage_total = postage * quantity
         snapshot = {**source, 'fresh': True, 'active_listing': True,
             'stock_status': 'available', 'condition': 'new', 'listing_type': 'buy_it_now',
             'commercial_capture_verified': True}
-        part.update(listing_price_gbp=str(item),
-            supplier_postage_gbp=str(postage) if source.get('postage_verified') is True else None,
+        part.update(listing_price_gbp=_money(item_total),
+            unit_price_gbp=_money(item),
+            supplier_postage_gbp=_money(postage_total) if source.get('postage_verified') is True else None,
             supplier_postage_assumption=(None if source.get('postage_verified') is True
                 else source.get('postage_assumption') or 'owner-approved-zero-fallback'),
             source_url=source.get('url'), source_observation=snapshot,
