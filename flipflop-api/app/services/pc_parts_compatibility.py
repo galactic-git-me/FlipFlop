@@ -11,7 +11,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from app.services.studio_fit import evaluate_fit
+from app.services.build_compatibility_gate import evaluate_build_compatibility
 
 
 WARNING_RULES = {
@@ -63,7 +63,8 @@ def evaluate_pc_parts_compatibility(
     prove a physical incompatibility. Unknown measurements remain unknown and
     are never silently treated as a pass.
     """
-    checks = evaluate_fit(parts, case or {}, gpu_required=gpu_required)
+    compatibility = evaluate_build_compatibility(parts, case or {}, gpu_required=gpu_required)
+    checks = compatibility["checks"]
     for check in checks:
         if check.get("code") in WARNING_RULES and check.get("severity") == "error":
             check["severity"] = "warning"

@@ -4042,8 +4042,9 @@ async def scan_sweep_complete(
     if signal is None:
         signal = GemRadarSweepSignal(id=1)
         db.add(signal)
+    if not signal.pending or signal.requested_at is None:
+        signal.requested_at = datetime.now(timezone.utc).replace(tzinfo=None)
     signal.pending = True
-    signal.requested_at = datetime.now(timezone.utc).replace(tzinfo=None)
     await db.commit()
 
     log.info("scan_sweep_complete.signalled")

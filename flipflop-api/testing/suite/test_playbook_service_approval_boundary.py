@@ -102,7 +102,7 @@ async def test_build_offer_assesses_approved_evidence_without_importing_supplier
         "component_delivery_eligibility",
         lambda *_args: {"fast_track": True, "standard": True, "flexible": True},
     )
-    monkeypatch.setattr(playbook_service, "evaluate_fit", lambda *_args, **_kwargs: [])
+    monkeypatch.setattr(playbook_service, "_evaluate_playbook_fit", lambda *_args, **_kwargs: [])
     monkeypatch.setattr("app.services.playbook_planning_checks.wireless_extra_required", lambda *_args: [])
     monkeypatch.setattr(
         playbook_service,
@@ -161,7 +161,7 @@ async def test_build_offer_selects_standard_eligible_benchmark_qualified_shared_
             "confidence_score": 0.9, "overall_score": 100},
     })
     monkeypatch.setattr(playbook_service, "_candidate_performance", lambda *_args: None)
-    monkeypatch.setattr(playbook_service, "evaluate_fit", lambda *_args, **_kwargs: [])
+    monkeypatch.setattr(playbook_service, "_evaluate_playbook_fit", lambda *_args, **_kwargs: [])
     monkeypatch.setattr("app.services.playbook_planning_checks.wireless_extra_required", lambda *_args: [])
 
     def policy(*_args):
