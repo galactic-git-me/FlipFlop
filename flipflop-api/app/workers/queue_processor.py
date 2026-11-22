@@ -306,7 +306,8 @@ async def process_submission_queue(process_interval_seconds: int = _EMPTY_QUEUE_
         ]
         reaper = asyncio.create_task(_stale_reaper_loop())
         phase2_trigger = asyncio.create_task(_phase2_trigger_loop())
-        await asyncio.gather(*workers, reaper, phase2_trigger, return_exceptions=True)
+        build_qa_worker = asyncio.create_task(_gem_build_qa_loop())
+        await asyncio.gather(*workers, reaper, phase2_trigger, build_qa_worker, return_exceptions=True)
     finally:
         watchdog_stop.set()
 
@@ -382,6 +383,13 @@ async def _phase2_trigger_loop() -> None:
                             catalogue=catalogue_result,
                             listing_lifecycle=lifecycle_result,
                         )
+                        # This is the scrape-completion boundary: the extension
+                        # has finished submitting, the queue drained, Phase 2 and
+                        # catalogue publication succeeded, and lifecycle was reconciled.
+                        from app.api.gem_radar import _runtime_environment
+                        from app.workers.gem_build_qa_worker import enqueue_completed_sweep_qa
+                        await enqueue_completed_sweep_qa(db, environment=_runtime_environment(),
+                            requested_at=signal.requested_at)
                         signal.pending = False
                         await db.commit()
                         if get_settings().commercial_reconciliation_enabled:
@@ -401,6 +409,17 @@ async def _phase2_trigger_loop() -> None:
             logger.warning("phase2_trigger.error", error=str(exc))
 
         await asyncio.sleep(_PHASE2_TRIGGER_POLL_SECONDS)
+
+
+async def _gem_build_qa_loop() -> None:
+    """Process completed-sweep QA events without blocking scrape submissions."""
+    while True:
+        try:
+            from app.workers.gem_build_qa_worker import process_pending_gem_build_qa_events
+            await process_pending_gem_build_qa_events(limit=1)
+        except Exception as exc:
+            logger.warning("gem_build_qa.worker_error", error_type=type(exc).__name__)
+        await asyncio.sleep(5)
 
 
 async def _worker_loop(worker_id: int, poll_interval_seconds: int) -> None:

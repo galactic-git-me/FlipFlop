@@ -53,6 +53,7 @@ from app.models.gem_radar_cpk_listing_price import GemRadarCpkListingPrice
 from app.models.gem_radar_cpk_market_price import GemRadarCpkMarketPrice
 from app.models.build_sold_observation import BuildSoldObservation
 from app.models.gem_radar_sweep_signal import GemRadarSweepSignal
+from app.models.gem_radar_build_qa_event import GemRadarBuildQAEvent
 from app.models.gem_radar_listing_demand_history import GemRadarListingDemandHistory
 from app.models.gem_radar_intelligence import GemRadarDecisionEvent, ComponentRatingEvent, PreferredComponent
 from app.models.submission_queue import SubmissionQueue
@@ -129,6 +130,7 @@ __all__ = [
     "GemRadarCpkListingPrice",
     "GemRadarCpkMarketPrice",
     "GemRadarSweepSignal",
+    "GemRadarBuildQAEvent",
     "GemRadarListingDemandHistory",
     "GemRadarDecisionEvent",
     "ComponentRatingEvent",
