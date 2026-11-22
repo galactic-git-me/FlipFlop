@@ -109,6 +109,7 @@ async def test_cross_channel_sale_does_not_use_ebay_active_offer_as_relist(monke
         "listing_id": "198786792745", "listing_url": "https://www.ebay.co.uk/itm/198786792745",
     })
     monkeypatch.setattr("app.config.get_settings", lambda: SimpleNamespace(ebay_listing_environment="production"))
+    monkeypatch.setattr("app.services.ebay_token_manager.get_valid_ebay_access_token", AsyncMock(return_value="token"))
     monkeypatch.setattr("app.services.ebay_relisted_listing.find_active_listing_for_sku", discover)
     monkeypatch.setattr("app.services.ebay_trading_api.get_item_status", AsyncMock(return_value={
         "listing_status": "Active", "quantity_sold": 0,
