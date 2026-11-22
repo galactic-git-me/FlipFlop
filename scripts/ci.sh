@@ -53,6 +53,7 @@ log "Running API tests"
   else
     python scripts/run_isolated_tests.py -- -q \
       testing/suite/test_browser_listing_jobs.py \
+      testing/unit/test_secret_key_rotation.py \
       testing/suite/test_curated_availability_public.py \
       testing/suite/test_curated_build_policy.py \
       testing/suite/test_curated_upgrade_benchmarks.py \

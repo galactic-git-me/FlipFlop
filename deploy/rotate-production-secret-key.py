@@ -56,11 +56,12 @@ def rotate(path: Path) -> str:
             output.flush()
             os.fsync(output.fileno())
         os.replace(temp_path, path)
-        directory_fd = os.open(path.parent, os.O_RDONLY)
-        try:
-            os.fsync(directory_fd)
-        finally:
-            os.close(directory_fd)
+        if os.name == "posix":
+            directory_fd = os.open(path.parent, os.O_RDONLY)
+            try:
+                os.fsync(directory_fd)
+            finally:
+                os.close(directory_fd)
     except Exception:
         if temp_path is not None:
             temp_path.unlink(missing_ok=True)

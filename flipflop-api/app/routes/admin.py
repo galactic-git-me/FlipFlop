@@ -26,7 +26,6 @@ from app.models.product import Product, ProductType
 from app.routes.admin_auth import get_current_admin
 from app.services.email_service import send_shipment_update_email, send_order_status_email
 from app.services.warranty_service import ensure_order_reserve
-from app.services.rotating_secret import decode_application_token
 
 router = APIRouter(prefix="/api/admin", tags=["admin"], dependencies=[Depends(get_current_admin)])
 
