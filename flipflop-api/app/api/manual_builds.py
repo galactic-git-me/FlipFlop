@@ -1526,10 +1526,16 @@ async def reconcile_ebay_relist(
         raise HTTPException(502, "Could not verify a live eBay offer for this build") from exc
     if not listing:
         return {"ok": True, "relisted": False, "reason": "no_active_exact_sku_offer"}
+    if str(listing["listing_id"]) == str(build.ebay_listing_id):
+        return {"ok": True, "relisted": False, "reason": "original_listing_still_active"}
     from app.services.channel_sync import record_relisted_channel
-    await record_relisted_channel(db, build, channel="ebay_uk",
-        external_listing_id=listing["listing_id"], listing_url=listing["listing_url"],
-        source="admin_reconciliation")
+    try:
+        await record_relisted_channel(db, build, channel="ebay_uk",
+            external_listing_id=listing["listing_id"], listing_url=listing["listing_url"],
+            source="admin_reconciliation")
+    except ValueError as exc:
+        await db.rollback()
+        raise HTTPException(409, str(exc)) from exc
     await db.commit()
     return {"ok": True, "relisted": True, **listing, "build_id": build.id}
 
