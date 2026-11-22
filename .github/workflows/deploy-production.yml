@@ -90,7 +90,10 @@ jobs:
             const { data: checks } = await github.rest.checks.listForRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: process.env.RELEASE_SHA,
+              // The DEV-parity check runs on the promotion PR head. GitHub's
+              // synthetic merge commit and final main merge commit do not
+              // inherit that check run, so query the validated PR head SHA.
+              ref: promotion.head.sha,
               per_page: 100,
             });
             const passedGate = checks.check_runs.some((check) =>
