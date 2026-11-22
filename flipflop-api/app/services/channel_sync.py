@@ -77,6 +77,27 @@ async def record_relisted_channel(db, build, *, channel, external_listing_id, li
     external_listing_id = str(external_listing_id)
     if channel == "ebay_uk" and build.ebay_listing_id and str(build.ebay_listing_id) == external_listing_id:
         raise ValueError("The confirmed eBay offer is the original listing, not a replacement")
+    old_listing_id = build.ebay_listing_id if channel == "ebay_uk" else None
+    old_rows = []
+    pending_jobs = []
+    if old_listing_id and str(old_listing_id) != external_listing_id:
+        old_rows = (await db.execute(select(ChannelListing).where(
+            ChannelListing.manual_build_id == build.id,
+            ChannelListing.channel.in_(("ebay", "ebay_uk")),
+            ChannelListing.external_listing_id == str(old_listing_id),
+        ).with_for_update())).scalars().all()
+        if old_rows:
+            old_row_ids = [old_row.id for old_row in old_rows]
+            pending_jobs = (await db.execute(select(BrowserListingJob).where(
+                BrowserListingJob.channel_listing_id.in_(old_row_ids),
+                BrowserListingJob.operation == "withdraw",
+                BrowserListingJob.status.in_(PENDING),
+            ).with_for_update())).scalars().all()
+            # Check before creating or changing the replacement row. The
+            # reconciliation caller may catch this refusal and commit its
+            # original-listing observation in the same transaction.
+            if any(job.status == "running" for job in pending_jobs):
+                raise ValueError("An eBay withdrawal is already running for the original listing")
     row = (await db.execute(select(ChannelListing).where(
         ChannelListing.manual_build_id == build.id,
         ChannelListing.channel.in_([channel] + [key for key, value in ALIASES.items() if value == channel]),
@@ -92,28 +113,11 @@ async def record_relisted_channel(db, build, *, channel, external_listing_id, li
     row.withdrawn_at = None
     row.last_checked_at = datetime.utcnow()
     if channel == "ebay_uk":
-        old_listing_id = build.ebay_listing_id
-        if old_listing_id and old_listing_id != external_listing_id:
-            old_rows = (await db.execute(select(ChannelListing).where(
-                ChannelListing.manual_build_id == build.id,
-                ChannelListing.channel.in_(("ebay", "ebay_uk")),
-                ChannelListing.external_listing_id == str(old_listing_id),
-                ChannelListing.id != row.id,
-            ).with_for_update())).scalars().all()
-            if old_rows:
-                old_row_ids = [old_row.id for old_row in old_rows]
-                pending_jobs = (await db.execute(select(BrowserListingJob).where(
-                    BrowserListingJob.channel_listing_id.in_(old_row_ids),
-                    BrowserListingJob.operation == "withdraw",
-                    BrowserListingJob.status.in_(PENDING),
-                ).with_for_update())).scalars().all()
-                if any(job.status == "running" for job in pending_jobs):
-                    raise ValueError("An eBay withdrawal is already running for the original listing")
-                for job in pending_jobs:
-                    job.status, job.lease_token, job.lease_until = "cancelled", None, None
-                    job.message = "Superseded by a provider-confirmed replacement listing."
-                for old_row in old_rows:
-                    old_row.status = "sold"
+        for job in pending_jobs:
+            job.status, job.lease_token, job.lease_until = "cancelled", None, None
+            job.message = "Superseded by a provider-confirmed replacement listing."
+        for old_row in old_rows:
+            old_row.status = "sold"
         build.ebay_listing_id = str(external_listing_id)
         build.ebay_listing_url = listing_url
         build.ebay_listing_status = "active"
