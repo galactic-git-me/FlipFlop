@@ -17,6 +17,13 @@ def test_complete_pc_titles_are_identified_without_flagging_standalone_parts():
     assert not is_full_system_listing("Desktop PC Case Fan 120mm ARGB")
 
 
+def test_cpu_model_number_and_motherboard_compatibility_are_not_a_full_build():
+    title = "MSI B550 motherboard supports AMD Ryzen 5 5600 processors"
+
+    assert not is_full_system_listing(title)
+    assert resolve_identity(title).category == "motherboard"
+
+
 def test_explicit_product_type_beats_compatibility_specs():
     assert resolve_identity(
         "RGEEK A07 Mini ITX PC Case supports RTX2070, M.2 SSD and Flex PSU"
