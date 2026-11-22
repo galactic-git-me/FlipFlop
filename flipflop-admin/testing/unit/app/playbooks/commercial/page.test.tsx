@@ -177,7 +177,7 @@ it('explains that acknowledgement cannot approve a stale software licence captur
   const button=await screen.findByRole('button',{name:'Review this source for Playbook consideration'});
   fireEvent.click(screen.getByRole('checkbox'));
   expect(button).toBeDisabled();
-  expect(screen.getByRole('status')).toHaveTextContent(/capture is stale.*acknowledging the review cannot refresh/i);
+  expect(screen.getByRole('status')).toHaveTextContent(/older than 24 hours.*scheduled supplier refresh records the current listing.*acknowledging review does not refresh/i);
 });
 
 it('shows unique supplier facts across all builds and offers one explicit batch approval',async()=>{

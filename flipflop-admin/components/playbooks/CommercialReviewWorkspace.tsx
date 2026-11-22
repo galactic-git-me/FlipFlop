@@ -506,6 +506,7 @@ export default function CommercialReviewWorkspace({
     offer?.components.filter((part) => {
       const source = part.source_observation;
       return (
+        source?.supplier_cost_reviewed !== true &&
         source?.fresh &&
         source.commercial_capture_verified &&
         source.active_listing &&
@@ -540,6 +541,9 @@ export default function CommercialReviewWorkspace({
     ).values()
   ).sort(
     (a, b) => a.role.localeCompare(b.role) || a.title.localeCompare(b.title)
+  );
+  const pendingSupplierSources = allReviewableSources.filter(
+    (part) => part.source_observation?.supplier_cost_reviewed !== true
   );
   return (
     <main className="mx-auto max-w-7xl space-y-6 p-6">
@@ -639,7 +643,7 @@ export default function CommercialReviewWorkspace({
             {id === "builds"
               ? ` (${offers.length})`
               : id === "suppliers"
-              ? ` (${allReviewableSources.length})`
+              ? ` (${pendingSupplierSources.length})`
               : id === "compatibility"
               ? ` (${compatibilityCount}/${offers.length})`
               : id === "software"
@@ -1195,7 +1199,7 @@ export default function CommercialReviewWorkspace({
                     </p>
                   </div>
                   <button
-                    disabled={busy || allReviewableSources.length === 0}
+                    disabled={busy || pendingSupplierSources.length === 0}
                     onClick={() =>
                       void (contextCellId && offer
                         ? approveSources(offer)
@@ -1203,7 +1207,7 @@ export default function CommercialReviewWorkspace({
                     }
                     className="rounded border border-emerald-500/50 px-4 py-2 text-sm text-emerald-300 disabled:opacity-40"
                   >
-                    Approve all {allReviewableSources.length} reviewed supplier
+                    Approve all {pendingSupplierSources.length} reviewed supplier
                     products
                   </button>
                 </div>
@@ -1246,6 +1250,18 @@ export default function CommercialReviewWorkspace({
                               >
                                 {part.title}
                               </a>
+                              {source.supplier_cost_reviewed ? (
+                                <span className="mt-1 block text-xs text-emerald-300">
+                                  Exact supplier capture already saved for costing
+                                  {source.supplier_cost_reviewed_at
+                                    ? ` · ${new Date(source.supplier_cost_reviewed_at).toLocaleString("en-GB")}`
+                                    : ""}
+                                </span>
+                              ) : (
+                                <span className="mt-1 block text-xs text-amber-300">
+                                  Current capture still needs supplier cost review
+                                </span>
+                              )}
                               {part.amazon_listing_url && part.asin && (
                                 <a
                                   href={sourceLink(part.amazon_listing_url)}
@@ -1520,16 +1536,17 @@ export default function CommercialReviewWorkspace({
                           </label>
                           {!candidate.fresh ? (
                             <p role="status" className="text-sm text-amber-300">
-                              This supplier capture is stale. Refresh the exact
-                              supplier listing before it can be considered;
-                              acknowledging the review cannot refresh its price,
-                              stock or licence terms.
+                              This supplier capture is older than 24 hours. The
+                              button stays disabled until a scheduled supplier
+                              refresh records the current listing; checking
+                              refresh status or acknowledging review does not
+                              refresh its price, stock or licence terms.
                             </p>
                           ) : !candidate.licence_review_fingerprint ? (
                             <p role="status" className="text-sm text-amber-300">
                               This listing is missing its exact review
-                              fingerprint. Refresh supplier listings before
-                              reviewing it.
+                              fingerprint. It can be reviewed after a supplier
+                              refresh records a complete current capture.
                             </p>
                           ) : null}
                           <button

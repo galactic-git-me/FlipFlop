@@ -479,3 +479,79 @@ async def test_playbook_refresh_status_marks_stale_progress_without_mutating_job
     assert result['status']=='running'
     assert result['progress_stale'] is True
     assert row.status=='running'
+
+@pytest.mark.asyncio
+async def test_supplier_cost_review_annotation_requires_the_exact_saved_capture():
+    from datetime import datetime, timezone
+    from app.services.commercial_source_validation import bounded_evidence_reference
+    from app.services.playbook_service import annotate_supplier_cost_reviews
+
+    url='https://www.amazon.co.uk/dp/B000000000'
+    fingerprint='a'*64
+    reviewed_at=datetime.now(timezone.utc)
+    evidence=SimpleNamespace(
+        part_key='variant:201',
+        evidence_ref=bounded_evidence_reference(url),
+        evidence_source=f'catalogue_import:12:{fingerprint[:16]}',
+        captured_by_admin_id=7,
+        captured_at=reviewed_at,
+    )
+
+    class Session:
+        async def execute(self, _statement):
+            return SimpleNamespace(scalars=lambda:SimpleNamespace(all=lambda:[evidence]))
+
+    proposals=[{'components':[
+        {'role':'cpu','variant_id':201,'listing_id':901,'source_observation':{
+            'observation_id':12,'fingerprint':fingerprint,'url':url}},
+        {'role':'cpu','variant_id':201,'listing_id':902,'source_observation':{
+            'observation_id':13,'fingerprint':'b'*64,'url':url}},
+    ]}]
+
+    annotated=await annotate_supplier_cost_reviews(Session(),proposals)
+
+    assert annotated[0]['components'][0]['source_observation']['supplier_cost_reviewed'] is True
+    assert annotated[0]['components'][0]['source_observation']['supplier_cost_reviewed_at']==reviewed_at.isoformat()
+    assert annotated[0]['components'][1]['source_observation']['supplier_cost_reviewed'] is False
+    assert 'supplier_cost_reviewed' not in proposals[0]['components'][0]['source_observation']
+
+
+@pytest.mark.asyncio
+async def test_queued_rebuild_does_not_cancel_an_active_supplier_refresh(monkeypatch):
+    import asyncio
+    from app import database
+    from app.models.playbook_refresh_run import PlaybookRefreshRun
+
+    monkeypatch.setattr(playbook_service,'PLAYBOOK_REFRESH_HEARTBEAT_SECONDS',0.001)
+    run=SimpleNamespace(job_id='refresh-1',actor_id=0,mode='refresh',status='queued',
+        phase='queued',heartbeat_at=None,started_at=playbook_service._utcnow(),
+        completed_at=None,error=None,result=None)
+
+    class Session:
+        async def __aenter__(self):return self
+        async def __aexit__(self,*_args):return False
+        async def execute(self,statement):
+            if 'pg_advisory_xact_lock' in str(statement):
+                return SimpleNamespace(scalar_one_or_none=lambda:None)
+            return SimpleNamespace(scalar_one_or_none=lambda:'queued-rebuild')
+        async def get(self,model,_job_id):
+            return run if model is PlaybookRefreshRun else None
+        async def commit(self):return None
+
+    monkeypatch.setattr(database,'AsyncSessionLocal',Session)
+    started=asyncio.Event()
+    finish=asyncio.Event()
+
+    async def refresh(_actor,progress=None):
+        started.set()
+        await finish.wait()
+        return {'ok':True}
+
+    monkeypatch.setattr(playbook_service,'run_playbook_refresh',refresh)
+    task=asyncio.create_task(playbook_service.run_playbook_refresh_job('refresh-1',0))
+    await asyncio.wait_for(started.wait(),timeout=1)
+    await asyncio.sleep(0.02)
+    assert not task.done()
+    finish.set()
+    await asyncio.wait_for(task,timeout=1)
+    assert run.status=='succeeded'
