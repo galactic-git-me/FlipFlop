@@ -27,10 +27,7 @@ from app.services.curated_build_policy import definitions
 from app.services.commercial_readiness import fingerprint, source_preview, source_preview_many
 from app.services.commercial_pilot_policy import APPROVED_TIER_FLOORS
 from app.services.commercial_pilot_policy import DELIVERY_CEILINGS
-from app.services.studio_fit import engineering_specs
-from app.services.build_compatibility_gate import evaluate_playbook_build_compatibility
-
-
+from app.services.studio_fit import engineering_specs, evaluate_playbook_fit as evaluate_fit
 
 from app.services.playbook_mvp import mvp_enabled, mvp_mode, prepare_candidates, publication_limit_reason, commercial_revision_payload
 from app.services.compatibility_engine import _infer_cpu_socket, _extract_ram_type
@@ -38,8 +35,11 @@ from app.services.benchmark_normaliser import normalise_cpu, normalise_gpu
 from app.services.bestseller_catalogue_sync import HARDWARE_ROLES, sync_bestseller_catalogues, amazon_asin
 from app.services.amazon_bestsellers import bestseller_item_matches_category
 
+
 def _evaluate_playbook_fit(parts, case, *, gpu_required=True):
-    return evaluate_playbook_build_compatibility(parts, case, gpu_required=gpu_required)["checks"]
+    # Preserve the established Playbook publication/workshop severity policy.
+    # The stricter shared physical-fit gate is used for Gem QA snapshots.
+    return evaluate_fit(parts, case, gpu_required=gpu_required)
 
 
 MODES=('fast_track','standard','flexible')

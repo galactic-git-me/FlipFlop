@@ -46,7 +46,12 @@ def _engineering(role: str, listing: Listing | None, title: str) -> dict[str, An
     raw = listing.raw_specs if isinstance(listing.raw_specs, dict) else {}
     configured = raw.get("configurator") if isinstance(raw.get("configurator"), dict) else {}
     exact_config_source = bool(listing.url and configured.get("source_url") == listing.url)
-    facts = {key: value for key, value in configured.items() if key != "source_url"}
+    # A configuration is trusted only after review against this exact listing.
+    # Otherwise, do not let unrelated unreviewed fields ride along when a
+    # source capture promotes a small subset of facts below.
+    facts = ({key: value for key, value in configured.items() if key != "source_url"}
+             if configured.get("reviewed") is True and exact_config_source
+             else {"reviewed": False})
     capture_maps = _source_properties(raw, str(listing.url or ""))
     facts["reviewed"] = configured.get("reviewed") is True and exact_config_source
     if capture_maps:
@@ -67,6 +72,30 @@ def _check_summary(checks: list[dict], role: str) -> str:
     return "; ".join(
         f"{item.get('code')}: {item.get('message')}" for item in relevant
     )[:1200]
+
+
+def _apply_required_slot_blockers(result: dict[str, Any], selected: dict[str, dict]) -> dict[str, Any]:
+    """Ensure every required BOM slot exists before a snapshot can proceed."""
+    for role, record in selected.items():
+        if record.get("status") != "candidate":
+            result["checks"].append({
+                "code": "REQUIRED_COMPONENT_UNAVAILABLE",
+                "severity": "unknown",
+                "message": f"Required {role} component is {record.get('status', 'unavailable')}; an eligible candidate is needed.",
+                "affected": [role],
+            })
+    checks = result["checks"]
+    blocking = [check for check in checks if check.get("severity") in {"error", "unknown"}]
+    if any(check.get("severity") == "error" for check in checks):
+        result["status"] = "incompatible"
+    elif blocking:
+        result["status"] = "unverified"
+    elif any(check.get("severity") == "warning" for check in checks):
+        result["status"] = "compatible_with_warnings"
+    else:
+        result["status"] = "compatible"
+    result["can_proceed"] = not blocking
+    return result
 
 
 async def build_platform_snapshot(
@@ -175,6 +204,10 @@ async def build_platform_snapshot(
         "engineering": case_facts,
     }
     result = evaluate_build_compatibility(parts, case, gpu_required=True, required_socket=socket)
+    # The shared physical-fit evaluator checks facts for components it receives.
+    # Add a fail-closed check for required slots with no eligible candidate so
+    # a missing SSD (or any other slot) cannot produce a proceedable verdict.
+    result = _apply_required_slot_blockers(result, selected)
     verdict = result["status"]
     rows_out = []
     completed_local = completed_at.astimezone(ZoneInfo("Europe/London")).isoformat()

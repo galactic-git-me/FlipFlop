@@ -1,4 +1,5 @@
 from app.services.build_compatibility_gate import evaluate_build_compatibility
+from app.services.gem_build_qa import _apply_required_slot_blockers
 
 
 BASE_PARTS = {
@@ -51,3 +52,11 @@ def test_curated_policy_still_blocks_unknown_publication_facts():
     result = evaluate_build_compatibility(parts, CASE, curated_policy=True)
     assert result["can_proceed"] is False
     assert any(item.get("stage") == "publication" and item["severity"] == "unknown" for item in result["checks"])
+
+
+def test_required_storage_slot_blocks_snapshot_when_no_candidate_exists():
+    result = {"status": "compatible", "can_proceed": True, "checks": []}
+    _apply_required_slot_blockers(result, {"storage": {"status": "unavailable"}})
+    assert result["status"] == "unverified"
+    assert result["can_proceed"] is False
+    assert any(item["code"] == "REQUIRED_COMPONENT_UNAVAILABLE" for item in result["checks"])
