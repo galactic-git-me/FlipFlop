@@ -407,27 +407,23 @@ class EmailMonitor:
             "relisted" in lifecycle_text or "item is now live" in lifecycle_text
             or "listing is now active" in lifecycle_text
         )
-        if relist_notice and relist_match:
+        order_match = re.search(r"(?:order\s*(?:number|id)?\s*[:#]?\s*)(\d{2}-\d{5}-\d{5})", lifecycle_text, re.I)
+        if relist_notice and relist_match and order_match:
             listing_id = relist_match.group(1)
             prior_rows = (await db.execute(select(ChannelListing).where(
                 ChannelListing.channel.in_(("ebay", "ebay_uk")),
                 ChannelListing.status == "sold",
                 ChannelListing.external_listing_id != listing_id,
             ))).scalars().all()
-            build_ids = {row.manual_build_id for row in prior_rows}
+            build_ids = {row.manual_build_id for row in prior_rows if row.manual_build_id is not None}
             builds = (await db.execute(select(ManualBuild).where(
                 ManualBuild.id.in_(build_ids), ManualBuild.status == "sold",
+                ManualBuild.ebay_order_id == order_match.group(1),
             ))).scalars().all() if build_ids else []
-            if len(builds) == 1 and (order_match := re.search(r"(?:order\s*(?:number|id)?\s*[:#]?\s*)(\d{2}-\d{5}-\d{5})", lifecycle_text, re.I)):
-                relisted_build = builds[0]
-                if relisted_build.ebay_order_id and relisted_build.ebay_order_id != order_match.group(1):
-                    relisted_build = None
-            elif len(builds) == 1 and len(build_ids) == 1:
-                # Use a uniquely attributable sold eBay build only when this
-                # account has exactly one candidate; ambiguous notices stay unlinked.
-                relisted_build = builds[0]
-            else:
-                relisted_build = None
+            # A unique sold listing is not enough to identify the physical
+            # build. Link only when the email carries the exact saved eBay
+            # order ID; notices without it remain for operator review.
+            relisted_build = builds[0] if len(builds) == 1 else None
             if relisted_build:
                 listing_url = f"https://www.ebay.co.uk/itm/{listing_id}"
                 from app.services.channel_sync import record_relisted_channel
