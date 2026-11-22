@@ -46,7 +46,7 @@ def test_active_relisted_offer_is_discovered_for_previously_sold_build(monkeypat
     build = SimpleNamespace(
         id=2, status="sold", ebay_listing_id="198786792744", ebay_listing_status="sold",
         ebay_listing_status_checked_at=None, ebay_listing_end_reason="sold",
-        ebay_sku="FF-BUILD-2", dispatch_status="awaiting_dispatch",
+        ebay_sku="FF-BUILD-2", ebay_order_id="05-15450-52548", dispatch_status="awaiting_dispatch",
     )
     db = AsyncMock()
     db.execute.return_value = SimpleNamespace(scalar_one_or_none=lambda: None)
@@ -63,6 +63,63 @@ def test_active_relisted_offer_is_discovered_for_previously_sold_build(monkeypat
     assert state == "active"
     relisted.assert_awaited_once_with(db, build, channel="ebay_uk", external_listing_id="199000000001",
         listing_url="https://www.ebay.co.uk/itm/199000000001", source="ebay_inventory_api")
+
+
+@pytest.mark.asyncio
+async def test_active_original_listing_stays_sold_and_is_reported_for_withdrawal(monkeypatch):
+    from app.services.ebay_listing_reconciliation import reconcile_manual_build_listing
+
+    listing_id = "198786792744"
+    build = SimpleNamespace(
+        id=2, status="sold", ebay_listing_id=listing_id, ebay_listing_status="sold",
+        ebay_listing_status_checked_at=None, ebay_listing_end_reason="sold",
+        ebay_sku="FF-BUILD-2", ebay_order_id="05-15450-52548", dispatch_status="awaiting_dispatch",
+    )
+    db = AsyncMock()
+    relisted = AsyncMock()
+    monkeypatch.setattr("app.config.get_settings", lambda: SimpleNamespace(ebay_listing_environment="production"))
+    monkeypatch.setattr("app.services.ebay_token_manager.get_valid_ebay_access_token", AsyncMock(return_value="token"))
+    monkeypatch.setattr("app.services.ebay_relisted_listing.find_active_listing_for_sku", AsyncMock(return_value={
+        "listing_id": listing_id, "listing_url": f"https://www.ebay.co.uk/itm/{listing_id}",
+    }))
+    monkeypatch.setattr("app.services.channel_sync.record_relisted_channel", relisted)
+    monkeypatch.setattr("app.services.ebay_trading_api.get_item_status", AsyncMock(return_value={
+        "listing_status": "Active", "quantity_sold": 0,
+    }))
+
+    state = await reconcile_manual_build_listing(build, db, force=True)
+
+    assert state == "active"
+    assert build.status == "sold"
+    relisted.assert_not_awaited()
+    db.flush.assert_awaited_once()
+
+
+@pytest.mark.asyncio
+async def test_cross_channel_sale_does_not_use_ebay_active_offer_as_relist(monkeypatch):
+    from app.services.ebay_listing_reconciliation import reconcile_manual_build_listing
+
+    build = SimpleNamespace(
+        id=3, status="sold", ebay_listing_id="198786792745", ebay_listing_status="active",
+        ebay_listing_status_checked_at=None, ebay_listing_end_reason=None,
+        ebay_sku="FF-BUILD-3", ebay_order_id=None, dispatch_status="awaiting_dispatch",
+    )
+    db = AsyncMock()
+    discover = AsyncMock(return_value={
+        "listing_id": "198786792745", "listing_url": "https://www.ebay.co.uk/itm/198786792745",
+    })
+    monkeypatch.setattr("app.config.get_settings", lambda: SimpleNamespace(ebay_listing_environment="production"))
+    monkeypatch.setattr("app.services.ebay_token_manager.get_valid_ebay_access_token", AsyncMock(return_value="token"))
+    monkeypatch.setattr("app.services.ebay_relisted_listing.find_active_listing_for_sku", discover)
+    monkeypatch.setattr("app.services.ebay_trading_api.get_item_status", AsyncMock(return_value={
+        "listing_status": "Active", "quantity_sold": 0,
+    }))
+
+    state = await reconcile_manual_build_listing(build, db, force=True)
+
+    assert state == "active"
+    assert build.status == "sold"
+    discover.assert_not_awaited()
 
 
 @pytest.mark.asyncio
