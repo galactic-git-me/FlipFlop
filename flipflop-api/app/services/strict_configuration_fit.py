@@ -7,7 +7,8 @@ from sqlalchemy import select
 from app.models.catalogue import CatalogueVariant, CaseCatalogue, PlaybookSlot
 from app.models.listing import Listing
 from app.models.playbook import Playbook
-from app.services.studio_fit import engineering_specs, evaluate_fit, evaluate_playbook_fit
+from app.services.studio_fit import engineering_specs
+from app.services.build_compatibility_gate import evaluate_build_compatibility
 
 
 async def configuration_fit(db, config):
@@ -100,8 +101,8 @@ async def configuration_fit(db, config):
             case_specs=parts['case']
             case_data={**case_data,**case_specs,'engineering':case_specs}
 
-    evaluator=evaluate_playbook_fit if curated else evaluate_fit
-    checks = evaluator(parts, case_data, gpu_required=gpu_required)
+    compatibility = evaluate_build_compatibility(parts, case_data, gpu_required=gpu_required, curated_policy=curated)
+    checks = compatibility["checks"]
     for role in missing:
         checks.append({"code": "MISSING_CONFIGURATION", "severity": "error",
                        "message": f"Select a valid {role}.", "affected": [role]})

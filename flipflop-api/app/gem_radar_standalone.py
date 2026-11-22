@@ -29,6 +29,7 @@ from app.routes.cases import router as cases_router
 from app.database import Base, engine
 from app.config import get_settings
 from app.models import case as case_models
+from app.models import gem_radar_build_qa_event as gem_build_qa_models
 from app.workers.queue_processor import process_submission_queue
 from app.workers.database_cleaner import run_database_cleaner
 from app.services.amazon_bestsellers import scrape_amazon_component_bestsellers

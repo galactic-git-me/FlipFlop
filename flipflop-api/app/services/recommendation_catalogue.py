@@ -21,7 +21,7 @@ from app.models.playbook import Playbook, PlaybookStatus
 from app.models.product import Product, ProductStatus, ProductType
 from app.services.configurator_compatibility import evaluate_configuration
 from app.services.procurement_optimizer import ApprovedPart, find_compatible_catalogue_bom
-from app.services.studio_fit import evaluate_fit
+from app.services.build_compatibility_gate import evaluate_build_compatibility
 from app.services.commerce_pricing import ConditionPolicy
 
 
@@ -227,12 +227,12 @@ async def find_catalogue_bom_candidates(
                     "max_psu_length_mm": case_specs.get("max_psu_length_mm"),
                 },
             }
-            fit_checks = evaluate_fit(
+            fit_checks = evaluate_build_compatibility(
                 engineering,
                 case,
                 gpu_required=bool(option_minimums.get("gpu_required")),
             )
-            if any(check["severity"] in {"error", "unknown"} for check in fit_checks):
+            if any(check["severity"] in {"error", "unknown"} for check in fit_checks["checks"]):
                 continue
             compatibility = await evaluate_configuration(db, playbook.id, selections)
             verdict_by_slot = {item["slot_id"]: item for item in compatibility.get("slots", [])}

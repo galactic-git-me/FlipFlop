@@ -27,12 +27,20 @@ from app.services.curated_build_policy import definitions
 from app.services.commercial_readiness import fingerprint, source_preview, source_preview_many
 from app.services.commercial_pilot_policy import APPROVED_TIER_FLOORS
 from app.services.commercial_pilot_policy import DELIVERY_CEILINGS
-from app.services.studio_fit import engineering_specs, evaluate_playbook_fit as evaluate_fit
+from app.services.studio_fit import engineering_specs
+from app.services.build_compatibility_gate import evaluate_playbook_build_compatibility
+
+
+
 from app.services.playbook_mvp import mvp_enabled, mvp_mode, prepare_candidates, publication_limit_reason, commercial_revision_payload
 from app.services.compatibility_engine import _infer_cpu_socket, _extract_ram_type
 from app.services.benchmark_normaliser import normalise_cpu, normalise_gpu
 from app.services.bestseller_catalogue_sync import HARDWARE_ROLES, sync_bestseller_catalogues, amazon_asin
 from app.services.amazon_bestsellers import bestseller_item_matches_category
+
+def _evaluate_playbook_fit(parts, case, *, gpu_required=True):
+    return evaluate_playbook_build_compatibility(parts, case, gpu_required=gpu_required)["checks"]
+
 
 MODES=('fast_track','standard','flexible')
 SOURCE='catalogue_playbook_service_v1'
@@ -331,11 +339,11 @@ def _candidate_source_prices(_catalogue_price, source):
     return item, postage, verified
 
 
-def _apply_exact_source_core_engineering(role,listing,source,engineering):
+def _apply_exact_source_core_engineering(role,listing,source,engineering,*,allow_title_facts=True):
     """Use only explicitly stated core fit facts from the exact product source."""
     if not isinstance(source,dict) or source.get('url')!=listing.url:
         return engineering
-    values=_source_engineering_values(role,source.get('product_properties'),listing.title)
+    values=_source_engineering_values(role,source.get('product_properties'),listing.title if allow_title_facts else None)
     core_fields={
         'cpu':{'socket','integrated_graphics'},
         'motherboard':{'socket','ram_type','form_factor','gpu_interfaces'},
@@ -2075,7 +2083,7 @@ async def build_cell_offer(db,definition,parent,settings,candidates,benchmark_in
         specs=fit_engineering(part)
         return {**chassis,**specs,'engineering':specs}
     def fit_check(selected,complete):
-        checks=evaluate_fit({role:fit_engineering(part) for role,part in selected.items()
+        checks=_evaluate_playbook_fit({role:fit_engineering(part) for role,part in selected.items()
             if role!='case' and not role.startswith('os')},chassis_for(selected),
             gpu_required='gpu' in required_roles(definition))
         return _selected_fit_passes(checks,set(selected),complete)
@@ -2163,7 +2171,7 @@ async def build_cell_offer(db,definition,parent,settings,candidates,benchmark_in
             blockers.append(f"{role}: approve the product photos in the Playbook")
     engineering={role:fit_engineering(part) for role,part in parts.items() if role!='case' and not role.startswith('os')}
     chassis=chassis_for(parts)
-    checks=evaluate_fit(engineering,chassis,gpu_required='gpu' in required_roles(definition))
+    checks=_evaluate_playbook_fit(engineering,chassis,gpu_required='gpu' in required_roles(definition))
     compatible=not any(check['severity'] in {'error','unknown'} for check in checks)
     if not compatible:
         blockers.append('Compatibility facts still need confirmation before publication')
@@ -2262,7 +2270,7 @@ async def build_cell_offer(db,definition,parent,settings,candidates,benchmark_in
         for alternative in sorted(alternatives,key=lambda row:(not _upgrade_quality_verified(role,selected,row,metric),
                 *_candidate_key(row,definition.get('components',{}).get(role,''))))[:3]:
             upgraded={**parts,role:alternative}
-            upgraded_checks=evaluate_fit({key:value['engineering'] for key,value in upgraded.items() if key not in {'case','os'}},
+            upgraded_checks=_evaluate_playbook_fit({key:value['engineering'] for key,value in upgraded.items() if key not in {'case','os'}},
                 {**alternative['engineering'],'engineering':alternative['engineering']} if role=='case' else chassis,
                 gpu_required='gpu' in required_roles(definition))
             if not _distinct_storage_devices(upgraded):
