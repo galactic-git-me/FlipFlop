@@ -358,7 +358,7 @@ def is_full_system_listing(title: str) -> bool:
     # two separately listed installed component groups is not a CPU offer.
     has_cpu = bool(re.search('|'.join(CPU_PATTERNS), title, re.I))
     other_build_parts = sum((
-        bool(re.search(r'\b(?:rtx|gtx|rx\s*\d{3,4}|arc\s+[ab]\d{3,4}|\d{4}\s*(?:ti|super)?|graphics\s+card|video\s+card|gpu)\b', title, re.I)),
+        bool(re.search(r'\b(?:rtx\s*\d{4}(?:\s*(?:ti|super))?|gtx\s*\d{3,4}(?:\s*ti)?|rx\s*\d{3,4}(?:\s*xt)?|arc\s+[ab]\d{3,4}|\d{4}\s*(?:ti|super)|graphics\s+card|video\s+card|gpu)\b', title, re.I)),
         bool(re.search(r'\b\d+\s*(?:gb|tb)\s*(?:ram|ddr[345])\b', title, re.I)),
         bool(re.search(r'\b\d+(?:\.\d+)?\s*(?:tb|gb)\s*(?:ssd|nvme|hdd)\b', title, re.I)),
         bool(re.search(r'\bmotherboard\b', title, re.I)),

@@ -227,7 +227,7 @@ async def confirm_browser_observation(db, job, *, state, external_id=None, listi
             validate_listing_url(row.channel, listing_url)
             row.listing_url = listing_url
         row.status = "published"
-        if (build.status == "sold" and build.ebay_listing_status != "active") or build.is_archived:
+        if build.status == "sold" or build.is_archived:
             await withdraw_other_channels(db, build)
         elif evidence.get("price") is not None and float(evidence["price"]) != build.ebay_price:
             await enqueue_operation(db, build, row, "update")
