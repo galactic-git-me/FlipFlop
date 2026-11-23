@@ -695,7 +695,7 @@ export default function CommercialReviewWorkspace({
       </nav>
       {loading ? (
         <div className="flex min-h-[42vh] items-center justify-center rounded border border-slate-800 bg-slate-950/40">
-          <BrandCubeLoader label="Loading Playbook review data…" size="md" />
+          <BrandCubeLoader size="md" />
         </div>
       ) : error ? (
         <section className="flex min-h-[30vh] flex-col items-center justify-center gap-3 rounded border border-red-900/60 bg-slate-950/40 p-6 text-center">

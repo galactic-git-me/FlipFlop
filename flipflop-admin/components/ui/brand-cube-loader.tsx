@@ -33,7 +33,7 @@ export function BrandCubeLoader({
         hold={0.55}
         fontSize={signatureSizes[size]}
         fontWeight={500}
-        fontFamily={'Orbitron, "Eurostile Extended", "Bank Gothic", sans-serif'}
+        fontFamily={'"FlipFlopNASA", sans-serif'}
         letterSpacing={0.22}
         ariaLabel="Loading"
         className="w-full max-w-[340px] px-3"

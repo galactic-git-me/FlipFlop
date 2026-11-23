@@ -59,7 +59,6 @@ export default function PlaybookAutomationHealth() {
       {error && <p role="alert" className="mt-2 text-amber-300">{error}</p>}
       {!status && !error && (
         <BrandCubeLoader
-          label="Checking API scheduler and last run…"
           size="xs"
           className="mt-2"
         />
@@ -114,7 +113,6 @@ export default function PlaybookAutomationHealth() {
             </button>
             {checking ? (
               <BrandCubeLoader
-                label="Refreshing scheduler status…"
                 size="xs"
               />
             ) : lastChecked ? (

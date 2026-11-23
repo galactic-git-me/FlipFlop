@@ -1315,3 +1315,16 @@ label {
   -webkit-animation-delay: 275ms;
   animation-delay: 275ms;
 }
+
+/* Exact logo palette for the reusable FlipFlop cube loader. */
+.cubes .cube[data-cube],
+.large-shadow[data-cube] {
+  --cube-gradient-start: #fc5b00;
+  --cube-gradient-end: #002cff;
+  --color-bg-top: color-mix(in srgb, var(--cube-gradient-start) 96%, white);
+  --color-bg-bottom: color-mix(in srgb, var(--cube-gradient-end) 94%, white);
+  --color-fl-top: color-mix(in srgb, var(--cube-gradient-start) 88%, #842900);
+  --color-fl-bottom: color-mix(in srgb, var(--cube-gradient-end) 88%, #001776);
+  --color-fr-top: color-mix(in srgb, var(--cube-gradient-start) 52%, var(--cube-gradient-end));
+  --color-fr-bottom: color-mix(in srgb, var(--cube-gradient-start) 38%, var(--cube-gradient-end));
+}
