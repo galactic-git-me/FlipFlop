@@ -201,6 +201,7 @@ async def test_error_17_without_matching_order_authorizes_fresh_listing():
         ebay_listing_status=None,
         ebay_listing_status_checked_at=None,
         ebay_listing_end_reason=None,
+        ebay_order_id=None,
     )
     db = AsyncMock()
     get_item_error = EbayTradingApiError("GetItem", [], "Failure")
@@ -231,6 +232,7 @@ async def test_error_17_stays_unknown_if_order_lookup_fails():
         ebay_listing_status=None,
         ebay_listing_status_checked_at=None,
         ebay_listing_end_reason=None,
+        ebay_order_id=None,
     )
     db = AsyncMock()
     get_item_error = EbayTradingApiError("GetItem", [], "Failure")
@@ -280,6 +282,9 @@ async def test_paid_order_records_sale_provenance_and_queues_dispatch(
 
     monkeypatch.setattr("app.config.get_settings", lambda: SimpleNamespace(ebay_listing_environment="production"))
     monkeypatch.setattr("app.services.ebay_token_manager.get_valid_ebay_access_token", AsyncMock(return_value="token"))
+    monkeypatch.setattr("app.services.ebay_order_sync.get_order_refund_state", AsyncMock(return_value={
+        "cancel_state": "NONE", "refunds": [], "refund_signature": "",
+    }))
     monkeypatch.setattr("app.services.ebay_trading_api.get_item_status", AsyncMock(return_value={"listing_status": "Completed", "quantity_sold": 1}))
     monkeypatch.setattr("app.services.ebay_order_sync.find_order_for_listing", AsyncMock(return_value=order))
     monkeypatch.setattr("app.services.channel_sync.record_confirmed_sale", sale_event)
