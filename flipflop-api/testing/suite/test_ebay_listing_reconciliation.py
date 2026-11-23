@@ -20,6 +20,14 @@ def test_completed_listing_without_sale_is_ended_early():
     assert classify_ebay_listing_state({"listing_status": "Completed", "quantity_sold": 0}, order_found=False) == "ended"
 
 
+def test_confirmed_cancellation_overrides_ebay_historical_quantity_sold():
+    assert classify_ebay_listing_state(
+        {"listing_status": "Completed", "quantity_sold": 1},
+        order_found=False,
+        cancelled_order=True,
+    ) == "ended"
+
+
 def test_order_proves_sale_even_if_item_has_disappeared():
     assert classify_ebay_listing_state(None, order_found=True) == "sold"
 
@@ -79,6 +87,9 @@ async def test_active_original_listing_stays_sold_and_is_reported_for_withdrawal
     relisted = AsyncMock()
     monkeypatch.setattr("app.config.get_settings", lambda: SimpleNamespace(ebay_listing_environment="production"))
     monkeypatch.setattr("app.services.ebay_token_manager.get_valid_ebay_access_token", AsyncMock(return_value="token"))
+    monkeypatch.setattr("app.services.ebay_order_sync.get_order_refund_state", AsyncMock(return_value={
+        "cancel_state": "NONE", "refunds": [], "refund_signature": "",
+    }))
     monkeypatch.setattr("app.services.ebay_relisted_listing.find_active_listing_for_sku", AsyncMock(return_value={
         "listing_id": listing_id, "listing_url": f"https://www.ebay.co.uk/itm/{listing_id}",
     }))

@@ -177,6 +177,68 @@ async def get_order(
     return parsed
 
 
+async def get_order_refund_state(order_id: str, environment: str = "production", db=None) -> dict:
+    """Fetch cancellation and refund state for a previously matched order.
+
+    getOrders intentionally returns no cancellation requests. This focused
+    getOrder read is used for already-sold builds so a later refund can be
+    surfaced without treating a partial refund or pending cancellation as a
+    returned item.
+    """
+    try:
+        access_token = await get_valid_ebay_access_token(environment, db=db)
+    except ValueError as exc:
+        raise EbayOrderSyncError(str(exc), 401) from exc
+    if not access_token:
+        raise EbayOrderSyncError("Connect the eBay seller account in Settings.", 401)
+    base_url = _EBAY_API_BASE[environment]
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        await _wait_for_ebay_rate_limit(environment)
+        response = await client.get(
+            f"{base_url}/sell/fulfillment/v1/order/{order_id}",
+            headers={"Authorization": f"Bearer {access_token}", "Accept": "application/json"},
+        )
+    _record_ebay_rate_limit(environment, response)
+    if response.status_code != 200:
+        try:
+            error_json = response.json()
+            errors = error_json.get("errors", [])
+            message = errors[0].get("longMessage") or errors[0].get("message") if errors else response.text
+        except Exception:
+            message = response.text
+        raise EbayOrderSyncError(message or "Failed to fetch eBay order refund state", response.status_code)
+
+    order = response.json()
+    payment_summary = order.get("paymentSummary") or {}
+    completed_refunds = []
+    for refund in payment_summary.get("refunds") or []:
+        if str(refund.get("refundStatus") or "").upper() == "REFUNDED":
+            completed_refunds.append(refund)
+    for item in order.get("lineItems") or []:
+        for refund in item.get("refunds") or []:
+            if str(refund.get("refundStatus") or "").upper() == "REFUNDED":
+                completed_refunds.append(refund)
+
+    # Stable, non-PII signature lets the scheduler emit one durable review
+    # event per newly completed refund while still noticing later refunds.
+    refund_signature = "|".join(sorted(
+        ":".join(str(refund.get(key) or "") for key in ("refundId", "refundReferenceId", "refundStatus", "refundDate"))
+        + ":" + str((refund.get("amount") or refund.get("refundAmount") or {}).get("value") or "")
+        for refund in completed_refunds
+    ))
+    return {
+        "order_payment_status": str(order.get("orderPaymentStatus") or "").upper(),
+        "cancel_state": str((order.get("cancelStatus") or {}).get("cancelState") or "").upper(),
+        "refunds": completed_refunds,
+        "refund_signature": refund_signature,
+    }
+
+
+def is_terminal_order_cancellation(state: dict) -> bool:
+    """Only treat eBay's completed cancellation state as a cancelled sale."""
+    return str(state.get("cancel_state") or "").upper() in {"CANCELED", "CANCELLED"}
+
+
 async def find_order_for_listing(
     ebay_listing_id: str, environment: str = "production", lookback_days: int = 90, db=None
 ) -> EbayOrderInfo | None:

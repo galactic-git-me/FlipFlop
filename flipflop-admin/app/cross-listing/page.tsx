@@ -48,12 +48,26 @@ const statusStyles: Record<CrossListingSource["status"], string> = {
   preview: "text-violet-300 bg-violet-400/10 border-violet-400/25",
   sold: "text-orange-300 bg-orange-400/10 border-orange-400/25",
   ended: "text-slate-300 bg-slate-400/10 border-slate-400/25",
+  cancelled: "text-slate-400 bg-slate-400/10 border-slate-400/25",
   unavailable: "text-yellow-300 bg-yellow-400/10 border-yellow-400/25",
   failed: "text-red-300 bg-red-400/10 border-red-400/25",
 };
 
 const labelForStatus = (value: string) =>
   value.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+
+function jobAge(value?: string | null): string {
+  if (!value) return "an unknown time";
+  const normalized = /(?:z|[+-]\d{2}:?\d{2})$/i.test(value) ? value : `${value}Z`;
+  const seconds = Math.max(0, Math.floor((Date.now() - Date.parse(normalized)) / 1000));
+  if (!Number.isFinite(seconds)) return "an unknown time";
+  if (seconds < 60) return "less than a minute";
+  if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours`;
+  const days = Math.floor(seconds / 86400);
+  const hours = Math.floor((seconds % 86400) / 3600);
+  return `${days} day${days === 1 ? "" : "s"}${hours ? ` ${hours} hours` : ""}`;
+}
 
 type GroupedListing = {
   id: string;
@@ -240,18 +254,34 @@ function listingUrlFor(source?: CrossListingSource) {
   return source.url;
 }
 
-function ChannelCell({ source }: { source?: CrossListingSource }) {
+function ChannelCell({ source, channelLabel, assist }: { source?: CrossListingSource; channelLabel: string; assist?: BrowserAssistJob }) {
+  const title = source?.error || (source?.status === "sold"
+    ? "This build sold on this channel. The build remains sold; this channel is not available for relisting."
+    : source?.status === "cancelled"
+    ? "This channel publish was cancelled because the build sold before the listing was confirmed."
+    : source?.status === "live"
+    ? "Listing confirmed live on this channel."
+    : `No confirmed listing on ${channelLabel}.`);
   if (
     !source ||
     source.status === "unavailable" ||
     source.status === "ended" ||
-    source.status === "sold"
+    source.status === "sold" ||
+    source.status === "cancelled"
   ) {
+    const terminalLabel = source?.status === "sold"
+      ? "Sold"
+      : source?.status === "cancelled"
+        ? "Cancelled"
+        : source?.status === "ended"
+          ? "Ended"
+          : "Not listed";
     return (
       <div
         className="flex min-h-8 min-w-[76px] items-center justify-center"
-        aria-label="Not listed"
-      />
+        title={title}
+        aria-label={title}
+      ><span className={`text-[10px] ${source?.status === "sold" ? "text-orange-300" : source?.status === "cancelled" ? "text-slate-400" : "text-slate-600"}`}>{terminalLabel}</span></div>
     );
   }
   const isLive = source.status === "live";
@@ -265,7 +295,7 @@ function ChannelCell({ source }: { source?: CrossListingSource }) {
     : isPreview
     ? "Development preview — not live"
     : isDraft
-    ? "Unpublished draft — not live"
+    ? "Not confirmed live"
     : "Listing status unavailable";
   const statusClass = isFailed
     ? "text-red-400"
@@ -302,7 +332,7 @@ function ChannelCell({ source }: { source?: CrossListingSource }) {
   const cell = (
     <div
       className="flex min-h-8 min-w-[76px] items-center justify-center"
-      title={source.error || undefined}
+      title={title}
     >
       {url ? (
         <a
@@ -315,6 +345,20 @@ function ChannelCell({ source }: { source?: CrossListingSource }) {
         </a>
       ) : (
         statusContent
+      )}
+      {assist && (
+        <button
+          type="button"
+          title={`Open ${channelLabel} seller handoff and download the listing pack`}
+          aria-label={`Open ${channelLabel} seller handoff and download the listing pack`}
+          onClick={() => {
+            openBrowserAssist(assist);
+            void downloadCanonicalListingPack(createCanonicalListingPackResource(assist.source, assist.build));
+          }}
+          className="ml-1 cursor-pointer text-[10px] text-sky-300 underline focus:outline-none focus:ring-1 focus:ring-sky-300"
+        >
+          Handoff
+        </button>
       )}
     </div>
   );
@@ -346,6 +390,7 @@ function normalizeScheduleChannel(channel: string): CrossListingChannel | null {
 
 function scheduleStatus(status: string): CrossListingSource["status"] {
   if (["published", "active", "updated"].includes(status)) return "live";
+  if (status === "cancelled") return "cancelled";
   if (
     [
       "draft",
@@ -385,7 +430,7 @@ function batchResultStatus(status: string): CrossListingSource["status"] {
   }
   if (status === "failed") return "failed";
   if (["withdrawn", "cancelled", "ended", "sold"].includes(status)) {
-    return status === "sold" ? "sold" : "ended";
+    return status === "sold" ? "sold" : status === "cancelled" ? "cancelled" : "ended";
   }
   return "unavailable";
 }
@@ -712,9 +757,6 @@ type ProgressJob = {
   status: "pending" | "running" | "success" | "manual_action_required" | "failed";
   message?: string;
 };
-type BatchRun = { completedAt: string; results: ListingResult[] };
-const BATCH_HISTORY_KEY = "flipflop-cross-listing-batch-history";
-
 const sellerUrls: Partial<Record<CrossListingChannel, string>> = {
   onbuy: "https://seller.onbuy.com/",
   amazon: "https://sellercentral.amazon.co.uk/",
@@ -989,8 +1031,8 @@ export default function CrossListingPage() {
         // Keep the provider's response on the table cell so it is available
         // as the tooltip for the status indicator, regardless of outcome.
         error:
-          result.message ||
           existing?.error ||
+          result.message ||
           (result.status === "failed"
             ? "The vendor rejected the listing without returning an error message."
             : null),
@@ -1068,7 +1110,7 @@ export default function CrossListingPage() {
     setRefreshing(true);
     setError(null);
     try {
-      const [summary, ebay, amazon, google, scheduleRows, actionRows, settings] =
+      const [summary, ebay, amazon, google, scheduleRows, actionRows, settings, browserJobRows] =
         await Promise.all([
           api.manualBuilds.list(),
           fetch("/proxy-api/cross-listing/ebay/status", { cache: "no-store" }).then(async (response) => response.ok ? response.json() : { connected: false }).catch(() => ({ connected: false })),
@@ -1085,6 +1127,7 @@ export default function CrossListingPage() {
           api.crossListing.schedules(),
           api.crossListing.actions(),
           api.settings.get().catch(() => ({})),
+          api.crossListing.browserJobs().catch(() => []),
         ]);
       const policy = settings as {
         relist_interval_days?: number;
@@ -1125,6 +1168,12 @@ export default function CrossListingPage() {
       for (const source of nextItems)
         if (!canonicalByBuild.has(source.buildId))
           canonicalByBuild.set(source.buildId, source);
+      const browserJobsByChannel = new Map<string, (typeof browserJobRows)[number]>();
+      for (const job of browserJobRows) {
+        const channel = normalizeScheduleChannel(job.channel);
+        const key = channel ? `${job.build_id}:${channel}` : null;
+        if (key && !browserJobsByChannel.has(key)) browserJobsByChannel.set(key, job);
+      }
       for (const schedule of scheduleRows) {
         const channel = normalizeScheduleChannel(schedule.channel);
         const base = canonicalByBuild.get(schedule.build_id);
@@ -1137,21 +1186,48 @@ export default function CrossListingPage() {
           continue;
         const status = scheduleStatus(schedule.status);
         const key = `${schedule.build_id}:${channel}`;
+        const browserJob = browserJobsByChannel.get(key);
+        const age = jobAge(browserJob?.created_at);
+        const queuedAt = browserJob?.created_at
+          ? Date.parse(/(?:z|[+-]\d{2}:?\d{2})$/i.test(browserJob.created_at) ? browserJob.created_at : `${browserJob.created_at}Z`)
+          : NaN;
+        const queuedTooLong = browserJob?.status === "queued" && Number.isFinite(queuedAt) && Date.now() - queuedAt >= 15 * 60 * 1000;
+        const jobMessage = browserJob?.status === "queued"
+          ? queuedTooLong
+            ? `Queued for ${age}; the desktop worker has not claimed this ${browserJob.operation} job. It is not published. Check that the “FlipFlop Codex Browser Listings” Windows task is running.`
+            : `Queued for ${age}; waiting for the desktop worker. It is not published.`
+          : browserJob?.status === "running"
+            ? `Desktop worker started this ${browserJob.operation} job ${age} ago. It is not live until the vendor URL is verified.`
+            : browserJob?.status === "blocked" || browserJob?.status === "needs_review"
+              ? `${browserJob.message || "The desktop worker needs review."} No live listing is confirmed.`
+              : browserJob?.status === "cancelled" && !schedule.external_listing_id && !schedule.listing_url
+                ? browserJob.message || "Cancelled before publication; no live listing was confirmed."
+                : null;
+        const displayStatus = browserJob?.status === "blocked" || browserJob?.status === "needs_review"
+          ? "failed"
+          : browserJob?.status === "cancelled" && !schedule.external_listing_id && !schedule.listing_url
+            ? "cancelled"
+            : browserJob && ["queued", "running"].includes(browserJob.status) && !schedule.external_listing_id && !schedule.listing_url
+              ? "draft"
+              : status;
         nextItems.push({
           ...base,
           id: `${channel}:${schedule.build_id}`,
           channel,
           source: "flipflop_shop",
           externalId: schedule.external_listing_id || "not-created",
-          status,
+          status: displayStatus,
           url: schedule.listing_url ?? actionUrls.get(key) ?? null,
           updatedAt: schedule.updated_at || base.updatedAt,
-          error:
-            status === "failed"
+          error: jobMessage || (
+            displayStatus === "failed"
               ? schedule.last_recreate_message ||
                 failedActionMessages.get(key) ||
                 "The vendor rejected the listing without returning an error message."
-              : null,
+              : displayStatus === "cancelled"
+                ? "Cancelled because the build sold before this channel listing was confirmed. The build remains sold; the pending channel job was cancelled."
+                : null
+          ),
         });
       }
       setBuilds(nextBuilds);
@@ -1179,19 +1255,6 @@ export default function CrossListingPage() {
   useEffect(() => {
     void refresh();
   }, [refresh]);
-
-  useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem(BATCH_HISTORY_KEY);
-      if (!stored) return;
-      const history = JSON.parse(stored) as BatchRun[];
-      if (Array.isArray(history) && history.length > 0) {
-        setResults(history[0].results);
-      }
-    } catch {
-      // Ignore unavailable or invalid browser storage; the live session still works.
-    }
-  }, []);
 
   const openScheduledHandoff = (
     action: Awaited<ReturnType<typeof api.crossListing.actions>>[number]
@@ -1650,19 +1713,7 @@ export default function CrossListingPage() {
           });
         }
       }
-    const completedBatch: BatchRun = {
-      completedAt: new Date().toISOString(),
-      results: nextResults,
-    };
     setResults(nextResults);
-    try {
-      const stored = window.localStorage.getItem(BATCH_HISTORY_KEY);
-      const current = stored ? (JSON.parse(stored) as BatchRun[]) : [];
-      const next = [completedBatch, ...(Array.isArray(current) ? current : [])].slice(0, 20);
-      window.localStorage.setItem(BATCH_HISTORY_KEY, JSON.stringify(next));
-    } catch {
-      /* best effort */
-    }
     setPublishing(false);
     await refresh();
   };
@@ -1964,45 +2015,6 @@ export default function CrossListingPage() {
             </button>
           )}
         </div>
-      )}
-
-      {results.length > 0 && (
-        <section aria-label="Cross-listing results" className="space-y-3 rounded-xl border border-slate-700 bg-slate-900/70 p-4">
-          <h2 className="text-sm font-semibold text-white">Latest cross-listing results</h2>
-          <div className="space-y-2">
-            {results.map((result, index) => (
-              <div key={`${result.buildId}-${result.channel}-${index}`} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-slate-800 bg-slate-950/60 px-3 py-3">
-                <div className="min-w-0">
-                  <div className="text-sm font-medium text-slate-100">Build {result.buildId} · {result.channel}</div>
-                  <p className="mt-1 text-xs text-slate-400">{result.message}</p>
-                </div>
-                {result.assist && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      openBrowserAssist(result.assist!);
-                      void downloadCanonicalListingPack(
-                        createCanonicalListingPackResource(
-                          result.assist!.source,
-                          result.assist!.build
-                        )
-                      );
-                    }}
-                    className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-emerald-400/50 bg-emerald-400/10 px-3 py-2 text-xs font-semibold text-emerald-200 hover:bg-emerald-400/20"
-                  >
-                    <ExternalLink className="h-4 w-4" /> Open Codex handoff and download listing pack
-                  </button>
-                )}
-                {result.status === "preview" && result.url && (
-                  <a href={result.url} target="_blank" rel="noreferrer" className="rounded-md border border-violet-400/40 px-3 py-2 text-xs font-semibold text-violet-200 hover:bg-violet-400/10">View development preview</a>
-                )}
-                {result.url && result.status === "published" && (
-                  <a href={result.url} target="_blank" rel="noreferrer" className="rounded-md border border-emerald-400/40 px-3 py-2 text-xs font-semibold text-emerald-200 hover:bg-emerald-400/10">View listing</a>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
       )}
 
       <div className="fixed right-4 top-1/3 z-50 flex flex-col items-center gap-2">
@@ -2347,7 +2359,7 @@ export default function CrossListingPage() {
                           {item.title}
                         </div>
                         <div className="mt-1 text-xs text-slate-500">
-                          Build {item.buildId} ·{" "}
+                          Build {item.buildId}{builds[item.buildId]?.status === "sold" ? " · Sold" : ""} ·{" "}
                           {tableChannels
                             .map(
                               (channel) => item.byChannel[channel]?.externalId
@@ -2358,14 +2370,22 @@ export default function CrossListingPage() {
                       </div>
                     </div>
                   </td>
-                  {tableChannels.map((channel) => (
-                    <td
-                      key={`${item.id}-${channel}`}
-                      className="border-l border-slate-800/60 px-3 py-3"
-                    >
-                      <ChannelCell source={item.byChannel[channel]} />
-                    </td>
-                  ))}
+                  {tableChannels.map((channel) => {
+                    const capability = channelCapabilities.find((entry) => entry.channel === channel);
+                    const result = results.find((entry) => entry.buildId === item.buildId && normalizeScheduleChannel(entry.channel) === channel);
+                    return (
+                      <td
+                        key={`${item.id}-${channel}`}
+                        className="border-l border-slate-800/60 px-3 py-3"
+                      >
+                        <ChannelCell
+                          source={item.byChannel[channel]}
+                          channelLabel={capability?.label ?? channel}
+                          assist={result?.assist}
+                        />
+                      </td>
+                    );
+                  })}
                   <td className="border-l border-slate-800 px-4 py-3 text-xs text-slate-500">
                     {new Date(item.updatedAt).toLocaleDateString("en-GB")}
                   </td>

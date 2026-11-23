@@ -7,6 +7,7 @@ from app.models.channel_listing import ChannelListing
 from app.models.browser_listing_job import BrowserListingJob
 from app.services.browser_listing_jobs import enqueue_browser_job, complete_browser_job, validate_listing_url
 from app.api.browser_listing_jobs import claim, heartbeat, preflight, LeaseIn, require_worker
+from app.api.cross_listing import set_channel_status, ManualChannelStatusIn
 
 
 @pytest.fixture(autouse=True)
@@ -78,6 +79,35 @@ async def test_sold_build_cannot_be_queued(db):
     build.status = "sold"
     with pytest.raises(ValueError, match="Sold"):
         await enqueue_browser_job(db, build.id, "onbuy")
+
+
+@pytest.mark.asyncio
+async def test_operator_channel_status_correction_is_audited(db):
+    build = await make_build(db)
+    build.status = "sold"
+    row = await set_channel_status(build.id, "ebay_uk", ManualChannelStatusIn(
+        status="cancelled", reason="Buyer cancellation confirmed in seller account"), db)
+    saved = (await db.execute(select(ChannelListing).where(
+        ChannelListing.manual_build_id == build.id, ChannelListing.channel == "ebay_uk",
+    ))).scalar_one()
+    from app.models.listing_publish_event import ListingPublishEvent
+    event = (await db.execute(select(ListingPublishEvent).where(
+        ListingPublishEvent.channel_listing_id == saved.id,
+        ListingPublishEvent.event_type == "manual_status_override",
+    ))).scalar_one()
+    assert row["status"] == "cancelled"
+    assert saved.status == "cancelled"
+    assert event.event_metadata["previous_status"] == "draft"
+    assert event.message == "Buyer cancellation confirmed in seller account"
+    assert build.status == "built"
+
+
+@pytest.mark.asyncio
+async def test_operator_cannot_mark_live_without_vendor_identity(db):
+    build = await make_build(db)
+    with pytest.raises(HTTPException, match="confirmed live listing"):
+        await set_channel_status(build.id, "vinted", ManualChannelStatusIn(
+            status="live", reason="Verified listing manually"), db)
 
 
 @pytest.mark.asyncio

@@ -9,6 +9,7 @@ import { SourceBadge } from "@/components/source-badge";
 import { EmptyState } from "@/components/empty-state";
 import { Part } from "@/lib/types";
 import { api } from "@/lib/api";
+import { BrandCubeLoader } from "@/components/ui/brand-cube-loader";
 import { formatCurrency } from "@/lib/utils";
 
 const THEME_ICONS: Record<string, string> = {
@@ -155,7 +156,7 @@ export default function CasesPage() {
 
       {loading ? (
         <div className="flex items-center justify-center py-20 text-slate-500 text-sm gap-2">
-          <RefreshCw className="w-4 h-4 animate-spin" /> Loading cases…
+          <BrandCubeLoader />
         </div>
       ) : cases.length === 0 ? (
         <EmptyState

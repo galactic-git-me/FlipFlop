@@ -23,15 +23,6 @@ No build is marked verified merely because a planning BOM, photograph or stale l
 - playbook_motherboard_specs_awaiting_review: 17
 - playbook_product_engineering_suggestions_awaiting_review: 14
 - playbook_product_engineering_suggestions_by_role: {'case': 3, 'cooling': 5, 'motherboard': 5, 'cpu': 1}
-- royalcdkeys_windows_licence_candidates: 2
-- royalcdkeys_windows_11_unpriced_home: 0
-- royalcdkeys_windows_11_unpriced_pro: 0
-- royalcdkeys_priced_windows_offers: 2
-- royalcdkeys_office_candidates: 2
-- royalcdkeys_google_ai_pro_18_month_candidates: 1
-- royalcdkeys_fresh_captured_offers: 1
-- royalcdkeys_source_reviewed_offers: 0
-- royalcdkeys_customer_enabled_offers: 0
 - generated_proposals: 24
 - proposals_ready_for_approval: 0
 - complete_hardware_proposals: 24
@@ -84,7 +75,6 @@ The authenticated review screen is `http://localhost:4312/playbooks/commercial`,
 ### Human review and approvals
 
 - Review the 24 distinct hardware supplier listings in the Supplier listings area (the 114 proposal appearances reuse those listings). Confirm the exact listing, new condition, stock statement, item price, postage and arrival estimate. This records cost evidence; it does not set a selling price or publish a build.
-- Review 2 Windows, 2 Office and 1 Gemini offers in the Software licences area. These exact digital products come from the RoyalCDKeys bestseller collection; Amazon remains a hardware-demand source. Source review does not enable customer purchase or establish independent licence entitlement/resale rights.
 - Review the 17 automatically researched motherboard suggestions in the Compatibility area against their linked source evidence. Use “Approve reviewed specs” only for facts the source confirms. Unreviewed suggestions never count as compatibility proof.
 - Review 14 exact-product engineering suggestions in the Compatibility area (by role: {'case': 3, 'cooling': 5, 'motherboard': 5, 'cpu': 1}). Suggestions use captured listing facts and remain unverified until you approve them.
 - Review photo choices for 2 exact proposal listings (23 build-role appearances) in Admin → PC Builder (`/pc-builder`) → Listing Images. Review generated product models separately in Catalogue → 3D Assets (`/catalogue/3d-assets`); a photo approval alone does not approve a model or publish a product.
@@ -117,12 +107,5 @@ These rows come from the live Playbook-service proposals, separate from the curr
 - playbook_product_engineering_suggestions_by_role: {'case': 3, 'cooling': 5, 'motherboard': 5, 'cpu': 1}
 - proposals_missing_separate_storage_devices: 0
 - proposals_missing_dual_boot_products: 0
-- royalcdkeys_windows_licence_candidates: 2
-- royalcdkeys_priced_windows_offers: 2
-- royalcdkeys_office_candidates: 2
-- royalcdkeys_google_ai_pro_18_month_candidates: 1
-- royalcdkeys_fresh_captured_offers: 1
-- royalcdkeys_source_reviewed_offers: 0
-- royalcdkeys_customer_enabled_offers: 0
 
 The local media schema repair restored four missing image/video fields and backfilled existing primary images. Unrelated migration history was not stamped or applied. The corresponding migration now tolerates already-present media fields.

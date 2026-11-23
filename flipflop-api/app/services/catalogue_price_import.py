@@ -67,9 +67,8 @@ async def import_current_catalogue_prices(db, parts, admin_id):
         if item == 0 and not free_official_download:
             blocked.append(f"{part['role']}: zero-cost items require verified official Ubuntu download evidence")
             continue
-        if identity in {'royalcdkeys','gamers_outlet'} and source.get('licence_source_reviewed') is not True:
-            vendor='Gamers Outlet' if identity=='gamers_outlet' else 'RoyalCDKeys'
-            blocked.append(f"{part['role']}: exact {vendor} licence terms need review")
+        if identity == 'gamers_outlet' and source.get('licence_source_reviewed') is not True:
+            blocked.append(f"{part['role']}: exact Gamers Outlet licence terms need review")
             continue
         supplier = 'Ubuntu' if software else identity
         entry = SimpleNamespace(part_key=key, fees_gbp=old.fees_gbp if old else Decimal('0.00'),
@@ -81,7 +80,7 @@ async def import_current_catalogue_prices(db, parts, admin_id):
             observed = max(observed, lifecycle_time)
         delivery_source=delivery_estimate_source_label(source.get('delivery_estimate_source'))
         pending.append({'part_key': key, 'supplier': supplier,
-            'channel': 'software' if software or identity in {'royalcdkeys','gamers_outlet'} else 'marketplace' if identity in {'ebay', 'vinted'} else 'retail',
+            'channel': 'software' if software or identity == 'gamers_outlet' else 'marketplace' if identity in {'ebay', 'vinted'} else 'retail',
             'condition': source['condition'], 'item_gbp': item, 'delivery_gbp': delivery,
             'fees_gbp': entry.fees_gbp, 'risk_gbp': entry.risk_gbp,
             'supplier_confidence': entry.supplier_confidence, 'stock_confirmed': entry.stock_confirmed,

@@ -36,7 +36,7 @@ def test_cell_budget_gate_leaves_uncapped_high_end_quotes_unchanged():
 @pytest.mark.asyncio
 async def test_refresh_releases_catalogue_locks_before_browser_collection_and_retains_completed_stages(monkeypatch):
     import app.database as database
-    from app.services import amazon_bestsellers,bestseller_catalogue_sync,playbook_product_capture,royalcdkeys_catalogue_sync
+    from app.services import amazon_bestsellers,bestseller_catalogue_sync,playbook_product_capture
     events=[]
     class Session:
         async def __aenter__(self):return self
@@ -46,11 +46,10 @@ async def test_refresh_releases_catalogue_locks_before_browser_collection_and_re
             return SimpleNamespace(scalar_one_or_none=lambda:None,scalars=lambda:SimpleNamespace(all=lambda:[]))
     monkeypatch.setattr(database,'AsyncSessionLocal',Session)
     async def ranks(**_kwargs):return {}
-    async def royal(_db):events.append('royal');return {}
     async def sync(_db,*,check_free_software=True):
         events.append('catalogue' if check_free_software else 'catalogue_after_capture');return {}
     async def capture(_db):
-        assert events==['royal','commit','commit','catalogue','commit','discovery','commit']
+        assert events==['commit','catalogue','commit','discovery','commit']
         events.append('capture');return {}
     async def discovery(_db):events.append('discovery');return {}
     monkeypatch.setattr('app.services.playbook_requirement_sources.discover_missing_requirement_sources',discovery)
@@ -58,13 +57,12 @@ async def test_refresh_releases_catalogue_locks_before_browser_collection_and_re
         assert events[-4:]==['capture','commit','catalogue_after_capture','commit']
         raise RuntimeError('build failed after source capture')
     monkeypatch.setattr(amazon_bestsellers,'scrape_amazon_component_bestsellers',ranks)
-    monkeypatch.setattr(royalcdkeys_catalogue_sync,'refresh_royalcdkeys_os_catalogue',royal)
     monkeypatch.setattr(bestseller_catalogue_sync,'sync_bestseller_catalogues',sync)
     monkeypatch.setattr(playbook_product_capture,'refresh_selected_product_facts',capture)
     monkeypatch.setattr(playbook_service,'refresh_playbooks',failed_build)
     with pytest.raises(RuntimeError,match='build failed'):
         await playbook_service.run_playbook_refresh(0)
-    assert events==['royal','commit','commit','catalogue','commit','discovery','commit','capture','commit',
+    assert events==['commit','catalogue','commit','discovery','commit','capture','commit',
         'catalogue_after_capture','commit']
 
 
@@ -217,10 +215,10 @@ async def test_build_offer_selects_standard_eligible_benchmark_qualified_shared_
 
 
 @pytest.mark.asyncio
-async def test_royalcdkeys_approval_activates_os_catalogue_candidates_without_publishing(monkeypatch):
+async def test_gamers_outlet_approval_activates_os_catalogue_candidates_without_publishing(monkeypatch):
     fingerprint='a'*64
-    listing=SimpleNamespace(id=91,source_name='RoyalCDKeys',title='Windows 11 Home OEM Key',url='https://royalcdkeys.com/en-gb/products/windows-11-home-oem-key',raw_specs={
-        'royalcdkeys':{'category':'os','handle':'windows-11-home-oem-key'},
+    listing=SimpleNamespace(id=91,source_name='Gamers Outlet',title='Windows 11 Home OEM Key',url='https://www.gamers-outlet.net/en/buy-windows-11-home-oem-cd-key',raw_specs={
+        'gamers_outlet':{'category':'os','handle':'windows-11-home-oem-cd-key'},
         'playbook_product_capture':{'status':'captured','licence_review_required':True,
             'product_properties':{'License type (supplier listing)':'OEM',
                 'Key uniqueness (supplier claim)':'No key-reuse statement captured'}}})
@@ -232,7 +230,7 @@ async def test_royalcdkeys_approval_activates_os_catalogue_candidates_without_pu
     db=SimpleNamespace(execute=AsyncMock(side_effect=[listing_result,variant_result]),add=lambda row:setattr(db,'audit',row),flush=AsyncMock())
     monkeypatch.setattr('app.services.commercial_readiness.source_preview',AsyncMock(return_value=observation))
 
-    outcome=await playbook_service.approve_royalcdkeys_licence_source(db,91,fingerprint,7)
+    outcome=await playbook_service.approve_gamers_outlet_licence_source(db,91,fingerprint,7)
 
     assert outcome['reviewed'] is True
     assert outcome['prices_published'] is False
@@ -247,11 +245,11 @@ async def test_royalcdkeys_approval_activates_os_catalogue_candidates_without_pu
 
 
 @pytest.mark.asyncio
-async def test_royalcdkeys_office_review_does_not_activate_or_publish_a_customer_offer(monkeypatch):
+async def test_gamers_outlet_office_review_does_not_activate_or_publish_a_customer_offer(monkeypatch):
     fingerprint='c'*64
-    listing=SimpleNamespace(id=92,source_name='RoyalCDKeys',title='Microsoft Office 2024',
-        url='https://royalcdkeys.com/en-gb/products/office-2024',raw_specs={
-            'royalcdkeys':{'category':'office','handle':'office-2024'},
+    listing=SimpleNamespace(id=92,source_name='Gamers Outlet',title='Microsoft Office 2024',
+        url='https://www.gamers-outlet.net/en/buy-office-2024',raw_specs={
+            'gamers_outlet':{'category':'office','handle':'office-2024'},
             'playbook_product_capture':{'status':'captured','licence_review_required':True,
                 'product_properties':{'License type (supplier listing)':'Not stated'}}})
     observation={'fresh':True,'licence_review_fingerprint':fingerprint,'product_properties':{}}
@@ -261,7 +259,7 @@ async def test_royalcdkeys_office_review_does_not_activate_or_publish_a_customer
         add=lambda row:setattr(db,'audit',row),flush=AsyncMock())
     monkeypatch.setattr('app.services.commercial_readiness.source_preview',AsyncMock(return_value=observation))
 
-    outcome=await playbook_service.approve_royalcdkeys_licence_source(db,92,fingerprint,7)
+    outcome=await playbook_service.approve_gamers_outlet_licence_source(db,92,fingerprint,7)
 
     assert outcome['category']=='office'
     assert outcome['activated_catalogue_links']==0
@@ -285,9 +283,9 @@ def test_playbook_service_api_exposes_admin_reviewed_licence_workflow(monkeypatc
         yield db
     app.dependency_overrides[get_db]=provide_db
     app.dependency_overrides[get_current_admin]=lambda:SimpleNamespace(id=17)
-    monkeypatch.setattr(api_module,'royalcdkeys_licence_candidates',AsyncMock(return_value=[{'listing_id':1}]))
+    monkeypatch.setattr(api_module,'gamers_outlet_licence_candidates',AsyncMock(return_value=[{'listing_id':1}]))
     review=AsyncMock(return_value={'listing_id':1,'reviewed':True,'reused':False,'published':False})
-    monkeypatch.setattr(api_module,'approve_royalcdkeys_licence_source',review)
+    monkeypatch.setattr(api_module,'approve_gamers_outlet_licence_source',review)
 
     with TestClient(app) as client:
         assert client.get('/playbook-service/supplier-licences').json()=={'items':[{'listing_id':1}]}

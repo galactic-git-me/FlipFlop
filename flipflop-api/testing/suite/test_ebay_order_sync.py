@@ -8,6 +8,16 @@ from app.services import ebay_order_sync
 from app.services.ebay_order_sync import _parse_order
 
 
+@pytest.mark.parametrize("cancel_state", ["CANCELED", "CANCELLED", "canceled"])
+def test_terminal_ebay_cancellation_states_are_recognized(cancel_state):
+    assert ebay_order_sync.is_terminal_order_cancellation({"cancel_state": cancel_state})
+
+
+@pytest.mark.parametrize("cancel_state", ["IN_PROGRESS", "NONE", "REJECTED", ""])
+def test_pending_or_rejected_cancellation_is_not_terminal(cancel_state):
+    assert not ebay_order_sync.is_terminal_order_cancellation({"cancel_state": cancel_state})
+
+
 def test_parse_order_retains_exact_ebay_ship_by_deadline():
     order = {
         "orderId": "12-34567-89012",

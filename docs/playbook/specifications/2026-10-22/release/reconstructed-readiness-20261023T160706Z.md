@@ -49,7 +49,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: motherboard (source capture missing or stale; listing not confirmed active; stock unknown), ram (source capture missing or stale; listing not confirmed active; stock unknown), storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)
 - fast_track: Current exact supplier data is missing: cpu: catalogue product, motherboard: current item price, ram: current item price, storage: current item price, psu: current item price, cooling: current item price, case: current item price, os: current item price
@@ -71,7 +70,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: cpu (source capture missing or stale; listing not confirmed active; stock unknown), motherboard (source capture missing or stale; listing not confirmed active; stock unknown), ram (source capture missing or stale; listing not confirmed active; stock unknown), gpu (source capture missing or stale; listing not confirmed active; stock unknown), storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)
 - fast_track: Current exact supplier data is missing: cpu: current item price, motherboard: current item price, ram: current item price, gpu: current item price, storage: current item price, psu: current item price, cooling: current item price, case: current item price, os: current item price
@@ -100,7 +98,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: motherboard (source capture missing or stale; listing not confirmed active; stock unknown), ram (source capture missing or stale; listing not confirmed active; stock unknown), storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)
 - fast_track: Current exact supplier data is missing: cpu: catalogue product, motherboard: current item price, ram: current item price, storage: current item price, psu: current item price, cooling: current item price, case: current item price, os: current item price
@@ -121,7 +118,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: cpu (source capture missing or stale; listing not confirmed active; stock unknown), motherboard (source capture missing or stale; listing not confirmed active; stock unknown), ram (source capture missing or stale; listing not confirmed active; stock unknown), storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)
 - fast_track: Current exact supplier data is missing: cpu: current item price, motherboard: current item price, ram: current item price, storage: current item price, psu: current item price, cooling: current item price, case: current item price, os: current item price
@@ -150,7 +146,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: motherboard (source capture missing or stale; listing not confirmed active; stock unknown), ram (source capture missing or stale; listing not confirmed active; stock unknown), storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)
 - fast_track: Current exact supplier data is missing: cpu: catalogue product, motherboard: current item price, ram: current item price, storage: current item price, psu: current item price, cooling: current item price, case: current item price, os: current item price
@@ -172,7 +167,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: cpu (source capture missing or stale; listing not confirmed active; stock unknown), motherboard (source capture missing or stale; listing not confirmed active; stock unknown), ram (source capture missing or stale; listing not confirmed active; stock unknown), gpu (source capture missing or stale; listing not confirmed active; stock unknown), storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)
 - fast_track: Current exact supplier data is missing: cpu: current item price, motherboard: current item price, ram: current item price, gpu: current item price, storage: current item price, psu: current item price, cooling: current item price, case: current item price, os: current item price
@@ -202,7 +196,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: cpu (source capture missing or stale; listing not confirmed active; stock unknown), motherboard (source capture missing or stale; listing not confirmed active; stock unknown), ram (source capture missing or stale; listing not confirmed active; stock unknown), gpu (source capture missing or stale; listing not confirmed active; stock unknown), storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)
 - fast_track: Current exact supplier data is missing: cpu: current item price, motherboard: current item price, ram: current item price, gpu: current item price, storage: current item price, psu: current item price, cooling: current item price, case: current item price, os: current item price
@@ -224,7 +217,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: cpu (source capture missing or stale; listing not confirmed active; stock unknown), motherboard (source capture missing or stale; listing not confirmed active; stock unknown), ram (source capture missing or stale; listing not confirmed active; stock unknown), gpu (source capture missing or stale; listing not confirmed active; stock unknown), storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)
 - fast_track: Current exact supplier data is missing: cpu: current item price, motherboard: current item price, ram: current item price, gpu: current item price, storage: current item price, psu: current item price, cooling: current item price, case: current item price, os: current item price
@@ -254,7 +246,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: cpu (source capture missing or stale; listing not confirmed active; stock unknown), motherboard (source capture missing or stale; listing not confirmed active; stock unknown), ram (source capture missing or stale; listing not confirmed active; stock unknown), gpu (source capture missing or stale; listing not confirmed active; stock unknown), storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)
 - fast_track: Current exact supplier data is missing: cpu: current item price, motherboard: current item price, ram: current item price, gpu: current item price, storage: current item price, psu: current item price, cooling: current item price, case: current item price, os: current item price
@@ -276,7 +267,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: cpu (source capture missing or stale; listing not confirmed active; stock unknown), motherboard (source capture missing or stale; listing not confirmed active; stock unknown), ram (source capture missing or stale; listing not confirmed active; stock unknown), gpu (source capture missing or stale; listing not confirmed active; stock unknown), storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)
 - fast_track: Current exact supplier data is missing: cpu: current item price, motherboard: current item price, ram: current item price, gpu: current item price, storage: current item price, psu: current item price, cooling: current item price, case: current item price, os: current item price
@@ -298,7 +288,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - gpu not live: An active final model matching the chosen 3D reference photos is required; no media-ready substitute passed selection
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: cpu (source capture missing or stale; listing not confirmed active; stock unknown), motherboard (source capture missing or stale; listing not confirmed active; stock unknown), ram (source capture missing or stale; listing not confirmed active; stock unknown), gpu (source capture missing or stale; listing not confirmed active; stock unknown), storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)
@@ -322,7 +311,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: cpu (source capture missing or stale; listing not confirmed active; stock unknown), motherboard (source capture missing or stale; listing not confirmed active; stock unknown), ram (source capture missing or stale; listing not confirmed active; stock unknown), gpu (source capture missing or stale; listing not confirmed active; stock unknown), storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)
 - fast_track: Current exact supplier data is missing: cpu: current item price, motherboard: current item price, ram: current item price, gpu: current item price, storage: current item price, psu: current item price, cooling: current item price, case: current item price, os: current item price
@@ -343,7 +331,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: cpu (source capture missing or stale; listing not confirmed active; stock unknown), motherboard (source capture missing or stale; listing not confirmed active; stock unknown), ram (source capture missing or stale; listing not confirmed active; stock unconfirmed), gpu (source capture missing or stale; listing not confirmed active; stock unknown), storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)
 - fast_track: Current exact supplier data is missing: cpu: current item price, motherboard: current item price, ram: current item price, gpu: current item price, storage: current item price, psu: current item price, cooling: current item price, case: current item price, os: current item price
@@ -366,7 +353,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - ram not live: An active final model matching the chosen 3D reference photos is required; no media-ready substitute passed selection
 - gpu not live: An active final model matching the chosen 3D reference photos is required; no media-ready substitute passed selection
 - Automatic product research must resolve compatibility evidence before recommendation
@@ -391,7 +377,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: cpu (source capture missing or stale; listing not confirmed active; stock unknown), motherboard (source capture missing or stale; listing not confirmed active; stock unknown), ram (source capture missing or stale; listing not confirmed active; stock unknown), gpu (source capture missing or stale; listing not confirmed active; stock unknown), storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)
 - fast_track: Current exact supplier data is missing: cpu: current item price, motherboard: current item price, ram: current item price, gpu: current item price, storage: current item price, psu: current item price, cooling: current item price, case: current item price, os: current item price
@@ -412,7 +397,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - gpu not live: An active final model matching the chosen 3D reference photos is required; no media-ready substitute passed selection
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: cpu (source capture missing or stale; listing not confirmed active; stock unknown), motherboard (source capture missing or stale; listing not confirmed active; stock unknown), ram (source capture missing or stale; listing not confirmed active; stock unconfirmed), gpu (source capture missing or stale; listing not confirmed active; stock unknown), storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)
@@ -436,7 +420,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)
 - High-end Standard remains unpublished until reviewed P75 market evidence supports the full-cost margin floor
@@ -458,7 +441,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: cpu (source capture missing or stale; listing not confirmed active; stock unknown), motherboard (source capture missing or stale; listing not confirmed active; stock unknown), ram (source capture missing or stale; listing not confirmed active; stock unknown), storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)
 - fast_track: Current exact supplier data is missing: cpu: current item price, motherboard: current item price, ram: current item price, storage: current item price, psu: current item price, cooling: current item price, case: current item price, os: current item price
@@ -478,7 +460,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: cpu (source capture missing or stale; listing not confirmed active; stock unknown), motherboard (source capture missing or stale; listing not confirmed active; stock unknown), ram (source capture missing or stale; listing not confirmed active; stock unconfirmed), storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)
 - fast_track: Current exact supplier data is missing: cpu: current item price, motherboard: current item price, ram: current item price, storage: current item price, psu: current item price, cooling: current item price, case: current item price, os: current item price
@@ -499,7 +480,6 @@ Blocking reasons:
 - psu: supplier rights are not approved for supplier_amazon
 - cooling: supplier rights are not approved for supplier_amazon
 - case: supplier rights are not approved for supplier_amazon
-- os: supplier rights are not approved for supplier_royalcdkeys
 - ram not live: An active final model matching the chosen 3D reference photos is required; no media-ready substitute passed selection
 - Automatic product research must resolve compatibility evidence before recommendation
 - Refresh exact supplier stock evidence for: cpu (source capture missing or stale; listing not confirmed active; stock unknown), motherboard (source capture missing or stale; listing not confirmed active; stock unknown), ram (source capture missing or stale; listing not confirmed active; stock unknown), storage (source capture missing or stale; listing not confirmed active; stock unknown), psu (source capture missing or stale; listing not confirmed active; stock unknown), cooling (source capture missing or stale; listing not confirmed active; stock unknown), case (source capture missing or stale; listing not confirmed active; stock unknown), os (source capture missing or stale; listing not confirmed active; stock unknown)

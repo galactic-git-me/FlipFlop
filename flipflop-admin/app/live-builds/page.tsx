@@ -15,6 +15,8 @@ import {
   Tag,
 } from "lucide-react";
 import { api, type ManualBuild } from "@/lib/api";
+import { BrandCubeLoader } from "@/components/ui/brand-cube-loader";
+import BrowserListingJobs from "@/components/BrowserListingJobs";
 
 type Channel = "ebay_uk" | "flipflop_shop" | "onbuy" | "amazon" | "facebook_catalog" | "vinted" | "google_shopping";
 type ListingSchedule = Awaited<ReturnType<typeof api.crossListing.schedules>>[number];
@@ -71,7 +73,7 @@ function channelStates(build: ManualBuild, schedules: ListingSchedule[]): Record
   for (const vendor of vendors) {
     if (vendor.channel === "ebay_uk") {
       const active = build.ebay_live === true || build.ebay_listing_status === "active";
-      result[vendor.channel] = { active, status: active ? "Live" : build.ebay_listing_status === "unknown" ? "Unverified" : "Not listed", url: build.ebay_listing_url };
+      result[vendor.channel] = { active, status: active ? "Live" : build.ebay_listing_end_reason === "order_cancelled" ? "Cancelled" : build.ebay_listing_status === "unknown" ? "Unverified" : build.ebay_listing_status === "ended" ? "Ended" : "Not listed", url: build.ebay_listing_url };
       continue;
     }
     if (vendor.channel === "flipflop_shop") {
@@ -138,7 +140,7 @@ export default function LiveBuildsPage() {
           if (detail.status !== "fulfilled") continue;
           const build = detail.value;
           const channels = channelStates(build, nextSchedules);
-          if (Object.values(channels).some((state) => state.active)) nextCards.push({ build, channels });
+          if (Object.values(channels).some((state) => state.active) || build.status === "sold") nextCards.push({ build, channels });
         }
         setCards(nextCards);
       } else {
@@ -227,6 +229,26 @@ export default function LiveBuildsPage() {
     finally { setActionKey(null); }
   };
 
+  const changeVendorStatus = async (buildId: number, vendor: Vendor, status: "live" | "sold" | "ended" | "cancelled" | "not_listed") => {
+    const reason = window.prompt(`Why are you correcting ${vendor.label} for Build ${buildId}?`);
+    if (!reason?.trim()) return;
+    let listing_url: string | undefined;
+    let external_id: string | undefined;
+    if (status === "live") {
+      listing_url = window.prompt(`Paste the confirmed ${vendor.label} listing URL`)?.trim();
+      external_id = window.prompt(`Enter the confirmed ${vendor.label} listing ID`)?.trim();
+      if (!listing_url || !external_id) return;
+    }
+    const key = `${buildId}:${vendor.channel}:status`;
+    setActionKey(key);
+    try {
+      await api.crossListing.setManualChannelStatus(buildId, vendor.channel, {status, reason: reason.trim(), listing_url, external_id});
+      setNotice(`${vendor.label} status for Build ${buildId} recorded as ${status.replaceAll("_", " ")}.`);
+      await refresh();
+    } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not update the marketplace status."); }
+    finally { setActionKey(null); }
+  };
+
   return (
     <main className="space-y-6">
       <header className="flex flex-wrap items-end justify-between gap-4">
@@ -240,6 +262,8 @@ export default function LiveBuildsPage() {
           Refresh builds and inbox
         </button>
       </header>
+
+      <BrowserListingJobs onChanged={() => refresh(true)} />
 
       <section className="grid gap-3 sm:grid-cols-3" aria-label="Live build summary">
         <div className="rounded-xl border border-slate-700 bg-slate-950/70 p-4"><p className="text-xs text-slate-400">Builds for sale</p><p className="mt-1 text-2xl font-semibold text-white">{cards.length}</p></div>
@@ -257,7 +281,7 @@ export default function LiveBuildsPage() {
       </label>
 
       {loading ? (
-        <div className="flex items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-950/40 py-16 text-sm text-slate-400"><Loader2 className="h-4 w-4 animate-spin" />Loading live inventory…</div>
+        <div className="flex items-center justify-center rounded-xl border border-slate-800 bg-slate-950/40 py-16"><BrandCubeLoader /></div>
       ) : filtered.length ? (
         <section className="grid gap-5 md:grid-cols-2 2xl:grid-cols-3" aria-label="Live build cards">
           {filtered.map(({ build, channels }) => {
@@ -304,10 +328,16 @@ export default function LiveBuildsPage() {
                   <div className="grid grid-cols-2 gap-2">
                     {vendors.map((vendor) => {
                       const state = channels[vendor.channel];
-                      return <div key={vendor.channel} className="flex min-w-0 items-center gap-2 rounded-md border border-slate-800 bg-slate-950/50 px-2 py-1.5" title={state.status}>
+                      const selected = state.active ? "live" : state.status.toLowerCase().includes("sold") ? "sold" : state.status.toLowerCase().includes("cancel") ? "cancelled" : state.status.toLowerCase().includes("ended") || state.status.toLowerCase().includes("withdrawn") ? "ended" : "not_listed";
+                      const statusKey = `${build.id}:${vendor.channel}:status`;
+                      return <div key={vendor.channel} className="flex min-w-0 flex-wrap items-center gap-2 rounded-md border border-slate-800 bg-slate-950/50 px-2 py-1.5" title={state.status}>
                         <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${state.active ? vendor.activeClass : state.status !== "not listed" ? "bg-amber-400/20 text-amber-200" : "bg-slate-800 text-slate-500"}`}>{vendor.mark}</span>
                         <span className={`truncate text-[11px] ${state.active ? "text-slate-200" : "text-slate-500"}`}>{vendor.label}</span>
                         {state.url && <a href={state.url} target="_blank" rel="noreferrer" aria-label={`Open ${vendor.label} listing`} className="ml-auto shrink-0 text-slate-500 hover:text-cyan-300"><ExternalLink className="h-3 w-3" /></a>}
+                        <select aria-label={`Correct ${vendor.label} status for Build ${build.id}`} value={selected} disabled={!!actionKey} onChange={(event) => void changeVendorStatus(build.id, vendor, event.target.value as "live" | "sold" | "ended" | "cancelled" | "not_listed")} className="ml-auto max-w-full rounded border border-slate-700 bg-slate-900 px-1.5 py-1 text-[10px] text-slate-300 disabled:opacity-50">
+                          <option value="live">Live (verified)</option><option value="sold">Sold</option><option value="cancelled">Cancelled</option><option value="ended">Ended</option><option value="not_listed">Not listed</option>
+                        </select>
+                        {actionKey === statusKey && <span className="text-[10px] text-cyan-300">Saving…</span>}
                       </div>;
                     })}
                   </div>

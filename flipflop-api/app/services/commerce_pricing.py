@@ -115,7 +115,7 @@ def supplier_allowed(mode: FulfilmentMode, offer: SupplierOffer) -> bool:
             # An official Ubuntu download is a zero-cost, non-physical
             # Playbook component. Never let a positive-cost offer use this route.
             return offer.item_gbp == offer.delivery_gbp == offer.fees_gbp == offer.risk_gbp == Decimal("0")
-        if supplier in {"royalcdkeys", "gamers_outlet", "gamers outlet"}:
+        if supplier in {"gamers_outlet", "gamers outlet"}:
             # Reviewed digital products enter this evidence channel only
             # after the exact licence offer was source-reviewed. A digital key
             # has no postage and must be available without supplier delay so

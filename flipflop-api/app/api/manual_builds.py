@@ -1453,6 +1453,36 @@ async def list_sold_build_alerts(db: AsyncSession = Depends(get_db)):
                 continue
             latest_sales.setdefault(build_id, (channel, event))
 
+    refund_reviews = {}
+    withdrawn_channels = {}
+    if build_ids:
+        channel_rows = (await db.execute(select(ChannelListing).where(
+            ChannelListing.manual_build_id.in_(build_ids),
+        ).order_by(ChannelListing.id.desc()))).scalars().all()
+        for row in channel_rows:
+            if row.status in {"withdrawn", "withdrawal_pending"}:
+                withdrawn_channels.setdefault(row.manual_build_id, []).append({
+                    "channel": row.channel,
+                    "status": row.status,
+                })
+        lifecycle_events = (await db.execute(
+            select(ChannelListing.manual_build_id, ListingPublishEvent)
+            .join(ListingPublishEvent, ListingPublishEvent.channel_listing_id == ChannelListing.id)
+            .where(
+                ChannelListing.manual_build_id.in_(build_ids),
+                ListingPublishEvent.event_type.in_(("refund_detected", "refund_relist_decision")),
+            )
+            .order_by(ListingPublishEvent.id.asc())
+        )).all()
+        for build_id, event in lifecycle_events:
+            metadata = event.event_metadata or {}
+            if metadata.get("order_id") != next((b.ebay_order_id for b in builds if b.id == build_id), None):
+                continue
+            if event.event_type == "refund_detected":
+                refund_reviews[build_id] = {"event": event, "metadata": metadata, "decision": None}
+            elif build_id in refund_reviews:
+                refund_reviews[build_id]["decision"] = event
+
     settings_row = None
     if any(build.ebay_order_id for build in builds):
         settings_row = (await db.execute(
@@ -1495,8 +1525,96 @@ async def list_sold_build_alerts(db: AsyncSession = Depends(get_db)):
             "sale_currency": metadata.get("currency") or "GBP",
             "sale_source": metadata.get("source") or ("sale_confirmed_event" if sale else None),
             "sale_confirmed_at": sale[1].created_at if sale else None,
+            "refund_review": ({
+                "required": review["decision"] is None or review["decision"].id < review["event"].id,
+                "detected_at": review["event"].created_at,
+                "order_payment_status": review["metadata"].get("order_payment_status"),
+                "refunds": review["metadata"].get("refunds", []),
+            } if (review := refund_reviews.get(build.id)) else None),
+            "withdrawn_channels": withdrawn_channels.get(build.id, []),
         })
     return alerts
+
+
+class EBayRefundReviewDecision(BaseModel):
+    decision: Literal["relist", "keep_offline", "not_full_refund"]
+
+
+@router.post("/{build_id}/refund-review")
+async def decide_ebay_refund_review(
+    build_id: int,
+    body: EBayRefundReviewDecision,
+    admin: AdminUser = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    """Record an owner decision after a completed eBay refund is detected.
+
+    Reopening inventory requires the owner's explicit confirmation that the
+    refund was full. Choosing relist only sends the owner to Cross-listing; it
+    never publishes to a marketplace by itself.
+    """
+    build = (await db.execute(select(ManualBuild).where(
+        ManualBuild.id == build_id,
+    ).with_for_update())).scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if not build.ebay_order_id or build.status != "sold":
+        raise HTTPException(409, "This build has no unresolved sold eBay order to review")
+
+    lifecycle = (await db.execute(
+        select(ChannelListing.manual_build_id, ListingPublishEvent)
+        .join(ListingPublishEvent, ListingPublishEvent.channel_listing_id == ChannelListing.id)
+        .where(
+            ChannelListing.manual_build_id == build.id,
+            ListingPublishEvent.event_type.in_(("refund_detected", "refund_relist_decision")),
+        )
+        .order_by(ListingPublishEvent.id.asc())
+    )).all()
+    latest_refund = None
+    latest_decision = None
+    for _, event in lifecycle:
+        metadata = event.event_metadata or {}
+        if metadata.get("order_id") != build.ebay_order_id:
+            continue
+        if event.event_type == "refund_detected":
+            latest_refund = event
+        elif event.event_type == "refund_relist_decision":
+            latest_decision = event
+    if latest_refund is None or (latest_decision and latest_decision.id > latest_refund.id):
+        raise HTTPException(409, "There is no new completed refund awaiting a decision")
+
+    now = datetime.utcnow()
+    if body.decision in {"relist", "keep_offline"}:
+        build.status = "built"
+        build.dispatch_status = "refunded"
+        build.relist_enabled = False
+        build.next_recreate_at = None
+        build.ebay_listing_status = "unknown"
+        build.ebay_listing_status_checked_at = None
+        build.updated_at = now
+        if body.decision == "relist":
+            ebay_rows = (await db.execute(select(ChannelListing).where(
+                ChannelListing.manual_build_id == build.id,
+                ChannelListing.channel.in_(("ebay_uk", "ebay")),
+            ))).scalars().all()
+            for row in ebay_rows:
+                row.status = "ended"
+
+    db.add(ListingPublishEvent(
+        channel_listing_id=latest_refund.channel_listing_id,
+        event_type="refund_relist_decision",
+        message=f"Owner reviewed the completed eBay refund: {body.decision}.",
+        event_metadata={
+            "build_id": build.id,
+            "order_id": build.ebay_order_id,
+            "refund_event_id": latest_refund.id,
+            "decision": body.decision,
+            "actor_id": getattr(admin, "id", None),
+            "at": now.isoformat(),
+        },
+    ))
+    await db.commit()
+    return {"ok": True, "decision": body.decision, "build_status": build.status}
 
 
 @router.post("/{build_id}/reconcile-ebay-relist")

@@ -458,7 +458,7 @@ def _supplier_fact_is_approvable(part,source):
     # not require a particular retailer when the product identity is exact.
     accepted_identity=identity in {'amazon','overclockers','scan','ebuyer',
         'computer_orbit','awd_it','ccl','corsair','alpha_components','hardvance','senetic','morecoco'}
-    if identity in {'royalcdkeys','gamers_outlet'}:
+    if identity == 'gamers_outlet':
         # A digital-key offer needs an explicit operator review of the
         # supplier's licence type and UK resale/install terms before its cost
         # can enter a customer quote.
@@ -618,17 +618,17 @@ def _model_tokens(value):
 def _verified_windows_licence_listing(listing):
     """Only recommend an exact per-device Windows licence listing for operator review."""
     raw=listing.raw_specs if isinstance(listing.raw_specs,dict) else {}
-    royal=(raw.get('gamers_outlet') or raw.get('royalcdkeys') or {})
+    supplier=raw.get('gamers_outlet') or {}
     capture=raw.get('playbook_product_capture') if isinstance(raw.get('playbook_product_capture'),dict) else {}
     properties=capture.get('product_properties') if isinstance(capture.get('product_properties'),dict) else {}
     title=capture.get('title') or listing.title
     expected_edition=re.search(r'\bwindows\s+11\s+(home|pro)\b',listing.title,re.I)
     captured_edition=re.search(r'\bwindows\s+11\s+(home|pro)\b',title,re.I)
     license_type=str(properties.get('License type (supplier listing)') or '').casefold()
-    handle=royal.get('handle')
+    handle=supplier.get('handle')
     captured_handle=capture.get('supplier_product_handle')
     from app.services.playbook_product_capture import supported_product_url
-    return bool(royal.get('category')=='os' and royal.get('handle')
+    return bool(getattr(listing,'source_name',None)=='Gamers Outlet' and supplier.get('category')=='os' and supplier.get('handle')
         and capture.get('status')=='captured' and capture.get('digital_product') is True
         and capture.get('licence_review_required') is True and capture.get('licence_resale_rights_verified') is False
         and capture.get('url')==listing.url and supported_product_url(listing.url)
@@ -2502,13 +2502,18 @@ async def approve_current_supplier_sources(db,proposal_id,revision,actor_id,sour
         for item in (source_evidence or [])}
     for part in proposal.proposed_data.get('components',[]):
         role=part.get('role'); proposed=part.get('source_observation') or {}
+        listing_id=part.get('listing_id')
+        reviewed_fingerprint=reviewed_fingerprints.get((role,int(listing_id or 0)))
+        # When the caller supplies an explicit subset, inspect only those exact
+        # rows. This keeps bulk review scoped to the captures the operator saw
+        # and avoids repeating source-preview work for every unrelated BOM part.
+        if source_evidence is not None and not reviewed_fingerprint:
+            continue
         if not proposed:
             pending_roles.append(role);continue
-        listing_id=part.get('listing_id')
         listing=await db.get(Listing,listing_id) if listing_id else None
         current=await source_preview(db,listing) if listing else None
         if source_evidence is not None:
-            reviewed_fingerprint=reviewed_fingerprints.get((role,int(listing_id or 0)))
             # A saved vendor-ETA default or a harmless representation change
             # (for example "0.00" -> "0") can change a legacy fingerprint.
             # If the operator reviewed this proposal's fingerprint and its
@@ -2581,26 +2586,26 @@ async def approve_current_supplier_sources(db,proposal_id,revision,actor_id,sour
         'pending_roles':pending_roles,'audit_id':audit.id,'checkout_changed':False,'prices_published':False}
 
 
-def _licence_supplier_terms_url(listing):
+def _gamers_outlet_terms_url(listing):
     host=(urlsplit(str(listing.url or '')).hostname or '').casefold()
-    if host in {'gamers-outlet.net','www.gamers-outlet.net'}:
-        return 'https://www.gamers-outlet.net/en/terms-and-conditions'
-    return 'https://royalcdkeys.com/pages/terms-conditions'
+    if host not in {'gamers-outlet.net','www.gamers-outlet.net'}:
+        raise HTTPException(404,'Gamers Outlet supplier listing not found')
+    return 'https://www.gamers-outlet.net/en/terms-and-conditions'
 
 
-async def approve_royalcdkeys_licence_source(db,listing_id,licence_review_fingerprint,actor_id):
+async def approve_gamers_outlet_licence_source(db,listing_id,licence_review_fingerprint,actor_id):
     """Approve an exact software listing for internal Playbook OS catalogue use."""
     from app.models.commerce_evidence import PriceQuoteSnapshot
     from app.models.catalogue import CatalogueVariant, PlaybookSlot
     from app.services.commercial_readiness import source_preview
     listing=(await db.execute(select(Listing).where(Listing.id==listing_id).with_for_update())).scalar_one_or_none()
-    if listing is None or listing.source_name not in {'RoyalCDKeys','Gamers Outlet'}:
+    if listing is None or listing.source_name!='Gamers Outlet':
         raise HTTPException(404,'Software supplier Playbook product not found')
     raw=listing.raw_specs if isinstance(listing.raw_specs,dict) else {}
     capture=raw.get('playbook_product_capture') if isinstance(raw.get('playbook_product_capture'),dict) else {}
-    royal=(raw.get('gamers_outlet') or raw.get('royalcdkeys') or {})
+    supplier=raw.get('gamers_outlet') or {}
     current=await source_preview(db,listing)
-    category=royal.get('category')
+    category=supplier.get('category')
     if (category not in {'os','office','ai_subscription'} or capture.get('status')!='captured'
             or capture.get('licence_review_required') is not True
             or current is None or not current.get('fresh')
@@ -2612,7 +2617,7 @@ async def approve_royalcdkeys_licence_source(db,listing_id,licence_review_finger
     if category=='os' and (license_type not in {'oem','retail'} or 'not guaranteed' in unique_claim):
         raise HTTPException(409,'This listing does not identify a single-device OEM/Retail offer suitable for Playbook review')
     previous=raw.get('playbook_licence_source_review') or {}
-    terms_url=_licence_supplier_terms_url(listing)
+    terms_url=_gamers_outlet_terms_url(listing)
     reused=bool(previous.get('reviewed') is True
         and previous.get('licence_review_fingerprint')==licence_review_fingerprint)
     reviewed_at=(previous.get('reviewed_at') if reused else datetime.now(timezone.utc).isoformat())
@@ -2639,7 +2644,7 @@ async def approve_royalcdkeys_licence_source(db,listing_id,licence_review_finger
         variant.reviewed_by=str(actor_id)
         variant.updated_at=reviewed_at
         activated.append({'variant_id':variant.id,'playbook_id':playbook_id})
-    supplier_key='gamers_outlet' if listing.source_name=='Gamers Outlet' else 'royalcdkeys'
+    supplier_key='gamers_outlet'
     audit=PriceQuoteSnapshot(product_key=f'{supplier_key}_licence_source:{listing.id}',
         status='supplier_licence_source_review',created_by_admin_id=actor_id,
         evidence_json={'listing_id':listing.id,'title':listing.title,'source':listing.source_name,
@@ -2657,17 +2662,17 @@ async def approve_royalcdkeys_licence_source(db,listing_id,licence_review_finger
         'prices_published':False,'checkout_changed':False,'customer_offering_enabled':False}
 
 
-async def royalcdkeys_licence_candidates(db):
-    """Return exact captured RoyalCDKeys OS listings for explicit admin review."""
+async def gamers_outlet_licence_candidates(db):
+    """Return exact captured Gamers Outlet software listings for admin review."""
     from app.models.catalogue import CatalogueVariant, PlaybookSlot
-    rows=(await db.execute(select(Listing).where(Listing.source_name.in_(('RoyalCDKeys','Gamers Outlet')))
+    rows=(await db.execute(select(Listing).where(Listing.source_name=='Gamers Outlet')
         .order_by(Listing.title,Listing.id))).scalars().all()
     result=[]
     for listing in rows:
         raw=listing.raw_specs if isinstance(listing.raw_specs,dict) else {}
         capture=raw.get('playbook_product_capture') if isinstance(raw.get('playbook_product_capture'),dict) else {}
-        royal=(raw.get('gamers_outlet') or raw.get('royalcdkeys') or {})
-        if royal.get('category') not in {'os','office','ai_subscription'} or capture.get('status')!='captured':
+        supplier=raw.get('gamers_outlet') or {}
+        if supplier.get('category') not in {'os','office','ai_subscription'} or capture.get('status')!='captured':
             continue
         observation=await source_preview(db,listing)
         if observation is None:
@@ -2689,8 +2694,8 @@ async def royalcdkeys_licence_candidates(db):
             'stock_evidence':observation.get('stock_evidence'),
             'product_properties':observation.get('product_properties') or {},
             'catalogue_statuses':[{'playbook_id':row.playbook_id,'status':row.status} for row in variants],
-            'terms_url':_licence_supplier_terms_url(listing),
-            'category':royal.get('category'),'customer_offering_enabled':False})
+            'terms_url':_gamers_outlet_terms_url(listing),
+            'category':supplier.get('category'),'customer_offering_enabled':False})
     return result
 
 
@@ -2928,7 +2933,10 @@ async def annotate_supplier_cost_reviews(db, proposals):
     """Expose whether an operator saved the exact capture shown in each proposal."""
     from copy import deepcopy
     from app.models.commerce_evidence import SupplierOfferEvidence
-    from app.services.commercial_source_validation import bounded_evidence_reference
+    from app.services.commercial_source_validation import (bounded_evidence_reference,
+        delivery_estimate_source_label)
+    from datetime import datetime, timezone
+    from decimal import Decimal, InvalidOperation
 
     proposals = deepcopy(proposals)
     expected = {}
@@ -2938,23 +2946,49 @@ async def annotate_supplier_cost_reviews(db, proposals):
             fingerprint = source.get('fingerprint')
             observation_id = source.get('observation_id')
             url = source.get('url')
-            if not fingerprint or not observation_id or not url:
+            if not fingerprint or not url:
                 continue
             part_key = (f"case:{part['case_catalogue_id']}" if part.get('role') == 'case'
                 and part.get('case_catalogue_id') else f"variant:{part.get('variant_id')}")
             evidence_ref = bounded_evidence_reference(str(url))
-            evidence_source = f"catalogue_import:{observation_id}:{fingerprint[:16]}"
-            expected[(part_key, evidence_ref, evidence_source)] = source
+            # Suggested offers assembled from an immutable product capture can
+            # have no Gem Radar observation ID. Their review is still saved as
+            # a URL-bound supplier snapshot, so retain the exact facts to match.
+            evidence_source = (f"catalogue_import:{observation_id}:{fingerprint[:16]}"
+                if observation_id else None)
+            expected[(part_key, evidence_ref)] = (source, evidence_source)
 
     if not expected:
         return proposals
     rows = (await db.execute(select(SupplierOfferEvidence).where(
         SupplierOfferEvidence.part_key.in_({key[0] for key in expected}),
         SupplierOfferEvidence.evidence_ref.in_({key[1] for key in expected}),
-        SupplierOfferEvidence.evidence_source.in_({key[2] for key in expected}),
         SupplierOfferEvidence.captured_by_admin_id > 0,
-    ))).scalars().all()
-    saved = {(row.part_key, row.evidence_ref, row.evidence_source): row for row in rows}
+    ).order_by(SupplierOfferEvidence.id.desc()))).scalars().all()
+    saved = {}
+    for row in rows:
+        saved.setdefault((row.part_key, row.evidence_ref), []).append(row)
+
+    def same_saved_snapshot(source, row):
+        try:
+            observed = datetime.fromisoformat(str(source.get('observed_at') or '').replace('Z', '+00:00'))
+            if observed.tzinfo is None:
+                return False
+            item = Decimal(str(source.get('item_gbp')))
+            delivery = Decimal(str(source.get('delivery_gbp') if source.get('postage_verified') is True else '0'))
+        except (ValueError, TypeError, InvalidOperation):
+            return False
+        expected_stock = bool(source.get('active_listing') and source.get('stock_status') in {'available', 'in_stock'})
+        expected_delivery_source = delivery_estimate_source_label(source.get('delivery_estimate_source'))
+        return bool(
+            row.condition == source.get('condition')
+            and row.item_gbp == item
+            and row.delivery_gbp == delivery
+            and row.stock_confirmed is expected_stock
+            and row.observed_at.astimezone(timezone.utc) == observed.astimezone(timezone.utc)
+            and row.delivery_working_days == source.get('delivery_working_days')
+            and row.delivery_estimate_source == expected_delivery_source
+        )
     for proposal in proposals:
         for part in proposal.get('components', []):
             source = part.get('source_observation')
@@ -2963,8 +2997,13 @@ async def annotate_supplier_cost_reviews(db, proposals):
             part_key = (f"case:{part['case_catalogue_id']}" if part.get('role') == 'case'
                 and part.get('case_catalogue_id') else f"variant:{part.get('variant_id')}")
             evidence_ref = bounded_evidence_reference(str(source.get('url') or ''))
-            evidence_source = f"catalogue_import:{source.get('observation_id')}:{str(source.get('fingerprint') or '')[:16]}"
-            row = saved.get((part_key, evidence_ref, evidence_source))
+            candidates = saved.get((part_key, evidence_ref), [])
+            observation_id = source.get('observation_id')
+            evidence_source = (f"catalogue_import:{observation_id}:{str(source.get('fingerprint') or '')[:16]}"
+                if observation_id else None)
+            row = next((candidate for candidate in candidates
+                if (evidence_source and candidate.evidence_source == evidence_source)
+                or same_saved_snapshot(source, candidate)), None)
             part['source_observation'] = {**source,
                 'supplier_cost_reviewed': bool(row),
                 'supplier_cost_reviewed_at': row.captured_at.isoformat() if row else None}
@@ -3656,11 +3695,8 @@ async def run_playbook_refresh(actor_id=0,progress=None):
                 stage_seconds[name]=round(perf_counter()-started,3)
 
         try:
-            # Amazon remains the hardware demand/catalogue source. OS licence
-            # costs are sourced from the selected specialist key catalogue.
-            from app.services.royalcdkeys_catalogue_sync import refresh_royalcdkeys_os_catalogue
-            await timed_stage('royalcdkeys_seconds',lambda:refresh_royalcdkeys_os_catalogue(db))
-            await db.commit()
+            # Amazon remains the hardware demand/catalogue source. Software
+            # prices and evidence come from the selected Gamers Outlet capture.
             bestseller_refresh=await timed_stage('amazon_bestsellers_seconds',lambda:
                 scrape_amazon_component_bestsellers(
                     categories=['cpu','gpu','ram','storage','motherboard','psu','cooler','case'], reconcile_catalogue=False))

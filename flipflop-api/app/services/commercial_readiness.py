@@ -627,7 +627,7 @@ async def _product_page_source_preview(db, listing, archived=None):
     prime_eligible = capture.get('prime_eligible') if isinstance(capture.get('prime_eligible'), bool) else None
     delivery_days = capture.get('delivery_working_days')
     delivery_source = capture.get('delivery_estimate_source')
-    if capture.get('digital_product') is True and host in {'gamers-outlet.net','www.gamers-outlet.net','royalcdkeys.com'}:
+    if capture.get('digital_product') is True and host in {'gamers-outlet.net','www.gamers-outlet.net'}:
         delivery_days,delivery_source=0,'digital_delivery'
     if delivery_days is None:
         # Exact listing-level fallback: a visibly Prime-marked offer gets the

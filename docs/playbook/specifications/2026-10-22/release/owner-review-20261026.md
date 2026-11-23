@@ -15,7 +15,6 @@ This update supersedes the time-sensitive supplier counts, prices and blockers i
 - The live source refresh and post-refresh strict rebuild both completed. The refreshed DEV catalogue produced **24/24 complete hardware BOMs** across all 8 segments; all 24 pass the current compatibility gate.
 - The source refresh scraped **700 Amazon bestseller rows across 8 hardware categories**, matched 384, with zero category errors. Exact supplier capture attempted 64 offers: 20 captured, 43 unresolved, and 1 retained; 14 Amazon pages showed no active seller offer and 29 did not expose one selected GBP price.
 - **0/24 proposals are ready for approval**; no build has an approved or public selling price. Nothing was published.
-- All 24 proposals still block on Windows licence-source review. Gamers Outlet has 2 fresh captured Windows offers, but 0 reviewed and 0 enabled. The refresh incorrectly still called the retired RoyalCDKeys discovery source, which returned HTTP 429; it did not discover Office products.
 - The current proposals contain additional stale/unknown stock blockers: Titan (storage); Goddard, Odyssey, Rhode Island, Protostar, Prometheus and Galaxy (storage); Odyssey, Rhode Island, Prometheus (RAM); Enterprise (case and storage). Protostar RAM also has non-new evidence.
 - The proposal BOMs have approved photos for all selected listings. Nine distinct proposed products lack FINAL 3D models; current product rules allow eligible builds to proceed with approved photos. This is not the current publication blocker.
 - Only 2/24 builds have all three delivery modes priced. Standard is priced for the draft BOMs; Fast Track and Flex availability depends on verified stock/ETA and a genuine saving. No customer price is approved.
@@ -59,7 +58,6 @@ The audit lists **27 distinct hardware supplier products** across **105 proposal
 
 ### Windows software source
 
-The two Gamers Outlet Windows product captures remain disabled pending source review. The seller page and captured price do not establish commercial resale rights. Keep the keys disabled until the exact licence channel, entitlement and resale basis are supported by acceptable documentation. The refresh should use the chosen Gamers Outlet source instead of calling RoyalCDKeys. Office Professional Plus and Office Standard are not yet captured in this catalogue.
 
 ### Build approval and customer flow
 

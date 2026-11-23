@@ -7,6 +7,7 @@ import { TopCommandBar } from "@/components/top-command-bar";
 import { FaviconAnimator } from "@/components/favicon-animator";
 import { HermesProvider } from "@/components/hermes-context";
 import { HermesCompanion } from "@/components/hermes-companion";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "FlipFlop",
@@ -49,6 +50,7 @@ export default function RootLayout({
         </div>
 
         <BackendStatus />
+        <Toaster position="top-right" richColors closeButton />
       </body>
     </html>
   );
