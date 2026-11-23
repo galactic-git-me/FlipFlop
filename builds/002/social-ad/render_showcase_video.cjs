@@ -37,12 +37,14 @@ function startServer() {
     page.on('requestfailed', r => errors.push(`Request failed: ${r.url()} ${r.failure()?.errorText}`));
     page.on('response', r => { if (r.status() >= 400) errors.push(`HTTP ${r.status()}: ${r.url()}`); });
     await page.goto(`http://127.0.0.1:${port}/builds/002/social-ad/showcase.html`, { waitUntil: 'networkidle', timeout: 60000 });
-    await page.waitForFunction(() => typeof window.adSetAngle === 'function', null, { timeout: 90000 });
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForFunction(() => typeof window.adSetFrame === 'function', null, { timeout: 90000 });
     for (let i = 0; i < 72; i++) {
-      await page.evaluate(angle => window.adSetAngle(angle), Math.PI * 2 * i / 72);
+      await page.evaluate(({ angle, phase }) => window.adSetFrame(angle, phase), { angle: Math.PI * 2 * i / 72, phase: i / 72 * 100 });
       await page.locator('.ad').screenshot({ path: path.join(frames, `frame-${String(i).padStart(3, '0')}.png`), animations: 'disabled' });
     }
     await page.locator('.ad').screenshot({ path: path.join(output, 'showcase-preview.png') });
+    await page.locator('.ad').screenshot({ path: path.join(output, 'prometheus-black-friday-1080x1350.png'), animations: 'disabled' });
     const ffmpeg = 'C:/Users/mclar/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-8.1.2-full_build/bin/ffmpeg.exe';
     const encode = spawnSync(ffmpeg, ['-y', '-hide_banner', '-loglevel', 'error', '-framerate', '8', '-i', path.join(frames, 'frame-%03d.png'), '-vf', 'scale=720:900:flags=lanczos,fps=24,format=yuv420p', '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', '-movflags', '+faststart', path.join(output, 'prometheus-black-friday-animated.mp4')], { encoding: 'utf8' });
     if (encode.status !== 0) throw new Error(`FFmpeg encoding failed: ${encode.stderr}`);
