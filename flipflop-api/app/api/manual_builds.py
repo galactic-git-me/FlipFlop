@@ -1612,6 +1612,7 @@ async def decide_ebay_refund_review(
         event_metadata={
             "build_id": build.id,
             "order_id": build.ebay_order_id,
+            "listing_id": str((latest_refund.event_metadata or {}).get("listing_id") or build.ebay_listing_id or ""),
             "refund_event_id": latest_refund.id,
             "decision": body.decision,
             "actor_id": getattr(admin, "id", None),

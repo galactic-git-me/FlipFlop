@@ -47,28 +47,43 @@ async def get_reviewed_refund_decision(db, build: ManualBuild) -> str | None:
     from app.models.listing_publish_event import ListingPublishEvent
 
     events = (await db.execute(
-        select(ListingPublishEvent)
+        select(ListingPublishEvent, ChannelListing.external_listing_id)
         .join(ChannelListing, ListingPublishEvent.channel_listing_id == ChannelListing.id)
         .where(
             ChannelListing.manual_build_id == build.id,
             ListingPublishEvent.event_type.in_(("refund_detected", "refund_relist_decision")),
         )
         .order_by(ListingPublishEvent.id.asc())
-    )).scalars().all()
+    )).all()
     latest_refund_id = None
+    latest_refund_listing_id = None
     decisions: dict[int, str] = {}
-    for event in events:
+    decision_listing_ids: dict[int, str | None] = {}
+    for event, channel_listing_id in events:
         metadata = event.event_metadata or {}
         if metadata.get("order_id") != build.ebay_order_id:
             continue
         if event.event_type == "refund_detected":
             latest_refund_id = event.id
+            latest_refund_listing_id = str(
+                metadata.get("listing_id") or channel_listing_id or ""
+            )
         elif event.event_type == "refund_relist_decision":
             refund_event_id = metadata.get("refund_event_id")
             if isinstance(refund_event_id, int):
                 decisions[refund_event_id] = str(metadata.get("decision") or "")
+                decision_listing_ids[refund_event_id] = str(
+                    metadata.get("listing_id") or channel_listing_id or ""
+                )
     decision = decisions.get(latest_refund_id)
-    return decision if decision in {"relist", "keep_offline"} else None
+    reviewed_listing_id = decision_listing_ids.get(latest_refund_id) or latest_refund_listing_id
+    if (
+        decision in {"relist", "keep_offline"}
+        and reviewed_listing_id
+        and reviewed_listing_id == str(build.ebay_listing_id or "")
+    ):
+        return decision
+    return None
 
 
 async def reconcile_manual_build_listing(

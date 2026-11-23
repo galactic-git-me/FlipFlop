@@ -95,6 +95,7 @@ async def test_inventory_sale_cycle_can_cancel_and_sell_the_same_unit_again(db):
     await db.flush()
     build = await orchestration_build_for(db, manual_build)
     unit = InventoryUnit(inventory_item_id=item.id, unit_number=1, status="consumed")
+    other_build_unit = InventoryUnit(inventory_item_id=item.id, unit_number=2, status="sold")
     db.add_all([
         InventoryAllocation(
             inventory_item_id=item.id,
@@ -104,20 +105,30 @@ async def test_inventory_sale_cycle_can_cancel_and_sell_the_same_unit_again(db):
             cost_per_unit_at_allocation=100,
         ),
         unit,
+        other_build_unit,
     ])
     await db.flush()
 
     await record_sale(db, manual_build, 500)
     await db.flush()
     assert unit.status == "sold"
+    assert other_build_unit.status == "sold"
+    await record_sale(db, manual_build, 500)
+    await db.flush()
+    assert other_build_unit.status == "sold"
 
     await record_sale_cancellation(db, manual_build, source="test")
     await db.flush()
     assert unit.status == "consumed"
+    assert other_build_unit.status == "sold"
+    await record_sale_cancellation(db, manual_build, source="test")
+    await db.flush()
+    assert other_build_unit.status == "sold"
 
     await record_sale(db, manual_build, 450)
     await db.flush()
     assert unit.status == "sold"
+    assert other_build_unit.status == "sold"
     await record_sale(db, manual_build, 450)
     await db.commit()
 

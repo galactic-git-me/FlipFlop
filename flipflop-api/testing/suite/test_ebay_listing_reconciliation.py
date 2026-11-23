@@ -352,3 +352,33 @@ async def test_reviewed_refund_is_not_reclassified_as_the_same_historical_sale(m
     assert build.ebay_order_id == order_id
     assert build.ebay_listing_end_reason == "refund_reviewed"
     inventory_sale.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_refund_decision_does_not_apply_to_a_replacement_listing():
+    from app.services.ebay_listing_reconciliation import get_reviewed_refund_decision
+
+    order_id = "05-15450-52548"
+    refund = SimpleNamespace(
+        id=30,
+        event_type="refund_detected",
+        event_metadata={"order_id": order_id, "listing_id": "198786792744"},
+    )
+    decision = SimpleNamespace(
+        id=31,
+        event_type="refund_relist_decision",
+        event_metadata={
+            "order_id": order_id,
+            "listing_id": "198786792744",
+            "refund_event_id": 30,
+            "decision": "relist",
+        },
+    )
+    db = AsyncMock()
+    db.execute.return_value = SimpleNamespace(all=lambda: [(refund, "198786792744"), (decision, "198786792744")])
+
+    replacement = SimpleNamespace(id=49, ebay_order_id=order_id, ebay_listing_id="199000000001")
+    original = SimpleNamespace(id=49, ebay_order_id=order_id, ebay_listing_id="198786792744")
+
+    assert await get_reviewed_refund_decision(db, replacement) is None
+    assert await get_reviewed_refund_decision(db, original) == "relist"
