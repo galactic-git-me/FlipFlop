@@ -1,0 +1,1 @@
+Model loaded and 72 rotation frames rendered. Browser errors: ["ProgressEvent","ProgressEvent","ProgressEvent","ProgressEvent","ProgressEvent","ProgressEvent","Failed to load resource: the server responded with a status of 404 (Not Found)","ProgressEvent","ProgressEvent","ProgressEvent","ProgressEvent","ProgressEvent"]

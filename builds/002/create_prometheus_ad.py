@@ -63,12 +63,13 @@ def compose(frame=0, animate=False):
     panel = (35, 346, 1045, 880)
     rr(draw, panel, 28, (8, 14, 23), outline=(69, 104, 148), width=2)
     photo = Image.open(MEDIA / '1757491c53e246808aa45d69e2b48185.png').convert('RGB')
-    # Cover the showcase window while preserving the complete tower.
+    # Contain the complete machine in a widescreen product showcase.
     pw, ph = 960, 492
-    scale = max(pw / photo.width, ph / photo.height)
+    scale = min(pw / photo.width, ph / photo.height)
     photo = photo.resize((round(photo.width * scale), round(photo.height * scale)), Image.Resampling.LANCZOS)
-    crop_x, crop_y = (photo.width - pw) // 2, (photo.height - ph) // 2
-    photo = photo.crop((crop_x, crop_y, crop_x + pw, crop_y + ph))
+    canvas = Image.new('RGB', (pw, ph), (9, 17, 28))
+    canvas.paste(photo, ((pw - photo.width) // 2, (ph - photo.height) // 2))
+    photo = canvas
     im.paste(photo, ((W - pw) // 2, 362))
     # Soft vignette fades the real room photograph into the cinematic ad.
     fade = Image.new('RGBA', (W, 520), (0, 0, 0, 0))
@@ -77,10 +78,10 @@ def compose(frame=0, animate=False):
         alpha = int(215 * (1 - i / 100) ** 2)
         fd.line((35, i, 1045, i), fill=(5, 10, 17, alpha), width=1)
         fd.line((35, 520-i, 1045, 520-i), fill=(5, 10, 17, alpha), width=1)
-    # Keep the upper photo vivid: only feather its lower edge into the dark panel.
-    for i in range(110):
-        alpha = int(235 * (i / 109) ** 2)
-        fd.line((35, 410 + i, 1045, 410 + i), fill=(5, 10, 17, alpha), width=1)
+    # Keep the photograph vivid; feather only its lower edge into the panel.
+    for i in range(105):
+        alpha = int(230 * (i / 104) ** 2)
+        fd.line((60, 760 + i, 1020, 760 + i), fill=(5, 10, 17, alpha), width=1)
     im.paste(fade, (0, 346), fade)
     draw = ImageDraw.Draw(im)
     rr(draw, (65, 378, 289, 423), 17, (7, 12, 19, 226), outline=(255, 172, 53), width=1)
