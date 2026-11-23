@@ -104,7 +104,7 @@ export function TopCommandBar() {
       try {
         const [recent, allTime] = await Promise.all([
           api.adminPerformance.summary(30),
-          api.adminPerformance.summary(36500),
+          api.adminPerformance.summary(365),
         ]);
         if (active) {
           setSalesSummary({
@@ -330,20 +330,20 @@ export function TopCommandBar() {
           </Link>
           <Link
             href="/performance"
-            title="Total recorded revenue"
+            title="Recorded revenue over the last 365 days"
             className="inline-flex items-center gap-1.5 rounded-md border border-cyan-300/20 bg-cyan-400/5 px-2 py-1.5 text-[9px] font-semibold uppercase tracking-wide text-slate-300 transition hover:border-cyan-300/40 hover:bg-cyan-400/10"
           >
-            Total Rev
+            Rev 365d
             <span className="min-w-5 rounded-full bg-cyan-400/15 px-1.5 py-0.5 text-center text-[10px] tabular-nums text-cyan-200">
               {salesSummary ? formatHeaderCurrency(salesSummary.revenue) : "—"}
             </span>
           </Link>
           <Link
             href="/performance"
-            title="Total recorded profit"
+            title="Recorded profit over the last 365 days"
             className="inline-flex items-center gap-1.5 rounded-md border border-emerald-300/20 bg-emerald-400/5 px-2 py-1.5 text-[9px] font-semibold uppercase tracking-wide text-slate-300 transition hover:border-emerald-300/40 hover:bg-emerald-400/10"
           >
-            Total Profit
+            Profit 365d
             <span className="min-w-5 rounded-full bg-emerald-400/15 px-1.5 py-0.5 text-center text-[10px] tabular-nums text-emerald-200">
               {salesSummary ? formatHeaderCurrency(salesSummary.profit) : "—"}
             </span>
