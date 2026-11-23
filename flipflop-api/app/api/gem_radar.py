@@ -736,7 +736,17 @@ _MOBILE_CPU_SUFFIX_RE = re.compile(r"\b(?:i[3579]|ryzen\s*[3579])-?\s*\d{3,5}[a-
 #   - CPU: Ryzen 3000-series+ (Zen2, 2019) or Intel 10th-gen+ (Comet Lake, 2020).
 #   - GPU: GeForce RTX-series or GTX 16-series, or Radeon RX 5000-series+.
 #     Excludes GTX 10-series and older, RX 500-series and older.
-_MODERN_MOBO_SOCKET_RE = re.compile(r"\b(?:am4|am5|lga\s*1200|lga\s*1700|lga\s*1851)\b", re.IGNORECASE)
+# Many motherboard bundles name the chipset/model rather than the CPU socket.
+# Recognise chipsets on the same supported desktop platforms so current boards
+# such as Z790 are not hidden merely because "LGA1700" is absent from the title.
+_MODERN_MOBO_SOCKET_RE = re.compile(
+    r"\b(?:am4|am5|lga\s*1200|lga\s*1700|lga\s*1851|"
+    r"a320|b350|x370|b450|x470|a520|b550|x570|"
+    r"a620|b650e?|x670e?|b840|b850|x870e?|"
+    r"h410|b460|h470|z490|h510|b560|h570|z590|"
+    r"h610|b660|h670|z690|b760|h770|z790|h810|b860|z890)\b",
+    re.IGNORECASE,
+)
 _MODERN_CPU_RE = re.compile(
     r"\bryzen\s*[3579]\s*[1-9]\d{2,3}[x]?\b|i[357](?:\s+Core)?[\s-]*[8-9][0-9]{3}|i9(?:\s+Core)?[\s-]*[89][0-9]{3}|i[3579](?:\s+Core)?[\s-]*1[0-9]{3}", re.IGNORECASE
 )
