@@ -157,21 +157,29 @@ async def record_sale(db: AsyncSession, manual_build: ManualBuild, sale_price: f
     )
     allocations = result.scalars().all()
     for allocation in allocations:
-        existing = await db.execute(select(InventoryEvent.id).where(
+        last_sale = await db.execute(select(InventoryEvent.id).where(
             InventoryEvent.inventory_item_id == allocation.inventory_item_id,
             InventoryEvent.manual_build_id == manual_build.id,
             InventoryEvent.event_type == "sold",
-        ))
-        if existing.scalar_one_or_none() is not None:
-            continue
-        add_event(
-            db,
-            inventory_item_id=allocation.inventory_item_id,
-            manual_build_id=manual_build.id,
-            event_type="sold",
-            quantity=allocation.quantity_allocated,
-            detail={"sale_price": sale_price},
-        )
+        ).order_by(InventoryEvent.id.desc()).limit(1))
+        last_cancellation = await db.execute(select(InventoryEvent.id).where(
+            InventoryEvent.inventory_item_id == allocation.inventory_item_id,
+            InventoryEvent.manual_build_id == manual_build.id,
+            InventoryEvent.event_type == "sale_cancelled",
+        ).order_by(InventoryEvent.id.desc()).limit(1))
+        last_sale_id = last_sale.scalar_one_or_none()
+        last_cancellation_id = last_cancellation.scalar_one_or_none()
+        if last_sale_id is None or (last_cancellation_id is not None and last_cancellation_id > last_sale_id):
+            add_event(
+                db,
+                inventory_item_id=allocation.inventory_item_id,
+                manual_build_id=manual_build.id,
+                event_type="sold",
+                quantity=allocation.quantity_allocated,
+                detail={"sale_price": sale_price},
+            )
+        # Repair the physical-unit state even if the sale event already exists:
+        # a later cancellation may have returned the unit to consumed inventory.
         unit_result = await db.execute(select(InventoryUnit).where(
             InventoryUnit.inventory_item_id == allocation.inventory_item_id,
             InventoryUnit.status.in_(["consumed", "reserved"]),
@@ -192,16 +200,24 @@ async def record_sale_cancellation(db: AsyncSession, manual_build: ManualBuild, 
     )).scalars().all()
     restored = 0
     for allocation in allocations:
-        existing = await db.execute(select(InventoryEvent.id).where(
+        last_sale = await db.execute(select(InventoryEvent.id).where(
+            InventoryEvent.inventory_item_id == allocation.inventory_item_id,
+            InventoryEvent.manual_build_id == manual_build.id,
+            InventoryEvent.event_type == "sold",
+        ).order_by(InventoryEvent.id.desc()).limit(1))
+        last_cancellation = await db.execute(select(InventoryEvent.id).where(
             InventoryEvent.inventory_item_id == allocation.inventory_item_id,
             InventoryEvent.manual_build_id == manual_build.id,
             InventoryEvent.event_type == "sale_cancelled",
-        ))
-        if existing.scalar_one_or_none() is not None:
-            continue
-        add_event(db, inventory_item_id=allocation.inventory_item_id,
-            manual_build_id=manual_build.id, event_type="sale_cancelled",
-            quantity=allocation.quantity_allocated, detail={"source": source})
+        ).order_by(InventoryEvent.id.desc()).limit(1))
+        last_sale_id = last_sale.scalar_one_or_none()
+        last_cancellation_id = last_cancellation.scalar_one_or_none()
+        if last_sale_id is not None and (
+            last_cancellation_id is None or last_sale_id > last_cancellation_id
+        ):
+            add_event(db, inventory_item_id=allocation.inventory_item_id,
+                manual_build_id=manual_build.id, event_type="sale_cancelled",
+                quantity=allocation.quantity_allocated, detail={"source": source})
         unit = (await db.execute(select(InventoryUnit).where(
             InventoryUnit.inventory_item_id == allocation.inventory_item_id,
             InventoryUnit.status == "sold",

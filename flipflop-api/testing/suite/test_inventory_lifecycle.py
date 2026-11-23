@@ -3,11 +3,13 @@ from datetime import datetime
 import pytest
 from sqlalchemy import select
 
-from app.models import InventoryAllocation, InventoryEvent, InventoryItem, ManualBuild
+from app.models import InventoryAllocation, InventoryEvent, InventoryItem, InventoryUnit, ManualBuild
 from app.services.inventory_lifecycle import (
     apply_inventory_component,
     orchestration_build_for,
     record_consumption,
+    record_sale,
+    record_sale_cancellation,
     release_manual_build_inventory,
 )
 
@@ -83,3 +85,50 @@ async def test_marking_build_records_consumption_once(db):
     await db.commit()
     events = (await db.execute(select(InventoryEvent).where(InventoryEvent.event_type == "consumed"))).scalars().all()
     assert len(events) == 1
+
+
+@pytest.mark.asyncio
+async def test_inventory_sale_cycle_can_cancel_and_sell_the_same_unit_again(db):
+    manual_build = ManualBuild(name="Resold build", components=[], status="built")
+    item = InventoryItem(component_name="CPU", component_type="cpu", quantity=1, base_price=100)
+    db.add_all([manual_build, item])
+    await db.flush()
+    build = await orchestration_build_for(db, manual_build)
+    unit = InventoryUnit(inventory_item_id=item.id, unit_number=1, status="consumed")
+    db.add_all([
+        InventoryAllocation(
+            inventory_item_id=item.id,
+            build_id=build.id,
+            flip_id=None,
+            quantity_allocated=1,
+            cost_per_unit_at_allocation=100,
+        ),
+        unit,
+    ])
+    await db.flush()
+
+    await record_sale(db, manual_build, 500)
+    await db.flush()
+    assert unit.status == "sold"
+
+    await record_sale_cancellation(db, manual_build, source="test")
+    await db.flush()
+    assert unit.status == "consumed"
+
+    await record_sale(db, manual_build, 450)
+    await db.flush()
+    assert unit.status == "sold"
+    await record_sale(db, manual_build, 450)
+    await db.commit()
+
+    sale_events = (await db.execute(select(InventoryEvent).where(
+        InventoryEvent.manual_build_id == manual_build.id,
+        InventoryEvent.event_type == "sold",
+    ))).scalars().all()
+    cancellation_events = (await db.execute(select(InventoryEvent).where(
+        InventoryEvent.manual_build_id == manual_build.id,
+        InventoryEvent.event_type == "sale_cancelled",
+    ))).scalars().all()
+    assert len(sale_events) == 2
+    assert len(cancellation_events) == 1
+    assert unit.status == "sold"
