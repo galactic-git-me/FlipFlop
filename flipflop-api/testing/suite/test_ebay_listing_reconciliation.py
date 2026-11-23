@@ -307,3 +307,48 @@ async def test_paid_order_records_sale_provenance_and_queues_dispatch(
         source="ebay_fulfillment_order_api",
         account="flip_7417",
     )
+
+
+@pytest.mark.asyncio
+async def test_reviewed_refund_is_not_reclassified_as_the_same_historical_sale(monkeypatch):
+    from app.services.ebay_listing_reconciliation import reconcile_manual_build_listing
+
+    order_id = "05-15450-52548"
+    build = SimpleNamespace(
+        id=48,
+        status="built",
+        ebay_listing_id="198786792744",
+        ebay_listing_url="https://www.ebay.co.uk/itm/198786792744",
+        ebay_listing_status="unknown",
+        ebay_listing_status_checked_at=None,
+        ebay_listing_end_reason="refund_reviewed",
+        ebay_order_id=order_id,
+        sale_price_actual=1400.0,
+        dispatch_status="refunded",
+        ebay_sku="FF-BUILD-48",
+        warranty_started_at=None,
+        delivered_at=None,
+        storefront_product_id=None,
+        status_marker=None,
+    )
+    db = AsyncMock()
+    order = SimpleNamespace(order_id=order_id, sale_price=1400.0)
+    inventory_sale = AsyncMock()
+
+    monkeypatch.setattr("app.config.get_settings", lambda: SimpleNamespace(ebay_listing_environment="production"))
+    monkeypatch.setattr("app.services.ebay_listing_reconciliation.get_reviewed_refund_decision",
+        AsyncMock(return_value="relist"))
+    monkeypatch.setattr("app.services.ebay_token_manager.get_valid_ebay_access_token", AsyncMock(return_value="token"))
+    monkeypatch.setattr("app.services.ebay_trading_api.get_item_status", AsyncMock(return_value={
+        "listing_status": "Completed", "quantity_sold": 1,
+    }))
+    monkeypatch.setattr("app.services.ebay_order_sync.find_order_for_listing", AsyncMock(return_value=order))
+    monkeypatch.setattr("app.services.inventory_lifecycle.record_sale", inventory_sale)
+
+    state = await reconcile_manual_build_listing(build, db, force=True)
+
+    assert state == "ended"
+    assert build.status == "built"
+    assert build.ebay_order_id == order_id
+    assert build.ebay_listing_end_reason == "refund_reviewed"
+    inventory_sale.assert_not_awaited()
