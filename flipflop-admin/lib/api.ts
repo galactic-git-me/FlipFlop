@@ -1241,7 +1241,10 @@ export const api = {
     scanScheduleStatus: () =>
       requestGemRadar<ScanScheduleStatus>("/scan-schedule-status"),
     extensionStatus: (environment?: "DEV" | "LIVE") =>
-      requestGemRadar<{
+      // Extension heartbeats are posted to the main API (the extension's
+      // configured production backend). Read them from that same API instead
+      // of the web-only Gem Radar service, whose in-memory status is separate.
+      request<{
         state: "offline" | "idle" | "scanning" | "error";
         lastHeartbeat: string | null;
         lastScan: string | null;
@@ -1249,7 +1252,7 @@ export const api = {
         activeSearches: number;
         extensionVersion: string | null;
         environment: "DEV" | "LIVE" | null;
-      }>(`/extension-status${environment ? `?environment=${environment}` : ""}`, { cache: "no-store", signal: AbortSignal.timeout(4_000) }),
+      }>(`/gem-radar/extension-status${environment ? `?environment=${environment}` : ""}`, { cache: "no-store", signal: AbortSignal.timeout(4_000) }),
   },
 
   flips: {
