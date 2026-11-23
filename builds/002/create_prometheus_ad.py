@@ -1,6 +1,5 @@
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from pathlib import Path
-import math, random, subprocess
 
 ROOT = Path(__file__).resolve().parent
 MEDIA = ROOT / 'Media'
@@ -20,7 +19,7 @@ def font(name, size):
 def rr(draw, box, radius, fill, outline=None, width=1):
     draw.rounded_rectangle(box, radius=radius, fill=fill, outline=outline, width=width)
 
-def base_frame(frame=0):
+def base_frame():
     im = Image.new('RGB', (W, H), BG)
     # Low-key blue/orange atmosphere, kept behind the typography.
     glow = Image.new('RGBA', (W, H), (0, 0, 0, 0))
@@ -37,8 +36,8 @@ def base_frame(frame=0):
     im = Image.alpha_composite(im.convert('RGBA'), grid).convert('RGB')
     return im
 
-def compose(frame=0, animate=False):
-    im = base_frame(frame)
+def compose():
+    im = base_frame()
     draw = ImageDraw.Draw(im)
 
     # Brand lockup: use the supplied genuine FlipFlop logo artwork.
@@ -119,29 +118,11 @@ def compose(frame=0, animate=False):
     draw.text((777, 1260), 'SHOP THE FIRST BUILD  →', font=font('arialbd.ttf', 16), fill=GOLD)
     draw.text((935, 1315), 'theflipflop.shop', font=font('arialbd.ttf', 15), fill=WHITE)
 
-    if animate:
-        # A restrained parallax sweep plus animated orange/blue perimeter light.
-        sweep_x = int(-380 + ((frame * 19) % 1570))
-        overlay = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-        od = ImageDraw.Draw(overlay)
-        od.polygon([(sweep_x, 346), (sweep_x + 90, 346), (sweep_x + 380, 880), (sweep_x + 290, 880)], fill=(91, 174, 255, 14))
-        od.rounded_rectangle((35, 346, 1045, 880), radius=28, outline=(70, 144, 255, 70 + (frame % 8) * 5), width=2)
-        im = Image.alpha_composite(im.convert('RGBA'), overlay).convert('RGB')
     return im
 
 def main():
     # Static 4:5 paid/social feed master.
     compose().save(OUT / 'prometheus-black-friday-1080x1350.png', optimize=True)
-    # Short 9-second 720x900 animated feed/reel edit; slow cinematic sweep.
-    frames_dir = OUT / 'frames'
-    frames_dir.mkdir(exist_ok=True)
-    for i in range(36):
-        frame = compose(i, True).resize((720, 900), Image.Resampling.LANCZOS)
-        frame.save(frames_dir / f'frame-{i:03}.png', optimize=True)
-    ffmpeg = 'C:/Users/mclar/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-8.1.2-full_build/bin/ffmpeg.exe'
-    subprocess.run([ffmpeg, '-y', '-hide_banner', '-loglevel', 'error', '-framerate', '4', '-i', str(frames_dir / 'frame-%03d.png'),
-                    '-vf', 'fps=24,format=yuv420p', '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', '-movflags', '+faststart',
-                    str(OUT / 'prometheus-black-friday-animated.mp4')], check=True)
 
 if __name__ == '__main__':
     main()
