@@ -21,9 +21,11 @@ def classify_ebay_listing_state(
     """Pure lifecycle decision used by reconciliation and unit tests."""
     remote_status = str((remote or {}).get("listing_status") or "").lower()
     quantity_sold = 0 if cancelled_order else int((remote or {}).get("quantity_sold") or 0)
+    if order_found:
+        return "sold"
     if remote_status in {"active", "started"}:
         return "active"
-    if order_found or quantity_sold > 0:
+    if quantity_sold > 0:
         return "sold"
     if confirmed_unavailable:
         return "missing"
@@ -122,7 +124,7 @@ async def reconcile_manual_build_listing(
 
     remote_status = str((remote or {}).get("listing_status") or "").lower()
     cancelled_order = False
-    if build.status == "sold" and build.ebay_order_id:
+    if build.ebay_order_id:
         from app.services.ebay_order_sync import get_order_refund_state, is_terminal_order_cancellation
         try:
             lifecycle = await get_order_refund_state(build.ebay_order_id,
@@ -137,21 +139,28 @@ async def reconcile_manual_build_listing(
         # QuantitySold proves it. Mere disappearance is an early/manual end.
         order = None
         order_lookup_failed = False
-        if not cancelled_order:
-            try:
-                order = await find_order_for_listing(
-                    build.ebay_listing_id,
-                    environment=target_environment,
-                    lookback_days=90,
-                    db=db,
-                )
-            except EbayOrderSyncError as exc:
-                order_lookup_failed = True
-                log.warning(
-                    "manual_build.ebay_order_reconcile_failed",
-                    build_id=build.id,
-                    error=str(exc),
-                )
+        try:
+            order = await find_order_for_listing(
+                build.ebay_listing_id,
+                environment=target_environment,
+                lookback_days=90,
+                db=db,
+            )
+        except EbayOrderSyncError as exc:
+            order_lookup_failed = True
+            log.warning(
+                "manual_build.ebay_order_reconcile_failed",
+                build_id=build.id,
+                error=str(exc),
+            )
+        if cancelled_order and order is not None:
+            if order.order_id == build.ebay_order_id:
+                # The API's paid-order search can still return a cancelled
+                # order. Ignore that historical sale while preserving the
+                # chance to recognize a later, distinct order for this item.
+                order = None
+            else:
+                cancelled_order = False
         # Error 17 means this seller cannot access the old item. After eBay's
         # order lookup succeeds and finds no sale, let the relist cycle create
         # a fresh listing with a new ID. Network/auth errors remain unknown.

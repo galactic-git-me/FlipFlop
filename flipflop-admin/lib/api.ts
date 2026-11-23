@@ -424,6 +424,7 @@ export interface ManualBuildSummary {
 }
 
 export interface ManualBuildSaleAlert extends ManualBuildSummary {
+  sale_event_id?: number | null;
   dispatch_status: string;
   sale_channel: string | null;
   sale_account: string | null;

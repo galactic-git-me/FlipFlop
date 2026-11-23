@@ -103,6 +103,51 @@ async def test_operator_channel_status_correction_is_audited(db):
 
 
 @pytest.mark.asyncio
+async def test_operator_marking_channel_sold_withdraws_other_channels(db):
+    build = await make_build(db)
+    ebay = ChannelListing(
+        manual_build_id=build.id,
+        channel="ebay_uk",
+        status="published",
+        external_listing_id="198786792744",
+        listing_url="https://www.ebay.co.uk/itm/198786792744",
+    )
+    vinted = ChannelListing(
+        manual_build_id=build.id,
+        channel="vinted",
+        status="published",
+        external_listing_id="vinted-123",
+        listing_url="https://www.vinted.co.uk/items/vinted-123",
+    )
+    db.add_all([ebay, vinted])
+    await db.flush()
+
+    result = await set_channel_status(
+        build.id,
+        "ebay_uk",
+        ManualChannelStatusIn(status="sold", reason="Verified sold in seller account"),
+        db,
+    )
+
+    assert result["status"] == "sold"
+    assert build.status == "sold"
+    assert ebay.status == "sold"
+    assert vinted.status == "withdrawal_pending"
+    withdrawal = (await db.execute(select(BrowserListingJob).where(
+        BrowserListingJob.channel_listing_id == vinted.id,
+        BrowserListingJob.operation == "withdraw",
+    ))).scalar_one()
+    assert withdrawal.status == "queued"
+
+    from app.api.manual_builds import list_sold_build_alerts
+    alert = next(item for item in await list_sold_build_alerts(db) if item["id"] == build.id)
+    assert alert["sale_channel"] == "ebay_uk"
+    assert alert["sale_source"] == "operator"
+    assert alert["sale_event_id"] is not None
+    assert alert["withdrawn_channels"] == [{"channel": "vinted", "status": "withdrawal_pending"}]
+
+
+@pytest.mark.asyncio
 async def test_operator_cannot_mark_live_without_vendor_identity(db):
     build = await make_build(db)
     with pytest.raises(HTTPException, match="confirmed live listing"):

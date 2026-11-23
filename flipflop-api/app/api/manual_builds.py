@@ -1444,12 +1444,16 @@ async def list_sold_build_alerts(db: AsyncSession = Depends(get_db)):
             .join(ListingPublishEvent, ListingPublishEvent.channel_listing_id == ChannelListing.id)
             .where(
                 ChannelListing.manual_build_id.in_(build_ids),
-                ListingPublishEvent.event_type.in_(("sale_confirmed", "seller_state_confirmed")),
+                ListingPublishEvent.event_type.in_(
+                    ("sale_confirmed", "seller_state_confirmed", "manual_status_override")
+                ),
             )
             .order_by(ListingPublishEvent.created_at.desc(), ListingPublishEvent.id.desc())
         )).all()
         for build_id, channel, event in events:
             if event.event_type == "seller_state_confirmed" and (event.event_metadata or {}).get("state") != "sold":
+                continue
+            if event.event_type == "manual_status_override" and (event.event_metadata or {}).get("status") != "sold":
                 continue
             latest_sales.setdefault(build_id, (channel, event))
 
@@ -1524,6 +1528,7 @@ async def list_sold_build_alerts(db: AsyncSession = Depends(get_db)):
             "sale_price": metadata.get("sale_price") or build.sale_price_actual,
             "sale_currency": metadata.get("currency") or "GBP",
             "sale_source": metadata.get("source") or ("sale_confirmed_event" if sale else None),
+            "sale_event_id": sale[1].id if sale else None,
             "sale_confirmed_at": sale[1].created_at if sale else None,
             "refund_review": ({
                 "required": review["decision"] is None or review["decision"].id < review["event"].id,

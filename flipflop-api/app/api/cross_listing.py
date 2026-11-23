@@ -100,10 +100,26 @@ async def set_channel_status(build_id: int, channel: str, body: ManualChannelSta
         row.withdrawn_at = None
     elif body.status in {"ended", "cancelled", "not_listed"}:
         row.withdrawn_at = now
+    elif body.status == "sold":
+        # A manual sold correction is an inventory lifecycle event, not just
+        # a label on this channel. Make the physical build unavailable and
+        # persist withdrawals for every other channel in the same transaction.
+        build.status = "sold"
+        if build.dispatch_status not in {"dispatched", "delivered"}:
+            build.dispatch_status = "awaiting_dispatch"
+        from app.services.channel_sync import withdraw_other_channels
+        from app.services.getting_started_jobs import ensure_manual_build_job
+        from app.services.inventory_lifecycle import record_sale
+        await withdraw_other_channels(db, build, source_channel=channel)
+        await record_sale(db, build, build.sale_price_actual)
+        await ensure_manual_build_job(db, manual_build_id=build.id)
     row.last_checked_at = now
     db.add(ListingPublishEvent(channel_listing_id=row.id, event_type="manual_status_override",
         message=body.reason.strip(), event_metadata={"build_id": build_id, "channel": channel,
-            "previous_status": previous, "status": row.status, "source": "operator"}))
+            "previous_status": previous, "status": row.status, "source": "operator",
+            "sale_price": build.sale_price_actual if body.status == "sold" else None,
+            "currency": "GBP", "external_listing_id": row.external_listing_id,
+            "listing_url": row.listing_url}))
     await db.commit()
     return {"build_id": build_id, "channel": channel, "status": body.status, "recorded_at": now.isoformat()}
 
