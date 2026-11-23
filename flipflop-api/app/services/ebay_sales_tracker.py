@@ -303,6 +303,7 @@ class eBaySalesTracker:
                             event_metadata={
                                 "build_id": build.id,
                                 "order_id": build.ebay_order_id,
+                                "listing_id": str(build.ebay_listing_id or channel_row.external_listing_id or ""),
                                 "refund_signature": signature,
                                 "order_payment_status": state["order_payment_status"],
                                 "cancel_state": state["cancel_state"],

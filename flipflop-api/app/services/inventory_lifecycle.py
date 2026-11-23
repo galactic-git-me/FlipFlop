@@ -157,36 +157,47 @@ async def record_sale(db: AsyncSession, manual_build: ManualBuild, sale_price: f
     )
     allocations = result.scalars().all()
     for allocation in allocations:
-        last_sale = await db.execute(select(InventoryEvent.id).where(
+        last_sale_result = await db.execute(select(InventoryEvent).where(
             InventoryEvent.inventory_item_id == allocation.inventory_item_id,
             InventoryEvent.manual_build_id == manual_build.id,
             InventoryEvent.event_type == "sold",
         ).order_by(InventoryEvent.id.desc()).limit(1))
-        last_cancellation = await db.execute(select(InventoryEvent.id).where(
+        last_cancellation_result = await db.execute(select(InventoryEvent).where(
             InventoryEvent.inventory_item_id == allocation.inventory_item_id,
             InventoryEvent.manual_build_id == manual_build.id,
             InventoryEvent.event_type == "sale_cancelled",
         ).order_by(InventoryEvent.id.desc()).limit(1))
-        last_sale_id = last_sale.scalar_one_or_none()
-        last_cancellation_id = last_cancellation.scalar_one_or_none()
-        if last_sale_id is None or (last_cancellation_id is not None and last_cancellation_id > last_sale_id):
+        last_sale = last_sale_result.scalar_one_or_none()
+        last_cancellation = last_cancellation_result.scalar_one_or_none()
+        last_sale_id = last_sale.id if last_sale else None
+        last_cancellation_id = last_cancellation.id if last_cancellation else None
+        new_sale_cycle = last_sale_id is None or (
+            last_cancellation_id is not None and last_cancellation_id > last_sale_id
+        )
+        if new_sale_cycle:
+            returned_unit_ids = (last_cancellation.detail or {}).get("inventory_unit_ids", []) if last_cancellation else []
+            if last_cancellation_id is not None and last_cancellation_id > (last_sale_id or 0) and returned_unit_ids:
+                unit_query = select(InventoryUnit).where(
+                    InventoryUnit.inventory_item_id == allocation.inventory_item_id,
+                    InventoryUnit.id.in_(returned_unit_ids),
+                    InventoryUnit.status.in_(["consumed", "reserved"]),
+                ).order_by(InventoryUnit.unit_number)
+            else:
+                unit_query = select(InventoryUnit).where(
+                    InventoryUnit.inventory_item_id == allocation.inventory_item_id,
+                    InventoryUnit.status.in_(["consumed", "reserved"]),
+                ).order_by(InventoryUnit.unit_number).limit(allocation.quantity_allocated)
+            units = (await db.execute(unit_query)).scalars().all()
+            for unit in units:
+                unit.status = "sold"
             add_event(
                 db,
                 inventory_item_id=allocation.inventory_item_id,
                 manual_build_id=manual_build.id,
                 event_type="sold",
                 quantity=allocation.quantity_allocated,
-                detail={"sale_price": sale_price},
+                detail={"sale_price": sale_price, "inventory_unit_ids": [unit.id for unit in units]},
             )
-        # Repair the physical-unit state even if the sale event already exists:
-        # a later cancellation may have returned the unit to consumed inventory.
-        unit_result = await db.execute(select(InventoryUnit).where(
-            InventoryUnit.inventory_item_id == allocation.inventory_item_id,
-            InventoryUnit.status.in_(["consumed", "reserved"]),
-        ).order_by(InventoryUnit.unit_number))
-        unit = unit_result.scalars().first()
-        if unit:
-            unit.status = "sold"
     return len(allocations)
 
 
@@ -200,29 +211,41 @@ async def record_sale_cancellation(db: AsyncSession, manual_build: ManualBuild, 
     )).scalars().all()
     restored = 0
     for allocation in allocations:
-        last_sale = await db.execute(select(InventoryEvent.id).where(
+        last_sale_result = await db.execute(select(InventoryEvent).where(
             InventoryEvent.inventory_item_id == allocation.inventory_item_id,
             InventoryEvent.manual_build_id == manual_build.id,
             InventoryEvent.event_type == "sold",
         ).order_by(InventoryEvent.id.desc()).limit(1))
-        last_cancellation = await db.execute(select(InventoryEvent.id).where(
+        last_cancellation_result = await db.execute(select(InventoryEvent).where(
             InventoryEvent.inventory_item_id == allocation.inventory_item_id,
             InventoryEvent.manual_build_id == manual_build.id,
             InventoryEvent.event_type == "sale_cancelled",
         ).order_by(InventoryEvent.id.desc()).limit(1))
-        last_sale_id = last_sale.scalar_one_or_none()
-        last_cancellation_id = last_cancellation.scalar_one_or_none()
+        last_sale = last_sale_result.scalar_one_or_none()
+        last_cancellation = last_cancellation_result.scalar_one_or_none()
+        last_sale_id = last_sale.id if last_sale else None
+        last_cancellation_id = last_cancellation.id if last_cancellation else None
         if last_sale_id is not None and (
             last_cancellation_id is None or last_sale_id > last_cancellation_id
         ):
+            sold_unit_ids = (last_sale.detail or {}).get("inventory_unit_ids", [])
+            if sold_unit_ids:
+                unit_query = select(InventoryUnit).where(
+                    InventoryUnit.inventory_item_id == allocation.inventory_item_id,
+                    InventoryUnit.id.in_(sold_unit_ids),
+                    InventoryUnit.status == "sold",
+                ).order_by(InventoryUnit.unit_number)
+            else:
+                unit_query = select(InventoryUnit).where(
+                    InventoryUnit.inventory_item_id == allocation.inventory_item_id,
+                    InventoryUnit.status == "sold",
+                ).order_by(InventoryUnit.unit_number).limit(allocation.quantity_allocated)
+            units = (await db.execute(unit_query)).scalars().all()
+            for unit in units:
+                unit.status = "consumed"
             add_event(db, inventory_item_id=allocation.inventory_item_id,
                 manual_build_id=manual_build.id, event_type="sale_cancelled",
-                quantity=allocation.quantity_allocated, detail={"source": source})
-        unit = (await db.execute(select(InventoryUnit).where(
-            InventoryUnit.inventory_item_id == allocation.inventory_item_id,
-            InventoryUnit.status == "sold",
-        ).order_by(InventoryUnit.unit_number))).scalars().first()
-        if unit:
-            unit.status = "consumed"
-            restored += 1
+                quantity=allocation.quantity_allocated,
+                detail={"source": source, "inventory_unit_ids": [unit.id for unit in units]})
+            restored += len(units)
     return restored
