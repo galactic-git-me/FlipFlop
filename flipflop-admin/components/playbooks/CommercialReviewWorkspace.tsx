@@ -132,6 +132,9 @@ function supplierEvidence(offer: PlaybookOffer) {
       : [];
   }).sort((a, b) => a.role.localeCompare(b.role) || a.listing_id - b.listing_id);
 }
+function supplierCaptureKey(role: string, listingId: number, fingerprint: string | undefined) {
+  return `${role}:${listingId}:${fingerprint || ""}`;
+}
 export default function CommercialReviewWorkspace({
   contextCellId,
   initialArea = "builds",
@@ -452,23 +455,35 @@ export default function CommercialReviewWorkspace({
     setBusy(true);
     setError(null);
     setNotice("Preparing the exact supplier captures that still need review…");
+    const saved = {
+      proposals: 0,
+      skipped_proposals: 0,
+      imported: 0,
+      reused: 0,
+      pending_roles: [] as { cell_id: string; role: string }[],
+      prices_published: false as const,
+    };
     try {
       // Supplier review is bound server-side to the current exact
-      // (role, listing, fingerprint). Avoid an extra full proposal reload and
-      // send each still-pending product only once even when several builds use
-      // the same catalogue listing.
-      const reviewFingerprints = new Map(
-        allReviewableSources.map((part) => [
-          part.listing_id,
-          part.source_observation?.fingerprint,
-        ])
+      // (role, listing, fingerprint). A listing can have multiple distinct
+      // captured observations across proposals, so dedupe by that full key.
+      // Send only captures shown as pending; already reviewed snapshots do not
+      // need another audit record.
+      const pendingCaptureKeys = new Set(
+        pendingSupplierSources.map((part) =>
+          supplierCaptureKey(
+            part.role,
+            part.listing_id,
+            part.source_observation?.fingerprint
+          )
+        )
       );
-      const reviewedListingIds = new Set<number>();
+      const reviewedCaptureKeys = new Set<string>();
       const reviewed = offers.flatMap((shown) => {
         const source_evidence = supplierEvidence(shown).filter((item) => {
-          if (reviewedListingIds.has(item.listing_id) ||
-              reviewFingerprints.get(item.listing_id) !== item.fingerprint) return false;
-          reviewedListingIds.add(item.listing_id);
+          const key = supplierCaptureKey(item.role, item.listing_id, item.fingerprint);
+          if (!pendingCaptureKeys.has(key) || reviewedCaptureKeys.has(key)) return false;
+          reviewedCaptureKeys.add(key);
           return true;
         });
         return source_evidence.length ? [{
@@ -482,14 +497,29 @@ export default function CommercialReviewWorkspace({
         setNotice("These proposals are no longer awaiting supplier review. The current Playbook list has been loaded.");
         return;
       }
-      setNotice(`Saving ${reviewedListingIds.size} exact supplier capture reviews…`);
-      const result = await api.commercialReadiness.approveAllSupplierSources(reviewed);
-      toast.success(`Supplier reviews saved: ${result.imported} new exact fact${result.imported === 1 ? "" : "s"}; ${result.reused} already approved.`);
+      // Keep each request well below the same-origin proxy's timeout. Every
+      // chunk commits independently, and progress makes partial success clear.
+      const batchSize = 4;
+      for (let offset = 0; offset < reviewed.length; offset += batchSize) {
+        const batch = reviewed.slice(offset, offset + batchSize);
+        setNotice(
+          `Saving ${reviewedCaptureKeys.size} exact supplier capture reviews… ${Math.min(offset + batch.length, reviewed.length)} of ${reviewed.length} proposal reviews submitted.`
+        );
+        const result = await api.commercialReadiness.approveAllSupplierSources(batch);
+        saved.proposals += result.proposals;
+        saved.skipped_proposals += result.skipped_proposals;
+        saved.imported += result.imported;
+        saved.reused += result.reused;
+        saved.pending_roles.push(...result.pending_roles);
+        toast.success(
+          `Supplier reviews saved for ${result.proposals} build proposal${result.proposals === 1 ? "" : "s"}: ${result.imported} new exact fact${result.imported === 1 ? "" : "s"}.`
+        );
+      }
       setNotice("Supplier evidence saved. Rebuilding proposal readiness from the reviewed captures…");
       await load();
       try {
         const rebuilt = await rebuildCaptured();
-        setNotice(`Reviewed ${result.proposals} build proposals: ${result.imported} exact supplier facts saved; ${result.reused} already approved; ${result.pending_roles.length} changed or unavailable component captures remain pending${result.skipped_proposals ? `; ${result.skipped_proposals} proposals were no longer pending` : ""}. Rebuilt ${rebuilt.cells} proposals from saved captures; unknown buying postage was costed at £0.00. No prices or products were published.`);
+        setNotice(`Reviewed ${saved.proposals} build proposals: ${saved.imported} exact supplier facts saved; ${saved.reused} already approved; ${saved.pending_roles.length} changed or unavailable component captures remain pending${saved.skipped_proposals ? `; ${saved.skipped_proposals} proposals were no longer pending` : ""}. Rebuilt ${rebuilt.cells} proposals from saved captures; unknown buying postage was costed at £0.00. No prices or products were published.`);
       } catch (reason) {
         toast.error(`Supplier reviews saved, but proposal rebuilding failed: ${reason instanceof Error ? reason.message : "unknown error"}`);
         setError(
@@ -510,11 +540,11 @@ export default function CommercialReviewWorkspace({
         return;
       }
       setError(
-        reason instanceof Error
+        `${reason instanceof Error
           ? reason.message
-          : "Could not approve the reviewed supplier facts"
+          : "Could not approve the reviewed supplier facts"}${saved.proposals ? ` Previously saved ${saved.imported} exact supplier facts across ${saved.proposals} proposals; reload to see the committed reviews.` : ""}`
       );
-      toast.error(reason instanceof Error ? reason.message : "Could not approve the reviewed supplier facts");
+      toast.error(`${reason instanceof Error ? reason.message : "Could not approve the reviewed supplier facts"}${saved.proposals ? ` ${saved.imported} exact supplier facts were already saved across ${saved.proposals} proposals.` : ""}`);
     } finally {
       setBusy(false);
     }
@@ -560,7 +590,7 @@ export default function CommercialReviewWorkspace({
       );
     }).length ?? 0;
   const allReviewableSources = Array.from(
-    new Map<number, PlaybookOffer["components"][number]>(
+    new Map<string, PlaybookOffer["components"][number]>(
       offers
         .flatMap((item) =>
           item.components.filter((part) => {
@@ -578,7 +608,10 @@ export default function CommercialReviewWorkspace({
             );
           })
         )
-        .map((part) => [part.listing_id, part] as const)
+        .map((part) => [
+          supplierCaptureKey(part.role, part.listing_id, part.source_observation?.fingerprint),
+          part,
+        ] as const)
     ).values()
   ).sort(
     (a, b) => a.role.localeCompare(b.role) || a.title.localeCompare(b.title)
@@ -1285,7 +1318,7 @@ export default function CommercialReviewWorkspace({
                         );
                         return (
                           <tr
-                            key={part.listing_id}
+                            key={supplierCaptureKey(part.role, part.listing_id, source.fingerprint)}
                             className="border-b border-slate-800"
                           >
                             <td className="p-2">
@@ -1357,6 +1390,11 @@ export default function CommercialReviewWorkspace({
                                   ? "captured within 24 hours"
                                   : "stale"}
                               </span>
+                              {source.observed_at && (
+                                <span className="mt-1 block text-slate-400">
+                                  Captured {new Date(source.observed_at).toLocaleString("en-GB")}
+                                </span>
+                              )}
                             </td>
                             <td className="p-2">
                               {money(part.listing_price_gbp)}
