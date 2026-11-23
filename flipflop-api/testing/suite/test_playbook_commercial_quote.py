@@ -266,7 +266,7 @@ class CommercialQuoteTests(unittest.TestCase):
             'Ubuntu','software',Condition.NEW,D('1'),D('0'),D('0'),D('0'),NOW.isoformat(),True,True,0))])
             ['modes']['standard']['offerable'])
 
-    def test_reviewed_royalcdkeys_digital_licence_fits_all_modes_without_delivery_delay(self):
+    def test_reviewed_gamers_outlet_digital_licence_fits_all_modes_without_delivery_delay(self):
         data=policy_data()
         data['required_part_keys']=['cpu','os']
         for name,mode in data['modes'].items():
@@ -274,7 +274,7 @@ class CommercialQuoteTests(unittest.TestCase):
         offers=[
             PartEvidence(1,'cpu',SupplierOffer('Amazon','retail',Condition.NEW,D('300'),D('5'),D('0'),D('0'),
                 NOW.isoformat(),True,True,1)),
-            PartEvidence(2,'os',SupplierOffer('royalcdkeys','software',Condition.NEW,D('5.73'),D('0'),D('0'),D('0'),
+            PartEvidence(2,'os',SupplierOffer('gamers_outlet','software',Condition.NEW,D('5.73'),D('0'),D('0'),D('0'),
                 NOW.isoformat(),True,True,0)),
         ]
         modes=self.quote(data,offers=offers)['modes']

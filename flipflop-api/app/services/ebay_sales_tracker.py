@@ -124,14 +124,16 @@ class eBaySalesTracker:
                         })
 
                 # Manual builds use the same eBay account but have their own
-                # lifecycle model. Reconcile every locally-active/unknown
+                # lifecycle model. Reconcile every locally active, unknown,
+                # ended or missing listing belonging to an available build
                 # listing so disappeared offers become sold or ended instead
                 # of remaining falsely "listed" forever.
                 from app.models.manual_build import ManualBuild
                 from app.services.ebay_listing_reconciliation import reconcile_manual_build_listing
                 manual_rows = (await db.execute(select(ManualBuild).where(
                     ManualBuild.ebay_listing_id.isnot(None),
-                    ManualBuild.ebay_listing_status.in_(["active", "unknown"]),
+                    ManualBuild.ebay_listing_status.in_(["active", "unknown", "ended", "missing"]),
+                    ManualBuild.status.in_(["built", "listed"]),
                 ))).scalars().all()
                 manual_rows = [build for build in manual_rows if str(build.ebay_listing_id).isdecimal()]
                 orphaned_local_rows = (await db.execute(select(ManualBuild).where(
@@ -174,6 +176,153 @@ class eBaySalesTracker:
                     ManualBuild.ebay_listing_id.is_not(None),
                 ))).scalars().all()
                 result["sold_relist_builds_checked"] = len(sold_manual_rows)
+
+                # A later seller-issued refund is a separate order lifecycle
+                # change from a buyer cancellation request. Poll each saved
+                # sold order through getOrder (getOrders does not return the
+                # populated cancellation/refund details) and emit one durable
+                # review event per completed refund signature. Never reopen
+                # or republish the build automatically; the owner must decide.
+                from app.models.channel_listing import ChannelListing
+                from app.models.listing_publish_event import ListingPublishEvent
+                from app.services.ebay_order_sync import get_order_refund_state, is_terminal_order_cancellation
+                refund_rows = (await db.execute(select(ManualBuild).where(
+                    ManualBuild.status == "sold",
+                    ManualBuild.ebay_order_id.is_not(None),
+                ))).scalars().all()
+                result["sold_orders_refund_checked"] = len(refund_rows)
+                for build in refund_rows:
+                    try:
+                        state = await get_order_refund_state(
+                            build.ebay_order_id,
+                            environment=settings.ebay_listing_environment,
+                            db=db,
+                        )
+                        if is_terminal_order_cancellation(state):
+                            signature = f"cancelled:{state['cancel_state']}"
+                            prior_cancel = (await db.execute(select(ListingPublishEvent).where(
+                                ListingPublishEvent.event_type == "ebay_order_cancelled",
+                                ListingPublishEvent.event_metadata["build_id"].as_integer() == build.id,
+                                ListingPublishEvent.event_metadata["order_id"].as_string() == build.ebay_order_id,
+                            ).limit(1))).scalar_one_or_none()
+                            if not prior_cancel:
+                                channel_row = (await db.execute(select(ChannelListing).where(
+                                    ChannelListing.manual_build_id == build.id,
+                                    ChannelListing.channel.in_(("ebay_uk", "ebay")),
+                                ).order_by(ChannelListing.id.desc()).limit(1))).scalars().first()
+                                if channel_row is None:
+                                    channel_row = ChannelListing(
+                                        manual_build_id=build.id, channel="ebay_uk", status="sold",
+                                        external_listing_id=build.ebay_listing_id,
+                                        listing_url=build.ebay_listing_url,
+                                    )
+                                    db.add(channel_row)
+                                    await db.flush()
+                                dispatched = build.dispatch_status in {"dispatched", "delivered"}
+                                db.add(ListingPublishEvent(
+                                    channel_listing_id=channel_row.id,
+                                    event_type="ebay_order_cancelled",
+                                    message=("eBay confirmed the order was cancelled after dispatch; owner review is required."
+                                        if dispatched else "eBay confirmed the order was cancelled; the build is available for review."),
+                                    event_metadata={"build_id": build.id, "order_id": build.ebay_order_id,
+                                        "cancel_state": state["cancel_state"], "source": "ebay_order_api",
+                                        "dispatch_status": build.dispatch_status},
+                                ))
+                                if not dispatched:
+                                    build.status = "built"
+                                    build.ebay_listing_status = "ended"
+                                    build.ebay_listing_end_reason = "order_cancelled"
+                                    build.ebay_listing_status_checked_at = datetime.utcnow()
+                                    channel_row.status = "ended"
+                                    from app.services.inventory_lifecycle import record_sale_cancellation
+                                    await record_sale_cancellation(db, build, source="ebay_order_api")
+                                    if build.ebay_listing_id and str(build.ebay_listing_id).isdecimal():
+                                        from app.services.ebay_trading_api import get_item_status
+                                        try:
+                                            remote = await get_item_status(build.ebay_listing_id, access_token,
+                                                settings.ebay_listing_environment)
+                                            remote_status = str(remote.get("listing_status") or "").lower()
+                                            if remote_status in {"active", "started"}:
+                                                build.ebay_listing_status = "active"
+                                                build.status = "listed"
+                                                build.ebay_listing_end_reason = None
+                                                if channel_row:
+                                                    channel_row.status = "published"
+                                            elif remote_status in {"ended", "completed"}:
+                                                build.ebay_listing_status = "ended"
+                                                if channel_row:
+                                                    channel_row.status = "ended"
+                                            else:
+                                                build.ebay_listing_status = "unknown"
+                                            build.ebay_listing_status_checked_at = datetime.utcnow()
+                                        except Exception as exc:
+                                            log.warning("ebay_sales_tracker.cancelled_listing_check_failed",
+                                                build_id=build.id, error=str(exc))
+                                    result.setdefault("orders_cancelled", 0)
+                                    result["orders_cancelled"] += 1
+                                else:
+                                    result.setdefault("order_cancellations_needing_review", 0)
+                                    result["order_cancellations_needing_review"] += 1
+                            continue
+                        refunds = state["refunds"]
+                        signature = state["refund_signature"] or state["order_payment_status"]
+                        if not refunds and state["order_payment_status"] not in {"FULLY_REFUNDED", "PARTIALLY_REFUNDED"}:
+                            continue
+                        if not signature:
+                            continue
+                        prior = (await db.execute(select(ListingPublishEvent).where(
+                            ListingPublishEvent.event_type == "refund_detected",
+                            ListingPublishEvent.event_metadata["build_id"].as_integer() == build.id,
+                            ListingPublishEvent.event_metadata["order_id"].as_string() == build.ebay_order_id,
+                            ListingPublishEvent.event_metadata["refund_signature"].as_string() == signature,
+                        ).limit(1))).scalar_one_or_none()
+                        if prior:
+                            continue
+                        channel_row = (await db.execute(select(ChannelListing).where(
+                            ChannelListing.manual_build_id == build.id,
+                            ChannelListing.channel.in_(("ebay_uk", "ebay")),
+                        ).order_by(ChannelListing.id.desc()).limit(1))).scalars().first()
+                        if channel_row is None:
+                            channel_row = ChannelListing(
+                                manual_build_id=build.id,
+                                channel="ebay_uk",
+                                status="sold",
+                                external_listing_id=build.ebay_listing_id,
+                                listing_url=build.ebay_listing_url,
+                            )
+                            db.add(channel_row)
+                            await db.flush()
+                        refund_amounts = [
+                            refund.get("amount") or refund.get("refundAmount") or {}
+                            for refund in refunds
+                        ]
+                        db.add(ListingPublishEvent(
+                            channel_listing_id=channel_row.id,
+                            event_type="refund_detected",
+                            message="eBay reports a completed refund for this sold order. Owner review is required before changing availability or relisting.",
+                            event_metadata={
+                                "build_id": build.id,
+                                "order_id": build.ebay_order_id,
+                                "listing_id": str(build.ebay_listing_id or channel_row.external_listing_id or ""),
+                                "refund_signature": signature,
+                                "order_payment_status": state["order_payment_status"],
+                                "cancel_state": state["cancel_state"],
+                                "refunds": [
+                                    {
+                                        "amount": amount.get("value"),
+                                        "currency": amount.get("currency"),
+                                        "refund_id": refund.get("refundId") or refund.get("refundReferenceId"),
+                                        "refund_date": refund.get("refundDate"),
+                                    }
+                                    for refund, amount in zip(refunds, refund_amounts)
+                                ],
+                            },
+                        ))
+                        result.setdefault("refunds_detected", 0)
+                        result["refunds_detected"] += 1
+                    except Exception as exc:
+                        log.warning("ebay_sales_tracker.refund_check_failed", build_id=build.id, error=str(exc))
+
                 for build in sold_manual_rows:
                     try:
                         previous_id = build.ebay_listing_id

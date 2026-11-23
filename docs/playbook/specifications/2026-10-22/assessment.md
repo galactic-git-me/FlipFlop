@@ -141,7 +141,6 @@ Verified: Python syntax compilation, successful durable DEV rebuild, persisted p
 - Draft rebuilds now validate fresh exact-source engineering facts with automatic publication disabled; absent measurements remain unknown and unrelated draft values are not certified.
 - Applied the documented Standard-only matrix profile to eight segments with automatic publication explicitly disabled; prior pricing models backed up under output/playbook-priority-rebuild-20261025/before-standard-only-profile.json.
 - Corrected preparation to retain separate primary and secondary storage roles for the same listing. Focused deterministic checks pass; full rebuild verification remains in progress.
-- Exact refresh of the two selected RoyalCDKeys listings returned HTTP 429; retained older captures remain stale, not freshly verified.
 
 ### Software vendor replacement: Gamers Outlet
 CD-Keys.uk is disabled in DEV and replaced by Gamers Outlet. Extension DEV now captures exact Windows 11 Home, Pro and Office 2024 Professional Plus products, converting EUR to GBP using dated ECB evidence. Office Standard remains a targeted discovery search because no perpetual Standard product was found; Microsoft 365 Business Standard is not substituted. Live source JSON-LD fixtures and deterministic conversion checks passed, as did extension type checking and DEV packaging. Installed browser reload and actual scan ingestion are not yet verified. This does not approve licence rights or publish offers.

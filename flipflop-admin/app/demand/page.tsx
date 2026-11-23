@@ -8,6 +8,7 @@ import {
 } from "recharts";
 import { RefreshCw, TrendingUp, TrendingDown, Minus, ExternalLink, BrainCircuit, Database, Activity, Search, ShoppingCart, Cpu, Bot, Gauge, Layers3 } from "lucide-react";
 import { api, type BuildComponent } from "@/lib/api";
+import { BrandCubeLoader } from "@/components/ui/brand-cube-loader";
 import { ClassificationBadge } from "@/components/classification-badge";
 import type { DemandCategory, AuctionIntelItem, DemandSummary, SoldMarketDemand, SoldMarketInsight, SoldMarketListing, SoldComponentCategory } from "@/lib/types";
 
@@ -1019,9 +1020,8 @@ function AuctionIntelTab({ auctions, loading, error, onRetry }: {
 
 function Spinner() {
   return (
-    <div className="flex items-center justify-center py-16 text-slate-600 text-sm gap-2">
-      <RefreshCw className="w-4 h-4 animate-spin" />
-      Loading…
+    <div className="flex items-center justify-center py-16">
+      <BrandCubeLoader />
     </div>
   );
 }

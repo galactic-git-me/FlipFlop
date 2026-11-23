@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { BarChart3, Search, Loader2, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { api } from "@/lib/api";
+import { BrandCubeLoader } from "@/components/ui/brand-cube-loader";
 
 // Playbook rows 16, 37, 38 — cross-build, store-wide utilities, not scoped
 // to any single build's page (see docs/build-details-automation-plan.md).
@@ -66,8 +67,8 @@ export default function PerformancePage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20 text-slate-500 text-sm gap-2">
-        <Loader2 className="w-4 h-4 animate-spin" /> Loading performance dashboard…
+      <div className="flex items-center justify-center py-20">
+        <BrandCubeLoader />
       </div>
     );
   }

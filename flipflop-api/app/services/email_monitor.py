@@ -358,6 +358,53 @@ class EmailMonitor:
         # enter the shared operator alert feed. Email indicates a request,
         # never that a refund has been issued.
         lifecycle_text = f"{msg['subject']} {body}".lower()
+        ebay_cancel_confirmed = marketplace == "ebay" and any(term in lifecycle_text for term in (
+            "order was cancelled", "order has been cancelled", "order was canceled",
+            "order has been canceled", "buyer cancelled the order", "buyer canceled the order",
+            "cancellation is complete", "cancellation has been confirmed",
+        ))
+        if ebay_cancel_confirmed:
+            cancel_order_match = re.search(r"(?:order\s*(?:number|id)?\s*[:#]?\s*)(\d{2}-\d{5}-\d{5})", lifecycle_text, re.I)
+            cancel_listing_match = re.search(r"(?:item\s*(?:number|id)?\s*[:#]?\s*)(\d{9,15})", lifecycle_text, re.I)
+            candidate_query = select(ManualBuild)
+            if cancel_order_match:
+                candidate_query = candidate_query.where(ManualBuild.ebay_order_id == cancel_order_match.group(1))
+            elif cancel_listing_match:
+                candidate_query = candidate_query.where(ManualBuild.ebay_listing_id == cancel_listing_match.group(1))
+            else:
+                candidate_query = None
+            candidates = (await db.execute(candidate_query)).scalars().all() if candidate_query is not None else []
+            cancelled_build = candidates[0] if len(candidates) == 1 else None
+            if cancelled_build:
+                event.event_type = "order_cancelled"
+                event.manual_build_id = cancelled_build.id
+                event.payload = {"order_id": cancelled_build.ebay_order_id,
+                    "listing_id": cancelled_build.ebay_listing_id, "source": "email"}
+                dispatched = cancelled_build.dispatch_status in {"dispatched", "delivered"}
+                event.summary = (f"eBay cancellation for {cancelled_build.name} needs owner review after dispatch."
+                    if dispatched else f"eBay confirmed the order cancellation for {cancelled_build.name}.")
+                if not dispatched:
+                    cancelled_build.status = "built"
+                    cancelled_build.ebay_listing_status = "ended"
+                    cancelled_build.ebay_listing_status_checked_at = datetime.utcnow()
+                    cancelled_build.ebay_listing_end_reason = "order_cancelled"
+                    from app.services.inventory_lifecycle import record_sale_cancellation
+                    await record_sale_cancellation(db, cancelled_build, source="ebay_cancellation_email")
+                from app.models.listing_publish_event import ListingPublishEvent
+                cancel_channel = (await db.execute(select(ChannelListing).where(
+                    ChannelListing.manual_build_id == cancelled_build.id,
+                    ChannelListing.channel.in_(("ebay", "ebay_uk")),
+                ).order_by(ChannelListing.id.desc()).limit(1))).scalars().first()
+                if cancel_channel is None:
+                    cancel_channel = ChannelListing(manual_build_id=cancelled_build.id,
+                        channel="ebay_uk", status="sold", external_listing_id=cancelled_build.ebay_listing_id,
+                        listing_url=cancelled_build.ebay_listing_url)
+                    db.add(cancel_channel)
+                    await db.flush()
+                db.add(ListingPublishEvent(channel_listing_id=cancel_channel.id,
+                    event_type="ebay_order_cancelled", message=event.summary,
+                    event_metadata={"build_id": cancelled_build.id, "order_id": cancelled_build.ebay_order_id,
+                        "source": "email", "dispatch_status": cancelled_build.dispatch_status}))
         ebay_refund_request = marketplace == "ebay" and any(term in lifecycle_text for term in (
             "refund request", "requested a refund", "requesting a refund",
             "return request", "opened a return", "buyer wants a refund",

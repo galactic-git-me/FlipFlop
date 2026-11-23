@@ -47,7 +47,6 @@ Use: 1080p gaming, esports and first gaming PC
 | psu | [CPS PCCOOLER KN650 Fully Modular PSU 80 Plus Gold ATX 3.1 PCIE 5.1 / 650W ATX 3.1, 80 Plus Gold Certified, Japanese Capacitor](https://www.amazon.co.uk/PCCOOLER-KN650-Fully-Modular-Plus/dp/B0FJXLKHVK/ref=zg_bs_g_430514031_d_sccl_35/525-2744570-5187137) | 54.68 | 0.00 |
 | cooling | [ARCTIC Freezer 36 (Black)- Single-tower CPU cooler with push-pull, two pressure-optimised 120 mm P fans, fluid dynamic bearin](https://www.amazon.co.uk/ARCTIC-Single-tower-push-pull-pressure-optimised-heatpipes/dp/B09VH14935/ref=zg_bs_g_430499031_d_sccl_17/525-2744570-5187137) | 22.99 | 0.00 (default) |
 | case | [APNX Creator C1 ChromaFlair Mid Tower Case](https://www.overclockers.co.uk/search?sSearch=APNX+Creator+C1+ChromaFlair+Mid+Tower+Case) | 39.95 | 0.00 (default) |
-| os | [Windows 11 Home OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-home-oem-key?country=GB&currency=GBP) | 3.47 | 0.00 |
 
 Known parts: £929.64. Suggested price: 1311.09. Estimated profit: 119.19.
 
@@ -83,7 +82,6 @@ Component sold-price medians cover 2/8 hardware roles. Remaining roles use recor
 | psu | [be quiet! System Power 11 750W Power Supply, ATX 3.1 PSU, 80 PLUS® Bronze / With Support For PCIe 5.1 GPUs, Temperature-Contr](https://www.amazon.co.uk/quiet-System-Power-Supply-Bronze/dp/B0FNDFHLQX/ref=zg_bs_g_430514031_d_sccl_13/525-2744570-5187137) | 59.99 | 0.00 |
 | cooling | [ARCTIC Freezer 36 (Black)- Single-tower CPU cooler with push-pull, two pressure-optimised 120 mm P fans, fluid dynamic bearin](https://www.amazon.co.uk/ARCTIC-Single-tower-push-pull-pressure-optimised-heatpipes/dp/B09VH14935/ref=zg_bs_g_430499031_d_sccl_17/525-2744570-5187137) | 22.99 | 0.00 (default) |
 | case | [APNX Creator C1 ChromaFlair Mid Tower Case](https://www.overclockers.co.uk/search?sSearch=APNX+Creator+C1+ChromaFlair+Mid+Tower+Case) | 39.95 | 0.00 (default) |
-| os | [Windows 11 Home OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-home-oem-key?country=GB&currency=GBP) | 3.47 | 0.00 |
 
 Known parts: £1570.58. Suggested price: 2184.10. Estimated profit: 198.56.
 
@@ -119,7 +117,6 @@ Component sold-price medians cover 1/8 hardware roles. Remaining roles use recor
 | psu | [be quiet! Pure Power 12 850W Gaming PSU, 80 Plus Gold, ATX 3.1, 12V-Rail / PCIe 5.1 GPU Support Power Supply, Silent 120mm Fa](https://www.amazon.co.uk/quiet-Pure-Power-Gaming-12V-Rail/dp/B0FZCPSC4D/ref=zg_bs_g_430514031_d_sccl_14/525-2744570-5187137) | 84.99 | 0.00 |
 | cooling | [Thermalright AQUA ELITE 240 V3 Liquid CPU Cooler, 240 Cooling Row Size, 2 x 120mm PWM Fans, S-FDB Bearings,for AMD/AM4/AM5, I](https://www.amazon.co.uk/Thermalright-Cooling-Bearings-LGA1150-Desktop/dp/B0CCP1T3W7/ref=zg_bs_g_430499031_d_sccl_38/525-2744570-5187137) | 35.90 | 0.00 |
 | case | [APNX Creator C1 ChromaFlair Mid Tower Case](https://www.overclockers.co.uk/search?sSearch=APNX+Creator+C1+ChromaFlair+Mid+Tower+Case) | 39.95 | 0.00 (default) |
-| os | [Windows 11 Home OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-home-oem-key?country=GB&currency=GBP) | 3.47 | 0.00 |
 
 Known parts: £2060.22. Suggested price: 2851.04. Estimated profit: 259.19.
 
@@ -155,7 +152,6 @@ Component sold prices cover 0/8 hardware roles. Using recorded full cost plus 10
 | psu | [be quiet! System Power 11 750W Power Supply, ATX 3.1 PSU, 80 PLUS® Bronze / With Support For PCIe 5.1 GPUs, Temperature-Contr](https://www.amazon.co.uk/quiet-System-Power-Supply-Bronze/dp/B0FNDFHLQX/ref=zg_bs_g_430514031_d_sccl_13/525-2744570-5187137) | 59.99 | 0.00 |
 | cooling | [ARCTIC Freezer 36 (Black)- Single-tower CPU cooler with push-pull, two pressure-optimised 120 mm P fans, fluid dynamic bearin](https://www.amazon.co.uk/ARCTIC-Single-tower-push-pull-pressure-optimised-heatpipes/dp/B09VH14935/ref=zg_bs_g_430499031_d_sccl_17/525-2744570-5187137) | 22.99 | 0.00 (default) |
 | case | [APNX Creator C1 ChromaFlair Mid Tower Case](https://www.overclockers.co.uk/search?sSearch=APNX+Creator+C1+ChromaFlair+Mid+Tower+Case) | 39.95 | 0.00 (default) |
-| os | [Windows 11 Home OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-home-oem-key?country=GB&currency=GBP) | 3.47 | 0.00 |
 
 Known parts: £1737.29. Suggested price: 2411.17. Estimated profit: 219.20.
 
@@ -191,7 +187,6 @@ Use: Premium 1440p/4K gaming and showcase build
 | psu | [be quiet! System Power 11 750W Power Supply, ATX 3.1 PSU, 80 PLUS® Bronze / With Support For PCIe 5.1 GPUs, Temperature-Contr](https://www.amazon.co.uk/quiet-System-Power-Supply-Bronze/dp/B0FNDFHLQX/ref=zg_bs_g_430514031_d_sccl_13/525-2744570-5187137) | 59.99 | 0.00 |
 | cooling | [Thermalright AQUA ELITE 240 V3 Liquid CPU Cooler, 240 Cooling Row Size, 2 x 120mm PWM Fans, S-FDB Bearings,for AMD/AM4/AM5, I](https://www.amazon.co.uk/Thermalright-Cooling-Bearings-LGA1150-Desktop/dp/B0CCP1T3W7/ref=zg_bs_g_430499031_d_sccl_38/525-2744570-5187137) | 35.90 | 0.00 |
 | case | [APNX Creator C1 ChromaFlair Mid Tower Case](https://www.overclockers.co.uk/search?sSearch=APNX+Creator+C1+ChromaFlair+Mid+Tower+Case) | 39.95 | 0.00 (default) |
-| os | [Windows 11 Home OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-home-oem-key?country=GB&currency=GBP) | 3.47 | 0.00 |
 
 Known parts: £1898.49. Suggested price: 2630.73. Estimated profit: 239.16.
 
@@ -227,7 +222,6 @@ Component sold-price medians cover 3/8 hardware roles. Remaining roles use recor
 | psu | [Lian Li RS 1200W RS Hub ATX 3.1 PCIe 5.1 80 Plus Gold Modular Power Supply](https://www.overclockers.co.uk/lian-li-rs-1200w-rs-hub-atx-3.1-pcie-5.1-80-plus-gold-modular-power-supply/POW-LIA-06175.html) | 109.99 | 0.00 (default) |
 | cooling | [ARCTIC Liquid Freezer III Pro 360 - AIO CPU Cooler, 3 x 120 mm Water Cooling, 38 mm Radiator, PWM Pump, VRM Fan, AMD AM5/AM4,](https://www.amazon.co.uk/ARCTIC-Liquid-Freezer-III-Pro/dp/B0DLWGG85P/ref=zg_bs_g_430499031_d_sccl_10/525-2744570-5187137) | 67.49 | 0.00 |
 | case | [APNX Creator C1 ChromaFlair Mid Tower Case](https://www.overclockers.co.uk/apnx-creator-c1-chromaflair-mid-tower-case/CAS-AER-00612.html) | 39.95 | 0.00 (default) |
-| os | [Windows 11 Pro OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-pro-oem-cd-key?country=GB&currency=GBP) | 5.22 | 0.00 |
 
 Known parts: £9391.61. Suggested price: 12836.94. Estimated profit: 1167.00.
 
@@ -262,7 +256,6 @@ Component sold-price medians cover 2/7 hardware roles. Remaining roles use recor
 | psu | [CPS PCCOOLER KN650 Fully Modular PSU 80 Plus Gold ATX 3.1 PCIE 5.1 / 650W ATX 3.1, 80 Plus Gold Certified, Japanese Capacitor](https://www.amazon.co.uk/PCCOOLER-KN650-Fully-Modular-Plus/dp/B0FJXLKHVK/ref=zg_bs_g_430514031_d_sccl_35/525-2744570-5187137) | 54.68 | 0.00 |
 | cooling | [TR-Assassin X 120R SE V2 CPU Air Cooler, 4 Heat Pipes,148MM High, TL-C12C-L V2 PWM Fan CPU Cooler, for AMD AM4 AM5/Intel LGA1](https://www.amazon.co.uk/TR-Assassin-SE-TL-C12C-L-LGA1700-LGA17XX/dp/B0DWSQ9VX2/ref=zg_bs_g_430499031_d_sccl_19/525-2749015-4854065) | 12.32 | 0.00 (default) |
 | case | [iONZ KZ10 PC Gaming Case Mid Tower ATX Tempered Glass With 4 x 120mm ARGB Fans - Black](https://www.amazon.co.uk/Gaming-Classic-Tempered-Window-KZ10B-Black/dp/B08HQNF5VT/ref=zg_bs_g_430498031_d_sccl_35/525-2744570-5187137) | 39.95 | 0.00 |
-| os | [Windows 11 Home OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-home-oem-key?country=GB&currency=GBP) | 3.47 | 0.00 |
 
 Known parts: £934.61. Suggested price: 1317.87. Estimated profit: 119.81.
 
@@ -298,7 +291,6 @@ Component sold-price medians cover 2/8 hardware roles. Remaining roles use recor
 | psu | [CPS PCCOOLER KN650 Fully Modular PSU 80 Plus Gold ATX 3.1 PCIE 5.1 / 650W ATX 3.1, 80 Plus Gold Certified, Japanese Capacitor](https://www.amazon.co.uk/PCCOOLER-KN650-Fully-Modular-Plus/dp/B0FJXLKHVK/ref=zg_bs_g_430514031_d_sccl_35/525-2744570-5187137) | 54.68 | 0.00 |
 | cooling | [ARCTIC Freezer 36 (Black)- Single-tower CPU cooler with push-pull, two pressure-optimised 120 mm P fans, fluid dynamic bearin](https://www.amazon.co.uk/ARCTIC-Single-tower-push-pull-pressure-optimised-heatpipes/dp/B09VH14935/ref=zg_bs_g_430499031_d_sccl_17/525-2744570-5187137) | 22.99 | 0.00 (default) |
 | case | [APNX Creator C1 ChromaFlair Mid Tower Case](https://www.overclockers.co.uk/search?sSearch=APNX+Creator+C1+ChromaFlair+Mid+Tower+Case) | 39.95 | 0.00 (default) |
-| os | [Windows 11 Home OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-home-oem-key?country=GB&currency=GBP) | 3.47 | 0.00 |
 
 Known parts: £1370.15. Suggested price: 1911.10. Estimated profit: 173.74.
 
@@ -334,7 +326,6 @@ Component sold prices cover 0/8 hardware roles. Using recorded full cost plus 10
 | psu | [be quiet! Pure Power 12 850W Gaming PSU, 80 Plus Gold, ATX 3.1, 12V-Rail / PCIe 5.1 GPU Support Power Supply, Silent 120mm Fa](https://www.amazon.co.uk/quiet-Pure-Power-Gaming-12V-Rail/dp/B0FZCPSC4D/ref=zg_bs_g_430514031_d_sccl_14/525-2744570-5187137) | 84.99 | 0.00 |
 | cooling | [Thermalright AQUA ELITE 240 V3 Liquid CPU Cooler, 240 Cooling Row Size, 2 x 120mm PWM Fans, S-FDB Bearings,for AMD/AM4/AM5, I](https://www.amazon.co.uk/Thermalright-Cooling-Bearings-LGA1150-Desktop/dp/B0CCP1T3W7/ref=zg_bs_g_430499031_d_sccl_38/525-2744570-5187137) | 35.90 | 0.00 |
 | case | [APNX Creator C1 ChromaFlair Mid Tower Case](https://www.overclockers.co.uk/search?sSearch=APNX+Creator+C1+ChromaFlair+Mid+Tower+Case) | 39.95 | 0.00 (default) |
-| os | [Windows 11 Home OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-home-oem-key?country=GB&currency=GBP) | 3.47 | 0.00 |
 
 Known parts: £2748.27. Suggested price: 3788.20. Estimated profit: 344.39.
 
@@ -369,7 +360,6 @@ Component sold-price medians cover 2/7 hardware roles. Remaining roles use recor
 | psu | [CPS PCCOOLER KN650 Fully Modular PSU 80 Plus Gold ATX 3.1 PCIE 5.1 / 650W ATX 3.1, 80 Plus Gold Certified, Japanese Capacitor](https://www.amazon.co.uk/PCCOOLER-KN650-Fully-Modular-Plus/dp/B0FJXLKHVK/ref=zg_bs_g_430514031_d_sccl_35/525-2744570-5187137) | 54.68 | 0.00 |
 | cooling | [TR-Assassin X 120R SE V2 CPU Air Cooler, 4 Heat Pipes,148MM High, TL-C12C-L V2 PWM Fan CPU Cooler, for AMD AM4 AM5/Intel LGA1](https://www.amazon.co.uk/TR-Assassin-SE-TL-C12C-L-LGA1700-LGA17XX/dp/B0DWSQ9VX2/ref=zg_bs_g_430499031_d_sccl_19/525-2749015-4854065) | 12.32 | 0.00 (default) |
 | case | [iONZ KZ10 PC Gaming Case Mid Tower ATX Tempered Glass With 4 x 120mm ARGB Fans - Black](https://www.amazon.co.uk/Gaming-Classic-Tempered-Window-KZ10B-Black/dp/B08HQNF5VT/ref=zg_bs_g_430498031_d_sccl_35/525-2744570-5187137) | 39.95 | 0.00 |
-| os | [Windows 11 Pro OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-pro-oem-cd-key?country=GB&currency=GBP) | 5.22 | 0.00 |
 
 Known parts: £936.36. Suggested price: 1320.25. Estimated profit: 120.03.
 
@@ -404,7 +394,6 @@ Component sold prices cover 0/7 hardware roles. Using recorded full cost plus 10
 | psu | [CPS PCCOOLER KN650 Fully Modular PSU 80 Plus Gold ATX 3.1 PCIE 5.1 / 650W ATX 3.1, 80 Plus Gold Certified, Japanese Capacitor](https://www.amazon.co.uk/PCCOOLER-KN650-Fully-Modular-Plus/dp/B0FJXLKHVK/ref=zg_bs_g_430514031_d_sccl_35/525-2744570-5187137) | 54.68 | 0.00 |
 | cooling | [TR-Assassin X 120R SE V2 CPU Air Cooler, 4 Heat Pipes,148MM High, TL-C12C-L V2 PWM Fan CPU Cooler, for AMD AM4 AM5/Intel LGA1](https://www.amazon.co.uk/TR-Assassin-SE-TL-C12C-L-LGA1700-LGA17XX/dp/B0DWSQ9VX2/ref=zg_bs_g_430499031_d_sccl_19/525-2749015-4854065) | 12.32 | 0.00 (default) |
 | case | [iONZ KZ10 PC Gaming Case Mid Tower ATX Tempered Glass With 4 x 120mm ARGB Fans - Black](https://www.amazon.co.uk/Gaming-Classic-Tempered-Window-KZ10B-Black/dp/B08HQNF5VT/ref=zg_bs_g_430498031_d_sccl_35/525-2744570-5187137) | 39.95 | 0.00 |
-| os | [Windows 11 Pro OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-pro-oem-cd-key?country=GB&currency=GBP) | 5.22 | 0.00 |
 
 Known parts: £1169.08. Suggested price: 1637.23. Estimated profit: 148.84.
 
@@ -439,7 +428,6 @@ Component sold-price medians cover 2/7 hardware roles. Remaining roles use recor
 | psu | [CPS PCCOOLER KN650 Fully Modular PSU 80 Plus Gold ATX 3.1 PCIE 5.1 / 650W ATX 3.1, 80 Plus Gold Certified, Japanese Capacitor](https://www.amazon.co.uk/PCCOOLER-KN650-Fully-Modular-Plus/dp/B0FJXLKHVK/ref=zg_bs_g_430514031_d_sccl_35/525-2744570-5187137) | 54.68 | 0.00 |
 | cooling | [TR-Assassin X 120R SE V2 CPU Air Cooler, 4 Heat Pipes,148MM High, TL-C12C-L V2 PWM Fan CPU Cooler, for AMD AM4 AM5/Intel LGA1](https://www.amazon.co.uk/TR-Assassin-SE-TL-C12C-L-LGA1700-LGA17XX/dp/B0DWSQ9VX2/ref=zg_bs_g_430499031_d_sccl_19/525-2749015-4854065) | 12.32 | 0.00 (default) |
 | case | [iONZ KZ10 PC Gaming Case Mid Tower ATX Tempered Glass With 4 x 120mm ARGB Fans - Black](https://www.amazon.co.uk/Gaming-Classic-Tempered-Window-KZ10B-Black/dp/B08HQNF5VT/ref=zg_bs_g_430498031_d_sccl_35/525-2744570-5187137) | 39.95 | 0.00 |
-| os | [Windows 11 Pro OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-pro-oem-cd-key?country=GB&currency=GBP) | 5.22 | 0.00 |
 
 Known parts: £1445.13. Suggested price: 2013.24. Estimated profit: 183.03.
 
@@ -475,7 +463,6 @@ Component sold prices cover 0/8 hardware roles. Using recorded full cost plus 10
 | psu | [be quiet! System Power 11 750W Power Supply, ATX 3.1 PSU, 80 PLUS® Bronze / With Support For PCIe 5.1 GPUs, Temperature-Contr](https://www.amazon.co.uk/quiet-System-Power-Supply-Bronze/dp/B0FNDFHLQX/ref=zg_bs_g_430514031_d_sccl_13/525-2744570-5187137) | 59.99 | 0.00 |
 | cooling | [Thermalright AQUA ELITE 240 V3 Liquid CPU Cooler, 240 Cooling Row Size, 2 x 120mm PWM Fans, S-FDB Bearings,for AMD/AM4/AM5, I](https://www.amazon.co.uk/Thermalright-Cooling-Bearings-LGA1150-Desktop/dp/B0CCP1T3W7/ref=zg_bs_g_430499031_d_sccl_38/525-2744570-5187137) | 35.90 | 0.00 |
 | case | [APNX Creator C1 ChromaFlair Mid Tower Case](https://www.overclockers.co.uk/search?sSearch=APNX+Creator+C1+ChromaFlair+Mid+Tower+Case) | 39.95 | 0.00 (default) |
-| os | [Windows 11 Home OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-home-oem-key?country=GB&currency=GBP) | 3.47 | 0.00 |
 
 Known parts: £2143.24. Suggested price: 2964.11. Estimated profit: 269.47.
 
@@ -511,7 +498,6 @@ Component sold prices cover 0/8 hardware roles. Using recorded full cost plus 10
 | psu | [be quiet! Pure Power 13 M 1000W Power Supply, 80+ Gold, Cybenetics Platinum / PCIe 5.1 Ready, ATX 3.1, Fully Modular, PSU wit](https://www.amazon.co.uk/quiet-Power-1000W-Fully-Modular/dp/B0FNDGQ7CK/ref=zg_bs_g_430514031_d_sccl_7/525-2744570-5187137) | 118.99 | 0.00 |
 | cooling | [ARCTIC Liquid Freezer III Pro 360 - AIO CPU Cooler, 3 x 120 mm Water Cooling, 38 mm Radiator, PWM Pump, VRM Fan, AMD AM5/AM4,](https://www.amazon.co.uk/ARCTIC-Liquid-Freezer-III-Pro/dp/B0DLWGG85P/ref=zg_bs_g_430499031_d_sccl_10/525-2744570-5187137) | 67.49 | 0.00 |
 | case | [APNX Creator C1 ChromaFlair Mid Tower Case](https://www.overclockers.co.uk/search?sSearch=APNX+Creator+C1+ChromaFlair+Mid+Tower+Case) | 39.95 | 0.00 (default) |
-| os | [Windows 11 Pro OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-pro-oem-cd-key?country=GB&currency=GBP) | 5.22 | 0.00 |
 
 Known parts: £3475.61. Suggested price: 4778.90. Estimated profit: 434.45.
 
@@ -548,7 +534,6 @@ Component sold-price medians cover 2/9 hardware roles. Remaining roles use recor
 | cooling | [TR-Assassin X 120R SE V2 CPU Air Cooler, 4 Heat Pipes,148MM High, TL-C12C-L V2 PWM Fan CPU Cooler, for AMD AM4 AM5/Intel LGA1](https://www.amazon.co.uk/TR-Assassin-SE-TL-C12C-L-LGA1700-LGA17XX/dp/B0DWSQ9VX2/ref=zg_bs_g_430499031_d_sccl_19/525-2749015-4854065) | 12.32 | 0.00 (default) |
 | case | [APNX Creator C1 ChromaFlair Mid Tower Case](https://www.overclockers.co.uk/apnx-creator-c1-chromaflair-mid-tower-case/CAS-AER-00612.html) | 39.95 | 0.00 (default) |
 | storage_secondary | [Samsung 990 PRO NVMe M.2 SSD, 4 TB, PCIe 4.0, 7,450 MB/s read, 6,900 MB/s write, Internal SSD, For gaming and video editing, MZ-V9P4T0BW](https://www.amazon.co.uk/dp/B0CBYZ6DD1) | 589.99 | 0.00 |
-| os | [Windows 11 Pro OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-pro-oem-cd-key?country=GB&currency=GBP) | 5.22 | 0.00 |
 
 Known parts: £11278.17. Suggested price: 15406.57. Estimated profit: 1400.60.
 
@@ -584,7 +569,6 @@ Component sold-price medians cover 2/8 hardware roles. Remaining roles use recor
 | psu | [be quiet! System Power 11 750W Power Supply, ATX 3.1 PSU, 80 PLUS® Bronze / With Support For PCIe 5.1 GPUs, Temperature-Contr](https://www.amazon.co.uk/quiet-System-Power-Supply-Bronze/dp/B0FNDFHLQX/ref=zg_bs_g_430514031_d_sccl_13/525-2744570-5187137) | 59.99 | 0.00 |
 | cooling | [ARCTIC Freezer 36 (Black)- Single-tower CPU cooler with push-pull, two pressure-optimised 120 mm P fans, fluid dynamic bearin](https://www.amazon.co.uk/ARCTIC-Single-tower-push-pull-pressure-optimised-heatpipes/dp/B09VH14935/ref=zg_bs_g_430499031_d_sccl_17/525-2744570-5187137) | 22.99 | 0.00 (default) |
 | case | [APNX Creator C1 ChromaFlair Mid Tower Case](https://www.overclockers.co.uk/search?sSearch=APNX+Creator+C1+ChromaFlair+Mid+Tower+Case) | 39.95 | 0.00 (default) |
-| os | [Windows 11 Pro OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-pro-oem-cd-key?country=GB&currency=GBP) | 5.22 | 0.00 |
 
 Known parts: £1979.36. Suggested price: 2740.89. Estimated profit: 249.18.
 
@@ -620,7 +604,6 @@ Component sold-price medians cover 1/8 hardware roles. Remaining roles use recor
 | psu | [be quiet! Pure Power 13 M 1000W Power Supply, 80+ Gold, Cybenetics Platinum / PCIe 5.1 Ready, ATX 3.1, Fully Modular, PSU wit](https://www.amazon.co.uk/quiet-Power-1000W-Fully-Modular/dp/B0FNDGQ7CK/ref=zg_bs_g_430514031_d_sccl_7/525-2744570-5187137) | 118.99 | 0.00 |
 | cooling | [ARCTIC Liquid Freezer III Pro 360 - AIO CPU Cooler, 3 x 120 mm Water Cooling, 38 mm Radiator, PWM Pump, VRM Fan, AMD AM5/AM4,](https://www.amazon.co.uk/ARCTIC-Liquid-Freezer-III-Pro/dp/B0DLWGG85P/ref=zg_bs_g_430499031_d_sccl_10/525-2744570-5187137) | 67.49 | 0.00 |
 | case | [APNX Creator C1 ChromaFlair Mid Tower Case](https://www.overclockers.co.uk/search?sSearch=APNX+Creator+C1+ChromaFlair+Mid+Tower+Case) | 39.95 | 0.00 (default) |
-| os | [Windows 11 Pro OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-pro-oem-cd-key?country=GB&currency=GBP) | 5.22 | 0.00 |
 | os_secondary | [Ubuntu 24.04 LTS Desktop (official free download)](https://releases.ubuntu.com/24.04/) | 0.00 | 0.00 |
 
 Known parts: £5562.35. Suggested price: 7621.19. Estimated profit: 692.84.
@@ -658,7 +641,6 @@ Component sold-price medians cover 2/9 hardware roles. Remaining roles use recor
 | cooling | [Noctua NH-U14S TR5-SP6 CPU Cooler - 140mm](https://www.overclockers.co.uk/noctua-nh-u14s-tr5-sp6-cpu-cooler-140mm/COO-NOC-01407.html) | 119.99 | 0.00 (default) |
 | case | [Fractal Design Define 7 XL Black Brushed Aluminum/Steel E-ATX Silent Modular Full Tower Computer Case](https://www.amazon.co.uk/Fractal-Design-FD-C-DEF7X-01-Define-Black/dp/B08146GB6Y/ref=zg_bs_g_430498031_d_sccl_26/524-1065766-8214213) | 199.99 | 0.00 |
 | storage_secondary | [Kingston FURY Kingston Technology 8TB FURY RENEGADE G5 M.2 2280 NVMe SSD](https://www.ebuyer.com/kingston-fury-kingston-technology-8tb-fury-renegade-g5-m2-2280-nvme-ssd-736054#colcode=73605403) | 1699.99 | 0.00 (default) |
-| os | [Windows 11 Pro OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-pro-oem-cd-key?country=GB&currency=GBP) | 5.22 | 0.00 |
 | os_secondary | [Ubuntu 24.04 LTS Desktop (official free download)](https://releases.ubuntu.com/24.04/) | 0.00 | 0.00 |
 
 Known parts: £26378.16. Suggested price: 35973.90. Estimated profit: 3270.36.
@@ -695,7 +677,6 @@ Component sold-price medians cover 2/8 hardware roles. Remaining roles use recor
 | psu | [CPS PCCOOLER KN650 Fully Modular PSU 80 Plus Gold ATX 3.1 PCIE 5.1 / 650W ATX 3.1, 80 Plus Gold Certified, Japanese Capacitor](https://www.amazon.co.uk/PCCOOLER-KN650-Fully-Modular-Plus/dp/B0FJXLKHVK/ref=zg_bs_g_430514031_d_sccl_35/525-2744570-5187137) | 54.68 | 0.00 |
 | cooling | [ARCTIC Freezer 36 (Black)- Single-tower CPU cooler with push-pull, two pressure-optimised 120 mm P fans, fluid dynamic bearin](https://www.amazon.co.uk/ARCTIC-Single-tower-push-pull-pressure-optimised-heatpipes/dp/B09VH14935/ref=zg_bs_g_430499031_d_sccl_17/525-2744570-5187137) | 22.99 | 0.00 (default) |
 | case | [APNX Creator C1 ChromaFlair Mid Tower Case](https://www.overclockers.co.uk/search?sSearch=APNX+Creator+C1+ChromaFlair+Mid+Tower+Case) | 39.95 | 0.00 (default) |
-| os | [Windows 11 Pro OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-pro-oem-cd-key?country=GB&currency=GBP) | 5.22 | 0.00 |
 
 Known parts: £1684.94. Suggested price: 2339.87. Estimated profit: 212.72.
 
@@ -731,7 +712,6 @@ Component sold prices cover 0/8 hardware roles. Using recorded full cost plus 10
 | psu | [be quiet! Pure Power 12 850W Gaming PSU, 80 Plus Gold, ATX 3.1, 12V-Rail / PCIe 5.1 GPU Support Power Supply, Silent 120mm Fa](https://www.amazon.co.uk/quiet-Pure-Power-Gaming-12V-Rail/dp/B0FZCPSC4D/ref=zg_bs_g_430514031_d_sccl_14/525-2744570-5187137) | 84.99 | 0.00 |
 | cooling | [Noctua NH-D15 G2 chromax.black, Quiet High-Performance CPU Cooler / 168mm Height, Ultimate Low-Noise Cooling, 8 Heatpipes, Fo](https://www.amazon.co.uk/Noctua-NH-D15-G2-chromax-black-Premium/dp/B0FXGWKHND/ref=zg_bs_g_430499031_d_sccl_95/522-2937676-0377409) | 139.90 | 0.00 |
 | case | [Fractal Design Define 7 XL Black Brushed Aluminum/Steel E-ATX Silent Modular Full Tower Computer Case](https://www.amazon.co.uk/Fractal-Design-FD-C-DEF7X-01-Define-Black/dp/B08146GB6Y/ref=zg_bs_g_430498031_d_sccl_26/524-1065766-8214213) | 199.99 | 0.00 |
-| os | [Windows 11 Pro OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-pro-oem-cd-key?country=GB&currency=GBP) | 5.22 | 0.00 |
 
 Known parts: £3411.56. Suggested price: 4691.66. Estimated profit: 426.52.
 
@@ -768,7 +748,6 @@ Component sold-price medians cover 1/9 hardware roles. Remaining roles use recor
 | cooling | [ARCTIC Liquid Freezer III Pro 360 - AIO CPU Cooler, 3 x 120 mm Water Cooling, 38 mm Radiator, PWM Pump, VRM Fan, AMD AM5/AM4,](https://www.amazon.co.uk/ARCTIC-Liquid-Freezer-III-Pro/dp/B0DLWGG85P/ref=zg_bs_g_430499031_d_sccl_10/525-2744570-5187137) | 67.49 | 0.00 |
 | case | [APNX Creator C1 ChromaFlair Mid Tower Case](https://www.overclockers.co.uk/search?sSearch=APNX+Creator+C1+ChromaFlair+Mid+Tower+Case) | 39.95 | 0.00 (default) |
 | storage_secondary | [Samsung 990 PRO NVMe M.2 SSD, 4 TB, PCIe 4.0, 7,450 MB/s read, 6,900 MB/s write, Internal SSD, For gaming and video editing, MZ-V9P4T0BW](https://www.amazon.co.uk/dp/B0CBYZ6DD1) | 589.99 | 0.00 |
-| os | [Windows 11 Pro OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-pro-oem-cd-key?country=GB&currency=GBP) | 5.22 | 0.00 |
 | os_secondary | [Ubuntu 24.04 LTS Desktop (official free download)](https://releases.ubuntu.com/24.04/) | 0.00 | 0.00 |
 
 Known parts: £5752.34. Suggested price: 7879.96. Estimated profit: 716.36.
@@ -804,7 +783,6 @@ Component sold-price medians cover 2/7 hardware roles. Remaining roles use recor
 | psu | [CPS PCCOOLER KN650 Fully Modular PSU 80 Plus Gold ATX 3.1 PCIE 5.1 / 650W ATX 3.1, 80 Plus Gold Certified, Japanese Capacitor](https://www.amazon.co.uk/PCCOOLER-KN650-Fully-Modular-Plus/dp/B0FJXLKHVK/ref=zg_bs_g_430514031_d_sccl_35/525-2744570-5187137) | 54.68 | 0.00 |
 | cooling | [TR-Assassin X 120R SE V2 CPU Air Cooler, 4 Heat Pipes,148MM High, TL-C12C-L V2 PWM Fan CPU Cooler, for AMD AM4 AM5/Intel LGA1](https://www.amazon.co.uk/TR-Assassin-SE-TL-C12C-L-LGA1700-LGA17XX/dp/B0DWSQ9VX2/ref=zg_bs_g_430499031_d_sccl_19/525-2749015-4854065) | 12.32 | 0.00 (default) |
 | case | [iONZ KZ10 PC Gaming Case Mid Tower ATX Tempered Glass With 4 x 120mm ARGB Fans - Black](https://www.amazon.co.uk/Gaming-Classic-Tempered-Window-KZ10B-Black/dp/B08HQNF5VT/ref=zg_bs_g_430498031_d_sccl_35/525-2744570-5187137) | 39.95 | 0.00 |
-| os | [Windows 11 Home OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-home-oem-key?country=GB&currency=GBP) | 3.47 | 0.00 |
 
 Known parts: £934.61. Suggested price: 1317.87. Estimated profit: 119.81.
 
@@ -840,7 +818,6 @@ Component sold-price medians cover 2/8 hardware roles. Remaining roles use recor
 | psu | [CPS PCCOOLER KN650 Fully Modular PSU 80 Plus Gold ATX 3.1 PCIE 5.1 / 650W ATX 3.1, 80 Plus Gold Certified, Japanese Capacitor](https://www.amazon.co.uk/PCCOOLER-KN650-Fully-Modular-Plus/dp/B0FJXLKHVK/ref=zg_bs_g_430514031_d_sccl_35/525-2744570-5187137) | 54.68 | 0.00 |
 | cooling | [ARCTIC Freezer 36 (Black)- Single-tower CPU cooler with push-pull, two pressure-optimised 120 mm P fans, fluid dynamic bearin](https://www.amazon.co.uk/ARCTIC-Single-tower-push-pull-pressure-optimised-heatpipes/dp/B09VH14935/ref=zg_bs_g_430499031_d_sccl_17/525-2744570-5187137) | 22.99 | 0.00 (default) |
 | case | [APNX Creator C1 ChromaFlair Mid Tower Case](https://www.overclockers.co.uk/search?sSearch=APNX+Creator+C1+ChromaFlair+Mid+Tower+Case) | 39.95 | 0.00 (default) |
-| os | [Windows 11 Home OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-home-oem-key?country=GB&currency=GBP) | 3.47 | 0.00 |
 
 Known parts: £1565.27. Suggested price: 2176.87. Estimated profit: 197.90.
 
@@ -876,7 +853,6 @@ Component sold-price medians cover 1/8 hardware roles. Remaining roles use recor
 | psu | [be quiet! Pure Power 12 850W Gaming PSU, 80 Plus Gold, ATX 3.1, 12V-Rail / PCIe 5.1 GPU Support Power Supply, Silent 120mm Fa](https://www.amazon.co.uk/quiet-Pure-Power-Gaming-12V-Rail/dp/B0FZCPSC4D/ref=zg_bs_g_430514031_d_sccl_14/525-2744570-5187137) | 84.99 | 0.00 |
 | cooling | [Thermalright AQUA ELITE 240 V3 Liquid CPU Cooler, 240 Cooling Row Size, 2 x 120mm PWM Fans, S-FDB Bearings,for AMD/AM4/AM5, I](https://www.amazon.co.uk/Thermalright-Cooling-Bearings-LGA1150-Desktop/dp/B0CCP1T3W7/ref=zg_bs_g_430499031_d_sccl_38/525-2744570-5187137) | 35.90 | 0.00 |
 | case | [APNX Creator C1 ChromaFlair Mid Tower Case](https://www.overclockers.co.uk/search?sSearch=APNX+Creator+C1+ChromaFlair+Mid+Tower+Case) | 39.95 | 0.00 (default) |
-| os | [Windows 11 Home OEM CD Key](https://royalcdkeys.com/en-gb/products/windows-11-home-oem-key?country=GB&currency=GBP) | 3.47 | 0.00 |
 
 Known parts: £2626.26. Suggested price: 3622.03. Estimated profit: 329.28.
 

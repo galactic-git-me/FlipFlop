@@ -3,10 +3,10 @@ from app.services.playbook_motherboard_sources import extract_official_board_fac
 
 def test_captures_literal_msi_spec_fields_from_matching_official_page():
     html = """<html><head><title>MSI X870 GAMING PLUS WIFI Specifications</title></head>
-    <body><h1>MSI X870 GAMING PLUS WIFI</h1>
+    <body><h1>MSI X870 GAMING PLUS WIFI</h1><main>
     <p>AMD Socket AM5. AMD X870 chipset. 4 x DDR5 UDIMM.
     Maximum Memory Capacity 256GB. ATX Form Factor. 3 x M.2 slots.
-    4 x SATA 6G. Wi-Fi 7.</p></body></html>"""
+    4 x SATA 6G. Wi-Fi 7.</p></main></body></html>"""
 
     result = extract_official_board_facts(
         html,
@@ -45,8 +45,8 @@ def test_rejects_an_official_page_for_a_different_board_model():
 
 def test_captures_explicit_gigabyte_memory_and_m2_specs():
     html = """<html><head><title>X870 AORUS ELITE X3D ICE Motherboard Specifications</title></head>
-    <body><h1>X870 AORUS ELITE X3D ICE</h1><p>AMD Socket AM5. AMD X870.
-    4 x DDR5 DIMM sockets supporting up to 256 GB. 4 x M.2 Slots. 4 x SATA ports.</p></body></html>"""
+    <body><h1>X870 AORUS ELITE X3D ICE</h1><main><p>AMD Socket AM5. AMD X870.
+    4 x DDR5 DIMM sockets supporting up to 256 GB. 4 x M.2 Slots. 4 x SATA ports.</p></main></body></html>"""
 
     result = extract_official_board_facts(
         html,
@@ -64,9 +64,9 @@ def test_captures_explicit_gigabyte_memory_and_m2_specs():
 
 def test_captures_explicit_asus_socket_and_board_layout():
     html = """<html><head><title>ROG STRIX Z890-F GAMING WIFI Specifications</title></head>
-    <body><h1>ROG STRIX Z890-F GAMING WIFI</h1><p>Intel LGA1851. Intel Z890.
+    <body><h1>ROG STRIX Z890-F GAMING WIFI</h1><main><p>Intel LGA1851. Intel Z890.
     DDR5 memory, 4 x DIMM slots supporting up to 256 GB. ATX Form Factor.
-    5 x M.2 slots. 4 x SATA 6Gb/s ports. WiFi 7.</p></body></html>"""
+    5 x M.2 slots. 4 x SATA 6Gb/s ports. WiFi 7.</p></main></body></html>"""
 
     result = extract_official_board_facts(
         html,
@@ -83,11 +83,11 @@ def test_captures_explicit_asus_socket_and_board_layout():
 
 def test_asus_title_matching_stops_before_trailing_cpu_socket_descriptors():
     html = """<html><head><title>ROG STRIX Z890-F GAMING WIFI | ROG</title></head>
-    <body><h1>ROG STRIX Z890-F GAMING WIFI</h1>
+    <body><h1>ROG STRIX Z890-F GAMING WIFI</h1><main>
     CPU Intel Socket LGA1851 for Intel Core Ultra Processors.
     Chipset Intel Z890 Chipset. Memory 4 x DIMM slots, max. 256GB, DDR5.
     Form Factor ATX Form Factor. Storage Supports 5 x M.2 slots and 4 x SATA 6Gb/s ports.
-    </body></html>"""
+    </main></body></html>"""
 
     result = extract_official_board_facts(
         html,

@@ -61,7 +61,9 @@ class ResultIn(LeaseIn):
 def summary(job):
     return {"id": job.id, "channel_listing_id": job.channel_listing_id, "status": job.status,
         "operation": job.operation, "build_id": job.payload.get("build_id"), "channel": job.payload.get("channel"),
-        "message": job.message, "updated_at": job.updated_at.isoformat() if job.updated_at else None}
+        "message": job.message,
+        "created_at": job.created_at.isoformat() if job.created_at else None,
+        "updated_at": job.updated_at.isoformat() if job.updated_at else None}
 
 
 @router.post("")

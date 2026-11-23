@@ -11,6 +11,7 @@ import { EmptyState } from "@/components/empty-state";
 import { ShippingCalculator } from "@/components/shipping-calculator";
 import { Flip } from "@/lib/types";
 import { api } from "@/lib/api";
+import { BrandCubeLoader } from "@/components/ui/brand-cube-loader";
 import { formatCurrency } from "@/lib/utils";
 
 const PLATFORM_FEES: Record<string, number> = { ebay: 0.127, facebook: 0, gumtree: 0.02 };
@@ -292,7 +293,7 @@ export default function SellingPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20 text-slate-500 text-sm gap-2">
-        <RefreshCw className="w-4 h-4 animate-spin" /> Loading flips…
+        <BrandCubeLoader />
       </div>
     );
   }

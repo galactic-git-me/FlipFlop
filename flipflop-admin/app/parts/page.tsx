@@ -19,6 +19,7 @@ import { EmptyState } from "@/components/empty-state";
 import { ManualSubmitModal } from "@/components/manual-submit-modal";
 import { GroupedPart, Listing, Classification, CLASSIFICATION_CONFIG } from "@/lib/types";
 import { api } from "@/lib/api";
+import { BrandCubeLoader } from "@/components/ui/brand-cube-loader";
 import { formatCurrency, formatRelativeTime } from "@/lib/utils";
 
 // ── Tab definitions ────────────────────────────────────────────────────────────
@@ -386,7 +387,7 @@ function FlipOpportunitiesTab() {
       {/* Results */}
       {loading ? (
         <div className="flex items-center justify-center py-20 text-slate-500 text-sm gap-2">
-          <RefreshCw className="w-4 h-4 animate-spin" /> Loading…
+          <BrandCubeLoader />
         </div>
       ) : listings.length === 0 ? (
         <EmptyState icon={Gem} title="No listings found"
@@ -1589,7 +1590,7 @@ function PartsTab({ category }: { category: PartsTabCategory }) {
       {/* Grid */}
       {loading ? (
         <div className="flex items-center justify-center py-20 text-slate-500 text-sm gap-2">
-          <RefreshCw className="w-4 h-4 animate-spin" /> Loading…
+          <BrandCubeLoader />
         </div>
       ) : filtered.length === 0 ? (
         <EmptyState

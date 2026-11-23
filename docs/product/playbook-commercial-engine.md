@@ -110,9 +110,7 @@ Exact-page capture confirmed that the current Amazon Windows 11 Home bestseller 
 
 ## Latest live DEV audit — 15 October 2026
 
-The current refresh supersedes the earlier continuation, OS-source and capture snapshots above. Durable job `d59d10fc-ef3f-4e1b-b57b-9f3f9e9e8386` completed: 8/8 Amazon hardware bestseller categories, 712 observations and 391 matches; 5/5 RoyalCDKeys offers captured for source review; 59 exact supplier captures attempted, 22 captured and 37 unresolved. The exact capture batch uses asynchronous concurrency capped at three listings. No approvals or publications occurred.
 
-The live proposals remain blocked: 24 cells, 16 complete hardware drafts, 0 compatibility-verified, 0 with prices for all three delivery modes and 0 ready for approval. The service assembled 465 upsell alternatives; none is publication-eligible. Admin review currently has 31 exact supplier products, 15 motherboard suggestions, 105 exact-product engineering suggestions and 5 RoyalCDKeys products awaiting applicable review. Supplier-cost and workshop-capacity evidence remain empty. The [current readiness audit](../../FlipFlop.shop/output/dev-readiness-active-goal-latest/README.md) has per-cell blockers. Focused backend approval-boundary, RoyalCDKeys and exact-capture tests passed (18 tests); production deployment was not performed.
 
 ## Playbook continuation — 15 October 2026
 
@@ -120,11 +118,9 @@ The Playbook now falls back to a same-source overall PassMark score when a workl
 
 ## Latest scheduled DEV refresh and approval queue — 15 October 2026
 
-Durable scheduled run `e10d0412-433e-4cfa-8159-ad9e8ea71d84` succeeded. It refreshed all 8 Amazon hardware bestseller categories (712 observations, 389 matched), captured 5 RoyalCDKeys offers, attempted 64 exact-product captures (38 captured, 1 retained and 25 unresolved), and rebuilt all 24 segment proposals. The current audit found 19 complete hardware drafts, 5 missing required roles, 0 compatible proposals, 0 proposals with all three delivery prices, 0 approved selling prices and 0 published upsells. No supplier-cost evidence has been approved. Operator queues are 36 distinct hardware listings across 141 proposal appearances, 18 motherboard references, 101 product-engineering suggestions, 5 software offers, plus exact listing-photo and final-model approvals. The current itemised evidence is in [the operator-queue readiness report](../../FlipFlop.shop/output/dev-readiness-active-goal-2026-10-15-operator-queues/README.md). Exact-configuration checkout remains unverified because no Playbook cell is approved and published. Routine catalogue refresh and proposal rebuild do not require operator clicks; the operator review page is for those evidence and publication decisions that require a person.
 
 ### Playbook catalogue sync and alternative-capture follow-up — 15 October 2026
 
-Durable DEV refresh `5e6d9a30-2cb4-470d-990a-f8bcac5e2473` succeeded: 8/8 Amazon hardware bestseller categories produced 724 observations (395 matched), RoyalCDKeys captured 5/5 offers for review, and exact-page capture attempted 64 products (55 captured, 1 retained, 8 unresolved). Amazon's catalogue-attributes API remained access-denied for 157 cached ASINs. A follow-up audit still has 24 cells, 19 hardware-complete, 5 incomplete, zero compatibility-verified, zero with all three delivery prices and zero ready to approve; 35 hardware supplier products and 17 motherboard suggestions await review. One distinct missing part remains the secondary-storage role; AIW-03 still lacks CPU, GPU, RAM and a second drive.
 
 The refresh pipeline now syncs captured offers into the catalogue after exact capture, and the captured-facts rebuild performs the same local sync before proposal recalculation. Both paths avoid repeating the remote Ubuntu availability check and keep new catalogue variants pending review. Missing CPU/GPU roles also prioritize exact-page capture of alternatives only when a same-source PassMark overall score meets the missing target; CPU alternatives must match the known socket and explicitly identify integrated graphics when the authored cell has no discrete GPU. GPU alternatives must meet the authored VRAM floor. This collects review evidence only; assembly still needs reviewed fit facts and a current, approved supplier offer.
 

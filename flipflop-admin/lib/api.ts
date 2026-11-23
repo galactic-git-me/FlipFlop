@@ -424,6 +424,7 @@ export interface ManualBuildSummary {
 }
 
 export interface ManualBuildSaleAlert extends ManualBuildSummary {
+  sale_event_id?: number | null;
   dispatch_status: string;
   sale_channel: string | null;
   sale_account: string | null;
@@ -433,6 +434,13 @@ export interface ManualBuildSaleAlert extends ManualBuildSummary {
   sale_currency: string;
   sale_source: string | null;
   sale_confirmed_at: string | null;
+  refund_review: null | {
+    required: boolean;
+    detected_at: string;
+    order_payment_status: string | null;
+    refunds: Array<{ amount: string | null; currency: string | null; refund_id: string | null; refund_date: string | null }>;
+  };
+  withdrawn_channels: Array<{ channel: string; status: string }>;
 }
 
 export interface AiReadyToShipProposal {
@@ -1012,7 +1020,9 @@ export const api = {
         method: "POST",
         body: JSON.stringify({ images }),
       }),
-    browserJobs: () => request<Array<{ id: number; build_id: number; channel: string; status: string; operation: string; message?: string | null; updated_at?: string | null }>>("/cross-listing/browser-jobs"),
+    browserJobs: () => request<Array<{ id: number; build_id: number; channel: string; status: string; operation: string; message?: string | null; created_at?: string | null; updated_at?: string | null }>>("/cross-listing/browser-jobs"),
+    setManualChannelStatus: (buildId: number, channel: string, body: {status: "live" | "sold" | "ended" | "cancelled" | "not_listed"; reason: string; listing_url?: string; external_id?: string}) =>
+      request<{build_id: number; channel: string; status: string}>(`/cross-listing/builds/${buildId}/channels/${encodeURIComponent(channel)}/status`, {method: "PATCH", body: JSON.stringify(body)}),
     queueBrowserJob: (data: { build_id: number; channel: string; operation: "publish" | "update" | "relist"; image_urls: string[] }) =>
       request<{ id: number; status: string }>("/cross-listing/browser-jobs", { method: "POST", body: JSON.stringify(data) }),
     retryBrowserJob: (id: number) => request<unknown>(`/cross-listing/browser-jobs/${id}/retry`, { method: "POST" }),
@@ -1395,6 +1405,11 @@ export const api = {
   manualBuilds: {
     list: () => request<ManualBuildSummary[]>("/manual-builds/"),
     soldAlerts: () => request<ManualBuildSaleAlert[]>("/manual-builds/sold-alerts"),
+    refundReview: (id: number, decision: "relist" | "keep_offline" | "not_full_refund") => request<{ ok: boolean; decision: string; build_status: string }>(`/manual-builds/${id}/refund-review`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ decision }),
+    }),
     reconcileEbayRelist: (id: number) => request<{ ok: boolean; relisted: boolean; listing_id?: string; listing_url?: string }>(`/manual-builds/${id}/reconcile-ebay-relist`, { method: "POST" }),
     get: (id: number) => request<ManualBuild>(`/manual-builds/${id}`),
     getPurchasePlan: (id: number) => request<BuildPurchasePlan>(`/manual-builds/${id}/purchase-plan`),
@@ -2168,8 +2183,8 @@ export const api = {
     book: () => request<import('./playbook-book').PlaybookBook>('/commerce-intelligence/playbook-service/book'),
     bookHistory: (cellId: string, historyLimit = 100) => request<{cell_id:string;history:import('./playbook-book').BookEvent[]}>(`/commerce-intelligence/playbook-service/book/${encodeURIComponent(cellId)}/history?history_limit=${historyLimit}`),
     refreshPricingGuidance: () => request<{queued:boolean;checkout_changed:false;published:false}>('/commerce-intelligence/playbook-service/pricing-guidance/refresh', {method:'POST'}),
-    proposals: () => request<{items:import('./playbook-proposals').PlaybookOffer[]}>('/commerce-intelligence/playbook-service/proposals', {cache:'no-store'}),
-    supplierLicences: () => request<{items:import('./playbook-proposals').SupplierLicenceCandidate[]}>('/commerce-intelligence/playbook-service/supplier-licences'),
+    proposals: () => request<{items:import('./playbook-proposals').PlaybookOffer[]}>('/commerce-intelligence/playbook-service/proposals', {cache:'no-store',signal:AbortSignal.timeout(30_000)}),
+    supplierLicences: () => request<{items:import('./playbook-proposals').SupplierLicenceCandidate[]}>('/commerce-intelligence/playbook-service/supplier-licences', {signal:AbortSignal.timeout(30_000)}),
     approveSupplierLicence: (candidate:import('./playbook-proposals').SupplierLicenceCandidate) =>
       request<{listing_id:number;reviewed:true;reused:boolean;category:'os'|'office'|'ai_subscription';activated_catalogue_links:number;prices_published:false;checkout_changed:false;customer_offering_enabled:false}>(`/commerce-intelligence/playbook-service/supplier-licences/${candidate.listing_id}/approve`,{method:'POST',body:JSON.stringify({licence_review_fingerprint:candidate.licence_review_fingerprint})}),
     engineeringSuggestions: () => request<{items:import('./playbook-proposals').MotherboardEngineeringSuggestion[]}>('/commerce-intelligence/playbook-service/engineering-suggestions'),
@@ -2188,7 +2203,7 @@ export const api = {
       request<import('./playbook-proposals').CompatibilitySecondOpinion>(`/commerce-intelligence/playbook-service/proposals/${offer.proposal_id}/compatibility-second-opinion`,{method:'POST',body:JSON.stringify({revision_sha256:offer.revision_sha256})}),
     approveSupplierSources: (offer:import('./playbook-proposals').PlaybookOffer,source_evidence:Array<{role:string;listing_id:number;fingerprint:string}>) =>
       request<{imported:number;reused:number;pending_roles:string[];checkout_changed:false;prices_published:false}>(`/commerce-intelligence/playbook-service/proposals/${offer.proposal_id}/approve-supplier-sources`,{method:'POST',body:JSON.stringify({revision_sha256:offer.revision_sha256,source_evidence})}),
-    approveAllSupplierSources: (offers:Array<import('./playbook-proposals').PlaybookOffer & {source_evidence:Array<{role:string;listing_id:number;fingerprint:string}>}>) =>
+    approveAllSupplierSources: (offers:Array<Pick<import('./playbook-proposals').PlaybookOffer,'proposal_id'|'revision_sha256'> & {source_evidence:Array<{role:string;listing_id:number;fingerprint:string}>}>) =>
       request<{proposals:number;skipped_proposals:number;imported:number;reused:number;pending_roles:{cell_id:string;role:string}[];prices_published:false}>('/commerce-intelligence/playbook-service/supplier-sources/approve-all',{method:'POST',body:JSON.stringify({proposals:offers.map(offer=>({proposal_id:offer.proposal_id,revision_sha256:offer.revision_sha256,source_evidence:offer.source_evidence}))})}),
     configurations: () => request<{items:import('./commercial-readiness').ConfigurationReview[]}>('/commerce-intelligence/configurations'),
     configuration: (id:number) => request<import('./commercial-readiness').ConfigurationDetail>(`/commerce-intelligence/configurations/${id}`),

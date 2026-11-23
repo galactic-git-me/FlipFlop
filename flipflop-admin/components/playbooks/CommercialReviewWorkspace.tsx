@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import { api } from "@/lib/api";
+import { BrandCubeLoader } from "@/components/ui/brand-cube-loader";
 import { supplierArrivalEstimate, supplierDisplayLabel } from "@/lib/commercial-readiness";
 import type {
   CompatibilitySecondOpinion,
@@ -103,7 +105,9 @@ function directRetailProduct(value: string | undefined) {
         host.endsWith(".overclockers.co.uk")) &&
         (url.pathname.toLowerCase().includes("/product/") ||
           /-[a-z0-9]+-\d{4,}\.html$/i.test(url.pathname) ||
-          /^\/[a-z0-9][a-z0-9.-]+\/[a-z]{2,4}-[a-z0-9]{2,6}-[a-z0-9]{2,6}\.html$/i.test(url.pathname)))
+          /^\/[a-z0-9][a-z0-9.-]+\/[a-z]{2,4}-[a-z0-9]{2,6}-[a-z0-9]{2,6}\.html$/i.test(url.pathname))) ||
+      ((host === "gamers-outlet.net" || host === "www.gamers-outlet.net") &&
+        /^\/en\/buy-[a-z0-9-]+$/i.test(url.pathname))
     );
   } catch {
     return false;
@@ -245,6 +249,9 @@ export default function CommercialReviewWorkspace({
       const result = await api.commercialReadiness.approveSupplierLicence(
         candidate
       );
+      toast.success(candidate.category === "os"
+        ? `Reviewed ${candidate.title}; ${result.activated_catalogue_links} internal OS catalogue candidate${result.activated_catalogue_links === 1 ? "" : "s"} added.`
+        : `Reviewed the exact ${candidate.title} supplier source.`);
       await load();
       try {
         const rebuilt = await rebuildCaptured();
@@ -258,6 +265,7 @@ export default function CommercialReviewWorkspace({
           } proposals from stored facts. Prices and products remain unpublished.`
         );
       } catch (reason) {
+        toast.error(`Supplier source review saved, but proposal rebuilding failed: ${reason instanceof Error ? reason.message : "unknown error"}`);
         setError(
           `Source review was saved, but proposal rebuilding failed: ${
             reason instanceof Error ? reason.message : "unknown error"
@@ -265,6 +273,7 @@ export default function CommercialReviewWorkspace({
         );
       }
     } catch (reason) {
+      toast.error(reason instanceof Error ? reason.message : "Could not review this supplier product");
       setError(
         reason instanceof Error
           ? reason.message
@@ -297,6 +306,9 @@ export default function CommercialReviewWorkspace({
         return;
       }
       await api.commercialReadiness.reviewProposal(currentOffer, decision);
+      toast.success(decision === "approve"
+        ? "Build approved and published after all server checks passed."
+        : "Build proposal rejected.");
       setNotice(
         decision === "approve"
           ? "Exact proposal approved and published after the server repeated publication checks."
@@ -321,6 +333,7 @@ export default function CommercialReviewWorkspace({
           ? reason.message
           : "Could not review this revision"
       );
+      toast.error(reason instanceof Error ? reason.message : "Could not save this build decision");
     } finally {
       setBusy(false);
     }
@@ -355,6 +368,7 @@ export default function CommercialReviewWorkspace({
   const approveSources = async (offer: PlaybookOffer) => {
     setBusy(true);
     setError(null);
+    setNotice("Checking the latest supplier capture before saving this review…");
     try {
       // A scheduled rebuild can replace this proposal while the operator is
       // reviewing it. Submit the exact supplier fingerprints that were shown;
@@ -376,6 +390,8 @@ export default function CommercialReviewWorkspace({
         currentOffer,
         supplierEvidence(offer)
       );
+      toast.success(`Supplier review saved: ${result.imported} new exact fact${result.imported === 1 ? "" : "s"}; ${result.reused} already approved.`);
+      setNotice("Supplier evidence saved. Rebuilding proposal readiness from the reviewed captures…");
       await load();
       try {
         const rebuilt = await rebuildCaptured();
@@ -387,6 +403,7 @@ export default function CommercialReviewWorkspace({
           : "No supplier facts were saved because the displayed captures had changed or were unavailable. The current proposals have been reloaded.";
         setNotice(`${outcome}${changed} Rebuilt ${rebuilt.cells} proposals from saved captures; unknown buying postage was costed at £0.00. No customer prices were published.`);
       } catch (reason) {
+        toast.error(`Supplier review saved, but proposal rebuilding failed: ${reason instanceof Error ? reason.message : "unknown error"}`);
         setError(
           `Supplier review was saved, but proposal rebuilding failed: ${
             reason instanceof Error ? reason.message : "unknown error"
@@ -405,9 +422,11 @@ export default function CommercialReviewWorkspace({
           const currentOffer = latest.items.find(item => item.proposal_id === offer.proposal_id);
           if (currentOffer && JSON.stringify(supplierEvidence(currentOffer)) === JSON.stringify(supplierEvidence(offer))) {
             const result = await api.commercialReadiness.approveSupplierSources(currentOffer, supplierEvidence(currentOffer));
+            toast.success(`Supplier review saved: ${result.imported} new exact fact${result.imported === 1 ? "" : "s"}; ${result.reused} already approved.`);
             await load();
             setError(null);
             const rebuilt = await rebuildCaptured();
+            toast.success(`Proposals recalculated for ${rebuilt.cells} build cells.`);
             setNotice(`Saved ${result.imported} exact supplier fact${result.imported === 1 ? "" : "s"}; ${result.reused} already approved. Rebuilt ${rebuilt.cells} proposals from captured data.`);
           } else {
             await load();
@@ -424,6 +443,7 @@ export default function CommercialReviewWorkspace({
           ? reason.message
           : "Could not approve current supplier facts"
       );
+      toast.error(reason instanceof Error ? reason.message : "Could not approve current supplier facts");
     } finally {
       setBusy(false);
     }
@@ -431,27 +451,47 @@ export default function CommercialReviewWorkspace({
   const approveAllSources = async () => {
     setBusy(true);
     setError(null);
-    setNotice(null);
+    setNotice("Preparing the exact supplier captures that still need review…");
     try {
-      const latest = await api.commercialReadiness.proposals();
-      const currentById = new Map(latest.items.map((item) => [item.proposal_id, item]));
+      // Supplier review is bound server-side to the current exact
+      // (role, listing, fingerprint). Avoid an extra full proposal reload and
+      // send each still-pending product only once even when several builds use
+      // the same catalogue listing.
+      const reviewFingerprints = new Map(
+        allReviewableSources.map((part) => [
+          part.listing_id,
+          part.source_observation?.fingerprint,
+        ])
+      );
+      const reviewedListingIds = new Set<number>();
       const reviewed = offers.flatMap((shown) => {
-        const current = currentById.get(shown.proposal_id);
-        return current
-          ? [{ ...current, source_evidence: supplierEvidence(shown) }]
-          : [];
+        const source_evidence = supplierEvidence(shown).filter((item) => {
+          if (reviewedListingIds.has(item.listing_id) ||
+              reviewFingerprints.get(item.listing_id) !== item.fingerprint) return false;
+          reviewedListingIds.add(item.listing_id);
+          return true;
+        });
+        return source_evidence.length ? [{
+          proposal_id: shown.proposal_id,
+          revision_sha256: shown.revision_sha256,
+          source_evidence,
+        }] : [];
       });
       if (!reviewed.length) {
         await load();
         setNotice("These proposals are no longer awaiting supplier review. The current Playbook list has been loaded.");
         return;
       }
+      setNotice(`Saving ${reviewedListingIds.size} exact supplier capture reviews…`);
       const result = await api.commercialReadiness.approveAllSupplierSources(reviewed);
+      toast.success(`Supplier reviews saved: ${result.imported} new exact fact${result.imported === 1 ? "" : "s"}; ${result.reused} already approved.`);
+      setNotice("Supplier evidence saved. Rebuilding proposal readiness from the reviewed captures…");
       await load();
       try {
         const rebuilt = await rebuildCaptured();
         setNotice(`Reviewed ${result.proposals} build proposals: ${result.imported} exact supplier facts saved; ${result.reused} already approved; ${result.pending_roles.length} changed or unavailable component captures remain pending${result.skipped_proposals ? `; ${result.skipped_proposals} proposals were no longer pending` : ""}. Rebuilt ${rebuilt.cells} proposals from saved captures; unknown buying postage was costed at £0.00. No prices or products were published.`);
       } catch (reason) {
+        toast.error(`Supplier reviews saved, but proposal rebuilding failed: ${reason instanceof Error ? reason.message : "unknown error"}`);
         setError(
           `Supplier reviews were saved, but proposal rebuilding failed: ${
             reason instanceof Error ? reason.message : "unknown error"
@@ -474,6 +514,7 @@ export default function CommercialReviewWorkspace({
           ? reason.message
           : "Could not approve the reviewed supplier facts"
       );
+      toast.error(reason instanceof Error ? reason.message : "Could not approve the reviewed supplier facts");
     } finally {
       setBusy(false);
     }
@@ -641,19 +682,32 @@ export default function CommercialReviewWorkspace({
           >
             {label}
             {id === "builds"
-              ? ` (${offers.length})`
+              ? loading || error ? "" : ` (${offers.length})`
               : id === "suppliers"
-              ? ` (${pendingSupplierSources.length})`
+              ? loading || error ? "" : ` (${pendingSupplierSources.length})`
               : id === "compatibility"
-              ? ` (${compatibilityCount}/${offers.length})`
+              ? loading || error ? "" : ` (${compatibilityCount}/${offers.length})`
               : id === "software"
-              ? ` (${licenceCandidates.length})`
+              ? loading || error ? "" : ` (${licenceCandidates.length})`
               : ""}
           </button>
         ))}
       </nav>
       {loading ? (
-        <p role="status">Loading Playbook review data…</p>
+        <div className="flex min-h-[42vh] items-center justify-center rounded border border-slate-800 bg-slate-950/40">
+          <BrandCubeLoader size="md" />
+        </div>
+      ) : error ? (
+        <section className="flex min-h-[30vh] flex-col items-center justify-center gap-3 rounded border border-red-900/60 bg-slate-950/40 p-6 text-center">
+          <p className="text-slate-300">Playbook review data could not be loaded.</p>
+          <button
+            type="button"
+            onClick={() => void load()}
+            className="rounded border border-slate-600 px-4 py-2 text-sm text-slate-200 hover:bg-slate-800"
+          >
+            Retry loading Playbook data
+          </button>
+        </section>
       ) : (
         <>
           <section

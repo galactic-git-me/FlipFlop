@@ -1,5 +1,5 @@
 from types import SimpleNamespace
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import asyncio
 
@@ -18,6 +18,21 @@ def test_completed_listing_with_sale_is_sold():
 
 def test_completed_listing_without_sale_is_ended_early():
     assert classify_ebay_listing_state({"listing_status": "Completed", "quantity_sold": 0}, order_found=False) == "ended"
+
+
+def test_confirmed_cancellation_overrides_ebay_historical_quantity_sold():
+    assert classify_ebay_listing_state(
+        {"listing_status": "Completed", "quantity_sold": 1},
+        order_found=False,
+        cancelled_order=True,
+    ) == "ended"
+
+
+def test_confirmed_order_overrides_stale_active_listing_snapshot():
+    assert classify_ebay_listing_state(
+        {"listing_status": "Active", "quantity_sold": 0},
+        order_found=True,
+    ) == "sold"
 
 
 def test_order_proves_sale_even_if_item_has_disappeared():
@@ -79,6 +94,10 @@ async def test_active_original_listing_stays_sold_and_is_reported_for_withdrawal
     relisted = AsyncMock()
     monkeypatch.setattr("app.config.get_settings", lambda: SimpleNamespace(ebay_listing_environment="production"))
     monkeypatch.setattr("app.services.ebay_token_manager.get_valid_ebay_access_token", AsyncMock(return_value="token"))
+    monkeypatch.setattr("app.services.ebay_listing_reconciliation.get_reviewed_refund_decision", AsyncMock(return_value=None))
+    monkeypatch.setattr("app.services.ebay_order_sync.get_order_refund_state", AsyncMock(return_value={
+        "cancel_state": "NONE", "refunds": [], "refund_signature": "",
+    }))
     monkeypatch.setattr("app.services.ebay_relisted_listing.find_active_listing_for_sku", AsyncMock(return_value={
         "listing_id": listing_id, "listing_url": f"https://www.ebay.co.uk/itm/{listing_id}",
     }))
@@ -93,6 +112,55 @@ async def test_active_original_listing_stays_sold_and_is_reported_for_withdrawal
     assert build.status == "sold"
     relisted.assert_not_awaited()
     db.flush.assert_awaited_once()
+
+
+@pytest.mark.asyncio
+async def test_cancelled_order_remains_cancelled_after_build_reopens(monkeypatch):
+    from app.services.ebay_listing_reconciliation import reconcile_manual_build_listing
+
+    order_id = "05-15450-52548"
+    channel_row = SimpleNamespace(id=82, status="sold")
+    query_result = SimpleNamespace(
+        scalar_one_or_none=lambda: None,
+        scalars=lambda: SimpleNamespace(first=lambda: channel_row),
+    )
+    db = AsyncMock()
+    db.add = MagicMock()
+    db.execute.return_value = query_result
+    build = SimpleNamespace(
+        id=27,
+        status="built",
+        ebay_listing_id="198786792744",
+        ebay_listing_status="ended",
+        ebay_listing_status_checked_at=None,
+        ebay_listing_end_reason="order_cancelled",
+        ebay_order_id=order_id,
+        ebay_sku="FF-BUILD-27",
+        dispatch_status="not_started",
+    )
+    cancelled_order = SimpleNamespace(order_id=order_id)
+    cancellation = AsyncMock(return_value={"cancel_state": "CANCELED"})
+    cancellation_inventory = AsyncMock()
+    order_lookup = AsyncMock(return_value=cancelled_order)
+
+    monkeypatch.setattr("app.config.get_settings", lambda: SimpleNamespace(ebay_listing_environment="production"))
+    monkeypatch.setattr("app.services.ebay_token_manager.get_valid_ebay_access_token", AsyncMock(return_value="token"))
+    monkeypatch.setattr("app.services.ebay_listing_reconciliation.get_reviewed_refund_decision", AsyncMock(return_value=None))
+    monkeypatch.setattr("app.services.ebay_trading_api.get_item_status", AsyncMock(return_value={
+        "listing_status": "Completed", "quantity_sold": 1,
+    }))
+    monkeypatch.setattr("app.services.ebay_order_sync.get_order_refund_state", cancellation)
+    monkeypatch.setattr("app.services.ebay_order_sync.find_order_for_listing", order_lookup)
+    monkeypatch.setattr("app.services.inventory_lifecycle.record_sale_cancellation", cancellation_inventory)
+
+    state = await reconcile_manual_build_listing(build, db, force=True)
+
+    assert state == "ended"
+    assert build.status == "built"
+    assert build.ebay_listing_end_reason == "order_cancelled"
+    cancellation.assert_awaited_once_with(order_id, environment="production", db=db)
+    order_lookup.assert_awaited_once()
+    cancellation_inventory.assert_awaited_once_with(db, build, source="ebay_order_api")
 
 
 @pytest.mark.asyncio
@@ -135,6 +203,7 @@ async def test_error_17_without_matching_order_authorizes_fresh_listing():
         ebay_listing_status=None,
         ebay_listing_status_checked_at=None,
         ebay_listing_end_reason=None,
+        ebay_order_id=None,
     )
     db = AsyncMock()
     get_item_error = EbayTradingApiError("GetItem", [], "Failure")
@@ -165,6 +234,7 @@ async def test_error_17_stays_unknown_if_order_lookup_fails():
         ebay_listing_status=None,
         ebay_listing_status_checked_at=None,
         ebay_listing_end_reason=None,
+        ebay_order_id=None,
     )
     db = AsyncMock()
     get_item_error = EbayTradingApiError("GetItem", [], "Failure")
@@ -214,6 +284,10 @@ async def test_paid_order_records_sale_provenance_and_queues_dispatch(
 
     monkeypatch.setattr("app.config.get_settings", lambda: SimpleNamespace(ebay_listing_environment="production"))
     monkeypatch.setattr("app.services.ebay_token_manager.get_valid_ebay_access_token", AsyncMock(return_value="token"))
+    monkeypatch.setattr("app.services.ebay_listing_reconciliation.get_reviewed_refund_decision", AsyncMock(return_value=None))
+    monkeypatch.setattr("app.services.ebay_order_sync.get_order_refund_state", AsyncMock(return_value={
+        "cancel_state": "NONE", "refunds": [], "refund_signature": "",
+    }))
     monkeypatch.setattr("app.services.ebay_trading_api.get_item_status", AsyncMock(return_value={"listing_status": "Completed", "quantity_sold": 1}))
     monkeypatch.setattr("app.services.ebay_order_sync.find_order_for_listing", AsyncMock(return_value=order))
     monkeypatch.setattr("app.services.channel_sync.record_confirmed_sale", sale_event)
@@ -236,3 +310,81 @@ async def test_paid_order_records_sale_provenance_and_queues_dispatch(
         source="ebay_fulfillment_order_api",
         account="flip_7417",
     )
+
+
+@pytest.mark.asyncio
+async def test_reviewed_refund_is_not_reclassified_as_the_same_historical_sale(monkeypatch):
+    from app.services.ebay_listing_reconciliation import reconcile_manual_build_listing
+
+    order_id = "05-15450-52548"
+    build = SimpleNamespace(
+        id=48,
+        status="built",
+        ebay_listing_id="198786792744",
+        ebay_listing_url="https://www.ebay.co.uk/itm/198786792744",
+        ebay_listing_status="unknown",
+        ebay_listing_status_checked_at=None,
+        ebay_listing_end_reason="refund_reviewed",
+        ebay_order_id=order_id,
+        sale_price_actual=1400.0,
+        dispatch_status="refunded",
+        ebay_sku="FF-BUILD-48",
+        warranty_started_at=None,
+        delivered_at=None,
+        storefront_product_id=None,
+        status_marker=None,
+    )
+    db = AsyncMock()
+    order = SimpleNamespace(order_id=order_id, sale_price=1400.0)
+    inventory_sale = AsyncMock()
+
+    monkeypatch.setattr("app.config.get_settings", lambda: SimpleNamespace(ebay_listing_environment="production"))
+    monkeypatch.setattr("app.services.ebay_listing_reconciliation.get_reviewed_refund_decision",
+        AsyncMock(return_value="relist"))
+    monkeypatch.setattr("app.services.ebay_token_manager.get_valid_ebay_access_token", AsyncMock(return_value="token"))
+    monkeypatch.setattr("app.services.ebay_order_sync.get_order_refund_state", AsyncMock(return_value={
+        "cancel_state": "NONE", "refunds": [], "refund_signature": "",
+    }))
+    monkeypatch.setattr("app.services.ebay_trading_api.get_item_status", AsyncMock(return_value={
+        "listing_status": "Completed", "quantity_sold": 1,
+    }))
+    monkeypatch.setattr("app.services.ebay_order_sync.find_order_for_listing", AsyncMock(return_value=order))
+    monkeypatch.setattr("app.services.inventory_lifecycle.record_sale", inventory_sale)
+
+    state = await reconcile_manual_build_listing(build, db, force=True)
+
+    assert state == "ended"
+    assert build.status == "built"
+    assert build.ebay_order_id == order_id
+    assert build.ebay_listing_end_reason == "refund_reviewed"
+    inventory_sale.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_refund_decision_does_not_apply_to_a_replacement_listing():
+    from app.services.ebay_listing_reconciliation import get_reviewed_refund_decision
+
+    order_id = "05-15450-52548"
+    refund = SimpleNamespace(
+        id=30,
+        event_type="refund_detected",
+        event_metadata={"order_id": order_id, "listing_id": "198786792744"},
+    )
+    decision = SimpleNamespace(
+        id=31,
+        event_type="refund_relist_decision",
+        event_metadata={
+            "order_id": order_id,
+            "listing_id": "198786792744",
+            "refund_event_id": 30,
+            "decision": "relist",
+        },
+    )
+    db = AsyncMock()
+    db.execute.return_value = SimpleNamespace(all=lambda: [(refund, "198786792744"), (decision, "198786792744")])
+
+    replacement = SimpleNamespace(id=49, ebay_order_id=order_id, ebay_listing_id="199000000001")
+    original = SimpleNamespace(id=49, ebay_order_id=order_id, ebay_listing_id="198786792744")
+
+    assert await get_reviewed_refund_decision(db, replacement) is None
+    assert await get_reviewed_refund_decision(db, original) == "relist"

@@ -23,6 +23,7 @@ _IDENTITY_NOISE = {
     "matx", "ddr4", "ddr5", "ddr", "sata", "pcie", "pci", "express",
     "generation", "gen", "mother", "m", "for", "with", "the", "and", "lga",
 }
+_PARSER_VERSION = 2
 
 
 def _manufacturer_domains(title: str) -> tuple[str, ...]:
@@ -76,7 +77,7 @@ def _allowed_official_url(url: str, domains: tuple[str, ...]) -> bool:
 def _model_name_prefix(listing_title: str) -> str:
     return re.split(
         r"[,|]|\b(?:motherboard|mother\s+board|mainboard|socket|supports|supporting|intel|amd|"
-        r"lga\s*\d{4,5}|ddr\s*[345]|e?\s*[- ]?atx|micro\s*[- ]?atx|mini\s*[- ]?itx)\b",
+        r"lga\s*\d{4,5}|str\s*\d+|eeb|ddr\s*[345]|e?\s*[- ]?atx|micro\s*[- ]?atx|mini\s*[- ]?itx)\b",
         listing_title, maxsplit=1, flags=re.I,
     )[0].strip(" ,:-")
 
@@ -108,16 +109,29 @@ def extract_official_board_facts(markup: str, listing_title: str, source_url: st
     identity = " ".join((page_title, headings, publisher))
     if not _board_identity_matches(listing_title, identity):
         return None
-    text = re.sub(r"\s+", " ", soup.get_text(" ", strip=True))[:250_000]
+    # Manufacturer pages often include recommendations and other products in
+    # their global navigation/footer. Those can contain a different socket or
+    # chipset and must never be mixed into the exact board's facts. ASUS tech
+    # spec pages render their actual specification rows in rowTableItems.
+    spec_nodes = soup.select('[class*="rowTableItems"]')
+    if spec_nodes:
+        source_text = " ".join(node.get_text(" ", strip=True) for node in spec_nodes)
+    else:
+        main = soup.select_one("main, [role=main]")
+        if main is None:
+            return None
+        source_text = main.get_text(" ", strip=True)
+    text = re.sub(r"\s+", " ", source_text)[:250_000]
     facts: dict[str, object] = {}
     evidence: dict[str, str] = {}
 
-    socket = re.search(r"\b(?:AMD\s+)?Socket\s*(AM[45])\b|\bLGA\s*(\d{4,5})\b", text, re.I)
+    socket = re.search(r"\b(?:AMD\s+)?Socket\s*(AM[45]|sTR\s*\d+)\b|\bLGA\s*(\d{4,5})\b", text, re.I)
     if socket:
-        facts["socket"] = (socket.group(1) or f"lga{socket.group(2)}").casefold()
+        facts["socket"] = (re.sub(r"\s+", "", socket.group(1)).casefold()
+            if socket.group(1) else f"lga{socket.group(2)}")
         evidence["socket"] = _snippet(text, socket.group(0)) or socket.group(0)
 
-    chipset = re.search(r"\b(?:AMD|Intel)\s+([ABXZ H]\s?\d{3,4}E?|B\d{3,4}E?)\b", text, re.I)
+    chipset = re.search(r"\b(?:AMD|Intel)\s+(WRX\s*\d{2,3}|[ABXZ H]\s?\d{3,4}E?|B\d{3,4}E?)\b", text, re.I)
     if chipset:
         facts["chipset"] = re.sub(r"\s+", "", chipset.group(1)).casefold()
         evidence["chipset"] = _snippet(text, chipset.group(0)) or chipset.group(0)
@@ -142,7 +156,7 @@ def extract_official_board_facts(markup: str, listing_title: str, source_url: st
         facts["max_ram_gb"] = int(capacity.group(1))
         evidence["max_ram_gb"] = _snippet(text, capacity.group(0)) or capacity.group(0)
 
-    form = re.search(r"\b(E\s*[- ]?ATX|Micro\s*[- ]?ATX|Mini\s*[- ]?ITX|ATX)\s+(?:Form\s+Factor|Motherboard)\b|\bPCB\s+Info\s*[:|]?\s*(E\s*[- ]?ATX|Micro\s*[- ]?ATX|Mini\s*[- ]?ITX|ATX)\b", text, re.I)
+    form = re.search(r"\b(EEB|E\s*[- ]?ATX|Micro\s*[- ]?ATX|Mini\s*[- ]?ITX|ATX)\s+(?:Form\s+Factor|Motherboard)\b|\bPCB\s+Info\s*[:|]?\s*(EEB|E\s*[- ]?ATX|Micro\s*[- ]?ATX|Mini\s*[- ]?ITX|ATX)\b", text, re.I)
     if form:
         value = re.sub(r"\s+", "", form.group(1) or form.group(2)).replace("-", "").casefold()
         facts["form_factor"] = {"eatx": "eatx", "microatx": "matx", "miniitx": "itx"}.get(value, value)
@@ -183,7 +197,8 @@ def extract_official_board_facts(markup: str, listing_title: str, source_url: st
     if not facts.get("socket") or not facts.get("ram_type") or len(facts) < 3:
         return None
     return {"facts": facts, "field_evidence": evidence, "source_url": source_url,
-        "source_title": page_title or headings[:300], "review_required": True}
+        "source_title": page_title or headings[:300], "parser_version": _PARSER_VERSION,
+        "review_required": True}
 
 
 async def _fetch_official_page(client: httpx.AsyncClient, url: str, domains: tuple[str, ...]) -> tuple[str, str] | None:

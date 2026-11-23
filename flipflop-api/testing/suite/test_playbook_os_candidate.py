@@ -31,15 +31,15 @@ def test_os_candidate_rejects_missing_physical_or_manufacturer_evidence():
     assert not _verified_windows_licence_listing(listing_with_capture(rank="328 in Software"))
 
 
-def test_royalcdkeys_exact_reviewed_windows_offer_is_a_candidate_for_review():
-    url="https://royalcdkeys.com/en-gb/products/windows-11-pro-oem-cd-key"
+def test_gamers_outlet_exact_reviewed_windows_offer_is_a_candidate_for_review():
+    url="https://www.gamers-outlet.net/en/buy-windows-11-pro-oem-cd-key"
     capture={"status":"captured","url":url,"digital_product":True,
         "licence_review_required":True,"licence_resale_rights_verified":False,
         "supplier_product_handle":"windows-11-pro-oem-cd-key",
         "product_properties":{"License type (supplier listing)":"OEM",
             "Key uniqueness (supplier claim)":"No key-reuse statement captured"}}
-    listing=SimpleNamespace(title="Windows 11 Pro OEM CD Key",url=url,raw_specs={
-        "royalcdkeys":{"category":"os","handle":"windows-11-pro-oem-cd-key"},
+    listing=SimpleNamespace(title="Windows 11 Pro OEM CD Key",url=url,source_name="Gamers Outlet",raw_specs={
+        "gamers_outlet":{"category":"os","handle":"windows-11-pro-oem-cd-key"},
         "playbook_product_capture":capture})
     assert _verified_windows_licence_listing(listing)
     listing.raw_specs["playbook_product_capture"]["supplier_product_handle"]="wrong-handle"

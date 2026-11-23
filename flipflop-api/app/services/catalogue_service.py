@@ -344,7 +344,7 @@ async def check_freshness(db: AsyncSession, *, curated_only=False) -> int:
             # turn an unreviewed software source into an approved catalogue
             # product merely because its supplier page was seen again.
             raw=listing.raw_specs or {}
-            if (raw.get('gamers_outlet') or raw.get('royalcdkeys') or {}).get('operator_approval_required') and not (
+            if raw.get('gamers_outlet', {}).get('operator_approval_required') and not (
                     raw.get('playbook_licence_source_review') or {}).get('reviewed'):
                 previous='pending_review'
             variant.status = previous

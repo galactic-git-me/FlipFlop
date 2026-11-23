@@ -7,6 +7,7 @@ from app.models.channel_listing import ChannelListing
 from app.models.browser_listing_job import BrowserListingJob
 from app.services.browser_listing_jobs import enqueue_browser_job, complete_browser_job, validate_listing_url
 from app.api.browser_listing_jobs import claim, heartbeat, preflight, LeaseIn, require_worker
+from app.api.cross_listing import set_channel_status, ManualChannelStatusIn
 
 
 @pytest.fixture(autouse=True)
@@ -78,6 +79,80 @@ async def test_sold_build_cannot_be_queued(db):
     build.status = "sold"
     with pytest.raises(ValueError, match="Sold"):
         await enqueue_browser_job(db, build.id, "onbuy")
+
+
+@pytest.mark.asyncio
+async def test_operator_channel_status_correction_is_audited(db):
+    build = await make_build(db)
+    build.status = "sold"
+    row = await set_channel_status(build.id, "ebay_uk", ManualChannelStatusIn(
+        status="cancelled", reason="Buyer cancellation confirmed in seller account"), db)
+    saved = (await db.execute(select(ChannelListing).where(
+        ChannelListing.manual_build_id == build.id, ChannelListing.channel == "ebay_uk",
+    ))).scalar_one()
+    from app.models.listing_publish_event import ListingPublishEvent
+    event = (await db.execute(select(ListingPublishEvent).where(
+        ListingPublishEvent.channel_listing_id == saved.id,
+        ListingPublishEvent.event_type == "manual_status_override",
+    ))).scalar_one()
+    assert row["status"] == "cancelled"
+    assert saved.status == "cancelled"
+    assert event.event_metadata["previous_status"] == "draft"
+    assert event.message == "Buyer cancellation confirmed in seller account"
+    assert build.status == "built"
+
+
+@pytest.mark.asyncio
+async def test_operator_marking_channel_sold_withdraws_other_channels(db):
+    build = await make_build(db)
+    ebay = ChannelListing(
+        manual_build_id=build.id,
+        channel="ebay_uk",
+        status="published",
+        external_listing_id="198786792744",
+        listing_url="https://www.ebay.co.uk/itm/198786792744",
+    )
+    vinted = ChannelListing(
+        manual_build_id=build.id,
+        channel="vinted",
+        status="published",
+        external_listing_id="vinted-123",
+        listing_url="https://www.vinted.co.uk/items/vinted-123",
+    )
+    db.add_all([ebay, vinted])
+    await db.flush()
+
+    result = await set_channel_status(
+        build.id,
+        "ebay_uk",
+        ManualChannelStatusIn(status="sold", reason="Verified sold in seller account"),
+        db,
+    )
+
+    assert result["status"] == "sold"
+    assert build.status == "sold"
+    assert ebay.status == "sold"
+    assert vinted.status == "withdrawal_pending"
+    withdrawal = (await db.execute(select(BrowserListingJob).where(
+        BrowserListingJob.channel_listing_id == vinted.id,
+        BrowserListingJob.operation == "withdraw",
+    ))).scalar_one()
+    assert withdrawal.status == "queued"
+
+    from app.api.manual_builds import list_sold_build_alerts
+    alert = next(item for item in await list_sold_build_alerts(db) if item["id"] == build.id)
+    assert alert["sale_channel"] == "ebay_uk"
+    assert alert["sale_source"] == "operator"
+    assert alert["sale_event_id"] is not None
+    assert alert["withdrawn_channels"] == [{"channel": "vinted", "status": "withdrawal_pending"}]
+
+
+@pytest.mark.asyncio
+async def test_operator_cannot_mark_live_without_vendor_identity(db):
+    build = await make_build(db)
+    with pytest.raises(HTTPException, match="confirmed live listing"):
+        await set_channel_status(build.id, "vinted", ManualChannelStatusIn(
+            status="live", reason="Verified listing manually"), db)
 
 
 @pytest.mark.asyncio

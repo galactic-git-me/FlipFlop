@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
 import os
+from urllib.parse import urlparse
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
+from typing import Literal
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import require_operator
@@ -27,6 +29,99 @@ class ChannelImagesIn(BaseModel):
     clean_photographs: bool = False
     image_ids: list[str] = Field(default_factory=list, max_length=24)
     policy_version: int | None = None
+
+
+class ManualChannelStatusIn(BaseModel):
+    status: Literal["live", "sold", "ended", "cancelled", "not_listed"]
+    reason: str = Field(min_length=4, max_length=500)
+    listing_url: str | None = Field(default=None, max_length=1000)
+    external_id: str | None = Field(default=None, max_length=100)
+
+
+@router.patch("/builds/{build_id}/channels/{channel}/status")
+async def set_channel_status(build_id: int, channel: str, body: ManualChannelStatusIn, db: AsyncSession = Depends(get_db)):
+    """Record an operator-verified marketplace status with an audit event."""
+    aliases = {"ebay": "ebay_uk", "facebook": "facebook_catalog", "storefront": "flipflop_shop"}
+    channel = aliases.get(channel, channel)
+    allowed = {"ebay_uk", "flipflop_shop", "onbuy", "amazon", "facebook_catalog", "vinted", "google_shopping"}
+    if channel not in allowed:
+        raise HTTPException(422, "Unsupported sales channel")
+    build = (await db.execute(select(ManualBuild).where(ManualBuild.id == build_id).with_for_update())).scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if body.status == "live" and (not body.listing_url or not body.external_id):
+        raise HTTPException(422, "A confirmed live listing requires its vendor URL and listing ID")
+    if body.status == "live":
+        allowed_hosts = {
+            "ebay_uk": {"ebay.co.uk", "www.ebay.co.uk"},
+            "flipflop_shop": {"theflipflop.shop", "www.theflipflop.shop"},
+            "onbuy": {"onbuy.com", "www.onbuy.com"},
+            "amazon": {"amazon.co.uk", "www.amazon.co.uk"},
+            "facebook_catalog": {"facebook.com", "www.facebook.com"},
+            "vinted": {"vinted.co.uk", "www.vinted.co.uk"},
+            "google_shopping": {"theflipflop.shop", "www.theflipflop.shop"},
+        }
+        parsed_url = urlparse(body.listing_url)
+        if parsed_url.scheme != "https" or parsed_url.hostname not in allowed_hosts[channel] or parsed_url.username or parsed_url.password:
+            raise HTTPException(422, "Use the confirmed HTTPS listing URL from the selected marketplace")
+
+    row = (await db.execute(select(ChannelListing).where(
+        ChannelListing.manual_build_id == build_id, ChannelListing.channel == channel,
+    ).order_by(ChannelListing.id.desc()).with_for_update())).scalars().first()
+    if row is None:
+        row = ChannelListing(manual_build_id=build_id, channel=channel, status="draft")
+        db.add(row)
+        await db.flush()
+    previous = row.status
+    now = datetime.utcnow()
+    if channel == "ebay_uk":
+        ebay_status = {"live": "active", "sold": "sold", "ended": "ended", "cancelled": "ended", "not_listed": "never_listed"}[body.status]
+        build.ebay_listing_status = ebay_status
+        build.ebay_listing_status_checked_at = now
+        if body.listing_url:
+            build.ebay_listing_url = body.listing_url
+        if body.external_id:
+            build.ebay_listing_id = body.external_id
+        if body.status == "cancelled" and build.status == "sold" and build.dispatch_status not in {"dispatched", "delivered"}:
+            from app.services.inventory_lifecycle import record_sale_cancellation
+            await record_sale_cancellation(db, build, source="operator_status_override")
+            build.status = "built"
+        elif body.status == "live" and build.status == "built":
+            build.status = "listed"
+        if body.status == "cancelled":
+            build.ebay_listing_end_reason = "order_cancelled"
+    row.status = {"live": "published", "sold": "sold", "ended": "ended", "cancelled": "cancelled", "not_listed": "draft"}[body.status]
+    if body.listing_url:
+        row.listing_url = body.listing_url
+    if body.external_id:
+        row.external_listing_id = body.external_id
+    if body.status == "live":
+        row.published_at = now
+        row.withdrawn_at = None
+    elif body.status in {"ended", "cancelled", "not_listed"}:
+        row.withdrawn_at = now
+    elif body.status == "sold":
+        # A manual sold correction is an inventory lifecycle event, not just
+        # a label on this channel. Make the physical build unavailable and
+        # persist withdrawals for every other channel in the same transaction.
+        build.status = "sold"
+        if build.dispatch_status not in {"dispatched", "delivered"}:
+            build.dispatch_status = "awaiting_dispatch"
+        from app.services.channel_sync import withdraw_other_channels
+        from app.services.getting_started_jobs import ensure_manual_build_job
+        from app.services.inventory_lifecycle import record_sale
+        await withdraw_other_channels(db, build, source_channel=channel)
+        await record_sale(db, build, build.sale_price_actual)
+        await ensure_manual_build_job(db, manual_build_id=build.id)
+    row.last_checked_at = now
+    db.add(ListingPublishEvent(channel_listing_id=row.id, event_type="manual_status_override",
+        message=body.reason.strip(), event_metadata={"build_id": build_id, "channel": channel,
+            "previous_status": previous, "status": row.status, "source": "operator",
+            "sale_price": build.sale_price_actual if body.status == "sold" else None,
+            "currency": "GBP", "external_listing_id": row.external_listing_id,
+            "listing_url": row.listing_url}))
+    await db.commit()
+    return {"build_id": build_id, "channel": channel, "status": body.status, "recorded_at": now.isoformat()}
 
 
 async def _channel_image_previews(body: ChannelImagesIn, db: AsyncSession):

@@ -37,7 +37,6 @@ def supplier_identity(supplier, reference):
                          ("senetic.co.uk", "senetic"),
                          ("morecoco.co.uk", "morecoco"),
                          ("releases.ubuntu.com", "ubuntu"),
-                         ("royalcdkeys.com", "royalcdkeys"),
                          ("gamers-outlet.net", "gamers_outlet"),
                          ("ebay.co.uk", "ebay"), ("ebay.com", "ebay"), ("vinted.co.uk", "vinted")):
         if host == domain or host.endswith("." + domain):

@@ -30,7 +30,7 @@ it('keeps embedded supplier approvals scoped to the selected cell',async()=>{
   approveSupplierSources.mockResolvedValue({imported:1,reused:0,pending_roles:[],prices_published:false});
   render(<CommercialReviewWorkspace contextCellId="SELECTED" initialArea="suppliers"/>);
   fireEvent.click(await screen.findByRole('button',{name:'Approve all 1 reviewed supplier products'}));
-  expect(await screen.findByRole('status')).toHaveTextContent('Saved 1 exact supplier fact for Playbook costing; 0 already approved.');
+  expect(await screen.findByText(/Saved 1 exact supplier fact for Playbook costing; 0 already approved/)).toHaveAttribute('role','status');
   expect(approveSupplierSources).toHaveBeenCalledWith(expect.objectContaining(selected), []);
   expect(approveAllSupplierSources).not.toHaveBeenCalled();
   expect(screen.queryByText('Another cell build')).not.toBeInTheDocument();
@@ -49,7 +49,7 @@ it('requires explicit confirmation before replacing previously reviewed source v
   fireEvent.click(screen.getByRole('checkbox',{name:'I reviewed these differences and approve replacing the previous values.'}));
   expect(button).not.toBeDisabled();
   fireEvent.click(button);
-  expect(await screen.findByRole('status')).toHaveTextContent('cpu source facts reviewed');
+  expect(await screen.findByText(/cpu source facts reviewed/)).toHaveAttribute('role','status');
   expect(approveProductEngineeringSuggestion).toHaveBeenCalledWith(item,true);
   expect(onApproved).toHaveBeenCalledOnce();
 });
@@ -79,6 +79,23 @@ it('renders structured connector counts and numeric support lists for operator r
   expect(screen.getByText('2242, 2280')).toBeInTheDocument();
 });
 beforeEach(()=>{automation.mockResolvedValue({setting_enabled:true,registered:true,enabled:true,next_run_at:null,scheduled_latest:null,scheduled_rebuild_latest:null,manual_latest:null});engineeringSuggestions.mockResolvedValue({items:[]});productEngineeringSuggestions.mockResolvedValue({items:[]});supplierLicences.mockResolvedValue({items:[]});approveSupplierSources.mockClear();approveAllSupplierSources.mockClear();rebuildProposals.mockClear();rebuildProposals.mockResolvedValue({job_id:'rebuild-1',mode:'rebuild',status:'queued',phase:'Queued proposal rebuild',started:true});refreshStatus.mockResolvedValue({job_id:'rebuild-1',mode:'rebuild',status:'succeeded',phase:'Playbook proposals refreshed',error:null,result:{cells:24,complete_hardware:13,ready_for_approval:0,published:false}});});
+it('shows the branded loader and withholds zero counts while initial Playbook data is pending',()=>{
+  proposals.mockReturnValue(new Promise(()=>{}));
+  automation.mockReturnValue(new Promise(()=>{}));
+  render(<CommercialReviewWorkspace initialArea="builds"/>);
+  expect(screen.getByText('Loading Playbook review data…')).toBeInTheDocument();
+  expect(screen.getByRole('button',{name:'Build proposals'})).toBeInTheDocument();
+  expect(screen.queryByRole('button',{name:'Build proposals (0)'})).not.toBeInTheDocument();
+  expect(screen.queryByText('No generated proposals awaiting review')).not.toBeInTheDocument();
+});
+it('shows a recoverable load failure instead of presenting unavailable data as zero',async()=>{
+  proposals.mockRejectedValue(new Error('Playbook API unavailable'));
+  await renderPage();
+  expect(await screen.findByText('Playbook review data could not be loaded.')).toBeInTheDocument();
+  expect(screen.getByRole('button',{name:'Retry loading Playbook data'})).toBeInTheDocument();
+  expect(screen.queryByText('No generated proposals awaiting review')).not.toBeInTheDocument();
+  expect(screen.queryByRole('button',{name:'Build proposals (0)'})).not.toBeInTheDocument();
+});
 it('does not ask the operator to set a weekly sales cap and links to the workshop calendar',async()=>{
   proposals.mockResolvedValue({items:[]});
   await renderPage();
@@ -113,7 +130,7 @@ it('lets the operator approve only captured stock, price and postage facts',asyn
   const mode={available:false,recommended_price_gbp:null,reason:'Source research pending'};
   const offer={proposal_id:22,cell_id:'TEST',revision_sha256:'b'.repeat(64),segment:'Gaming',tier:'Budget',name:'Generated gaming build',description:'Catalogue proposal',required_hardware_count:8,
     components:[{role:'cpu',variant_id:4,listing_id:8,title:'Exact source CPU',source_url:'https://www.amazon.co.uk/dp/B000000000',listing_price_gbp:'128.49',supplier_postage_gbp:'0.00',catalogue_approved:true,
-      source_observation:{source:'amazon',url:'https://www.amazon.co.uk/dp/B000000000',fresh:true,commercial_capture_verified:true,active_listing:true,condition:'new',listing_type:'buy_it_now',stock_status:'available',stock_evidence:'Only 2 left in stock',postage_verified:true,delivery_gbp:'0.00',delivery_working_days:1,delivery_estimate_source:'listing_estimate'}}],
+      source_observation:{source:'amazon',url:'https://www.amazon.co.uk/dp/B000000000',fingerprint:'a'.repeat(64),fresh:true,commercial_capture_verified:true,active_listing:true,condition:'new',listing_type:'buy_it_now',stock_status:'available',stock_evidence:'Only 2 left in stock',postage_verified:true,delivery_gbp:'0.00',delivery_working_days:1,delivery_estimate_source:'listing_estimate'}}],
     case_choices:[],upsells:[],compatibility:{verified:false,checks:[]},blockers:['Compatibility evidence pending'],delivery_products:{fast_track:mode,standard:mode,flexible:mode}};
   proposals.mockResolvedValue({items:[offer]});
   approveSupplierSources.mockResolvedValue({imported:1,reused:0,pending_roles:[],checkout_changed:false,prices_published:false});
@@ -122,8 +139,12 @@ it('lets the operator approve only captured stock, price and postage facts',asyn
   fireEvent.click(await screen.findByRole('button',{name:/^Supplier listings/}));
   expect((await screen.findAllByText('Only 2 left in stock')).length).toBe(2);
   fireEvent.click(screen.getByRole('button',{name:'Approve all 1 reviewed supplier products'}));
-  expect(await screen.findByRole('status')).toHaveTextContent('Reviewed 1 build proposals: 1 exact supplier facts saved');
-  expect(approveAllSupplierSources).toHaveBeenCalledWith([expect.objectContaining(offer)]);
+  expect(await screen.findByText(/Reviewed 1 build proposals: 1 exact supplier facts saved/)).toHaveAttribute('role','status');
+  expect(approveAllSupplierSources).toHaveBeenCalledWith([{
+    proposal_id:offer.proposal_id,
+    revision_sha256:offer.revision_sha256,
+    source_evidence:[{role:'cpu',listing_id:8,fingerprint:'a'.repeat(64)}],
+  }]);
   expect(rebuildProposals).toHaveBeenCalledOnce();
 });
 
@@ -152,7 +173,7 @@ it('does not present an Overclockers search page as an approvable supplier produ
 });
 
 it('requires an explicit acknowledgement before approving a Windows source into OS catalogues',async()=>{
-  const candidate={listing_id:61,title:'Windows 11 Home OEM Key',url:'https://royalcdkeys.com/en-gb/products/windows-11-home-oem-key',price_gbp:'4.12',image_url:null,seller_product_claims:'One PC, non-transferable.',supplier_handle:'windows-11-home-oem-key',digital_product:true,category:'os',customer_offering_enabled:false,licence_review_fingerprint:'e'.repeat(64),licence_source_reviewed:false,fresh:true,stock_status:'available',stock_evidence:'Royal product feed reports available=true',product_properties:{'License type (supplier listing)':'OEM','Device scope (supplier claim)':'One device'},catalogue_statuses:[{playbook_id:1,status:'pending_review'}],terms_url:'https://royalcdkeys.com/pages/terms-conditions'};
+  const candidate={listing_id:61,title:'Windows 11 Home OEM Key',url:'https://www.gamers-outlet.net/en/buy-windows-11-home-oem-cd-key',price_gbp:'4.12',image_url:null,seller_product_claims:'One PC, non-transferable.',supplier_handle:'windows-11-home-oem-cd-key',digital_product:true,category:'os',customer_offering_enabled:false,licence_review_fingerprint:'e'.repeat(64),licence_source_reviewed:false,fresh:true,stock_status:'available',stock_evidence:'Gamers Outlet listing reports available=true',product_properties:{'License type (supplier listing)':'OEM','Device scope (supplier claim)':'One device'},catalogue_statuses:[{playbook_id:1,status:'pending_review'}],terms_url:'https://www.gamers-outlet.net/en/terms-and-conditions'};
   proposals.mockResolvedValue({items:[]});
   supplierLicences.mockResolvedValue({items:[candidate]});
   approveSupplierLicence.mockResolvedValue({listing_id:61,reviewed:true,reused:false,activated_catalogue_links:8,published:false,prices_published:false,checkout_changed:false});
@@ -164,12 +185,12 @@ it('requires an explicit acknowledgement before approving a Windows source into 
   fireEvent.click(screen.getByRole('checkbox'));
   expect(button).toBeEnabled();
   fireEvent.click(button);
-  expect(await screen.findByRole('status')).toHaveTextContent('Reviewed this exact Windows offer and added 8 internal OS catalogue candidates.');
+  expect(await screen.findByText(/Reviewed this exact Windows offer and added 8 internal OS catalogue candidates/)).toHaveAttribute('role','status');
   expect(approveSupplierLicence).toHaveBeenCalledWith(candidate);
 });
 
 it('explains that acknowledgement cannot approve a stale software licence capture',async()=>{
-  const candidate={listing_id:62,title:'Windows 11 Home OEM Key',url:'https://royalcdkeys.com/en-gb/products/windows-11-home-oem-key',price_gbp:'4.12',image_url:null,seller_product_claims:'One PC, non-transferable.',supplier_handle:'windows-11-home-oem-key',digital_product:true,category:'os',customer_offering_enabled:false,licence_review_fingerprint:'f'.repeat(64),licence_source_reviewed:false,fresh:false,stock_status:'available',stock_evidence:'Royal product feed reports available=true',product_properties:{'License type (supplier listing)':'OEM','Device scope (supplier claim)':'One device'},catalogue_statuses:[{playbook_id:1,status:'pending_review'}],terms_url:'https://royalcdkeys.com/pages/terms-conditions'};
+  const candidate={listing_id:62,title:'Windows 11 Home OEM Key',url:'https://www.gamers-outlet.net/en/buy-windows-11-home-oem-cd-key',price_gbp:'4.12',image_url:null,seller_product_claims:'One PC, non-transferable.',supplier_handle:'windows-11-home-oem-cd-key',digital_product:true,category:'os',customer_offering_enabled:false,licence_review_fingerprint:'f'.repeat(64),licence_source_reviewed:false,fresh:false,stock_status:'available',stock_evidence:'Gamers Outlet listing reports available=true',product_properties:{'License type (supplier listing)':'OEM','Device scope (supplier claim)':'One device'},catalogue_statuses:[{playbook_id:1,status:'pending_review'}],terms_url:'https://www.gamers-outlet.net/en/terms-and-conditions'};
   proposals.mockResolvedValue({items:[]});
   supplierLicences.mockResolvedValue({items:[candidate]});
   await renderPage();
@@ -177,14 +198,14 @@ it('explains that acknowledgement cannot approve a stale software licence captur
   const button=await screen.findByRole('button',{name:'Review this source for Playbook consideration'});
   fireEvent.click(screen.getByRole('checkbox'));
   expect(button).toBeDisabled();
-  expect(screen.getByRole('status')).toHaveTextContent(/older than 24 hours.*scheduled supplier refresh records the current listing.*acknowledging review does not refresh/i);
+  expect(screen.getByText(/older than 24 hours.*scheduled supplier refresh records the current listing.*acknowledging review does not refresh/i)).toHaveAttribute('role','status');
 });
 
 it('shows unique supplier facts across all builds and offers one explicit batch approval',async()=>{
   const mode={available:false,recommended_price_gbp:null,reason:'Source research pending'};
   const offer={proposal_id:32,cell_id:'BATCH',revision_sha256:'d'.repeat(64),segment:'Gaming',tier:'Budget',name:'Generated gaming build',description:'',required_hardware_count:1,
     components:[{role:'cpu',variant_id:8,listing_id:101,title:'Verified CPU',source_url:'https://www.amazon.co.uk/dp/B000000000',listing_price_gbp:'128.49',supplier_postage_gbp:'0.00',catalogue_approved:true,
-      source_observation:{source:'amazon',url:'https://www.amazon.co.uk/dp/B000000000',fresh:true,commercial_capture_verified:true,active_listing:true,condition:'new',listing_type:'buy_it_now',stock_status:'available',stock_evidence:'In stock',postage_verified:true,delivery_gbp:'0.00',delivery_working_days:1,delivery_estimate_source:'listing_estimate'}}],
+      source_observation:{source:'amazon',url:'https://www.amazon.co.uk/dp/B000000000',fingerprint:'b'.repeat(64),fresh:true,commercial_capture_verified:true,active_listing:true,condition:'new',listing_type:'buy_it_now',stock_status:'available',stock_evidence:'In stock',postage_verified:true,delivery_gbp:'0.00',delivery_working_days:1,delivery_estimate_source:'listing_estimate'}}],
     case_choices:[],upsells:[],compatibility:{verified:false,checks:[]},blockers:['Compatibility evidence pending'],delivery_products:{fast_track:mode,standard:mode,flexible:mode}};
   proposals.mockResolvedValue({items:[offer]});
   approveAllSupplierSources.mockResolvedValue({proposals:1,imported:1,reused:0,pending_roles:[],prices_published:false});
@@ -192,8 +213,12 @@ it('shows unique supplier facts across all builds and offers one explicit batch 
   fireEvent.click(await screen.findByRole('button',{name:/^Supplier listings/}));
   expect((await screen.findAllByRole('link',{name:'Verified CPU'})).length).toBe(1);
   fireEvent.click(screen.getByRole('button',{name:'Approve all 1 reviewed supplier products'}));
-  expect(await screen.findByRole('status')).toHaveTextContent('Reviewed 1 build proposals: 1 exact supplier facts saved');
-  expect(approveAllSupplierSources).toHaveBeenCalledWith([expect.objectContaining(offer)]);
+  expect(await screen.findByText(/Reviewed 1 build proposals: 1 exact supplier facts saved/)).toHaveAttribute('role','status');
+  expect(approveAllSupplierSources).toHaveBeenCalledWith([{
+    proposal_id:offer.proposal_id,
+    revision_sha256:offer.revision_sha256,
+    source_evidence:[{role:'cpu',listing_id:101,fingerprint:'b'.repeat(64)}],
+  }]);
 });
 
 it('keeps motherboard research automatic and leaves its facts unapproved',async()=>{
@@ -220,7 +245,7 @@ it('requires an explicit review click before a board suggestion affects proposal
   expect(await screen.findByText('MSI B550M PRO-VDH WIFI')).toBeInTheDocument();
   expect(screen.getByText('am4')).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button',{name:'Approve reviewed specs'}));
-  expect(await screen.findByRole('status')).toHaveTextContent('MSI B550M PRO-VDH WIFI reference reviewed. Proposals were recalculated from captured facts; no build was published.');
+  expect(await screen.findByText('MSI B550M PRO-VDH WIFI reference reviewed. Proposals were recalculated from captured facts; no build was published.')).toHaveAttribute('role','status');
   expect(approveEngineeringSuggestion).toHaveBeenCalledWith(7);
   expect(rebuildProposals).toHaveBeenCalledOnce();
 });
@@ -238,7 +263,7 @@ it('shows exact-product engineering facts and requires explicit source review',a
   expect(await screen.findByRole('button',{name:'Review these source facts'})).toBeInTheDocument();
   expect(screen.getByText('power w')).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button',{name:'Review these source facts'}));
-  expect(await screen.findByRole('status')).toHaveTextContent('cpu source facts reviewed for Example CPU product. Proposals were recalculated from captured facts; nothing was published.');
+  expect(await screen.findByText('cpu source facts reviewed for Example CPU product. Proposals were recalculated from captured facts; nothing was published.')).toHaveAttribute('role','status');
   expect(approveProductEngineeringSuggestion).toHaveBeenCalledWith(item);
   expect(rebuildProposals).toHaveBeenCalledOnce();
 });

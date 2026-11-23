@@ -202,7 +202,7 @@ const definitions = [
   ['confirm_observation', 'Record a verified seller-side listing observation. A sold state requires an order ID.', schema()],
   ['confirm_messages', 'Save messages visibly observed in an inbox and matched to the exact listing. Read-only.', schema({ messages: { type: 'array', maxItems: 50, items: schema({ message_id: str, thread_url: str, listing_url: str, sender: str, subject: str, body: str, received_at: str }, ['message_id', 'thread_url', 'listing_url', 'body']) } })],
   ['reply_message', 'Send only the operator-queued reply in the exact verified conversation, using fresh observed references.', schema({ message_id: str, textbox_ref: str, send_ref: str })],
-  ['block_job', 'Stop with a precise MFA, CAPTCHA, credentials, seller-policy, account or uncertain-publication blocker.', schema({ reason: str })],
+  ['block_job', 'Pause safely with the precise visible sign-in, CAPTCHA, bot-check, seller-policy, account or uncertain-publication reason so the owner can act and resume reconciliation.', schema({ reason: str })],
 ].map(([name, description, inputSchema]) => ({ name, description, inputSchema }));
 const lines = readline.createInterface({ input: process.stdin });
 // Serialize calls: each element reference belongs to one page observation.

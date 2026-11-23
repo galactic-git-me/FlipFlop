@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 import { api } from "@/lib/api";
 import { supplierArrivalEstimate, supplierDisplayLabel } from "@/lib/commercial-readiness";
 import type {
@@ -127,6 +128,7 @@ export default function ConfigurationCommercialReview() {
         detail,
         selectedSources()
       );
+      toast.success(`Supplier facts recorded: ${result.imported} new exact fact${result.imported === 1 ? "" : "s"}; ${result.reused} already existed.`);
       const updated = await api.commercialReadiness.configuration(
         detail.request_id
       );
@@ -157,6 +159,7 @@ export default function ConfigurationCommercialReview() {
           ? reason.message
           : "Could not record the reviewed supplier facts"
       );
+      toast.error(reason instanceof Error ? reason.message : "Could not record the reviewed supplier facts");
     } finally {
       setBusy(false);
     }
@@ -172,6 +175,7 @@ export default function ConfigurationCommercialReview() {
         detail.request_id,
         detail.price_review_sha256
       );
+      toast.success("Customer configuration approved for checkout at the reviewed prices.");
       const updated = await api.commercialReadiness.configuration(
         detail.request_id
       );
@@ -186,6 +190,7 @@ export default function ConfigurationCommercialReview() {
           ? reason.message
           : "Could not approve this exact configuration"
       );
+      toast.error(reason instanceof Error ? reason.message : "Could not approve this exact configuration");
     } finally {
       setBusy(false);
     }

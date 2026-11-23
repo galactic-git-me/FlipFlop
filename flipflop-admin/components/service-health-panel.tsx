@@ -17,7 +17,7 @@ const BASE_SERVICES: Service[] = [
   // route runs SELECT 1, and Gem reports its background queue worker pool.
   { name: "API", path: "/health/live", icon: Gauge },
   { name: "DB", path: "/health/database", icon: Database },
-  { name: "Gem", path: "/api/gem-radar/health", useApiProxy: false, icon: Gem },
+  { name: "Gem", path: "/gem-radar/health", icon: Gem },
   { name: "Shop", path: "/health/shop", icon: Globe },
 ];
 
