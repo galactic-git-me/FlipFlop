@@ -180,3 +180,33 @@ async def record_sale(db: AsyncSession, manual_build: ManualBuild, sale_price: f
         if unit:
             unit.status = "sold"
     return len(allocations)
+
+
+async def record_sale_cancellation(db: AsyncSession, manual_build: ManualBuild, *, source: str) -> int:
+    """Return sold inventory units to their assembled-build state after a confirmed pre-dispatch cancellation."""
+    build = await orchestration_build_for(db, manual_build, create=False)
+    if build is None:
+        return 0
+    allocations = (await db.execute(
+        select(InventoryAllocation).where(InventoryAllocation.build_id == build.id)
+    )).scalars().all()
+    restored = 0
+    for allocation in allocations:
+        existing = await db.execute(select(InventoryEvent.id).where(
+            InventoryEvent.inventory_item_id == allocation.inventory_item_id,
+            InventoryEvent.manual_build_id == manual_build.id,
+            InventoryEvent.event_type == "sale_cancelled",
+        ))
+        if existing.scalar_one_or_none() is not None:
+            continue
+        add_event(db, inventory_item_id=allocation.inventory_item_id,
+            manual_build_id=manual_build.id, event_type="sale_cancelled",
+            quantity=allocation.quantity_allocated, detail={"source": source})
+        unit = (await db.execute(select(InventoryUnit).where(
+            InventoryUnit.inventory_item_id == allocation.inventory_item_id,
+            InventoryUnit.status == "sold",
+        ).order_by(InventoryUnit.unit_number))).scalars().first()
+        if unit:
+            unit.status = "consumed"
+            restored += 1
+    return restored

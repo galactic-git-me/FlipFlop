@@ -16,13 +16,16 @@ def classify_ebay_listing_state(
     *,
     order_found: bool,
     confirmed_unavailable: bool = False,
+    cancelled_order: bool = False,
 ) -> str:
     """Pure lifecycle decision used by reconciliation and unit tests."""
     remote_status = str((remote or {}).get("listing_status") or "").lower()
-    quantity_sold = int((remote or {}).get("quantity_sold") or 0)
+    quantity_sold = 0 if cancelled_order else int((remote or {}).get("quantity_sold") or 0)
+    if order_found:
+        return "sold"
     if remote_status in {"active", "started"}:
         return "active"
-    if order_found or quantity_sold > 0:
+    if quantity_sold > 0:
         return "sold"
     if confirmed_unavailable:
         return "missing"
@@ -120,7 +123,16 @@ async def reconcile_manual_build_listing(
         )
 
     remote_status = str((remote or {}).get("listing_status") or "").lower()
-    if remote_status in {"active", "started"}:
+    cancelled_order = False
+    if build.ebay_order_id:
+        from app.services.ebay_order_sync import get_order_refund_state, is_terminal_order_cancellation
+        try:
+            lifecycle = await get_order_refund_state(build.ebay_order_id,
+                environment=target_environment, db=db)
+            cancelled_order = is_terminal_order_cancellation(lifecycle)
+        except EbayOrderSyncError as exc:
+            log.warning("manual_build.ebay_cancel_state_check_failed", build_id=build.id, error=str(exc))
+    if remote_status in {"active", "started"} and not cancelled_order:
         state = classify_ebay_listing_state(remote, order_found=False)
     else:
         # A completed/vanished listing is sold only when eBay's order API or
@@ -136,7 +148,19 @@ async def reconcile_manual_build_listing(
             )
         except EbayOrderSyncError as exc:
             order_lookup_failed = True
-            log.warning("manual_build.ebay_order_reconcile_failed", build_id=build.id, error=str(exc))
+            log.warning(
+                "manual_build.ebay_order_reconcile_failed",
+                build_id=build.id,
+                error=str(exc),
+            )
+        if cancelled_order and order is not None:
+            if order.order_id == build.ebay_order_id:
+                # The API's paid-order search can still return a cancelled
+                # order. Ignore that historical sale while preserving the
+                # chance to recognize a later, distinct order for this item.
+                order = None
+            else:
+                cancelled_order = False
         # Error 17 means this seller cannot access the old item. After eBay's
         # order lookup succeeds and finds no sale, let the relist cycle create
         # a fresh listing with a new ID. Network/auth errors remain unknown.
@@ -149,6 +173,7 @@ async def reconcile_manual_build_listing(
             remote,
             order_found=order is not None,
             confirmed_unavailable=confirmed_unavailable,
+            cancelled_order=cancelled_order,
         )
         newly_recorded_order = order is not None and build.ebay_order_id != order.order_id
         if confirmed_unavailable and state == "missing":
@@ -170,6 +195,8 @@ async def reconcile_manual_build_listing(
         # confirmed physical unit to stock. Only record_relisted_channel,
         # after a distinct replacement listing is discovered, can do that.
         build.ebay_listing_end_reason = None
+        if build.status == "built":
+            build.status = "listed"
     elif state == "sold":
         build.status = "sold"
         build.ebay_listing_end_reason = "sold"
@@ -211,5 +238,38 @@ async def reconcile_manual_build_listing(
         build.ebay_listing_end_reason = "ended_early" if state == "ended" else "missing_from_ebay"
     elif remote_error is not None:
         build.ebay_listing_end_reason = None
+    if cancelled_order:
+        from app.models.channel_listing import ChannelListing
+        from app.models.listing_publish_event import ListingPublishEvent
+        from app.services.inventory_lifecycle import record_sale_cancellation
+        dispatched = build.dispatch_status in {"dispatched", "delivered"}
+        prior_cancel = (await db.execute(select(ListingPublishEvent).where(
+            ListingPublishEvent.event_type == "ebay_order_cancelled",
+            ListingPublishEvent.event_metadata["build_id"].as_integer() == build.id,
+            ListingPublishEvent.event_metadata["order_id"].as_string() == build.ebay_order_id,
+        ).limit(1))).scalar_one_or_none()
+        channel_row = (await db.execute(select(ChannelListing).where(
+            ChannelListing.manual_build_id == build.id,
+            ChannelListing.channel.in_(("ebay_uk", "ebay")),
+        ).order_by(ChannelListing.id.desc()).limit(1))).scalars().first()
+        if channel_row is None:
+            channel_row = ChannelListing(manual_build_id=build.id, channel="ebay_uk",
+                status="ended", external_listing_id=build.ebay_listing_id,
+                listing_url=build.ebay_listing_url)
+            db.add(channel_row)
+            await db.flush()
+        channel_row.status = "published" if state == "active" else "ended"
+        if not prior_cancel:
+            db.add(ListingPublishEvent(channel_listing_id=channel_row.id,
+                event_type="ebay_order_cancelled",
+                message=("eBay confirmed cancellation after dispatch; owner review is required." if dispatched
+                    else "eBay confirmed cancellation; the unsent build is available for review."),
+                event_metadata={"build_id": build.id, "order_id": build.ebay_order_id,
+                    "cancel_state": "CANCELED", "source": "ebay_order_api",
+                    "dispatch_status": build.dispatch_status}))
+        if not dispatched:
+            build.status = "listed" if state == "active" else "built"
+            build.ebay_listing_end_reason = None if state == "active" else "order_cancelled"
+            await record_sale_cancellation(db, build, source="ebay_order_api")
     await db.flush()
     return state

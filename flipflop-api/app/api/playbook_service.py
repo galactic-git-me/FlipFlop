@@ -15,8 +15,8 @@ from app.services.playbook_service import (current_proposals, annotate_supplier_
     approve_proposal, approve_current_supplier_sources, approve_all_current_supplier_sources,
     list_motherboard_engineering_suggestions, research_playbook_motherboard_specs,
     approve_playbook_motherboard_spec, list_playbook_product_engineering_suggestions,
-    approve_playbook_product_engineering, royalcdkeys_licence_candidates,
-    approve_royalcdkeys_licence_source, start_playbook_refresh_job,
+    approve_playbook_product_engineering, gamers_outlet_licence_candidates,
+    approve_gamers_outlet_licence_source, start_playbook_refresh_job,
     playbook_refresh_job_status, run_playbook_refresh_job)
 
 router=APIRouter(prefix='/playbook-service',dependencies=[Depends(get_current_admin)])
@@ -150,13 +150,13 @@ async def approve_product_engineering_suggestion(listing_id:int,body:Engineering
 
 @router.get('/supplier-licences')
 async def supplier_licences(db:AsyncSession=Depends(get_db)):
-    return {'items':await royalcdkeys_licence_candidates(db)}
+    return {'items':await gamers_outlet_licence_candidates(db)}
 
 
 @router.post('/supplier-licences/{listing_id}/approve')
 async def approve_supplier_licence(listing_id:int,body:LicenceSourceApproval,
         db:AsyncSession=Depends(get_db),admin:AdminUser=Depends(get_current_admin)):
-    result=await approve_royalcdkeys_licence_source(db,listing_id,body.licence_review_fingerprint,admin.id)
+    result=await approve_gamers_outlet_licence_source(db,listing_id,body.licence_review_fingerprint,admin.id)
     await db.commit()
     return result
 

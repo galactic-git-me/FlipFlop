@@ -60,7 +60,7 @@ export interface CrossListingSource {
   currency: "GBP";
   quantity: number;
   condition: string;
-  status: "live" | "draft" | "preview" | "sold" | "ended" | "unavailable" | "failed";
+  status: "live" | "draft" | "preview" | "sold" | "ended" | "cancelled" | "unavailable" | "failed";
   url: string | null;
   updatedAt: string;
   error?: string | null;

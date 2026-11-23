@@ -83,7 +83,7 @@ def _refresh_availability(variant: CatalogueVariant, listing: Listing) -> None:
 
 def listing_is_software(listing):
     specs = listing.raw_specs or {}
-    return bool(specs.get("gamers_outlet") or specs.get("royalcdkeys") or specs.get("playbook_free_software"))
+    return bool(specs.get("gamers_outlet") or specs.get("playbook_free_software"))
 
 
 @router.get("")

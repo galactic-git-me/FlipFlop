@@ -31,7 +31,9 @@ async def main(apply=False):
             if not capture or not capture.get('licence_review_fingerprint'):
                 raise RuntimeError('The original Windows supplier requires current licence evidence')
             if not capture.get('licence_source_reviewed'):
-                await service.approve_royalcdkeys_licence_source(db,listing_id,capture['licence_review_fingerprint'],0)
+                if listing.source_name != 'Gamers Outlet':
+                    raise RuntimeError(f"{original['cell_id']}: software source is not Gamers Outlet")
+                await service.approve_gamers_outlet_licence_source(db,listing_id,capture['licence_review_fingerprint'],0)
             checked=await source_preview(db,listing)
             if not checked.get('licence_source_reviewed'):
                 raise RuntimeError('The original Windows licence review did not persist in this transaction')

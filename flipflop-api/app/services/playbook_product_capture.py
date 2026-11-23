@@ -10,7 +10,7 @@ import httpx
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
-RETAILERS=('amazon.co.uk','overclockers.co.uk','royalcdkeys.com')
+RETAILERS=('amazon.co.uk','overclockers.co.uk')
 CAPTURED_SUPPLIER_HOSTS={
     'scan.co.uk','www.scan.co.uk','ebuyer.com','www.ebuyer.com',
     'computerorbit.com','www.computerorbit.com','awd-it.co.uk','www.awd-it.co.uk',
@@ -51,8 +51,6 @@ def supported_product_url(url):
             return legacy_product or current_sku_page or legacy_sku_page
         if host in {'gamers-outlet.net','www.gamers-outlet.net'}:
             return bool(re.fullmatch(r'/en/buy-[a-z0-9-]+',parsed.path.casefold()))
-        if host=='royalcdkeys.com':
-            return bool(re.fullmatch(r'/en-gb/products/[a-z0-9][a-z0-9-]*',parsed.path.casefold()))
         if host in {'corsair.com','www.corsair.com'}:
             return bool(re.fullmatch(r'/uk/en/p/memory/[a-z0-9-]+/[a-z0-9-]+',parsed.path.casefold()))
         if host in {'awd-it.co.uk','www.awd-it.co.uk'}:
@@ -896,100 +894,6 @@ def _amazon_prime_eligibility(soup):
     return True if re.search(r'\bprime\b',text,re.I) else None
 
 
-def parse_royalcdkeys_capture(html,url,product_json):
-    """Capture a single UK digital-key offer without treating seller claims as verified licence rights."""
-    from decimal import Decimal
-    soup=BeautifulSoup(html,'html.parser')
-    parsed=urlsplit(url)
-    requested=re.fullmatch(r'/en-gb/products/([a-z0-9][a-z0-9-]*)',parsed.path.casefold())
-    if not requested or not isinstance(product_json,dict) or product_json.get('handle')!=requested.group(1):
-        return {'status':'unresolved','reason':'The exact RoyalCDKeys product handle could not be confirmed'}
-    currency=(soup.select_one('meta[property="og:price:currency"]') or {}).get('content')
-    price_text=(soup.select_one('meta[property="og:price:amount"]') or {}).get('content')
-    try:
-        item=Decimal(str(price_text))
-        shopify_price=Decimal(str(product_json.get('price')))/Decimal('100')
-    except Exception:
-        return {'status':'unresolved','reason':'The exact UK product page did not expose one GBP price'}
-    if currency!='GBP' or not item.is_finite() or item<=0 or item!=item.quantize(Decimal('.01')) or shopify_price!=item:
-        return {'status':'unresolved','reason':'The product page and UK product feed did not agree on one GBP price'}
-    variants=product_json.get('variants')
-    if not isinstance(variants,list) or len(variants)!=1 or not isinstance(variants[0],dict):
-        return {'status':'unresolved','reason':'The product has multiple variants; no arbitrary key offer was selected'}
-    variant=variants[0]
-    if Decimal(str(variant.get('price')))/Decimal('100')!=item:
-        return {'status':'unresolved','reason':'The selected product variant price does not match the product page'}
-    description=' '.join(BeautifulSoup(str(product_json.get('description') or ''),'html.parser').get_text(' ',strip=True).split())
-    page_text=' '.join(soup.get_text(' ',strip=True).split())
-    combined=f'{product_json.get("title") or ""} {description} {page_text}'
-    digital=bool(re.search(r'\binstant\s+(?:digital\s+)?delivery\b|\bdigital\s+delivery\b',combined,re.I)
-        and re.search(r'\b(?:digital|email|e-mail|product\s+key|activation\s+key)\b',combined,re.I))
-    available=product_json.get('available')
-    stock='available' if available is True else 'unavailable' if available is False else 'unknown'
-    stock_evidence=(f"RoyalCDKeys product feed reports available={str(available).lower()}; key quantity is not exposed"
-        if isinstance(available,bool) else None)
-    title=str(product_json.get('title') or '').strip()
-    if not title:
-        return {'status':'unresolved','reason':'The exact product title is missing'}
-    license_type=('OEM' if re.search(r'\boem\b',combined,re.I) else
-        'Retail' if re.search(r'\bretail\b',combined,re.I) else 'Not stated')
-    device_scope=('One device (supplier claim)' if re.search(r'\b(?:one|1)\s+(?:computer|pc|device)\b',description,re.I)
-        else 'Not stated by supplier')
-    transferability=('Non-transferable (supplier claim)' if re.search(r'\bcannot be transferred\b|\bnon[- ]transferable\b',description,re.I)
-        else 'Transfer rights not stated by supplier')
-    key_reuse=('Supplier says a unique key per licence is not guaranteed' if re.search(
-        r'\b(?:same|duplicate)\s+(?:activation\s+)?key\b.{0,120}\b(?:not guaranteed|multiple|more than one)\b|\bunique\s+key\b.{0,100}\bnot guaranteed\b',description,re.I)
-        else 'No key-reuse statement captured')
-    properties={
-        'License type (supplier listing)':license_type,
-        'Device scope (supplier claim)':device_scope,
-        'Transferability (supplier claim)':transferability,
-        'Key uniqueness (supplier claim)':key_reuse,
-        'UK activation eligibility':'Not established by the captured listing',
-        'Reseller / system-builder authorization':'Not established by the captured listing',
-        'Product description (supplier text)':description[:1000],
-    }
-    licence_basis=json.dumps({'url':url,'handle':requested.group(1),'title':title,
-        'properties':properties,'seller_product_claims':description[:2000]},
-        sort_keys=True,separators=(',',':'),ensure_ascii=True).encode()
-    image=(soup.select_one('meta[property="og:image"]') or {}).get('content')
-    sku=str(variant.get('sku') or variant.get('id') or product_json.get('id') or requested.group(1))
-    return {'status':'captured','url':url,'observed_at':datetime.now(timezone.utc).isoformat(),
-        'title':title,'sku':sku,'mpn':None,'merchant_name':'RoyalCDKeys','condition':'new',
-        'item_gbp':str(item),'delivery_gbp':'0' if digital else None,
-        'postage_verified':digital,'delivery_calendar_days':0 if digital else None,
-        'delivery_working_days':0 if digital else None,
-        'delivery_estimate_source':'seller_claimed_instant_digital_delivery' if digital else None,
-        'delivery_destination':'GB' if digital else None,'stock_status':stock,'stock_evidence':stock_evidence,
-        'product_properties':properties,'engineering_reviewed':False,'digital_product':digital,
-        'licence_resale_rights_verified':False,'licence_review_required':True,
-        'licence_review_fingerprint':hashlib.sha256(licence_basis).hexdigest(),
-        'supplier_product_handle':requested.group(1),'image_url':image,
-        'seller_product_claims':description[:2000]}
-
-
-async def _collect_royalcdkeys_capture(url):
-    parsed=urlsplit(url)
-    match=re.fullmatch(r'/en-gb/products/([a-z0-9][a-z0-9-]*)',parsed.path.casefold())
-    if not match:
-        return {'status':'unsupported','reason':'Only exact UK RoyalCDKeys product pages are supported'}
-    handle=match.group(1)
-    async with httpx.AsyncClient(timeout=15,follow_redirects=False) as client:
-        response=await client.get(url,headers={'Accept':'text/html'})
-        if response.status_code!=200 or 'text/html' not in response.headers.get('content-type',''):
-            return {'status':'unresolved','reason':f'RoyalCDKeys product page returned HTTP {response.status_code}'}
-        product_response=await client.get(
-            f'https://royalcdkeys.com/products/{handle}.js?country=GB&currency=GBP',
-            headers={'Accept':'application/json'})
-        if product_response.status_code!=200:
-            return {'status':'unresolved','reason':f'RoyalCDKeys UK product feed returned HTTP {product_response.status_code}'}
-        try:
-            product_json=product_response.json()
-        except ValueError:
-            return {'status':'unresolved','reason':'RoyalCDKeys product feed returned invalid JSON'}
-        return parse_royalcdkeys_capture(response.text,url,product_json)
-
-
 async def _collect_gamers_outlet_capture(url, *, browser_runtime=None):
     """Capture an exact digital offer, with dated GBP conversion and unapproved rights."""
     import xml.etree.ElementTree as ET
@@ -1116,8 +1020,6 @@ async def collect_product_capture(url, *, browser_runtime=None):
             return {'status':'unresolved','reason':f'Retailer request failed: {type(error).__name__}'}
     if (urlsplit(url).hostname or '').casefold() in {'gamers-outlet.net','www.gamers-outlet.net'}:
         return await _collect_gamers_outlet_capture(url,browser_runtime=browser_runtime)
-    if (urlsplit(url).hostname or '').casefold()=='royalcdkeys.com':
-        return await _collect_royalcdkeys_capture(url)
     http_reason=None
     try:
         async with httpx.AsyncClient(timeout=15,follow_redirects=False) as client:
@@ -1224,7 +1126,7 @@ def playbook_capture_listing_ids(proposals,requested_listing_ids=None):
             listing_id=part.get('listing_id')
             if not listing_id:continue
             role=str(part.get('role') or '')
-            if role.startswith('os') and not any(host in str(part.get('source_url') or '').casefold() for host in ('royalcdkeys.com','gamers-outlet.net')):
+            if role.startswith('os') and not any(host in str(part.get('source_url') or '').casefold() for host in ('gamers-outlet.net',)):
                 continue
             listing_ids.add(listing_id)
     return listing_ids
@@ -1294,14 +1196,12 @@ async def refresh_selected_product_facts(db, limit=64, *, listing_ids=None, forc
         if part.get('listing_id')}
     ids=playbook_capture_listing_ids(proposals,requested_listing_ids=listing_ids)
     # Software offers are captured from the explicitly selected provider's
-    # exact product pages. Keep legacy RoyalCDKeys records reviewable, while
-    # ensuring the current Gamers Outlet Windows and Office offers are also
-    # refreshed even when a proposal does not currently select them.
+    # exact product pages. Include selected Gamers Outlet Windows and Office
+    # offers even when a proposal does not currently select them.
     catalogue_software=(await db.execute(select(Listing).where(
-        Listing.status=='active',Listing.source_name.in_(('Gamers Outlet','RoyalCDKeys'))))).scalars().all()
+        Listing.status=='active',Listing.source_name=='Gamers Outlet'))).scalars().all()
     ids.update(row.id for row in catalogue_software
-        if ((row.raw_specs or {}).get('gamers_outlet') or
-            (row.raw_specs or {}).get('royalcdkeys') or {}).get('category') in {'os','office'})
+        if (row.raw_specs or {}).get('gamers_outlet', {}).get('category') in {'os','office'})
     # Bestseller rows without a ranking-page price still represent real Amazon
     # products. Capture their exact selected offers before syncing them into
     # Playbook slots; never promote the ranking snapshot itself into cost.
@@ -1373,7 +1273,7 @@ async def refresh_selected_product_facts(db, limit=64, *, listing_ids=None, forc
         except (TypeError,ValueError): return 10000
     def capture_priority(listing):
         raw=listing.raw_specs or {}
-        software=raw.get('gamers_outlet') or raw.get('royalcdkeys') or {}
+        software=raw.get('gamers_outlet') or {}
         requirement_source=bool(raw.get('playbook_requirement_discovery')
             or raw.get('playbook_requirement_source'))
         return (0 if software.get('category')=='os' and listing.source_name=='Gamers Outlet' else

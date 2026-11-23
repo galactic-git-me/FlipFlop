@@ -51,7 +51,7 @@ def test_exact_fact_queue_includes_base_and_upsell_products_but_uses_the_licence
     proposals=[SimpleNamespace(demand_signals={'source':'catalogue_playbook_service_v1'},proposed_data={
         'components':[{'listing_id':11,'role':'cpu'},{'listing_id':12,'role':'os','source_url':'https://amazon.co.uk/dp/B000000001'}],
         'upsells':[{'component':{'listing_id':13,'role':'gpu'}},
-            {'component':{'listing_id':14,'role':'os','source_url':'https://royalcdkeys.com/en-gb/products/win-11'}}]}),
+            {'component':{'listing_id':14,'role':'os','source_url':'https://www.gamers-outlet.net/en/buy-windows-11-pro-oem-cd-key'}}]}),
         SimpleNamespace(demand_signals={'source':'unrelated'},proposed_data={'components':[{'listing_id':99}]})]
     assert playbook_capture_listing_ids(proposals)=={11,13,14}
 

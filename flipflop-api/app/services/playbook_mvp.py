@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 from decimal import Decimal, InvalidOperation
 from urllib.parse import urlsplit
 
-DEFAULT_SUPPLIERS = ("amazon.co.uk", "overclockers.co.uk", "royalcdkeys.com", "gamers-outlet.net", "releases.ubuntu.com")
+DEFAULT_SUPPLIERS = ("amazon.co.uk", "overclockers.co.uk", "gamers-outlet.net", "releases.ubuntu.com")
 
 
 def mvp_mode(parent):

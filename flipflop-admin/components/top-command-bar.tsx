@@ -26,6 +26,14 @@ const PLACEHOLDERS: Record<string, string> = {
   "/community": "SEARCH COMMUNITY POSTS...",
 };
 
+function formatHeaderCurrency(value: number) {
+  return new Intl.NumberFormat("en-GB", {
+    style: "currency",
+    currency: "GBP",
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
 export function TopCommandBar() {
   const pathname = usePathname();
   const router = useRouter();
@@ -35,6 +43,7 @@ export function TopCommandBar() {
   const [pendingProposals, setPendingProposals] = useState<PlaybookProposal[]>([]);
   const [alerts, setAlerts] = useState<Array<{ id: number; code: string; message: string; link_url?: string | null; created_at?: string | null }>>([]);
   const [priceAlertCount, setPriceAlertCount] = useState(0);
+  const [salesSummary, setSalesSummary] = useState<{ newSales: number; revenue: number; profit: number } | null>(null);
   const [approvalStatus, setApprovalStatus] = useState<{ count: number; partial: boolean } | null>(null);
   const [toasts, setToasts] = useState<Array<{ id: string; text: string; linkUrl?: string | null; persistent?: boolean }>>([]);
   const [confettiPieces, setConfettiPieces] = useState<Array<{ id: string; left: number; delay: number; duration: number; size: number; color: string; drift: number }>>([]);
@@ -85,6 +94,31 @@ export function TopCommandBar() {
     }).catch(() => { if (active) setApprovalStatus(null); });
     refresh();
     const timer = window.setInterval(refresh, 60_000);
+    return () => { active = false; window.clearInterval(timer); };
+  }, [pathname]);
+
+  useEffect(() => {
+    if (pathname === "/login") return;
+    let active = true;
+    const loadSalesSummary = async () => {
+      try {
+        const [recent, allTime] = await Promise.all([
+          api.adminPerformance.summary(30),
+          api.adminPerformance.summary(365),
+        ]);
+        if (active) {
+          setSalesSummary({
+            newSales: recent.sold_count,
+            revenue: allTime.total_revenue,
+            profit: allTime.total_profit,
+          });
+        }
+      } catch {
+        // Keep the top bar usable when performance data is unavailable.
+      }
+    };
+    void loadSalesSummary();
+    const timer = window.setInterval(() => void loadSalesSummary(), 60_000);
     return () => { active = false; window.clearInterval(timer); };
   }, [pathname]);
 
@@ -283,6 +317,38 @@ export function TopCommandBar() {
       </div>
 
       <div className="node-topbar-right">
+        <nav aria-label="Sales summary" className="hidden 2xl:flex items-center gap-1.5">
+          <Link
+            href="/performance"
+            title="Confirmed sales in the last 30 days"
+            className="inline-flex items-center gap-1.5 rounded-md border border-orange-300/20 bg-orange-400/5 px-2 py-1.5 text-[9px] font-semibold uppercase tracking-wide text-slate-300 transition hover:border-orange-300/40 hover:bg-orange-400/10"
+          >
+            New Sales
+            <span className="min-w-5 rounded-full bg-orange-400/20 px-1.5 py-0.5 text-center text-[10px] tabular-nums text-orange-200">
+              {salesSummary?.newSales ?? "—"}
+            </span>
+          </Link>
+          <Link
+            href="/performance"
+            title="Recorded revenue over the last 365 days"
+            className="inline-flex items-center gap-1.5 rounded-md border border-cyan-300/20 bg-cyan-400/5 px-2 py-1.5 text-[9px] font-semibold uppercase tracking-wide text-slate-300 transition hover:border-cyan-300/40 hover:bg-cyan-400/10"
+          >
+            Rev 365d
+            <span className="min-w-5 rounded-full bg-cyan-400/15 px-1.5 py-0.5 text-center text-[10px] tabular-nums text-cyan-200">
+              {salesSummary ? formatHeaderCurrency(salesSummary.revenue) : "—"}
+            </span>
+          </Link>
+          <Link
+            href="/performance"
+            title="Recorded profit over the last 365 days"
+            className="inline-flex items-center gap-1.5 rounded-md border border-emerald-300/20 bg-emerald-400/5 px-2 py-1.5 text-[9px] font-semibold uppercase tracking-wide text-slate-300 transition hover:border-emerald-300/40 hover:bg-emerald-400/10"
+          >
+            Profit 365d
+            <span className="min-w-5 rounded-full bg-emerald-400/15 px-1.5 py-0.5 text-center text-[10px] tabular-nums text-emerald-200">
+              {salesSummary ? formatHeaderCurrency(salesSummary.profit) : "—"}
+            </span>
+          </Link>
+        </nav>
         <Link
           href={isLocalEnvironment ? "http://localhost:4313" : "https://www.theflipflop.shop"}
           className={`inline-flex animate-pulse items-center gap-1.5 rounded-md border px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest transition ${environmentBadgeClass}`}

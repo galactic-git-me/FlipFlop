@@ -47,7 +47,7 @@ export function supplierDisplayLabel(source: Partial<Pick<SourcePreview,'source'
     const host = source.url ? new URL(source.url).hostname.toLowerCase() : '';
     if (host === 'amazon.co.uk' || host.endsWith('.amazon.co.uk')) platform = 'Amazon';
     else if (host === 'overclockers.co.uk' || host.endsWith('.overclockers.co.uk')) platform = 'Overclockers UK';
-    else if (host === 'royalcdkeys.com' || host.endsWith('.royalcdkeys.com')) platform = 'RoyalCDKeys';
+    else if (host === 'gamers-outlet.net' || host.endsWith('.gamers-outlet.net')) platform = 'Gamers Outlet';
     else if (host === 'releases.ubuntu.com') platform = 'Ubuntu';
     else if (host === 'ebay.co.uk' || host.endsWith('.ebay.co.uk') || host === 'ebay.com' || host.endsWith('.ebay.com')) platform = 'eBay';
     else if (host === 'vinted.co.uk' || host.endsWith('.vinted.co.uk')) platform = 'Vinted';

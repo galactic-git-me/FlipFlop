@@ -190,6 +190,32 @@ async def withdraw_other_channels(db, build, source_channel=None):
             continue
         if row.status == "withdrawn" and row.last_checked_at:
             continue
+        pending_jobs = (await db.execute(select(BrowserListingJob).where(
+            BrowserListingJob.channel_listing_id == row.id,
+            BrowserListingJob.status.in_(PENDING),
+        ).with_for_update())).scalars().all()
+        possibly_live = bool(
+            row.external_listing_id
+            or row.listing_url
+            or row.status in {"publishing", "published", "withdrawal_pending", "needs_review"}
+            or any(job.status in {"running", "needs_review"} for job in pending_jobs)
+        )
+        if not possibly_live:
+            cancelled_jobs = []
+            for job in pending_jobs:
+                if job.operation == "withdraw":
+                    continue
+                job.status, job.lease_token, job.lease_until = "cancelled", None, None
+                job.message = "Cancelled because the build sold before this channel listing was confirmed."
+                cancelled_jobs.append(job)
+            if row.status in {"draft", "queued"}:
+                row.status, row.withdrawn_at, row.last_checked_at = "cancelled", now, now
+            if cancelled_jobs:
+                db.add(ListingPublishEvent(channel_listing_id=row.id, event_type="browser_job_cancelled",
+                    message="Unstarted channel publishing was cancelled after the build sold.",
+                    event_metadata={"build_id": build.id, "channel": channel,
+                        "job_ids": [job.id for job in cancelled_jobs], "reason": "confirmed_sale"}))
+            continue
         if row.external_listing_id or row.listing_url or row.status in {"publishing", "published", "withdrawal_pending"}:
             await enqueue_operation(db, build, row, "withdraw")
     await db.flush()
