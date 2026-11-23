@@ -17,12 +17,15 @@ def classify_ebay_listing_state(
     order_found: bool,
     confirmed_unavailable: bool = False,
     cancelled_order: bool = False,
+    reviewed_refund: bool = False,
 ) -> str:
     """Pure lifecycle decision used by reconciliation and unit tests."""
     remote_status = str((remote or {}).get("listing_status") or "").lower()
     quantity_sold = 0 if cancelled_order else int((remote or {}).get("quantity_sold") or 0)
     if order_found:
         return "sold"
+    if reviewed_refund:
+        return "ended"
     if remote_status in {"active", "started"}:
         return "active"
     if quantity_sold > 0:
@@ -34,6 +37,53 @@ def classify_ebay_listing_state(
     if remote is not None:
         return "missing"
     return "unknown"
+
+
+async def get_reviewed_refund_decision(db, build: ManualBuild) -> str | None:
+    """Return the owner's current decision for this build's latest refund event."""
+    if not build.ebay_order_id:
+        return None
+    from app.models.channel_listing import ChannelListing
+    from app.models.listing_publish_event import ListingPublishEvent
+
+    events = (await db.execute(
+        select(ListingPublishEvent, ChannelListing.external_listing_id)
+        .join(ChannelListing, ListingPublishEvent.channel_listing_id == ChannelListing.id)
+        .where(
+            ChannelListing.manual_build_id == build.id,
+            ListingPublishEvent.event_type.in_(("refund_detected", "refund_relist_decision")),
+        )
+        .order_by(ListingPublishEvent.id.asc())
+    )).all()
+    latest_refund_id = None
+    latest_refund_listing_id = None
+    decisions: dict[int, str] = {}
+    decision_listing_ids: dict[int, str | None] = {}
+    for event, channel_listing_id in events:
+        metadata = event.event_metadata or {}
+        if metadata.get("order_id") != build.ebay_order_id:
+            continue
+        if event.event_type == "refund_detected":
+            latest_refund_id = event.id
+            latest_refund_listing_id = str(
+                metadata.get("listing_id") or channel_listing_id or ""
+            )
+        elif event.event_type == "refund_relist_decision":
+            refund_event_id = metadata.get("refund_event_id")
+            if isinstance(refund_event_id, int):
+                decisions[refund_event_id] = str(metadata.get("decision") or "")
+                decision_listing_ids[refund_event_id] = str(
+                    metadata.get("listing_id") or channel_listing_id or ""
+                )
+    decision = decisions.get(latest_refund_id)
+    reviewed_listing_id = decision_listing_ids.get(latest_refund_id) or latest_refund_listing_id
+    if (
+        decision in {"relist", "keep_offline"}
+        and reviewed_listing_id
+        and reviewed_listing_id == str(build.ebay_listing_id or "")
+    ):
+        return decision
+    return None
 
 
 async def reconcile_manual_build_listing(
@@ -124,6 +174,8 @@ async def reconcile_manual_build_listing(
 
     remote_status = str((remote or {}).get("listing_status") or "").lower()
     cancelled_order = False
+    reviewed_refund_decision = await get_reviewed_refund_decision(db, build)
+    reviewed_refund = False
     if build.ebay_order_id:
         from app.services.ebay_order_sync import get_order_refund_state, is_terminal_order_cancellation
         try:
@@ -132,7 +184,7 @@ async def reconcile_manual_build_listing(
             cancelled_order = is_terminal_order_cancellation(lifecycle)
         except EbayOrderSyncError as exc:
             log.warning("manual_build.ebay_cancel_state_check_failed", build_id=build.id, error=str(exc))
-    if remote_status in {"active", "started"} and not cancelled_order:
+    if remote_status in {"active", "started"} and not cancelled_order and not reviewed_refund_decision:
         state = classify_ebay_listing_state(remote, order_found=False)
     else:
         # A completed/vanished listing is sold only when eBay's order API or
@@ -161,6 +213,14 @@ async def reconcile_manual_build_listing(
                 order = None
             else:
                 cancelled_order = False
+        if reviewed_refund_decision and (
+            order is None or order.order_id == build.ebay_order_id
+        ):
+            # The saved order is the refunded sale already reviewed by the
+            # owner. Its old listing quantity must not recreate that sale,
+            # even if eBay no longer returns the refunded order in search.
+            order = None
+            reviewed_refund = True
         # Error 17 means this seller cannot access the old item. After eBay's
         # order lookup succeeds and finds no sale, let the relist cycle create
         # a fresh listing with a new ID. Network/auth errors remain unknown.
@@ -174,6 +234,7 @@ async def reconcile_manual_build_listing(
             order_found=order is not None,
             confirmed_unavailable=confirmed_unavailable,
             cancelled_order=cancelled_order,
+            reviewed_refund=reviewed_refund,
         )
         newly_recorded_order = order is not None and build.ebay_order_id != order.order_id
         if confirmed_unavailable and state == "missing":
@@ -235,7 +296,10 @@ async def reconcile_manual_build_listing(
     elif state in {"ended", "missing"}:
         if build.status == "listed":
             build.status = "built"
-        build.ebay_listing_end_reason = "ended_early" if state == "ended" else "missing_from_ebay"
+        if reviewed_refund:
+            build.ebay_listing_end_reason = "refund_reviewed"
+        else:
+            build.ebay_listing_end_reason = "ended_early" if state == "ended" else "missing_from_ebay"
     elif remote_error is not None:
         build.ebay_listing_end_reason = None
     if cancelled_order:
