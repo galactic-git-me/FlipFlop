@@ -509,6 +509,9 @@ def prefer_exact_product_page_preview(product_page, listing_preview):
         # A retained exact-page capture must not hide a newer verified offer
         # for the same listing. The approval endpoint rechecks the freshest
         # source, so pricing/rebuild and review must apply the same precedence.
+        # Delivery estimates are not carried forward independently: an ETA
+        # from an older page capture cannot make a newer listing observation
+        # look eligible unless its own current evidence supplies that ETA.
         if (page_time < listing_time
                 and listing_preview.get('commercial_capture_verified') is True
                 and listing_preview.get('stock_status') == 'available'):
