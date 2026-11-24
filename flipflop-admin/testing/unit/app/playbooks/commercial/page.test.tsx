@@ -19,6 +19,7 @@ const approveAllSupplierSources=vi.fn();
 vi.mock('@/lib/api',()=>({api:{commercialReadiness:{proposals:(...args:unknown[])=>proposals(...args),automation:(...args:unknown[])=>automation(...args),supplierLicences:(...args:unknown[])=>supplierLicences(...args),approveSupplierLicence:(...args:unknown[])=>approveSupplierLicence(...args),rebuildProposals:(...args:unknown[])=>rebuildProposals(...args),refreshStatus:(...args:unknown[])=>refreshStatus(...args),engineeringSuggestions:(...args:unknown[])=>engineeringSuggestions(...args),productEngineeringSuggestions:(...args:unknown[])=>productEngineeringSuggestions(...args),approveProductEngineeringSuggestion:(...args:unknown[])=>approveProductEngineeringSuggestion(...args),researchEngineeringSuggestions:(...args:unknown[])=>researchEngineeringSuggestions(...args),approveEngineeringSuggestion:(...args:unknown[])=>approveEngineeringSuggestion(...args),approveSupplierSources:(...args:unknown[])=>approveSupplierSources(...args),approveAllSupplierSources:(...args:unknown[])=>approveAllSupplierSources(...args)}}}));
 const renderPage = async () => render(await Page({searchParams:Promise.resolve({})}));
 afterEach(cleanup);
+beforeEach(()=>{window.matchMedia=window.matchMedia||((query:string)=>({matches:false,media:query,onchange:null,addListener:vi.fn(),removeListener:vi.fn(),addEventListener:vi.fn(),removeEventListener:vi.fn(),dispatchEvent:vi.fn(()=>false)} as unknown as MediaQueryList));});
 it('keeps embedded supplier approvals scoped to the selected cell',async()=>{
   const mode={available:false,recommended_price_gbp:null,reason:'Pending checks'};
   const selected={proposal_id:41,playbook_id:1,cell_id:'SELECTED',revision_sha256:'1'.repeat(64),segment:'Gaming',tier:'Budget',name:'Selected cell build',description:'',required_hardware_count:1,
@@ -80,13 +81,31 @@ it('renders structured connector counts and numeric support lists for operator r
 });
 beforeEach(()=>{automation.mockResolvedValue({setting_enabled:true,registered:true,enabled:true,next_run_at:null,scheduled_latest:null,scheduled_rebuild_latest:null,manual_latest:null});engineeringSuggestions.mockResolvedValue({items:[]});productEngineeringSuggestions.mockResolvedValue({items:[]});supplierLicences.mockResolvedValue({items:[]});approveSupplierSources.mockClear();approveAllSupplierSources.mockClear();rebuildProposals.mockClear();rebuildProposals.mockResolvedValue({job_id:'rebuild-1',mode:'rebuild',status:'queued',phase:'Queued proposal rebuild',started:true});refreshStatus.mockResolvedValue({job_id:'rebuild-1',mode:'rebuild',status:'succeeded',phase:'Playbook proposals refreshed',error:null,result:{cells:24,complete_hardware:13,ready_for_approval:0,published:false}});});
 it('shows the branded loader and withholds zero counts while initial Playbook data is pending',()=>{
-  proposals.mockReturnValue(new Promise(()=>{}));
+  proposals.mockReturnValueOnce(new Promise(()=>{}));
   automation.mockReturnValue(new Promise(()=>{}));
   render(<CommercialReviewWorkspace initialArea="builds"/>);
   expect(screen.getByText('Loading Playbook review data…')).toBeInTheDocument();
   expect(screen.getByRole('button',{name:'Build proposals'})).toBeInTheDocument();
   expect(screen.queryByRole('button',{name:'Build proposals (0)'})).not.toBeInTheDocument();
   expect(screen.queryByText('No generated proposals awaiting review')).not.toBeInTheDocument();
+});
+it('shows build proposals without waiting for software licence data',async()=>{
+  proposals.mockResolvedValue({items:[]});
+  supplierLicences.mockReturnValue(new Promise(()=>{}));
+  await renderPage();
+  expect(await screen.findByText('No generated proposals awaiting review')).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button',{name:'Software licences'}));
+  expect(screen.getByText('Loading.....')).toBeInTheDocument();
+});
+it('loads software licence data only when its tab is opened',async()=>{
+  proposals.mockResolvedValue({items:[]});
+  supplierLicences.mockResolvedValue({items:[]});
+  await renderPage();
+  await screen.findByText('No generated proposals awaiting review');
+  expect(supplierLicences).toHaveBeenCalledOnce();
+  fireEvent.click(screen.getByRole('button',{name:'Software licences'}));
+  expect(await screen.findByText(/No Windows, Office or Google AI supplier offers are awaiting/)).toBeInTheDocument();
+  expect(supplierLicences).toHaveBeenCalledOnce();
 });
 it('shows a recoverable load failure instead of presenting unavailable data as zero',async()=>{
   proposals.mockRejectedValue(new Error('Playbook API unavailable'));

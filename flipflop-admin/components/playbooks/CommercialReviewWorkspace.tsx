@@ -145,6 +145,7 @@ export default function CommercialReviewWorkspace({
   const [licenceCandidates, setLicenceCandidates] = useState<
     SupplierLicenceCandidate[]
   >([]);
+  const [licencesLoaded, setLicencesLoaded] = useState(false);
   const [licenceAcknowledgements, setLicenceAcknowledgements] = useState<
     Record<number, boolean>
   >({});
@@ -152,6 +153,8 @@ export default function CommercialReviewWorkspace({
   const [activeArea, setActiveArea] =
     useState<(typeof reviewAreas)[number][0]>(initialArea);
   const [loading, setLoading] = useState(true);
+  const [licencesLoading, setLicencesLoading] = useState(true);
+  const [licenceError, setLicenceError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -160,24 +163,12 @@ export default function CommercialReviewWorkspace({
     setLoading(true);
     setError(null);
     try {
-      const [data, licences] = await Promise.all([
-        api.commercialReadiness.proposals(),
-        api.commercialReadiness.supplierLicences(),
-      ]);
+      const data = await api.commercialReadiness.proposals();
       const visible = contextCellId
         ? data.items.filter((item) => item.cell_id === contextCellId)
         : data.items;
       setOffers(visible);
       setCompatibilityOpinions({});
-      setLicenceCandidates(
-        contextCellId
-          ? licences.items.filter((candidate) =>
-              candidate.catalogue_statuses.some(
-                (link) => link.playbook_id === visible[0]?.playbook_id
-              )
-            )
-          : licences.items
-      );
       setLicenceAcknowledgements({});
       setSelected((current) =>
         visible.some((item) => item.cell_id === current)
@@ -190,6 +181,7 @@ export default function CommercialReviewWorkspace({
             visible[0]?.cell_id ??
             null
       );
+      setLoading(false);
       return true;
     } catch (reason) {
       setError(
@@ -205,6 +197,30 @@ export default function CommercialReviewWorkspace({
   useEffect(() => {
     void load();
   }, [load]);
+  const loadLicences = useCallback(async () => {
+    setLicencesLoading(true);
+    setLicenceError(null);
+    try {
+      const licences = await api.commercialReadiness.supplierLicences();
+      setLicenceCandidates(
+        contextCellId
+          ? licences.items.filter((candidate) =>
+              candidate.catalogue_statuses.some(
+                (link) => link.playbook_id === offers[0]?.playbook_id
+              )
+            )
+          : licences.items
+      );
+      setLicencesLoaded(true);
+    } catch (reason) {
+      setLicenceError(reason instanceof Error ? reason.message : "Could not load software supplier listings");
+    } finally {
+      setLicencesLoading(false);
+    }
+  }, [contextCellId, offers]);
+  useEffect(() => {
+    if (activeArea === "software") void loadLicences();
+  }, [activeArea, loadLicences]);
   useEffect(() => {
     setActiveArea(initialArea);
   }, [initialArea]);
@@ -688,7 +704,7 @@ export default function CommercialReviewWorkspace({
               : id === "compatibility"
               ? loading || error ? "" : ` (${compatibilityCount}/${offers.length})`
               : id === "software"
-              ? loading || error ? "" : ` (${licenceCandidates.length})`
+              ? !licencesLoaded || licenceError ? "" : ` (${licenceCandidates.length})`
               : ""}
           </button>
         ))}
@@ -1464,7 +1480,16 @@ export default function CommercialReviewWorkspace({
             hidden={activeArea !== "software"}
             className="space-y-4"
           >
-            {licenceCandidates.length > 0 ? (
+            {licencesLoading && !licencesLoaded ? (
+              <div className="flex min-h-[24vh] items-center justify-center rounded border border-slate-800 bg-slate-950/40">
+                <BrandCubeLoader size="sm" />
+              </div>
+            ) : licenceError ? (
+              <section role="alert" className="rounded border border-red-900/60 p-4 text-red-300">
+                Software supplier listings could not be loaded: {licenceError}
+                <button type="button" className="ml-3 underline" onClick={() => void loadLicences()}>Retry</button>
+              </section>
+            ) : licenceCandidates.length > 0 ? (
               <section
                 aria-label="Software supplier source review"
                 className="space-y-4 rounded border border-amber-700/70 p-4"
