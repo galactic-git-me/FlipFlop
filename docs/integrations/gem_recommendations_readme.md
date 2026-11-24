@@ -388,17 +388,17 @@ curl -X POST "http://localhost:8000/api/gems/1/build" \
 
 ## Testing
 
-Comprehensive test suite in `flipflop-api/testing/suite/test_gem_service.py`:
+Comprehensive test suite in `flipflop-api/tests/test_gem_service.py`:
 
 ```bash
 # Run all gem tests
-pytest testing/suite/test_gem_service.py -v
+pytest tests/test_gem_service.py -v
 
 # Run specific test
-pytest testing/suite/test_gem_service.py::test_analyze_demand -v
+pytest tests/test_gem_service.py::test_analyze_demand -v
 
 # With coverage
-pytest testing/suite/test_gem_service.py --cov=app.services.gem_service
+pytest tests/test_gem_service.py --cov=app.services.gem_service
 ```
 
 **Test Coverage:**
@@ -529,7 +529,7 @@ class Settings(BaseSettings):
 - `/app/routes/gems.py` - FastAPI endpoints
 - `/app/schemas/gem.py` - Pydantic request/response schemas
 - `/app/migrations/versions/20260629_0006_create_gem_builds_table.py` - Database migration
-- `/testing/suite/test_gem_service.py` - Comprehensive test suite (200+ lines)
+- `/tests/test_gem_service.py` - Comprehensive test suite (200+ lines)
 
 **Frontend:**
 - `/flipflop-admin/components/GemRecommendations.tsx` - Admin UI component

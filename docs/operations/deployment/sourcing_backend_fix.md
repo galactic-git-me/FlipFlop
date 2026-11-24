@@ -28,7 +28,7 @@ can be rolled back while leaving the widened column in place.
 Offline regression checks (no database or provider calls):
 
 ```powershell
-python flipflop-api/testing/suite/test_sourcing_backend_contracts.py
+python flipflop-api/tests/test_sourcing_backend_contracts.py
 ```
 
 These checks validate the ORM column, PostgreSQL migration SQL, Alembic

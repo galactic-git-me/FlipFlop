@@ -851,10 +851,14 @@ async def update_shipping(
     order_id: int,
     update: ShippingUpdateRequest,
     background_tasks: BackgroundTasks,
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     """Update shipping information."""
-    order = db.query(Order).filter(Order.id == order_id).first()
+    order = (
+        await db.execute(
+            select(Order).options(selectinload(Order.customer)).where(Order.id == order_id)
+        )
+    ).scalar_one_or_none()
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
 
@@ -868,8 +872,8 @@ async def update_shipping(
     order.estimated_delivery = update.estimated_delivery
     order.shipped_at = order.shipped_at or datetime.utcnow()
 
-    db.commit()
-    db.refresh(order)
+    await db.commit()
+    await db.refresh(order)
 
     if shipping_changed and order.customer:
         carrier_urls = {"royal_mail": "https://www.royalmail.com/track-your-item#/tracking-results/{}", "parcelforce": "https://www.parcelforce.com/track-trace?trackNumber={}", "dpd": "https://track.dpd.co.uk/parcels/{}", "ups": "https://www.ups.com/track?loc=en_GB&tracknum={}", "dhl": "https://www.dhl.com/gb-en/home/tracking/tracking-express.html?submit=1&tracking-id={}"}

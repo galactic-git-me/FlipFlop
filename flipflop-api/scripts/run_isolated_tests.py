@@ -107,7 +107,7 @@ def main() -> int:
     parser.add_argument(
         "pytest_args",
         nargs=argparse.REMAINDER,
-        help="optional pytest arguments, for example: testing/suite/test_orders.py -q",
+        help="optional pytest arguments, for example: tests/test_orders.py -q",
     )
     args = parser.parse_args()
     if args.pytest_args[:1] == ["--"]:
@@ -144,7 +144,7 @@ def main() -> int:
         mark_database(test_async_url, run_token)
         run([sys.executable, "-m", "alembic", "upgrade", "head"], env)
         verify_migration_head(test_sync_url)
-        pytest_args = args.pytest_args or ["testing/suite", "testing/unit"]
+        pytest_args = args.pytest_args or ["tests", "testing/unit"]
         run([sys.executable, "-m", "pytest", *pytest_args], env)
         passed = True
         return 0

@@ -49,6 +49,8 @@ async def final_assets_by_variant(db, variants: list[CatalogueVariant]) -> dict[
     """Return approved family models; cases retain exact listing/photo matching."""
     if not variants:
         return {}
+    # Family lookup needs identity only. Loading complete listings once per
+    # variant duplicates large source captures across the whole catalogue.
     variant_ids = {variant.id for variant in variants}
     assets = (await db.execute(select(Component3DAsset).where(
         Component3DAsset.status == Component3DAssetStatus.FINAL,

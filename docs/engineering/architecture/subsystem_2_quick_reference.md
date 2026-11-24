@@ -61,7 +61,7 @@ services/email.py                        (SendGrid integration)
 
 alembic/versions/XXX_add_orders.py       (Schema migration)
 
-testing/suite/test_orders.py                     (Unit + integration tests)
+tests/test_orders.py                     (Unit + integration tests)
 ```
 
 Files to Modify:

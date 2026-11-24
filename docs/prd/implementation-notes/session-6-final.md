@@ -63,13 +63,13 @@
   - **Audit trail** for all events
 
 ### Tests (4 files, 55 tests)
-- `testing/suite/test_multi_channel_publisher.py` (352 LOC, 13 tests)
+- `tests/test_multi_channel_publisher.py` (352 LOC, 13 tests)
   - Create single/multiple channel listings
   - Idempotent operations
   - List active channels
   - Sync verification
 
-- `testing/suite/test_dry_run_validator.py` (397 LOC, 14 tests)
+- `tests/test_dry_run_validator.py` (397 LOC, 14 tests)
   - Valid/invalid listing detection
   - Pricing, title, description validation
   - Photo warnings
@@ -77,7 +77,7 @@
   - Preview generation
   - Inventory simulation
 
-- `testing/suite/test_inventory_reservation.py` (401 LOC, 14 tests)
+- `tests/test_inventory_reservation.py` (401 LOC, 14 tests)
   - Reserve single/multiple channels
   - Prevent duplicate reservations
   - Get reserved count
@@ -85,7 +85,7 @@
   - Release reservations
   - Oversell detection
 
-- `testing/suite/test_live_publisher.py` (419 LOC, 14 tests)
+- `tests/test_live_publisher.py` (419 LOC, 14 tests)
   - Publish to single channel
   - Publish to multiple channels
   - Feature flag enforcement
