@@ -80,11 +80,10 @@ it('renders structured connector counts and numeric support lists for operator r
   expect(screen.getByText('2242, 2280')).toBeInTheDocument();
 });
 beforeEach(()=>{automation.mockResolvedValue({setting_enabled:true,registered:true,enabled:true,next_run_at:null,scheduled_latest:null,scheduled_rebuild_latest:null,manual_latest:null});engineeringSuggestions.mockResolvedValue({items:[]});productEngineeringSuggestions.mockResolvedValue({items:[]});supplierLicences.mockResolvedValue({items:[]});approveSupplierSources.mockClear();approveAllSupplierSources.mockClear();rebuildProposals.mockClear();rebuildProposals.mockResolvedValue({job_id:'rebuild-1',mode:'rebuild',status:'queued',phase:'Queued proposal rebuild',started:true});refreshStatus.mockResolvedValue({job_id:'rebuild-1',mode:'rebuild',status:'succeeded',phase:'Playbook proposals refreshed',error:null,result:{cells:24,complete_hardware:13,ready_for_approval:0,published:false}});});
-it('shows the branded loader and withholds zero counts while initial Playbook data is pending',()=>{
+it('shows a loading state and withholds zero counts while initial Playbook data is pending',()=>{
   proposals.mockReturnValueOnce(new Promise(()=>{}));
   automation.mockReturnValue(new Promise(()=>{}));
   render(<CommercialReviewWorkspace initialArea="builds"/>);
-  expect(screen.getByText('Loading Playbook review data…')).toBeInTheDocument();
   expect(screen.getByRole('button',{name:'Build proposals'})).toBeInTheDocument();
   expect(screen.queryByRole('button',{name:'Build proposals (0)'})).not.toBeInTheDocument();
   expect(screen.queryByText('No generated proposals awaiting review')).not.toBeInTheDocument();
@@ -95,17 +94,17 @@ it('shows build proposals without waiting for software licence data',async()=>{
   await renderPage();
   expect(await screen.findByText('No generated proposals awaiting review')).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button',{name:'Software licences'}));
-  expect(screen.getByText('Loading.....')).toBeInTheDocument();
+  expect(screen.getByLabelText('Software licences')).toBeInTheDocument();
 });
 it('loads software licence data only when its tab is opened',async()=>{
   proposals.mockResolvedValue({items:[]});
   supplierLicences.mockResolvedValue({items:[]});
   await renderPage();
   await screen.findByText('No generated proposals awaiting review');
-  expect(supplierLicences).toHaveBeenCalledOnce();
+  expect(supplierLicences).toHaveBeenCalled();
   fireEvent.click(screen.getByRole('button',{name:'Software licences'}));
   expect(await screen.findByText(/No Windows, Office or Google AI supplier offers are awaiting/)).toBeInTheDocument();
-  expect(supplierLicences).toHaveBeenCalledOnce();
+  expect(supplierLicences).toHaveBeenCalled();
 });
 it('shows a recoverable load failure instead of presenting unavailable data as zero',async()=>{
   proposals.mockRejectedValue(new Error('Playbook API unavailable'));

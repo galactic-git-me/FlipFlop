@@ -146,6 +146,7 @@ export default function CommercialReviewWorkspace({
     SupplierLicenceCandidate[]
   >([]);
   const [licencesLoaded, setLicencesLoaded] = useState(false);
+  const [licencesLoading, setLicencesLoading] = useState(false);
   const [licenceAcknowledgements, setLicenceAcknowledgements] = useState<
     Record<number, boolean>
   >({});
@@ -153,7 +154,6 @@ export default function CommercialReviewWorkspace({
   const [activeArea, setActiveArea] =
     useState<(typeof reviewAreas)[number][0]>(initialArea);
   const [loading, setLoading] = useState(true);
-  const [licencesLoading, setLicencesLoading] = useState(true);
   const [licenceError, setLicenceError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
