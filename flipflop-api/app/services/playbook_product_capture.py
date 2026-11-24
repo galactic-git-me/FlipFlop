@@ -180,9 +180,10 @@ def product_capture_refresh_due(previous, now):
             return True
         age=(now-checked).total_seconds()
         # If a current successful capture is retained after a failed refresh,
-        # retry daily rather than on every hourly Playbook refresh. New/unresolved
-        # products still retry hourly so newly available offers enter promptly.
-        retry_interval=86400 if last_attempt and previous.get('status')=='captured' else 3600
+        # retry twice daily rather than on every hourly Playbook refresh. New or
+        # unresolved products still retry hourly so newly available offers enter
+        # promptly.
+        retry_interval=43200 if last_attempt and previous.get('status')=='captured' else 3600
         return age>=retry_interval
     except (TypeError,ValueError):
         return True

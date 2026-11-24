@@ -74,6 +74,10 @@ def test_retained_capture_uses_the_last_failed_attempt_for_retry_cooldown():
     assert not product_capture_refresh_due(previous,now)
     previous['last_capture_attempt']['attempted_at']=(now-timedelta(hours=2)).isoformat()
     assert not product_capture_refresh_due(previous,now)
+    previous['last_capture_attempt']['attempted_at']=(now-timedelta(hours=11,minutes=59)).isoformat()
+    assert not product_capture_refresh_due(previous,now)
+    previous['last_capture_attempt']['attempted_at']=(now-timedelta(hours=12)).isoformat()
+    assert product_capture_refresh_due(previous,now)
     previous['last_capture_attempt']['attempted_at']=(now-timedelta(days=2)).isoformat()
     assert product_capture_refresh_due(previous,now)
 
