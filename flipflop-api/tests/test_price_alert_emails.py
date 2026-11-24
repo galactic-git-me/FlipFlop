@@ -19,6 +19,11 @@ from app.services.price_alert_emails import (
 from app.services.money import Money
 
 
+@pytest.fixture(autouse=True)
+def enable_price_alert_emails(monkeypatch):
+    monkeypatch.setattr("app.services.price_alert_emails.is_enabled", lambda _flag: True)
+
+
 @pytest.mark.asyncio
 class TestPriceAlertEmails:
     """Test price alert email functionality."""
