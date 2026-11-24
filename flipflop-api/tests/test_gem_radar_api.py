@@ -56,6 +56,7 @@ async def test_platform_spotlight_candidate_pool_keeps_lower_ranked_compatible_l
             expected_profit=200 - index * 2,
             desirability_score=100 - index,
             liquidity_score=100 - index,
+            sell_through_rate_pct=0,
             watch_count=100 - index,
             bid_count=100 - index,
             image_url=f"https://images.example/{index}.jpg",
@@ -92,7 +93,9 @@ async def test_platform_spotlight_candidate_pool_keeps_lower_ranked_compatible_l
 
     db = SimpleNamespace(execute=AsyncMock(return_value=_ScalarsResult(rows)))
     pool = await gem_radar._gem_spotlight_candidates(
-        db, "motherboard", {str(index) for index in range(1, 11)},
+        db,
+        "motherboard",
+        {str(index) for index in range(1, 11)},
         preserve_full_pool=True,
     )
 

@@ -2505,7 +2505,14 @@ async def _fetch_best_motherboard_bundle_gem(
     return None
 
 
-async def _gem_spotlight_candidates(db: AsyncSession, category: str, actionable_ids: set[str], benchmark_context=None) -> list[dict]:
+async def _gem_spotlight_candidates(
+    db: AsyncSession,
+    category: str,
+    actionable_ids: set[str],
+    benchmark_context=None,
+    *,
+    preserve_full_pool: bool = False,
+) -> list[dict]:
     """Return a bounded, image-ready candidate pool covering all five build objectives."""
     from app.services.curated_media import media_urls
 
@@ -2588,6 +2595,11 @@ async def _gem_spotlight_candidates(db: AsyncSession, category: str, actionable_
 
     if not candidates:
         return []
+    # Platform builds need the reviewed-fact compatibility filter to see
+    # candidates before global objective cutoffs remove lower-ranked items.
+    if preserve_full_pool:
+        return candidates
+
     selected: dict[int, dict] = {}
     rankings = (
         sorted(candidates, key=lambda item: item["deal_score"], reverse=True)[:8],
@@ -2613,7 +2625,13 @@ async def get_gem_spotlight(db: AsyncSession, actionable_ids: set[str] | None = 
         "most_popular": "Top Demand Signal Concept"}
     actionable_ids = actionable_ids if actionable_ids is not None else await get_active_buy_it_now_listing_ids(db)
     benchmark_context = await load_benchmark_context(db)
-    pools = {category: await _gem_spotlight_candidates(db, category, actionable_ids, benchmark_context)
+    pools = {category: await _gem_spotlight_candidates(
+        db,
+        category,
+        actionable_ids,
+        benchmark_context,
+        preserve_full_pool=platform is not None,
+    )
         for category in all_categories}
     if platform is not None:
         builds = await _gem_spotlight_platform_builds(db, pools, platform)
