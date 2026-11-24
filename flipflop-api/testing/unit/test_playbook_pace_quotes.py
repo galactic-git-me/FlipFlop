@@ -21,7 +21,7 @@ from decimal import Decimal
 
 
 class PaceQuoteChecks(unittest.TestCase):
-    def test_fresh_exact_page_eta_survives_newer_vendor_default(self):
+    def test_newer_listing_observation_is_not_replaced_by_older_page_eta(self):
         url = "https://www.overclockers.co.uk/exact-cpu/PRO-AMD-02677.html"
         page = {"url": url, "identity_source": "exact_retailer_product_page",
             "observed_at": "2026-11-24T03:00:00+00:00", "fresh": True,
@@ -32,7 +32,7 @@ class PaceQuoteChecks(unittest.TestCase):
             "delivery_working_days": 3, "delivery_estimate_source": "vendor_default",
             "commercial_capture_verified": True, "stock_status": "available"}
 
-        self.assertTrue(prefer_exact_product_page_preview(page, listing))
+        self.assertFalse(prefer_exact_product_page_preview(page, listing))
 
     def test_newer_explicit_exact_page_eta_remains_preferred(self):
         url = "https://www.overclockers.co.uk/exact-cpu/PRO-AMD-02677.html"
