@@ -55,5 +55,5 @@ def test_infer_slot_type_storage():
 def test_infer_slot_type_unknown_returns_none():
     assert infer_slot_type("Complete Gaming PC i7 RTX 3060") is None
 
-def test_infer_slot_type_psu_returns_none():
-    assert infer_slot_type("Corsair 650W modular psu") is None
+def test_infer_slot_type_psu():
+    assert infer_slot_type("Corsair 650W modular psu") == "psu"

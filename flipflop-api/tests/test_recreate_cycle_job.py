@@ -14,8 +14,18 @@ from sqlalchemy import select
 from app.database import AsyncSessionLocal
 from app.models.flip import Flip, FlipStage
 from app.models.listing import Listing
+from app.models.app_settings import AppSettings
 from app.workers.recreate_cycle import run_deferred_publish_job, run_recreate_cycle_job
 from app.workers.markdown_event import run_markdown_event_scan_job
+from app.services import ebay_oauth
+
+
+@pytest.fixture(autouse=True)
+def _disable_seller_token_lookup(monkeypatch):
+    async def no_token(_db):
+        return None
+
+    monkeypatch.setattr(ebay_oauth, "get_valid_access_token", no_token)
 
 
 @pytest.fixture(autouse=True)
@@ -23,6 +33,7 @@ async def _clean_tables():
     async with AsyncSessionLocal() as db:
         await db.execute(Flip.__table__.delete())
         await db.execute(Listing.__table__.delete())
+        await db.execute(AppSettings.__table__.delete())
         await db.commit()
     yield
 

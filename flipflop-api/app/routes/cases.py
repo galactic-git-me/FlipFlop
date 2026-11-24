@@ -7,7 +7,7 @@ from pathlib import Path
 from uuid import uuid4
 from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, Query, UploadFile
 import httpx
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field, HttpUrl, field_validator
 from sqlalchemy import select, and_, func, or_, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
@@ -176,6 +176,15 @@ class CaseReferenceApproval(BaseModel):
     selected_images: list[CaseReferenceImage] = Field(default_factory=list)
     listing_images: list[CaseReferenceImage] | None = None
     model_images: list[CaseReferenceImage] | None = None
+
+    @field_validator("selected_images")
+    @classmethod
+    def validate_legacy_four_image_selection(
+        cls, images: list[CaseReferenceImage]
+    ) -> list[CaseReferenceImage]:
+        if images and len(images) != 4:
+            raise ValueError("Legacy reference selection requires exactly four images")
+        return images
 
 
 def _candidate_source(url: str, fallback: str = "manual") -> str:

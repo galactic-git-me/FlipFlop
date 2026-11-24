@@ -14,6 +14,12 @@ from datetime import datetime, timedelta
 class TestCalculateMetrics:
     """Test metrics calculation."""
 
+    @pytest.fixture(autouse=True)
+    def enable_demand_intelligence(self, monkeypatch):
+        monkeypatch.setattr(
+            "app.services.demand_metrics_calculator.is_enabled", lambda _flag: True
+        )
+
     async def test_calculate_from_gem_radar_data(self, db: AsyncSession):
         """Calculate metrics from gem_radar demand history."""
         build = ManualBuild(

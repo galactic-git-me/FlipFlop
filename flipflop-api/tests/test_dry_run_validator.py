@@ -156,7 +156,7 @@ class TestStorefrontValidation:
     """Test Storefront-specific validation."""
 
     async def test_storefront_without_product_id(self, db: AsyncSession):
-        """Storefront warns without product ID."""
+        """Storefront publication is blocked until its product ID is known."""
         build = ManualBuild(
             name="Storefront Build",
             status="built",
@@ -170,9 +170,8 @@ class TestStorefrontValidation:
 
         result = await DryRunValidator.validate_listing(db, build.id, "storefront")
 
-        assert result.valid is True
-        assert len(result.warnings) > 0
-        assert any("storefront" in w.lower() for w in result.warnings)
+        assert result.valid is False
+        assert any("product id" in error.lower() for error in result.errors)
 
     async def test_storefront_with_product_id(self, db: AsyncSession):
         """Storefront passes with product ID."""

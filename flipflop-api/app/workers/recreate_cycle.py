@@ -155,11 +155,18 @@ async def _publish_flip(flip, db) -> bool:
         return False
 
     from app.services.ebay_listing_poster import post_flip_to_ebay
+    from app.models.listing import Listing
+
+    listing = await db.get(Listing, flip.listing_id)
+    image_urls = list(flip.generated_images_urls or [])
+    if not image_urls and listing:
+        image_urls = list(listing.image_urls or [])
 
     result = await post_flip_to_ebay(
         title=flip.generated_title or f"Flip #{flip.id}",
         description=flip.generated_description or "",
         price=flip.listing_price or flip.current_estimated_resale or flip.total_cost,
+        image_urls=image_urls,
         access_token=token,
         environment=settings.ebay_environment,
     )

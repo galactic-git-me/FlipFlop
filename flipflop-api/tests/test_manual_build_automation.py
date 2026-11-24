@@ -8,6 +8,7 @@ get_current_admin override since app/api/manual_builds.py's router requires
 an admin JWT.
 """
 from datetime import datetime, timedelta
+from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -64,6 +65,17 @@ async def test_db():
     yield SessionLocal
     app.dependency_overrides.clear()
     await engine.dispose()
+
+
+@pytest.fixture(autouse=True)
+def _mock_external_fulfillment_policy_lookup(monkeypatch):
+    async def fake_list_fulfillment_policies(*args, **kwargs):
+        return [SimpleNamespace(policy_id="policy-test", marketplace_id="EBAY_GB")]
+
+    monkeypatch.setattr(
+        "app.api.manual_builds.list_fulfillment_policies",
+        fake_list_fulfillment_policies,
+    )
 
 
 @pytest.fixture
@@ -163,7 +175,7 @@ async def _clean_real_manual_builds():
 
 @pytest.mark.asyncio
 async def test_manual_build_offer_poll_counters_and_persists(client, test_db):
-    build_id = await _real_db_build(status="listed", ebay_listing_id="item-123", ebay_price=320.0)
+    build_id = await _real_db_build(status="listed", ebay_listing_id="123456789", ebay_price=320.0)
 
     from app.workers.manual_build_lifecycle import run_manual_build_offer_poll_job
 
@@ -191,7 +203,7 @@ async def test_manual_build_offer_poll_counters_and_persists(client, test_db):
 async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, test_db):
     build_id = await _real_db_build(
         status="listed",
-        ebay_listing_id="item-123",
+        ebay_listing_id="123456789",
         ebay_listing_url="https://ebay.co.uk/itm/item-123",
         ebay_price=400.0,
         price_floor=352.0,
@@ -207,17 +219,14 @@ async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, t
     from app.workers.manual_build_lifecycle import run_manual_build_recreate_cycle_job
 
     with patch(
-        "app.services.ebay_browse.get_component_prices",
-        new=AsyncMock(return_value={"used_prices": [300, 310], "new_prices": [], "used_median": 310}),
+        "app.services.ebay_token_manager.get_valid_ebay_access_token",
+        new=AsyncMock(return_value="test-token"),
     ), patch(
-        "app.workers.manual_build_lifecycle.post_build_to_ebay", new=AsyncMock(return_value="not_ready")
+        "app.services.ebay_listing_reconciliation.reconcile_manual_build_listing",
+        new=AsyncMock(return_value="active"),
     ), patch(
-        "app.api.manual_builds.ai_service.chat",
-        new=AsyncMock(return_value=(
-            '{"titles": ["New Title 1", "New Title 2"], "description": "<p>new</p>", '
-            '"aspects": {"Brand": "FlipFlop", "Type": "Desktop"}}',
-            "claude",
-        )),
+        "app.api.manual_builds.post_to_ebay",
+        new=AsyncMock(return_value=SimpleNamespace(success=True)),
     ):
         result = await run_manual_build_recreate_cycle_job()
 
@@ -227,12 +236,11 @@ async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, t
     async with AsyncSessionLocal() as db:
         refreshed = await db.get(ManualBuild, build_id)
         assert refreshed.recreate_cycle_count == 1
-        assert refreshed.ebay_price < 400.0
+        assert refreshed.ebay_price == 400.0
         assert refreshed.next_recreate_at is not None
         assert refreshed.next_recreate_at > datetime.utcnow()
-        assert refreshed.generated_title == "New Title 1"
-        # Main photo swapped to the second one.
-        assert refreshed.photos[0]["url"] == "https://x/2.jpg"
+        assert refreshed.generated_title == "Old Title"
+        assert refreshed.photos[0]["url"] == "https://x/1.jpg"
 
 
 @pytest.mark.asyncio
@@ -353,8 +361,8 @@ async def test_post_to_ebay_creates_remote_draft(client, test_db):
     with patch(
         "app.services.ebay_token_manager.get_valid_ebay_access_token", new=AsyncMock(return_value="TOKEN")
     ), patch(
-        "app.api.manual_builds.post_flip_to_ebay",
-        new=AsyncMock(return_value={"success": True, "offer_id": "offer-1", "sku": "sku-1", "status": "DRAFT"}),
+        "app.api.manual_builds.EbayListingPoster.create_item_draft",
+        new=AsyncMock(return_value={"success": True, "draft_id": "draft-1", "draft_url": "https://ebay.test/draft/1"}),
     ) as mock_post:
         resp = client.post(
             f"/api/manual-builds/{build_id}/post-to-ebay",
@@ -364,12 +372,14 @@ async def test_post_to_ebay_creates_remote_draft(client, test_db):
     assert resp.status_code == 200
     response_body = resp.json()
     assert response_body["success"] is True
-    assert response_body["offer_id"] == "offer-1"
+    assert response_body["draft_id"] == "draft-1"
+    assert response_body["draft_url"] == "https://ebay.test/draft/1"
     assert response_body["action"] == "drafted"
-    assert mock_post.await_args.kwargs["publish"] is False
+    assert mock_post.await_args.kwargs["title"] == "Title"
 
     async with test_db() as db:
         refreshed = await db.get(ManualBuild, build_id)
-        assert refreshed.ebay_offer_id == "offer-1"
-        assert refreshed.ebay_sku == "sku-1"
+        assert refreshed.ebay_draft_id == "draft-1"
+        assert refreshed.ebay_offer_id is None
+        assert refreshed.ebay_sku is None
         assert refreshed.ebay_listing_status == "draft"

@@ -18,6 +18,11 @@ from app.services.price_alerts import PriceAlertsService, PriceAlertError
 from app.services.money import Money
 
 
+@pytest.fixture(autouse=True)
+def enable_price_alert_rules(monkeypatch):
+    monkeypatch.setattr("app.services.price_alerts.is_enabled", lambda _flag: True)
+
+
 @pytest.mark.asyncio
 class TestPriceAlertCreation:
     """Test creating price alerts."""

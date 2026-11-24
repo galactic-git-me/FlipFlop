@@ -64,6 +64,7 @@ def test_active_relisted_offer_is_discovered_for_previously_sold_build(monkeypat
         ebay_sku="FF-BUILD-2", ebay_order_id="05-15450-52548", dispatch_status="awaiting_dispatch",
     )
     db = AsyncMock()
+    db.execute = AsyncMock(return_value=SimpleNamespace(scalar_one_or_none=lambda: None))
     db.execute.return_value = SimpleNamespace(scalar_one_or_none=lambda: None)
     relisted = AsyncMock()
     monkeypatch.setattr("app.config.get_settings", lambda: SimpleNamespace(ebay_listing_environment="production"))
@@ -92,6 +93,7 @@ async def test_active_original_listing_stays_sold_and_is_reported_for_withdrawal
     )
     db = AsyncMock()
     relisted = AsyncMock()
+    db.execute = AsyncMock(return_value=SimpleNamespace(all=lambda: []))
     monkeypatch.setattr("app.config.get_settings", lambda: SimpleNamespace(ebay_listing_environment="production"))
     monkeypatch.setattr("app.services.ebay_token_manager.get_valid_ebay_access_token", AsyncMock(return_value="token"))
     monkeypatch.setattr("app.services.ebay_order_sync.get_order_refund_state", AsyncMock(return_value={
@@ -121,7 +123,8 @@ async def test_cancelled_order_remains_cancelled_after_build_reopens(monkeypatch
     channel_row = SimpleNamespace(id=82, status="sold")
     query_result = SimpleNamespace(
         scalar_one_or_none=lambda: None,
-        scalars=lambda: SimpleNamespace(first=lambda: channel_row),
+        all=lambda: [],
+        scalars=lambda: SimpleNamespace(first=lambda: channel_row, all=lambda: [channel_row]),
     )
     db = AsyncMock()
     db.add = MagicMock()
@@ -275,8 +278,11 @@ async def test_paid_order_records_sale_provenance_and_queues_dispatch(
         status_marker=None,
     )
     db = AsyncMock()
-    result = SimpleNamespace(scalar_one_or_none=lambda: SimpleNamespace(ebay_seller_username="flip_7417"))
-    db.execute.return_value = result
+    result = SimpleNamespace(
+        scalar_one_or_none=lambda: SimpleNamespace(ebay_seller_username="flip_7417"),
+        all=lambda: [],
+    )
+    db.execute = AsyncMock(return_value=result)
     order = SimpleNamespace(order_id="05-15450-52548", sale_price=1400.0)
     sale_event = AsyncMock()
 

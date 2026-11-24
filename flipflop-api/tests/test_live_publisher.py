@@ -17,6 +17,16 @@ from app.services.live_publisher import LivePublisher
 from app.services.feature_flags import set_flag_for_testing
 
 
+@pytest.fixture(autouse=True)
+def _mock_channel_image_derivatives(monkeypatch):
+    async def prepare_channel_urls(originals, channel):
+        return [f"https://example.test/{channel}-prepared-front.jpg"] if originals else []
+
+    monkeypatch.setattr(
+        "app.services.channel_images.prepare_channel_urls", prepare_channel_urls
+    )
+
+
 @pytest.mark.asyncio
 class TestPublishToChannel:
     """Test publishing to single channel."""
@@ -45,6 +55,7 @@ class TestPublishToChannel:
             status="built",
             generated_title="Gaming PC",
             generated_description="High-performance gaming build",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
         )
@@ -68,6 +79,7 @@ class TestPublishToChannel:
             status="built",
             generated_title="PC",
             generated_description="Gaming PC",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
         )
@@ -92,6 +104,7 @@ class TestPublishToChannel:
             status="built",
             generated_title="PC",
             generated_description="Gaming PC",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
         )
@@ -125,6 +138,7 @@ class TestPublishToChannel:
             status="built",
             generated_title="PC",
             generated_description="Gaming PC",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
         )
@@ -150,6 +164,7 @@ class TestPublishMultipleChannels:
             status="built",
             generated_title="PC",
             generated_description="Gaming PC",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
             storefront_product_id=123,
@@ -176,6 +191,7 @@ class TestPublishMultipleChannels:
             status="built",
             generated_title="PC",
             generated_description="Gaming PC",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
             # storefront_product_id missing (will fail storefront validation)
@@ -207,6 +223,7 @@ class TestWithdraw:
             status="built",
             generated_title="PC",
             generated_description="Gaming PC",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
         )
@@ -253,6 +270,7 @@ class TestWithdraw:
             status="built",
             generated_title="PC",
             generated_description="Gaming PC",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
         )
@@ -286,6 +304,7 @@ class TestAuditTrail:
             status="built",
             generated_title="PC",
             generated_description="Gaming PC",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
         )
@@ -324,6 +343,7 @@ class TestAuditTrail:
             status="built",
             generated_title="PC",
             generated_description="Gaming PC",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
         )
