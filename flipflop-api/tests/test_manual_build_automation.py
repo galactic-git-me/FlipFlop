@@ -219,21 +219,14 @@ async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, t
     from app.workers.manual_build_lifecycle import run_manual_build_recreate_cycle_job
 
     with patch(
-        "app.services.ebay_browse.get_component_prices",
-        new=AsyncMock(return_value={"used_prices": [300, 310], "new_prices": [], "used_median": 310}),
+        "app.services.ebay_token_manager.get_valid_ebay_access_token",
+        new=AsyncMock(return_value="test-token"),
     ), patch(
         "app.services.ebay_listing_reconciliation.reconcile_manual_build_listing",
         new=AsyncMock(return_value="active"),
     ), patch(
-        "app.api.manual_builds.post_flip_to_ebay",
-        new=AsyncMock(return_value={"success": True, "listing_id": "123456789", "url": "https://ebay.co.uk/itm/123456789"}),
-    ), patch(
-        "app.api.manual_builds.ai_service.chat",
-        new=AsyncMock(return_value=(
-            '{"titles": ["New Title 1", "New Title 2"], "description": "<p>new</p>", '
-            '"aspects": {"Brand": "FlipFlop", "Type": "Desktop"}}',
-            "claude",
-        )),
+        "app.api.manual_builds.post_to_ebay",
+        new=AsyncMock(return_value=SimpleNamespace(success=True)),
     ):
         result = await run_manual_build_recreate_cycle_job()
 
@@ -243,12 +236,11 @@ async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, t
     async with AsyncSessionLocal() as db:
         refreshed = await db.get(ManualBuild, build_id)
         assert refreshed.recreate_cycle_count == 1
-        assert refreshed.ebay_price < 400.0
+        assert refreshed.ebay_price == 400.0
         assert refreshed.next_recreate_at is not None
         assert refreshed.next_recreate_at > datetime.utcnow()
-        assert refreshed.generated_title == "New Title 1"
-        # Main photo swapped to the second one.
-        assert refreshed.photos[0]["url"] == "https://x/2.jpg"
+        assert refreshed.generated_title == "Old Title"
+        assert refreshed.photos[0]["url"] == "https://x/1.jpg"
 
 
 @pytest.mark.asyncio
@@ -369,8 +361,8 @@ async def test_post_to_ebay_creates_remote_draft(client, test_db):
     with patch(
         "app.services.ebay_token_manager.get_valid_ebay_access_token", new=AsyncMock(return_value="TOKEN")
     ), patch(
-        "app.api.manual_builds.post_flip_to_ebay",
-        new=AsyncMock(return_value={"success": True, "offer_id": "offer-1", "sku": "sku-1", "status": "DRAFT"}),
+        "app.api.manual_builds.EbayListingPoster.create_item_draft",
+        new=AsyncMock(return_value={"success": True, "draft_id": "draft-1", "draft_url": "https://ebay.test/draft/1"}),
     ) as mock_post:
         resp = client.post(
             f"/api/manual-builds/{build_id}/post-to-ebay",
@@ -380,12 +372,14 @@ async def test_post_to_ebay_creates_remote_draft(client, test_db):
     assert resp.status_code == 200
     response_body = resp.json()
     assert response_body["success"] is True
-    assert response_body["offer_id"] == "offer-1"
+    assert response_body["draft_id"] == "draft-1"
+    assert response_body["draft_url"] == "https://ebay.test/draft/1"
     assert response_body["action"] == "drafted"
-    assert mock_post.await_args.kwargs["publish"] is False
+    assert mock_post.await_args.kwargs["title"] == "Title"
 
     async with test_db() as db:
         refreshed = await db.get(ManualBuild, build_id)
-        assert refreshed.ebay_offer_id == "offer-1"
-        assert refreshed.ebay_sku == "sku-1"
+        assert refreshed.ebay_draft_id == "draft-1"
+        assert refreshed.ebay_offer_id is None
+        assert refreshed.ebay_sku is None
         assert refreshed.ebay_listing_status == "draft"

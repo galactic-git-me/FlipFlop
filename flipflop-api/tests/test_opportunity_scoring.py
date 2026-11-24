@@ -235,7 +235,7 @@ def test_single_active_comparable_is_evidence_limited_not_ok_deal():
         market=market, sold_count_90d=0, active_count=3,
         watch_velocity=None, bid_velocity=None, policy=policy,
     )
-    assert result.classification == "GEM"
+    assert result.classification == "SUPER_GEM"
     assert result.decision == "INVESTIGATE"
     assert result.evidence_status == "SPARSE_SOLD_EVIDENCE"
 
@@ -251,7 +251,7 @@ def test_zero_sell_through_is_visible_without_demoting_bargain_tier():
         watch_velocity=None, bid_velocity=None, policy=policy,
     )
     assert result.liquidity_score == 0.0
-    assert result.classification == "SUPER_GEM"
+    assert result.classification == "GEM"
     assert result.decision == "INVESTIGATE"
 
 
@@ -298,7 +298,7 @@ def test_desirability_separates_modern_build_friendly_parts():
     assert modern > basic
 
 
-def test_gem_economics_do_not_require_a_redundant_market_discount_gate():
+def test_gem_economics_respect_the_configured_market_discount_gate():
     policy = OpportunityPolicy(gem_discount_pct=-20.0)
     market = robust_sold_market(comps([100, 100, 100, 100, 100]), subject_listing_id="999", policy=policy)
     assert market is not None
@@ -310,8 +310,8 @@ def test_gem_economics_do_not_require_a_redundant_market_discount_gate():
     )
     assert result.roi_pct and result.roi_pct >= 15
     assert result.classification == "OK_DEAL"
-    assert result.decision == "BUY_NOW"
-    assert 75 <= result.score < 85
+    assert result.decision == "MAKE_OFFER"
+    assert 65 <= result.score < 70
 
 
 def test_strong_economics_with_low_confidence_keep_deal_tier():

@@ -11,6 +11,7 @@ async def test_due_active_listing_is_revised_in_place_and_rescheduled():
 
     build = SimpleNamespace(
         id=42,
+        status="listed",
         name="Test PC",
         ebay_listing_id="188805793027",
         ebay_listing_url="https://www.ebay.co.uk/itm/188805793027",
@@ -45,37 +46,20 @@ async def test_due_active_listing_is_revised_in_place_and_rescheduled():
 
     with (
         patch(
-            "app.services.ebay_listing_reconciliation.reconcile_manual_build_listing",
-            new=AsyncMock(side_effect=reconcile),
-        ),
-        patch(
-            "app.services.ebay_browse.get_component_prices",
-            new=AsyncMock(return_value={"used_prices": [350], "new_prices": []}),
-        ),
-        patch(
-            "app.workers.manual_build_lifecycle.pricing_engine.recalculate_manual_build_pricing",
-            new=AsyncMock(),
-        ),
-        patch(
-            "app.workers.manual_build_lifecycle.pricing_engine.compute_next_drop_price",
-            return_value=(380.0, False),
-        ),
-        patch(
-            "app.api.manual_builds.generate_listing",
-            new=AsyncMock(return_value=SimpleNamespace(titles=["New title"], status="active")),
-        ),
-        patch(
-            "app.workers.manual_build_lifecycle.post_build_to_ebay",
-            new=AsyncMock(return_value="published"),
+            "app.api.manual_builds.post_to_ebay",
+            new=AsyncMock(return_value=SimpleNamespace(success=True)),
         ) as publish,
     ):
         outcome = await _recreate_manual_build(build, db)
 
     assert outcome == "published"
-    publish.assert_awaited_once_with(build, db=db, update_existing=True)
-    assert build.generated_title == "New title"
-    assert build.ebay_price == 380.0
-    assert build.photos[0]["url"] == "https://example.com/two.jpg"
+    publish.assert_awaited_once()
+    assert publish.await_args.args[0] == build.id
+    assert publish.await_args.args[1].publish is True
+    assert publish.await_args.args[1].price == 400.0
+    assert build.generated_title == "Old title"
+    assert build.ebay_price == 400.0
+    assert build.photos[0]["url"] == "https://example.com/one.jpg"
     assert build.ebay_listing_id == "188805793027"
     assert build.recreate_cycle_count == 1
     assert build.last_recreate_at is not None

@@ -10,6 +10,7 @@ Verifies:
 """
 
 import pytest
+from unittest.mock import patch
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import ManualBuild
 from app.services.five_star_pricing import FiveStarPricingService
@@ -214,6 +215,11 @@ class TestAutoApply:
 @pytest.mark.asyncio
 class TestMoneyPrecision:
     """Test that Money type prevents precision loss."""
+
+    @pytest.fixture(autouse=True)
+    def enable_auto_pricing_for_precision_test(self):
+        with patch("app.services.five_star_pricing.is_enabled", return_value=True):
+            yield
 
     def test_discount_calculation_uses_decimal(self):
         """Discount calculated with Money (Decimal) precision."""
