@@ -46,12 +46,13 @@ function makeXCreative() {
     <text x="640" y="137" fill="url(#lime)" font-family="Arial,sans-serif" font-size="55" font-weight="900" letter-spacing="-2">PROMETHEUS</text>
     <text x="646" y="182" fill="#f2f6fb" font-family="Arial,sans-serif" font-size="21" font-weight="700">RYZEN 7 7800X3D</text>
     <text x="646" y="212" fill="#b7c7da" font-family="Arial,sans-serif" font-size="18">GEFORCE RTX 3070 · 32GB DDR5</text>
-    <text x="642" y="312" fill="url(#accent)" font-family="Arial,sans-serif" font-size="78" font-weight="900" letter-spacing="-4">£1,349</text>
-    <text x="648" y="345" fill="#e7edf4" font-family="Arial,sans-serif" font-size="16" font-weight="700">DIRECT · ELIGIBLE NEW-CUSTOMER PRICE</text>
-    <text x="648" y="375" fill="#aebcd0" font-family="Arial,sans-serif" font-size="18">£50 discount included</text>
+    <text x="648" y="274" fill="#aebcd0" font-family="Arial,sans-serif" font-size="18" font-weight="700">RRP</text><text x="698" y="274" fill="#aebcd0" font-family="Arial,sans-serif" font-size="20" font-weight="700" text-decoration="line-through">£1,700</text>
+    <text x="642" y="345" fill="url(#accent)" font-family="Arial,sans-serif" font-size="78" font-weight="900" letter-spacing="-4">£1,349</text>
+    <text x="648" y="378" fill="#e7edf4" font-family="Arial,sans-serif" font-size="16" font-weight="700">DIRECT · £50 NEW-CUSTOMER DISCOUNT INCLUDED</text>
     <rect x="646" y="403" width="500" height="2" fill="#334b64"/>
-    <text x="648" y="445" fill="#f0a55a" font-family="Arial,sans-serif" font-size="21" font-weight="800">£1,399 ON EBAY</text>
-    <text x="648" y="490" fill="#ffffff" font-family="Arial,sans-serif" font-size="21" font-weight="900" letter-spacing="1">BLACK FRIDAY · ONE REMAINING</text>
+    <text x="648" y="440" fill="#aebcd0" font-family="Arial,sans-serif" font-size="16" font-weight="700">EBAY RRP</text><text x="732" y="440" fill="#aebcd0" font-family="Arial,sans-serif" font-size="18" font-weight="700" text-decoration="line-through">£1,700</text>
+    <text x="648" y="473" fill="#f0a55a" font-family="Arial,sans-serif" font-size="24" font-weight="800">£1,399 ON EBAY</text>
+    <text x="648" y="515" fill="#ffffff" font-family="Arial,sans-serif" font-size="21" font-weight="900" letter-spacing="1">BLACK FRIDAY · ONE REMAINING</text>
     <text x="648" y="528" fill="#94a8bd" font-family="Arial,sans-serif" font-size="16">See post copy for shopping links</text>
     <text x="648" y="577" fill="url(#accent)" font-family="Arial,sans-serif" font-size="18" font-weight="700" letter-spacing="2">BEAUTIFUL MACHINES. BUILT TO BE ADMIRED.</text>
   </svg>`;
