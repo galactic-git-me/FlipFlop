@@ -3,7 +3,7 @@ from types import SimpleNamespace
 import pytest
 
 from app.services.playbook_product_capture import (max_working_days_for_calendar_duration,
-    parse_product_capture, supported_product_url)
+    collect_product_capture, parse_product_capture, supported_product_url)
 from app.services.playbook_service import _verified_windows_licence_listing
 
 
@@ -301,8 +301,7 @@ async def test_ccl_capture_uses_shared_browser_after_http_block(monkeypatch):
         async def new_page(self): return page
 
     monkeypatch.setattr('app.services.playbook_product_capture.httpx.AsyncClient',BlockedClient)
-    result=await __import__('app.services.playbook_product_capture',fromlist=['collect_product_capture']).collect_product_capture(
-        url,browser_runtime=(object(),Context()))
+    result=await collect_product_capture(url,browser_runtime=(object(),Context()))
 
     assert result['status']=='captured'
     assert result['capture_method']=='playwright_fallback'
