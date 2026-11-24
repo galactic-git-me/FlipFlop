@@ -65,7 +65,7 @@ class TestAuthEndpoints:
         """Test signup request validation."""
         # Missing email
         response = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={"password": "Password123!", "name": "User"},
         )
         assert response.status_code == 422
@@ -73,14 +73,14 @@ class TestAuthEndpoints:
 
         # Missing password
         response = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={"email": "test@example.com", "name": "User"},
         )
         assert response.status_code == 422
 
         # Missing name
         response = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={"email": "test@example.com", "password": "Password123!"},
         )
         assert response.status_code == 422
@@ -88,33 +88,33 @@ class TestAuthEndpoints:
     def test_login_request_validation(self, client):
         """Test login request validation."""
         response = client.post(
-            "/auth/login",
+            "/api/auth/login",
             json={"email": "test@example.com"},
         )
         assert response.status_code == 422
 
     def test_auth_header_required(self, client):
         """Test that auth header is required for protected endpoints."""
-        response = client.get("/orders")
+        response = client.get("/api/orders/me")
         assert response.status_code == 401
         assert "authorization" in response.json()["detail"].lower()
 
     def test_invalid_token(self, client):
         """Test invalid token rejection."""
         headers = {"Authorization": "Bearer invalid_token_xyz"}
-        response = client.get("/orders", headers=headers)
+        response = client.get("/api/orders/me", headers=headers)
         assert response.status_code == 401
 
     def test_malformed_auth_header(self, client):
         """Test malformed authorization header."""
         # Missing "Bearer"
         headers = {"Authorization": "token_only"}
-        response = client.get("/orders", headers=headers)
+        response = client.get("/api/orders/me", headers=headers)
         assert response.status_code == 401
 
         # Empty header
         headers = {"Authorization": ""}
-        response = client.get("/orders", headers=headers)
+        response = client.get("/api/orders/me", headers=headers)
         assert response.status_code == 401
 
 
@@ -129,7 +129,7 @@ class TestQuotesEndpoints:
         """Test quote response includes required fields."""
         # Signup first
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "quote@example.com",
                 "password": "Password123!",
@@ -140,7 +140,7 @@ class TestQuotesEndpoints:
         headers = {"Authorization": f"Bearer {token}"}
 
         response = client.post(
-            "/quotes/generate",
+            "/api/quotes/generate",
             json={"budget": 1500.0},
             headers=headers,
         )
@@ -166,7 +166,7 @@ class TestQuotesEndpoints:
     def test_quote_budget_constraint(self, client):
         """Test that quote respects budget constraint."""
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "budget@example.com",
                 "password": "Password123!",
@@ -178,7 +178,7 @@ class TestQuotesEndpoints:
 
         for budget in [500.0, 1000.0, 2000.0]:
             response = client.post(
-                "/quotes/generate",
+                "/api/quotes/generate",
                 json={"budget": budget},
                 headers=headers,
             )
@@ -190,7 +190,7 @@ class TestQuotesEndpoints:
     def test_quote_invalid_budget(self, client):
         """Test quote with invalid budget."""
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "invalid@example.com",
                 "password": "Password123!",
@@ -202,7 +202,7 @@ class TestQuotesEndpoints:
 
         # Zero budget
         response = client.post(
-            "/quotes/generate",
+            "/api/quotes/generate",
             json={"budget": 0},
             headers=headers,
         )
@@ -210,7 +210,7 @@ class TestQuotesEndpoints:
 
         # Negative budget
         response = client.post(
-            "/quotes/generate",
+            "/api/quotes/generate",
             json={"budget": -100},
             headers=headers,
         )
@@ -227,7 +227,7 @@ class TestOrdersEndpoints:
     def test_create_order_response_schema(self, client):
         """Test order creation response schema."""
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "order@example.com",
                 "password": "Password123!",
@@ -239,7 +239,7 @@ class TestOrdersEndpoints:
 
         # Generate quote
         quote_resp = client.post(
-            "/quotes/generate",
+            "/api/quotes/generate",
             json={"budget": 1500.0},
             headers=headers,
         )
@@ -247,7 +247,7 @@ class TestOrdersEndpoints:
 
         # Create order
         order_resp = client.post(
-            "/orders/create",
+            "/api/orders/create",
             json={
                 "budget": 1500.0,
                 "components": {
@@ -282,7 +282,7 @@ class TestOrdersEndpoints:
     def test_get_order_by_id(self, client):
         """Test retrieving order by ID."""
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "getorder@example.com",
                 "password": "Password123!",
@@ -293,14 +293,14 @@ class TestOrdersEndpoints:
         headers = {"Authorization": f"Bearer {token}"}
 
         quote_resp = client.post(
-            "/quotes/generate",
+            "/api/quotes/generate",
             json={"budget": 1500.0},
             headers=headers,
         )
         quote = quote_resp.json()
 
         order_resp = client.post(
-            "/orders/create",
+            "/api/orders/create",
             json={
                 "budget": 1500.0,
                 "components": {
@@ -320,14 +320,14 @@ class TestOrdersEndpoints:
         order_id = order_resp.json()["id"]
 
         # Get order
-        get_resp = client.get(f"/orders/{order_id}", headers=headers)
+        get_resp = client.get(f"/api/orders/{order_id}", headers=headers)
         assert get_resp.status_code == 200
         assert get_resp.json()["id"] == order_id
 
     def test_get_nonexistent_order(self, client):
         """Test retrieving nonexistent order returns 404."""
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "notfound@example.com",
                 "password": "Password123!",
@@ -337,13 +337,13 @@ class TestOrdersEndpoints:
         token = signup_resp.json()["access_token"]
         headers = {"Authorization": f"Bearer {token}"}
 
-        response = client.get("/orders/99999", headers=headers)
+        response = client.get("/api/orders/99999", headers=headers)
         assert response.status_code == 404
 
     def test_list_orders(self, client):
         """Test listing customer orders."""
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "listorders@example.com",
                 "password": "Password123!",
@@ -356,14 +356,14 @@ class TestOrdersEndpoints:
         # Create multiple orders
         for i in range(3):
             quote_resp = client.post(
-                "/quotes/generate",
+                "/api/quotes/generate",
                 json={"budget": 1000.0 + i * 500},
                 headers=headers,
             )
             quote = quote_resp.json()
 
             client.post(
-                "/orders/create",
+                "/api/orders/create",
                 json={
                     "budget": 1000.0 + i * 500,
                     "components": {
@@ -382,7 +382,7 @@ class TestOrdersEndpoints:
             )
 
         # List orders
-        list_resp = client.get("/orders", headers=headers)
+        list_resp = client.get("/api/orders/me", headers=headers)
         assert list_resp.status_code == 200
         data = list_resp.json()
         assert "orders" in data
@@ -405,7 +405,7 @@ class TestPaymentsEndpoints:
         mock_stripe.return_value = mock_intent
 
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "payment@example.com",
                 "password": "Password123!",
@@ -416,14 +416,14 @@ class TestPaymentsEndpoints:
         headers = {"Authorization": f"Bearer {token}"}
 
         quote_resp = client.post(
-            "/quotes/generate",
+            "/api/quotes/generate",
             json={"budget": 1500.0},
             headers=headers,
         )
         quote = quote_resp.json()
 
         order_resp = client.post(
-            "/orders/create",
+            "/api/orders/create",
             json={
                 "budget": 1500.0,
                 "components": {
@@ -444,7 +444,7 @@ class TestPaymentsEndpoints:
 
         # Create payment intent
         payment_resp = client.post(
-            "/payments/intent",
+            "/api/payments/intent",
             json={"amount": 1500.0, "order_id": order_id},
             headers=headers,
         )
@@ -469,7 +469,7 @@ class TestCORSHeaders:
 
     def test_cors_headers_present(self, client):
         """Test CORS headers in responses."""
-        response = client.options("/auth/signup")
+        response = client.options("/api/auth/signup")
 
         # CORS headers should be present
         assert "access-control-allow-origin" in response.headers or \
@@ -492,7 +492,7 @@ class TestErrorHandling:
         """Test 405 error for invalid HTTP method."""
         # Most endpoints don't support GET
         response = client.get(
-            "/auth/signup",
+            "/api/auth/signup",
             headers={"Authorization": "Bearer token"},
         )
         # This might be 405 or 422 depending on implementation
@@ -502,14 +502,14 @@ class TestErrorHandling:
         """Test 500 error handling for internal errors."""
         # Cause a database error by creating with invalid data
         with patch("app.database.get_db", side_effect=Exception("Database error")):
-            response = client.get("/orders")
+            response = client.get("/api/orders/me")
             # Should return 500 or 401 (since auth fails)
             assert response.status_code in [500, 401]
 
     def test_error_response_includes_detail(self, client):
         """Test error responses include detail field."""
         response = client.post(
-            "/auth/login",
+            "/api/auth/login",
             json={"email": "nonexistent@example.com", "password": "wrong"},
         )
         assert response.status_code == 401
@@ -526,7 +526,7 @@ class TestRequestValidation:
     def test_invalid_json(self, client):
         """Test invalid JSON handling."""
         response = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             data="not valid json",
             headers={"Content-Type": "application/json"},
         )
@@ -535,7 +535,7 @@ class TestRequestValidation:
     def test_extra_fields_ignored(self, client):
         """Test that extra fields in request are ignored."""
         response = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "extra@example.com",
                 "password": "Password123!",
@@ -549,7 +549,7 @@ class TestRequestValidation:
     def test_type_coercion(self, client):
         """Test type coercion in requests."""
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "coerce@example.com",
                 "password": "Password123!",
@@ -561,7 +561,7 @@ class TestRequestValidation:
 
         # Budget as string should be coerced to float
         response = client.post(
-            "/quotes/generate",
+            "/api/quotes/generate",
             json={"budget": "1500.0"},
             headers=headers,
         )
