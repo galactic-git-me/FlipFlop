@@ -16,12 +16,12 @@ class TestGuideServiceStyles:
 
         styles = service.styles
         assert styles is not None
-        assert isinstance(styles, dict)
+        assert hasattr(styles, "__getitem__")
 
         # Verify key styles exist
-        assert 'CustomTitle' in styles
-        assert 'CustomHeading1' in styles
-        assert 'CustomBody' in styles
+        assert styles['CustomTitle'] is not None
+        assert styles['CustomHeading1'] is not None
+        assert styles['CustomBody'] is not None
 
 
 class TestGuideServiceSectionMethods:

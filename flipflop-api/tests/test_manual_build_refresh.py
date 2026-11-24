@@ -62,7 +62,7 @@ async def test_due_active_listing_is_revised_in_place_and_rescheduled():
         ),
         patch(
             "app.api.manual_builds.generate_listing",
-            new=AsyncMock(return_value=SimpleNamespace(titles=["New title"])),
+            new=AsyncMock(return_value=SimpleNamespace(titles=["New title"], status="active")),
         ),
         patch(
             "app.workers.manual_build_lifecycle.post_build_to_ebay",

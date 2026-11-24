@@ -17,6 +17,15 @@ from app.models.listing import Listing
 from app.models.app_settings import AppSettings
 from app.workers.offer_poll import run_offer_poll_job, run_send_to_watchers_job
 from app.workers.message_poll import run_message_poll_job
+from app.services import ebay_token_manager
+
+
+@pytest.fixture(autouse=True)
+def _mock_token_lookup(monkeypatch):
+    async def token(_environment, *, db=None):
+        return "test-token"
+
+    monkeypatch.setattr(ebay_token_manager, "get_valid_ebay_access_token", token)
 
 
 @pytest.fixture(autouse=True)
@@ -53,7 +62,7 @@ async def _make_flip(**overrides) -> int:
         await db.flush()
         defaults = dict(
             listing_id=listing.id, stage=FlipStage.ready_for_sale, total_cost=800.0,
-            listing_price=1000.0, offers_enabled=True, ebay_listing_id="item-1",
+            listing_price=1000.0, offers_enabled=True, ebay_listing_id="123456789",
         )
         defaults.update(overrides)
         flip = Flip(**defaults)
@@ -82,7 +91,7 @@ async def test_offer_poll_counters_active_offer():
     assert result["countered"] == 1
     mock_respond.assert_called_once()
     call_args = mock_respond.call_args.args
-    assert call_args[0] == "item-1"
+    assert call_args[0] == "123456789"
     assert call_args[1] == "5001"
     assert call_args[2] == "Counter"
 
@@ -109,7 +118,10 @@ async def test_send_to_watchers_sends_when_due():
         listed_at=datetime.utcnow() - timedelta(days=6), min_offer_price=700.0,
     )
 
-    with patch("app.workers.offer_poll.ebay_negotiation.send_offer_to_watchers", new=AsyncMock(return_value=True)) as mock_send:
+    with patch(
+        "app.workers.offer_poll.ebay_trading_api.get_item_status",
+        new=AsyncMock(return_value={"current_price": 1000.0, "currency": "GBP"}),
+    ), patch("app.workers.offer_poll.ebay_negotiation.send_offer_to_watchers", new=AsyncMock(return_value=True)) as mock_send:
         result = await run_send_to_watchers_job()
 
     assert result["sent"] == 1
@@ -143,7 +155,7 @@ async def test_message_poll_flags_old_unanswered_message():
 
     with patch("app.workers.message_poll.ebay_trading_api.get_member_messages", new=AsyncMock(return_value=[
         {"message_id": "m1", "sender": "buyer1", "subject": "Is this still available?",
-         "item_id": "item-1", "received_at": old_time},
+         "item_id": "123456789", "received_at": old_time},
     ])):
         result = await run_message_poll_job()
 
@@ -157,7 +169,7 @@ async def test_message_poll_ignores_recent_message():
 
     with patch("app.workers.message_poll.ebay_trading_api.get_member_messages", new=AsyncMock(return_value=[
         {"message_id": "m2", "sender": "buyer2", "subject": "Quick question",
-         "item_id": "item-1", "received_at": recent_time},
+         "item_id": "123456789", "received_at": recent_time},
     ])):
         result = await run_message_poll_job()
 

@@ -148,7 +148,7 @@ class TestPaymentService:
                     signature="invalid_signature",
                 )
 
-            assert "Invalid webhook payload" in str(exc_info.value)
+            assert "Invalid signature" in str(exc_info.value)
 
     @patch("app.services.payment_service.stripe")
     async def test_refund_payment_success(self, mock_stripe, payment_service):

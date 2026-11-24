@@ -8,6 +8,7 @@ get_current_admin override since app/api/manual_builds.py's router requires
 an admin JWT.
 """
 from datetime import datetime, timedelta
+from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -64,6 +65,17 @@ async def test_db():
     yield SessionLocal
     app.dependency_overrides.clear()
     await engine.dispose()
+
+
+@pytest.fixture(autouse=True)
+def _mock_external_fulfillment_policy_lookup(monkeypatch):
+    async def fake_list_fulfillment_policies(*args, **kwargs):
+        return [SimpleNamespace(policy_id="policy-test", marketplace_id="EBAY_GB")]
+
+    monkeypatch.setattr(
+        "app.api.manual_builds.list_fulfillment_policies",
+        fake_list_fulfillment_policies,
+    )
 
 
 @pytest.fixture
@@ -163,7 +175,7 @@ async def _clean_real_manual_builds():
 
 @pytest.mark.asyncio
 async def test_manual_build_offer_poll_counters_and_persists(client, test_db):
-    build_id = await _real_db_build(status="listed", ebay_listing_id="item-123", ebay_price=320.0)
+    build_id = await _real_db_build(status="listed", ebay_listing_id="123456789", ebay_price=320.0)
 
     from app.workers.manual_build_lifecycle import run_manual_build_offer_poll_job
 
@@ -191,7 +203,7 @@ async def test_manual_build_offer_poll_counters_and_persists(client, test_db):
 async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, test_db):
     build_id = await _real_db_build(
         status="listed",
-        ebay_listing_id="item-123",
+        ebay_listing_id="123456789",
         ebay_listing_url="https://ebay.co.uk/itm/item-123",
         ebay_price=400.0,
         price_floor=352.0,
@@ -210,7 +222,11 @@ async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, t
         "app.services.ebay_browse.get_component_prices",
         new=AsyncMock(return_value={"used_prices": [300, 310], "new_prices": [], "used_median": 310}),
     ), patch(
-        "app.workers.manual_build_lifecycle.post_build_to_ebay", new=AsyncMock(return_value="not_ready")
+        "app.services.ebay_listing_reconciliation.reconcile_manual_build_listing",
+        new=AsyncMock(return_value="active"),
+    ), patch(
+        "app.api.manual_builds.post_flip_to_ebay",
+        new=AsyncMock(return_value={"success": True, "listing_id": "123456789", "url": "https://ebay.co.uk/itm/123456789"}),
     ), patch(
         "app.api.manual_builds.ai_service.chat",
         new=AsyncMock(return_value=(

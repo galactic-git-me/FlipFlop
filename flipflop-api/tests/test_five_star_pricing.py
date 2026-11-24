@@ -117,6 +117,11 @@ class TestDiscountExplanation:
 class TestAutoApply:
     """Test automatic price adjustment application."""
 
+    @pytest.fixture(autouse=True)
+    def enable_auto_pricing_for_behavior_tests(self):
+        with patch("app.services.five_star_pricing.is_enabled", return_value=True):
+            yield
+
     async def test_apply_auto_pricing_reduces_price(self, db: AsyncSession):
         """Auto-pricing reduces price when rating below 5 stars."""
         build = ManualBuild(

@@ -347,6 +347,8 @@ async def test_recreate_cycle_partial_batch_not_lost():
     call_count = 0
 
     async def mock_publish_flip_success(flip, db):
+        nonlocal call_count
+        call_count += 1
         flip.ebay_listing_id = f"listing-{flip.id}-retry"
         return True
 

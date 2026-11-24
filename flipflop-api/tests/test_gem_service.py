@@ -11,6 +11,7 @@ Tests cover:
 
 import pytest
 import json
+from types import SimpleNamespace
 from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock, patch
 from decimal import Decimal
@@ -243,7 +244,7 @@ async def test_enrich_recommendation_financial(db_with_orders):
     rec = {
         "name": "1440p Gaming Beast",
         "use_case": "gaming",
-        "target_budget_gbp": 1200,
+        "target_budget_gbp": 2500,
         "specs": {
             "cpu": "Intel i7-14700K",
             "gpu": "RTX 4070",
@@ -256,7 +257,7 @@ async def test_enrich_recommendation_financial(db_with_orders):
             "motherboard": "ASUS TUF Z890",
         },
         "estimated_cost_gbp": 950,
-        "estimated_market_price_gbp": 1200,
+        "estimated_market_price_gbp": 3000,
         "confidence_score": 85,
         "risk_level": "low",
         "recommended_quantity": 2,
@@ -415,16 +416,12 @@ async def test_delete_recommendation(db_with_orders):
 
 
 @pytest.mark.asyncio
-@patch('app.services.gem_service.Anthropic')
-async def test_call_claude_for_recommendations(mock_anthropic_class, db_with_orders):
-    """Test Claude API integration (mocked)."""
+async def test_call_model_for_recommendations(db_with_orders):
+    """Test configured model recommendation integration (mocked)."""
     db, _ = db_with_orders
     service = GemRecommendationService(db)
 
     # Mock the Claude response
-    mock_client = MagicMock()
-    mock_anthropic_class.return_value = mock_client
-
     claude_response = {
         "recommendations": [
             {
@@ -451,19 +448,18 @@ async def test_call_claude_for_recommendations(mock_anthropic_class, db_with_ord
         ]
     }
 
-    mock_message = MagicMock()
-    mock_message.content = [MagicMock(text=json.dumps(claude_response))]
-    mock_client.messages.create.return_value = mock_message
-
     demand_analysis = await service._analyze_demand(30)
     market_prices = service._get_market_prices()
 
-    recommendations = await service._call_claude_for_recommendations(
-        demand_analysis,
-        market_prices,
-        30
-    )
+    with patch(
+        "app.services.gem_service.model_selection_service.complete",
+        new=AsyncMock(return_value=SimpleNamespace(text=json.dumps(claude_response), model="test")),
+    ) as complete:
+        recommendations = await service._call_model_for_recommendations(
+            demand_analysis, market_prices, 30
+        )
 
+    complete.assert_awaited_once()
     assert len(recommendations) >= 1
     assert recommendations[0]["name"] == "1440p Gaming Beast"
     assert recommendations[0]["confidence_score"] == 85

@@ -394,7 +394,11 @@ class TestStripeWebhookSecurity:
         webhook_event = {
             "id": "evt_test",
             "type": "payment_intent.succeeded",
-            "data": {"object": {"id": "pi_test", "metadata": {"customer_id": "0"}}},
+            "data": {"object": {
+                "id": "pi_test",
+                "amount": 1000,
+                "metadata": {"customer_id": "0"},
+            }},
         }
         mock_construct.return_value = webhook_event
 
