@@ -3,7 +3,7 @@ from types import SimpleNamespace
 import pytest
 
 from app.services.playbook_product_capture import (max_working_days_for_calendar_duration,
-    parse_product_capture, supported_product_url)
+    collect_product_capture, parse_product_capture, supported_product_url)
 from app.services.playbook_service import _verified_windows_licence_listing
 
 
@@ -240,3 +240,70 @@ def test_supported_exact_uk_retailer_product_urls(url):
 ])
 def test_supported_retailer_search_and_category_urls_are_not_product_evidence(url):
     assert not supported_product_url(url)
+
+
+def ccl_offer_html(url, delivery_text='Available for delivery from Tomorrow'):
+    import json
+    product={'@type':'Product','url':url,'name':'Kingston Fury Beast 128GB DDR5 Memory Kit',
+        'sku':'KF556C40BBK4-128','mpn':'KF556C40BBK4-128','brand':{'name':'Kingston'},
+        'offers':{'@type':'Offer','url':url,'priceCurrency':'GBP','price':'2186.99',
+            'availability':'https://schema.org/InStock'}}
+    return ('<script type="application/ld+json">'+json.dumps(product)+'</script>'+
+        f'<main><h1>Kingston Fury Beast 128GB DDR5 Memory Kit</h1><p>{delivery_text}</p></main>')
+
+
+def test_ccl_delivery_capture_accepts_explicit_tomorrow_wording_only():
+    url='https://www.cclonline.com/kf556c40bbk4-128-kingston-fury-beast-128gb-4x32gb-5600mt-s-ddr5-memory-kit-458062/'
+
+    captured=parse_product_capture(ccl_offer_html(url),url)
+    countdown_only=parse_product_capture(ccl_offer_html(url,'Order within 0 day 11 hours'),url)
+
+    assert captured['status']=='captured'
+    assert captured['item_gbp']=='2186.99'
+    assert captured['stock_status']=='available'
+    assert captured['delivery_calendar_days']==1
+    assert captured['delivery_working_days']==max_working_days_for_calendar_duration(1)
+    assert captured['delivery_estimate_source']=='retailer_page_displayed_estimate'
+    assert countdown_only['delivery_estimate_source']=='structured_product_offer_calendar_days'
+    assert countdown_only['delivery_calendar_days'] is None
+
+
+@pytest.mark.asyncio
+async def test_ccl_capture_uses_shared_browser_after_http_block(monkeypatch):
+    url='https://www.cclonline.com/kf556c40bbk4-128-kingston-fury-beast-128gb-4x32gb-5600mt-s-ddr5-memory-kit-458062/'
+
+    class BlockedResponse:
+        status_code=403
+        headers={'content-type':'text/html'}
+        async def __aenter__(self): return self
+        async def __aexit__(self,*_args): pass
+
+    class BlockedClient:
+        def __init__(self,**_kwargs): pass
+        async def __aenter__(self): return self
+        async def __aexit__(self,*_args): pass
+        def stream(self,*_args,**_kwargs): return BlockedResponse()
+
+    class BrowserResponse:
+        status=200
+
+    class Page:
+        navigated=None
+        closed=False
+        async def goto(self,target,**_kwargs):
+            self.navigated=target
+            return BrowserResponse()
+        async def content(self): return ccl_offer_html(url)
+        async def close(self): self.closed=True
+
+    page=Page()
+    class Context:
+        async def new_page(self): return page
+
+    monkeypatch.setattr('app.services.playbook_product_capture.httpx.AsyncClient',BlockedClient)
+    result=await collect_product_capture(url,browser_runtime=(object(),Context()))
+
+    assert result['status']=='captured'
+    assert result['capture_method']=='playwright_fallback'
+    assert result['delivery_working_days']==max_working_days_for_calendar_duration(1)
+    assert page.navigated==url and page.closed
