@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Prometheus 3D model comparison · temporary</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;padding:28px;background:#070b12;color:#edf4ff;font:15px/1.5 'Space Grotesk',Arial,sans-serif}main{max-width:1480px;margin:auto}h1{font-size:clamp(25px,4vw,42px);margin:0 0 8px;color:#caff48}p{color:#9fb3c9;margin:0 0 23px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:16px}.card{border:1px solid #355778;border-radius:18px;overflow:hidden;background:linear-gradient(145deg,#0d1826,#0a111a)}.viewport{height:420px;background:radial-gradient(ellipse at 50% 60%,#193b5a,#09111c 67%);position:relative}.viewport canvas{display:block;width:100%;height:100%}.label{padding:15px 18px}.label h2{font-size:18px;margin:0 0 3px}.label code{font-size:12px;color:#72c9ff;overflow-wrap:anywhere}.status{color:#96a9bf;font-size:12px;margin-top:6px}.status.error{color:#ff9b82}@media(max-width:600px){body{padding:14px}.viewport{height:310px}}
+  </style>
+</head>
+<body><main>
+  <h1>Prometheus · 3D model comparison</h1>
+  <p>Temporary visual check of distinct build-model files found in the FlipFlop workspaces. Rotate each model by dragging.</p>
+  <section class="grid">
+    <article class="card"><div class="viewport"><canvas id="model-a"></canvas></div><div class="label"><h2>Current showcase model</h2><code>builds/002/3D Build/model-3d-db3dc408…glb</code><div class="status" id="status-a">Loading model…</div></div></article>
+    <article class="card"><div class="viewport"><canvas id="model-b"></canvas></div><div class="label"><h2>Alternate build model</h2><code>builds/002/3D Build/build_2_complete_build_d4f12539…glb</code><div class="status" id="status-b">Loading model…</div></div></article>
+    <article class="card"><div class="viewport"><canvas id="model-c"></canvas></div><div class="label"><h2>Runtime uploaded model</h2><code>runtime/uploads/models/build_2_complete_build_1691d390…glb</code><div class="status" id="status-c">Loading model…</div></div></article>
+  </section>
+</main>
+<script type="importmap">{"imports":{"three":"../../../flipflop-admin/node_modules/three/build/three.module.js","three/addons/":"../../../flipflop-admin/node_modules/three/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
+const entries=[
+  {canvas:'model-a',status:'status-a',url:'../../002/3D%20Build/model-3d-db3dc40800744d29be6c726152a37b7a.glb'},
+  {canvas:'model-b',status:'status-b',url:'../../002/3D%20Build/build_2_complete_build_d4f12539d4bc4886b6534db6cb4f0232.glb'},
+  {canvas:'model-c',status:'status-c',url:'../../../runtime/uploads/models/build_2_complete_build_1691d39094c34adb94a0471110ebf62a.glb'}
+];
+const loader=new GLTFLoader();loader.setMeshoptDecoder(MeshoptDecoder);
+for(const [i,item] of entries.entries()){
+  const canvas=document.getElementById(item.canvas),status=document.getElementById(item.status);
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  const scene=new THREE.Scene();scene.add(new THREE.HemisphereLight(0xc5deff,0x10121a,2));const key=new THREE.DirectionalLight(i===1?0xffaa42:0x55bdff,3);key.position.set(-3,5,5);scene.add(key);
+  const grid=new THREE.GridHelper(8,32,0x35bfff,0x173755);grid.position.y=-1.7;scene.add(grid);
+  const camera=new THREE.PerspectiveCamera(34,1,.01,100);let model;let drag=false,lastX=0;let angle=0;
+  const resize=()=>{const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();if(model){const box=new THREE.Box3().setFromObject(model);const size=box.getSize(new THREE.Vector3());const center=box.getCenter(new THREE.Vector3());camera.position.set(center.x+0.55,center.y+1.0,center.z+Math.max(size.x,size.y,size.z)*1.75);camera.lookAt(center)}renderer.render(scene,camera)};
+  loader.load(item.url,g=>{model=g.scene;const box=new THREE.Box3().setFromObject(model);const center=box.getCenter(new THREE.Vector3());const size=box.getSize(new THREE.Vector3());const scale=3.0/Math.max(size.x,size.y,size.z);model.scale.multiplyScalar(scale);model.position.sub(center.multiplyScalar(scale));scene.add(model);status.textContent=`Loaded · ${Math.round(size.x)} × ${Math.round(size.y)} × ${Math.round(size.z)} source units`;resize()},e=>{status.textContent=`Could not load: ${e.message||'model error'}`;status.classList.add('error');console.error(e)});
+  new ResizeObserver(resize).observe(canvas);resize();canvas.addEventListener('pointerdown',e=>{drag=true;lastX=e.clientX;canvas.setPointerCapture(e.pointerId)});canvas.addEventListener('pointerup',()=>drag=false);canvas.addEventListener('pointermove',e=>{if(drag&&model){angle+=(e.clientX-lastX)*.01;lastX=e.clientX;model.rotation.y=angle;renderer.render(scene,camera)}});function animate(){if(!drag&&model){angle+=.003;model.rotation.y=angle;renderer.render(scene,camera)}requestAnimationFrame(animate)}animate();
+}
+</script></body></html>
