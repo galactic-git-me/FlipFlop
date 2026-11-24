@@ -759,7 +759,7 @@ export default function PlaybookBook({
     setLoading(true);
     setError("");
     try {
-      setBook(await api.commercialReadiness.book(density === "detailed" ? 100 : 3));
+      setBook(await api.commercialReadiness.book());
     } catch (reason) {
       setError(
         reason instanceof Error
@@ -769,7 +769,7 @@ export default function PlaybookBook({
     } finally {
       setLoading(false);
     }
-  }, [density]);
+  }, []);
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     setPage(bookPage(query.get("slice")));
