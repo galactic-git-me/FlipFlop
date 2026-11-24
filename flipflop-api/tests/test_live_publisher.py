@@ -17,6 +17,16 @@ from app.services.live_publisher import LivePublisher
 from app.services.feature_flags import set_flag_for_testing
 
 
+@pytest.fixture(autouse=True)
+def _mock_channel_image_derivatives(monkeypatch):
+    async def prepare_channel_urls(originals, channel):
+        return [f"https://example.test/{channel}-prepared-front.jpg"] if originals else []
+
+    monkeypatch.setattr(
+        "app.services.channel_images.prepare_channel_urls", prepare_channel_urls
+    )
+
+
 @pytest.mark.asyncio
 class TestPublishToChannel:
     """Test publishing to single channel."""

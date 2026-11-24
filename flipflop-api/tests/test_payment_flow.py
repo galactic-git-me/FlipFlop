@@ -3,6 +3,7 @@
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 from fastapi import HTTPException
+from stripe import SignatureVerificationError, StripeError
 
 from app.services.payment_service import PaymentService
 from app.schemas.payment import (
@@ -55,9 +56,7 @@ class TestPaymentService:
     ):
         """Test payment intent creation with Stripe error."""
         # Mock Stripe error
-        mock_stripe.PaymentIntent.create.side_effect = Exception(
-            "Stripe API Error"
-        )
+        mock_stripe.PaymentIntent.create.side_effect = StripeError("Stripe API Error")
 
         # Should raise ValueError
         with pytest.raises(ValueError) as exc_info:
@@ -120,6 +119,7 @@ class TestPaymentService:
         with patch("app.services.payment_service.stripe.Webhook.construct_event") as mock_construct:
             # Mock valid event
             mock_event = {
+                "id": "evt_test123",
                 "type": "payment_intent.succeeded",
                 "data": {"object": {"id": "pi_test123"}},
             }
@@ -137,7 +137,9 @@ class TestPaymentService:
         """Test webhook signature verification with invalid signature."""
         with patch("app.services.payment_service.stripe.Webhook.construct_event") as mock_construct:
             # Mock signature error
-            mock_construct.side_effect = Exception("Invalid signature")
+            mock_construct.side_effect = SignatureVerificationError(
+                "Invalid signature", "invalid_signature", b"test_payload"
+            )
 
             # Should raise ValueError
             with pytest.raises(ValueError) as exc_info:
@@ -173,7 +175,7 @@ class TestPaymentService:
         assert result["refund_id"] == "re_test123"
         assert result["amount"] == 1200.00
         assert result["status"] == "succeeded"
-        assert result["reason"] == "customer_request"
+        assert result["reason"] == "requested_by_customer"
 
     @patch("app.services.payment_service.stripe")
     async def test_refund_payment_no_charge(self, mock_stripe, payment_service):

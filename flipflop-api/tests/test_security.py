@@ -291,7 +291,7 @@ class TestAuthenticationSecurity:
         response = client.get("/api/orders/me", headers=headers)
         assert response.status_code in [200, 401]  # Could be 401 if token logic not fully implemented
 
-    def test_authorization_cross_customer(self, client):
+    async def test_authorization_cross_customer(self, client, test_db):
         """Test that customers can't access other customers' data."""
         # Create customer 1
         customer1_resp = client.post(
@@ -317,32 +317,24 @@ class TestAuthenticationSecurity:
         token2 = customer2_resp.json()["access_token"]
         headers2 = {"Authorization": f"Bearer {token2}"}
 
-        # Customer 1 creates order
-        quote1 = client.post(
-            "/api/quotes/generate",
-            json={"budget": 1500.0},
-            headers=headers1,
-        ).json()
-
-        order1 = client.post(
-            "/api/orders/create",
-            json={
-                "budget": 1500.0,
-                "components": {
-                    "cpu_id": quote1["components"][0]["id"],
-                    "gpu_id": quote1["components"][1]["id"],
-                    "ram_id": quote1["components"][2]["id"],
-                    "ssd_id": quote1["components"][3]["id"],
-                    "psu_id": quote1["components"][4]["id"],
-                    "case_id": quote1["components"][5]["id"],
-                    "cooler_id": quote1["components"][6]["id"],
-                },
-                "os_id": 1,
-                "theme_id": 1,
-            },
-            headers=headers1,
-        ).json()
-        order1_id = order1["id"]
+        from app.models.order import Order, OrderStatus
+        customer1_id = client.get("/api/auth/me", headers=headers1).json()["id"]
+        async_session = sessionmaker(test_db, class_=AsyncSession, expire_on_commit=False)
+        async with async_session() as db:
+            order = Order(
+                order_id="TEST-CROSS-CUSTOMER-001",
+                customer_id=customer1_id,
+                specs={},
+                customer_price=1500.0,
+                component_costs=1000.0,
+                overhead_amount=100.0,
+                status=OrderStatus.AWAITING_SOURCING,
+                payment_status="paid",
+            )
+            db.add(order)
+            await db.commit()
+            await db.refresh(order)
+            order1_id = order.id
 
         # Customer 2 tries to access customer 1's order
         response = client.get(f"/api/orders/{order1_id}", headers=headers2)
@@ -402,7 +394,7 @@ class TestStripeWebhookSecurity:
         webhook_event = {
             "id": "evt_test",
             "type": "payment_intent.succeeded",
-            "data": {"object": {"id": "pi_test"}},
+            "data": {"object": {"id": "pi_test", "metadata": {"customer_id": "0"}}},
         }
         mock_construct.return_value = webhook_event
 
@@ -445,14 +437,14 @@ class TestOAuth2Security:
         # This would be validated in the OAuth callback handler
         pass
 
-    @patch("app.services.oauth_service.verify_google_token")
+    @patch("app.services.oauth_service.OAuthService.exchange_google_code")
     def test_oauth_token_validation(self, mock_verify, client):
         """Test that OAuth tokens are validated."""
         # Mock invalid token
         mock_verify.side_effect = Exception("Invalid token")
 
         response = client.post(
-            "/oauth/google/callback",
+            "/api/auth/oauth/google/callback",
             json={"code": "invalid_code"},
         )
 

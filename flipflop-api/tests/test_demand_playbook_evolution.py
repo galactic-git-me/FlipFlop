@@ -78,36 +78,30 @@ async def test_external_demand_ingest_and_snapshot(monkeypatch: pytest.MonkeyPat
             )
         ]
 
-    async def fake_steam(topic, queries, signal_now):
-        return [
-            ext.DemandSignal(
-                source="steam_hardware",
-                topic=f"test-{topic}",
-                query="q3",
-                score=25.0,
-                confidence=0.5,
-                sample_size=8,
-                signal_time=signal_now,
-                notes="test",
-            )
-        ]
+    async def fake_rich(_now):
+        return {"ok": True, "inserted": 0}
+
+    async def fake_rich_steam(_now, *, force=False):
+        return {"ok": True, "inserted": 0}
 
     monkeypatch.setattr(ext, "_fetch_reddit_signals", fake_reddit)
     monkeypatch.setattr(ext, "_fetch_google_trends_signals", fake_trends)
-    monkeypatch.setattr(ext, "_fetch_steam_signals", fake_steam)
+    from app.services import rich_demand_collector
+    monkeypatch.setattr(rich_demand_collector, "collect_google_trends_rich", fake_rich)
+    monkeypatch.setattr(rich_demand_collector, "collect_reddit_rich", fake_rich)
+    monkeypatch.setattr(rich_demand_collector, "collect_steam_rich", fake_rich_steam)
 
     result = await ext.ingest_external_demand_signals()
     assert result["ok"] is True
     assert result["topics"] == len(ext.TOPIC_QUERIES)
-    assert result["inserted"] == len(ext.TOPIC_QUERIES) * 3
+    assert result["inserted"] == len(ext.TOPIC_QUERIES) * 2
 
     snapshot = await ext.latest_external_signal_snapshot(limit_per_source=50)
     assert "reddit" in snapshot["summary"]
     assert "google_trends" in snapshot["summary"]
-    assert "steam_hardware" in snapshot["summary"]
     assert snapshot["summary"]["reddit"]["count"] >= len(ext.TOPIC_QUERIES)
     assert snapshot["summary"]["google_trends"]["avg_score"] > 0
-    assert snapshot["summary"]["steam_hardware"]["avg_confidence"] > 0
+    assert result["rich"]["steam"]["ok"] is True
 
 
 async def test_playbook_evolution_creates_demand_driven_playbook_proposal(monkeypatch: pytest.MonkeyPatch) -> None:

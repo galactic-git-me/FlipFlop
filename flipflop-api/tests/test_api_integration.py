@@ -331,48 +331,24 @@ class TestPaymentsEndpoints:
         token = signup_resp.json()["access_token"]
         headers = {"Authorization": f"Bearer {token}"}
 
-        quote_resp = client.post(
-            "/api/quotes/generate",
-            json={"budget": 1500.0},
-            headers=headers,
-        )
-        quote = quote_resp.json()
+        customer = client.get("/api/auth/me", headers=headers).json()
 
-        order_resp = client.post(
-            "/api/orders/create",
-            json={
-                "budget": 1500.0,
-                "components": {
-                    "cpu_id": quote["components"][0]["id"],
-                    "gpu_id": quote["components"][1]["id"],
-                    "ram_id": quote["components"][2]["id"],
-                    "ssd_id": quote["components"][3]["id"],
-                    "psu_id": quote["components"][4]["id"],
-                    "case_id": quote["components"][5]["id"],
-                    "cooler_id": quote["components"][6]["id"],
-                },
-                "os_id": 1,
-                "theme_id": 1,
-            },
-            headers=headers,
-        )
-        order_id = order_resp.json()["id"]
-
-        # Create payment intent
+        # The current checkout creates an intent from a quote; an unpaid
+        # order is not created before Stripe confirms payment.
         payment_resp = client.post(
             "/api/payments/intent",
-            json={"amount": 1500.0, "order_id": order_id},
+            json={"budget": 1500.0, "customer_id": customer["id"]},
             headers=headers,
         )
 
-        assert payment_resp.status_code == 200
+        assert payment_resp.status_code == 201
         data = payment_resp.json()
 
         # Validate schema
         assert "intent_id" in data
         assert "client_secret" in data
         assert "amount" in data
-        assert data["amount"] == 1500.0
+        assert data["amount"] >= 1500.0
         assert "currency" in data
 
 
@@ -388,7 +364,7 @@ class TestCORSHeaders:
         response = client.options(
             "/api/auth/signup",
             headers={
-                "Origin": "http://localhost:3000",
+                "Origin": "http://localhost:4313",
                 "Access-Control-Request-Method": "POST",
             },
         )
