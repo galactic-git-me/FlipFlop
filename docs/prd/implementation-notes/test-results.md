@@ -7,7 +7,7 @@
 
 ## Unit Tests: Pattern Verification ✅
 
-**Test file**: `flipflop-api/testing/suite/test_cross_channel_sale_concurrency.py`
+**Test file**: `flipflop-api/tests/test_cross_channel_sale_concurrency.py`
 
 **Result**: 11/11 PASSED (0.04s)
 
@@ -63,7 +63,7 @@ test_documentation_of_fix_patterns PASSED
 
 ## Integration Tests: Behavior Verification
 
-**Test file**: `flipflop-api/testing/suite/test_recreate_cycle_batch_safety.py`
+**Test file**: `flipflop-api/tests/test_recreate_cycle_batch_safety.py`
 
 **Status**: Ready to run with live PostgreSQL database
 
@@ -124,20 +124,20 @@ docker run -e POSTGRES_PASSWORD=postgres -d postgres:15
 Run unit tests (no DB required):
 ```bash
 cd flipflop-api
-pytest testing/suite/test_cross_channel_sale_concurrency.py -v
+pytest tests/test_cross_channel_sale_concurrency.py -v
 # Expected: 11/11 PASSED in 0.04s
 ```
 
 Run integration tests (requires PostgreSQL):
 ```bash
 cd flipflop-api
-pytest testing/suite/test_recreate_cycle_batch_safety.py -v
+pytest tests/test_recreate_cycle_batch_safety.py -v
 # Expected: 4/4 PASSED (varies by test DB speed)
 ```
 
 Run all tests together:
 ```bash
-pytest testing/suite/test_cross_channel_sale_concurrency.py testing/suite/test_recreate_cycle_batch_safety.py -v
+pytest tests/test_cross_channel_sale_concurrency.py tests/test_recreate_cycle_batch_safety.py -v
 # Expected: 15/15 PASSED
 ```
 

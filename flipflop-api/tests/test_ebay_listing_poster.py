@@ -1,0 +1,182 @@
+from app.services.ebay_listing_poster import (
+    EBAY_PRODUCT_DESCRIPTION_MAX_LENGTH,
+    EBAY_MAX_IMAGE_URLS,
+    _inventory_product_description,
+    _normalise_ebay_image_urls,
+    _publish_error_message,
+    prepare_ebay_listing_description,
+    post_flip_to_ebay,
+)
+import httpx
+from unittest.mock import AsyncMock, patch
+
+
+def test_ebay_image_urls_are_deduplicated_and_capped():
+    urls = [f"https://images.example.test/{i}.jpg" for i in range(EBAY_MAX_IMAGE_URLS + 3)]
+    result = _normalise_ebay_image_urls([urls[0], *urls, urls[1]])
+
+    assert result == urls[:EBAY_MAX_IMAGE_URLS]
+
+
+def test_ebay_image_urls_reject_non_public_urls():
+    import pytest
+
+    with pytest.raises(ValueError, match="public HTTPS"):
+        _normalise_ebay_image_urls(["/api/uploads/manual_builds/1/photo.jpg"])
+
+
+def test_inventory_description_is_plain_text_and_within_limit():
+    html = "<div><h1>Prometheus</h1><p>Powerful &amp; quiet — £1,299.</p></div>" * 500
+
+    result = _inventory_product_description(html, "Fallback title")
+
+    assert len(result.encode("utf-8")) <= EBAY_PRODUCT_DESCRIPTION_MAX_LENGTH
+    assert "<" not in result
+    assert "&amp;" not in result
+    assert "Prometheus" in result
+
+
+def test_inventory_description_falls_back_when_html_has_no_text():
+    assert _inventory_product_description("<br><hr>", "Prometheus Gaming PC") == (
+        "Prometheus Gaming PC"
+    )
+
+
+def test_listing_description_inlines_dark_theme_and_removes_broken_images():
+    html = """
+    <style>.ff-section{color:white}</style>
+    <div class="ff-page"><div class="ff-wrap">
+      <div class="ff-section"><p>Readable copy</p></div>
+      <div class="ff-image-section"><img src="{{MISSING_IMAGE_URL}}" alt="leak"></div>
+      <img class="ff-heading" src="https://example.com/heading.png" alt="Heading">
+    </div></div>
+    """
+
+    result = prepare_ebay_listing_description(html)
+
+    assert "{{MISSING_IMAGE_URL}}" not in result
+    assert 'alt="leak"' not in result
+    assert "background:#0d1015" in result
+    assert "color:#d8e2ee" in result
+    assert "max-width:100%" in result
+
+
+def test_listing_description_inlines_visual_sales_layout():
+    html = """
+    <div class="ff-page"><div class="ff-wrap">
+      <div class="ff-hero"><p class="ff-hero-copy">Hero</p></div>
+      <div class="ff-card">CPU</div>
+      <div class="ff-benefit">Promise</div>
+      <div class="ff-performance-card"><span class="ff-performance-value">92nd</span></div>
+      <div class="ff-standout"><span class="ff-standout-icon">GPU</span></div>
+      <div class="ff-about"><p>About</p></div>
+    </div></div>
+    """
+
+    result = prepare_ebay_listing_description(html)
+
+    assert "text-align:center" in result
+    assert "min-height:220px" in result
+    assert "min-height:235px" in result
+    assert "min-height:130px" in result
+    assert "background:#102a43" in result
+    assert "border-top:3px solid #ff6700" in result
+
+
+def test_publish_limit_error_keeps_ebays_exact_message():
+    response = httpx.Response(
+        400,
+        json={
+            "errors": [
+                {
+                    "errorId": 25002,
+                    "message": (
+                        "A user error has occurred. This listing would cause you "
+                        "to exceed the amount you can list. You can list up to "
+                        "GBP 516.78 more in total sales this month."
+                    ),
+                    "parameters": [{"name": "0", "value": "LIMIT_REACHED"}],
+                }
+            ]
+        },
+    )
+
+    assert _publish_error_message(response) == response.json()["errors"][0]["message"]
+
+
+def test_publish_onboarding_error_stays_actionable():
+    response = httpx.Response(
+        400,
+        json={
+            "errors": [
+                {
+                    "errorId": 25002,
+                    "message": "generic error",
+                    "parameters": [
+                        {"name": "0", "value": "SELLING_PRIVILEGE_REQUIRED"}
+                    ],
+                }
+            ]
+        },
+    )
+
+    assert _publish_error_message(response) == (
+        "eBay seller account setup is incomplete. Complete eBay seller registration "
+        "and verification (including payout details), then retry publishing."
+    )
+
+
+async def test_existing_listing_uses_revise_instead_of_create():
+    with (
+        patch(
+            "app.services.ebay_listing_poster.EbayListingPoster.create_listing",
+            new=AsyncMock(),
+        ) as create,
+        patch(
+            "app.services.ebay_listing_poster.EbayListingPoster.update_listing",
+            new=AsyncMock(return_value={"success": True, "listing_id": "188805793027"}),
+        ) as revise,
+    ):
+        result = await post_flip_to_ebay(
+            title="Prometheus",
+            description='<div class="ff-page">Description</div>',
+            price=1450,
+            image_urls=["https://example.com/pc.jpg"],
+            access_token="token",
+            environment="production",
+            aspects={"Brand": ["Custom Build"]},
+            listing_id="188805793027",
+        )
+
+    create.assert_not_awaited()
+    revise.assert_awaited_once()
+    assert result["success"] is True
+    assert result["listing_id"] == "188805793027"
+
+
+async def test_duplicate_rejection_adopts_and_revises_original_listing():
+    duplicate_error = (
+        "It looks like this listing is for an item you already have on eBay: "
+        "Prometheus (188805793027). We don't allow identical listings."
+    )
+    with (
+        patch(
+            "app.services.ebay_listing_poster.EbayListingPoster.create_listing",
+            new=AsyncMock(return_value={"success": False, "error": duplicate_error}),
+        ),
+        patch(
+            "app.services.ebay_listing_poster.EbayListingPoster.update_listing",
+            new=AsyncMock(return_value={"success": True, "listing_id": "188805793027"}),
+        ) as revise,
+    ):
+        result = await post_flip_to_ebay(
+            title="Prometheus",
+            description="Description",
+            price=1450,
+            image_urls=["https://example.com/pc.jpg"],
+            access_token="token",
+            environment="production",
+        )
+
+    revise.assert_awaited_once()
+    assert result["listing_id"] == "188805793027"

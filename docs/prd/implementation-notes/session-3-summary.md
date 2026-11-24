@@ -35,7 +35,7 @@ Implemented feature-flag infrastructure for safely gating Phase 2+ features:
 - Migration: `20260823_0003_manual_build_cpk_versioning.py` (new)
 - Model: `app/models/manual_build.py` (updated)
 - Service: `app/services/cpk_versioning.py` (new)
-- Tests: `testing/suite/test_cpk_versioning.py` (new, 11 tests)
+- Tests: `tests/test_cpk_versioning.py` (new, 11 tests)
 
 **Status**: 11/11 unit tests PASSING
 

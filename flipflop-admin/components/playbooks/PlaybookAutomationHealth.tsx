@@ -112,9 +112,10 @@ export default function PlaybookAutomationHealth() {
               {checking ? "Checking status…" : "Check status now"}
             </button>
             {checking ? (
-              <BrandCubeLoader
-                size="xs"
-              />
+              <div className="flex items-center gap-2" role="status" aria-live="polite">
+                <BrandCubeLoader size="xs" />
+                <span>Refreshing scheduler status…</span>
+              </div>
             ) : lastChecked ? (
               <p role="status" className="text-slate-400">
                 Status checked at {lastChecked.toLocaleTimeString("en-GB")}

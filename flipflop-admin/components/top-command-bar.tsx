@@ -87,6 +87,27 @@ export function TopCommandBar() {
   }, []);
 
   useEffect(() => {
+    let active = true;
+    const checkApiSource = async () => {
+      try {
+        const response = await fetch("/health", { cache: "no-store" });
+        if (!response.ok) return;
+        const health = await response.json() as { source_commit?: string; source_branch?: string; source_dirty?: boolean };
+        if (active && health.source_commit) setApiSource({
+          commit: health.source_commit,
+          branch: health.source_branch ?? "unknown",
+          dirty: health.source_dirty === true,
+        });
+      } catch {
+        // Keep the environment header usable while the API is restarting.
+      }
+    };
+    void checkApiSource();
+    const timer = window.setInterval(() => void checkApiSource(), 30_000);
+    return () => { active = false; window.clearInterval(timer); };
+  }, []);
+
+  useEffect(() => {
     if (pathname === "/login") return;
     let active = true;
     const refresh = () => void getApprovalSnapshot(true).then(snapshot => {

@@ -315,10 +315,10 @@ FEATURE_LISTING_INVENTORY_RESERVATION=true
 - `flipflop-api/app/services/live_publisher.py` (308 lines)
 
 ### Tests
-- `flipflop-api/testing/suite/test_multi_channel_publisher.py` (352 lines, 13 tests)
-- `flipflop-api/testing/suite/test_dry_run_validator.py` (397 lines, 14 tests)
-- `flipflop-api/testing/suite/test_inventory_reservation.py` (401 lines, 14 tests)
-- `flipflop-api/testing/suite/test_live_publisher.py` (419 lines, 14 tests)
+- `flipflop-api/tests/test_multi_channel_publisher.py` (352 lines, 13 tests)
+- `flipflop-api/tests/test_dry_run_validator.py` (397 lines, 14 tests)
+- `flipflop-api/tests/test_inventory_reservation.py` (401 lines, 14 tests)
+- `flipflop-api/tests/test_live_publisher.py` (419 lines, 14 tests)
 
 ### Documentation
 - `flipflop-prd-implementation/f22-implementation-plan.md` (written during planning)
@@ -344,7 +344,7 @@ b0245839 feat: add comprehensive tests for F2.2 (55 tests across all 4 AC)
 3. **Phase 2 F4.x** — Optimal Build Designer (AI generation, refinement, library)
 
 ### Optional Before Deploy
-1. Run test suite locally: `pytest flipflop-api/testing/suite/test_*.py -v`
+1. Run test suite locally: `pytest flipflop-api/tests/test_*.py -v`
 2. Code review (code-reviewer agent)
 3. Security review (security-reviewer agent)
 

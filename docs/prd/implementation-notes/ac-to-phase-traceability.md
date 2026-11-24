@@ -37,8 +37,8 @@ All AC in Phase 1 are **infrastructure prerequisites**. No user-facing features 
 
 **Verification**: Run production bug fix tests
 ```bash
-pytest testing/suite/test_cross_channel_sale_concurrency.py -v
-pytest testing/suite/test_recreate_cycle_batch_safety.py -v
+pytest tests/test_cross_channel_sale_concurrency.py -v
+pytest tests/test_recreate_cycle_batch_safety.py -v
 ```
 
 ### F1.1: Feature-Flag System
@@ -52,7 +52,7 @@ pytest testing/suite/test_recreate_cycle_batch_safety.py -v
 
 **Verification**: Check feature flag defaults
 ```bash
-pytest testing/suite/test_feature_flags.py::TestFeatureFlagDefaults -v
+pytest tests/test_feature_flags.py::TestFeatureFlagDefaults -v
 ```
 
 ### F1.2: CPK Versioning
@@ -65,7 +65,7 @@ pytest testing/suite/test_feature_flags.py::TestFeatureFlagDefaults -v
 
 **Verification**: Generate and query versions
 ```bash
-pytest testing/suite/test_cpk_versioning.py -v
+pytest tests/test_cpk_versioning.py -v
 ```
 
 ### F1.3: Money Value Type
@@ -79,7 +79,7 @@ pytest testing/suite/test_cpk_versioning.py -v
 
 **Verification**: Run Money type tests
 ```bash
-pytest testing/suite/test_money.py -v
+pytest tests/test_money.py -v
 ```
 
 ### F1.4: Test Infrastructure (Admin Dashboard)

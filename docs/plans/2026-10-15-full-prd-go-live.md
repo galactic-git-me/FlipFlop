@@ -128,7 +128,7 @@ For implementation tracking, break each phase into repository-scoped issues with
 
 ### Phase 0 — test database isolation started, 15 October 2026
 
-Source inspection confirmed that `flipflop-api/testing/suite/conftest.py` gives many tests isolated in-memory SQLite sessions, but worker suites including `test_autonomous_notifications.py`, `test_demand_playbook_evolution.py`, and `test_recreate_cycle_job.py` import the application-level PostgreSQL engine and perform broad cleanup. That engine previously inherited the developer `DATABASE_URL`.
+Source inspection confirmed that `flipflop-api/tests/conftest.py` gives many tests isolated in-memory SQLite sessions, but worker suites including `test_autonomous_notifications.py`, `test_demand_playbook_evolution.py`, and `test_recreate_cycle_job.py` import the application-level PostgreSQL engine and perform broad cleanup. That engine previously inherited the developer `DATABASE_URL`.
 
 Added `flipflop-api/scripts/run_isolated_tests.py` to require a local PostgreSQL maintenance connection, create a uniquely named `flipflop_test_<random>_test` database, mark it with a per-run token, apply `alembic upgrade head`, and then run the requested pytest command. It drops only its own database after complete success; failures retain it for diagnosis. The pytest bootstrap now requires this database marker, binds all application/test database URLs to that run, and blocks Python socket traffic except to the local test PostgreSQL endpoint.
 

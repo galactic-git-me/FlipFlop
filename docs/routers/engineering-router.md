@@ -1,7 +1,7 @@
 # Engineering router
 
 - `flipflop-api/app/` — primary Python API, routes, services, models, scrapers, workers, and Gem Radar.
-- `flipflop-api/testing/` — backend `suite/`, `unit/`, and `manual/` checks.
+- `flipflop-api/tests/` — backend integration, contract, and end-to-end checks; `flipflop-api/testing/unit/` and `flipflop-api/testing/manual/` — focused unit and standalone diagnostic checks.
 - `flipflop-admin/testing/` — admin `unit/`, `e2e/`, and `manual/` checks.
 - `services/ollama-priority-gateway/testing/` — gateway and launcher checks.
 - `scripts/browser-listing/testing/` — browser-listing tests.
