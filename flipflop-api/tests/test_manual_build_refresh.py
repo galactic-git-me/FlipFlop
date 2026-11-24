@@ -12,6 +12,7 @@ async def test_due_active_listing_is_revised_in_place_and_rescheduled():
     build = SimpleNamespace(
         id=42,
         status="listed",
+        is_archived=False,
         name="Test PC",
         ebay_listing_id="188805793027",
         ebay_listing_url="https://www.ebay.co.uk/itm/188805793027",
