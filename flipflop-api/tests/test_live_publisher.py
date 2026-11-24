@@ -45,6 +45,7 @@ class TestPublishToChannel:
             status="built",
             generated_title="Gaming PC",
             generated_description="High-performance gaming build",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
         )
@@ -68,6 +69,7 @@ class TestPublishToChannel:
             status="built",
             generated_title="PC",
             generated_description="Gaming PC",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
         )
@@ -92,6 +94,7 @@ class TestPublishToChannel:
             status="built",
             generated_title="PC",
             generated_description="Gaming PC",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
         )
@@ -125,6 +128,7 @@ class TestPublishToChannel:
             status="built",
             generated_title="PC",
             generated_description="Gaming PC",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
         )
@@ -150,6 +154,7 @@ class TestPublishMultipleChannels:
             status="built",
             generated_title="PC",
             generated_description="Gaming PC",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
             storefront_product_id=123,
@@ -176,6 +181,7 @@ class TestPublishMultipleChannels:
             status="built",
             generated_title="PC",
             generated_description="Gaming PC",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
             # storefront_product_id missing (will fail storefront validation)
@@ -207,6 +213,7 @@ class TestWithdraw:
             status="built",
             generated_title="PC",
             generated_description="Gaming PC",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
         )
@@ -253,6 +260,7 @@ class TestWithdraw:
             status="built",
             generated_title="PC",
             generated_description="Gaming PC",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
         )
@@ -286,6 +294,7 @@ class TestAuditTrail:
             status="built",
             generated_title="PC",
             generated_description="Gaming PC",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
         )
@@ -324,6 +333,7 @@ class TestAuditTrail:
             status="built",
             generated_title="PC",
             generated_description="Gaming PC",
+            photos=[{"kind": "photo", "url": "https://example.test/build-front.jpg"}],
             ebay_price=999.99,
             ebay_condition="NEW",
         )

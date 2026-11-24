@@ -386,7 +386,11 @@ class TestCORSHeaders:
     def test_cors_headers_present(self, client):
         """Test CORS headers in responses."""
         response = client.options(
-            "/api/auth/signup", headers={"Origin": "http://localhost:3000"}
+            "/api/auth/signup",
+            headers={
+                "Origin": "http://localhost:3000",
+                "Access-Control-Request-Method": "POST",
+            },
         )
 
         # CORS headers should be present

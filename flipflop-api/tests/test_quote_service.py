@@ -49,8 +49,10 @@ class TestQuoteService:
         # 1000 is equidistant; the ordered tier list resolves ties downward.
         assert QuoteService.find_closest_budget_tier(1000) == 800
 
-        # 1350 is closer to 1500 than 1200
-        assert QuoteService.find_closest_budget_tier(1350) == 1500
+        # 1350 is equidistant from the adjacent supported tiers.
+        # Equidistant tiers resolve downward, matching the deterministic
+        # nearest-tier contract used for other boundary values.
+        assert QuoteService.find_closest_budget_tier(1350) == 1200
 
     def test_find_closest_budget_tier_below_minimum(self):
         """Test budget below minimum range returns None."""
