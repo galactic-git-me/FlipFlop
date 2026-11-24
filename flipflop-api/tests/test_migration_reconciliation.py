@@ -8,7 +8,7 @@ from alembic.operations import Operations
 from alembic.config import Config
 from alembic.script import ScriptDirectory
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location("migration_reconciliation", ROOT / "alembic" / "reconcile_existing.py")
 reconciliation = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(reconciliation)

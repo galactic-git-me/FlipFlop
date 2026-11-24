@@ -2,7 +2,7 @@ import importlib.util
 import io
 from pathlib import Path
 
-spec = importlib.util.spec_from_file_location("dev_launcher", Path(__file__).resolve().parents[2] / "run_dev.py")
+spec = importlib.util.spec_from_file_location("dev_launcher", Path(__file__).resolve().parents[1] / "run_dev.py")
 launcher = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(launcher)
 

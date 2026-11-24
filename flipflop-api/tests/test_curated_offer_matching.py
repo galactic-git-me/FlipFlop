@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 
 _spec = importlib.util.spec_from_file_location(
-    "resolve_curated_offers", Path(__file__).resolve().parents[2] / "scripts" / "resolve_curated_offers.py"
+    "resolve_curated_offers", Path(__file__).resolve().parents[1] / "scripts" / "resolve_curated_offers.py"
 )
 m = importlib.util.module_from_spec(_spec)
 sys.modules[_spec.name] = m

@@ -11,7 +11,7 @@ def _service_block(compose: str, service_name: str) -> str:
 
 
 def test_production_api_starts_scheduler_without_duplicate_background_worker():
-    repo_root = Path(__file__).resolve().parents[3]
+    repo_root = Path(__file__).resolve().parents[2]
     compose = (repo_root / "deploy" / "andromeda-api.compose.yml").read_text(encoding="utf-8")
     api = _service_block(compose, "api")
     gem_radar_endpoint = _service_block(compose, "gemradar-worker")

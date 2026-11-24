@@ -15,7 +15,7 @@ from app.api.playbook_commercial_quotes import (
 from app.api.commerce_intelligence import router
 from app.routes.admin_auth import get_current_admin
 from app.schemas.commercial_quote import CellCommercialPolicy
-from testing.suite.test_playbook_commercial_quote import policy_data, parts
+from tests.test_playbook_commercial_quote import policy_data, parts
 
 
 class AdapterTests(unittest.IsolatedAsyncioTestCase):

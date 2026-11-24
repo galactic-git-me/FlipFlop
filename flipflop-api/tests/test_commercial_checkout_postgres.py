@@ -29,7 +29,7 @@ from app.services.commercial_checkout import (
     commercial_order_snapshot, accepted_summary,
 )
 from app.api.playbook_commercial_quotes import save_cell_commercial_policy
-from testing.suite.test_playbook_commercial_quote import policy_data, parts
+from tests.test_playbook_commercial_quote import policy_data, parts
 
 
 class CommercialPostgresTests(unittest.IsolatedAsyncioTestCase):

@@ -11,7 +11,7 @@ from app.services import customer_support_chat
 
 
 def test_packaged_support_documents_are_exact_copies_of_customer_safe_sources():
-    repository_root = Path(__file__).resolve().parents[3]
+    repository_root = Path(__file__).resolve().parents[2]
     support_copy = customer_support_chat._PACKAGED_KNOWLEDGE_DIR / "customer-support-knowledge-base.md"
     software_copy = customer_support_chat._PACKAGED_KNOWLEDGE_DIR / "software-playbook.md"
 

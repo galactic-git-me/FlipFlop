@@ -39,7 +39,7 @@ def test_order_specific_portal_leaflet_is_a_two_page_pdf():
 
 
 def test_api_packaged_dispatch_templates_match_canonical_and_resolve_without_repo_docs(monkeypatch, tmp_path):
-    repository_root = Path(__file__).resolve().parents[3] / "templates" / "dispatch"
+    repository_root = Path(__file__).resolve().parents[2] / "templates" / "dispatch"
     packaged_root = Path(template_paths.__file__).resolve().parent / "templates" / "dispatch"
     names = (
         "getting-ready-package-prompt.md",

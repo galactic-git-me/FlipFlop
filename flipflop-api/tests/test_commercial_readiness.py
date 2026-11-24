@@ -10,7 +10,7 @@ from app.services.commercial_source_validation import ImportEntry, source_values
 from app.services.commercial_readiness import (catalogue_required_roles, catalogue_selected_roles,
     draft_errors, empty_draft, definition_hash)
 from app.services.commercial_quote_evidence import latest_listing_observations, supplier_identity
-from testing.suite.test_playbook_commercial_quote import policy_data
+from tests.test_playbook_commercial_quote import policy_data
 
 class ReadinessTests(unittest.IsolatedAsyncioTestCase):
     def setUp(self):

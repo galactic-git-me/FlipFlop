@@ -13,7 +13,7 @@ from alembic.operations import Operations
 from app.models.listing import Listing
 from app.models.commerce_evidence import SupplierOfferEvidence, PriceQuoteSnapshot
 from app.services.commercial_reconciliation import reconcile_commercial
-from testing.suite import test_commercial_checkout_postgres as fixtures
+from tests import test_commercial_checkout_postgres as fixtures
 
 
 class AutomationPostgresTests(unittest.IsolatedAsyncioTestCase):
@@ -72,7 +72,7 @@ class AutomationPostgresTests(unittest.IsolatedAsyncioTestCase):
         self.assertNotIn('private detail',str(audit.decision_json))
 
     async def test_additive_migration_round_trip_preserves_listing_rows(self):
-        path=Path(__file__).resolve().parents[2]/'alembic/versions/20261013_0002_commercial_observation_provenance.py'
+        path=Path(__file__).resolve().parents[1]/'alembic/versions/20261013_0002_commercial_observation_provenance.py'
         spec=importlib.util.spec_from_file_location('commercial_migration',path)
         module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
         async with fixtures.engine.begin() as connection:

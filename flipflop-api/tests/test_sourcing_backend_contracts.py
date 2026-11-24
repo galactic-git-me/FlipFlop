@@ -15,7 +15,7 @@ from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import DeclarativeBase
 
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[2]
 MIGRATION = ROOT / "flipflop-api/alembic/versions/20261104_0001_sold_observation_url_text.py"
 
 

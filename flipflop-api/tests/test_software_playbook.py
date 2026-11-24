@@ -56,7 +56,7 @@ def test_saved_time_estimate_uses_only_the_customer_selected_apps():
 
 
 def test_documented_recommendations_and_time_estimates_match_runtime_profiles():
-    workspace = Path(__file__).resolve().parents[3]
+    workspace = Path(__file__).resolve().parents[2]
     document = (workspace / "docs" / "playbook" / "software-playbook.md").read_text(encoding="utf-8")
     section = document.split("## Reviewed use-case recommendations", 1)[1].split("## Approved application catalogue", 1)[0]
 

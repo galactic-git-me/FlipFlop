@@ -188,7 +188,7 @@ def test_high_end_price_requires_reviewed_p75_and_keeps_margin_floor_below_cap()
     assert without_market['standard']['recommended_price_gbp'] is None
     assert 'eight-sale complete-PC P75' in without_market['standard']['reason']
     from app.schemas.commercial_quote import CellCommercialPolicy
-    from testing.suite.test_playbook_commercial_quote import policy_data
+    from tests.test_playbook_commercial_quote import policy_data
     from app.services.playbook_commercial_quote import supplier_meets_delivery_commitment
     raw=policy_data()
     for mode in raw['modes'].values():
