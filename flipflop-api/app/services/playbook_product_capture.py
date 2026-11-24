@@ -21,7 +21,7 @@ CAPTURED_SUPPLIER_HOSTS={
     'hardvance.co.uk','www.hardvance.co.uk',
     'senetic.co.uk','www.senetic.co.uk',
 }
-PARSER_VERSION=17
+PARSER_VERSION=18
 
 
 def max_working_days_for_calendar_duration(calendar_days):
@@ -822,6 +822,35 @@ def parse_product_capture(html,url):
         'engineering_reviewed':False,
         'prime_eligible':_amazon_prime_eligibility(soup) if (urlsplit(url).hostname or '').lower().endswith('amazon.co.uk') else None}
     host=(urlsplit(url).hostname or '').casefold()
+    if host in {'cclonline.com','www.cclonline.com'}:
+        # CCL's JSON-LD contains the exact offer, but its delivery promise is
+        # rendered separately on the product page. Only accept an explicit
+        # displayed date or "from tomorrow" wording; countdowns and generic
+        # dispatch text are not arrival estimates.
+        page_text=' '.join(soup.get_text(' ',strip=True).split())
+        today=datetime.now(timezone.utc).date()
+        target=None
+        if re.search(r'\bAvailable for delivery from\s+Tomorrow\b',page_text,re.I):
+            target=today+timedelta(days=1)
+        else:
+            date_match=re.search(
+                r'\bAvailable for delivery from\s+(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)?\s*'
+                r'(\d{1,2})\s+([A-Z][a-z]+)(?:\s+(\d{4}))?\b',page_text,re.I)
+            if date_match:
+                year=int(date_match.group(3) or today.year)
+                try:
+                    target=datetime.strptime(
+                        f"{date_match.group(1)} {date_match.group(2)} {year}",'%d %B %Y').date()
+                    if target<today and not date_match.group(3):
+                        target=target.replace(year=year+1)
+                except ValueError:
+                    target=None
+        if target is not None and target>=today:
+            calendar_days=(target-today).days
+            captured.update(delivery_calendar_days=calendar_days,
+                delivery_working_days=max_working_days_for_calendar_duration(calendar_days),
+                delivery_estimate_source='retailer_page_displayed_estimate',
+                delivery_destination='UK delivery estimate')
     if host in {'hardvance.co.uk','www.hardvance.co.uk'}:
         page_text=' '.join(soup.get_text(' ',strip=True).split())
         # Bind the displayed delivery estimate to the exact fetched product page.
@@ -1111,6 +1140,25 @@ async def collect_product_capture(url, *, browser_runtime=None):
         except Exception as error:
             return {'status':'unresolved','reason':f'Browser product capture failed: {type(error).__name__}',
                 'http_capture_reason':http_reason}
+    if (urlsplit(url).hostname or '').casefold() in {'cclonline.com','www.cclonline.com'} and browser_runtime is not None:
+        try:
+            _,context=browser_runtime
+            page=await context.new_page()
+            try:
+                response=await page.goto(url,wait_until='domcontentloaded',timeout=45000)
+                if response is None or response.status!=200:
+                    return {'status':'unresolved','reason':'Browser retailer request did not return HTTP 200',
+                        'http_capture_reason':http_reason}
+                browser_result=parse_product_capture(await page.content(),url)
+                if browser_result.get('status')=='captured':
+                    browser_result['capture_method']='playwright_fallback'
+                    return browser_result
+                return {**browser_result,'http_capture_reason':http_reason}
+            finally:
+                await page.close()
+        except Exception as error:
+            return {'status':'unresolved','reason':f'Browser product capture failed: {type(error).__name__}',
+                'http_capture_reason':http_reason}
     return {'status':'unresolved','reason':http_reason}
 
 
@@ -1306,6 +1354,7 @@ async def refresh_selected_product_facts(db, limit=64, *, listing_ids=None, forc
     batch=pending[:limit]
     if batch and any((urlsplit(listing.url).hostname or '').lower().endswith('amazon.co.uk')
                      or (urlsplit(listing.url).hostname or '').lower().endswith('gamers-outlet.net')
+                     or (urlsplit(listing.url).hostname or '').lower() in {'cclonline.com','www.cclonline.com'}
                      for listing in batch):
         from app.services.browser_pool import managed_playwright
         from app.swarms.cases import _make_pw_context
