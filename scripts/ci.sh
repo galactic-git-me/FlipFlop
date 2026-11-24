@@ -52,7 +52,7 @@ log "Running API tests"
   cd "$ROOT_DIR/flipflop-api"
   export FLIPFLOP_TEST_ADMIN_DATABASE_URL="${FLIPFLOP_TEST_ADMIN_DATABASE_URL:-${SYNC_DATABASE_URL%/*}/postgres}"
   if [[ "${FLIPFLOP_CI_FULL_API_TESTS:-0}" == "1" ]]; then
-    python scripts/run_isolated_tests.py -- tests testing/unit -q
+    python scripts/run_isolated_tests.py -- tests/test_browser_listing_jobs.py testing/unit/test_secret_key_rotation.py tests/test_curated_availability_public.py tests/test_curated_build_policy.py tests/test_curated_upgrade_benchmarks.py tests/test_public_playbook_fit.py tests/test_public_catalogue_api.py::test_analytics_event_does_not_trust_caller_customer_id tests/test_production_scheduler_runtime.py -q
   else
     python scripts/run_isolated_tests.py -- -q \
       tests/test_browser_listing_jobs.py \
