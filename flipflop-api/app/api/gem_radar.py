@@ -2601,7 +2601,8 @@ async def _gem_spotlight_candidates(db: AsyncSession, category: str, actionable_
     return list(selected.values())
 
 
-async def get_gem_spotlight(db: AsyncSession, actionable_ids: set[str] | None = None) -> dict:
+async def get_gem_spotlight(db: AsyncSession, actionable_ids: set[str] | None = None,
+                            platform: str | None = None) -> dict:
     """Select five objective-ranked Gem builds without running compatibility checks."""
     from app.services.hardware_performance import load_benchmark_context
 
@@ -2614,6 +2615,9 @@ async def get_gem_spotlight(db: AsyncSession, actionable_ids: set[str] | None = 
     benchmark_context = await load_benchmark_context(db)
     pools = {category: await _gem_spotlight_candidates(db, category, actionable_ids, benchmark_context)
         for category in all_categories}
+    if platform is not None:
+        builds = await _gem_spotlight_platform_builds(db, pools, platform)
+        return {"platform": platform.upper(), "builds": builds}
     cache_facts = {category: [{key: item[key] for key in ("id", "deal_score", "price", "market_reference",
         "expected_profit", "performance_percentile", "popularity_score")} for item in pools[category]]
         for category in all_categories}
@@ -2668,6 +2672,125 @@ async def get_gem_spotlight(db: AsyncSession, actionable_ids: set[str] | None = 
     result = {"builds": builds}
     _GEM_SPOTLIGHT_CACHE[pool_key] = (time.monotonic(), result)
     return result
+
+
+async def _gem_spotlight_platform_builds(db: AsyncSession, pools: dict, platform: str) -> dict:
+    """Re-rank concepts for a platform using exact reviewed listing facts only."""
+    from app.models.gem_radar_observation import GemRadarListingObservation
+    from app.models.listing import Listing
+    from app.services.gem_build_qa import _engineering
+
+    socket = {"am4": "am4", "am5": "am5"}[platform]
+    roles = {"cpu": "cpu", "motherboard": "motherboard", "ram": "ram",
+             "gpu": "gpu", "case": "case"}
+    listing_ids = {str(item["listing_id"]) for category in roles
+                   for item in pools.get(category, []) if item.get("listing_id")}
+    observations = (await db.execute(select(GemRadarListingObservation)
+        .where(GemRadarListingObservation.listing_id.in_(listing_ids or {"__none__"}))
+        .order_by(GemRadarListingObservation.observed_at.desc(),
+                  GemRadarListingObservation.id.desc()))).scalars().all()
+    source_by_id = {}
+    for observation in observations:
+        source_by_id.setdefault(str(observation.listing_id), observation.commercial_source_evidence or {})
+    urls = {str(source.get("url")) for source in source_by_id.values()
+            if isinstance(source, dict) and source.get("url")}
+    urls.update(str(item.get("url")) for category in roles for item in pools.get(category, [])
+                if item.get("url"))
+    listing_rows = (await db.execute(select(Listing).where(Listing.url.in_(urls or {"__none__"}))
+        .order_by(Listing.id.desc()))).scalars().all()
+    listing_by_url = {}
+    for row in listing_rows:
+        listing_by_url.setdefault(str(row.url), row)
+
+    facts_by_id = {}
+    for category, role in roles.items():
+        for candidate in pools.get(category, []):
+            evidence = source_by_id.get(str(candidate.get("listing_id")), {})
+            url = str(evidence.get("url") or candidate.get("url") or "") if isinstance(evidence, dict) else str(candidate.get("url") or "")
+            listing = listing_by_url.get(url)
+            if listing is not None and listing.url == url:
+                facts_by_id[candidate["id"]] = _engineering(role, listing, candidate.get("title", ""))
+
+    def reviewed(item, key):
+        facts = facts_by_id.get(item["id"], {})
+        return facts.get(key) if facts.get("reviewed") is True else None
+
+    def supports_board(board, component_case):
+        board_form = reviewed(board, "form_factor")
+        supported = reviewed(component_case, "supported_form_factors")
+        if not board_form:
+            return False
+        if isinstance(supported, list):
+            return board_form.casefold() in {str(value).casefold() for value in supported}
+        case_form = reviewed(component_case, "form_factor")
+        supported_by_size = {"atx": {"atx", "matx", "itx"},
+                             "matx": {"matx", "itx"}, "itx": {"itx"}}
+        return bool(case_form and board_form.casefold() in supported_by_size.get(case_form.casefold(), set()))
+
+    orderings = {}
+    for objective in ("best", "cheapest", "highest_end", "most_profitable", "most_popular"):
+        def score(category, item):
+            if objective == "best": return item["deal_score"]
+            if objective == "cheapest": return -item["price"]
+            if objective == "highest_end": return item.get("performance_percentile") if item.get("performance_percentile") is not None else (item.get("market_reference") or 0)
+            if objective == "most_profitable": return item.get("expected_profit") if item.get("expected_profit") is not None else -1e9
+            return item["popularity_score"]
+        orderings[objective] = {category: sorted(pools.get(category, []),
+            key=lambda item: score(category, item), reverse=True) for category in pools}
+
+    titles = {"best": "Top Deal Score Concept", "cheapest": "Lowest Parts Cost Concept",
+        "highest_end": "Highest Benchmark Tier Concept", "most_profitable": "Combined Profit Signal Concept",
+        "most_popular": "Top Demand Signal Concept"}
+    builds = {}
+    for objective, ordered in orderings.items():
+        chosen = None
+        # Try motherboards in the selected objective's order and keep the first
+        # one for which exact facts identify a complete platform-compatible set.
+        for board in ordered["motherboard"]:
+            if reviewed(board, "socket") != socket or not reviewed(board, "ram_type") or not reviewed(board, "form_factor"):
+                continue
+            cpu = next((item for item in ordered["cpu"] if reviewed(item, "socket") == socket), None)
+            ram = next((item for item in ordered["ram"] if reviewed(item, "ram_type") == reviewed(board, "ram_type")), None)
+            gpu = next((item for item in ordered["gpu"] if reviewed(item, "gpu_interface") == "pcie"
+                and isinstance(reviewed(board, "gpu_interfaces"), list)
+                and any("pcie" in str(value).casefold() for value in reviewed(board, "gpu_interfaces"))), None)
+            component_case = next((item for item in ordered["case"] if supports_board(board, item)), None)
+            if cpu and ram and gpu and component_case:
+                chosen = (board, cpu, ram, gpu, component_case)
+                break
+        gems = {category: None for category in pools}
+        if chosen:
+            for category, item in zip(("motherboard", "cpu", "ram", "gpu", "case"), chosen):
+                gems[category] = item
+        else:
+            # Show individually verified matches even when the active pool is
+            # too sparse to produce a complete platform-compatible set.
+            board = next((item for item in ordered["motherboard"]
+                if reviewed(item, "socket") == socket and reviewed(item, "ram_type") and reviewed(item, "form_factor")), None)
+            gems["motherboard"] = board
+            if board:
+                gems["cpu"] = next((item for item in ordered["cpu"] if reviewed(item, "socket") == socket), None)
+                gems["ram"] = next((item for item in ordered["ram"] if reviewed(item, "ram_type") == reviewed(board, "ram_type")), None)
+                if isinstance(reviewed(board, "gpu_interfaces"), list) and any(
+                    "pcie" in str(value).casefold() for value in reviewed(board, "gpu_interfaces")):
+                    gems["gpu"] = next((item for item in ordered["gpu"] if reviewed(item, "gpu_interface") == "pcie"), None)
+                gems["case"] = next((item for item in ordered["case"] if supports_board(board, item)), None)
+        for category in ("cooler", "ssd", "psu"):
+            gems[category] = orderings[objective][category][0] if orderings[objective][category] else None
+        priced = [item for item in gems.values() if item]
+        benchmark_values = [float(item["performance_percentile"]) for item in priced
+                            if item.get("performance_percentile") is not None]
+        builds[objective] = {"title": f"{platform.upper()} · {titles[objective]}", "gems": gems,
+            "metrics": {"parts_total": round(sum(float(item["price"]) for item in priced), 2),
+                "market_reference_total": (round(sum(float(item["market_reference"]) for item in priced), 2)
+                    if priced and all(item.get("market_reference") is not None for item in priced) else None),
+                "component_profit_signal": round(sum(float(item.get("expected_profit") or 0) for item in priced), 2),
+                "component_profit_evidence_count": sum(item.get("expected_profit") is not None for item in priced),
+                "popularity_signal": round(sum(float(item.get("popularity_score") or 0) for item in priced), 2),
+                "listing_watch_count": sum(int(item.get("watch_count") or 0) for item in priced),
+                "listing_bid_count": sum(int(item.get("bid_count") or 0) for item in priced),
+                "performance_percentile": round(sum(benchmark_values) / len(benchmark_values), 1) if benchmark_values else None}}
+    return builds
 
 
 async def _review_gem_spotlight_compatibility(db: AsyncSession, builds: dict) -> dict:
@@ -2866,21 +2989,23 @@ async def get_gem_by_component(
 @router.get("/gem-build-concepts")
 async def get_gem_build_concepts(
     db: AsyncSession = Depends(get_db),
+    platform: Literal["AM4", "AM5"] | None = Query(None),
     _: None = Depends(require_operator),
 ) -> dict:
-    """Five objective-ranked Gem build concepts without compatibility checks."""
+    """Five Gem build concepts, optionally re-ranked for a compatible AM platform."""
     actionable_ids = await get_active_buy_it_now_listing_ids(db)
-    return await get_gem_spotlight(db, actionable_ids)
+    return await get_gem_spotlight(db, actionable_ids, platform.casefold() if platform else None)
 
 
 @router.post("/gem-build-concepts/compatibility")
 async def review_gem_build_concepts_compatibility(
     db: AsyncSession = Depends(get_db),
+    platform: Literal["AM4", "AM5"] | None = Query(None),
     _: None = Depends(require_operator),
 ) -> dict:
     """Run a local LLM evidence cross-check for the currently selected concepts."""
     actionable_ids = await get_active_buy_it_now_listing_ids(db)
-    result = await get_gem_spotlight(db, actionable_ids)
+    result = await get_gem_spotlight(db, actionable_ids, platform.casefold() if platform else None)
     return await _review_gem_spotlight_compatibility(db, result.get("builds", {}))
 
 

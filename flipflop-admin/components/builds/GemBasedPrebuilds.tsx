@@ -53,6 +53,7 @@ interface GemBuildConcept {
 }
 
 interface GemSpotlightData {
+  platform?: "AM4" | "AM5";
   builds: Record<GemBuildConceptKey, GemBuildConcept>;
 }
 
@@ -113,6 +114,7 @@ function GemCard({ gem, label, accent, details, emptyMessage = "No compatible Ge
 
 export default function GemBasedPrebuilds() {
   const router = useRouter();
+  const [platform, setPlatform] = useState<"AM4" | "AM5">("AM5");
   const [data, setData] = useState<GemSpotlightData | null>(null);
   const [bundleGem, setBundleGem] = useState<GemData | null>(null);
   const [bundleFeedStatus, setBundleFeedStatus] = useState<"loading" | "ready" | "error">("loading");
@@ -135,13 +137,14 @@ export default function GemBasedPrebuilds() {
 
   useEffect(() => {
     let active = true;
+    setLoading(true);
     const load = async () => {
       try {
         let result: GemSpotlightData | null = null;
         let failure: Error | null = null;
         for (let attempt = 0; attempt < 2 && !result; attempt += 1) {
           try {
-            const response = await fetch("/proxy-api/gem-radar/gem-build-concepts", { cache: "no-store", signal: AbortSignal.timeout(60_000) });
+            const response = await fetch(`/proxy-api/gem-radar/gem-build-concepts?platform=${platform}`, { cache: "no-store", signal: AbortSignal.timeout(60_000) });
             if (!response.ok) throw new Error(`Gem build selection returned ${response.status}.`);
             result = await response.json() as GemSpotlightData;
           } catch (error) {
@@ -160,7 +163,7 @@ export default function GemBasedPrebuilds() {
     void load();
     const interval = setInterval(load, 5 * 60_000);
     return () => { active = false; clearInterval(interval); };
-  }, []);
+  }, [platform]);
 
   useEffect(() => {
     let active = true;
@@ -181,11 +184,11 @@ export default function GemBasedPrebuilds() {
   }, []);
 
   useEffect(() => {
-    if (!data) return;
+    if (!data || data.platform !== platform) return;
     let active = true;
     setCompatibilityLoading(true);
     setCompatibilityReviews({});
-    void fetch("/proxy-api/gem-radar/gem-build-concepts/compatibility", {
+    void fetch(`/proxy-api/gem-radar/gem-build-concepts/compatibility?platform=${platform}`, {
       method: "POST", cache: "no-store", signal: AbortSignal.timeout(300_000),
     }).then(async response => {
       if (!response.ok) throw new Error(`Compatibility review returned ${response.status}.`);
@@ -196,9 +199,10 @@ export default function GemBasedPrebuilds() {
       }]))); })
       .finally(() => { if (active) setCompatibilityLoading(false); });
     return () => { active = false; };
-  }, [data]);
+  }, [data, platform]);
 
   const money = (value: number) => new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format(value);
+  const currentData = data?.platform === platform ? data : null;
 
   const createDraft = async (key: GemBuildConceptKey, concept: GemBuildConcept) => {
     const selected = componentOrder.map(category => concept.gems[category] ?? null);
@@ -210,6 +214,7 @@ export default function GemBasedPrebuilds() {
         listing_ids: selected.map(gem => gem!.id),
         build_name: concept.title,
         concept: key,
+        platform,
       });
       router.push(`/builds?new=${draft.id}`);
     } catch (error) {
@@ -229,6 +234,13 @@ export default function GemBasedPrebuilds() {
       <Link href="/builds" className="rounded-lg border border-white/10 px-4 py-2 text-sm font-semibold text-slate-200 hover:bg-white/[0.06]">View current builds</Link>
     </header>
 
+    <section aria-label="Build platform" className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-cyan-400/20 bg-cyan-400/[0.035] p-4">
+      <div><h2 className="text-sm font-bold uppercase tracking-wide text-cyan-200">Choose platform</h2><p className="mt-1 text-xs text-slate-400">Changing platform reselects the CPU, motherboard, memory, graphics card and case from exact captured compatibility facts.</p></div>
+      <div role="group" aria-label="AM4 or AM5 platform" className="inline-flex rounded-xl border border-white/10 bg-black/30 p-1">
+        {(["AM4", "AM5"] as const).map(option => <button key={option} type="button" aria-pressed={platform === option} onClick={() => setPlatform(option)} className={`rounded-lg px-5 py-2 text-sm font-bold transition ${platform === option ? "bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 shadow-lg shadow-cyan-500/20" : "text-slate-300 hover:bg-white/[0.06]"}`}>{option}</button>)}
+      </div>
+    </section>
+
     {loading && <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-5 text-sm text-slate-300"><Loader2 className="h-5 w-5 animate-spin text-cyan-300" /> Loading individually ranked Gem candidates…</div>}
     {!loading && loadError && <div role="alert" className="rounded-xl border border-red-500/30 bg-red-950/30 p-4 text-sm text-red-200">{loadError}</div>}
     {draftError && <div role="alert" className="rounded-xl border border-red-500/30 bg-red-950/30 p-4 text-sm text-red-200">{draftError}</div>}
@@ -241,16 +253,16 @@ export default function GemBasedPrebuilds() {
       </div>
     </section>
 
-    <section aria-label="Best individual Gems, ranked independently of compatibility" className="rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.035] p-4">
-      <div className="mb-3"><h2 className="text-sm font-bold uppercase tracking-wide text-emerald-200">Best individual Gems</h2><p className="mt-1 text-xs text-slate-400">Each slot shows its top Gem by individual deal score. These picks are not filtered or reordered by compatibility with one another.</p></div>
+    <section aria-label={`Best individual Gems for ${platform}`} className="rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.035] p-4">
+      <div className="mb-3"><h2 className="text-sm font-bold uppercase tracking-wide text-emerald-200">Best {platform} individual Gems</h2><p className="mt-1 text-xs text-slate-400">CPU, motherboard, memory, graphics card and case use exact captured compatibility facts for this platform.</p></div>
       <div className="grid w-full min-w-0 grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-8">
-      {componentOrder.map(category => <GemCard key={category} gem={data?.builds?.best?.gems?.[category] ?? null}
+      {componentOrder.map(category => <GemCard key={category} gem={currentData?.builds?.best?.gems?.[category] ?? null}
         label={componentLabels[category]} accent={category === "motherboard" || category === "ram" ? "emerald" : category === "cpu" ? "cyan" : category === "gpu" ? "purple" : category === "ssd" ? "blue" : "orange"} onSelect={setSelectedGem} />)}
       </div>
     </section>
 
     {concepts.map(({ key, title, description, signal }) => {
-      const concept = data?.builds?.[key];
+      const concept = currentData?.builds?.[key];
       if (!concept) return null;
       const selected = componentOrder.map(category => ({ category, gem: concept.gems[category] ?? null }));
       const complete = selected.every(item => item.gem && ["GEM", "SUPER_GEM"].includes(item.gem.classification ?? ""));

@@ -383,6 +383,7 @@ class GemSpotlightDraftInput(BaseModel):
     listing_ids: list[int] = Field(min_length=8, max_length=8)
     build_name: str = Field(min_length=2, max_length=300)
     concept: Literal["best", "cheapest", "highest_end", "most_profitable", "most_popular"] = "best"
+    platform: Literal["AM4", "AM5"] | None = None
 
 
 _AI_BUILD_CATEGORY_SLOTS = {
@@ -1299,7 +1300,7 @@ async def create_gem_spotlight_draft(body: GemSpotlightDraftInput, db: AsyncSess
         raise HTTPException(422, "Choose one distinct Gem for each required component")
 
     active_listing_ids = await get_active_buy_it_now_listing_ids(db)
-    spotlight = await get_gem_spotlight(db, active_listing_ids)
+    spotlight = await get_gem_spotlight(db, active_listing_ids, body.platform.casefold() if body.platform else None)
     selected_concept = (spotlight.get("builds", {}).get(body.concept) or {})
     if {(selected_concept.get("gems", {}).get(category) or {}).get("id") for category in required_categories} != set(body.listing_ids):
         raise HTTPException(409, "The Gem selection has changed. Refresh the Gem-based pre-builds page before creating the draft.")
@@ -1356,6 +1357,7 @@ async def create_gem_spotlight_draft(body: GemSpotlightDraftInput, db: AsyncSess
             "sourcing_spotlight": {
                 "created_at": datetime.utcnow().isoformat(),
                 "concept": body.concept,
+                "platform": body.platform,
                 "astronomy_name": astronomy_name,
                 "candidate_listing_ids": [by_category[category].listing_id for category in required_categories],
                 "estimated_parts_cost_gbp": estimated_parts_cost,

@@ -2925,6 +2925,11 @@ async def current_proposals(db):
     items=[{'proposal_id':row.id,**row.proposed_data} for row in rows
         if (row.demand_signals or {}).get('source')==SOURCE]
     for item in items:
+        # Pace-specific source options are used by storefront/public catalogue
+        # consumers, not this supplier review workspace. They duplicate source
+        # captures already present on each component and needlessly enlarge the
+        # operator proposal response.
+        item.pop('component_pace_options', None)
         item['storefront_sales']=sales_by_cell.get(item['cell_id'],{
             'last_30_days':0,'previous_30_days':0,
             'delivery_options':{'fast_track':0,'standard':0,'flexible':0},'last_paid_order_at':None})

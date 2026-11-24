@@ -2,6 +2,7 @@ html,
 body {
   width: 100%;
   height: 100%;
+  overflow: hidden;
   margin: 0;
   padding: 0;
 }
@@ -116,59 +117,26 @@ label {
 .cube[data-cube^='1'],
 .large-shadow[data-cube^='1'] {
   top: calc(-10vmin - 2px);
-  --color-bg-top: #ffb15c;
-  --color-bg-bottom: #ff8a3d;
-  --color-fl-top: #e66f32;
-  --color-fl-bottom: #cf5928;
+  --color-bg-top: #a0ebe8;
+  --color-bg-bottom: #89e4e4;
+  --color-fl-top: #4eafbc;
+  --color-fl-bottom: #43a5b2;
 }
 .cube[data-cube^='2'],
 .large-shadow[data-cube^='2'] {
-  --color-bg-top: #ff8a3d;
-  --color-bg-bottom: #65cbff;
-  --color-fl-top: #cf5928;
-  --color-fl-bottom: #3784f5;
+  --color-bg-top: #89e4e4;
+  --color-bg-bottom: #76dee5;
+  --color-fl-top: #43a5b2;
+  --color-fl-bottom: #3d93a9;
 }
 .cube[data-cube^='3'],
 .large-shadow[data-cube^='3'] {
   top: calc(10vmin + 2px);
-  --color-bg-top: #65cbff;
-  --color-bg-bottom: #48b8ff;
-  --color-fl-top: #3784f5;
-  --color-fl-bottom: #2868d8;
+  --color-bg-top: #76dee5;
+  --color-bg-bottom: #63d3d4;
+  --color-fl-top: #3d93a9;
+  --color-fl-bottom: #3b8d9f;
 }
-/* Give every small cube its own orange-to-blue gradient, across all 27 cubes. */
-.cubes .cube {
-  --cube-gradient-angle: 135deg;
-  --cube-gradient-start: #ff8a3d;
-  --cube-gradient-end: #3784f5;
-  --color-bg-top: color-mix(in srgb, var(--cube-gradient-start) 76%, white);
-  --color-bg-bottom: color-mix(in srgb, var(--cube-gradient-end) 78%, white);
-  --color-fl-top: color-mix(in srgb, var(--cube-gradient-start) 78%, #b94425);
-  --color-fl-bottom: color-mix(in srgb, var(--cube-gradient-end) 78%, #164aa8);
-  --color-fr-top: color-mix(in srgb, var(--cube-gradient-start) 55%, var(--cube-gradient-end));
-  --color-fr-bottom: color-mix(in srgb, var(--cube-gradient-start) 38%, var(--cube-gradient-end));
-}
-.cubes .cube[data-cube^='1'] {
-  --cube-gradient-start: #ff9b45;
-  --cube-gradient-end: #55a9f5;
-}
-.cubes .cube[data-cube^='2'] {
-  --cube-gradient-start: #ff8138;
-  --cube-gradient-end: #328cf0;
-}
-.cubes .cube[data-cube^='3'] {
-  --cube-gradient-start: #f87534;
-  --cube-gradient-end: #2878e8;
-}
-/* Left-to-right color flow, with the blend concentrated in the center column. */
-/* Deterministic per-cube angle variation: different directions without render flicker. */
-.cubes .cube[data-cube$='1'] { --cube-gradient-angle: 35deg; }
-.cubes .cube[data-cube$='2'] { --cube-gradient-angle: 145deg; }
-.cubes .cube[data-cube$='3'] { --cube-gradient-angle: 255deg; }
-.cubes .cube[data-cube^='1'][data-cube$='2'] { --cube-gradient-angle: 220deg; }
-.cubes .cube[data-cube^='2'][data-cube$='1'] { --cube-gradient-angle: 290deg; }
-.cubes .cube[data-cube^='2'][data-cube$='3'] { --cube-gradient-angle: 75deg; }
-.cubes .cube[data-cube^='3'][data-cube$='2'] { --cube-gradient-angle: 15deg; }
 .cube[data-cube^='11'],
 .cube[data-cube^='21'],
 .cube[data-cube^='31'],
@@ -176,8 +144,8 @@ label {
 .large-shadow[data-cube^='21'],
 .large-shadow[data-cube^='31'] {
   left: calc(-10vmin - 2px);
-  --color-fr-top: #3c83c6;
-  --color-fr-bottom: #3578bd;
+  --color-fr-top: #2d505f;
+  --color-fr-bottom: #2d4f63;
 }
 .cube[data-cube^='12'],
 .cube[data-cube^='22'],
@@ -185,8 +153,8 @@ label {
 .large-shadow[data-cube^='12'],
 .large-shadow[data-cube^='22'],
 .large-shadow[data-cube^='32'] {
-  --color-fr-top: #3578bd;
-  --color-fr-bottom: #2868d8;
+  --color-fr-top: #2d4f63;
+  --color-fr-bottom: #2a5262;
 }
 .cube[data-cube^='13'],
 .cube[data-cube^='23'],
@@ -195,8 +163,8 @@ label {
 .large-shadow[data-cube^='23'],
 .large-shadow[data-cube^='33'] {
   left: calc(10vmin + 2px);
-  --color-fr-top: #2868d8;
-  --color-fr-bottom: #235bbd;
+  --color-fr-top: #2a5262;
+  --color-fr-bottom: #2a5467;
 }
 .cube[data-cube$='2'],
 .large-shadow[data-cube$='2'] {
@@ -1314,17 +1282,4 @@ label {
 .large-shadow[data-cube='333'] {
   -webkit-animation-delay: 275ms;
   animation-delay: 275ms;
-}
-
-/* Exact logo palette for the reusable FlipFlop cube loader. */
-.cubes .cube[data-cube],
-.large-shadow[data-cube] {
-  --cube-gradient-start: #fc5b00;
-  --cube-gradient-end: #002cff;
-  --color-bg-top: color-mix(in srgb, var(--cube-gradient-start) 96%, white);
-  --color-bg-bottom: color-mix(in srgb, var(--cube-gradient-end) 94%, white);
-  --color-fl-top: color-mix(in srgb, var(--cube-gradient-start) 88%, #842900);
-  --color-fl-bottom: color-mix(in srgb, var(--cube-gradient-end) 88%, #001776);
-  --color-fr-top: color-mix(in srgb, var(--cube-gradient-start) 52%, var(--cube-gradient-end));
-  --color-fr-bottom: color-mix(in srgb, var(--cube-gradient-start) 38%, var(--cube-gradient-end));
 }
