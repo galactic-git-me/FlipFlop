@@ -359,7 +359,7 @@ async def test_captured_catalogue_rebuild_commits_only_pending_proposal_metrics(
     class Session:
         async def __aenter__(self): return self
         async def __aexit__(self,*_args): return None
-        commit=AsyncMock()
+        async def commit(self): events.append(('commit',None))
     session=Session()
     monkeypatch.setattr('app.database.AsyncSessionLocal',lambda:session)
     events=[]
@@ -377,11 +377,11 @@ async def test_captured_catalogue_rebuild_commits_only_pending_proposal_metrics(
 
     assert result=={'cells':24,'complete_hardware':13,'ready_for_approval':0,
         'catalogue_sync':{'created_variants':2},'maintenance':None,'published':False}
-    assert events==[('sync',False),('rebuild',None)]
+    assert events==[('sync',False),('commit',None),('rebuild',None),('commit',None)]
     assert refresh.await_args.args==(session,17)
     refresh.assert_awaited_once()
     assert callable(refresh.await_args.kwargs['progress'])
-    session.commit.assert_awaited_once()
+    assert events.count(('commit',None))==2
 
 
 @pytest.mark.asyncio

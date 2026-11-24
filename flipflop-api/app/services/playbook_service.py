@@ -255,6 +255,10 @@ async def run_playbook_rebuild(actor_id=0,progress=None):
     # operator-triggered rebuild does not require another retailer scrape.
     async with AsyncSessionLocal() as db:
         catalogue_sync=await sync_bestseller_catalogues(db,check_free_software=False)
+        # Catalogue sync holds a transaction-scoped advisory lock while it
+        # links supplier captures. Commit those links before the slower
+        # proposal rebuild so other refresh workers can make progress.
+        await db.commit()
         result=await asyncio.wait_for(refresh_playbooks(db,actor_id,progress=progress,catalogue_sync=catalogue_sync,maintain_live_offers=False),
             timeout=PLAYBOOK_PROPOSAL_REBUILD_TIMEOUT_SECONDS)
         await db.commit()
