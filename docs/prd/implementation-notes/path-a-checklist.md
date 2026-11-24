@@ -22,12 +22,12 @@
 **Git status**: Use `git diff` to review all changes before committing.
 
 ### ✅ Test Coverage (Written, Not Run)
-- [x] `testing/suite/test_cross_channel_sale_concurrency.py` (8 test methods)
+- [x] `tests/test_cross_channel_sale_concurrency.py` (8 test methods)
   - Lock order verification
   - Race condition handling (confirm_checkout vs sync_ebay_order vs webhook)
   - Idempotency (same payment intent twice)
   - External I/O outside locks
-- [x] `testing/suite/test_recreate_cycle_batch_safety.py` (4 test methods)
+- [x] `tests/test_recreate_cycle_batch_safety.py` (4 test methods)
   - Per-iteration commit idempotency
   - Exception rollback safety
   - Partial batch progress preservation
@@ -35,7 +35,7 @@
 **How to run**:
 ```bash
 cd flipflop-api
-pytest testing/suite/test_cross_channel_sale_concurrency.py testing/suite/test_recreate_cycle_batch_safety.py -v
+pytest tests/test_cross_channel_sale_concurrency.py tests/test_recreate_cycle_batch_safety.py -v
 ```
 
 ---
@@ -110,11 +110,11 @@ Finding: [None seen / Multiple listings found / Unable to check / Other]
 cd flipflop-api
 
 # Run both test files
-pytest testing/suite/test_cross_channel_sale_concurrency.py testing/suite/test_recreate_cycle_batch_safety.py -v
+pytest tests/test_cross_channel_sale_concurrency.py tests/test_recreate_cycle_batch_safety.py -v
 
 # Or run individually:
-pytest testing/suite/test_cross_channel_sale_concurrency.py -v
-pytest testing/suite/test_recreate_cycle_batch_safety.py -v
+pytest tests/test_cross_channel_sale_concurrency.py -v
+pytest tests/test_recreate_cycle_batch_safety.py -v
 ```
 
 **Expected output**:
@@ -180,8 +180,8 @@ git diff
 git add app/api/public_showcase.py
 git add app/routes/webhooks.py
 git add app/workers/recreate_cycle.py
-git add testing/suite/test_cross_channel_sale_concurrency.py
-git add testing/suite/test_recreate_cycle_batch_safety.py
+git add tests/test_cross_channel_sale_concurrency.py
+git add tests/test_recreate_cycle_batch_safety.py
 
 # If orphaned-listing was a bug and you added the fix:
 git add app/workers/recreate_cycle.py  # (already staged above)

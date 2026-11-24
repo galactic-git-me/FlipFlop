@@ -77,7 +77,7 @@ Look for:
 ### Step 2: Run Tests (5-10 min)
 ```bash
 cd flipflop-api
-pytest testing/suite/test_cross_channel_sale_concurrency.py -v
+pytest tests/test_cross_channel_sale_concurrency.py -v
 # Expected: 11/11 PASSED in 0.04s
 ```
 
@@ -92,8 +92,8 @@ If accumulation found, I'll add withdrawal logic to `_recreate_flip`
 git add app/api/public_showcase.py
 git add app/routes/webhooks.py
 git add app/workers/recreate_cycle.py
-git add testing/suite/test_cross_channel_sale_concurrency.py
-git add testing/suite/test_recreate_cycle_batch_safety.py
+git add tests/test_cross_channel_sale_concurrency.py
+git add tests/test_recreate_cycle_batch_safety.py
 
 git commit -m "fix: prevent cross-channel sale races and duplicate eBay listings
 

@@ -16,7 +16,7 @@ export function BrandCubeLoader({
   const signatureSizes = { xs: 25, sm: 34, md: 46, lg: 58 };
 
   return (
-    <div role="status" aria-live="polite" className={cn("flex flex-col items-center justify-center gap-1 text-slate-100", className)}>
+    <div role="status" aria-live="polite" className={cn("flex min-w-0 flex-col items-center justify-center gap-1 overflow-x-hidden text-slate-100", className)}>
       <iframe
         src="/HTMLComponents/Cube/Cube.html"
         title=""
@@ -36,7 +36,7 @@ export function BrandCubeLoader({
         fontFamily={'"FlipFlopNASA", sans-serif'}
         letterSpacing={0.22}
         ariaLabel="Loading"
-        className="w-full max-w-[340px] px-3"
+        className="w-full min-w-0 max-w-[340px] overflow-x-hidden px-3"
       />
     </div>
   );

@@ -18,7 +18,8 @@ FlipFlop has two runtime environments, not three:
    user journey against DEV data and services. The launcher safely
    fast-forwards a clean local `dev` from `origin/dev`; otherwise it reports
    the commit and preserves local work. The API health response and admin
-   header refresh source details during hot reload and flag mismatches.
+   header exposes running source commits, refreshes them during hot reload,
+   and flags mismatches.
 4. Open a production pull request whose complete tracked source tree matches
    the validated DEV tree. CI rejects application, migration, configuration,
    or data differences from DEV while ignoring generated build and local tool

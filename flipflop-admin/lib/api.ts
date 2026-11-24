@@ -1423,7 +1423,7 @@ export const api = {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       }),
-    createGemSpotlightDraft: (data: { listing_ids: number[]; build_name: string; concept?: "best" | "cheapest" | "highest_end" | "most_profitable" | "most_popular" }) =>
+    createGemSpotlightDraft: (data: { listing_ids: number[]; build_name: string; concept?: "best" | "cheapest" | "highest_end" | "most_profitable" | "most_popular"; platform?: "AM4" | "AM5" }) =>
       request<ManualBuild>("/manual-builds/gem-spotlight-draft", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

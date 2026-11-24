@@ -306,10 +306,10 @@ All Phase 1-4 features complete and tested:
 
 ### Test Files
 ```
-flipflop-api/testing/suite/test_e2e_customer_journey.py   (700 lines)
-flipflop-api/testing/suite/test_api_integration.py        (550 lines)
-flipflop-api/testing/suite/test_security.py               (600 lines)
-flipflop-api/testing/suite/test_database_integrity.py     (450 lines)
+flipflop-api/tests/test_e2e_customer_journey.py   (700 lines)
+flipflop-api/tests/test_api_integration.py        (550 lines)
+flipflop-api/tests/test_security.py               (600 lines)
+flipflop-api/tests/test_database_integrity.py     (450 lines)
 ```
 
 ### Documentation Files

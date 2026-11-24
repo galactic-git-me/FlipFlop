@@ -10,11 +10,8 @@ export default function LoginPage() {
 
   useEffect(() => {
     const reason = new URLSearchParams(window.location.search).get("reason");
-    if (reason === "session_invalid") {
-      setError("Your sign-in session could not be verified. Please sign in again.");
-    } else if (reason === "session_missing") {
-      setError("Your sign-in cookie was not received. Check that cookies are enabled, then sign in again.");
-    }
+    if (reason === "session_invalid") setError("Your sign-in could not be verified. Please sign in again. If this keeps happening, contact support with this message.");
+    if (reason === "session_missing") setError("Your sign-in session was not received by the admin site. Check that cookies are enabled, then sign in again.");
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -37,8 +34,8 @@ export default function LoginPage() {
         return;
       }
 
-      // A fresh document request makes the proxy verify the cookie just issued
-      // by the login route before rendering a protected page.
+      // Force a fresh document request so proxy.ts verifies the cookie just issued
+      // by the route handler before rendering any protected page.
       window.location.replace("/");
     } catch {
       setError("Could not reach the server. Is the backend running?");

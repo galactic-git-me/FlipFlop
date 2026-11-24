@@ -88,7 +88,11 @@ async def set_channel_status(build_id: int, channel: str, body: ManualChannelSta
             build.status = "built"
         elif body.status == "live" and build.status == "built":
             build.status = "listed"
-        if body.status == "cancelled":
+        if body.status == "live":
+            # The current listing is active again; the previous listing's
+            # end reason remains in the publish-event history.
+            build.ebay_listing_end_reason = None
+        elif body.status == "cancelled":
             build.ebay_listing_end_reason = "order_cancelled"
     row.status = {"live": "published", "sold": "sold", "ended": "ended", "cancelled": "cancelled", "not_listed": "draft"}[body.status]
     if body.listing_url:

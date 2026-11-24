@@ -126,7 +126,7 @@ for flip in flips:
 **Status**: ✅ Complete (11/11 tests)  
 **Files**:
 - `app/services/feature_flags.py` (service, 120 LOC)
-- `testing/suite/test_feature_flags.py` (tests, 195 LOC)
+- `tests/test_feature_flags.py` (tests, 195 LOC)
 - Integration: `app/services/email_service.py` (modified)
 
 **Flags Implemented** (10 total):
@@ -147,7 +147,7 @@ for flip in flips:
 - Migration: `20260823_0003_manual_build_cpk_versioning.py`
 - Model: `app/models/manual_build.py` (3 new fields)
 - Service: `app/services/cpk_versioning.py` (220 LOC)
-- Tests: `testing/suite/test_cpk_versioning.py` (185 LOC)
+- Tests: `tests/test_cpk_versioning.py` (185 LOC)
 
 **Fields Added**:
 1. cpk_version (String, indexed) — Semantic version tag
