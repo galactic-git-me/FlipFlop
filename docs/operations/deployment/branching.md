@@ -29,16 +29,21 @@ workflows. Set it to a fine-grained token with read/write access to Contents and
 Pull requests for this repository. Without this secret the automation safely
 skips and leaves PRs available for manual merge.
 
-Local `dev` is a separate copy from GitHub's `origin/dev`. Before starting
-services, `scripts/start-all-servers.ps1` fast-forwards a clean local `dev`
-from `origin/dev`. It preserves dirty work and starts other branches without
-blocking; it prints the branch, commit, and dirty-worktree state. The API
+Local `dev` is a separate copy from GitHub's `origin/dev`. The reserved DEV
+ports may be started only from a clean local `dev` checkout whose HEAD exactly
+matches freshly fetched `origin/dev`. `scripts/start-all-servers.ps1` checks
+this before touching ports, the Ollama gateway, or service processes and fails
+closed for feature branches, dirty worktrees, fetch failures, and stale commits.
+Feature work must use an isolated preview environment; it must never claim the
+shared DEV ports. The API
 `/health` response and admin `/build-info` route refresh source details from
 Git during local DEV hot reloads. The admin header compares both services and
 flags a mismatch.
 
 After the exact DEV commit has passed its runtime check, open a pull request
-for `main` only when its tracked source tree matches `dev`. This permits a
+for `main` only when its tracked source tree matches `dev`. The release check
+and production deployment independently compare the tagged source tree with
+the freshly fetched `origin/dev`; a stale or divergent release is blocked. This permits a
 promotion branch that preserves production-only generated artifacts while
 ensuring application code and migrations are the tested DEV versions. Tag
 that exact merge commit. Release and deployment checks require a passing

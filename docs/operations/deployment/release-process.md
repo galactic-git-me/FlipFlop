@@ -15,19 +15,22 @@ FlipFlop has two runtime environments, not three:
 2. Wait for the DEV validation workflow and pull-request checks to pass. Merge
    the change into `dev`.
 3. Run the DEV application from that exact `dev` commit and verify the affected
-   user journey against DEV data and services. The launcher safely
-   fast-forwards a clean local `dev` from `origin/dev`; otherwise it reports
-   the commit and preserves local work. The API health response and admin
-   header exposes running source commits, refreshes them during hot reload,
-   and flags mismatches.
+   user journey against DEV data and services. The launcher starts reserved
+   DEV ports only from a clean local `dev` exactly matching freshly fetched
+   `origin/dev`; feature branches, dirty worktrees, fetch failures, and stale
+   commits fail before any service or port is changed. Feature work requires an
+   isolated preview environment. The API health response and admin header
+   expose running source commits, refresh them during hot reload, and flag
+   mismatches.
 4. Open a production pull request whose complete tracked source tree matches
    the validated DEV tree. CI rejects application, migration, configuration,
    or data differences from DEV while ignoring generated build and local tool
    artifacts. Merge only after the DEV runtime check is recorded.
 5. Create a version tag on that DEV-to-main merge commit, for example
-   `v1.0.0`. Release checks require the tag to be on `main` and its commit to
-   be associated with the merged production pull request and its successful
-   DEV-parity CI run.
+   `v1.0.0`. Release checks require the tag to be on `main`, its tracked source
+   tree to match freshly fetched `origin/dev`, and its commit to be associated
+   with the merged production pull request and its successful DEV-parity CI
+   run.
 6. Run **Actions → Deploy production**, enter the tag, and type
    `DEPLOY-PRODUCTION`. The deploy workflow reruns API checks and builds the
    admin bundle before connecting to production. The deployment stamps the
