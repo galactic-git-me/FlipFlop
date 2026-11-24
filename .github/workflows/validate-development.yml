@@ -45,7 +45,7 @@ jobs:
         run: pip install -r requirements.txt -r requirements-dev.txt pytest pytest-asyncio
       - name: Run development API checks
         working-directory: flipflop-api
-        run: python scripts/run_isolated_tests.py -- -q testing/suite/test_ebay_oauth.py testing/suite/test_component_price_alert_matching.py
+        run: python scripts/run_isolated_tests.py -- -q tests/test_ebay_oauth.py tests/test_component_price_alert_matching.py
       - name: Build development admin bundle
         working-directory: flipflop-admin
         run: npm ci && npm run build

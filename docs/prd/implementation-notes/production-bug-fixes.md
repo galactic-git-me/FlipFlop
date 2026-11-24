@@ -112,8 +112,8 @@ flip.ebay_listing_id = result.get("listing_id")  # OVERWRITES old ID
 ## Testing
 
 **Test files created** (ready to run):
-- `flipflop-api/testing/suite/test_cross_channel_sale_concurrency.py` — 4 test classes covering race conditions, idempotency, lock ordering, external I/O safety
-- `flipflop-api/testing/suite/test_recreate_cycle_batch_safety.py` — 4 test methods covering per-iteration commit safety, exception rollback, partial batch progress
+- `flipflop-api/tests/test_cross_channel_sale_concurrency.py` — 4 test classes covering race conditions, idempotency, lock ordering, external I/O safety
+- `flipflop-api/tests/test_recreate_cycle_batch_safety.py` — 4 test methods covering per-iteration commit safety, exception rollback, partial batch progress
 
 **Test structure**:
 
@@ -133,10 +133,10 @@ flip.ebay_listing_id = result.get("listing_id")  # OVERWRITES old ID
 **How to run**:
 ```bash
 cd flipflop-api
-pytest testing/suite/test_cross_channel_sale_concurrency.py -v
-pytest testing/suite/test_recreate_cycle_batch_safety.py -v
+pytest tests/test_cross_channel_sale_concurrency.py -v
+pytest tests/test_recreate_cycle_batch_safety.py -v
 # Both together:
-pytest testing/suite/test_cross_channel_sale_concurrency.py testing/suite/test_recreate_cycle_batch_safety.py -v
+pytest tests/test_cross_channel_sale_concurrency.py tests/test_recreate_cycle_batch_safety.py -v
 ```
 
 **Expected output**:

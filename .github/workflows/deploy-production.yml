@@ -125,10 +125,10 @@ jobs:
       - name: Verify eBay OAuth and price alerts
         run: >-
           python scripts/run_isolated_tests.py -- -q
-          testing/suite/test_ebay_oauth.py
+          tests/test_ebay_oauth.py
           testing/unit/test_secret_key_rotation.py
-          testing/suite/test_browser_listing_jobs.py
-          testing/suite/test_component_price_alert_matching.py
+          tests/test_browser_listing_jobs.py
+          tests/test_component_price_alert_matching.py
       - name: Build release admin bundle
         working-directory: flipflop-admin
         run: npm ci && npm run build

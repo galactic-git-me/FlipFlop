@@ -204,7 +204,7 @@ flipflop-api/app/services/
 
 ### Tests
 ```
-flipflop-api/testing/suite/
+flipflop-api/tests/
 ├── test_feature_flags.py, test_cpk_versioning.py, test_money.py
 ├── test_price_alerts.py, test_price_alert_emails.py
 ├── test_five_star_pricing.py, test_price_history.py

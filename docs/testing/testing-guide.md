@@ -6,7 +6,7 @@ This guide explains how to run the comprehensive test suite and verify FlipFlop 
 
 ## Test locations
 
-- `flipflop-api/testing/suite/` — API integration, contract, and end-to-end tests.
+- `flipflop-api/tests/` — API integration, contract, and end-to-end tests.
 - `flipflop-api/testing/unit/` — API unit tests.
 - `flipflop-api/testing/manual/` — standalone diagnostic scripts that are not part of pytest discovery.
 - `flipflop-admin/testing/unit/` — Vitest tests, grouped by their matching `app`, `components`, and `lib` areas.
@@ -30,16 +30,16 @@ pytest -v --cov=app --cov-report=html
 
 ```bash
 # E2E Customer Journey Tests
-pytest testing/suite/test_e2e_customer_journey.py -v
+pytest tests/test_e2e_customer_journey.py -v
 
 # API Integration Tests
-pytest testing/suite/test_api_integration.py -v
+pytest tests/test_api_integration.py -v
 
 # Security Tests
-pytest testing/suite/test_security.py -v
+pytest tests/test_security.py -v
 
 # Database Integrity Tests
-pytest testing/suite/test_database_integrity.py -v
+pytest tests/test_database_integrity.py -v
 ```
 
 ---
@@ -88,8 +88,8 @@ Tests the complete customer flow from signup through order delivery.
 **Run:**
 
 ```bash
-pytest testing/suite/test_e2e_customer_journey.py -v
-pytest testing/suite/test_e2e_customer_journey.py::TestCompleteCustomerJourney -v
+pytest tests/test_e2e_customer_journey.py -v
+pytest tests/test_e2e_customer_journey.py::TestCompleteCustomerJourney -v
 ```
 
 **Expected Results:**
@@ -128,8 +128,8 @@ Tests all API endpoints for correct behavior and error handling.
 **Run:**
 
 ```bash
-pytest testing/suite/test_api_integration.py -v
-pytest testing/suite/test_api_integration.py::TestAuthEndpoints -v
+pytest tests/test_api_integration.py -v
+pytest tests/test_api_integration.py::TestAuthEndpoints -v
 ```
 
 ---
@@ -163,8 +163,8 @@ Tests security controls and vulnerability prevention.
 **Run:**
 
 ```bash
-pytest testing/suite/test_security.py -v
-pytest testing/suite/test_security.py::TestSecretsManagement -v
+pytest tests/test_security.py -v
+pytest tests/test_security.py::TestSecretsManagement -v
 ```
 
 ---
@@ -195,8 +195,8 @@ Tests database schema, constraints, and data consistency.
 **Run:**
 
 ```bash
-pytest testing/suite/test_database_integrity.py -v
-pytest testing/suite/test_database_integrity.py::TestConstraints -v
+pytest tests/test_database_integrity.py -v
+pytest tests/test_database_integrity.py::TestConstraints -v
 ```
 
 ---
@@ -207,7 +207,7 @@ pytest testing/suite/test_database_integrity.py::TestConstraints -v
 
 ```bash
 # Run all tests with coverage
-pytest testing/suite/ --cov=app --cov-report=html --cov-report=term-missing
+pytest tests/ --cov=app --cov-report=html --cov-report=term-missing
 
 # View report
 open htmlcov/index.html  # macOS
@@ -380,7 +380,7 @@ ab -n 1000 -c 100 http://localhost:8000/health
 export DEBUG=True
 
 # Run load test
-pytest testing/suite/test_e2e_customer_journey.py::TestCompleteCustomerJourney -v
+pytest tests/test_e2e_customer_journey.py::TestCompleteCustomerJourney -v
 
 # Check logs for slow queries (> 100ms)
 ```
@@ -414,7 +414,7 @@ python -m mypy app/
 python -m bandit -r app/
 
 # Run all tests
-pytest testing/suite/ -v
+pytest tests/ -v
 ```
 
 ### Database
@@ -453,7 +453,7 @@ python -c "from app.config import get_settings; s = get_settings(); print(s.dict
 createdb flipflop_test
 
 # Or use in-memory SQLite
-DATABASE_URL=sqlite+aiosqlite:///:memory: pytest testing/suite/
+DATABASE_URL=sqlite+aiosqlite:///:memory: pytest tests/
 ```
 
 **Stripe webhook test failures:**
@@ -473,7 +473,7 @@ DATABASE_URL=sqlite+aiosqlite:///:memory: pytest testing/suite/
 **Slow tests:**
 ```bash
 # Profile slow tests
-pytest testing/suite/ --durations=10
+pytest tests/ --durations=10
 
 # Optimize database queries
 # Add indexes if needed
@@ -482,7 +482,7 @@ pytest testing/suite/ --durations=10
 **Memory leaks:**
 ```bash
 # Monitor memory during test run
-pytest testing/suite/ --memray
+pytest tests/ --memray
 
 # Check for unclosed connections
 # Ensure all async resources cleaned up
@@ -528,7 +528,7 @@ jobs:
       - name: Run tests
         run: |
           cd flipflop-api
-          pytest testing/suite/ --cov=app --cov-report=xml
+          pytest tests/ --cov=app --cov-report=xml
 
       - name: Upload coverage
         uses: codecov/codecov-action@v3

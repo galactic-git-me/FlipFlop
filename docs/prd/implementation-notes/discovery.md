@@ -34,7 +34,7 @@ Repos: `C:\Users\mclar\CODING\FlipFlop` (main app) and sibling `C:\Users\mclar\C
 
 - No dedicated notification/unread-count/badge subsystem found (searched `notification|unread|badge` across `app/api` — 4 incidental hits only).
 - Existing substrate to build on: `app/services/alerts.py` (`emit_alert`, called from `scheduler.py`), `app/models/alert_event.py`, `app/api/alerts.py`. **Not yet read in depth — required follow-up before designing PRD 02's insight inbox / header badge on top of it**, rather than building a parallel system.
-- `testing/suite/test_autonomous_notifications.py` exists — read for expected behaviour before extending.
+- `tests/test_autonomous_notifications.py` exists — read for expected behaviour before extending.
 
 ## 5. Listings / inventory / builds
 
@@ -99,7 +99,7 @@ Two parallel mechanisms:
 
 ## 10. Tests
 
-- **Backend**: pytest, ~50 files under `flipflop-api/testing/suite/` — gem radar scoring/observations/inventory, benchmarks, catalogue, eBay (oauth/media/trading api/listing poster), quotes, pricing engine/bias, offer engine/poll job, security, e2e customer journey, database integrity, storage retention, manual build automation. `test_security.py` exists — read before touching auth.
+- **Backend**: pytest, ~50 files under `flipflop-api/tests/` — gem radar scoring/observations/inventory, benchmarks, catalogue, eBay (oauth/media/trading api/listing poster), quotes, pricing engine/bias, offer engine/poll job, security, e2e customer journey, database integrity, storage retention, manual build automation. `test_security.py` exists — read before touching auth.
 - **Frontend**: `playwright.config.ts` present for E2E, but **no unit test framework wired up** (no Jest/Vitest config or `*.test.ts(x)` files found outside `node_modules`). Gap vs. the 80%-coverage standard — flag for the TDD phase of new frontend work.
 
 ## 11. Auth — two coexisting mechanisms (architectural debt)
