@@ -520,7 +520,7 @@ function VendorCounter({ value }: { value: number | null }) {
 // Compact right-justified number, replaces the old full-size stat tile grid
 // -- now lives on the same header row as "Current Scan Run" and the queue
 // status bar instead of its own section further down the page.
-function MiniStat({ label, value, color }: { label: string; value: string | number; color: string }) {
+function MiniStat({ label, value, color, loading = false }: { label: string; value: string | number; color: string; loading?: boolean }) {
   const numericValue = typeof value === "number" ? value : Number(value);
   const formattedValue = Number.isFinite(numericValue)
     ? numericValue.toLocaleString("en-GB", { maximumFractionDigits: 1 })
@@ -528,7 +528,7 @@ function MiniStat({ label, value, color }: { label: string; value: string | numb
   return (
     <div className="text-center leading-tight">
       <div className="text-xl font-bold" style={{ color }}>
-        {formattedValue}
+        {loading ? <Loader2 size={18} className="mx-auto animate-spin" aria-label={`Loading ${label}`} /> : formattedValue}
       </div>
       <div className="text-xs text-slate-400 whitespace-nowrap">{label}</div>
     </div>
@@ -544,8 +544,9 @@ function formatElapsedTime(seconds: number): string {
   return `${secs}s`;
 }
 
-function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: QueueStatus | null; marketSnapshot: MarketSnapshot | null }) {
+function PipelineDashboard({ queueStatus, marketSnapshot, enabled }: { queueStatus: QueueStatus | null; marketSnapshot: MarketSnapshot | null; enabled: boolean }) {
   const [status, setStatus] = useState<PipelineStatusResponse | null>(null);
+  const [statusLoaded, setStatusLoaded] = useState(false);
   const [queueItems, setQueueItems] = useState<QueueItem[]>([]);
   const [clientElapsed, setClientElapsed] = useState(0);
   const [displayedScans, setDisplayedScans] = useState<ScanProgress[]>([]);
@@ -569,6 +570,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
   });
 
   useEffect(() => {
+    if (!enabled) return;
     let cancelled = false;
     const fetchLatestRun = async () => {
       try {
@@ -589,7 +591,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
       cancelled = true;
       window.clearInterval(interval);
     };
-  }, []);
+  }, [enabled]);
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -612,6 +614,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
           readStatus("/api/gem-radar/scan-lock"),
         ]);
         if (res) {
+          setStatusLoaded(true);
           const data = res;
           const activeScans = data.activeScans ?? [];
           const queueIsRunning = Boolean(
@@ -832,10 +835,11 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
       }
     };
 
+    if (!enabled) return;
     fetchStatus();
     const interval = setInterval(fetchStatus, 5000); // Avoid competing with active ingestion.
     return () => clearInterval(interval);
-  }, [displayedScans.length, queueStatus]);
+  }, [displayedScans.length, enabled, queueStatus]);
 
   useEffect(() => {
     const isProcessing = queueStatus && (queueStatus.pending > 0 || queueStatus.processing > 0);
@@ -902,13 +906,13 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <MiniStat label="Processed" value={displayedListingCount} color="#e2e8f0" />
-            <MiniStat label="SUPER GEMs" value={displayedSuperGemCount} color="#fcd34d" />
-            <MiniStat label="Avg Super Gem" value={displayedAvgSuperGemScore.toFixed(1)} color="#fcd34d" />
-            <MiniStat label="GEMs" value={displayedGemCount} color="#93c5fd" />
-            <MiniStat label="Avg Gem" value={displayedAvgGemScore.toFixed(1)} color="#93c5fd" />
-            <MiniStat label="BIN Prices" value={displayedBinPricesCount} color="#34d399" />
-            <MiniStat label="Sold Prices" value={displayedSoldPricesCount} color="#f472b6" />
+            <MiniStat label="Processed" value={displayedListingCount} color="#e2e8f0" loading={!statusLoaded && !marketSnapshot} />
+            <MiniStat label="SUPER GEMs" value={displayedSuperGemCount} color="#fcd34d" loading={!statusLoaded && !marketSnapshot} />
+            <MiniStat label="Avg Super Gem" value={displayedAvgSuperGemScore.toFixed(1)} color="#fcd34d" loading={!statusLoaded && !marketSnapshot} />
+            <MiniStat label="GEMs" value={displayedGemCount} color="#93c5fd" loading={!statusLoaded && !marketSnapshot} />
+            <MiniStat label="Avg Gem" value={displayedAvgGemScore.toFixed(1)} color="#93c5fd" loading={!statusLoaded && !marketSnapshot} />
+            <MiniStat label="BIN Prices" value={displayedBinPricesCount} color="#34d399" loading={!statusLoaded && !marketSnapshot} />
+            <MiniStat label="Sold Prices" value={displayedSoldPricesCount} color="#f472b6" loading={!statusLoaded && !marketSnapshot} />
           </div>
         </div>
 
@@ -1109,7 +1113,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
 // Scan Run" panel above, which this sits beside). Same categories, same
 // MiniStat visual language, deliberately so the two read as a matched pair:
 // "what just happened" vs "where things stand right now".
-function MarketSnapshotPanel({ snapshot }: { snapshot: MarketSnapshot | null }) {
+function MarketSnapshotPanel({ snapshot, loading, retrying }: { snapshot: MarketSnapshot | null; loading: boolean; retrying: boolean }) {
   return (
     <div className="mb-6 p-4 rounded-lg glass-panel">
       <div className="flex items-center justify-between gap-4 flex-wrap">
@@ -1118,15 +1122,16 @@ function MarketSnapshotPanel({ snapshot }: { snapshot: MarketSnapshot | null }) 
           <p className="text-xs text-slate-400">All active market listings across scan runs; sold and missed listings are archived</p>
         </div>
         <div className="flex items-center gap-4">
-          <MiniStat label="Listings" value={snapshot?.ingestedCount ?? 0} color="#e2e8f0" />
-          <MiniStat label="SUPER GEMs" value={snapshot?.superGemCount ?? 0} color="#fcd34d" />
-          <MiniStat label="Avg Super Gem" value={(snapshot?.avgSuperGemScore ?? 0).toFixed(1)} color="#fcd34d" />
-          <MiniStat label="GEMs" value={snapshot?.gemCount ?? 0} color="#93c5fd" />
-          <MiniStat label="Avg Gem" value={(snapshot?.avgGemScore ?? 0).toFixed(1)} color="#93c5fd" />
-          <MiniStat label="BIN Prices" value={snapshot?.binPricesCount ?? 0} color="#34d399" />
-          <MiniStat label="Sold Prices" value={snapshot?.soldPricesCount ?? 0} color="#f472b6" />
+          <MiniStat label="Listings" value={snapshot?.ingestedCount ?? 0} color="#e2e8f0" loading={loading && !snapshot} />
+          <MiniStat label="SUPER GEMs" value={snapshot?.superGemCount ?? 0} color="#fcd34d" loading={loading && !snapshot} />
+          <MiniStat label="Avg Super Gem" value={(snapshot?.avgSuperGemScore ?? 0).toFixed(1)} color="#fcd34d" loading={loading && !snapshot} />
+          <MiniStat label="GEMs" value={snapshot?.gemCount ?? 0} color="#93c5fd" loading={loading && !snapshot} />
+          <MiniStat label="Avg Gem" value={(snapshot?.avgGemScore ?? 0).toFixed(1)} color="#93c5fd" loading={loading && !snapshot} />
+          <MiniStat label="BIN Prices" value={snapshot?.binPricesCount ?? 0} color="#34d399" loading={loading && !snapshot} />
+          <MiniStat label="Sold Prices" value={snapshot?.soldPricesCount ?? 0} color="#f472b6" loading={loading && !snapshot} />
         </div>
       </div>
+      {!snapshot && retrying && <p className="mt-2 text-right text-xs text-amber-300">Snapshot is taking longer than usual; retrying automatically.</p>}
     </div>
   );
 }
@@ -1405,7 +1410,7 @@ function GemSpotlightCard({
   );
 }
 
-function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | null> }) {
+function StatsTab({ componentGems, loading, retrying }: { componentGems?: Record<string, GemData | null>; loading: boolean; retrying: boolean }) {
   const componentLabels: Record<string, { label: string; emoji: string; accent: keyof typeof GEM_SPOTLIGHT_ACCENTS }> = {
     bundle: { label: "Gem Bundle", emoji: "💎", accent: "amber" },
     motherboard: { label: "Gem Motherboard", emoji: "🔧", accent: "emerald" },
@@ -1433,7 +1438,11 @@ function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | 
           ) : (
             <div key={category} className="aspect-square min-w-0 rounded-2xl border border-white/10 bg-white/[0.03] p-3 flex flex-col justify-between">
               <span className="text-[10px] uppercase tracking-wide font-semibold text-slate-400">{componentLabels[category].label}</span>
+            {loading ? (
+              <p className="flex items-center gap-2 text-sm text-slate-400"><Loader2 size={14} className="animate-spin" />{retrying ? "Still loading; retrying automatically…" : "Loading Gem snapshot…"}</p>
+            ) : (
               <p className="text-sm text-slate-500">{category === "bundle" ? "No qualifying motherboard bundle Gem in the current snapshot" : "No qualifying gem in the current snapshot"}</p>
+            )}
             </div>
           );
         })}
@@ -2999,7 +3008,9 @@ const AnalyticsTab = memo(function AnalyticsTab() {
 // hasn't drained yet — pending+processing is "left to process", completed
 // is the running total ever finished (never reset, so it only grows).
 function QueueStatusBar({ queue }: { queue: QueueStatus | null }) {
-  if (!queue) return null;
+  if (!queue) {
+    return <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg glass-panel text-xs text-slate-400"><Loader2 size={14} className="animate-spin text-blue-400" />Loading processing queue…</div>;
+  }
 
   const left = queue.pending + queue.processing;
   const total = left + queue.completed;
@@ -3066,6 +3077,7 @@ function SourcingPageInner() {
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
   const [backendConnected, setBackendConnected] = useState(false);
+  const [extensionStatusChecked, setExtensionStatusChecked] = useState(false);
   const [extensionStatus, setExtensionStatus] = useState<{
     state: "offline" | "idle" | "scanning" | "error";
     lastHeartbeat: string | null;
@@ -3080,6 +3092,9 @@ function SourcingPageInner() {
   const [scanIntervalMinutes, setScanIntervalMinutes] = useState<number | null>(null);
   const [nowTick, setNowTick] = useState(() => Date.now());
   const [marketSnapshot, setMarketSnapshot] = useState<MarketSnapshot | null>(null);
+  const [marketSnapshotRetrying, setMarketSnapshotRetrying] = useState(false);
+  const [componentGemsLoading, setComponentGemsLoading] = useState(true);
+  const [componentGemsRetrying, setComponentGemsRetrying] = useState(false);
   const [refreshError, setRefreshError] = useState("");
   const dataRequestInFlight = useRef(false);
   const currentTab = useRef(mainTab);
@@ -3094,6 +3109,8 @@ function SourcingPageInner() {
         if (active) setExtensionStatus(status);
       } catch {
         if (active) setExtensionStatus(null);
+      } finally {
+        if (active) setExtensionStatusChecked(true);
       }
     };
     void refreshExtensionStatus();
@@ -3121,14 +3138,6 @@ function SourcingPageInner() {
       setScanIntervalMinutes(status.scan_interval_minutes);
     } catch (error) {
       console.warn("Scan schedule refresh failed; retaining the last snapshot:", error);
-    }
-  };
-
-  const fetchMarketSnapshot = async () => {
-    try {
-      setMarketSnapshot(await api.gemRadar.marketSnapshot());
-    } catch (error) {
-      console.warn("Market snapshot refresh failed; retaining the last snapshot:", error);
     }
   };
 
@@ -3207,30 +3216,79 @@ function SourcingPageInner() {
   }, [mainTab, listingPage, listingFilters]);
 
   useEffect(() => {
+    if (loading) return;
     let active = true;
+    let timer: number | undefined;
+    let retryDelay = 5_000;
     const fetchComponentGems = async () => {
+      let succeeded = false;
       try {
         const response = await fetch("/api/gem-radar/gem-by-component", {
           cache: "no-store",
           signal: AbortSignal.timeout(30_000),
         });
-        if (response.ok && active) setComponentGems(await response.json());
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        if (active) {
+          setComponentGems(data);
+          setComponentGemsLoading(false);
+          setComponentGemsRetrying(false);
+          succeeded = true;
+        }
       } catch (error) {
         console.warn("Error fetching component gem summary:", error);
+        if (active) setComponentGemsRetrying(true);
       }
+      if (!active) return;
+      const delay = succeeded ? 60_000 : retryDelay;
+      retryDelay = succeeded ? 5_000 : Math.min(retryDelay * 2, 60_000);
+      timer = window.setTimeout(() => void fetchComponentGems(), delay);
     };
 
     void fetchComponentGems();
-    const interval = setInterval(fetchComponentGems, 60_000);
     return () => {
       active = false;
-      clearInterval(interval);
+      if (timer !== undefined) clearTimeout(timer);
     };
-  }, []);
+  }, [loading]);
 
   useEffect(() => {
+    if (loading) return;
+    let active = true;
+    let timer: number | undefined;
+    let retryDelay = 5_000;
     fetchScanSchedule();
-    fetchMarketSnapshot();
+    const fetchMarketSnapshot = async () => {
+      let succeeded = false;
+      try {
+        const snapshot = await api.gemRadar.marketSnapshot();
+        if (active) {
+          setMarketSnapshot(snapshot);
+          setMarketSnapshotRetrying(false);
+          succeeded = true;
+        }
+      } catch (error) {
+        console.warn("Market snapshot refresh failed; retaining the last snapshot:", error);
+        if (active) setMarketSnapshotRetrying(true);
+      }
+      if (!active) return;
+      const delay = succeeded ? 120_000 : retryDelay;
+      retryDelay = succeeded ? 5_000 : Math.min(retryDelay * 2, 60_000);
+      timer = window.setTimeout(() => void fetchMarketSnapshot(), delay);
+    };
+    void fetchMarketSnapshot();
+    const scheduleInterval = setInterval(fetchScanSchedule, 30000);
+    const tickInterval = setInterval(() => setNowTick(Date.now()), 1000);
+    return () => {
+      active = false;
+      clearInterval(scheduleInterval);
+      clearInterval(tickInterval);
+      if (timer !== undefined) clearTimeout(timer);
+    };
+  }, [loading]);
+
+  useEffect(() => {
+    if (mainTab !== "listings") return;
     const fetchListingFacets = async () => {
       try {
         const response = await fetch("/api/gem-radar/scored-listings-facets", { cache: "no-store" });
@@ -3245,24 +3303,14 @@ function SourcingPageInner() {
       } catch { /* Last-observed timestamps are advisory. */ }
     };
     void fetchSourceActivity();
-    // Keep lightweight schedule polling frequent enough for the countdown.
-    const scheduleInterval = setInterval(fetchScanSchedule, 30000);
-    // Market snapshot is a whole-database aggregation; it must not compete
-    // with the 1s pipeline progress polling or active queue work.
-    const snapshotInterval = setInterval(fetchMarketSnapshot, 120000);
     const activityInterval = setInterval(fetchSourceActivity, 60000);
     const facetsInterval = setInterval(fetchListingFacets, 60000);
-    // Tick every second purely to re-render the countdown display.
-    const tickInterval = setInterval(() => setNowTick(Date.now()), 1000);
 
     return () => {
-      clearInterval(scheduleInterval);
-      clearInterval(snapshotInterval);
       clearInterval(activityInterval);
       clearInterval(facetsInterval);
-      clearInterval(tickInterval);
     };
-  }, []);
+  }, [mainTab]);
 
   const scanCountdownLabel = (() => {
     if (!nextScanAt) return "No scan activity yet";
@@ -3294,7 +3342,7 @@ function SourcingPageInner() {
             <span className={backendConnected ? "text-emerald-400" : "text-amber-300"}>●</span> API {backendConnected ? "connected" : "unavailable"}
             <span className="ml-2 text-slate-400">·</span>
             <span className={extensionStatus?.state === "scanning" ? "text-cyan-300" : extensionStatus?.state === "idle" ? "text-emerald-400" : extensionStatus?.state === "error" ? "text-rose-300" : "text-amber-300"}>
-              Extension {extensionStatus?.state ?? "unknown"}
+              Extension {extensionStatus?.state ?? (extensionStatusChecked ? "unknown" : "checking")}
               {extensionStatus?.state === "scanning" ? ` · ${extensionStatus.activeSearches} active` : ""}
             </span>
           </div>
@@ -3376,9 +3424,9 @@ function SourcingPageInner() {
       <div className="flex-1 overflow-auto">
         {mainTab === "stats" && (
           <>
-            <MarketSnapshotPanel snapshot={marketSnapshot} />
-            <PipelineDashboard queueStatus={queueStatus} marketSnapshot={marketSnapshot} />
-            <StatsTab componentGems={componentGems || undefined} />
+            <MarketSnapshotPanel snapshot={marketSnapshot} loading={!marketSnapshot} retrying={marketSnapshotRetrying} />
+            <PipelineDashboard queueStatus={queueStatus} marketSnapshot={marketSnapshot} enabled={!loading} />
+            <StatsTab componentGems={componentGems || undefined} loading={componentGemsLoading} retrying={componentGemsRetrying} />
           </>
         )}
         {mainTab === "listings" && <>
