@@ -538,5 +538,41 @@
     "reason": "no_exact_official_pdf",
     "component": "Lian Li Lancool 217 ATX Mid Tower Gaming PC Case with 5 Fans, Wood, Black | Walnut wood accent computer case, mesh front, tem",
     "retry_after": "2026-12-24T16:20:14.587434"
+  },
+  "0171eafd28ccdc18c421eb30d79bbf7cb04b0d22f80e386de9662a6befabcfc2": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR 3500X Mid-Tower ATX PC Case \u2013 Panoramic Tempered Glass \u2013 Reverse Connection Motherboard Compatible \u2013 No Fans Included \u2013 Black",
+    "retry_after": "2026-12-25T11:39:17.780040"
+  },
+  "e3ca9bc2115b65fee7f6f5bbcadb84f56e789603338733159d28c6b6dea02c8f": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ASUS Dual NVIDIA GeForce RTX 5060 Ti 8GB GDDR7 Graphics Card (PCIe 5.0, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2.5-Slot, Axial Fans, 0dB Technology, Dual BIOS)",
+    "retry_after": "2026-12-25T11:39:17.780040"
+  },
+  "dcc7a91e898c5448f737f82522ffd96ef94b8a4fe134e8e0d1ecfdd972b3a480": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Lian Li O11D EVO RGB E-ATX Mid Tower Gaming PC Case, Tempered Glass, Black | Dual chamber modular computer case with custom R",
+    "retry_after": "2026-12-25T11:39:17.780040"
+  },
+  "e50aa3feff49ebecc5159f003a33abf41ecda4eadb8463605e75852d35169efb": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "CiT Academy Office PC Case Micro ATX, Computer Case with 500W PSU, Black | Ready-to-build office computer case with pre-insta",
+    "retry_after": "2026-12-25T14:10:58.640925"
+  },
+  "f69d943a480fc4d7b96d20a48768965f592c23762d12192d40b4ae3f07f69a77": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "CiT F3 Gaming PC Case Micro ATX, Mesh MATX Computer Case with 3 ARGB Fans | Small footprint micro atx pc case with fans inclu",
+    "retry_after": "2026-12-25T14:10:58.640925"
+  },
+  "99d5a4ddf7ba5c8303ccf79191ea1e0612822b797bb12049d45f2c37c1c13561": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR FRAME 4500X RS-R ARGB Panoramic Glass Mid-Tower PC Case \u2013 InfiniRail Mounting System, Fits Dual 360mm Radiators, GPU",
+    "retry_after": "2026-12-25T14:10:58.640925"
   }
 }
