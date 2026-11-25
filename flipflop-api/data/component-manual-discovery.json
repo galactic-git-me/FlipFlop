@@ -574,5 +574,23 @@
     "reason": "no_exact_official_pdf",
     "component": "CORSAIR FRAME 4500X RS-R ARGB Panoramic Glass Mid-Tower PC Case \u2013 InfiniRail Mounting System, Fits Dual 360mm Radiators, GPU",
     "retry_after": "2026-12-25T14:10:58.640925"
+  },
+  "3ea771b9cbaf62e671690d9effc93f25c3beef1ebe0870e517013990e906fe66": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR FRAME 4500X LX-R RGB LINK Panoramic Glass Mid-Tower PC Case \u2013 InfiniRail Mounting System, Fits Dual 360mm Radiators,",
+    "retry_after": "2026-12-25T17:59:13.248756"
+  },
+  "15f3895c26b2e6a2fbed5c4840a53d1aff75d39f9bdd53c53a27757bf88e62c7": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "HAVN BF 360 FLOW High Airflow ATX Mid Tower PC Case, Semi-Open SGCC Steel Frame, SimpliCable Cable Management, 2x 180mm Fan,",
+    "retry_after": "2026-12-25T17:59:13.248756"
+  },
+  "6831e0d27a4e26850e6ffdba4dca4909f8d04ad65e8d3fb096af05341ab5b5ba": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Lian Li DAN Cases B4 Wood Edition Micro-ATX PC Case, Walnut/Black | 21.3L SFF chassis, 358mm 4-slot GPU, ATX/SFX PSU, 360mm A",
+    "retry_after": "2026-12-25T17:59:13.248756"
   }
 }
