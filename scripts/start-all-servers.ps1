@@ -393,9 +393,11 @@ try {
             $wasListening = $serverListeningState[$server.Name]
 
             if (-not $isListening -and $wasListening) {
-                Write-Host "[WARN] $($server.Name) is not listening; see $($server.LogFile)" -ForegroundColor Yellow
+                $timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss K'
+                Write-Host "[$timestamp] [WARN] $($server.Name) is not listening; see $($server.LogFile)" -ForegroundColor Yellow
             } elseif ($isListening -and -not $wasListening) {
-                Write-Host "[RUNNING] $($server.Name) is listening again at http://127.0.0.1:$($server.Port)" -ForegroundColor $server.Color
+                $timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss K'
+                Write-Host "[$timestamp] [RUNNING] $($server.Name) is listening again at http://127.0.0.1:$($server.Port)" -ForegroundColor $server.Color
             }
 
             $serverListeningState[$server.Name] = $isListening
