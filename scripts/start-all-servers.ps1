@@ -74,6 +74,52 @@ function Assert-DevelopmentPrerequisites {
 
 }
 
+function Assert-DevCheckout {
+    $branch = (& git -C $projectRoot branch --show-current 2>$null).Trim()
+    if ($LASTEXITCODE -ne 0 -or $branch -ne 'dev') {
+        $displayBranch = if ($branch) { $branch } else { 'detached HEAD' }
+        throw "DEV startup is restricted to the dev branch. Current branch: $displayBranch. Use an isolated preview environment for feature work. No services or ports were changed."
+    }
+
+    $changes = @(& git -C $projectRoot status --porcelain 2>$null)
+    if ($LASTEXITCODE -ne 0) { throw 'Could not verify DEV worktree cleanliness; refusing startup.' }
+    if ($changes.Count -gt 0) {
+        throw 'DEV startup requires a clean worktree. Merge changes through a dev pull request, then retry. No services or ports were changed.'
+    }
+
+    & git -C $projectRoot fetch --quiet origin dev:refs/remotes/origin/dev
+    if ($LASTEXITCODE -ne 0) { throw 'Could not fetch origin/dev; refusing stale or offline DEV startup.' }
+
+    $head = (& git -C $projectRoot rev-parse HEAD 2>$null).Trim()
+    $remoteDev = (& git -C $projectRoot rev-parse origin/dev 2>$null).Trim()
+    if ($LASTEXITCODE -ne 0 -or $head -ne $remoteDev) {
+        throw "Local dev ($head) is not exactly origin/dev ($remoteDev). Update local dev and retry. No services or ports were changed."
+    }
+}
+
+function Assert-DefaultBranchCheckout([string]$Path, [string]$Label) {
+    $defaultRef = (& git -C $Path symbolic-ref --quiet refs/remotes/origin/HEAD 2>$null).Trim()
+    if ($LASTEXITCODE -ne 0 -or $defaultRef -notmatch '^refs/remotes/origin/(.+)$') {
+        throw "Could not determine $Label's origin default branch; refusing to start mixed-source DEV."
+    }
+    $defaultBranch = $Matches[1]
+    $branch = (& git -C $Path branch --show-current 2>$null).Trim()
+    if ($LASTEXITCODE -ne 0 -or $branch -ne $defaultBranch) {
+        throw "$Label must use its origin default branch '$defaultBranch' for DEV. Current branch: $(if ($branch) { $branch } else { 'detached HEAD' }). No services or ports were changed."
+    }
+    $changes = @(& git -C $Path status --porcelain 2>$null)
+    if ($LASTEXITCODE -ne 0 -or $changes.Count -gt 0) {
+        throw "$Label must have a clean worktree before DEV startup. No services or ports were changed."
+    }
+    & git -C $Path fetch --quiet origin "${defaultBranch}:refs/remotes/origin/${defaultBranch}"
+    if ($LASTEXITCODE -ne 0) { throw "Could not refresh $Label origin/$defaultBranch; refusing stale DEV startup." }
+    $head = (& git -C $Path rev-parse HEAD 2>$null).Trim()
+    $remoteHead = (& git -C $Path rev-parse "origin/$defaultBranch" 2>$null).Trim()
+    if ($LASTEXITCODE -ne 0 -or $head -ne $remoteHead) {
+        throw "$Label is not exactly synchronized with origin/$defaultBranch. Update it and retry. No services or ports were changed."
+    }
+}
+
 function Stop-PortListener([int]$Port) {
     $listeners = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue
     foreach ($ownerPid in @($listeners | Select-Object -ExpandProperty OwningProcess -Unique)) {
@@ -247,7 +293,20 @@ function Start-DevelopmentServer {
     return @{ Name = $Name; Process = $process; Port = $Port; Color = $Color; LogFile = $logFile }
 }
 
+Assert-DevCheckout
+if (-not $NoFrontend) { Assert-DefaultBranchCheckout -Path $storefrontRoot -Label 'FlipFlop.shop storefront' }
 Assert-DevelopmentPrerequisites
+$sourceBranch = (& git -C $projectRoot branch --show-current 2>$null).Trim()
+$sourceCommit = (& git -C $projectRoot rev-parse HEAD 2>$null).Trim()
+if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($sourceCommit)) {
+    throw 'Could not determine the validated source commit for this DEV checkout.'
+}
+$env:FLIPFLOP_SOURCE_COMMIT = $sourceCommit
+$env:FLIPFLOP_SOURCE_BRANCH = $sourceBranch
+$env:FLIPFLOP_SOURCE_DIRTY = 'false'
+$env:NEXT_PUBLIC_SOURCE_COMMIT = $sourceCommit
+$env:NEXT_PUBLIC_SOURCE_BRANCH = $sourceBranch
+$env:NEXT_PUBLIC_SOURCE_DIRTY = 'false'
 
 if ($CheckOnly) {
     Write-Host '[OK] Development launcher syntax and prerequisites are valid.' -ForegroundColor Green
@@ -300,39 +359,7 @@ $env:OLLAMA_BASE_URL = $ollamaBaseUrl
 $env:OLLAMA_MODEL = $ollamaModel
 Warm-OllamaModel -BaseUrl $ollamaBaseUrl -Model $ollamaModel
 
-# Report the exact source served by each local process without blocking startup
-# based on branch name. A clean local dev branch safely fast-forwards first.
-$sourceBranch = (& git -C $projectRoot branch --show-current 2>$null).Trim()
-if ($sourceBranch -eq 'dev') {
-    $worktreeChanges = @(& git -C $projectRoot status --porcelain 2>$null)
-    if ($LASTEXITCODE -eq 0 -and $worktreeChanges.Count -eq 0) {
-        try {
-            & git -C $projectRoot fetch --quiet origin dev:refs/remotes/origin/dev
-            if ($LASTEXITCODE -eq 0) {
-                & git -C $projectRoot merge --ff-only origin/dev
-                if ($LASTEXITCODE -ne 0) { Write-Warning 'Local dev and origin/dev have diverged; starting the current checkout.' }
-            } else {
-                Write-Warning 'Could not refresh origin/dev; starting the current checkout.'
-            }
-        } catch {
-            Write-Warning "Could not fast-forward local dev: $($_.Exception.Message). Starting the current checkout."
-        }
-    } elseif ($worktreeChanges.Count -gt 0) {
-        Write-Warning 'Local dev has uncommitted changes; leaving them intact and starting the current checkout.'
-    }
-}
-$sourceCommit = (& git -C $projectRoot rev-parse HEAD 2>$null).Trim()
-if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($sourceCommit)) {
-    throw 'Could not determine the source commit for this development checkout.'
-}
-$sourceDirty = @(& git -C $projectRoot status --porcelain 2>$null).Count -gt 0
-$env:FLIPFLOP_SOURCE_COMMIT = $sourceCommit
-$env:FLIPFLOP_SOURCE_BRANCH = if ($sourceBranch) { $sourceBranch } else { 'detached' }
-$env:FLIPFLOP_SOURCE_DIRTY = $sourceDirty.ToString().ToLowerInvariant()
-$env:NEXT_PUBLIC_SOURCE_COMMIT = $sourceCommit
-$env:NEXT_PUBLIC_SOURCE_BRANCH = $env:FLIPFLOP_SOURCE_BRANCH
-$env:NEXT_PUBLIC_SOURCE_DIRTY = $env:FLIPFLOP_SOURCE_DIRTY
-Write-Host "[*] Starting source $($env:FLIPFLOP_SOURCE_BRANCH)@$sourceCommit$(if ($sourceDirty) { ' (dirty worktree)' })" -ForegroundColor Cyan
+Write-Host "[*] Starting source $($env:FLIPFLOP_SOURCE_BRANCH)@$sourceCommit (clean DEV source)" -ForegroundColor Cyan
 
 $servers = @()
 $apiUrl = 'http://127.0.0.1:4311'
