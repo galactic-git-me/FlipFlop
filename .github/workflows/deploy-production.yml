@@ -59,6 +59,7 @@ jobs:
           exit 1
       - name: Verify release tag is on main
         id: release
+        working-directory: .
         env:
           RELEASE_TAG: ${{ inputs.tag }}
         run: |
