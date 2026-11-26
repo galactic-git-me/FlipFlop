@@ -59,6 +59,7 @@ jobs:
           exit 1
       - name: Verify release tag is on main
         id: release
+        working-directory: .
         env:
           RELEASE_TAG: ${{ inputs.tag }}
         run: |
@@ -69,6 +70,7 @@ jobs:
             echo "Release tag $RELEASE_TAG is not reachable from origin/main." >&2
             exit 1
           }
+          bash scripts/verify-dev-source-parity.sh origin/dev "$RELEASE_TAG"
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
       - name: Require a production pull request with passing DEV parity
         id: dev_promotion
