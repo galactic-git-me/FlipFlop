@@ -237,6 +237,10 @@ def serialize_account(row: SocialAccount) -> dict:
             else "Assisted publication"
             if row.capability == "assisted"
             else "Analytics-only"
+            if row.capability == "analytics_only"
+            else "Live API publisher available"
+            if row.platform in LIVE_PUBLISHER_PLATFORMS
+            else "No live publisher adapter registered"
         ),
     }
 
@@ -652,16 +656,19 @@ async def create_tracking_link(
 
 def tracked_url(link: TrackingLink) -> str:
     parsed = urlparse(link.destination_url)
-    query = dict(parse_qsl(parsed.query, keep_blank_values=True))
-    query.update(
-        {
-            "utm_source": link.utm_source,
-            "utm_medium": link.utm_medium,
-            "utm_campaign": link.utm_campaign,
-            "utm_content": link.utm_content or link.slug,
-        }
-    )
-    return urlunparse(parsed._replace(query=urlencode(query)))
+    tracking = {
+        "utm_source": link.utm_source,
+        "utm_medium": link.utm_medium,
+        "utm_campaign": link.utm_campaign,
+        "utm_content": link.utm_content or link.slug,
+    }
+    query = [
+        (key, value)
+        for key, value in parse_qsl(parsed.query, keep_blank_values=True)
+        if key not in tracking
+    ]
+    query.extend(tracking.items())
+    return urlunparse(parsed._replace(query=urlencode(query, doseq=True)))
 
 
 async def ingest_website_event(db: AsyncSession, payload: dict) -> AnalyticsEvent:

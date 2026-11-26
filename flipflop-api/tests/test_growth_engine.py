@@ -1,6 +1,7 @@
 """Growth Engine Marketing MVP: publishing, approvals, flags, analytics."""
 import pytest
 from sqlalchemy import select
+from urllib.parse import parse_qsl, urlparse
 
 from app.models.growth import ContentAsset, SocialAccount, SocialPublication, SocialPost, SocialPostRevision
 from app.models.product import Product, ProductStatus, ProductType
@@ -13,8 +14,9 @@ from app.services import growth_social as social
 async def test_fixture_publisher_is_idempotent():
     first = publish_fixture(platform="x", account_id=1, copy="hello", idempotency_key="post:1:rev:1:x")
     second = publish_fixture(platform="x", account_id=1, copy="hello again", idempotency_key="post:1:rev:1:x")
-    assert first["provider_post_id"] == second["provider_post_id"]
-    assert first["status"] == "published"
+    assert first["simulation_id"] == second["simulation_id"]
+    assert first["status"] == "simulated"
+    assert first["provider_post_id"] == ""
 
 
 @pytest.mark.asyncio
@@ -139,3 +141,21 @@ async def test_website_analytics_ingestion(db):
     assert summary["website_events"] == 1
     assert summary["website_sessions"] == 1
     assert "Organic" in summary["label"]
+
+
+@pytest.mark.asyncio
+async def test_tracking_link_preserves_repeated_query_values_and_fragment(db):
+    link = await social.create_tracking_link(
+        db,
+        destination_url="https://www.theflipflop.shop/ready-to-ship/1?keep=first&keep=second&utm_source=old#specs",
+        campaign="build-launch-1",
+        content="build-1-variant-a",
+    )
+
+    tracked = urlparse(social.tracked_url(link))
+    params = parse_qsl(tracked.query, keep_blank_values=True)
+
+    assert [value for key, value in params if key == "keep"] == ["first", "second"]
+    assert dict(params)["utm_campaign"] == "build-launch-1"
+    assert dict(params)["utm_content"] == "build-1-variant-a"
+    assert tracked.fragment == "specs"

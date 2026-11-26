@@ -9,6 +9,19 @@ Finish the quickest useful Release 1 vertical slice using the existing Growth En
 
 Do not implement paid spend, newsletter sends, automated blog generation, replies, or later-release experiences in Release 1. Do not enable a live publisher until account, credentials, API permissions, provider review, and safe retry/reconciliation are verified. No publishing or provider calls in automated tests.
 
+## Progress (2026-11-26)
+
+Implemented in the first approved slice:
+
+- Growth administration/read/write routes now require admin authentication; public storefront event ingestion and tracked redirects remain public.
+- A global dispatch pause record and authenticated control were added. The migration seeds it paused, and the due-post worker checks it.
+- Fixture outcomes are reported as simulations, not publications. Synthetic engagement snapshots were removed from dispatch.
+- Successful Ready-to-Ship storefront listing creates one factual, UTM-tracked Facebook and Instagram draft per canonical build/product launch in the listing transaction. Replays deduplicate by source reference and lock the product row.
+- Reused hero imagery starts unapproved for social use; the admin can approve the asset before submitting the draft for review.
+- The admin shows fixture/not-configured accounts, pause state, and an explicit GA4-not-configured message. Dispatch cannot resume from the UI without a verified adapter.
+
+Validation passed: Python syntax compilation, focused admin ESLint, admin TypeScript check, Alembic head discovery, and targeted PostgreSQL SQL generation for the dispatch migration. API tests were not run because the isolated runner requires `FLIPFLOP_TEST_ADMIN_DATABASE_URL`, which is unset. No live provider, database migration, or production action was performed.
+
 ## Critical path
 
 1. **Approval and decisions.** Approve this audit/plan; resolve the route, Meta accounts, GA4 access, image-fallback approval, posting windows/limits and approval expiry decisions documented in the audit.
