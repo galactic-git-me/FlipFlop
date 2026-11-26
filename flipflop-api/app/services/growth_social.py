@@ -50,6 +50,32 @@ DEFAULT_ACCOUNTS = (
     ("x", "FlipFlop on X", "@theflipflop"),
 )
 
+# Campaign creative already prepared and reviewed in the repository. These URLs
+# are served by the API's existing read-only /api/builds static mount.
+PROMETHEUS_CAMPAIGN_ASSETS = (
+    {
+        "kind": "image",
+        "title": "Prometheus Black Friday · Meta feed",
+        "url": "/api/builds/002/social-ad/platform-previews/assets/meta-feed-1080x1350.png",
+        "alt_text": "FlipFlop Prometheus gaming PC Black Friday portrait advert",
+        "provenance": "User-requested Prometheus campaign creative; builds/002/social-ad/platform-previews/assets/meta-feed-1080x1350.png",
+    },
+    {
+        "kind": "image",
+        "title": "Prometheus Black Friday · X feed",
+        "url": "/api/builds/002/social-ad/platform-previews/assets/x-feed-1200x628.png",
+        "alt_text": "FlipFlop Prometheus gaming PC Black Friday wide advert",
+        "provenance": "User-requested Prometheus campaign creative; builds/002/social-ad/platform-previews/assets/x-feed-1200x628.png",
+    },
+    {
+        "kind": "video",
+        "title": "Prometheus Black Friday · vertical showcase",
+        "url": "/api/builds/002/social-ad/platform-previews/assets/vertical-1080x1920.mp4",
+        "alt_text": "Animated vertical showcase of the Prometheus gaming PC",
+        "provenance": "User-requested Prometheus campaign creative; builds/002/social-ad/platform-previews/assets/vertical-1080x1920.mp4",
+    },
+)
+
 
 def _now() -> datetime:
     return datetime.utcnow()
@@ -95,6 +121,10 @@ async def ensure_seed(db: AsyncSession) -> None:
                 provenance="Owned FlipFlop brand asset",
             )
         )
+    existing_urls = {asset.url for asset in assets}
+    for asset in PROMETHEUS_CAMPAIGN_ASSETS:
+        if asset["url"] not in existing_urls:
+            db.add(ContentAsset(**asset, approved=True))
     await db.flush()
 
 

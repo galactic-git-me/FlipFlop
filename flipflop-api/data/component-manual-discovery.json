@@ -592,5 +592,95 @@
     "reason": "no_exact_official_pdf",
     "component": "Lian Li DAN Cases B4 Wood Edition Micro-ATX PC Case, Walnut/Black | 21.3L SFF chassis, 358mm 4-slot GPU, ATX/SFX PSU, 360mm A",
     "retry_after": "2026-12-25T17:59:13.248756"
+  },
+  "8941e5b888fcd40eb8bc1b48eee07212663488a502435e342bb73099b3209f0e": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "AMD Wraith Stealth Socket AM4 4-Pin Connector CPU Cooler with Aluminum Heatsink & 3.93-Inch Fan (Slim)",
+    "retry_after": "2026-12-25T19:34:28.244811"
+  },
+  "0ed06ef77d97318b47b24890cb2524cff4a5d159ec60796a859bfb12dcd6397c": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Thermalright Assassin X120 Refined SE CPU Air Cooler, 4 Heatpipes, TL-C12C PWM Fan, for AMD AM4/AM5 Intel 1700/1150/1151/1200",
+    "retry_after": "2026-12-25T19:34:28.244811"
+  },
+  "7960e7e625eaaf43011a18806c0de01b86c9acc9583c2f485d85193b5b4faaa6": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ARCTIC Liquid Freezer III Pro 360 A-RGB - AIO CPU Cooler, 3 x 120 mm Water Cooling, 38 mm Radiator, PWM Pump, VRM Fan, AMD AM",
+    "retry_after": "2026-12-25T19:34:28.244811"
+  },
+  "d63e424106bf010ab3bb556469e68f072d4bfff3126131d44030f74e8b14e8f4": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ARCTIC Liquid Freezer III Pro 360 - AIO CPU Cooler, 3 x 120 mm Water Cooling, 38 mm Radiator, PWM Pump, VRM Fan, AMD AM5/AM4,",
+    "retry_after": "2026-12-25T21:39:47.914380"
+  },
+  "f638b731e995ad0e554b8eb870b1772cffa8484615595fbf2b95ece45b1456b3": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Corsair NAUTILUS 360 RS LCD Liquid CPU Cooler \u2013 2.1\" IPS LCD Screen, 360mm AIO, Low-Noise, Daisy-Chain, Intel LGA 1851/1700,",
+    "retry_after": "2026-12-25T21:39:47.914380"
+  },
+  "b97fde3ab832d9da6ed8c57002f5a7af3afaa16985f2854148495801f7262314": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzensets 7 7800X3D Processor with 3D V Cache technology (integrated Radeon Graphics, 8 cores/16 threads, 120W TDP, AM5 S",
+    "retry_after": "2026-12-25T21:39:47.914380"
+  },
+  "38489795df22e315a1ba910b41f254847791261c826c0143a7cf6cb82424d193": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzensets 7 9700X Processor (8 Cores/16 Threads) 65W DTP, AM5 socket, 40MB Cache, Up to 5.5 GHz max boost frequency, no c",
+    "retry_after": "2026-12-26T01:08:59.266003"
+  },
+  "22534304d489fd333bfbcae53694c70dd2a0c3442734a76167bbb39d831818ff": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzensets 9 9950X Processor (integrated radeon graphics, 16 Cores/32 Threads, 170 W DTP, AM5 Socket, 80MB Cache, Up to 5.",
+    "retry_after": "2026-12-26T01:08:59.266003"
+  },
+  "5fb6b3fa8bf6454698c96fc72d56f2a76fb4d36cf51392824cdc28c31f8bd73a": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD RYZEN \u2122 7 9800X 3D Desktop Processor (8-core/16-thread, 104MB cache, up to 5.2 GHz max boost)",
+    "retry_after": "2026-12-26T01:08:59.266003"
+  },
+  "7a0083e9940ada4b9ff5b98ea45e17c29824637c39a7e6c8bf5b30e4d5d7a4e4": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD RYZEN\u2122 7 9850X3D",
+    "retry_after": "2026-12-26T03:35:40.004322"
+  },
+  "92f8c498f9a10d809889042cedc9b7d375146a66ef54220f64f5045043c1b3b2": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Intel Core Ultra 5 Processor 250K Plus, up to 5.3 GHz, LGA1851 Socket, PCIe 5.0, DDR5 Support, 125W TDP",
+    "retry_after": "2026-12-26T03:35:40.004322"
+  },
+  "690b4dd5c5c5723cec807a2f1a72a1b808a0c4e67ed45e061f47e4bfccfbcc7a": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Intel Core Ultra 7 Processor 270K Plus, up to 5.5 GHz, LGA1851 Socket, PCIe 5.0, DDR5 Support, 125W TDP",
+    "retry_after": "2026-12-26T03:35:40.004322"
+  },
+  "3486cb557f56be91904a6b6d141c062c4146b5b857fc4dcf0d47eb7a3359d607": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzen 7 5800X3D Processeur 10TH ANNIVERSARY (8 Cores/16 Threads, Socket AM4, 105W TDP, 100 Mo Cache, up to 4.5 GHz Freque",
+    "retry_after": "2026-12-26T06:53:16.067428"
+  },
+  "2deb93162c8ce57feaf50cbef0694c02802512bf3820fe18454d299f23f9ecf6": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ASUS Prime Radeon RX 9070 XT White OC Edition 16GB GDDR6 Gaming Graphics Card (AMD Radeon RX9070XT RDNA 4, 2.5-Slot, PCIe 5.0",
+    "retry_after": "2026-12-26T06:53:16.067428"
+  },
+  "893f2356d0a362fc17f8f133678323c8c0c4715a034a7ff89ee74e43e8f2599f": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Gigabyte GeForce RTX 5080 GAMING OC 16G Graphics Card - 16GB GDDR7, 256bit, PCI-E 5.0, 2730MHz Core Clock, 3 x DisplayPort, 1",
+    "retry_after": "2026-12-26T06:53:16.067428"
   }
 }
