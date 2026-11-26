@@ -6024,6 +6024,7 @@ async def list_on_storefront(
         product_result = await db.execute(select(Product).where(Product.id == build.storefront_product_id))
         product = product_result.scalar_one_or_none()
         if product:
+            was_listed = product.status == ProductStatus.LISTED
             product.price = body.price
             product.status = ProductStatus.LISTED
             product.hero_photo_url = build.hero_photo_url
@@ -6043,6 +6044,9 @@ async def list_on_storefront(
             await db.flush()
             from app.services.channel_listing_identity import save_confirmed_identity
             await save_confirmed_identity(db, build, "flipflop_shop", product.id, f"https://www.theflipflop.shop/ready-to-ship/{product.id}")
+            if not was_listed:
+                from app.services.growth_social import create_build_launch_drafts
+                await create_build_launch_drafts(db, product, build_id=product.build_id or build.id)
             return ListOnStorefrontResult(product_id=product.id, build_id=product.build_id, storefront_url=f"/ready-to-ship/{product.id}")
 
     orchestration_build = Build(
@@ -6085,6 +6089,8 @@ async def list_on_storefront(
 
     from app.services.channel_listing_identity import save_confirmed_identity
     await save_confirmed_identity(db, build, "flipflop_shop", product.id, f"https://www.theflipflop.shop/ready-to-ship/{product.id}")
+    from app.services.growth_social import create_build_launch_drafts
+    await create_build_launch_drafts(db, product, build_id=orchestration_build.id)
     return ListOnStorefrontResult(product_id=product.id, build_id=orchestration_build.id, storefront_url=f"/ready-to-ship/{product.id}")
 
 
@@ -6119,7 +6125,6 @@ async def withdraw_from_storefront(build_id: int, body: WithdrawStorefrontReques
     product.status = ProductStatus.WITHDRAWN
     product.updated_at = now
     product.reserved_until = None
-    product.checkout_addresses = None
 
     listing_result = await db.execute(
         select(ProductListing).where(

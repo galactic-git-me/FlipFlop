@@ -54,6 +54,18 @@ class GrowthReleaseConfiguration(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
+class GrowthDispatchControl(Base):
+    """Singleton operational kill switch checked by every publisher worker."""
+
+    __tablename__ = "growth_dispatch_control"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    is_paused: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    reason: Mapped[str] = mapped_column(String(500), default="", nullable=False)
+    updated_by: Mapped[str] = mapped_column(String(120), default="system", nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+
+
 class SocialAccount(Base):
     __tablename__ = "growth_social_accounts"
 

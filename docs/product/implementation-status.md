@@ -17,6 +17,32 @@ The Build Studio evaluation now uses FlipFlop's deterministic compatibility serv
 
 Implemented in source; runtime, live price coverage and the initial full manual backfill are not yet verified. The GitHub `PCPartsCompatibilityProgram` repository is a 2019 Expo prototype with a CPU specification table and scraper scripts, but no compatibility engine; no unlicensed source code was copied. The service uses FlipFlop's reviewed engineering records and explicit product rules instead.
 
+### Prometheus campaign handoff in Growth Engine — 25 November 2026
+
+The Advertising & Growth page can create tracked Facebook, Instagram and X social
+drafts from the prepared Prometheus Black Friday artwork and platform copy, with
+either the direct-shop or exact eBay listing as destination. The creative and
+listing links are visible in the campaign card; duplicate drafts for the same
+platform/destination are prevented in the page. A reminder requires checking
+the reference price, offer prices, stock and delivery terms before approval.
+
+Implemented in source; admin build/runtime and end-to-end draft persistence are
+not yet verified. This does not enable paid advertising or establish live social
+publishing: the configured social adapters remain fixture/assisted, and the paid
+acquisition release, real provider connectors, spend controls and profitability
+approval are still gated. The page disables the publish action when no full API
+publisher is connected. No external post or ad was created.
+
+### Manual storefront withdrawal from Live Builds — 26 November 2026
+
+Live Builds now offers a confirmed FlipFlop.shop unpublish action for active
+storefront listings. It withdraws the canonical product and active storefront
+listing records, disables storefront relisting, and records the operator reason
+in the channel listing audit. Sold products and active or indeterminate checkout
+reservations are blocked. Other sales channels and the build's sold state are
+left unchanged. Admin UI/runtime and database-backed withdrawal behaviour have
+not yet been verified.
+
 ### Capability-led Playbook model — 22 October 2026
 
 **Planned runtime migration; draft specification artifacts updated.** The owner approved customer use

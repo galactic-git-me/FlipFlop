@@ -57,9 +57,14 @@ def client(test_db):
     return TestClient(app)
 
 
-async def _create_listing(session_factory, *, status=ProductStatus.LISTED, reserved_until=None):
+async def _create_listing(session_factory, *, status=ProductStatus.LISTED, reserved_until=None, checkout_addresses=None):
     async with session_factory() as session:
-        product = Product(product_type=ProductType.PREBUILT, status=status, reserved_until=reserved_until)
+        product = Product(
+            product_type=ProductType.PREBUILT,
+            status=status,
+            reserved_until=reserved_until,
+            checkout_addresses=checkout_addresses,
+        )
         session.add(product)
         await session.flush()
         build = ManualBuild(name="Test PC", status="listed", storefront_product_id=product.id)
@@ -129,3 +134,28 @@ async def test_withdraw_storefront_rejects_sold_and_reserved_products(client, te
 
     assert sold_response.status_code == 409
     assert reserved_response.status_code == 409
+
+
+@pytest.mark.asyncio
+async def test_withdraw_expired_reservation_preserves_checkout_address_snapshot(client, test_db):
+    addresses = {
+        "delivery": {"contact_name": "Example Buyer", "line1": "1 Example Road"},
+        "billing": {"line1": "2 Example Road"},
+    }
+    build_id, product_id = await _create_listing(
+        test_db,
+        status=ProductStatus.RESERVED,
+        reserved_until=datetime.utcnow() - timedelta(minutes=5),
+        checkout_addresses=addresses,
+    )
+
+    response = client.post(
+        f"/api/manual-builds/{build_id}/withdraw-storefront",
+        json={"reason": "Unpublished after checkout expired"},
+    )
+
+    assert response.status_code == 200
+    async with test_db() as session:
+        product = await session.get(Product, product_id)
+    assert product.status == ProductStatus.WITHDRAWN
+    assert product.checkout_addresses == addresses
