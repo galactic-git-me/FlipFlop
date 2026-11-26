@@ -11,7 +11,7 @@ The repository contains a Growth Engine MVP foundation: an admin Advertising & G
 
 The initial approved Release 1 slice now connects successful Ready-to-Ship listing to idempotent Facebook/Instagram review drafts, with tracked product URLs and an explicit social-image approval step. A default-paused dispatch control is enforced by the worker. The fixture path cannot create a live publication or fabricated metrics. Rotation, full current-data revalidation, real social adapters, and GA4 reporting/configuration remain outstanding.
 
-The source PRD §32 required this audit, plan, and tracker before implementation. The owner approved proceeding on 2026-11-26. The first implementation slice now adds authenticated Growth API boundaries, a default-paused dispatch control, fail-safe fixture behavior, and listing-triggered review drafts; later acceptance work remains in progress. The superseded marketing PRD and implementation prompt are retained unchanged.
+The source PRD §32 required this audit, plan, and tracker before implementation. The owner approved proceeding on 2026-11-26. The first implementation slice now adds authenticated Growth API boundaries, a default-paused dispatch control, fail-safe fixture behavior, listing-triggered review drafts, and an explicit admin action to approve reused storefront imagery for social use; later acceptance work remains in progress. Targeted static checks passed. The API integration tests were authored but not run because `FLIPFLOP_TEST_ADMIN_DATABASE_URL` is unset. The superseded marketing PRD and implementation prompt are retained unchanged.
 
 ## Repository and change safety
 
@@ -31,16 +31,16 @@ The source PRD §32 required this audit, plan, and tracker before implementation
 
 | Area | Evidence observed | Audit conclusion |
 |---|---|---|
-| Admin entry | Sidebar item and `/advertising-growth` page exist | Existing, but navigation and screen need Release 1 UX completion and route decision |
+| Admin entry | Sidebar item and `/advertising-growth` page exist; Growth routes now require authenticated admin access | Existing, but navigation and screen need Release 1 UX completion and route decision |
 | Social account state | `SocialAccount`, API account listing, admin disable/verified-enable endpoint, fixture status, and profile cards | Fixture accounts are reported not configured; live OAuth setup and provider health check are not implemented |
-| Drafts and approval | `SocialPost`, immutable revision rows, approval requests, edit invalidation and tests | Useful foundation; exact revision approval exists in the local workflow, but authentication/authorization and production policy need end-to-end verification |
+| Drafts and approval | `SocialPost`, immutable revision rows, approval requests, edit invalidation and tests; Growth admin operations require admin authentication | Useful foundation; exact revision approval exists in the local workflow, but authentication/authorization and production policy need end-to-end verification |
 | Publishing | Fixture outcomes are explicitly simulated; `LIVE_PUBLISHER_PLATFORMS` is empty and the UI requires an available adapter | No live publication capability verified; external publishing remains disabled |
 | Scheduling | Due-post worker publishes `scheduled` rows after approval | Local scheduler path exists; durable queue guarantees, locking/race behavior and live provider reconciliation are not demonstrated by reviewed evidence |
-| Events | `/growth/analytics/events` stores website analytics events; the storefront listing flow calls `create_build_launch_drafts` in the listing transaction | Storefront new-listing hook creates idempotent drafts; no general outbox, replay reconciliation, marketplace-wide event intake, or promotion event hook |
+| Events | `/growth/analytics/events` stores website analytics events; successful first-time storefront listing calls `create_build_launch_drafts` in the listing transaction | Listing hook creates factual, tracked, revision-keyed and replay-idempotent drafts; no general outbox, restart reconciliation, marketplace-wide event intake, or promotion event hook |
 | Tracking | Tracking link table, slug endpoint, UTM redirect preserving existing query parameters | Core UTM redirect exists; build/template/creative opaque IDs and policy validation are not shown in its current fields/API |
 | Analytics | First-party event counts; fixture synthetic snapshots were removed from dispatch | GA4 reporting/configuration remains absent; fixture metrics must not be interpreted as observed provider metrics |
 | Rotation | No rotation/collection model or scheduler found in targeted Growth Engine files | Missing from reviewed Growth Engine implementation |
-| Release gates | `GrowthReleaseConfiguration`, enabled capability list and roadmap; `GrowthDispatchControl` defaults paused | Global pause is implemented; per-channel/per-workflow pause, frequency controls, and current-data dispatch gates remain |
+| Release gates | `GrowthReleaseConfiguration`, enabled capability list and roadmap; migration seeds `GrowthDispatchControl` paused and the worker checks it | Global pause is implemented; per-channel/per-workflow pause, frequency controls, current-data dispatch gates and concurrency acceptance evidence remain |
 | Later releases | Models explicitly defer paid ads, blog, newsletter and related capabilities | PRD1.1 correctly keeps them non-operational in Release 1 |
 | Production | No provider credentials/account calls, deployed runtime, or external delivery checks performed | Production readiness and connected status are unknown; no live claims made |
 
@@ -62,7 +62,7 @@ No OpenAI/ChatGPT API access or renderer choice is inferred from a subscription.
 
 ## Status methodology and counts
 
-The progress tracker decomposes acceptance criteria A01–A37 into 108 stable atomic rows. Statuses use the mutually exclusive PRD vocabulary. **COMPLETE means verified against the PRD by current evidence**; an implementation with unrun tests is IMPLEMENTED–UNVERIFIED or PARTIAL. A fixture test does not prove a real integration. Owner approval was received on 2026-11-26; implementation is underway.
+The progress tracker decomposes acceptance criteria A01–A37 into 108 stable atomic rows. Statuses use the mutually exclusive PRD vocabulary. **COMPLETE means verified against the PRD by current evidence**; an implementation with unrun tests is IMPLEMENTED–UNVERIFIED or PARTIAL. A fixture test does not prove a real integration. Owner approval was received on 2026-11-26; the approved first implementation slice is complete at source level, and acceptance validation remains in progress.
 
 - Applicable atomic acceptance requirements: 108
 - COMPLETE (verified): 6 (tracker uniqueness/count audit and approval-gate criteria)
@@ -87,6 +87,6 @@ Owner approval for this plan was received on 2026-11-26. Conservative defaults f
 4. Confirm Release 1 image fallback is allowed only after explicit per-draft approval while the video pipeline is unavailable.
 5. Confirm initial posting windows/frequency limits and approval expiry policy, or authorize conservative disabled-by-default settings pending configuration.
 
-Owner approval has been received. Continue with the proposed first-party and fixture-safe work; real provider publishing and GA4 reporting remain disabled until account credentials and provider feasibility are verified.
+Owner approval has been received. The first-party and fixture-safe slice described above is implemented. Continue with the remaining approved plan; real provider publishing and GA4 reporting remain disabled until account credentials and provider feasibility are verified.
 
 
