@@ -6125,7 +6125,6 @@ async def withdraw_from_storefront(build_id: int, body: WithdrawStorefrontReques
     product.status = ProductStatus.WITHDRAWN
     product.updated_at = now
     product.reserved_until = None
-    product.checkout_addresses = None
 
     listing_result = await db.execute(
         select(ProductListing).where(
