@@ -166,7 +166,11 @@ async def list_assets(db: AsyncSession) -> list[dict]:
 
 async def create_build_launch_drafts(db: AsyncSession, product, *, build_id: int) -> list[SocialPost]:
     """Create idempotent, approval-required drafts for a newly listed build."""
-    from app.models.product import ProductStatus, ProductType
+    from app.models.product import Product, ProductStatus, ProductType
+
+    product = (await db.execute(select(Product).where(Product.id == product.id).with_for_update())).scalar_one_or_none()
+    if product is None:
+        return []
 
     if product.product_type != ProductType.PREBUILT or product.status != ProductStatus.LISTED:
         return []

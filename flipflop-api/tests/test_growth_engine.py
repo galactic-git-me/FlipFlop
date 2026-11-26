@@ -2,7 +2,7 @@
 import pytest
 from sqlalchemy import select
 
-from app.models.growth import SocialPublication, SocialPost, SocialPostRevision
+from app.models.growth import SocialAccount, SocialPublication, SocialPost, SocialPostRevision
 from app.models.product import Product, ProductStatus, ProductType
 from app.services.growth_connectors import publish_fixture
 from app.services.growth_release import FeatureNotEnabled, get_active_release, require_capability
@@ -30,6 +30,9 @@ async def test_release_enables_mvp_and_blocks_paid(db):
 async def test_post_approve_publish_and_duplicate_retry(db):
     await social.ensure_seed(db)
     await social.set_dispatch_pause(db, paused=False, actor="owner")
+    accounts = (await db.execute(select(SocialAccount))).scalars().all()
+    for account in accounts:
+        account.status = "connected"
     post = await social.create_post(
         db,
         {
