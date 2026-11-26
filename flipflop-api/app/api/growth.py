@@ -60,33 +60,33 @@ async def posts(db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/social/posts", status_code=201, dependencies=[Depends(get_current_admin)])
-async def create_post(payload: dict[str, Any], db: AsyncSession = Depends(get_db)):
+async def create_post(payload: dict[str, Any], admin: AdminUser = Depends(get_current_admin), db: AsyncSession = Depends(get_db)):
     try:
-        post = await social.create_post(db, payload, actor=str(payload.get("actor") or "owner"))
+        post = await social.create_post(db, payload, actor=admin.email)
         return await _serialize_post(db, post)
     except Exception as exc:
         raise _error(exc) from exc
 
 
 @router.patch("/social/posts/{post_id}", dependencies=[Depends(get_current_admin)])
-async def revise_post(post_id: int, payload: dict[str, Any], db: AsyncSession = Depends(get_db)):
+async def revise_post(post_id: int, payload: dict[str, Any], admin: AdminUser = Depends(get_current_admin), db: AsyncSession = Depends(get_db)):
     post = await db.get(SocialPost, post_id)
     if not post:
         raise HTTPException(404, "Social post not found")
     try:
-        post = await social.revise_post(db, post, payload, actor=str(payload.get("actor") or "owner"))
+        post = await social.revise_post(db, post, payload, actor=admin.email)
         return await _serialize_post(db, post)
     except Exception as exc:
         raise _error(exc) from exc
 
 
 @router.post("/social/posts/{post_id}/submit", dependencies=[Depends(get_current_admin)])
-async def submit_post(post_id: int, payload: dict[str, Any] | None = None, db: AsyncSession = Depends(get_db)):
+async def submit_post(post_id: int, payload: dict[str, Any] | None = None, admin: AdminUser = Depends(get_current_admin), db: AsyncSession = Depends(get_db)):
     post = await db.get(SocialPost, post_id)
     if not post:
         raise HTTPException(404, "Social post not found")
     try:
-        post = await social.submit_for_review(db, post, actor=str((payload or {}).get("actor") or "owner"))
+        post = await social.submit_for_review(db, post, actor=admin.email)
         return await _serialize_post(db, post)
     except Exception as exc:
         raise _error(exc) from exc
@@ -105,12 +105,12 @@ async def decide_post(post_id: int, payload: dict[str, Any], admin: AdminUser = 
 
 
 @router.post("/social/posts/{post_id}/execute", dependencies=[Depends(get_current_admin)])
-async def execute_post(post_id: int, payload: dict[str, Any] | None = None, db: AsyncSession = Depends(get_db)):
+async def execute_post(post_id: int, payload: dict[str, Any] | None = None, admin: AdminUser = Depends(get_current_admin), db: AsyncSession = Depends(get_db)):
     post = await db.get(SocialPost, post_id)
     if not post:
         raise HTTPException(404, "Social post not found")
     try:
-        post = await social.schedule_or_publish(db, post, actor=str((payload or {}).get("actor") or "owner"))
+        post = await social.schedule_or_publish(db, post, actor=admin.email)
         return await _serialize_post(db, post)
     except Exception as exc:
         raise _error(exc) from exc

@@ -15,13 +15,14 @@ type Post = {
   revision?: { copy: string; media_asset_ids: number[]; link_url: string };
 };
 type ContentAsset = { id: number; kind: string; title: string; url: string; approved: boolean };
-type Account = { platform: string; health: string; status: string; capability: string };
+type Account = { id: number; platform: string; health: string; status: string; capability: string };
 type Centre = {
   approvals_pending: number;
   drafts: number;
   scheduled_today: number;
   published: number;
   account_health: Account[];
+  dispatch_control: { is_paused: boolean; reason: string; updated_by: string; updated_at: string | null };
   analytics: { website_sessions: number; utm_visits: number; freshness: string | null };
 };
 
@@ -81,6 +82,7 @@ export default function AdvertisingGrowthPage() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [working, setWorking] = useState<string | null>(null);
+  const [pauseWorking, setPauseWorking] = useState(false);
 
   const load = async () => {
     setLoading(true);
@@ -140,6 +142,22 @@ export default function AdvertisingGrowthPage() {
     catch (error) { setMessage(error instanceof Error ? error.message : "Action failed"); }
   }
 
+  async function setGlobalPause(paused: boolean) {
+    setPauseWorking(true);
+    try {
+      await growth("/dispatch-control", {
+        method: "POST",
+        body: JSON.stringify({ is_paused: paused, reason: paused ? "Paused by operator" : "" }),
+      });
+      setMessage(paused ? "Publishing paused. Scheduled drafts remain queued." : "Publishing resumed. Only approved posts can be dispatched.");
+      await load();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Could not update publishing pause");
+    } finally {
+      setPauseWorking(false);
+    }
+  }
+
   const creativeByTitle = useMemo(() => new Map(assets.map(asset => [asset.title, asset])), [assets]);
   const cards = centre ? [
     ["Awaiting approval", centre.approvals_pending], ["Drafts", centre.drafts], ["Scheduled today", centre.scheduled_today], ["Published", centre.published], ["Website sessions", centre.analytics.website_sessions], ["UTM visits", centre.analytics.utm_visits],
@@ -158,7 +176,13 @@ export default function AdvertisingGrowthPage() {
     </section>
     {message && <p role="status" className="rounded-md border border-cyan-300/20 bg-cyan-300/5 px-3 py-2 text-sm text-cyan-100">{message}</p>}
     {publishHint && <section className="rounded-xl border border-amber-300/30 bg-amber-950/30 p-4" role="status"><h2 className="flex items-center gap-2 font-semibold text-amber-100"><ShieldCheck className="h-4 w-4" />Live publishing is not connected</h2><p className="mt-1 text-sm text-amber-100/80">Drafts and review are available here. The configured social adapters are fixtures or assisted workflows, so this page will not present them as live provider publishing. Paid advertising also remains gated until an approved ad-account connector is configured.</p></section>}
+    {centre && <section className={`flex flex-col gap-3 rounded-xl border p-4 sm:flex-row sm:items-center sm:justify-between ${centre.dispatch_control.is_paused ? "border-amber-300/30 bg-amber-950/30" : "border-emerald-300/30 bg-emerald-950/20"}`} aria-live="polite">
+      <div><h2 className="font-semibold">{centre.dispatch_control.is_paused ? "Publishing paused" : "Publishing gate open"}</h2><p className="mt-1 text-sm text-slate-300">{centre.dispatch_control.is_paused ? centre.dispatch_control.reason || "Scheduled items will not be dispatched." : "Dispatch still requires an approved revision and a verified live provider."}</p></div>
+      <button type="button" disabled={pauseWorking || !hasLivePublisher} title={!hasLivePublisher ? "A verified live provider is required before dispatch can be resumed." : ""} onClick={() => void setGlobalPause(!centre.dispatch_control.is_paused)} className="rounded-md border border-white/20 px-3 py-2 text-sm font-medium hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 disabled:cursor-not-allowed disabled:opacity-50">{pauseWorking ? "Updating…" : centre.dispatch_control.is_paused ? "Resume publishing" : "Pause publishing"}</button>
+    </section>}
     <section className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">{cards.map(([label, value]) => <div key={String(label)} className="rounded-xl border border-white/10 bg-slate-950/70 p-4"><p className="text-xs text-slate-400">{label}</p><p className="mt-1 text-2xl font-semibold tabular-nums">{value}</p></div>)}</section>
+
+    <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3" aria-label="Social profile connections">{accounts.map(account => <article key={account.id} className="rounded-xl border border-white/10 bg-slate-950/70 p-4"><div className="flex items-start justify-between gap-3"><div><h2 className="font-semibold capitalize">{account.platform}</h2><p className="mt-1 text-sm text-slate-400">{account.status === "connected" && account.capability === "full_api" ? "Connected" : account.status === "disabled" ? "Disabled" : "Not configured"}</p></div><span className="rounded-full border border-amber-300/25 px-2 py-1 text-xs text-amber-100">{account.capability === "fixture" ? "Fixture only" : account.capability === "assisted" ? "Assisted" : account.capability}</span></div><p className="mt-3 text-xs text-slate-500">No provider credentials or live connection are verified for this profile.</p></article>)}</section>
 
     <section className="space-y-4 rounded-xl border border-orange-300/20 bg-slate-950/70 p-4 sm:p-5">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-orange-300">Ready-made campaign</p><h2 className="mt-1 text-xl font-bold">Prometheus · Black Friday</h2><p className="mt-1 max-w-3xl text-sm text-slate-400">Use the prepared platform artwork and copy to create tracked, reviewable drafts for either listing.</p></div><span className="w-fit rounded-full border border-amber-300/30 bg-amber-300/10 px-3 py-1 text-xs text-amber-100">Draft only · not live</span></div>

@@ -14,6 +14,7 @@ from app.models.growth import (
     ConnectorExecution,
     ContentAsset,
     GrowthAuditEvent,
+    GrowthDispatchControl,
     PerformanceSnapshot,
     SocialAccount,
     SocialPost,
@@ -24,8 +25,6 @@ from app.models.growth import (
 from app.services.growth_connectors import (
     PLATFORM_CAPS,
     character_limit,
-    organic_snapshot,
-    publish_fixture,
 )
 from app.services.growth_release import FeatureNotEnabled, get_active_release, require_capability
 
@@ -81,6 +80,33 @@ def _now() -> datetime:
     return datetime.utcnow()
 
 
+async def get_dispatch_control(db: AsyncSession, *, lock: bool = False) -> GrowthDispatchControl:
+    statement = select(GrowthDispatchControl).where(GrowthDispatchControl.id == 1)
+    if lock:
+        statement = statement.with_for_update()
+    control = (await db.execute(statement)).scalar_one_or_none()
+    if control is None:
+        control = GrowthDispatchControl(
+            id=1,
+            is_paused=True,
+            reason="Publishing remains paused until a live provider is verified",
+            updated_by="system",
+        )
+        db.add(control)
+        await db.flush()
+    return control
+
+
+async def set_dispatch_pause(db: AsyncSession, *, paused: bool, actor: str, reason: str = "") -> GrowthDispatchControl:
+    control = await get_dispatch_control(db, lock=True)
+    control.is_paused = paused
+    control.reason = reason.strip()[:500] if paused else ""
+    control.updated_by = actor
+    control.updated_at = _now()
+    await audit(db, "publishing.paused" if paused else "publishing.resumed", actor, "dispatch_control", 1, {"reason": control.reason})
+    return control
+
+
 async def audit(db: AsyncSession, action: str, actor: str, subject_type: str, subject_id, detail: dict | None = None):
     db.add(
         GrowthAuditEvent(
@@ -103,9 +129,9 @@ async def ensure_seed(db: AsyncSession) -> None:
                     platform=platform,
                     display_name=name,
                     handle=handle,
-                    status="connected",
+                    status="not_configured",
                     capability=PLATFORM_CAPS.get(platform, "fixture"),
-                    health="healthy",
+                    health="not_configured",
                     last_checked_at=_now(),
                 )
             )
@@ -128,19 +154,77 @@ async def ensure_seed(db: AsyncSession) -> None:
     await db.flush()
 
 
+async def list_accounts(db: AsyncSession) -> list[dict]:
+    rows = (await db.execute(select(SocialAccount).order_by(SocialAccount.platform))).scalars().all()
+    return [serialize_account(row) for row in rows]
+
+
+async def list_assets(db: AsyncSession) -> list[dict]:
+    rows = (await db.execute(select(ContentAsset).order_by(ContentAsset.created_at.desc()))).scalars().all()
+    return [serialize_asset(row) for row in rows]
+
+
+async def create_build_launch_drafts(db: AsyncSession, product, *, build_id: int) -> list[SocialPost]:
+    """Create idempotent, approval-required drafts for a newly listed build."""
+    from app.models.product import ProductStatus, ProductType
+
+    if product.product_type != ProductType.PREBUILT or product.status != ProductStatus.LISTED:
+        return []
+    if not product.title or not product.price or product.price <= 0 or not product.hero_photo_url:
+        return []
+    release = await get_active_release(db)
+    if "social_publishing" not in (release.enabled_capabilities or []):
+        return []
+    await ensure_seed(db)
+
+    image = (await db.execute(select(ContentAsset).where(ContentAsset.url == product.hero_photo_url).limit(1))).scalar_one_or_none()
+    if image is None:
+        image = ContentAsset(
+            kind="image",
+            title=f"{product.title} storefront hero",
+            url=product.hero_photo_url,
+            alt_text=f"{product.title} PC build",
+            approved=True,
+            provenance=f"Existing public Ready-to-Ship listing, product {product.id}; reused for an approval-required social draft",
+        )
+        db.add(image)
+        await db.flush()
+
+    product_url = f"https://www.theflipflop.shop/ready-to-ship/{product.id}"
+    source_ref = f"build-launch:build:{build_id}:product:{product.id}:revision:1"
+    existing_rows = (await db.execute(select(SocialPost.platforms).where(SocialPost.source_ref == source_ref))).scalars().all()
+    existing_platforms = {platform for platforms in existing_rows for platform in (platforms or [])}
+    created: list[SocialPost] = []
+    for platform in ("facebook", "instagram"):
+        if platform in existing_platforms or platform not in (release.enabled_channels or []):
+            continue
+        copy = f"Meet {product.title}. Available now for £{product.price:,.2f} at FlipFlop. View the full specification and current availability: {product_url}"
+        created.append(await create_post(db, {
+            "platforms": [platform],
+            "source_type": "build",
+            "source_ref": source_ref,
+            "copy": copy,
+            "platform_variants": {platform: copy},
+            "media_asset_ids": [image.id],
+            "link_url": product_url,
+        }, actor="growth_event"))
+    return created
+
+
 def serialize_account(row: SocialAccount) -> dict:
+    status = "not_configured" if row.capability == "fixture" and row.status == "connected" else row.status
     return {
         "id": row.id,
         "platform": row.platform,
         "display_name": row.display_name,
         "handle": row.handle,
-        "status": row.status,
+        "status": status,
         "capability": row.capability,
         "health": row.health,
         "health_detail": row.health_detail,
         "last_checked_at": row.last_checked_at.isoformat() if row.last_checked_at else None,
         "publish_mode": (
-            "Full API publication (fixture/sandbox)"
+            "Development fixture only; no external publication"
             if row.capability == "fixture"
             else "Assisted publication"
             if row.capability == "assisted"
@@ -388,6 +472,11 @@ async def publish_post(db: AsyncSession, post: SocialPost, actor: str = "system"
         return post
     if post.status not in {"approved", "scheduled", "needs_attention", "publishing"}:
         raise ValueError("Post is not ready to publish")
+    control = await get_dispatch_control(db, lock=True)
+    if control.is_paused:
+        post.needs_attention = control.reason or "Publishing is paused"
+        await audit(db, "post.dispatch_blocked", actor, "social_post", post.id, {"reason": post.needs_attention})
+        return post
     revision = await latest_revision(db, post.id)
     if not revision:
         raise ValueError("Post has no revision")
@@ -409,10 +498,11 @@ async def publish_post(db: AsyncSession, post: SocialPost, actor: str = "system"
     any_unknown = False
     for platform in post.platforms or []:
         account = account_by_platform.get(platform)
-        if account is None or account.capability == "analytics_only":
+        if account is None or account.capability == "analytics_only" or account.status != "connected":
             any_failed = True
             continue
         if account.capability == "assisted":
+            any_failed = True
             continue
         key = f"post:{post.id}:rev:{revision.id}:{platform}"
         existing = (
@@ -424,7 +514,27 @@ async def publish_post(db: AsyncSession, post: SocialPost, actor: str = "system"
             any_unknown = True
             continue
         copy = (revision.platform_variants or {}).get(platform) or revision.copy
-        result = publish_fixture(platform=platform, account_id=account.id, copy=copy, idempotency_key=key, media_urls=media_urls)
+        if account.capability == "fixture":
+            result = {
+                "status": "simulated",
+                "provider_post_id": "",
+                "error": "Fixture adapter only; no external publication occurred",
+                "confirmed_at": None,
+            }
+        elif account.capability == "full_api":
+            result = {
+                "status": "failed",
+                "provider_post_id": "",
+                "error": "No live publisher adapter is registered for this account",
+                "confirmed_at": None,
+            }
+        else:
+            result = {
+                "status": "failed",
+                "provider_post_id": "",
+                "error": "Unsupported publishing capability",
+                "confirmed_at": None,
+            }
         publication = existing or SocialPublication(
             post_id=post.id,
             revision_id=revision.id,
@@ -484,6 +594,9 @@ async def publish_due_posts(db: AsyncSession) -> dict:
         require_capability(release, "social_publishing")
     except FeatureNotEnabled:
         return {"published": 0, "skipped": "FEATURE_NOT_ENABLED"}
+    control = await get_dispatch_control(db)
+    if control.is_paused:
+        return {"published": 0, "skipped": "GLOBAL_PAUSED", "reason": control.reason}
     due = (
         await db.execute(
             select(SocialPost).where(
@@ -591,6 +704,7 @@ async def command_centre(db: AsyncSession) -> dict:
     ).scalars().all()
     accounts = (await db.execute(select(SocialAccount))).scalars().all()
     summary = await analytics_summary(db)
+    control = await get_dispatch_control(db)
     today = _now().date()
     return {
         "approvals_pending": len(approvals),
@@ -603,9 +717,15 @@ async def command_centre(db: AsyncSession) -> dict:
         "needs_attention": sum(1 for post in posts if post.status in {"needs_attention", "timed_out", "validation_failed"}),
         "published": sum(1 for post in posts if post.status == "published"),
         "account_health": [
-            {"platform": row.platform, "health": row.health, "status": row.status, "capability": row.capability}
+            {"id": row.id, "platform": row.platform, "health": row.health, "status": serialize_account(row)["status"], "capability": row.capability}
             for row in accounts
         ],
+        "dispatch_control": {
+            "is_paused": control.is_paused,
+            "reason": control.reason,
+            "updated_by": control.updated_by,
+            "updated_at": control.updated_at.isoformat() if control.updated_at else None,
+        },
         "analytics": summary,
         "roadmap_hidden_claims": [
             "Revenue attributed to growth activity is not shown in Marketing MVP",
