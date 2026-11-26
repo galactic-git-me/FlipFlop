@@ -31,10 +31,11 @@ from app.models.ai_setup_purchase import AISetupPurchase
 from app.models.component_manual import ComponentManual
 from app.models.app_settings import AppSettings
 from app.models.channel_listing import ChannelListing
+from app.models.browser_listing_job import BrowserListingJob
 from app.models.listing_publish_event import ListingPublishEvent
 from app.models.gem_radar_intelligence import ComponentRatingEvent, PreferredComponent
 from app.models.build import Build, BuildType, BuildStatus
-from app.models.product import Product, ProductType, ProductStatus
+from app.models.product import Product, ProductType, ProductStatus, ProductListing, ProductListingStatus, ListingChannel, WithdrawalReason
 from app.models.order import Order, OrderStatus
 from app.models.playbook import Playbook
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
@@ -6085,3 +6086,97 @@ async def list_on_storefront(
     from app.services.channel_listing_identity import save_confirmed_identity
     await save_confirmed_identity(db, build, "flipflop_shop", product.id, f"https://www.theflipflop.shop/ready-to-ship/{product.id}")
     return ListOnStorefrontResult(product_id=product.id, build_id=orchestration_build.id, storefront_url=f"/ready-to-ship/{product.id}")
+
+
+class WithdrawStorefrontRequest(BaseModel):
+    reason: str = Field(min_length=3, max_length=500)
+
+
+@router.post("/{build_id}/withdraw-storefront")
+async def withdraw_from_storefront(build_id: int, body: WithdrawStorefrontRequest, db: AsyncSession = Depends(get_db)):
+    """Remove a manual build from FlipFlop.shop without changing other channels or sale state."""
+    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id).with_for_update())
+    build = result.scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if not build.storefront_product_id:
+        raise HTTPException(409, "This build has no FlipFlop.shop product to withdraw")
+
+    product_result = await db.execute(
+        select(Product).where(Product.id == build.storefront_product_id).with_for_update()
+    )
+    product = product_result.scalar_one_or_none()
+    if not product:
+        raise HTTPException(409, "The linked FlipFlop.shop product could not be found")
+    if product.status == ProductStatus.SOLD:
+        raise HTTPException(409, "A sold product cannot be manually withdrawn")
+
+    now = datetime.utcnow()
+    if product.status == ProductStatus.RESERVED and (not product.reserved_until or product.reserved_until > now):
+        raise HTTPException(409, "This product is reserved in an active checkout; try again after the reservation expires")
+
+    already_withdrawn = product.status == ProductStatus.WITHDRAWN
+    product.status = ProductStatus.WITHDRAWN
+    product.updated_at = now
+    product.reserved_until = None
+    product.checkout_addresses = None
+
+    listing_result = await db.execute(
+        select(ProductListing).where(
+            ProductListing.product_id == product.id,
+            ProductListing.channel == ListingChannel.STOREFRONT,
+        )
+    )
+    for listing in listing_result.scalars():
+        if listing.status in (ProductListingStatus.ACTIVE, ProductListingStatus.PENDING):
+            listing.status = ProductListingStatus.WITHDRAWN
+            listing.withdrawn_at = now
+            listing.withdrawal_reason = WithdrawalReason.MANUAL
+            listing.updated_at = now
+
+    channel_result = await db.execute(
+        select(ChannelListing).where(
+            ChannelListing.manual_build_id == build.id,
+            ChannelListing.channel.in_(("storefront", "flipflop_shop")),
+        ).with_for_update()
+    )
+    storefront_rows = channel_result.scalars().all()
+    storefront_row_ids = [row.id for row in storefront_rows]
+    cancelled_job_ids = []
+    if storefront_row_ids:
+        from app.services.browser_listing_jobs import PENDING
+
+        pending_updates = await db.execute(
+            select(BrowserListingJob).where(
+                BrowserListingJob.channel_listing_id.in_(storefront_row_ids),
+                BrowserListingJob.operation == "update",
+                BrowserListingJob.status.in_(PENDING),
+            ).with_for_update()
+        )
+        for job in pending_updates.scalars():
+            job.status = "cancelled"
+            job.lease_token = None
+            job.lease_until = None
+            job.message = "Cancelled because the storefront listing was manually withdrawn."
+            cancelled_job_ids.append(job.id)
+
+    for channel_listing in storefront_rows:
+        if channel_listing.status != "withdrawn":
+            channel_listing.status = "withdrawn"
+            channel_listing.withdrawn_at = now
+            channel_listing.recreate_enabled = False
+            channel_listing.next_recreate_at = None
+            db.add(ListingPublishEvent(
+                channel_listing_id=channel_listing.id,
+                event_type="withdrawn",
+                message=body.reason.strip(),
+                event_metadata={
+                    "build_id": build.id,
+                    "product_id": product.id,
+                    "reason": "manual",
+                    "cancelled_update_job_ids": cancelled_job_ids,
+                },
+            ))
+
+    await db.flush()
+    return {"build_id": build.id, "product_id": product.id, "status": "withdrawn", "already_withdrawn": already_withdrawn}
