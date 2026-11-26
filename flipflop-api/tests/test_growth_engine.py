@@ -2,7 +2,7 @@
 import pytest
 from sqlalchemy import select
 
-from app.models.growth import SocialAccount, SocialPublication, SocialPost, SocialPostRevision
+from app.models.growth import ContentAsset, SocialAccount, SocialPublication, SocialPost, SocialPostRevision
 from app.models.product import Product, ProductStatus, ProductType
 from app.services.growth_connectors import publish_fixture
 from app.services.growth_release import FeatureNotEnabled, get_active_release, require_capability
@@ -97,7 +97,18 @@ async def test_new_listed_build_creates_idempotent_meta_drafts(db):
     assert {platform for post in first for platform in post.platforms} == {"facebook", "instagram"}
     revisions = (await db.execute(select(SocialPostRevision).where(SocialPostRevision.post_id.in_([p.id for p in first])))).scalars().all()
     assert all("£799.00" in revision.copy for revision in revisions)
-    assert all("utm_campaign" in revision.link_url for revision in revisions)
+    assert all("utm_campaign=build-launch-42" in revision.link_url for revision in revisions)
+    assert all("build-42-product-" in revision.link_url for revision in revisions)
+    for revision in revisions:
+        asset = await db.get(ContentAsset, revision.media_asset_ids[0])
+        assert asset is not None and not asset.approved
+
+    first[0] = await social.submit_for_review(db, first[0])
+    assert first[0].status == "validation_failed"
+    asset = await db.get(ContentAsset, revisions[0].media_asset_ids[0])
+    asset.approved = True
+    first[0] = await social.submit_for_review(db, first[0])
+    assert first[0].status == "review"
 
 
 @pytest.mark.asyncio

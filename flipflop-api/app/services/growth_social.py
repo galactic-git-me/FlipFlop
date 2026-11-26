@@ -23,6 +23,7 @@ from app.models.growth import (
     TrackingLink,
 )
 from app.services.growth_connectors import (
+    LIVE_PUBLISHER_PLATFORMS,
     PLATFORM_CAPS,
     character_limit,
 )
@@ -211,6 +212,8 @@ async def create_build_launch_drafts(db: AsyncSession, product, *, build_id: int
             "platform_variants": {platform: copy},
             "media_asset_ids": [image.id],
             "link_url": product_url,
+            "tracking_campaign": f"build-launch-{build_id}",
+            "tracking_content": f"build-{build_id}-product-{product.id}-{platform}",
         }, actor="growth_event"))
     return created
 
@@ -224,6 +227,7 @@ def serialize_account(row: SocialAccount) -> dict:
         "handle": row.handle,
         "status": status,
         "capability": row.capability,
+        "live_adapter_available": row.platform in LIVE_PUBLISHER_PLATFORMS,
         "health": row.health,
         "health_detail": row.health_detail,
         "last_checked_at": row.last_checked_at.isoformat() if row.last_checked_at else None,
@@ -356,8 +360,8 @@ async def create_post(db: AsyncSession, payload: dict, actor: str = "owner") -> 
         link = await create_tracking_link(
             db,
             destination_url=payload["link_url"],
-            campaign=f"social-post-{post.id}",
-            content=str(post.id),
+            campaign=str(payload.get("tracking_campaign") or f"social-post-{post.id}"),
+            content=str(payload.get("tracking_content") or post.id),
         )
         post.tracking_link_id = link.id
         revision.link_url = tracked_url(link)
@@ -500,13 +504,16 @@ async def publish_post(db: AsyncSession, post: SocialPost, actor: str = "system"
     account_by_platform = {row.platform: row for row in accounts}
     any_failed = False
     any_unknown = False
+    failure_messages: list[str] = []
     for platform in post.platforms or []:
         account = account_by_platform.get(platform)
         if account is None or account.capability == "analytics_only" or account.status != "connected":
             any_failed = True
+            failure_messages.append(f"{platform} account is not connected for publishing")
             continue
         if account.capability == "assisted":
             any_failed = True
+            failure_messages.append(f"{platform} requires assisted publication")
             continue
         key = f"post:{post.id}:rev:{revision.id}:{platform}"
         existing = (
@@ -525,7 +532,7 @@ async def publish_post(db: AsyncSession, post: SocialPost, actor: str = "system"
                 "error": "Fixture adapter only; no external publication occurred",
                 "confirmed_at": None,
             }
-        elif account.capability == "full_api":
+        elif account.capability == "full_api" and platform in LIVE_PUBLISHER_PLATFORMS:
             result = {
                 "status": "failed",
                 "provider_post_id": "",
@@ -536,7 +543,7 @@ async def publish_post(db: AsyncSession, post: SocialPost, actor: str = "system"
             result = {
                 "status": "failed",
                 "provider_post_id": "",
-                "error": "Unsupported publishing capability",
+                "error": "No live publisher adapter is registered for this platform",
                 "confirmed_at": None,
             }
         publication = existing or SocialPublication(
@@ -552,20 +559,21 @@ async def publish_post(db: AsyncSession, post: SocialPost, actor: str = "system"
         publication.attempted_at = _now()
         if result["status"] == "published":
             publication.confirmed_at = _now()
-            snap = organic_snapshot(result["provider_post_id"], platform)
-            db.add(
-                PerformanceSnapshot(
+            metrics = result.get("metrics")
+            if isinstance(metrics, dict) and metrics:
+                db.add(PerformanceSnapshot(
                     subject_type="post",
                     subject_id=str(post.id),
                     provider=platform,
-                    metrics=snap,
+                    metrics=metrics,
                     retrieved_at=_now(),
                     freshness_seconds=0,
                     source_record=result["provider_post_id"],
-                )
-            )
+                ))
         else:
             any_failed = True
+            if result["error"]:
+                failure_messages.append(result["error"])
         if existing is None:
             db.add(publication)
         db.add(
@@ -583,12 +591,12 @@ async def publish_post(db: AsyncSession, post: SocialPost, actor: str = "system"
         post.needs_attention = "Provider result is unknown — reconcile before retrying"
     elif any_failed:
         post.status = "needs_attention"
-        post.needs_attention = "One or more platforms failed to publish"
+        post.needs_attention = "; ".join(failure_messages) or "One or more platforms failed to publish"
     else:
         post.status = "published"
         post.published_at = _now()
         post.needs_attention = ""
-    await audit(db, "post.published", actor, "social_post", post.id, {"status": post.status})
+    await audit(db, f"post.{post.status}", actor, "social_post", post.id, {"status": post.status})
     return post
 
 
@@ -721,7 +729,7 @@ async def command_centre(db: AsyncSession) -> dict:
         "needs_attention": sum(1 for post in posts if post.status in {"needs_attention", "timed_out", "validation_failed"}),
         "published": sum(1 for post in posts if post.status == "published"),
         "account_health": [
-            {"id": row.id, "platform": row.platform, "health": row.health, "status": serialize_account(row)["status"], "capability": row.capability}
+            {"id": row.id, "platform": row.platform, "health": row.health, **serialize_account(row)}
             for row in accounts
         ],
         "dispatch_control": {

@@ -18,6 +18,10 @@ PLATFORM_CAPS = {
     "linkedin": "assisted",
 }
 
+# Add a platform here only alongside an implemented provider adapter and its
+# separately verified credential/status contract.
+LIVE_PUBLISHER_PLATFORMS: frozenset[str] = frozenset()
+
 
 def character_limit(platform: str) -> int:
     return PLATFORM_LIMITS.get(platform, 2200)

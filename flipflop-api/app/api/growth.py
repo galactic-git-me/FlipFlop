@@ -9,7 +9,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
-from app.models.growth import ApprovalRequest, GrowthAuditEvent, GrowthDispatchControl, SocialAccount, SocialPost, TrackingLink
+from app.models.growth import ApprovalRequest, ContentAsset, GrowthAuditEvent, GrowthDispatchControl, SocialAccount, SocialPost, TrackingLink
 from app.models.admin_user import AdminUser
 from app.routes.admin_auth import get_current_admin
 from app.services import growth_social as social
@@ -55,7 +55,7 @@ async def assets(db: AsyncSession = Depends(get_db)):
 
 @router.patch("/assets/{asset_id}", dependencies=[Depends(get_current_admin)])
 async def review_asset(asset_id: int, payload: dict[str, Any], admin: AdminUser = Depends(get_current_admin), db: AsyncSession = Depends(get_db)):
-    asset = await db.get(social.ContentAsset, asset_id)
+    asset = await db.get(ContentAsset, asset_id)
     if asset is None:
         raise HTTPException(404, "Content asset not found")
     approved = payload.get("approved")
@@ -178,12 +178,19 @@ async def disable_social_account(account_id: int, payload: dict[str, Any], admin
     if account is None:
         raise HTTPException(404, "Social account not found")
     enabled = payload.get("enabled")
-    if enabled is not False:
-        raise HTTPException(409, "A provider connection must be established before an account can be enabled")
-    account.status = "disabled"
-    account.health = "disabled"
-    account.health_detail = "Disabled by administrator"
-    await social.audit(db, "account.disabled", admin.email, "social_account", account.id)
+    if not isinstance(enabled, bool):
+        raise HTTPException(422, "enabled must be a boolean")
+    if enabled:
+        if account.capability != "full_api":
+            raise HTTPException(409, "A verified live provider connection is required before an account can be enabled")
+        account.status = "connected"
+        account.health = "healthy"
+        account.health_detail = "Enabled by administrator"
+    else:
+        account.status = "disabled"
+        account.health = "disabled"
+        account.health_detail = "Disabled by administrator"
+    await social.audit(db, "account.enabled" if enabled else "account.disabled", admin.email, "social_account", account.id)
     return social.serialize_account(account)
 
 
