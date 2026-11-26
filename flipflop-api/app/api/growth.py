@@ -53,6 +53,19 @@ async def assets(db: AsyncSession = Depends(get_db)):
     return {"items": await social.list_assets(db)}
 
 
+@router.patch("/assets/{asset_id}", dependencies=[Depends(get_current_admin)])
+async def review_asset(asset_id: int, payload: dict[str, Any], admin: AdminUser = Depends(get_current_admin), db: AsyncSession = Depends(get_db)):
+    asset = await db.get(social.ContentAsset, asset_id)
+    if asset is None:
+        raise HTTPException(404, "Content asset not found")
+    approved = payload.get("approved")
+    if not isinstance(approved, bool):
+        raise HTTPException(422, "approved must be a boolean")
+    asset.approved = approved
+    await social.audit(db, "asset.approved" if approved else "asset.rejected", admin.email, "content_asset", asset.id, {"title": asset.title})
+    return social.serialize_asset(asset)
+
+
 @router.get("/social/posts", dependencies=[Depends(get_current_admin)])
 async def posts(db: AsyncSession = Depends(get_db)):
     rows = (await db.execute(select(SocialPost).order_by(SocialPost.updated_at.desc()))).scalars().all()
@@ -97,8 +110,11 @@ async def decide_post(post_id: int, payload: dict[str, Any], admin: AdminUser = 
     post = await db.get(SocialPost, post_id)
     if not post:
         raise HTTPException(404, "Social post not found")
+    approve = payload.get("approve")
+    if not isinstance(approve, bool):
+        raise HTTPException(422, "approve must be a boolean")
     try:
-        post = await social.decide_approval(db, post, approve=bool(payload.get("approve")), actor=admin.email, reason=str(payload.get("reason") or ""))
+        post = await social.decide_approval(db, post, approve=approve, actor=admin.email, reason=str(payload.get("reason") or ""))
         return await _serialize_post(db, post)
     except Exception as exc:
         raise _error(exc) from exc

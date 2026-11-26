@@ -1,6 +1,6 @@
 # Automated Growth Engine implementation plan
 
-**Status:** Proposed; awaiting explicit owner approval per PRD v1.1 §32.
+**Status:** Owner approved on 2026-11-26; Release 1 implementation in progress.
 **Basis:** [implementation audit](./automated-growth-engine-implementation-audit.md) and [progress tracker](./automated-growth-engine-progress-tracker.md).
 
 ## Goal and boundaries
@@ -62,3 +62,4 @@ Use current official provider docs at implementation time; this audit does not f
 - Preserve the existing admin URL while adding compatibility only if requested by route decision.
 - Image-based new-build draft is a disclosed fallback that needs separate approval; it does not satisfy the target video acceptance criterion.
 - No paid spend, newsletter sends, automated blog generation or automatic replies in Release 1.
+

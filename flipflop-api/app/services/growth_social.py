@@ -188,8 +188,8 @@ async def create_build_launch_drafts(db: AsyncSession, product, *, build_id: int
             title=f"{product.title} storefront hero",
             url=product.hero_photo_url,
             alt_text=f"{product.title} PC build",
-            approved=True,
-            provenance=f"Existing public Ready-to-Ship listing, product {product.id}; reused for an approval-required social draft",
+            approved=False,
+            provenance=f"Existing public Ready-to-Ship listing, product {product.id}; proposed for social use and awaiting operator approval",
         )
         db.add(image)
         await db.flush()

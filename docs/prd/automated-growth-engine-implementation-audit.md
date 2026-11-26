@@ -3,7 +3,7 @@
 **PRD:** `automated-growth-engine-prd-v1.1.md`, supplied from `C:\Users\mclar\Downloads\automated-growth-engine-prd-v1.1.md` (v1.1, 26 November 2026).
 **Audit date:** 2026-11-26
 **Branch:** `codex/prometheus-growth-storefront-20261126`
-**Scope:** Repository evidence review only. No application code, database, external account, provider, or production state was changed.
+**Scope:** Repository evidence review followed by an approved Release 1 implementation slice. No live database, external account, provider, or production state was changed.
 
 ## Executive result
 
@@ -11,7 +11,7 @@ The repository contains a Growth Engine MVP foundation: an admin Advertising & G
 
 The quickest Release 1 path is to finish the event-to-approved-draft vertical slice on top of the existing models and approval path, after adding global/channel/workflow dispatch gates and current-data revalidation; then select and verify a real social provider adapter and GA4 reporting/configuration path. There is no observed event/outbox-to-growth intake, build eligibility automation, rotation configuration, GA4 reporting connector, or global pause control in the inspected Growth Engine modules.
 
-The source PRD §32 requires this audit, plan, and tracker to be created before implementation and says to stop for owner approval. The superseded marketing PRD and implementation prompt are retained unchanged. This document set is that gate deliverable; application implementation remains pending explicit approval.
+The source PRD §32 required this audit, plan, and tracker before implementation. The owner approved proceeding on 2026-11-26. The first implementation slice now adds authenticated Growth API boundaries, a default-paused dispatch control, fail-safe fixture behavior, and listing-triggered review drafts; later acceptance work remains in progress. The superseded marketing PRD and implementation prompt are retained unchanged.
 
 ## Repository and change safety
 
@@ -62,24 +62,24 @@ No OpenAI/ChatGPT API access or renderer choice is inferred from a subscription.
 
 ## Status methodology and counts
 
-The progress tracker decomposes acceptance criteria A01–A37 into 108 stable atomic rows. Statuses use the mutually exclusive PRD vocabulary. **COMPLETE means verified against the PRD by current evidence**; a test pass for a deterministic fixture does not prove a real integration. For audit-level verification, the 108 criterion atoms are tracked as BLOCKED (approval gate); the evidence review supplies observations but does not constitute acceptance verification for a feature release.
+The progress tracker decomposes acceptance criteria A01–A37 into 108 stable atomic rows. Statuses use the mutually exclusive PRD vocabulary. **COMPLETE means verified against the PRD by current evidence**; an implementation with unrun tests is IMPLEMENTED–UNVERIFIED or PARTIAL. A fixture test does not prove a real integration. Owner approval was received on 2026-11-26; implementation is underway.
 
 - Applicable atomic acceptance requirements: 108
-- COMPLETE (verified): 0
-- IMPLEMENTED–UNVERIFIED: 0
-- PARTIAL: 0
+- COMPLETE (verified): 6 (tracker uniqueness/count audit and approval-gate criteria)
+- IMPLEMENTED–UNVERIFIED: 4
+- PARTIAL: 19
 - NEEDS ENHANCEMENT: 0
-- MISSING: 0
-- BLOCKED: 108 (application implementation and acceptance verification are gated on owner approval)
+- MISSING: 79
+- BLOCKED: 0
 - CONFLICT: 0 (specification conflicts are recorded above and resolved as plan constraints)
-- Verified percentage: **0 / 108 = 0%**
+- Verified percentage: **6 / 108 = 5.6%**
 - Approved exclusions: none recorded
 
 This percentage describes the explicit acceptance matrix’s verified completion, not the amount of code already present. Evidence gaps and existing partial foundations are identified above and item-by-item in the tracker.
 
-## Gate and requested decisions
+## Decisions carried forward
 
-Per §32, stop here. Before application changes, approve the audit and plan and decide:
+Owner approval for this plan was received on 2026-11-26. Conservative defaults for this slice retain /advertising-growth, require approval for every draft, and keep external publishing and GA4 reporting disabled. Before live scheduling or provider work, resolve:
 
 1. Should the existing `/advertising-growth` page remain the stable route with Social/Analytics tabs, or should compatibility routes `/marketing/social` and `/marketing/analytics` be added?
 2. Which Meta business portfolio, Facebook Page and Instagram Business account are the Release 1 targets, and who will supply/configure least-privilege app credentials and complete any required provider review?
@@ -87,4 +87,6 @@ Per §32, stop here. Before application changes, approve the audit and plan and 
 4. Confirm Release 1 image fallback is allowed only after explicit per-draft approval while the video pipeline is unavailable.
 5. Confirm initial posting windows/frequency limits and approval expiry policy, or authorize conservative disabled-by-default settings pending configuration.
 
-No application implementation or external provider action should begin until the owner approves the artifacts and the required provider/account decisions are available.
+Owner approval has been received. Continue with the proposed first-party and fixture-safe work; real provider publishing and GA4 reporting remain disabled until account credentials and provider feasibility are verified.
+
+
