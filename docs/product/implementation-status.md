@@ -5,10 +5,11 @@
 Live Builds offers a confirmed FlipFlop.shop unpublish action for active
 storefront listings. It withdraws the canonical product and active storefront
 listing records, disables storefront relisting, and records the operator reason
-in the channel listing audit. Sold products and active or indeterminate checkout
-reservations are blocked. Other sales channels and the build's sold state are
-left unchanged. Admin UI/runtime and database-backed withdrawal behaviour have
-not yet been verified.
+in the channel listing audit. Queued storefront updates are cancelled in the
+same transaction to prevent them from republishing the product. Sold products
+and active or indeterminate checkout reservations are blocked. Other sales
+channels and the build's sold state are left unchanged. Admin UI/runtime and
+database-backed withdrawal behaviour have not yet been verified.
 
 ### Build Studio compatibility, component prices and manuals — 11 November 2026
 

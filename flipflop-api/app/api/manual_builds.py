@@ -31,6 +31,7 @@ from app.models.ai_setup_purchase import AISetupPurchase
 from app.models.component_manual import ComponentManual
 from app.models.app_settings import AppSettings
 from app.models.channel_listing import ChannelListing
+from app.models.browser_listing_job import BrowserListingJob
 from app.models.listing_publish_event import ListingPublishEvent
 from app.models.gem_radar_intelligence import ComponentRatingEvent, PreferredComponent
 from app.models.build import Build, BuildType, BuildStatus
@@ -6137,9 +6138,29 @@ async def withdraw_from_storefront(build_id: int, body: WithdrawStorefrontReques
         select(ChannelListing).where(
             ChannelListing.manual_build_id == build.id,
             ChannelListing.channel.in_(("storefront", "flipflop_shop")),
-        )
+        ).with_for_update()
     )
-    for channel_listing in channel_result.scalars():
+    storefront_rows = channel_result.scalars().all()
+    storefront_row_ids = [row.id for row in storefront_rows]
+    cancelled_job_ids = []
+    if storefront_row_ids:
+        from app.services.browser_listing_jobs import PENDING
+
+        pending_updates = await db.execute(
+            select(BrowserListingJob).where(
+                BrowserListingJob.channel_listing_id.in_(storefront_row_ids),
+                BrowserListingJob.operation == "update",
+                BrowserListingJob.status.in_(PENDING),
+            ).with_for_update()
+        )
+        for job in pending_updates.scalars():
+            job.status = "cancelled"
+            job.lease_token = None
+            job.lease_until = None
+            job.message = "Cancelled because the storefront listing was manually withdrawn."
+            cancelled_job_ids.append(job.id)
+
+    for channel_listing in storefront_rows:
         if channel_listing.status != "withdrawn":
             channel_listing.status = "withdrawn"
             channel_listing.withdrawn_at = now
@@ -6149,7 +6170,12 @@ async def withdraw_from_storefront(build_id: int, body: WithdrawStorefrontReques
                 channel_listing_id=channel_listing.id,
                 event_type="withdrawn",
                 message=body.reason.strip(),
-                event_metadata={"build_id": build.id, "product_id": product.id, "reason": "manual"},
+                event_metadata={
+                    "build_id": build.id,
+                    "product_id": product.id,
+                    "reason": "manual",
+                    "cancelled_update_job_ids": cancelled_job_ids,
+                },
             ))
 
     await db.flush()

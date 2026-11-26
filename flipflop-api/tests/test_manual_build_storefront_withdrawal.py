@@ -9,6 +9,7 @@ from sqlalchemy.pool import StaticPool
 
 from app.database import Base, get_db
 from app.main import app
+from app.models.browser_listing_job import BrowserListingJob
 from app.models.channel_listing import ChannelListing
 from app.models.listing_publish_event import ListingPublishEvent
 from app.models.manual_build import ManualBuild
@@ -64,11 +65,19 @@ async def _create_listing(session_factory, *, status=ProductStatus.LISTED, reser
         build = ManualBuild(name="Test PC", status="listed", storefront_product_id=product.id)
         session.add(build)
         await session.flush()
+        storefront = ChannelListing(manual_build_id=build.id, channel="flipflop_shop", status="published", recreate_enabled=True)
         session.add_all([
             ProductListing(product_id=product.id, channel=ListingChannel.STOREFRONT, status=ProductListingStatus.ACTIVE),
-            ChannelListing(manual_build_id=build.id, channel="flipflop_shop", status="published", recreate_enabled=True),
+            storefront,
             ChannelListing(manual_build_id=build.id, channel="ebay_uk", status="published", recreate_enabled=True),
         ])
+        await session.flush()
+        session.add(BrowserListingJob(
+            channel_listing_id=storefront.id,
+            operation="update",
+            status="queued",
+            payload={"build_id": build.id, "channel": "flipflop_shop"},
+        ))
         await session.commit()
         return build.id, product.id
 
@@ -88,6 +97,7 @@ async def test_withdraw_storefront_preserves_other_channels_and_audits_reason(cl
         product = await session.get(Product, product_id)
         product_listing = (await session.execute(select(ProductListing).where(ProductListing.product_id == product_id))).scalar_one()
         channels = (await session.execute(select(ChannelListing).where(ChannelListing.manual_build_id == build_id))).scalars().all()
+        browser_job = (await session.execute(select(BrowserListingJob))).scalar_one()
         event = (await session.execute(select(ListingPublishEvent))).scalar_one()
     assert product.status == ProductStatus.WITHDRAWN
     assert product_listing.status == ProductListingStatus.WITHDRAWN
@@ -97,6 +107,8 @@ async def test_withdraw_storefront_preserves_other_channels_and_audits_reason(cl
     assert storefront.status == "withdrawn"
     assert storefront.recreate_enabled is False
     assert storefront.next_recreate_at is None
+    assert browser_job.status == "cancelled"
+    assert browser_job.message == "Cancelled because the storefront listing was manually withdrawn."
     assert ebay.status == "published"
     assert ebay.recreate_enabled is True
     assert event.event_type == "withdrawn"
