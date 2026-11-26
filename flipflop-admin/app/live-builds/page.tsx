@@ -10,6 +10,7 @@ import {
   Inbox,
   Loader2,
   MessageCircle,
+  OctagonX,
   RefreshCw,
   Search,
   Tag,
@@ -249,6 +250,21 @@ export default function LiveBuildsPage() {
     finally { setActionKey(null); }
   };
 
+  const unpublishStorefront = async (buildId: number) => {
+    if (!window.confirm(`Remove Build ${buildId} from FlipFlop.shop? This will not mark it sold or end its eBay/other listings.`)) return;
+    const key = `${buildId}:flipflop_shop:unpublish`;
+    setActionKey(key);
+    try {
+      const result = await api.manualBuilds.withdrawFromStorefront(buildId, "Unpublished by admin from Live Builds");
+      setNotice(result.already_withdrawn
+        ? `Build ${buildId} was already withdrawn from FlipFlop.shop.`
+        : `Build ${buildId} has been withdrawn from FlipFlop.shop. Other channel listings are unchanged.`);
+      await refresh();
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Could not withdraw this build from FlipFlop.shop.");
+    } finally { setActionKey(null); }
+  };
+
   return (
     <main className="space-y-6">
       <header className="flex flex-wrap items-end justify-between gap-4">
@@ -330,6 +346,7 @@ export default function LiveBuildsPage() {
                       const state = channels[vendor.channel];
                       const selected = state.active ? "live" : state.status.toLowerCase().includes("sold") ? "sold" : state.status.toLowerCase().includes("cancel") ? "cancelled" : state.status.toLowerCase().includes("ended") || state.status.toLowerCase().includes("withdrawn") ? "ended" : "not_listed";
                       const statusKey = `${build.id}:${vendor.channel}:status`;
+                      const unpublishKey = `${build.id}:flipflop_shop:unpublish`;
                       return <div key={vendor.channel} className="flex min-w-0 flex-wrap items-center gap-2 rounded-md border border-slate-800 bg-slate-950/50 px-2 py-1.5" title={state.status}>
                         <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${state.active ? vendor.activeClass : state.status !== "not listed" ? "bg-amber-400/20 text-amber-200" : "bg-slate-800 text-slate-500"}`}>{vendor.mark}</span>
                         <span className={`truncate text-[11px] ${state.active ? "text-slate-200" : "text-slate-500"}`}>{vendor.label}</span>
@@ -337,6 +354,10 @@ export default function LiveBuildsPage() {
                         <select aria-label={`Correct ${vendor.label} status for Build ${build.id}`} value={selected} disabled={!!actionKey} onChange={(event) => void changeVendorStatus(build.id, vendor, event.target.value as "live" | "sold" | "ended" | "cancelled" | "not_listed")} className="ml-auto max-w-full rounded border border-slate-700 bg-slate-900 px-1.5 py-1 text-[10px] text-slate-300 disabled:opacity-50">
                           <option value="live">Live (verified)</option><option value="sold">Sold</option><option value="cancelled">Cancelled</option><option value="ended">Ended</option><option value="not_listed">Not listed</option>
                         </select>
+                        {vendor.channel === "flipflop_shop" && state.active && <button type="button" onClick={() => void unpublishStorefront(build.id)} disabled={!!actionKey} className="ml-auto inline-flex items-center gap-1 rounded border border-rose-400/30 px-2 py-1 text-[10px] font-medium text-rose-200 hover:bg-rose-950/40 disabled:cursor-wait disabled:opacity-50">
+                          {actionKey === unpublishKey ? <Loader2 className="h-3 w-3 animate-spin" /> : <OctagonX className="h-3 w-3" />}
+                          {actionKey === unpublishKey ? "Removing…" : "Unpublish"}
+                        </button>}
                         {actionKey === statusKey && <span className="text-[10px] text-cyan-300">Saving…</span>}
                       </div>;
                     })}

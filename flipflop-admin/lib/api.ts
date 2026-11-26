@@ -1762,6 +1762,11 @@ export const api = {
         method: "POST",
         body: JSON.stringify({ price }),
       }),
+    withdrawFromStorefront: (id: number, reason: string) =>
+      request<{ build_id: number; product_id: number; status: "withdrawn"; already_withdrawn: boolean }>(
+        `/manual-builds/${id}/withdraw-storefront`,
+        { method: "POST", body: JSON.stringify({ reason }) },
+      ),
   },
 
   sources: {
