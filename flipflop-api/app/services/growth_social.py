@@ -196,7 +196,8 @@ async def create_build_launch_drafts(db: AsyncSession, product, *, build_id: int
         await db.flush()
 
     product_url = f"https://www.theflipflop.shop/ready-to-ship/{product.id}"
-    source_ref = f"build-launch:build:{build_id}:product:{product.id}:revision:1"
+    launch_revision = (product.updated_at or product.created_at or _now()).strftime("%Y%m%d%H%M%S%f")
+    source_ref = f"build-launch:build:{build_id}:product:{product.id}:revision:{launch_revision}"
     existing_rows = (await db.execute(select(SocialPost.platforms).where(SocialPost.source_ref == source_ref))).scalars().all()
     existing_platforms = {platform for platforms in existing_rows for platform in (platforms or [])}
     created: list[SocialPost] = []
@@ -212,8 +213,8 @@ async def create_build_launch_drafts(db: AsyncSession, product, *, build_id: int
             "platform_variants": {platform: copy},
             "media_asset_ids": [image.id],
             "link_url": product_url,
-            "tracking_campaign": f"build-launch-{build_id}",
-            "tracking_content": f"build-{build_id}-product-{product.id}-{platform}",
+            "tracking_campaign": f"build-launch-{build_id}-{launch_revision}",
+            "tracking_content": f"build-{build_id}-product-{product.id}-{launch_revision}-{platform}",
         }, actor="growth_event"))
     return created
 

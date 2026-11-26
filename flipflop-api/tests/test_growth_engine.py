@@ -99,7 +99,7 @@ async def test_new_listed_build_creates_idempotent_meta_drafts(db):
     assert {platform for post in first for platform in post.platforms} == {"facebook", "instagram"}
     revisions = (await db.execute(select(SocialPostRevision).where(SocialPostRevision.post_id.in_([p.id for p in first])))).scalars().all()
     assert all("£799.00" in revision.copy for revision in revisions)
-    assert all("utm_campaign=build-launch-42" in revision.link_url for revision in revisions)
+    assert all("utm_campaign=build-launch-42-" in revision.link_url for revision in revisions)
     assert all("build-42-product-" in revision.link_url for revision in revisions)
     for revision in revisions:
         asset = await db.get(ContentAsset, revision.media_asset_ids[0])
