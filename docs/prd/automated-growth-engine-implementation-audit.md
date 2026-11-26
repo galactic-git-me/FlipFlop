@@ -1,63 +1,90 @@
 # Automated Growth Engine implementation audit
 
-**Specification:** Owner-supplied `C:\Users\mclar\Downloads\automated-growth-engine-prd-v1.1.md` (26 November 2026)
-**Audit date:** 26 November 2026
-**Scope:** Repository evidence for the Growth Engine, related requirements, migrations, scheduler, admin/API flow, provider adapters, and existing focused tests.
-**Status:** Initial source audit complete; runtime/provider claims remain unverified. This audit is not approval to implement the application roadmap.
+**PRD:** `automated-growth-engine-prd-v1.1.md`, supplied from `C:\Users\mclar\Downloads\automated-growth-engine-prd-v1.1.md` (v1.1, 26 November 2026).
+**Audit date:** 2026-11-26
+**Branch:** `codex/prometheus-growth-storefront-20261126`
+**Scope:** Repository evidence review only. No application code, database, external account, provider, or production state was changed.
 
-## Executive summary
+## Executive result
 
-The repository already contains a Marketing MVP slice: an Advertising & Growth admin page, a Growth API, SQLAlchemy entities and an Alembic migration, social post revision/approval flows, tracked links, first-party analytics event storage, fixture/assisted channel adapters, a due-post scheduler, and a small backend test file. This is meaningful reusable work, but it does not establish a working live social or GA4 integration. The current code shown by inspection does not implement authoritative build/promotion event intake, campaign upsert/deduplication, curated build rotation, GA4 reporting/configuration, a global/channel/workflow pause, or durable queue/outbox reconciliation. No runtime or external provider was exercised during this audit.
+The repository contains a Growth Engine MVP foundation: an admin Advertising & Growth screen, API and persistence for social drafts/revisions, approval requests, tracking links, first-party analytics events, audit events, a scheduled due-post worker, and fixture-oriented tests. This is not a live social or GA4 integration. The social connector returns deterministic fixture publications and seeded accounts explicitly identify fixture/assisted capability. The existing page disables live publication unless a connected `full_api` account exists.
 
-The supplied v1.1 specification is broader than the repository's v1.0 copy at [automated-growth-engine-prd.md](./automated-growth-engine-prd.md), the bounded v0.1 marketing PRD, and the former implementation prompt. v1.1 explicitly makes audit, tracker, and plan delivery the first gate and requires owner approval before application or architectural changes. It retains the earlier MVP requirements while adding substantial future releases. The PRD register still labels the v0.1 Marketing Engine as current and classifies the Growth Engine documents separately; that source-of-truth mapping needs owner approval before archival or register edits.
+The quickest Release 1 path is to finish the event-to-approved-draft vertical slice on top of the existing models and approval path, after adding global/channel/workflow dispatch gates and current-data revalidation; then select and verify a real social provider adapter and GA4 reporting/configuration path. There is no observed event/outbox-to-growth intake, build eligibility automation, rotation configuration, GA4 reporting connector, or global pause control in the inspected Growth Engine modules.
 
-## Evidence examined
+The source PRD §32 requires this audit, plan, and tracker to be created before implementation and says to stop for owner approval. The superseded marketing PRD and implementation prompt are retained unchanged. This document set is that gate deliverable; application implementation remains pending explicit approval.
 
-- Supplied v1.1 PRD and repository v1.0 copy; the v0.1 marketing PRD and its implementation prompt.
-- Product and engineering routers, product documentation map, PRD register, Marketing MVP PRD, and critique/traceability matrix.
-- `flipflop-admin/app/advertising-growth/page.tsx`, sidebar route, approval-count integration, and relevant API helper references.
-- `flipflop-api/app/api/growth.py`, `app/models/growth.py`, `app/services/growth_social.py`, `growth_connectors.py`, `growth_release.py`, `app/main.py`, and scheduler registration/wrapper.
-- Growth Alembic migration, dev schema-alignment migration, and `flipflop-api/tests/test_growth_engine.py` source.
-- Current branch/history and `git status`; inspected diffs for the Growth Engine-related dirty files.
+## Repository and change safety
 
-The source audit was read-only. Tests, type checks, builds, database migrations, browser flows, external APIs, production services, 3D assembly/rendering, and provider account capabilities were not run or verified. Code presence is recorded as implemented-unverified or partial; it is never counted as complete solely from source inspection.
+- Current branch: `codex/prometheus-growth-storefront-20261126` (observed with `git status --short --branch`).
+- Pre-existing worktree change: `flipflop-api/data/component-manual-discovery.json` modified. It was not read or edited as part of this task.
+- Growth Engine route registration: `flipflop-api/app/main.py` includes `growth.router` under `/api`.
+- Admin navigation: `flipflop-admin/components/sidebar.tsx` links to `/advertising-growth` under “Listings & Growth”. This is not the PRD’s `/marketing/social` and `/marketing/analytics` route structure, though the PRD permits repository-convention adaptation.
+- Admin screen: `flipflop-admin/app/advertising-growth/page.tsx` shows social draft/review workflow, fixture/assisted provider warning, and paid-ads gate. Its displayed campaign is hard-coded Prometheus/Black Friday example material and is not an event-driven general campaign workflow.
+- API: `flipflop-api/app/api/growth.py` exposes release, command centre, accounts, assets, social posts/revisions, submit/approval/execute, approvals, audit, website event ingestion, analytics summary, and tracking redirect endpoints.
+- Persistence: `flipflop-api/app/models/growth.py`; initial schema migration `flipflop-api/alembic/versions/20260921_0001_growth_engine_mvp.py` plus subsequent merge migration (see migration history). Entities include release config, accounts, assets, posts/revisions/publications, tracking links, analytics events, snapshots, approvals, connector executions and audit events.
+- Scheduling: `flipflop-api/app/workers/scheduler.py` registers `growth_social_publisher`; `run_growth_social_publisher` delegates to `publish_due_posts`.
+- Tests: `flipflop-api/tests/test_growth_engine.py` exercises deterministic fixture idempotency, release flags, approval/publish behavior, validation, revision invalidation, and first-party event ingestion. These tests do not establish live provider behavior.
+- Analytics route: `flipflop-api/app/api/analytics.py` covers vendor/catalogue analytics and is not a GA4 connector. Marketing first-party analytics live under `/api/growth/analytics`.
+- Build/product lifecycle candidates for future verified integration: `flipflop-api/app/models/manual_build.py`, `flipflop-api/app/models/product.py`, `flipflop-api/app/api/manual_builds.py`, `flipflop-api/app/api/public_products.py`, and lifecycle/event code referenced by those modules. Exact canonical event hooks and public URL/media resolution must be traced during the implementation phase before selecting an integration point.
 
-## Working-tree protection and audit limitations
+## Evidence boundaries and findings
 
-At audit start, branch `dev` was at `2a5a19b4e` and the checkout contained unrelated dirty changes. Growth-related dirty paths include [advertising-growth/page.tsx](../../flipflop-admin/app/advertising-growth/page.tsx), [growth_social.py](../../flipflop-api/app/services/growth_social.py), and [implementation-status.md](../product/implementation-status.md). The page/service diff adds a Prometheus Black Friday campaign draft flow and approved creative seeds; the status document records that runtime and persistence are unverified. Other dirty paths concern live-build withdrawal, component discovery data, and API helpers. None were changed by this audit. Dirty code is not assumed to be committed, deployed, or production behavior.
-
-This audit has strong source-level coverage of the central MVP vertical slice, but not a line-by-line audit of every commerce source, every 3D asset, every provider's live documentation, production credentials, privacy/legal obligations, or production data. Those remain explicit evidence gaps, not inferred failures or passes.
-
-## Architecture and current implementation evidence
-
-| Area | Evidence and observed behavior | Audit result |
+| Area | Evidence observed | Audit conclusion |
 |---|---|---|
-| Admin/navigation | Sidebar links to `/advertising-growth`; page lists campaign drafts, manual drafts, review/approve/publish actions, basic observed metrics, and a content calendar-like post list. No distinct Social Media/Analytics routes, full account management, global pause, or GA4 connection screen was found in inspected paths. | Partial; visual/runtime behavior unverified |
-| API | `/api/growth` exposes release, command centre, accounts, assets, social posts, approvals, audit, event ingestion, analytics summary, and tracking redirect endpoints. No authoritative commerce-event intake or campaign/rotation API surfaced in this router. | MVP API partial |
-| Persistence | Growth entities cover release config, social accounts/assets/posts/revisions/publications, tracking links, analytics events/snapshots, approvals, connector executions, and audit events. Migration exists. A campaign, durable business-event inbox/outbox, rotation collection, template registry, render job, GA4 credentials/reporting state, and provider-specific event reconciliation were not found in these Growth models. | Foundation present; remaining domain model missing |
-| Approval/lifecycle | Revisions are versioned; submission validates copy/media and creates an expiring approval; editing an approved/review post resets it to draft; publication requires approved status and uses per-platform idempotency keys. | Implemented in source; tests/runtime not run; exact approval scope/revision hash, revalidation and conflict safety need enhancement |
-| Provider execution | Current adapter module is explicitly fixture/assisted. Seeded accounts are marked `connected` while capabilities identify fixture/assisted; deterministic fixture results produce provider-like IDs and synthetic-looking organic metric snapshots. No live OAuth connector was found. | Live integration absent; connection semantics and metric provenance need review |
-| Scheduled jobs | APScheduler registers a one-minute due-post publisher and a 90-day analytics retention task. The wrapper calls `publish_due_posts`; no durable queue/outbox, persisted attempt history/dead letter, reconciliation worker, or rotation worker was found in inspected code. | Scheduled MVP slice present; reliability requirements unmet/unverified |
-| Tracking/analytics | Tracked URLs preserve the destination query and add four UTM parameters; API can ingest first-party event records and summarize sessions/UTM presence. No GA4 connection/reporting API, date/channel filters, consent contract, full named event schema, or attributed revenue implementation was found in the inspected growth API. | First-party foundation partial; GA4/reporting missing |
-| Build/promotion lifecycle | The inspected Growth service accepts manually created social posts and campaign source references; it does not subscribe to authoritative listing, promotion, sold, availability, or blog events. No curated-build rotation implementation was found in the inspected Growth service/models. | Release 1 event orchestration and rotation missing |
-| Future releases | Existing release capabilities gate paid advertising, blog publishing, newsletters, automated replies, vouchers, loyalty, abandoned cart, revenue attribution, and optimisation as roadmap capabilities. No inspected end-to-end implementation establishes those capabilities. | Correctly gated; future scope remains unimplemented/unverified |
+| Admin entry | Sidebar item and `/advertising-growth` page exist | Existing, but navigation and screen need Release 1 UX completion and route decision |
+| Social account state | `SocialAccount`, seed accounts, serializers and account endpoint | State model exists; seeded fixture/assisted records are not connected profiles; connect/disable controls were not found in the inspected screen/API |
+| Drafts and approval | `SocialPost`, immutable revision rows, approval requests, edit invalidation and tests | Useful foundation; exact revision approval exists in the local workflow, but authentication/authorization and production policy need end-to-end verification |
+| Publishing | `publish_post` calls `publish_fixture`; connector capability map marks Facebook/Instagram/X as fixture and LinkedIn assisted | No live publication capability verified; external publishing must remain disabled |
+| Scheduling | Due-post worker publishes `scheduled` rows after approval | Local scheduler path exists; durable queue guarantees, locking/race behavior and live provider reconciliation are not demonstrated by reviewed evidence |
+| Events | `/growth/analytics/events` stores website analytics events | This is analytics ingestion, not business lifecycle event intake. No outbox/replay/deduped build/promotion event campaign hook was found in targeted searches |
+| Tracking | Tracking link table, slug endpoint, UTM redirect preserving existing query parameters | Core UTM redirect exists; build/template/creative opaque IDs and policy validation are not shown in its current fields/API |
+| Analytics | First-party event counts and fixture organic snapshots | GA4 reporting/configuration is absent in reviewed modules; fixture metrics must not be interpreted as observed provider metrics |
+| Rotation | No rotation/collection model or scheduler found in targeted Growth Engine files | Missing from reviewed Growth Engine implementation |
+| Release gates | `GrowthReleaseConfiguration`, enabled capability list and roadmap; paid advertising not in MVP | Capability gating exists; global pause and per-channel/per-workflow gates are not evidenced |
+| Later releases | Models explicitly defer paid ads, blog, newsletter and related capabilities | PRD1.1 correctly keeps them non-operational in Release 1 |
+| Production | No provider credentials/account calls, deployed runtime, or external delivery checks performed | Production readiness and connected status are unknown; no live claims made |
 
-## Risk and decision findings
+## Provider feasibility and unresolved integration facts
 
-1. **No live publishing proof.** Fixture publication can create a locally confirmed state and metric snapshots. This is not evidence that Facebook, Instagram, or X received a post. Seed account `connected` labels must not be interpreted as OAuth connection proof.
-2. **Approval boundary is narrower than v1.1.** The source implements an approval step, but audit did not establish approval hashes covering channel/account, exact assets/claims/link/schedule, fresh price/availability/consent checks at dispatch, or safe concurrent approval/execution behavior.
-3. **Pause and frequency controls are absent in inspected Growth flow.** The scheduler publishes due approved posts without visible global/channel/workflow pause or frequency-limit checks in `publish_due_posts`.
-4. **Event-driven eligibility is absent.** Build readiness, canonical URL, cross-listing grouping, promotion privacy/terms, stale draft invalidation, and sold/expired cancellation are not wired through the inspected API/service.
-5. **Analytics are not GA4.** Internal event counts and UTM presence are not GA4 connection state or provider-reported sessions/conversions. Avoid presenting synthetic fixture metrics as observed provider results without clear labeling.
-6. **User-supplied Prometheus campaign changes need commercial revalidation.** The dirty admin diff contains hard-coded prices, stock, delivery claims, and destination URLs, with a reminder to verify them before approval. Source presence does not validate current listing truth or campaign eligibility.
-7. **Governance mismatch.** The PRD asks to preserve the v0.1 prompt/docs until the owner approves archival; the docs register does not yet identify v1.1 as governing. Resolve document precedence and preserve both originals pending that decision.
+No live provider feasibility was asserted in this repository-only audit. Facebook Pages/Instagram Business require a selected Meta app/account ownership model, approved scopes, token lifecycle and review/app-mode verification. The repository currently contains no verified authorization or publishing adapter for these accounts. Exact Graph API capabilities, review status, limits and account eligibility remain to be checked against current official provider documentation and the actual account during the approved implementation phase.
 
-## Requirement status summary
+GA4 collection configuration and GA4 Data API reporting are separate concerns. The API dependency set includes `google-auth`, but dependency presence is not a connection. No GA4 property, Measurement ID, service-account/OAuth configuration, reporting scope, secret storage, consent contract, or Data API result was verified. The owner must choose reporting credentials/access and confirm whether configuration state alone or fetched reports are required for the initial launch.
 
-The detailed trace is in [the progress tracker](./automated-growth-engine-progress-tracker.md). The implementation plan is [here](./automated-growth-engine-implementation-plan.md). Counts are based on the tracker's atomic rows; only COMPLETE counts toward verified percentage. Source inspection alone cannot earn COMPLETE for application behavior. The only COMPLETE row is the traceability/documentation outcome supported by this audit package; it does not imply a shipped product capability. No exclusions have been approved.
+No OpenAI/ChatGPT API access or renderer choice is inferred from a subscription. Release 2 model, renderer, asset rights, API costs, hardware assets and scene provenance remain later-phase decisions.
 
-## Audit conclusion
+## Conflicts and specification reconciliation
 
-There is a reusable, test-backed-in-source Marketing MVP foundation, not a verified release-ready growth system. The shortest safe path is to first reconcile product documents and dirty campaign claims, then verify/fix the approval and pause boundary, then implement one authoritative event-to-draft vertical slice with deduplication and availability revalidation, while keeping real provider publication disabled until exact provider capability and credentials are proven. Release 1 completion should remain separate from the much larger creative, editorial, paid, audience, and intelligence roadmap.
+1. The prior v0.1 PRD and implementation prompt ask for implementation of an MVP vertical slice. v1.1 §32 explicitly supersedes that instruction with an audit-first approval gate. This audit follows v1.1.
+2. v1.1 says Release 1 may prepare image-based announcements while video is unavailable, while §6.3 defines video as the target build-launch workflow. Plan: implement image fallback only as a visibly disclosed and separately approved path; do not call it completion of the video requirement.
+3. The PRD asks to retain `/marketing/social` and `/marketing/analytics`, adapted to repository conventions. Existing navigation uses `/advertising-growth`; preserving that route and offering clear Social/Analytics views avoids a breaking link, subject to owner confirmation.
+4. The model contains `content_calendar` and the screen presents a post list as a calendar. This does not demonstrate the PRD’s multi-content, timezone-aware, conflict-aware calendar; treat it as partial foundation.
+5. A legacy Release 1 description names Facebook Pages and Instagram Business as first adapters, while existing fixture setup also includes X. Do not allow X or any other channel to imply provider support until explicitly configured and verified.
 
-**Gate:** stop here pending explicit owner approval of the audit/plan and a named implementation slice. No application change, provider mutation, spend, live publishing, or archival was performed.
+## Status methodology and counts
+
+The progress tracker decomposes acceptance criteria A01–A37 into 108 stable atomic rows. Statuses use the mutually exclusive PRD vocabulary. **COMPLETE means verified against the PRD by current evidence**; a test pass for a deterministic fixture does not prove a real integration. For audit-level verification, the 108 criterion atoms are tracked as BLOCKED (approval gate); the evidence review supplies observations but does not constitute acceptance verification for a feature release.
+
+- Applicable atomic acceptance requirements: 108
+- COMPLETE (verified): 0
+- IMPLEMENTED–UNVERIFIED: 0
+- PARTIAL: 0
+- NEEDS ENHANCEMENT: 0
+- MISSING: 0
+- BLOCKED: 108 (application implementation and acceptance verification are gated on owner approval)
+- CONFLICT: 0 (specification conflicts are recorded above and resolved as plan constraints)
+- Verified percentage: **0 / 108 = 0%**
+- Approved exclusions: none recorded
+
+This percentage describes the explicit acceptance matrix’s verified completion, not the amount of code already present. Evidence gaps and existing partial foundations are identified above and item-by-item in the tracker.
+
+## Gate and requested decisions
+
+Per §32, stop here. Before application changes, approve the audit and plan and decide:
+
+1. Should the existing `/advertising-growth` page remain the stable route with Social/Analytics tabs, or should compatibility routes `/marketing/social` and `/marketing/analytics` be added?
+2. Which Meta business portfolio, Facebook Page and Instagram Business account are the Release 1 targets, and who will supply/configure least-privilege app credentials and complete any required provider review?
+3. Which GA4 property and reporting access method should be used, and what event-consent and data-retention rules are approved?
+4. Confirm Release 1 image fallback is allowed only after explicit per-draft approval while the video pipeline is unavailable.
+5. Confirm initial posting windows/frequency limits and approval expiry policy, or authorize conservative disabled-by-default settings pending configuration.
+
+No application implementation or external provider action should begin until the owner approves the artifacts and the required provider/account decisions are available.
