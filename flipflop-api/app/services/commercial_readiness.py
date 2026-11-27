@@ -336,6 +336,23 @@ def observation_data(listing, observation, score, lifecycle):
         explicit_paid=False
     data['postage_verified']=bool(capture.get('postage_verified') is True or explicit_free or explicit_paid)
     _apply_unknown_supplier_postage_fallback(data)
+    # Licence approval is tied to the exact software product facts, not the
+    # price/stock observation. A later search capture must not erase that
+    # review, nor inherit the older capture's prices or arrival estimate.
+    raw=getattr(listing,'raw_specs',None)
+    raw=raw if isinstance(raw,dict) else {}
+    software=raw.get('playbook_product_capture') or {}
+    review=raw.get('playbook_licence_source_review') or {}
+    if (software.get('status')=='captured' and software.get('digital_product') is True
+            and software.get('licence_review_required') is True
+            and software.get('licence_review_fingerprint')
+            and same_listing_product(software.get('url'),listing.url)
+            and same_listing_product(software.get('url'),data.get('url'))):
+        data['product_properties']=software.get('product_properties') or {}
+        data['licence_review_fingerprint']=software['licence_review_fingerprint']
+        data['licence_source_reviewed']=bool(review.get('reviewed') is True
+            and review.get('licence_review_fingerprint')==software['licence_review_fingerprint'])
+        data['licence_source_reviewed_at']=review.get('reviewed_at') if data['licence_source_reviewed'] else None
     data["fingerprint"] = supplier_capture_fingerprint(data)
     data["fresh"] = _recent(data["observed_at"], datetime.now(timezone.utc), timedelta(hours=24))
     return data
