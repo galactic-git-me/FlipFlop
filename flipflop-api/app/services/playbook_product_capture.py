@@ -32,6 +32,11 @@ def max_working_days_for_calendar_duration(calendar_days):
         for start in range(7))
 
 
+def working_days_for_dated_arrival(start, arrival):
+    """Count actual weekdays through a supplier's known arrival date."""
+    return sum((start+timedelta(days=offset)).weekday()<5
+        for offset in range(1,(arrival-start).days+1))
+
 def supported_product_url(url):
     try:
         parsed=urlsplit(url)
@@ -488,6 +493,7 @@ def _amazon_dom_capture(soup,url):
     defaults=[node for node in delivery_nodes if node.get('data-csa-c-mir-variant')=='DEFAULT']
     delivery=defaults[0] if defaults else (delivery_nodes[0] if delivery_nodes else None)
     postage=None;calendar_days=None;delivery_text=None
+    today=datetime.now(timezone.utc).date()
     if delivery:
         delivery_text=delivery.get_text(' ',strip=True)
         raw_price=(delivery.get('data-csa-c-delivery-price') or '').strip()
@@ -521,7 +527,7 @@ def _amazon_dom_capture(soup,url):
         'title':title,'sku':requested.group(1).upper(),'mpn':None,'merchant_name':seller,
         'condition':'used' if used else 'new','item_gbp':item,'delivery_gbp':postage,
         'postage_verified':postage_verified,'delivery_calendar_days':calendar_days,
-        'delivery_working_days':max_working_days_for_calendar_duration(calendar_days),
+        'delivery_working_days':(working_days_for_dated_arrival(today,arrival) if calendar_days is not None else None),
         'delivery_estimate_source':'amazon_displayed_default_destination' if calendar_days is not None else None,
         'prime_eligible':prime_eligible,
         'delivery_destination':postcode.group(0).upper() if postcode else None,
@@ -568,7 +574,7 @@ def parse_product_capture(html,url):
                     target=datetime.strptime(' '.join(date_match.groups()),'%d %B %Y').date()
                     if target>=today:
                         calendar_days=(target-today).days
-                        working_days=max_working_days_for_calendar_duration(calendar_days)
+                        working_days=working_days_for_dated_arrival(today,target)
                 except ValueError:
                     pass
             return {'status':'captured','url':url,'observed_at':datetime.now(timezone.utc).isoformat(),
@@ -648,7 +654,7 @@ def parse_product_capture(html,url):
                     'condition_evidence':'first_party_retail_default_new_no_second_hand_designation',
                     'item_gbp':price,'delivery_gbp':None,'postage_verified':False,
                     'delivery_calendar_days':calendar_days,
-                    'delivery_working_days':max_working_days_for_calendar_duration(calendar_days),
+                    'delivery_working_days':working_days_for_dated_arrival(today,target),
                     'delivery_estimate_source':'retailer_page_displayed_estimate',
                     'stock_status':'available','stock_evidence':'MoreCoCo product panel reports In Stock',
                     'product_image_urls':[],
@@ -849,7 +855,7 @@ def parse_product_capture(html,url):
         if target is not None and target>=today:
             calendar_days=(target-today).days
             captured.update(delivery_calendar_days=calendar_days,
-                delivery_working_days=max_working_days_for_calendar_duration(calendar_days),
+                delivery_working_days=working_days_for_dated_arrival(today,target),
                 delivery_estimate_source='retailer_page_displayed_estimate',
                 delivery_destination='UK delivery estimate')
     if host in {'hardvance.co.uk','www.hardvance.co.uk'}:
@@ -903,12 +909,7 @@ def parse_product_capture(html,url):
                     calendar_days=(target-today).days
                     captured.update(
                         delivery_calendar_days=calendar_days,
-                        # This is an absolute arrival date, so use the known
-                        # weekdays rather than the worst possible start day
-                        # for an undated calendar-duration estimate.
-                        delivery_working_days=sum(
-                            (today+timedelta(days=offset)).weekday()<5
-                            for offset in range(1,calendar_days+1)),
+                        delivery_working_days=working_days_for_dated_arrival(today,target),
                         delivery_estimate_source='retailer_page_displayed_estimate',
                         delivery_destination='UK (excluding Channel Islands)',
                     )

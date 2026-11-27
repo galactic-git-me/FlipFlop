@@ -5,7 +5,9 @@ from datetime import datetime, timezone
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from app.services.playbook_product_capture import parse_product_capture
+from app.services.playbook_product_capture import (
+    max_working_days_for_calendar_duration, parse_product_capture,
+)
 from app.services.playbook_service import component_delivery_eligibility
 
 URL = "https://www.overclockers.co.uk/exact-processor/PRO-INT-07479.html"
@@ -31,6 +33,29 @@ def offer_html(stock="InStock", premium=True):
 
 
 class DatedArrivalTests(unittest.TestCase):
+    @patch("app.services.playbook_product_capture.datetime", FixedClock)
+    def test_amazon_selected_offer_uses_actual_weekdays(self):
+        url = "https://www.amazon.co.uk/dp/B0DSR14511"
+        html = '''<input name="ASIN" value="B0DSR14511">
+            <div id="productTitle">Crucial 64GB DDR5 RAM Kit</div>
+            <div id="corePrice_feature_div"><span class="a-offscreen">£739.99</span></div>
+            <div id="availability">In Stock</div>
+            <div id="sellerProfileTriggerId">Amazon</div>
+            <div id="deliveryBlockContainer">
+              <div data-csa-c-delivery-type="delivery" data-csa-c-mir-variant="DEFAULT"
+                data-csa-c-delivery-price="FREE" data-csa-c-delivery-time="Tuesday, 1 December">
+                FREE delivery Tuesday, 1 December
+              </div>
+            </div>'''
+        result = parse_product_capture(html, url)
+        self.assertEqual(result["status"], "captured")
+        self.assertEqual(result["delivery_calendar_days"], 4)
+        self.assertEqual(result["delivery_working_days"], 2)
+
+    def test_undated_calendar_duration_stays_conservative(self):
+        self.assertEqual(max_working_days_for_calendar_duration(4), 4)
+        self.assertEqual(max_working_days_for_calendar_duration(7), 5)
+
     @patch("app.services.playbook_product_capture.datetime", FixedClock)
     def test_dated_arrival_counts_actual_weekdays_and_allows_standard(self):
         result = parse_product_capture(offer_html(), URL)
