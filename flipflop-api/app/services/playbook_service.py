@@ -985,6 +985,10 @@ def _ram_layout_facts(title, properties=None, quantity=1):
     speed_match=re.search(r'(?<!\d)(\d{4,5})\s*(?:MT\s*/?\s*S|MTS|MHz)\b',text_value,re.I)
     speed=int(speed_match.group(1)) if speed_match else None
     latency_match=re.search(r'\bCL\s*(\d{1,3})\b',text_value,re.I)
+    if latency_match is None:
+        # Retailers also label CAS explicitly as C30 or PC5-48000C30.
+        # A suffix buried in a manufacturer's SKU is not a specification.
+        latency_match=re.search(r'(?:\bC\s*|\bPC[345][- ]\d{4,6}C)(\d{1,3})\b',text_value,re.I)
     latency=int(latency_match.group(1)) if latency_match else None
     for key,value in properties.items():
         normalized=re.sub(r'[^a-z]','',str(key).casefold())
