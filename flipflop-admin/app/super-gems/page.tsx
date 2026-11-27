@@ -67,6 +67,9 @@ export default function SuperGemsPage() {
         })
         .slice(0, 100)
           .map((s: any) => {
+            // The current scored-listings contract wraps marketplace fields in
+            // `listing`; keep accepting the older flat shape during rollouts.
+            const listing = s.listing ?? s;
             // Handle both gem-radar scored listings and raw listings API
             const isScored = s._source === 'scored';
             const classificationMap: Record<string, any> = {
@@ -76,19 +79,26 @@ export default function SuperGemsPage() {
             };
 
             // Price handling: gem-radar uses delivered_price, listings use price
-            const actualPrice = s.actual_price || s.delivered_price || s.price || 0;
+            const actualPrice = s.actual_price || s.delivered_price || s.price ||
+              listing.currentDeliveredPrice || listing.itemPrice || 0;
             // Resale: gem-radar uses market_used_price, listings uses estimated_resale
             const resalePrice = s.market_used_price || s.market_new_price || s.estimated_resale || 0;
             const profit = s.deal_score || s.estimated_profit || (resalePrice - actualPrice) || 0;
 
             return {
-              id: s.listing_id || s.id,
-              external_id: String(s.listing_id || s.external_id || s.id),
-              source_name: s.source || s.source_name,
-              title: s.title,
+              id: s.listing_id || listing.listingId || s.id,
+              external_id: String(s.listing_id || listing.listingId || s.external_id || s.id),
+              source_name: s.source || s.source_name || listing.source,
+              title: s.title || listing.title,
               price: actualPrice,
-              url: s.url || '',
-              image_urls: s.image_url ? [s.image_url] : (s.image_urls || []),
+              url: s.url || listing.url || '',
+              // Some API versions populate only imageUrls while others expose
+              // imageUrl; retain the full gallery and prefer the primary image.
+              image_urls: [...new Set([
+                s.image_url, s.imageUrl, listing.imageUrl,
+                ...(s.image_urls || []), ...(s.imageUrls || []),
+                ...(listing.imageUrls || []),
+              ].filter((url): url is string => typeof url === 'string' && url.trim().length > 0))],
               location: s.location || null,
               condition: s.condition,
               cpu: s.cpu || null,
