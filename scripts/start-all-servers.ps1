@@ -340,9 +340,18 @@ Stop-DevelopmentProcesses -Ports $portsToClean
 $env:FLIPFLOP_RUNTIME_ENV = 'development'
 $env:EBAY_ENVIRONMENT = 'production'
 $env:EBAY_LISTING_ENVIRONMENT = 'sandbox'
-$env:AMAZON_SP_API_ENVIRONMENT = 'sandbox'
-$env:AMAZON_SP_API_ENDPOINT = 'https://sandbox.sellingpartnerapi-eu.amazon.com'
-$env:AMAZON_SP_API_SELLER_ID = 'SANDBOX_SELLER_ID'
+$amazonSpApiEnvironment = Get-ApiLocalEnvironmentValue 'AMAZON_SP_API_ENVIRONMENT'
+if ($amazonSpApiEnvironment -notin @('production', 'sandbox')) {
+    throw 'AMAZON_SP_API_ENVIRONMENT in flipflop-api/.env.local must be production or sandbox.'
+}
+$env:AMAZON_SP_API_ENVIRONMENT = $amazonSpApiEnvironment
+$env:AMAZON_SP_API_SELLER_ID = Get-ApiLocalEnvironmentValue 'AMAZON_SP_API_SELLER_ID'
+Remove-Item Env:AMAZON_SP_API_ENDPOINT -ErrorAction SilentlyContinue
+if ($amazonSpApiEnvironment -eq 'production') {
+    $env:AMAZON_SP_API_ENDPOINT = Get-ApiEnvironmentValue 'AMAZON_SP_API_ENDPOINT'
+} else {
+    Remove-Item Env:AMAZON_SP_API_SANDBOX_ENDPOINT -ErrorAction SilentlyContinue
+}
 if (-not $NoBackend) {
     foreach ($name in @(
         'AMAZON_SP_API_CLIENT_ID',
@@ -365,7 +374,7 @@ $servers = @()
 $apiUrl = 'http://127.0.0.1:4311'
 
 if (-not $NoBackend) {
-    $command = "set `"FLIPFLOP_RUNTIME_ENV=development`" && set `"OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"OLLAMA_MODEL=$ollamaModel`" && set `"EBAY_ENVIRONMENT=production`" && set `"EBAY_LISTING_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENDPOINT=https://sandbox.sellingpartnerapi-eu.amazon.com`" && set `"AMAZON_SP_API_SELLER_ID=SANDBOX_SELLER_ID`" && set `"ADMIN_FRONTEND_URL=http://localhost:4312`" && set `"FRONTEND_URL=http://localhost:4313`" && .venv\Scripts\python.exe run_dev.py --host 127.0.0.1 --port 4311"
+    $command = "set `"FLIPFLOP_RUNTIME_ENV=development`" && set `"OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"OLLAMA_MODEL=$ollamaModel`" && set `"EBAY_ENVIRONMENT=production`" && set `"EBAY_LISTING_ENVIRONMENT=sandbox`" && set `"ADMIN_FRONTEND_URL=http://localhost:4312`" && set `"FRONTEND_URL=http://localhost:4313`" && .venv\Scripts\python.exe run_dev.py --host 127.0.0.1 --port 4311"
     $servers += Start-DevelopmentServer -Name 'backend' -WorkingDirectory (Join-Path $projectRoot 'flipflop-api') -Command $command -Port 4311 -Color Yellow
 }
 
