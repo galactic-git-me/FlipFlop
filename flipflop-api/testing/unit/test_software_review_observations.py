@@ -52,5 +52,34 @@ class SoftwareReviewObservationTests(unittest.TestCase):
         self.assertFalse(self.source(capture_url=URL+'-other-product').get('licence_source_reviewed'))
 
 
+
+class DigitalOfferPrecedenceTests(unittest.TestCase):
+    def setUp(self):
+        self.page = {'url': URL, 'identity_source': 'exact_retailer_product_page',
+            'observed_at': '2026-11-27T01:00:00+00:00', 'fresh': True,
+            'item_gbp': '3.47', 'delivery_gbp': '0.00', 'condition': 'new',
+            'stock_status': 'available', 'stock_evidence': 'InStock',
+            'licence_review_fingerprint': 'licence-facts',
+            'delivery_working_days': 0, 'delivery_estimate_source': 'digital_delivery'}
+        self.newer = {**self.page, 'observed_at': '2026-11-27T02:00:00+00:00',
+            'identity_source': 'approved_catalogue_listing_link',
+            'commercial_capture_verified': True,
+            'delivery_working_days': 3, 'delivery_estimate_source': 'vendor_default'}
+
+    def test_same_unchanged_digital_offer_keeps_complete_instant_delivery_capture(self):
+        from app.services.commercial_readiness import prefer_exact_product_page_preview
+        self.assertTrue(prefer_exact_product_page_preview(self.page, self.newer))
+
+    def test_newer_price_or_stock_change_is_not_hidden_by_old_digital_capture(self):
+        from app.services.commercial_readiness import prefer_exact_product_page_preview
+        self.assertFalse(prefer_exact_product_page_preview(self.page, {**self.newer, 'item_gbp': '4.00'}))
+        self.assertFalse(prefer_exact_product_page_preview(self.page, {**self.newer, 'stock_status': 'unavailable'}))
+
+    def test_stale_or_other_product_digital_capture_is_not_reused(self):
+        from app.services.commercial_readiness import prefer_exact_product_page_preview
+        self.assertFalse(prefer_exact_product_page_preview({**self.page, 'fresh': False}, self.newer))
+        self.assertFalse(prefer_exact_product_page_preview({**self.page, 'url': URL+'-other'}, self.newer))
+
 if __name__ == '__main__':
     unittest.main()
+

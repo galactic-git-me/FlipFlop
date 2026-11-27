@@ -523,6 +523,24 @@ def prefer_exact_product_page_preview(product_page, listing_preview):
         return False
     if (product_page.get('identity_source')=='exact_retailer_product_page'
             and same_listing_product(product_page.get('url'),listing_preview.get('url'))):
+        # A generic physical-shipping default is not new evidence about an
+        # unchanged instant digital offer. Keep the complete fresh exact-page
+        # record (including its original timestamp), never splice its ETA into
+        # a newer price or stock snapshot.
+        if (product_page.get('fresh') and product_page.get('licence_review_fingerprint')
+                and product_page.get('delivery_estimate_source')=='digital_delivery'
+                and product_page.get('delivery_working_days')==0
+                and listing_preview.get('delivery_estimate_source') in {
+                    None,'vendor_default','general_supplier_default','saved_vendor_default'}
+                and product_page.get('stock_status')==listing_preview.get('stock_status')=='available'
+                and product_page.get('condition')==listing_preview.get('condition')=='new'):
+            try:
+                same_digital_offer=all(Decimal(str(product_page.get(key)))
+                    ==Decimal(str(listing_preview.get(key))) for key in ('item_gbp','delivery_gbp'))
+            except (ValueError,TypeError,ArithmeticError):
+                same_digital_offer=False
+            if same_digital_offer:
+                return True
         # A retained exact-page capture must not hide a newer verified offer
         # for the same listing. The approval endpoint rechecks the freshest
         # source, so pricing/rebuild and review must apply the same precedence.
