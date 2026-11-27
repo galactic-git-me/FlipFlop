@@ -75,6 +75,7 @@ async def test_build_offer_assesses_approved_evidence_without_importing_supplier
             "variant_id": index,
             "slot_id": index,
             "listing_id": index,
+            "source_url": f"https://supplier.example/{role}",
             "title": f"{role.upper()} product {index}",
             "source_observation": {
                 "fresh": True,
@@ -84,6 +85,7 @@ async def test_build_offer_assesses_approved_evidence_without_importing_supplier
             },
             "catalogue_approved": True,
             "photo_ready": True,
+            "media_ready": True,
             "engineering": {},
         }
         for index, role in enumerate(roles, start=1)
