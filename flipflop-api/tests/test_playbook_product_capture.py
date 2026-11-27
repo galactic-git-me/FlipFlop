@@ -43,7 +43,9 @@ def test_amazon_dom_capture_uses_exact_offer_seller_stock_and_latest_arrival_day
     assert result['postage_verified'] is True
     assert result['delivery_gbp']=='0'
     assert result['delivery_calendar_days']==4
-    assert result['delivery_working_days']==max_working_days_for_calendar_duration(4)
+    today=datetime.now(timezone.utc).date()
+    assert result['delivery_working_days']==sum(
+        (today+timedelta(days=offset)).weekday()<5 for offset in range(1,5))
 
 
 def test_exact_fact_queue_includes_base_and_upsell_products_but_uses_the_licence_source():
@@ -266,7 +268,7 @@ def test_ccl_delivery_capture_accepts_explicit_tomorrow_wording_only():
     assert captured['item_gbp']=='2186.99'
     assert captured['stock_status']=='available'
     assert captured['delivery_calendar_days']==1
-    assert captured['delivery_working_days']==max_working_days_for_calendar_duration(1)
+    assert captured['delivery_working_days']==int((datetime.now(timezone.utc)+timedelta(days=1)).weekday()<5)
     assert captured['delivery_estimate_source']=='retailer_page_displayed_estimate'
     assert countdown_only['delivery_estimate_source']=='structured_product_offer_calendar_days'
     assert countdown_only['delivery_calendar_days'] is None
@@ -309,5 +311,5 @@ async def test_ccl_capture_uses_shared_browser_after_http_block(monkeypatch):
 
     assert result['status']=='captured'
     assert result['capture_method']=='playwright_fallback'
-    assert result['delivery_working_days']==max_working_days_for_calendar_duration(1)
+    assert result['delivery_working_days']==int((datetime.now(timezone.utc)+timedelta(days=1)).weekday()<5)
     assert page.navigated==url and page.closed

@@ -336,6 +336,23 @@ def observation_data(listing, observation, score, lifecycle):
         explicit_paid=False
     data['postage_verified']=bool(capture.get('postage_verified') is True or explicit_free or explicit_paid)
     _apply_unknown_supplier_postage_fallback(data)
+    # Licence approval is tied to the exact software product facts, not the
+    # price/stock observation. A later search capture must not erase that
+    # review, nor inherit the older capture's prices or arrival estimate.
+    raw=getattr(listing,'raw_specs',None)
+    raw=raw if isinstance(raw,dict) else {}
+    software=raw.get('playbook_product_capture') or {}
+    review=raw.get('playbook_licence_source_review') or {}
+    if (software.get('status')=='captured' and software.get('digital_product') is True
+            and software.get('licence_review_required') is True
+            and software.get('licence_review_fingerprint')
+            and same_listing_product(software.get('url'),listing.url)
+            and same_listing_product(software.get('url'),data.get('url'))):
+        data['product_properties']=software.get('product_properties') or {}
+        data['licence_review_fingerprint']=software['licence_review_fingerprint']
+        data['licence_source_reviewed']=bool(review.get('reviewed') is True
+            and review.get('licence_review_fingerprint')==software['licence_review_fingerprint'])
+        data['licence_source_reviewed_at']=review.get('reviewed_at') if data['licence_source_reviewed'] else None
     data["fingerprint"] = supplier_capture_fingerprint(data)
     data["fresh"] = _recent(data["observed_at"], datetime.now(timezone.utc), timedelta(hours=24))
     return data
@@ -506,6 +523,24 @@ def prefer_exact_product_page_preview(product_page, listing_preview):
         return False
     if (product_page.get('identity_source')=='exact_retailer_product_page'
             and same_listing_product(product_page.get('url'),listing_preview.get('url'))):
+        # A generic physical-shipping default is not new evidence about an
+        # unchanged instant digital offer. Keep the complete fresh exact-page
+        # record (including its original timestamp), never splice its ETA into
+        # a newer price or stock snapshot.
+        if (product_page.get('fresh') and product_page.get('licence_review_fingerprint')
+                and product_page.get('delivery_estimate_source')=='digital_delivery'
+                and product_page.get('delivery_working_days')==0
+                and listing_preview.get('delivery_estimate_source') in {
+                    None,'vendor_default','general_supplier_default','saved_vendor_default'}
+                and product_page.get('stock_status')==listing_preview.get('stock_status')=='available'
+                and product_page.get('condition')==listing_preview.get('condition')=='new'):
+            try:
+                same_digital_offer=all(Decimal(str(product_page.get(key)))
+                    ==Decimal(str(listing_preview.get(key))) for key in ('item_gbp','delivery_gbp'))
+            except (ValueError,TypeError,ArithmeticError):
+                same_digital_offer=False
+            if same_digital_offer:
+                return True
         # A retained exact-page capture must not hide a newer verified offer
         # for the same listing. The approval endpoint rechecks the freshest
         # source, so pricing/rebuild and review must apply the same precedence.
