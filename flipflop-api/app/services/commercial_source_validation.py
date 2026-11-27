@@ -110,9 +110,6 @@ def source_values(source: dict, entry: ImportEntry) -> dict:
     )
     if item == 0 and not free_ubuntu:
         raise HTTPException(422, "Zero-cost software requires verified official Ubuntu download evidence")
-    if identity == "gamers_outlet" and source.get("licence_source_reviewed") is not True:
-        raise HTTPException(409, "The exact licence source requires review")
-
     return {
         "part_key": entry.part_key,
         "supplier": "Ubuntu" if software else identity,

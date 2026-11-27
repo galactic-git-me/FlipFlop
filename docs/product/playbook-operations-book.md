@@ -8,6 +8,15 @@ commercial truth.
 
 ## Pages
 
+The **AUDIT** tab is the segment-by-segment publication checklist. It shows a
+green tick for a completed check, a red cross for a failed check, and blank for
+checks not yet run. It covers linked component listings, approved photos and
+3D models, local-LLM compatibility, prices, delivery paces, defined pace
+products, and purchasable key listings where applicable. One linked supplier
+listing per component is sufficient availability evidence; no supplier
+approval action is part of this workflow. Workshop planning and legal review
+are outside the Playbook publication checklist.
+
 ### Extension market discovery
 
 The extension obtains managed build searches from
@@ -50,16 +59,16 @@ separate verification/release work.
    measured complete-system benchmark.
 10. Live status: stored publication, checkout-policy and availability records,
     with outstanding proposal blockers.
-11. Approvals: pending exact-revision proposals and existing source/engineering
-    review actions. No view grants approval or bypasses publication checks.
+11. Approvals: pending exact-revision publication decisions and recorded
+    proposal history.
 12. History and decisions: persisted proposals, source/policy reviews and new
     append-only operational events, including before/after evidence and actor.
 13. Distribution: stored storefront publication and channel records with an exact
     `curated_build_id` link. A parent Playbook alone cannot assign a channel record
     to a budget cell. Stored publication is not a live channel poll.
-14. Compatibility: recorded fit checks and relevant engineering-review tools.
-15. Software: reviewed cell software and OS sourcing, using existing use-case
-    defaults where no separate cell profile exists.
+14. Compatibility: local-LLM checks against the selected components and their
+    captured specifications.
+15. Keys: OS key listing availability for builds that include an OS key.
 16. Automation health: recorded assessment time and shared scheduler/run health.
 
 ## Interaction and evidence
@@ -83,10 +92,12 @@ publication, manual cell edits/price application, and availability withdrawals
 append operational records to the existing snapshot store in the same transaction.
 This change does not add new automatic repricing, withdrawal or distribution rules.
 
-Publication, compatibility, supplier freshness, stock, commercial cost/margin,
-delivery and revision checks remain under their existing deterministic services.
-Workshop build counts are planning information only and never cap checkout or
-sales. The book consolidates those decisions and controls; it does not waive them.
+Publication still checks proposal revision, captured component listings,
+compatibility, pricing and delivery products. A linked listing is the
+availability evidence and does not need an additional supplier approval.
+Workshop build counts are outside the Playbook end-to-end publication process.
+Legal and licensing decisions remain with the owner and are not part of the
+Playbook key availability check.
 
 ## Evidence continuation
 
@@ -137,10 +148,9 @@ despite the rebuild's no-remote-collection contract.
 
 In commercial review, **Approve & publish this build** is the final operator
 approval for that exact proposal revision. The server repeats the source,
-compatibility, availability, delivery-price and publication checks,
+compatibility, listing availability, delivery-price and publication checks,
 then publishes the reviewed build at its proposed Standard price, exposes only
 eligible reviewed upsells, and enables checkout. The control stays disabled
 while any proposal blocker remains; approval never edits component values or
 prices by hand. The server may use a current schedule estimate to describe
-timing, but missing or full workshop-count evidence cannot make a product
-unsellable.
+timing; workshop planning evidence is not a publication requirement.

@@ -463,10 +463,7 @@ def _supplier_fact_is_approvable(part,source):
     accepted_identity=identity in {'amazon','overclockers','scan','ebuyer',
         'computer_orbit','awd_it','ccl','corsair','alpha_components','hardvance','senetic','morecoco'}
     if identity == 'gamers_outlet':
-        # A digital-key offer needs an explicit operator review of the
-        # supplier's licence type and UK resale/install terms before its cost
-        # can enter a customer quote.
-        accepted_identity=bool(part.get('role','').startswith('os') and source.get('licence_source_reviewed'))
+        accepted_identity=bool(part.get('role','').startswith('os'))
     postage_is_usable=(source.get('postage_verified') is True and postage is not None
         or source.get('postage_assumption')=='owner-approved-zero-fallback' and postage==0)
     exact_product=(url==part.get('source_url') or same_listing_product(url,part.get('source_url')))
@@ -620,26 +617,21 @@ def _model_tokens(value):
 
 
 def _verified_windows_licence_listing(listing):
-    """Only recommend an exact per-device Windows licence listing for operator review."""
+    """Recognise a captured Windows key listing; legal review is owner-managed."""
     raw=listing.raw_specs if isinstance(listing.raw_specs,dict) else {}
     supplier=raw.get('gamers_outlet') or {}
     capture=raw.get('playbook_product_capture') if isinstance(raw.get('playbook_product_capture'),dict) else {}
-    properties=capture.get('product_properties') if isinstance(capture.get('product_properties'),dict) else {}
     title=capture.get('title') or listing.title
     expected_edition=re.search(r'\bwindows\s+11\s+(home|pro)\b',listing.title,re.I)
     captured_edition=re.search(r'\bwindows\s+11\s+(home|pro)\b',title,re.I)
-    license_type=str(properties.get('License type (supplier listing)') or '').casefold()
     handle=supplier.get('handle')
     captured_handle=capture.get('supplier_product_handle')
     from app.services.playbook_product_capture import supported_product_url
     return bool(getattr(listing,'source_name',None)=='Gamers Outlet' and supplier.get('category')=='os' and supplier.get('handle')
         and capture.get('status')=='captured' and capture.get('digital_product') is True
-        and capture.get('licence_review_required') is True and capture.get('licence_resale_rights_verified') is False
         and capture.get('url')==listing.url and supported_product_url(listing.url)
         and handle==captured_handle and expected_edition and captured_edition
-        and expected_edition.group(1).casefold()==captured_edition.group(1).casefold()
-        and license_type in {'oem','retail'}
-        and 'not guaranteed' not in str(properties.get('Key uniqueness (supplier claim)','')).casefold())
+        and expected_edition.group(1).casefold()==captured_edition.group(1).casefold())
 
 
 def _candidate_key(candidate, preferred):
@@ -1801,7 +1793,8 @@ async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None,variant
         source_cache.update(await source_preview_many(db,pending))
     from app.services.shared_variant_assets import final_assets_by_variant, approved_model_photos
     from app.services.curated_media import media_urls
-    ready_assets=await final_assets_by_variant(db,[variant for _,variant,*_ in selected])
+    ready_assets=await final_assets_by_variant(db,[variant for _,variant,*_ in selected],
+        allow_pending_review=True)
     ready_ids=set(ready_assets)
     external_ids={listing.external_id for _,_,listing,_,_,_,_ in selected}
     catalogue_identities={}
@@ -1924,6 +1917,8 @@ async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None,variant
                     and (not variant.reject_reason or variant.reject_reason.startswith('freshness:')))),
             'media_ready':role.startswith('os') or variant.id in ready_ids,
             'photo_ready':role.startswith('os') or bool(approved_model_photos(variant)),
+            'photo_approval_status':(variant.asset_media_review or {}).get('status'),
+            'media_preparation_status':((variant.asset_media_review or {}).get('media_preparation') or {}).get('status'),
             'model_generation_status':((variant.asset_media_review or {}).get('generation') or {}).get('status'),
             'not_live_reason':None if role.startswith('os') or variant.id in ready_ids else (
                 'Choose one to four product photos for the 3D model' if not (
@@ -2166,31 +2161,24 @@ async def build_cell_offer(db,definition,parent,settings,candidates,benchmark_in
     wireless_missing_bom=[]
     if missing_radios:
         adapter=next((part for part in candidates if part.get('role')=='wireless_adapter'
-            and part.get('catalogue_status') in {'active','pending_review'}
             and part.get('planning_engineering',{}).get('wifi') is True
             and part.get('planning_engineering',{}).get('bluetooth') is True
-            and _decimal(part.get('listing_price_gbp')) is not None),None)
+            and part.get('listing_id') and part.get('source_url')),None)
         if adapter:
             parts['wireless_adapter']=dict(adapter)
             if policy:
                 parts['wireless_adapter']['delivery_eligibility']=component_delivery_eligibility(adapter,policy)
-            source=adapter.get('source_observation') or {}
-            if not adapter.get('catalogue_approved'):
-                blockers.append('wireless_adapter: approve the exact adapter in the shared catalogue before publication')
-            if not (source.get('fresh') and source.get('active_listing')
-                    and source.get('stock_status')=='available' and source.get('condition')=='new'):
-                blockers.append('wireless_adapter: refresh and verify a new, in-stock supplier offer before publication')
             wireless_extra={**adapter,'provides':['Wi-Fi','Bluetooth'],
                 'missing_on_motherboard':missing_radios,'source_status':'catalogue_candidate'}
         else:
-            wireless_missing_bom=['wireless_adapter: no approved, priced new adapter is available']
-            blockers.append('Add and source a new Wi-Fi/Bluetooth adapter; motherboard connectivity is missing or unverified for '
+            wireless_missing_bom=['wireless_adapter: no linked catalogue listing is available']
+            blockers.append('Link a Wi-Fi/Bluetooth adapter listing; motherboard connectivity is missing or unverified for '
                 +' and '.join(missing_radios))
     for role,part in parts.items():
-        if part.get('draft_software_candidate'):
-            blockers.append(f'{role}: review the exact software licence source before publication')
         if not role.startswith('os') and role!='wireless_adapter' and not part.get('photo_ready'):
             blockers.append(f"{role}: approve the product photos in the Playbook")
+        if not role.startswith('os') and not part.get('media_ready'):
+            blockers.append(f"{role}: approve a finished 3D model in the Playbook")
     engineering={role:fit_engineering(part) for role,part in parts.items() if role!='case' and not role.startswith('os')}
     chassis=chassis_for(parts)
     checks=_evaluate_playbook_fit(engineering,chassis,gpu_required='gpu' in required_roles(definition))
@@ -2202,26 +2190,12 @@ async def build_cell_offer(db,definition,parent,settings,candidates,benchmark_in
     availability=required.issubset(parts) and set(parts).issubset(allowed)
     if missing_radios and wireless_extra is None:
         availability=False
-    condition_gaps=[]
-    for part in parts.values():
-        source=part.get('source_observation') or {}
-        if not (source.get('fresh') and source.get('active_listing')
-                and source.get('stock_status')=='available'):
+    for role,part in parts.items():
+        if not part.get('listing_id') or not part.get('source_url'):
             availability=False
-        if source and source.get('condition') != 'new':
-            condition_gaps.append(part['role'])
     if not availability:
-        source_gaps=[]
-        for role,part in parts.items():
-            source=part.get('source_observation') or {}
-            gaps=[]
-            if not source.get('fresh'):gaps.append('source capture missing or stale')
-            if not source.get('active_listing'):gaps.append('listing not confirmed active')
-            if source.get('stock_status')!='available':gaps.append(f"stock {source.get('stock_status') or 'unconfirmed'}")
-            if gaps:source_gaps.append(f"{role} ({'; '.join(gaps)})")
-        blockers.append('Refresh exact supplier stock evidence for: '+', '.join(source_gaps or ['missing catalogue roles']))
-    if condition_gaps:
-        blockers.append('Replace non-new supplier offers for: '+', '.join(sorted(condition_gaps)))
+        missing_listings=[role for role,part in parts.items() if not part.get('listing_id') or not part.get('source_url')]
+        blockers.append('Link a supplier listing for: '+', '.join(missing_listings or sorted(required-set(parts))))
     if definition.get('components',{}).get('os') and 'os' not in parts:
         blockers.append('Automatic sourcing must link the operating-system licence and its cost from the catalogue')
     unmodelled_components=unmodelled_required_components(definition)
@@ -2373,6 +2347,12 @@ async def approve_proposal(db,proposal_id,revision,actor_id):
     current=await apply_configured_cell_budget_gate(db,definition,parent,current)
     if current['revision_sha256']!=revision:
         raise HTTPException(409,'Catalogue products, prices or availability changed; refresh and review the new proposal')
+    saved_compatibility=(proposal.proposed_data or {}).get('compatibility_review')
+    if saved_compatibility:
+        from app.services.compatibility_llm_review import validate_compatibility_review
+        current['compatibility_review']=validate_compatibility_review(current,saved_compatibility)
+    if not current.get('compatibility_review') or current['compatibility_review'].get('status')!='compatible':
+        raise HTTPException(409,'Run the local compatibility audit and resolve any incompatible or missing fit facts before publishing')
     limit_reason=publication_limit_reason(parent,definition,current) if mvp_enabled(parent) else None
     if limit_reason:
         raise HTTPException(409,limit_reason)

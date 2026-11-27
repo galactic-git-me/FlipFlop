@@ -14,9 +14,11 @@ class ProposalDeliveryTests(unittest.IsolatedAsyncioTestCase):
         roles = ('cpu', 'gpu')
         parts = {role: {'role': role, 'variant_id': i, 'slot_id': i,
             'listing_id': i, 'title': role.upper()+' product',
+            'source_url': f'https://supplier.example/{role}',
             'source_observation': {'fresh': True, 'active_listing': True,
                 'stock_status': 'available', 'condition': 'new'},
-            'catalogue_approved': True, 'photo_ready': True, 'engineering': {}}
+            'catalogue_approved': True, 'photo_ready': True, 'media_ready': True,
+            'engineering': {}}
             for i, role in enumerate(roles, 1)}
         policy = SimpleNamespace(enabled_modes=list(service.MODES),
             modes={mode: object() for mode in service.MODES})

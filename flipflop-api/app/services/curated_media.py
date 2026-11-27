@@ -49,6 +49,11 @@ def _usable_media_url(url):
         return False
     if "._rc" in path or "<svg" in path or "/catalogsearch/result" in path:
         return False
+    # Overclockers exposes a valid image URL for its generic missing-image
+    # tile. Treat it as absent so image-required Gem selection can choose the
+    # next scored listing with a real product photo.
+    if parsed.hostname.casefold().removeprefix("www.") == "overclockers.co.uk" and path.endswith("/images/no-image-available.png"):
+        return False
     # A scraper once treated Google's inline base64 placeholder as a remote URL.
     host = parsed.hostname.casefold()
     if (host == "google.com" or host.endswith(".google.com")) and path.startswith("/ivborw0kggo"):
