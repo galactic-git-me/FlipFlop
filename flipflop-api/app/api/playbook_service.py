@@ -232,7 +232,8 @@ async def compatibility_second_opinion(proposal_id:int,body:ReviewRevision,
     # proposal that changed while the model was running.
     from copy import deepcopy
     current=(await db.execute(select(PlaybookProposal).where(
-        PlaybookProposal.id==proposal_id).with_for_update())).scalar_one_or_none()
+        PlaybookProposal.id==proposal_id).with_for_update()
+        .execution_options(populate_existing=True))).scalar_one_or_none()
     if (current is None or current.status!='pending'
             or (current.proposed_data or {}).get('revision_sha256')!=body.revision_sha256):
         raise HTTPException(409,'The proposal changed during the compatibility check; reload before continuing')

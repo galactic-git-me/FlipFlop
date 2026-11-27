@@ -152,6 +152,54 @@ async def test_build_offer_assesses_approved_evidence_without_importing_supplier
 
 
 @pytest.mark.asyncio
+async def test_compatibility_review_does_not_overwrite_a_newer_proposal_revision(monkeypatch):
+    from app.api import playbook_service as api_module
+    from fastapi import HTTPException
+    from app.services import compatibility_llm_review
+
+    original = SimpleNamespace(
+        id=71,
+        status="pending",
+        demand_signals={"source": "catalogue_playbook_service_v1"},
+        proposed_data={"revision_sha256": "a" * 64},
+    )
+    refreshed = SimpleNamespace(
+        id=71,
+        status="pending",
+        demand_signals={"source": "catalogue_playbook_service_v1"},
+        proposed_data={"revision_sha256": "b" * 64},
+    )
+
+    class Database:
+        def __init__(self):
+            self.calls = 0
+            self.commits = 0
+
+        async def execute(self, statement):
+            self.calls += 1
+            if self.calls == 1:
+                return SimpleNamespace(scalar_one_or_none=lambda: original)
+            assert statement.get_execution_options().get("populate_existing") is True
+            return SimpleNamespace(scalar_one_or_none=lambda: refreshed)
+
+        async def commit(self):
+            self.commits += 1
+
+    async def review(_offer):
+        return {"status": "compatible", "checks": []}
+
+    monkeypatch.setattr(compatibility_llm_review, "review_compatibility_evidence", review)
+    db = Database()
+    body = api_module.ReviewRevision(revision_sha256="a" * 64)
+
+    with pytest.raises(HTTPException, match="changed during the compatibility check"):
+        await api_module.compatibility_second_opinion(71, body, db)
+
+    assert "compatibility_review" not in original.proposed_data
+    assert db.commits == 0
+
+
+@pytest.mark.asyncio
 async def test_build_offer_selects_standard_eligible_benchmark_qualified_shared_bom(monkeypatch):
     roles = ("cpu", "gpu")
     monkeypatch.setattr(playbook_service, "required_roles", lambda _definition: roles)

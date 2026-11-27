@@ -1793,7 +1793,8 @@ async def _catalogue_candidates(db,parent_id,catalogue,source_cache=None,variant
         source_cache.update(await source_preview_many(db,pending))
     from app.services.shared_variant_assets import final_assets_by_variant, approved_model_photos
     from app.services.curated_media import media_urls
-    ready_assets=await final_assets_by_variant(db,[variant for _,variant,*_ in selected])
+    ready_assets=await final_assets_by_variant(db,[variant for _,variant,*_ in selected],
+        allow_pending_review=True)
     ready_ids=set(ready_assets)
     external_ids={listing.external_id for _,_,listing,_,_,_,_ in selected}
     catalogue_identities={}
