@@ -4,6 +4,12 @@ import re
 
 def manufacturer_facts(role,title):
     text=title.casefold()
+    if role=='motherboard' and re.search(r'\bmsi\s+b850\s+gaming\s+plus\s+wifi\s*6e\b',text):
+        return {'source_url':'https://www.msi.com/Motherboard/B850-GAMING-PLUS-WIFI6E/Specification',
+                'socket':'am5','ram_type':'ddr5','ram_slots':4,'max_ram_gb':256,
+                'form_factor':'atx','gpu_interfaces':['pcie'],
+                'storage_interfaces':['nvme','sata'],'m2_slots':2,'sata_ports':4,
+                'wifi':True,'bluetooth':True}
     if role=='motherboard' and re.search(r'\bwrx90\s+ws\s+evo\b',text):
         return {'source_url':'https://www.asrock.com/mb/AMD/WRX90%20WS%20EVO/index.asp',
                 'socket':'str5','ram_type':'ddr5','ram_slots':8,'form_factor':'ssi-eeb',
@@ -157,6 +163,9 @@ def manufacturer_facts(role,title):
 # Field-level primary references checked on 25 October 2026. Generic family
 # pages above remain planning-only; they cannot certify a product's dimensions.
 _VERIFIED_REFERENCE_FIELDS = {
+    'https://www.msi.com/Motherboard/B850-GAMING-PLUS-WIFI6E/Specification': {
+        'socket','ram_type','ram_slots','max_ram_gb','form_factor','gpu_interfaces',
+        'storage_interfaces','m2_slots','sata_ports','wifi','bluetooth'},
     'https://www.asrock.com/mb/AMD/WRX90%20WS%20EVO/index.asp': {
         'socket','ram_type','ram_slots','form_factor','gpu_interfaces','storage_interfaces','m2_slots'},
     'https://lian-li.com/product/lancool-217-inf/': {
