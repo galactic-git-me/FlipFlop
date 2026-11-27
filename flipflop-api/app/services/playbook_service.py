@@ -1388,6 +1388,20 @@ def automatic_policy(parts, definition, parent, settings, *, definition_sha256_o
         'enabled_modes':list(MODES)})
 
 
+def publication_delivery_policy(policy, offer):
+    """Publish only reviewed available paces; the catalogue's base pace is Standard."""
+    delivery=offer.get('delivery_products') or {}
+    enabled=[]
+    for mode in MODES:
+        quote=delivery.get(mode) or {}
+        price=_decimal(quote.get('recommended_price_gbp'))
+        if quote.get('available') is True and price is not None and price.is_finite() and price>0:
+            enabled.append(mode)
+    if 'standard' not in enabled:
+        raise HTTPException(409,'Standard delivery must be available before publishing the build')
+    return policy.model_copy(update={'enabled_modes':enabled})
+
+
 def component_delivery_eligibility(part, policy):
     from app.services.playbook_commercial_quote import supplier_meets_delivery_commitment
     # Use the same fresh, exact new supplier capture that will be promoted into
@@ -2243,7 +2257,7 @@ async def build_cell_offer(db,definition,parent,settings,candidates,benchmark_in
                 continue
             if not quote['offerable']:
                 delivery[mode].update(available=False,reason=quote['reason'],recommended_price_gbp=None)
-                if mode in policy.enabled_modes:
+                if mode=='standard':
                     blockers.append(f"{mode}: {quote['reason']}")
             else:
                 delivery[mode].update(available=True,recommended_price_gbp=quote['price_gbp'],
@@ -2371,6 +2385,7 @@ async def approve_proposal(db,proposal_id,revision,actor_id):
     policy=automatic_policy(parts,definition,parent,await db.get(AppSettings,1))
     if policy is None:
         raise HTTPException(409,'The automatic commercial policy is not complete')
+    policy=publication_delivery_policy(policy,current)
     publication_upgrades=_publication_upgrade_rows(current)
     source_parts={}
     for role,part in parts.items():
@@ -2392,7 +2407,7 @@ async def approve_proposal(db,proposal_id,revision,actor_id):
         if mode not in policy.enabled_modes:
             continue
         if not quote['offerable'] or Decimal(quote['price_gbp'])!=Decimal(current['delivery_products'][mode]['recommended_price_gbp']):
-            raise HTTPException(409,'Current source and workshop evidence must support the exact three reviewed prices')
+            raise HTTPException(409,'Current source and workshop evidence must support every enabled reviewed price')
 
     # The exact proposal approval is also the Playbook publication approval.
     # Publish the same server-selected BOM and Standard price through the
