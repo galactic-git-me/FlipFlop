@@ -903,7 +903,12 @@ def parse_product_capture(html,url):
                     calendar_days=(target-today).days
                     captured.update(
                         delivery_calendar_days=calendar_days,
-                        delivery_working_days=max_working_days_for_calendar_duration(calendar_days),
+                        # This is an absolute arrival date, so use the known
+                        # weekdays rather than the worst possible start day
+                        # for an undated calendar-duration estimate.
+                        delivery_working_days=sum(
+                            (today+timedelta(days=offset)).weekday()<5
+                            for offset in range(1,calendar_days+1)),
                         delivery_estimate_source='retailer_page_displayed_estimate',
                         delivery_destination='UK (excluding Channel Islands)',
                     )
