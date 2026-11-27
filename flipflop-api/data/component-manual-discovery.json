@@ -682,5 +682,59 @@
     "reason": "no_exact_official_pdf",
     "component": "Gigabyte GeForce RTX 5080 GAMING OC 16G Graphics Card - 16GB GDDR7, 256bit, PCI-E 5.0, 2730MHz Core Clock, 3 x DisplayPort, 1",
     "retry_after": "2026-12-26T06:53:16.067428"
+  },
+  "fd4e5ec79a6e5af65cd26f4b4b81c27e55deff78cf451b4315cb92d9e7229760": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "AMD Ryzensets 9 9900X Processor (radeon graphics integrated, 12 Cores/24 Threads, 120W DTP, AM5 Socket, 76MB Cache, Up to 5.6",
+    "retry_after": "2026-12-27T10:39:08.110822"
+  },
+  "dfa9a82a5674abe4bb54dafe2c02b1e56ba2ca7f75c159ce4b728edf79d383d4": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ASUS GeForce RTX 3050 6G DUAL OC Gaming Graphics Card - 1537MHz Boost Clock, GDDR6, PCIe Gen 4, DLSS 2, 3 x DP v1.4a, 1 x HDM",
+    "retry_after": "2026-12-27T10:39:08.110822"
+  },
+  "9b644c87db8af93e935579dbf45d0d29b52ce7b74122c1db66638116591f3e65": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "MSI GeForce RTX 5050 8G VENTUS 2X OC Graphics Card - RTX 5050 GPU, 8GB GDDR6 (20Gbps/128-bit), PCIe 5.0 - DUAL-Fan Thermal De",
+    "retry_after": "2026-12-27T10:39:08.110822"
+  },
+  "22b2c428730e3ec472dc050fe288c9497ea5d98d54637beeca447a0d61fb7f0c": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "PowerColor Reaper AMD Radeon RX 9070 16GB GDDR6 Graphics Card",
+    "retry_after": "2026-12-27T11:15:46.318049"
+  },
+  "489b3a1dc2dbaf5dba930b78bea98feda8d092e2e42eedcf0aa41aaa71281a75": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "MSI GeForce RTX 5050 8G SHADOW 2X OC Graphics Card - RTX 5050 GPU, 8GB GDDR6 (20Gbps/128-bit), PCIe 5.0 - DUAL-Fan Thermal De",
+    "retry_after": "2026-12-27T11:15:46.318049"
+  },
+  "1d3406876acc5cf273365e7729075ea46c80eb825cd281afc68b9640be986c0c": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "MSI B550M PRO-VDH WIFI Motherboard M-ATX - Ryzen 5000, AM4, DDR4, Wi-Fi 6",
+    "retry_after": "2026-12-27T11:15:46.318049"
+  },
+  "eeaf9cf7d7b730e7da59563c7230adc9513c152f7ed69fa245b09d790e327bc3": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "MSI B850 GAMING PLUS WIFI6E Motherboard, ATX - Supports AMD Ryzen 9000/8000 / 7000 Processors, AM5 - DDR5 Memory Boost 8200+",
+    "retry_after": "2026-12-27T11:20:03.831934"
+  },
+  "567d0531b3307a40cfde5f3aa73ce9658522c9aa71817008b5401d2305a77cd2": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ASUS ROG STRIX B550-F GAMING WIFI II ATX Motherboard Socket AM4 AMD B550 Chipset -90MB19V0-M0EAY0",
+    "retry_after": "2026-12-27T11:20:03.831934"
+  },
+  "a5f69d689ae1d4103a17cb2172e504ed274f6b455efb3543bc55600cc4ec0bd7": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ASUS ProArt X870E-Creator WiFi AMD AM5 ATX Content Creator Motherboard | PCIe\u00ae 5.0 x16, 16+2+2 power stages, DDR5, dual USB4\u00ae",
+    "retry_after": "2026-12-27T11:20:03.831934"
   }
 }

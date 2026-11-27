@@ -30,7 +30,7 @@ _COMPATIBILITY_PROPERTY_KEYS = {
     'ram': {'memory generation', 'ram memory technology', 'memory technology',
         'memory form factor', 'form factor', 'computer memory size', 'ram size',
         'memory speed', 'number of pins', 'voltage'},
-    'gpu': {'graphics card length', 'length', 'vram', 'graphics memory size',
+    'gpu': {'graphics card length', 'length', 'length mm', 'vram', 'graphics memory size',
         'graphics card ram', 'wattage', 'tdp', 'power connectors'},
     'storage': {'hard disk interface', 'interface', 'hard disk form factor',
         'form factor', 'hardware connectivity', 'item dimensions l x w x thickness'},
@@ -41,7 +41,7 @@ _COMPATIBILITY_PROPERTY_KEYS = {
     'cooling': {'compatible sockets', 'supported sockets', 'socket', 'product dimensions',
         'item dimensions l x w x h', 'radiator size', 'height'},
     'case': {'form factor', 'supported form factors', 'motherboard support',
-        'max gpu length', 'maximum gpu length', 'max cooler height', 'maximum cooler height',
+        'max gpu length', 'maximum gpu length', 'max gpu length mm', 'maximum gpu length mm', 'max cooler height', 'maximum cooler height',
         'max psu length', 'radiator support', 'dimensions'},
 }
 
@@ -105,6 +105,8 @@ def compatibility_review_input(offer):
         'ram_motherboard':(('ram','memory_generation'),('motherboard','memory_generation')),
         'gpu_motherboard':(('gpu','interface'),('motherboard','gpu_interfaces')),
         'motherboard_case':(('motherboard','form_factor'),('case','supported_form_factors')),
+        'gpu_case':(('gpu','length_mm'),('case','max_gpu_length_mm')),
+        'am4_platform':(('motherboard','socket'),('cpu','socket'),('ram','memory_generation')),
     }.items():
         evidence={}
         for role,key in roles_and_keys:
@@ -118,6 +120,8 @@ def compatibility_review_input(offer):
                 'gpu_interfaces':{'gpu_interfaces','expansion_interfaces','pcie_slots'},
                 'form_factor':{'form_factor','motherboard_form_factor'},
                 'supported_form_factors':{'supported_form_factors','motherboard_support'},
+                'length_mm':{'length_mm','graphics_card_length','length'},
+                'max_gpu_length_mm':{'max_gpu_length_mm','max_gpu_length','maximum_gpu_length'},
             }[key]
             source_values={}
             for group in ('reviewed_specs','captured_product_properties','manufacturer_reference_specs'):
@@ -144,7 +148,7 @@ def _normalised_fact(value):
 
 
 def _deterministic_pair_verdict(pair, evidence):
-    """Cross-check the LLM against the four exact source-backed rules."""
+    """Cross-check the LLM against the exact source-backed fit rules."""
     def value(role, *fields):
         return next((v for ref,v in evidence.items()
             if ref.split('.',1)[0]==role and ref.split('.',1)[-1] in fields),None)
@@ -173,6 +177,34 @@ def _deterministic_pair_verdict(pair, evidence):
         board_norm=_normalised_fact(board)
         supported_values=supported if isinstance(supported,(list,tuple,set)) else [supported]
         return 'compatible' if board_norm in {_normalised_fact(item) for item in supported_values} else 'incompatible'
+    if pair=='gpu_case':
+        gpu_length=value('gpu','length_mm','graphics_card_length','length')
+        case_limit=value('case','max_gpu_length_mm','max_gpu_length','maximum_gpu_length')
+        def mm(raw):
+            text=str(raw or '').casefold().replace(',','')
+            match=re.search(r'\d+(?:\.\d+)?',text)
+            if not match:
+                return None
+            value=float(match.group())
+            unit=text[match.end():].strip()
+            if re.match(r'(?:cm|centimet(?:er|re)s?)\b',unit):
+                return value*10
+            if re.match(r'^(?:in|inch(?:es)?|\")',unit):
+                return value*25.4
+            return value
+        gpu_mm,case_mm=mm(gpu_length),mm(case_limit)
+        return ('compatible' if gpu_mm<=case_mm else 'incompatible') if gpu_mm is not None and case_mm is not None else 'insufficient_evidence'
+    if pair=='am4_platform':
+        board=value('motherboard','socket','cpu_socket','processor_socket')
+        cpu=value('cpu','socket','cpu_socket','processor_socket')
+        ram=value('ram','memory_generation','ram_type','memory_technology','ram_memory_technology')
+        if not board:
+            return 'insufficient_evidence'
+        if 'am4' not in _normalised_fact(board):
+            return 'compatible'
+        if not cpu or not ram:
+            return 'insufficient_evidence'
+        return 'compatible' if 'am4' in _normalised_fact(cpu) and 'ddr4' in _normalised_fact(ram) else 'incompatible'
     return 'insufficient_evidence'
 
 
@@ -185,9 +217,11 @@ def validate_compatibility_review(offer, review):
     roles={part['role'] for part in parts}
     relationships={}
     for first,second in (('motherboard','case'),('cpu','motherboard'),('ram','motherboard'),
-            ('gpu','motherboard')):
+            ('gpu','motherboard'),('gpu','case')):
         if first in roles and second in roles:
             relationships[f'{first}_{second}']={first,second}
+    if {'cpu','motherboard','ram'}.issubset(roles):
+        relationships['am4_platform']={'cpu','motherboard','ram'}
     pair_evidence={row['pair']:row['evidence'] for row in review_input['required_pair_evidence']}
     checks=[];withheld=False;model_conflicts=[]
     for original in review.get('checks') or []:
@@ -248,6 +282,10 @@ async def review_compatibility_evidence(offer):
     for first, second in (('cpu', 'motherboard'), ('ram', 'motherboard'), ('gpu', 'motherboard')):
         if first in roles and second in roles:
             expected_pairs.add(f'{first}_{second}')
+    if {'gpu','case'}.issubset(roles):
+        expected_pairs.add('gpu_case')
+    if {'cpu','motherboard','ram'}.issubset(roles):
+        expected_pairs.add('am4_platform')
 
     # Keep the inference payload focused on the four physical facts the user
     # asked us to check. The wider proposal and raw supplier descriptions are
@@ -260,6 +298,7 @@ async def review_compatibility_evidence(offer):
         'Check this PC hardware evidence. For every listed pair decide compatible, incompatible, or insufficient_evidence. '
         'CPU to motherboard: socket values must match. RAM to motherboard: memory generations must match. '
         'GPU to motherboard: both must provide PCIe expansion interface. Motherboard to case: board form factor must occur in the case supported-form-factors list. '
+        'GPU to case: GPU length must not exceed case maximum GPU length. If the motherboard socket is AM4, CPU socket must be AM4 and RAM must be DDR4. '
         'Use only supplied facts; missing, ambiguous, or conflicting facts mean insufficient_evidence. Never infer from product names. '
         'Return only one pair and verdict for each check. Do not explain or cite; the application attaches source evidence. '
         f'Use these exact pair identifiers: {", ".join(sorted(expected_pairs))}. '
@@ -269,8 +308,8 @@ async def review_compatibility_evidence(offer):
     result = await model_selection_service.complete(
         task='Scheduled Playbook build compatibility assessment',
         messages=[{'role': 'user', 'content': prompt}],
-        system_prompt='Follow the supplied four compatibility rules. Return only the requested JSON pair verdicts. Do not add evidence, explanation, or extra checks.',
-        max_tokens=180,
+        system_prompt='Follow the supplied compatibility rules. Return only the requested JSON pair verdicts. Do not add evidence, explanation, or extra checks.',
+        max_tokens=240,
         # DEV shares a priority queue with production and other local clients;
         # a compatibility request can wait before Ollama starts generating.
         timeout=300,

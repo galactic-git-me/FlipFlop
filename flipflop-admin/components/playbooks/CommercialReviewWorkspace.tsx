@@ -11,7 +11,6 @@ import type {
   PlaybookOffer,
   SupplierLicenceCandidate,
 } from "@/lib/playbook-proposals";
-import { EngineeringReview } from "@/app/playbooks/commercial/engineering-review";
 import ConfigurationCommercialReview from "@/components/playbooks/ConfigurationCommercialReview";
 import PlaybookAutomationHealth from "@/components/playbooks/PlaybookAutomationHealth";
 
@@ -22,10 +21,10 @@ const modes = [
 ] as const;
 const reviewAreas = [
   ["builds", "Build proposals"],
-  ["suppliers", "Supplier listings"],
+  ["suppliers", "Listings"],
   ["compatibility", "Compatibility"],
-  ["software", "Software licences"],
-  ["workshop", "Workshop planning"],
+  ["software", "Keys"],
+  ["audit", "AUDIT"],
   ["configurations", "Customer configurations"],
 ] as const;
 const money = (value: string | null | undefined) =>
@@ -51,6 +50,12 @@ const deliveryProfitLabel = (product: DeliveryProduct | undefined) =>
       : product.estimated_profit_gbp == null
         ? "Not calculated"
       : money(product.estimated_profit_gbp);
+function AuditMark({ value }: { value: boolean | null }) {
+  if (value === null) return <span aria-label="Not checked" className="inline-block min-w-5 text-center text-slate-600" />;
+  return value
+    ? <span aria-label="Completed successfully" className="font-bold text-emerald-300">✓</span>
+    : <span aria-label="Did not pass" className="font-bold text-red-400">×</span>;
+}
 function DeliveryTiming({ product }: { product: DeliveryProduct | undefined }) {
   if (product?.workshop_working_days == null) return null;
   const fields = [
@@ -93,47 +98,11 @@ function sourceLink(value: string) {
     return undefined;
   }
 }
-function directRetailProduct(value: string | undefined) {
-  try {
-    const url = new URL(value || "");
-    if (url.protocol !== "https:" || url.username || url.password) return false;
-    const host = url.hostname.toLowerCase();
-    return (
-      ((host === "amazon.co.uk" || host.endsWith(".amazon.co.uk")) &&
-        /\/(?:dp|gp\/product)\/[A-Z0-9]{10}(?:\/|$)/i.test(url.pathname)) ||
-      ((host === "overclockers.co.uk" ||
-        host.endsWith(".overclockers.co.uk")) &&
-        (url.pathname.toLowerCase().includes("/product/") ||
-          /-[a-z0-9]+-\d{4,}\.html$/i.test(url.pathname) ||
-          /^\/[a-z0-9][a-z0-9.-]+\/[a-z]{2,4}-[a-z0-9]{2,6}-[a-z0-9]{2,6}\.html$/i.test(url.pathname))) ||
-      ((host === "gamers-outlet.net" || host === "www.gamers-outlet.net") &&
-        /^\/en\/buy-[a-z0-9-]+$/i.test(url.pathname))
-    );
-  } catch {
-    return false;
-  }
-}
-function postageCanBeReviewed(part: PlaybookOffer["components"][number]) {
-  // Unknown buying postage has an owner-approved £0 costing fallback. It does
-  // not block reviewing the separately captured item, stock and arrival facts.
-  return Boolean(part.source_observation);
-}
 function postageLabel(part: PlaybookOffer["components"][number]) {
   if (part.source_observation?.postage_verified === true) {
     return money(part.source_observation.delivery_gbp ?? part.supplier_postage_gbp);
   }
   return "£0.00 (cost fallback)";
-}
-function supplierEvidence(offer: PlaybookOffer) {
-  return offer.components.flatMap((part) => {
-    const fingerprint = part.source_observation?.fingerprint;
-    return fingerprint && part.listing_id
-      ? [{ role: part.role, listing_id: part.listing_id, fingerprint }]
-      : [];
-  }).sort((a, b) => a.role.localeCompare(b.role) || a.listing_id - b.listing_id);
-}
-function supplierCaptureKey(role: string, listingId: number, fingerprint: string | undefined) {
-  return `${role}:${listingId}:${fingerprint || ""}`;
 }
 export default function CommercialReviewWorkspace({
   contextCellId,
@@ -145,14 +114,12 @@ export default function CommercialReviewWorkspace({
   onUpdated?: () => void;
 }) {
   const [offers, setOffers] = useState<PlaybookOffer[]>([]);
+  const [cells, setCells] = useState<Array<{id:string;name:string;segment:string;tier:string;playbook_id:number|null}>>([]);
   const [licenceCandidates, setLicenceCandidates] = useState<
     SupplierLicenceCandidate[]
   >([]);
   const [licencesLoaded, setLicencesLoaded] = useState(false);
   const [licencesLoading, setLicencesLoading] = useState(false);
-  const [licenceAcknowledgements, setLicenceAcknowledgements] = useState<
-    Record<number, boolean>
-  >({});
   const [selected, setSelected] = useState<string | null>(null);
   const [activeArea, setActiveArea] =
     useState<(typeof reviewAreas)[number][0]>(initialArea);
@@ -166,13 +133,18 @@ export default function CommercialReviewWorkspace({
     setLoading(true);
     setError(null);
     try {
-      const data = await api.commercialReadiness.proposals();
+      const [data, cellData] = await Promise.all([
+        api.commercialReadiness.proposals(),
+        api.playbooks.curatedCells(),
+      ]);
       const visible = contextCellId
         ? data.items.filter((item) => item.cell_id === contextCellId)
         : data.items;
+      setCells(contextCellId
+        ? cellData.items.filter((item) => item.id === contextCellId)
+        : cellData.items);
       setOffers(visible);
       setCompatibilityOpinions({});
-      setLicenceAcknowledgements({});
       setSelected((current) =>
         visible.some((item) => item.cell_id === current)
           ? current
@@ -261,47 +233,6 @@ export default function CommercialReviewWorkspace({
       setBusy(false);
     }
   };
-  const approveLicence = async (candidate: SupplierLicenceCandidate) => {
-    setBusy(true);
-    setError(null);
-    try {
-      const result = await api.commercialReadiness.approveSupplierLicence(
-        candidate
-      );
-      toast.success(candidate.category === "os"
-        ? `Reviewed ${candidate.title}; ${result.activated_catalogue_links} internal OS catalogue candidate${result.activated_catalogue_links === 1 ? "" : "s"} added.`
-        : `Reviewed the exact ${candidate.title} supplier source.`);
-      await load();
-      try {
-        const rebuilt = await rebuildCaptured();
-        setNotice(
-          `${
-            candidate.category === "os"
-              ? `Reviewed this exact Windows offer and added ${result.activated_catalogue_links} internal OS catalogue candidates.`
-              : "Recorded review of this exact supplier product."
-          } Rebuilt ${
-            rebuilt.cells
-          } proposals from stored facts. Prices and products remain unpublished.`
-        );
-      } catch (reason) {
-        toast.error(`Supplier source review saved, but proposal rebuilding failed: ${reason instanceof Error ? reason.message : "unknown error"}`);
-        setError(
-          `Source review was saved, but proposal rebuilding failed: ${
-            reason instanceof Error ? reason.message : "unknown error"
-          }`
-        );
-      }
-    } catch (reason) {
-      toast.error(reason instanceof Error ? reason.message : "Could not review this supplier product");
-      setError(
-        reason instanceof Error
-          ? reason.message
-          : "Could not review this supplier product"
-      );
-    } finally {
-      setBusy(false);
-    }
-  };
   const review = async (
     offer: PlaybookOffer,
     decision: "approve" | "reject"
@@ -384,257 +315,82 @@ export default function CommercialReviewWorkspace({
       setBusy(false);
     }
   };
-  const approveSources = async (offer: PlaybookOffer) => {
-    setBusy(true);
-    setError(null);
-    setNotice("Checking the latest supplier capture before saving this review…");
-    try {
-      // A scheduled rebuild can replace this proposal while the operator is
-      // reviewing it. Submit the exact supplier fingerprints that were shown;
-      // the API imports only facts that still match and leaves changed choices
-      // pending, instead of rejecting the whole review on revision churn.
-      const latest = await api.commercialReadiness.proposals();
-      const currentOffer = latest.items.find(
-        (item) => item.proposal_id === offer.proposal_id
-      );
-      if (!currentOffer) {
-        await load();
-        setNotice("This proposal is no longer awaiting review. The current Playbook data has been loaded.");
-        return;
-      }
-      // Bind this click to the fingerprints that were on screen. The API
-      // imports only matching current captures and reports changed parts as
-      // pending, so one changing offer cannot block the rest of the review.
-      const result = await api.commercialReadiness.approveSupplierSources(
-        currentOffer,
-        supplierEvidence(offer)
-      );
-      toast.success(`Supplier review saved: ${result.imported} new exact fact${result.imported === 1 ? "" : "s"}; ${result.reused} already approved.`);
-      setNotice("Supplier evidence saved. Rebuilding proposal readiness from the reviewed captures…");
-      await load();
-      try {
-        const rebuilt = await rebuildCaptured();
-        const changed = result.pending_roles.length
-          ? ` ${result.pending_roles.length} changed or unavailable component capture(s) remain pending and were not approved.`
-          : "";
-        const outcome = result.imported || result.reused
-          ? `Saved ${result.imported} exact supplier fact${result.imported === 1 ? "" : "s"} for Playbook costing; ${result.reused} already approved.`
-          : "No supplier facts were saved because the displayed captures had changed or were unavailable. The current proposals have been reloaded.";
-        setNotice(`${outcome}${changed} Rebuilt ${rebuilt.cells} proposals from saved captures; unknown buying postage was costed at £0.00. No customer prices were published.`);
-      } catch (reason) {
-        toast.error(`Supplier review saved, but proposal rebuilding failed: ${reason instanceof Error ? reason.message : "unknown error"}`);
-        setError(
-          `Supplier review was saved, but proposal rebuilding failed: ${
-            reason instanceof Error ? reason.message : "unknown error"
-          }`
-        );
-      }
-    } catch (reason) {
-      if (reason instanceof Error && /proposal changed|supplier .*changed|capture .*changed|revision changed|current capture/i.test(reason.message)) {
-        try {
-          // The current API deliberately binds supplier approval to the
-          // displayed (role, listing, capture fingerprint), not the proposal
-          // revision. A revision-only conflict is recovered by reloading the
-          // latest proposal and comparing exact supplier evidence; unchanged
-          // evidence can then be reviewed without losing the click.
-          const latest = await api.commercialReadiness.proposals();
-          const currentOffer = latest.items.find(item => item.proposal_id === offer.proposal_id);
-          if (currentOffer && JSON.stringify(supplierEvidence(currentOffer)) === JSON.stringify(supplierEvidence(offer))) {
-            const result = await api.commercialReadiness.approveSupplierSources(currentOffer, supplierEvidence(currentOffer));
-            toast.success(`Supplier review saved: ${result.imported} new exact fact${result.imported === 1 ? "" : "s"}; ${result.reused} already approved.`);
-            await load();
-            setError(null);
-            const rebuilt = await rebuildCaptured();
-            toast.success(`Proposals recalculated for ${rebuilt.cells} build cells.`);
-            setNotice(`Saved ${result.imported} exact supplier fact${result.imported === 1 ? "" : "s"}; ${result.reused} already approved. Rebuilt ${rebuilt.cells} proposals from captured data.`);
-          } else {
-            await load();
-            setError(null);
-            setNotice("Supplier evidence changed during review. The current listings are loaded; review the updated facts and try again.");
-          }
-        } catch (refreshReason) {
-          setError(`Could not complete supplier review after reloading the current proposal: ${refreshReason instanceof Error ? refreshReason.message : "unknown error"}`);
-        }
-        return;
-      }
-      setError(
-        reason instanceof Error
-          ? reason.message
-          : "Could not approve current supplier facts"
-      );
-      toast.error(reason instanceof Error ? reason.message : "Could not approve current supplier facts");
-    } finally {
-      setBusy(false);
-    }
-  };
-  const approveAllSources = async () => {
-    setBusy(true);
-    setError(null);
-    setNotice("Preparing the exact supplier captures that still need review…");
-    const saved = {
-      proposals: 0,
-      skipped_proposals: 0,
-      imported: 0,
-      reused: 0,
-      pending_roles: [] as { cell_id: string; role: string }[],
-      prices_published: false as const,
-    };
-    try {
-      // Supplier review is bound server-side to the current exact
-      // (role, listing, fingerprint). A listing can have multiple distinct
-      // captured observations across proposals, so dedupe by that full key.
-      // Send only captures shown as pending; already reviewed snapshots do not
-      // need another audit record.
-      const pendingCaptureKeys = new Set(
-        pendingSupplierSources.map((part) =>
-          supplierCaptureKey(
-            part.role,
-            part.listing_id,
-            part.source_observation?.fingerprint
-          )
-        )
-      );
-      const reviewedCaptureKeys = new Set<string>();
-      const reviewed = offers.flatMap((shown) => {
-        const source_evidence = supplierEvidence(shown).filter((item) => {
-          const key = supplierCaptureKey(item.role, item.listing_id, item.fingerprint);
-          if (!pendingCaptureKeys.has(key) || reviewedCaptureKeys.has(key)) return false;
-          reviewedCaptureKeys.add(key);
-          return true;
-        });
-        return source_evidence.length ? [{
-          proposal_id: shown.proposal_id,
-          revision_sha256: shown.revision_sha256,
-          source_evidence,
-        }] : [];
-      });
-      if (!reviewed.length) {
-        await load();
-        setNotice("These proposals are no longer awaiting supplier review. The current Playbook list has been loaded.");
-        return;
-      }
-      // Keep each request well below the same-origin proxy's timeout. Every
-      // chunk commits independently, and progress makes partial success clear.
-      const batchSize = 4;
-      for (let offset = 0; offset < reviewed.length; offset += batchSize) {
-        const batch = reviewed.slice(offset, offset + batchSize);
-        setNotice(
-          `Saving ${reviewedCaptureKeys.size} exact supplier capture reviews… ${Math.min(offset + batch.length, reviewed.length)} of ${reviewed.length} proposal reviews submitted.`
-        );
-        const result = await api.commercialReadiness.approveAllSupplierSources(batch);
-        saved.proposals += result.proposals;
-        saved.skipped_proposals += result.skipped_proposals;
-        saved.imported += result.imported;
-        saved.reused += result.reused;
-        saved.pending_roles.push(...result.pending_roles);
-        toast.success(
-          `Supplier reviews saved for ${result.proposals} build proposal${result.proposals === 1 ? "" : "s"}: ${result.imported} new exact fact${result.imported === 1 ? "" : "s"}.`
-        );
-      }
-      setNotice("Supplier evidence saved. Rebuilding proposal readiness from the reviewed captures…");
-      await load();
-      try {
-        const rebuilt = await rebuildCaptured();
-        setNotice(`Reviewed ${saved.proposals} build proposals: ${saved.imported} exact supplier facts saved; ${saved.reused} already approved; ${saved.pending_roles.length} changed or unavailable component captures remain pending${saved.skipped_proposals ? `; ${saved.skipped_proposals} proposals were no longer pending` : ""}. Rebuilt ${rebuilt.cells} proposals from saved captures; unknown buying postage was costed at £0.00. No prices or products were published.`);
-      } catch (reason) {
-        toast.error(`Supplier reviews saved, but proposal rebuilding failed: ${reason instanceof Error ? reason.message : "unknown error"}`);
-        setError(
-          `Supplier reviews were saved, but proposal rebuilding failed: ${
-            reason instanceof Error ? reason.message : "unknown error"
-          }`
-        );
-      }
-    } catch (reason) {
-      if (reason instanceof Error && /proposal changed|supplier .*changed|capture .*changed|generated proposal set changed/i.test(reason.message)) {
-        try {
-          const rebuilt = await rebuildCaptured();
-          setError(null);
-          setNotice(`Supplier evidence changed during the batch review. Refreshed ${rebuilt.cells} proposals from captured data; review the updated facts and try again.`);
-        } catch (refreshReason) {
-          setError(`Supplier evidence changed, but the captured-data rebuild failed: ${refreshReason instanceof Error ? refreshReason.message : "unknown error"}`);
-        }
-        return;
-      }
-      setError(
-        `${reason instanceof Error
-          ? reason.message
-          : "Could not approve the reviewed supplier facts"}${saved.proposals ? ` Previously saved ${saved.imported} exact supplier facts across ${saved.proposals} proposals; reload to see the committed reviews.` : ""}`
-      );
-      toast.error(`${reason instanceof Error ? reason.message : "Could not approve the reviewed supplier facts"}${saved.proposals ? ` ${saved.imported} exact supplier facts were already saved across ${saved.proposals} proposals.` : ""}`);
-    } finally {
-      setBusy(false);
-    }
-  };
   const offer = offers.find((item) => item.cell_id === selected);
   const segmentGroups = useMemo(
-    () =>
-      Array.from(
-        offers.reduce(
-          (groups, item) =>
-            groups.set(item.segment, [
-              ...(groups.get(item.segment) || []),
-              item,
-            ]),
-          new Map<string, PlaybookOffer[]>()
-        )
-      ),
+    () => Array.from(offers.reduce((groups, item) => groups.set(item.segment, [
+      ...(groups.get(item.segment) || []), item,
+    ]), new Map<string, PlaybookOffer[]>())),
     [offers]
   );
-  const completeHardwareCount = offers.filter(
-    (item) =>
-      item.components.filter(
-        (part) => part.role !== "os" && part.role !== "os_secondary"
-      ).length >= item.required_hardware_count
+  const completeHardwareCount = offers.filter((item) =>
+    item.components.filter((part) => !part.role.startsWith("os")).length >= item.required_hardware_count
   ).length;
-  const compatibilityCount = offers.filter(
-    (item) => item.compatibility.verified
-  ).length;
-  const reviewableSources =
-    offer?.components.filter((part) => {
-      const source = part.source_observation;
-      return (
-        source?.supplier_cost_reviewed !== true &&
-        source?.fresh &&
-        source.commercial_capture_verified &&
-        source.active_listing &&
-        source.condition === "new" &&
-        source.listing_type === "buy_it_now" &&
-        source.stock_status === "available" &&
-        Boolean(source.stock_evidence) &&
-        postageCanBeReviewed(part) &&
-        directRetailProduct(source.url)
-      );
-    }).length ?? 0;
-  const allReviewableSources = Array.from(
-    new Map<string, PlaybookOffer["components"][number]>(
-      offers
-        .flatMap((item) =>
-          item.components.filter((part) => {
-            const source = part.source_observation;
-            return (
-              source?.fresh &&
-              source.commercial_capture_verified &&
-              source.active_listing &&
-              source.condition === "new" &&
-              source.listing_type === "buy_it_now" &&
-              source.stock_status === "available" &&
-              Boolean(source.stock_evidence) &&
-              postageCanBeReviewed(part) &&
-              directRetailProduct(source.url)
-            );
-          })
-        )
-        .map((part) => [
-          supplierCaptureKey(part.role, part.listing_id, part.source_observation?.fingerprint),
-          part,
-        ] as const)
-    ).values()
-  ).sort(
-    (a, b) => a.role.localeCompare(b.role) || a.title.localeCompare(b.title)
-  );
-  const pendingSupplierSources = allReviewableSources.filter(
-    (part) => part.source_observation?.supplier_cost_reviewed !== true
-  );
+  const compatibilityCount = offers.filter((item) => item.compatibility.verified).length;
+  const auditOffers = cells.map((cell) => ({
+    cell,
+    offer: offers.find((item) => item.cell_id === cell.id),
+  }));
+  const auditStatus = (offer: PlaybookOffer | undefined, check: "listings" | "photos" | "model" | "compatibility" | "prices" | "paces" | "keys"): boolean | null => {
+    if (!offer) return null;
+    const parts = offer.components ?? [];
+    const hardware = parts.filter((part) => !part.role.startsWith("os"));
+    if (check === "listings") return hardware.length >= offer.required_hardware_count && hardware.every((part) => Boolean(part.listing_id && part.source_url));
+    if (check === "photos") {
+      if (!hardware.length) return null;
+      if (hardware.every((part) => part.photo_ready === true)) return true;
+      return hardware.some((part) => part.photo_approval_status === "rejected"
+        || (part.photo_approval_status === "approved" && part.photo_ready !== true)) ? false : null;
+    }
+    if (check === "model") {
+      if (!hardware.length) return null;
+      if (hardware.every((part) => part.media_ready === true)) return true;
+      return hardware.some((part) => ["FAILED", "REJECTED", "CANCELED", "CANCELLED"].includes(String(part.model_generation_status || "").toUpperCase())
+        || part.media_preparation_status === "FAILED") ? false : null;
+    }
+    if (check === "compatibility") {
+      const review = compatibilityOpinions[offer.proposal_id] ?? offer.compatibility_review;
+      return review?.status === "compatible" ? true
+        : review?.status === "review_pending" ? null
+        : review ? false : null;
+    }
+    if (check === "prices") {
+      const rows = Object.values(offer.delivery_products ?? {});
+      const available = rows.filter((row) => row.available !== false);
+      return rows.length > 0 && Boolean(offer.delivery_products.standard?.recommended_price_gbp)
+        && available.every((row) => Boolean(row.recommended_price_gbp));
+    }
+    if (check === "paces") return ["fast_track", "standard", "flexible"].every((mode) => Boolean(offer.delivery_products?.[mode as keyof typeof offer.delivery_products]));
+    if (check === "keys") {
+      const keys = parts.filter((part) => part.role.startsWith("os"));
+      return keys.length ? keys.every((part) => Boolean(part.listing_id && part.source_url)) : null;
+    }
+    return null;
+  };
+  const runAuditCompatibility = async (offer: PlaybookOffer) => {
+    setBusy(true);
+    setError(null);
+    setNotice(`Asking the local model to check ${offer.name}…`);
+    try {
+      const result = await api.commercialReadiness.compatibilitySecondOpinion(offer);
+      setCompatibilityOpinions((current) => ({ ...current, [offer.proposal_id]: result }));
+      setNotice(`Local compatibility check saved for ${offer.name}: ${result.status.replaceAll("_", " ")}.`);
+      await load();
+    } catch (reason) {
+      const message = reason instanceof Error ? reason.message : "Could not run the local compatibility check";
+      setCompatibilityOpinions((current) => ({
+        ...current,
+        [offer.proposal_id]: {
+          status: "review_unavailable",
+          summary: message,
+          checks: [],
+          authority: "advisory_only",
+        },
+      }));
+      setError(message);
+    } finally {
+      setBusy(false);
+    }
+  };
   return (
     <main className="mx-auto max-w-7xl space-y-6 p-6">
       {!contextCellId && (
@@ -733,7 +489,7 @@ export default function CommercialReviewWorkspace({
             {id === "builds"
               ? loading || error ? "" : ` (${offers.length})`
               : id === "suppliers"
-              ? loading || error ? "" : ` (${pendingSupplierSources.length})`
+              ? loading || error ? "" : ` (${offers.reduce((count, item) => count + item.components.filter((part) => Boolean(part.listing_id && part.source_url)).length, 0)})`
               : id === "compatibility"
               ? loading || error ? "" : ` (${compatibilityCount}/${offers.length})`
               : id === "software"
@@ -1148,21 +904,7 @@ export default function CommercialReviewWorkspace({
                       </table>
                     </section>
                     <div className="rounded border border-slate-700 p-4">
-                      <p className="text-sm text-slate-300">
-                        Review real supplier stock from the linked listing. Only
-                        fresh, exact-product offers with explicit stock are
-                        saved. Captured postage is retained; missing buying
-                        postage uses the £0.00 cost fallback and is not treated
-                        as free-delivery evidence.
-                      </p>
-                      <button
-                        disabled={busy || reviewableSources === 0}
-                        onClick={() => void approveSources(offer)}
-                        className="mt-3 rounded border border-emerald-500/50 px-4 py-2 text-sm text-emerald-300 disabled:opacity-40"
-                      >
-                        Approve {reviewableSources} supplier cost record
-                        {reviewableSources === 1 ? "" : "s"}
-                      </button>
+                      <p className="text-sm text-slate-300">A linked supplier listing counts as availability evidence. The displayed price and any captured postage are used by the existing Playbook calculations; no separate supplier approval is required.</p>
                     </div>
                     <details className="rounded border border-slate-700 p-4">
                       <summary>
@@ -1223,8 +965,8 @@ export default function CommercialReviewWorkspace({
                     </details>
                     <details className="rounded border border-slate-700 p-4">
                       <summary>Compatibility checks</summary>
-                      <p className="mt-2 text-xs text-slate-400">Deterministic checks decide fit. Ask the local or free tier LLM for an evidence based second opinion; it cannot approve or clear a build.</p>
-                      <button type="button" disabled={busy} onClick={() => void checkCompatibilityWithAI(offer)} className="mt-3 rounded border border-cyan-700 px-3 py-1.5 text-xs text-cyan-200 disabled:opacity-40">Ask AI to cross-check evidence</button>
+                      <p className="mt-2 text-xs text-slate-400">Ask the local LLM to check the selected parts against their captured specifications. It checks socket fit, AM4 with DDR4, motherboard-to-case fit, and GPU-to-case fit. Missing facts remain unresolved.</p>
+                      <button type="button" disabled={busy} onClick={() => void checkCompatibilityWithAI(offer)} className="mt-3 rounded border border-cyan-700 px-3 py-1.5 text-xs text-cyan-200 disabled:opacity-40">Ask local LLM</button>
                       <ul className="mt-3 space-y-2 text-sm">
                         {offer.compatibility.checks.map((check, index) => (
                           <li key={`${check.code}:${index}`}>
@@ -1235,7 +977,7 @@ export default function CommercialReviewWorkspace({
                       {compatibilityOpinions[offer.proposal_id] && <div role="status" className="mt-3 rounded border border-cyan-900 p-3 text-sm">
                         <p>{compatibilityOpinions[offer.proposal_id].summary}</p>
                         <ul className="mt-2 list-disc space-y-1 pl-5">{compatibilityOpinions[offer.proposal_id].checks.map((check, index) => <li key={index}><strong>{check.pair.replaceAll("_", " ↔ ")}</strong> · {check.verdict.replaceAll("_", " ")}: {check.explanation} <span className="text-xs text-slate-400">({check.evidence.join(", ")} · {check.confidence} confidence)</span></li>)}</ul>
-                        <p className="mt-2 text-xs text-amber-200">This LLM assessment is advisory; the source-backed deterministic checks above control publication.</p>
+                        <p className="mt-2 text-xs text-amber-200">The saved local compatibility result is checked against the exact proposal facts before publication.</p>
                       </div>}
                     </details>
                     <div className="rounded border border-cyan-800 bg-cyan-950/20 p-4">
@@ -1272,209 +1014,25 @@ export default function CommercialReviewWorkspace({
               </div>
             )}
           </section>
-          <section
-            aria-label="Supplier listings"
-            hidden={activeArea !== "suppliers"}
-            className="space-y-5"
-          >
-            {offers.length === 0 ? (
-              <p className="rounded border border-slate-700 p-4 text-slate-400">
-                Supplier facts appear here when Playbook proposals have linked
-                listings.
-              </p>
-            ) : (
-              <section
-                aria-label="All supplier facts for review"
-                className="rounded border border-slate-700 p-4"
-              >
-                <div className="flex flex-wrap items-start justify-between gap-4">
-                  <div>
-                    <h2 className="font-semibold">
-                      Supplier facts across all {offers.length} builds
-                    </h2>
-                    <p className="mt-1 max-w-3xl text-sm text-slate-400">
-                      Item price, condition and stock come from the linked
-                      supplier page. Supplier arrival uses captured data or the
-                      saved vendor estimate; missing inbound postage costs £0.00
-                      by default. Approval saves source evidence for costing
-                      only. It does not approve a customer price or publish a
-                      build.
-                    </p>
-                  </div>
-                  <button
-                    disabled={busy || pendingSupplierSources.length === 0}
-                    onClick={() =>
-                      void (contextCellId && offer
-                        ? approveSources(offer)
-                        : approveAllSources())
-                    }
-                    className="rounded border border-emerald-500/50 px-4 py-2 text-sm text-emerald-300 disabled:opacity-40"
-                  >
-                    Approve all {pendingSupplierSources.length} reviewed supplier
-                    products
-                  </button>
-                </div>
-                <div className="mt-4 max-h-[65vh] overflow-auto">
-                  <table className="w-full text-left text-sm">
-                    <thead className="sticky top-0 bg-slate-950">
-                      <tr className="border-b border-slate-700">
-                        <th className="p-2">Product and supplier</th>
-                        <th className="p-2">Captured stock</th>
-                        <th className="p-2">Item price</th>
-                        <th className="p-2">Postage</th>
-                        <th className="p-2">Arrival</th>
-                        <th className="p-2">Retailer specifications</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {allReviewableSources.map((part) => {
-                        const source = part.source_observation!;
-                        const properties = Object.entries(
-                          source.product_properties || {}
-                        );
-                        return (
-                          <tr
-                            key={supplierCaptureKey(part.role, part.listing_id, source.fingerprint)}
-                            className="border-b border-slate-800"
-                          >
-                            <td className="p-2">
-                              <span className="block text-xs uppercase text-slate-400">
-                                {part.role} ·{" "}
-                                {supplierDisplayLabel({
-                                  source: source.source,
-                                  url: source.url,
-                                })}
-                              </span>
-                              <a
-                                href={sourceLink(source.url || part.source_url)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-emerald-400"
-                              >
-                                {part.title}
-                              </a>
-                              {source.supplier_cost_reviewed ? (
-                                <span className="mt-1 block text-xs text-emerald-300">
-                                  Exact supplier capture already saved for costing
-                                  {source.supplier_cost_reviewed_at
-                                    ? ` · ${new Date(source.supplier_cost_reviewed_at).toLocaleString("en-GB")}`
-                                    : ""}
-                                </span>
-                              ) : (
-                                <span className="mt-1 block text-xs text-amber-300">
-                                  Current capture still needs supplier cost review
-                                </span>
-                              )}
-                              {part.amazon_listing_url && part.asin && (
-                                <a
-                                  href={sourceLink(part.amazon_listing_url)}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="mt-1 block text-xs text-cyan-300"
-                                >
-                                  Amazon listing · ASIN {part.asin}
-                                </a>
-                              )}
-                              {!!part.supplier_offers?.length && (
-                                <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs">
-                                  {part.supplier_offers.map((vendorOffer, vendorOfferIndex) => (
-                                    <a
-                                      key={`${vendorOffer.url}-${vendorOffer.source}-${vendorOfferIndex}`}
-                                      href={sourceLink(vendorOffer.url)}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-emerald-300"
-                                      title={`${vendorOffer.title} · ${vendorOffer.stock_status || "stock unconfirmed"}`}
-                                    >
-                                      {vendorOffer.source || "Vendor"} · {money(vendorOffer.item_gbp)}
-                                    </a>
-                                  ))}
-                                </div>
-                              )}
-                            </td>
-                            <td className="p-2 text-xs">
-                              {source.stock_evidence}
-                              {source.capture_refresh_warning && (
-                                <span className="mt-1 block text-amber-300">
-                                  Latest refresh could not retrieve the page;
-                                  showing the last captured evidence.
-                                </span>
-                              )}
-                              <span className="mt-1 block text-slate-400">
-                                {source.condition} ·{" "}
-                                {source.fresh
-                                  ? "captured within 24 hours"
-                                  : "stale"}
-                              </span>
-                              {source.observed_at && (
-                                <span className="mt-1 block text-slate-400">
-                                  Captured {new Date(source.observed_at).toLocaleString("en-GB")}
-                                </span>
-                              )}
-                            </td>
-                            <td className="p-2">
-                              {money(part.listing_price_gbp)}
-                            </td>
-                            <td className="p-2">
-                              {postageLabel(part)}
-                            </td>
-                            <td className="p-2 text-xs">
-                              {(() => {
-                                const arrival = supplierArrivalEstimate(
-                                  source ?? { url: part.source_url }
-                                );
-                                return arrival
-                                  ? `${arrival.days} working days${
-                                      source?.delivery_destination
-                                        ? ` to ${source.delivery_destination}`
-                                        : ""
-                                    } · ${arrival.label}`
-                                  : "Supplier URL unavailable for vendor ETA default";
-                              })()}
-                            </td>
-                            <td className="p-2 text-xs">
-                              {properties.length > 0 ? (
-                                <details>
-                                  <summary>
-                                    Show {properties.length} captured specs
-                                  </summary>
-                                  <dl className="mt-2 space-y-1">
-                                    {properties.map(([name, value]) => (
-                                      <div key={name}>
-                                        <dt className="inline text-slate-400">
-                                          {name}:{" "}
-                                        </dt>
-                                        <dd className="inline">
-                                          {String(value)}
-                                        </dd>
-                                      </div>
-                                    ))}
-                                  </dl>
-                                  <p className="mt-2 text-slate-400">
-                                    These retailer fields are source data, not
-                                    yet approved compatibility specs.
-                                  </p>
-                                </details>
-                              ) : (
-                                "Not shown by retailer"
-                              )}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                      {allReviewableSources.length === 0 && (
-                        <tr>
-                          <td colSpan={6} className="p-3 text-slate-400">
-                            No fresh exact supplier facts currently meet the
-                            review requirements.
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </section>
-            )}
+          <section aria-label="Supplier listings" hidden={activeArea !== "suppliers"} className="space-y-4">
+            <div>
+              <h2 className="font-semibold">Linked component listings</h2>
+              <p className="mt-1 max-w-4xl text-sm text-slate-400">A linked supplier listing is the availability evidence for the component. Captured prices, postage and arrival are shown as recorded; this view does not ask for a separate supplier approval.</p>
+            </div>
+            <div className="overflow-x-auto rounded border border-slate-700">
+              <table className="w-full min-w-[800px] text-left text-sm">
+                <thead className="bg-slate-950 text-xs uppercase text-slate-400"><tr><th className="p-3">Segment</th><th className="p-3">Component listing</th><th className="p-3">Listing price</th><th className="p-3">Availability evidence</th><th className="p-3">Captured</th></tr></thead>
+                <tbody>{offers.flatMap((item) => item.components.map((part) => ({ item, part }))).map(({ item, part }) => (
+                  <tr key={`${item.cell_id}:${part.role}:${part.listing_id}`} className="border-t border-slate-800">
+                    <td className="p-3">{item.name}</td>
+                    <td className="p-3"><span className="mr-2 text-xs uppercase text-slate-500">{part.role}</span><a href={sourceLink(part.source_observation?.url || part.source_url)} target="_blank" rel="noopener noreferrer" className="text-emerald-300">{part.title}</a></td>
+                    <td className="p-3">{money(part.listing_price_gbp)}</td>
+                    <td className="p-3 text-slate-300">{part.listing_id && part.source_url ? "Supplier listing linked" : "No listing linked"}</td>
+                    <td className="p-3 text-xs text-slate-400">{part.source_observation?.observed_at ? new Date(part.source_observation.observed_at).toLocaleString("en-GB") : "Not captured"}</td>
+                  </tr>
+                ))}{offers.length === 0 && <tr><td colSpan={5} className="p-4 text-slate-400">Supplier listings appear here when a Playbook proposal has linked components.</td></tr>}</tbody>
+              </table>
+            </div>
           </section>
           <section
             aria-label="Compatibility"
@@ -1482,232 +1040,89 @@ export default function CommercialReviewWorkspace({
             className="space-y-4"
           >
             <div>
-              <h2 className="font-semibold">Compatibility evidence</h2>
+              <h2 className="font-semibold">Compatibility check</h2>
               <p className="mt-1 text-sm text-slate-400">
-                Review source-backed component specifications and engineering
-                checks here. A catalogue listing by itself does not prove that
-                parts fit together.
+                The local LLM checks the selected parts against their captured specifications, including AM4 CPU and DDR4 RAM requirements, motherboard fit in the case, and GPU length in the case.
               </p>
             </div>
-            <EngineeringReview
-              listingIds={
-                contextCellId
-                  ? [
-                      ...(offer?.components ?? []),
-                      ...(offer?.upsells.map((item) => item.component) ?? []),
-                    ].map((part) => part.listing_id)
-                  : undefined
-              }
-              boardTitles={
-                contextCellId
-                  ? [
-                      ...(offer?.components ?? []),
-                      ...(offer?.upsells.map((item) => item.component) ?? []),
-                    ]
-                      .filter((part) => part.role === "motherboard")
-                      .map((part) => part.title)
-                  : undefined
-              }
-              onApproved={async () => {
-                await rebuildCaptured();
-              }}
-            />
+            {offer ? <div className="rounded border border-slate-700 p-4">
+              <h3 className="font-medium">{offer.name}</h3>
+              <p className="mt-2 text-sm text-slate-300">{(compatibilityOpinions[offer.proposal_id] ?? offer.compatibility_review)?.summary ?? "No local LLM compatibility check has been recorded for this proposal yet."}</p>
+              <button type="button" disabled={busy} onClick={() => void runAuditCompatibility(offer)} className="mt-3 rounded border border-cyan-700 px-3 py-1.5 text-xs text-cyan-200 disabled:opacity-40">Ask local LLM</button>
+              {(compatibilityOpinions[offer.proposal_id] ?? offer.compatibility_review)?.checks.map((check, index) => <p key={`${check.pair}:${index}`} className="mt-2 text-sm"><strong>{check.pair.replaceAll("_", " ↔ ")}</strong> · {check.verdict.replaceAll("_", " ")} — {check.explanation}</p>)}
+            </div> : <p className="rounded border border-slate-700 p-4 text-sm text-slate-400">Open a segment with a saved proposal to run its compatibility check.</p>}
           </section>
-          <section
-            aria-label="Software licences"
-            hidden={activeArea !== "software"}
-            className="space-y-4"
-          >
+          <section aria-label="Key availability" hidden={activeArea !== "software"} className="space-y-4">
+            <div>
+              <h2 className="font-semibold">Software key listings</h2>
+              <p className="mt-1 max-w-4xl text-sm text-slate-400">This view checks whether supplier listings exist for keys included in a build. Listing presence is the availability evidence. Legal and licensing decisions are outside this workflow.</p>
+            </div>
             {licencesLoading && !licencesLoaded ? (
-              <div className="flex min-h-[24vh] items-center justify-center rounded border border-slate-800 bg-slate-950/40">
-                <BrandCubeLoader size="sm" />
-              </div>
+              <div className="flex min-h-[24vh] items-center justify-center rounded border border-slate-800 bg-slate-950/40"><BrandCubeLoader size="sm" /></div>
             ) : licenceError ? (
               <section role="alert" className="rounded border border-red-900/60 p-4 text-red-300">
-                Software supplier listings could not be loaded: {licenceError}
+                Key supplier listings could not be loaded: {licenceError}
                 <button type="button" className="ml-3 underline" onClick={() => void loadLicences()}>Retry</button>
               </section>
-            ) : licenceCandidates.length > 0 ? (
-              <section
-                aria-label="Software supplier source review"
-                className="space-y-4 rounded border border-amber-700/70 p-4"
-              >
-                <div>
-                  <h2 className="font-semibold">
-                    Windows, Office and Google AI offers to review
-                  </h2>
-                  <p className="mt-1 max-w-4xl text-sm text-slate-400">
-                    Exact product pages captured from the selected software
-                    suppliers. Review the product page,
-                    region/activation conditions and supplier terms. A Windows
-                    approval may add an internal OS catalogue candidate. Office
-                    and Google AI approvals only record source review; they do
-                    not add the product to a segment, set its selling price,
-                    establish entitlement or resale rights, publish it, or
-                    enable checkout.
-                  </p>
-                </div>
-                <ul className="grid gap-3 lg:grid-cols-2">
-                  {licenceCandidates.map((candidate) => (
-                    <li
-                      key={candidate.listing_id}
-                      className="space-y-3 rounded border border-slate-700 p-4"
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <a
-                            href={sourceLink(candidate.url)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-medium text-emerald-400"
-                          >
-                            {candidate.title}
-                          </a>
-                          <p className="mt-1 text-xs text-slate-400">
-                            {candidate.category === "os"
-                              ? "Windows licence"
-                              : candidate.category === "office"
-                              ? "Microsoft Office"
-                              : "Google AI subscription"}{" "}
-                            ·{" "}
-                            {candidate.supplier_handle || "Exact supplier page"}{" "}
-                            ·{" "}
-                            {candidate.fresh
-                              ? "captured within 24 hours"
-                              : "capture is stale"}{" "}
-                            ·{" "}
-                            {candidate.stock_status === "available"
-                              ? "supplier reports available"
-                              : candidate.stock_status === "unavailable"
-                              ? "supplier reports unavailable"
-                              : "stock not confirmed"}
-                          </p>
-                        </div>
-                        <strong>{money(candidate.price_gbp)}</strong>
-                      </div>
-                      <dl className="grid gap-x-4 gap-y-1 text-xs sm:grid-cols-2">
-                        {Object.entries(candidate.product_properties).map(
-                          ([name, value]) => (
-                            <div key={name}>
-                              <dt className="inline text-slate-400">
-                                {name}:{" "}
-                              </dt>
-                              <dd className="inline">{String(value)}</dd>
-                            </div>
-                          )
-                        )}
-                      </dl>
-                      {candidate.seller_product_claims && (
-                        <details className="text-xs">
-                          <summary>Supplier’s product claims</summary>
-                          <p className="mt-2 whitespace-pre-wrap text-slate-300">
-                            {candidate.seller_product_claims}
-                          </p>
-                        </details>
-                      )}
-                      <p className="text-xs text-slate-400">
-                        OS catalogue links:{" "}
-                        {candidate.catalogue_statuses.length
-                          ? candidate.catalogue_statuses
-                              .map((row) => row.status)
-                              .join(", ")
-                          : "none"}
-                      </p>
-                      <a
-                        href={sourceLink(candidate.terms_url)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-emerald-400"
-                      >
-                        Read {candidate.supplier_name} terms
-                      </a>
-                      {candidate.licence_source_reviewed ? (
-                        <p role="status" className="text-sm text-emerald-300">
-                          Exact source review recorded.{" "}
-                          {candidate.category === "os"
-                            ? "The OS candidate still needs separate build, selling-price and publication approval."
-                            : "Not attached to any Playbook segment or customer offer."}
-                        </p>
-                      ) : (
-                        <>
-                          <label className="flex items-start gap-2 text-sm">
-                            <input
-                              type="checkbox"
-                              checked={
-                                licenceAcknowledgements[
-                                  candidate.listing_id
-                                ] === true
-                              }
-                              onChange={(event) =>
-                                setLicenceAcknowledgements((current) => ({
-                                  ...current,
-                                  [candidate.listing_id]: event.target.checked,
-                                }))
-                              }
-                            />
-                            <span>
-                              I reviewed this exact supplier listing and its
-                              terms. I understand this does not establish
-                              independent entitlement or resale authorization.
-                            </span>
-                          </label>
-                          {!candidate.fresh ? (
-                            <p role="status" className="text-sm text-amber-300">
-                              This supplier capture is older than 24 hours. The
-                              button stays disabled until a scheduled supplier
-                              refresh records the current listing; checking
-                              refresh status or acknowledging review does not
-                              refresh its price, stock or licence terms.
-                            </p>
-                          ) : !candidate.licence_review_fingerprint ? (
-                            <p role="status" className="text-sm text-amber-300">
-                              This listing is missing its exact review
-                              fingerprint. It can be reviewed after a supplier
-                              refresh records a complete current capture.
-                            </p>
-                          ) : null}
-                          <button
-                            disabled={
-                              busy ||
-                              !candidate.fresh ||
-                              !candidate.licence_review_fingerprint ||
-                              !licenceAcknowledgements[candidate.listing_id]
-                            }
-                            onClick={() => void approveLicence(candidate)}
-                            className="rounded border border-amber-500/70 px-3 py-2 text-sm disabled:opacity-40"
-                          >
-                            Review this source for Playbook consideration
-                          </button>
-                        </>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </section>
+            ) : licenceCandidates.filter((candidate) => candidate.category === "os").length ? (
+              <ul className="grid gap-3 lg:grid-cols-2">
+                {licenceCandidates.filter((candidate) => candidate.category === "os").map((candidate) => (
+                  <li key={candidate.listing_id} className="rounded border border-slate-700 p-4">
+                    <a href={sourceLink(candidate.url)} target="_blank" rel="noopener noreferrer" className="font-medium text-emerald-400">{candidate.title}</a>
+                    <p className="mt-2 text-sm text-slate-300">Supplier listing found · {money(candidate.price_gbp)}</p>
+                    <p className="mt-1 text-xs text-slate-500">{candidate.supplier_handle || candidate.supplier_name} · captured {candidate.fresh ? "within 24 hours" : "previously"}</p>
+                  </li>
+                ))}
+              </ul>
             ) : (
-              <p className="rounded border border-slate-700 p-4 text-slate-400">
-                No Windows, Office or Google AI supplier offers are awaiting
-                source review.
-              </p>
+              <p className="rounded border border-slate-700 p-4 text-slate-400">No Windows key listings are currently captured.</p>
             )}
           </section>
-          <section
-            aria-label="Workshop planning"
-            hidden={activeArea !== "workshop"}
-            className="space-y-4"
-          >
+          <section aria-label="Playbook audit" hidden={activeArea !== "audit"} className="space-y-4">
             <div>
-              <h2 className="font-semibold">Workshop planning</h2>
-              <p className="mt-1 text-sm text-slate-400">
-                There is no concurrent-build sales cap and no weekly build
-                count to enter. Delivery prices use current supplier arrival
-                evidence and the reviewed work, QA and courier allowances. The
-                Workshop Calendar organises paid builds by deadline, delivery
-                priority and parts readiness for your daily review.
-              </p>
-              <Link href="/orders" className="mt-3 inline-flex rounded border border-cyan-700 px-3 py-2 text-sm text-cyan-200 hover:bg-cyan-950/40">
-                Open Workshop Calendar
-              </Link>
+              <h2 className="font-semibold">Publication audit by segment</h2>
+              <p className="mt-1 text-sm text-slate-400">A tick means the check completed successfully, a red cross means it failed, and a blank means it has not run or does not apply. Listing presence is the availability evidence. Compatibility is checked by the local model against AM4/DDR4, socket, board-to-case fit, and GPU-to-case clearance.</p>
+            </div>
+            <div className="overflow-x-auto rounded border border-slate-700">
+              <table className="w-full min-w-[1120px] border-collapse text-left text-sm">
+                <thead className="bg-slate-950 text-xs uppercase tracking-wide text-slate-400">
+                  <tr>
+                    <th scope="col" className="sticky left-0 z-10 bg-slate-950 p-3">Playbook segment</th>
+                    <th scope="col" className="p-3 text-center">Listings / availability</th>
+                    <th scope="col" className="p-3 text-center">Photos approved</th>
+                    <th scope="col" className="p-3 text-center">3D model approved</th>
+                    <th scope="col" className="p-3 text-center">Compatibility</th>
+                    <th scope="col" className="p-3 text-center">Price checks</th>
+                    <th scope="col" className="p-3 text-center">Pace products</th>
+                    <th scope="col" className="p-3 text-center">Keys listed</th>
+                    <th scope="col" className="p-3">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {auditOffers.map(({ cell, offer: auditOffer }) => {
+                    const llmResult = auditOffer && (compatibilityOpinions[auditOffer.proposal_id] ?? auditOffer.compatibility_review);
+                    const compatStatus = auditStatus(auditOffer, "compatibility");
+                    return <tr key={cell.id} className="border-t border-slate-800 hover:bg-slate-900/50">
+                      <th scope="row" className="sticky left-0 z-10 bg-slate-950 p-3 font-medium text-slate-200">
+                        <span className="block">{cell.name}</span><span className="mt-1 block text-xs font-normal text-slate-500">{cell.segment} · {cell.tier}</span>
+                      </th>
+                      {(["listings", "photos", "model", "compatibility", "prices", "paces", "keys"] as const).map((key) => (
+                        <td key={key} className="p-3 text-center" title={key === "compatibility" ? llmResult?.summary : undefined}>
+                          <AuditMark value={auditStatus(auditOffer, key)} />
+                        </td>
+                      ))}
+                      <td className="p-3">
+                        {auditOffer ? <div className="flex flex-wrap gap-2">
+                          <button type="button" onClick={() => { setSelected(cell.id); setActiveArea("builds"); }} className="rounded border border-slate-600 px-2 py-1 text-xs text-slate-200 hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400">Open segment</button>
+                          {compatStatus !== true && <button type="button" disabled={busy} onClick={() => void runAuditCompatibility(auditOffer)} className="rounded border border-cyan-700 px-2 py-1 text-xs text-cyan-200 hover:bg-cyan-950/50 disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-400">{busy ? "Checking…" : "Ask local LLM"}</button>}
+                        </div> : <span className="text-xs text-slate-600">No proposal yet</span>}
+                        {llmResult && <p className="mt-2 max-w-xs text-xs text-slate-400">{llmResult.summary}</p>}
+                      </td>
+                    </tr>;
+                  })}
+                  {auditOffers.length === 0 && <tr><td colSpan={9} className="p-4 text-slate-400">No Playbook segments are available.</td></tr>}
+                </tbody>
+              </table>
             </div>
           </section>
           {activeArea === "configurations" && <ConfigurationCommercialReview />}
