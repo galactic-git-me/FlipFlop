@@ -18,9 +18,12 @@ async def check():
                     (2,12,'AMD Ryzen 9 9950X','cpu',None),
                     (3,13,'AMD Ryzen 7 9700X','cpu',{'at':'2026-10-21','by':'owner'})])
             return SimpleNamespace(scalars=lambda:SimpleNamespace(all=lambda:[asset]))
-    variants=[SimpleNamespace(id=i,status='active',asset_media_review={}) for i in (1,2,3)]
+    variants=[SimpleNamespace(id=i,status=status,asset_media_review={})
+        for i,status in ((1,'active'),(2,'pending_review'),(3,'active'))]
     found=await final_assets_by_variant(Database(),variants)
-    assert set(found)=={1,2} and found[1] is found[2] is asset
+    assert set(found)=={1} and found[1] is asset
+    found=await final_assets_by_variant(Database(),variants,allow_pending_review=True)
+    assert set(found)=={1,2} and all(row is asset for row in found.values())
     columns=list(queries[0].selected_columns)
     assert len(columns)==5, 'Family lookup fetches complete ORM catalogue rows'
     assert not any(str(column)=='listings.raw_specs' for column in columns)

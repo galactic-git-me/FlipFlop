@@ -1,8 +1,33 @@
 # Playbooks, catalogues and fulfilment
 
 **Status:** Current product rules  
-**Last reviewed:** 2026-10-22
+**Last reviewed:** 2026-11-27
 **Customer-safe:** No; use the support knowledge base for customer answers
+
+## Owner instruction — Playbook publication audit, 27 November 2026
+
+This instruction supersedes older Playbook workflow steps that conflict with it.
+
+- Component availability is established by at least one underlying supplier
+  listing linked to each required component. Do not require a separate human
+  availability approval; use the captured price and source data in the existing
+  price calculations.
+- Compatibility review must ask the local LLM about the selected build. Check
+  CPU and motherboard socket fit; for an AM4 system, require an AM4 CPU and
+  DDR4 memory; check that the motherboard fits the case and the GPU fits inside
+  the case. Use the saved source facts and leave missing facts unresolved.
+- Software-key review is limited to whether a supplier listing exists for a key
+  included in the build. Legal and licensing decisions belong to the owner and
+  are outside the Playbook publication workflow.
+- Workshop planning is not a required Playbook publication step. Remove it from
+  the Playbook end-to-end process and do not make workshop planning evidence a
+  publication prerequisite.
+- The Playbook includes an **AUDIT** tab for each segment. It reports linked
+  listings/availability, approved photos, approved 3D models, local-LLM
+  compatibility, price checks, delivery-pace products and key listings. A green
+  tick means the check succeeded, a red cross means it failed, and a blank means
+  it has not run or does not apply. The audit reports evidence state; it does
+  not itself publish a segment.
 
 ## Playbook model
 
@@ -26,9 +51,9 @@ budget ceiling, publication authority or current offer is changed by this produc
 
 The admin operational home is one customer-type × budget matrix. Each cell shows its base build, Standard price, estimated contribution, delivery estimate and status. Photos and finished-model approvals open on that build. Previous operational pages are retained under Advanced diagnostics rather than being the everyday workflow.
 
-**MVP reset approved 20 October 2026:** one base configuration and one selected case per cell; Standard delivery was the initial scope. The 27 October customer-pace instruction above supersedes that restriction: all three paces are assessed, with per-component source coverage and explicit eligibility. The single base configuration and case remain; upgrades retain their existing review rules. The owner can approve product photos in one shared catalogue grid: choose a captured listing photo, select all shown, deselect unsuitable cards, and approve the selection once per case or shared hardware family. Approval is reused across the single Curated catalogue, the from-scratch builder and every segment. The source main photo is shown initially with a horizontal thumbnail gallery; local Qwen is not used to select or approve photos. Automatic model preparation uses the owner-approved single photo without another selection gate. Existing model references and GLBs are preserved when photo approvals change. Finished-model customer publication still requires its recorded quality, scale and rights evidence. Once approved product photos exist, an otherwise eligible build may publish without a 3D model; the public model resolver still returns no model until a matching FINAL case or family asset has been explicitly approved and published. Software licences are not physical 3D subjects.
+**MVP reset approved 20 October 2026:** one base configuration and one selected case per cell; Standard delivery was the initial scope. The 27 October customer-pace instruction above supersedes that restriction: all three paces are assessed, with per-component source coverage and explicit eligibility. The single base configuration and case remain; upgrades retain their existing review rules. The owner approves product photos in one shared catalogue grid; approval is reused across Curated, the from-scratch builder and every segment. Local Qwen does not select or approve photos. Automatic model preparation uses the owner-approved single photo. Existing model references and GLBs are preserved when photo approvals change. Finished models retain their recorded quality, scale and rights checks. **Owner instruction 27 November 2026:** each segment's publication audit requires approved photos and an approved 3D model for its selected physical components.
 
-Routine collection, exact source-backed specification validation, supplier-cost reconciliation, compatibility checks and bounded publication are automated after one-time operating-rule setup. The Playbook publication compatibility gate is intentionally limited to the owner-approved checks: CPU socket and motherboard, GPU interface and motherboard when a discrete GPU is selected, RAM generation and motherboard, and motherboard form factor and case. A build without a discrete GPU must have integrated graphics. Cooler clearance, PSU length and cabling, total system power, BIOS revision, memory slot count, storage mounting and other assembly details stay in the workshop checklist rather than blocking a proposal. Each scheduled proposal also receives a local LLM cross-check of its exact selected BOM and the saved source evidence. Its result is stored against that evidence; the model cannot turn a missing or contradictory fact into a verified pass. Proposals are saved before model calls run. A scheduled worker claims up to three pending compatibility reviews each minute, releases its database connection during inference, and saves each result only if the physical evidence still matches. Unavailable responses retry after fifteen minutes; abandoned claims recover after six minutes. Price, postage and software-only changes reuse unchanged physical evidence. Rules record per-cell budget ceilings, the existing tier profit floors, a fixed published-price anchor and an allowed movement (10% default, at most 25%). Approved retail source hosts are Amazon UK, Overclockers, Gamers Outlet and official Ubuntu releases; inclusion never waives licence, condition, stock or fit checks. Missing budgets keep the affected cell paused. Unknown or contradictory facts remain exceptional system work; no source or model approval is invented. Pausing automatic publication preserves the MVP presentation and existing valid offers.
+Routine collection, source-backed specification validation, supplier-cost reconciliation, local-LLM compatibility checks and bounded publication are automated after one-time operating-rule setup. The 27 November audit asks the local LLM to check CPU/motherboard socket fit, AM4 CPU and DDR4 requirements for AM4 builds, motherboard-to-case fit, and GPU-to-case fit. Missing or contradictory source facts remain unresolved. Proposals are saved before model calls run; review results are tied to the physical evidence and discarded if that evidence changes. Price, postage and software-only changes reuse unchanged physical evidence. Rules record per-cell budget ceilings, tier profit floors, a fixed published-price anchor and allowed movement. One linked underlying supplier listing per component is the Playbook availability evidence; its captured price is used in the existing calculations. Key checks establish listing presence only; legal and licensing decisions belong to the owner. Workshop planning is outside the Playbook publication process. The AUDIT tab summarizes each segment's listing, media, compatibility, pricing, pace-product and key-listing state with success, failure or not-yet-run markers.
 
 The customer Build Studio uses a separate deterministic compatibility service. Verified CPU/board socket, RAM generation, board/case form factor, GPU/cooler clearance, cooler socket and required PSU connector mismatches are hard failures. PSU wattage headroom, BIOS support, M.2/SATA slot counts and RAM/cooler clearance are warnings. Missing engineering facts remain unknown. Product inspection shows recent captured vendor offers and per-vendor price history; it does not imply live price polling. Manufacturer manuals are cached only from approved manufacturer domains and matched to exact component identifiers.
 
@@ -57,9 +82,9 @@ Made-by-you customers declare Budget, Mid-range, or High-end in the custom studi
 
 ## One component catalogue
 
-**Owner instruction, 27 October 2026:** Windows keys remain with the original Gamers Outlet supplier and its existing Home/Pro product links. Rebuilds and source reviews must preserve that choice. Fix missing capture, approval and commercial integration checks against those offers; do not substitute another Windows vendor. A vendor change requires a new explicit owner instruction. This does not waive source freshness, edition or licence-source review.
+**Owner instruction, 27 October 2026:** Windows keys remain with the original Gamers Outlet supplier and its existing Home/Pro product links. Rebuilds and source reviews must preserve that choice. Fix missing capture and commercial integration against those offers; do not substitute another Windows vendor. A vendor change requires a new explicit owner instruction. **The 27 November 2026 instruction limits the Playbook key step to checking listing availability; the owner handles legal and licensing decisions.**
 
-An exact captured Windows licence on an active supplier listing may be included in a draft cost estimate while its catalogue source review is pending. The estimate identifies that licence cost as provisional. The catalogue variant remains unapproved and the proposal retains a publication blocker until the licence source is reviewed; draft costing does not establish activation eligibility or resale rights.
+An exact captured Windows key listing supplies its captured cost and listing-availability evidence. The Playbook does not decide activation eligibility or resale rights; those legal decisions belong to the owner.
 
 **Approved simplification, 21 October 2026:** Curated is the only component catalogue. Curated-for-you starts with a Playbook recommendation; Made-by-you starts with an empty 3D build and chooses from the same products. There is no separate Custom catalogue, independent component membership or Custom price list. Legacy API paths/columns remain only for compatibility and historical records.
 
@@ -157,15 +182,11 @@ Draft ordering prefers complete exact-offer evidence over token similarity once 
 Exact-source engineering validation runs during draft rebuilds even when automatic publication is disabled. This does not enable publication or import commercial prices: those imports retain their existing enabled live-maintenance policy. Unknown or conflicting specifications still require further source evidence.
 
 
-## Publication compatibility scope - owner decision, 25 October 2026
+## Publication compatibility scope - owner instruction, 27 November 2026
 
-Playbook publication and curated checkout use CPU/motherboard socket support,
-GPU/motherboard expansion-interface compatibility, RAM generation and
-motherboard/case form-factor support. Missing assembly measurements, installed
-BIOS state, RAM clearance, cable routing and detailed power allowance remain
-workshop tasks rather than publication blockers. A known incompatibility remains
-blocking, including a measured oversized component. Integrated-graphics builds
-must establish graphics availability. The LLM review uses the same basic
-relationships with source references; it cannot invent absent facts. The strict
-Made-by-you/custom fit policy is unchanged. This changes compatibility scope,
-not supplier condition, software entitlement, prices or publication authority.
+The local LLM must check CPU/motherboard socket fit; on AM4, an AM4 CPU and DDR4
+memory; motherboard fit in the case; and GPU fit in the case. It should use
+captured source facts and leave missing measurements unresolved. A failed or
+inconclusive check is recorded in the segment's AUDIT tab. Workshop planning is
+not a required Playbook step. The separate Made-by-you/custom deterministic fit
+service retains its own product rules.

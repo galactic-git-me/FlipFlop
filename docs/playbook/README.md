@@ -1,7 +1,7 @@
 # Playbook and 3D asset working references
 
-**Last reviewed:** 2026-10-24
-**Authority:** Product rules live in [`../product/catalogues-playbooks-and-fulfilment.md`](../product/catalogues-playbooks-and-fulfilment.md). These files are operational references derived from current source data and do not replace live approval, compatibility, pricing, stock, or delivery checks.
+**Last reviewed:** 2026-11-27
+**Authority:** Product rules live in [`../product/catalogues-playbooks-and-fulfilment.md`](../product/catalogues-playbooks-and-fulfilment.md). These files are operational references derived from current source data and do not replace proposal revision, compatibility, pricing, or delivery checks.
 
 ## Current simple Playbook
 
@@ -39,7 +39,7 @@ The default Playbook is a single matrix. Open **Operating rules** once to set bu
 
 For routine work use **Approve photos** or **Approve models** in a cell. The photo panel includes only its selected physical base components, not software or unselected alternatives. Choose 1–4 photos and click **Approve photos & generate model**. The saved choice is sent unchanged; the browser returns as soon as the persisted generation job is accepted. Return to review the finished model and explicitly confirm rights/scale before publication. Media decisions queue an automatic captured-fact rebuild. No generated model is approved on the owner's behalf.
 
-Builds may use approved product photos before a model is published. Missing/conflicting supplier, engineering or licensing evidence still pauses sale. Advanced diagnostics retain the previous operational pages for engineering investigation. The previous overlay description above is historical where it describes separate steps or unselected options.
+The Playbook **AUDIT** tab shows, for every segment, green ticks for completed checks, red crosses for failed checks, and blank cells for checks not run yet. It covers linked component listings, approved photos, approved 3D models, local-LLM compatibility, prices, pace products, and OS key listing availability where applicable. One underlying supplier listing per component is sufficient availability evidence; the UI does not request supplier approval. Legal review belongs to the owner. Workshop planning is not a required Playbook publication step.
 
 ## Main-photo approval grid — 21 October 2026
 

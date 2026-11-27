@@ -86,14 +86,11 @@ class ReadinessTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(ebay['supplier'], 'ebay')
         self.assertEqual(ebay['channel'], 'marketplace')
 
-    def test_gamers_outlet_digital_software_requires_its_exact_source_review(self):
+    def test_gamers_outlet_key_listing_does_not_require_a_licence_legal_review(self):
         source={**self.source,'source':'Gamers Outlet',
             'url':'https://www.gamers-outlet.net/en/buy-windows-11-pro-oem-cd-key',
             'item_gbp':'5.73','delivery_gbp':'0.00','delivery_working_days':0}
-        with self.assertRaises(HTTPException):
-            source_values(source,self.entry)
-
-        result=source_values({**source,'licence_source_reviewed':True},self.entry)
+        result=source_values(source,self.entry)
         self.assertEqual(result['supplier'],'gamers_outlet')
         self.assertEqual(result['channel'],'software')
         self.assertEqual(result['delivery_working_days'],0)

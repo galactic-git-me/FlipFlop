@@ -91,6 +91,7 @@ interface Listing {
 }
 
 interface GemData {
+  id: number;
   title: string;
   price: number;
   market_median_price?: number | null;
@@ -98,6 +99,7 @@ interface GemData {
   condition: string;
   url: string;
   image_url?: string | null;
+  image_urls?: string[];
   cpu?: string | null;
   category?: string;
 }
@@ -1355,6 +1357,19 @@ const GEM_SPOTLIGHT_ACCENTS = {
   orange: { label: "text-orange-300", price: "text-orange-200", ring: "ring-orange-400/30", glow: "from-orange-500/20" },
 } as const;
 
+function gemSpotlightImageUrl(value: string) {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:") return null;
+    if (["www.scan.co.uk", "computerorbit.com", "www.computerorbit.com", "www.overclockers.co.uk", "i.ebayimg.com", "m.media-amazon.com", "images-eu.ssl-images-amazon.com", "images-na.ssl-images-amazon.com"].includes(url.hostname)) {
+      return `/api/proxy-image?url=${encodeURIComponent(url.toString())}`;
+    }
+    return value;
+  } catch {
+    return null;
+  }
+}
+
 function GemSpotlightCard({
   gem,
   label,
@@ -1365,6 +1380,10 @@ function GemSpotlightCard({
   accent: keyof typeof GEM_SPOTLIGHT_ACCENTS;
 }) {
   const colors = GEM_SPOTLIGHT_ACCENTS[accent];
+  const imageUrls = [...new Set([...(gem.image_urls ?? []), gem.image_url].filter((url): url is string => !!url))];
+  const [imageIndex, setImageIndex] = useState(0);
+  useEffect(() => setImageIndex(0), [gem.id, gem.image_url, gem.image_urls]);
+  const imageSrc = imageUrls[imageIndex] ? gemSpotlightImageUrl(imageUrls[imageIndex]) : null;
   const median = gem.market_median_price;
   const medianDifference = median != null && median > 0 ? gem.price - median : null;
   return (
@@ -1374,13 +1393,14 @@ function GemSpotlightCard({
       rel="noopener noreferrer"
       className={`group relative block aspect-square overflow-hidden rounded-2xl ring-1 ${colors.ring} shadow-lg shadow-black/40`}
     >
-      {gem.image_url ? (
+      {imageSrc ? (
         <img
-          src={gem.image_url}
+          src={imageSrc}
           alt={gem.title}
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           onError={(e) => {
-            (e.target as HTMLImageElement).style.display = "none";
+            if (imageIndex + 1 < imageUrls.length) setImageIndex(imageIndex + 1);
+            else (e.target as HTMLImageElement).style.display = "none";
           }}
         />
       ) : (

@@ -67,9 +67,6 @@ async def import_current_catalogue_prices(db, parts, admin_id):
         if item == 0 and not free_official_download:
             blocked.append(f"{part['role']}: zero-cost items require verified official Ubuntu download evidence")
             continue
-        if identity == 'gamers_outlet' and source.get('licence_source_reviewed') is not True:
-            blocked.append(f"{part['role']}: exact Gamers Outlet licence terms need review")
-            continue
         supplier = 'Ubuntu' if software else identity
         entry = SimpleNamespace(part_key=key, fees_gbp=old.fees_gbp if old else Decimal('0.00'),
             risk_gbp=old.risk_gbp if old else Decimal('0.00'),

@@ -62,16 +62,16 @@ services:
       ollama-tunnel:
         condition: service_started
     env_file:
+      # Keep developer-local defaults lowest priority; production settings and
+      # SP-API credentials must come from the production checkout's .env.local.
+      - path: ../flipflop-api/.env
+        required: false
       - path: ../.env.local
         required: true
       - path: ../runtime/admin-auth.env
         required: true
       - path: ../runtime/browser-worker.env
         required: true
-      # Developer-local API overrides are gitignored and are not present in
-      # the production checkout. Production secrets live in ../.env.local.
-      - path: ../flipflop-api/.env
-        required: false
     environment:
       APP_ENV: production
       FLIPFLOP_RUNTIME_ENV: live
@@ -97,6 +97,11 @@ services:
       # Live listings must never silently fall back to the eBay sandbox when
       # the host env file omits this optional setting.
       EBAY_LISTING_ENVIRONMENT: production
+      # The production API always uses the live EU SP-API and UK marketplace.
+      # Client credentials, refresh token, and seller ID come from ../.env.local.
+      AMAZON_SP_API_ENVIRONMENT: production
+      AMAZON_SP_API_ENDPOINT: https://sellingpartnerapi-eu.amazon.com
+      AMAZON_SP_API_MARKETPLACE_ID: A1F83G8C2ARO7P
       # OAuth is completed by the public production admin UI.
       ADMIN_FRONTEND_URL: https://admin.theflipflop.shop
       EBAY_OAUTH_CALLBACK_URL: https://www.theflipflop.shop/api/ebay/oauth/callback

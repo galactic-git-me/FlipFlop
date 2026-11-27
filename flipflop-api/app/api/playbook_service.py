@@ -224,9 +224,24 @@ async def compatibility_second_opinion(proposal_id:int,body:ReviewRevision,
         raise HTTPException(409,'The proposal changed; reload before reviewing')
     from app.services.compatibility_llm_review import review_compatibility_evidence
     try:
-        return await review_compatibility_evidence(offer)
+        review=await review_compatibility_evidence(offer)
     except Exception as error:
         raise HTTPException(503,'The advisory compatibility review is unavailable') from error
+    # The Audit tab needs a durable result for the exact BOM it checked. Recheck
+    # the revision after local inference so a result cannot be attached to a
+    # proposal that changed while the model was running.
+    from copy import deepcopy
+    current=(await db.execute(select(PlaybookProposal).where(
+        PlaybookProposal.id==proposal_id).with_for_update()
+        .execution_options(populate_existing=True))).scalar_one_or_none()
+    if (current is None or current.status!='pending'
+            or (current.proposed_data or {}).get('revision_sha256')!=body.revision_sha256):
+        raise HTTPException(409,'The proposal changed during the compatibility check; reload before continuing')
+    snapshot=deepcopy(current.proposed_data or {})
+    snapshot['compatibility_review']=review
+    current.proposed_data=snapshot
+    await db.commit()
+    return review
 
 
 @router.post('/proposals/{proposal_id}/approve')

@@ -21,7 +21,7 @@ from app.models.listing_archive import ListingArchive
 from app.models.playbook import Playbook, PlaybookProposal
 from app.schemas.commercial_quote import CellCommercialPolicy
 from app.services.commercial_checkout import current_capacity_ids
-from app.services.commercial_quote_evidence import definition_hash, latest_listing_observations, assess_stored_cell, supplier_identity
+from app.services.commercial_quote_evidence import definition_hash, assess_stored_cell, supplier_identity
 from app.services.commerce_pricing import _recent
 from app.services.curated_build_policy import definitions, matches_spec
 
@@ -182,19 +182,6 @@ async def readiness_index(db):
         cell_id = (proposal.proposed_data or {}).get("cell_id")
         if cell_id:
             proposal_by_cell.setdefault((proposal.playbook_id, cell_id), proposal)
-    required = set()
-    for parent in parents.values():
-        for raw in ((parent.pricing_model or {}).get("commercial_cells") or {}).values():
-            if isinstance(raw, dict):
-                required.update(raw.get("required_part_keys") or [])
-    for candidate in draft_by_key.values():
-        required.update(candidate.get("required_part_keys") or [])
-    rows = (await db.execute(select(SupplierOfferEvidence).where(
-        SupplierOfferEvidence.part_key.in_(required),
-        SupplierOfferEvidence.observed_at >= datetime.now(timezone.utc) - timedelta(hours=24),
-    ))).scalars().all() if required else []
-    fresh = latest_listing_observations(rows)
-    capacities = await current_capacity_ids(db)
     now = datetime.now(timezone.utc)
     items = []
     for definition in cells:
@@ -208,11 +195,14 @@ async def readiness_index(db):
         missing_roles = required_roles - selected_roles
         candidate = draft_by_key.get(product_key(parent.id, definition["id"]), {}) if parent else {}
         coverage_keys = set(policy.required_part_keys if policy else candidate.get("required_part_keys") or [])
-        coverage_condition = policy.condition.value if policy else candidate.get("condition", "new")
-        covered = {row.part_key for row in fresh if row.stock_confirmed and row.condition == coverage_condition
-                   and row.delivery_working_days is not None and row.delivery_working_days >= 0
-                   and row.supplier_confidence >= Decimal("0.8")
-                   and _recent(row.observed_at.isoformat(), now, timedelta(hours=24))}
+        linked_parts = (proposal.proposed_data or {}).get("components", []) if proposal else []
+        covered = {
+            (f"case:{part['case_catalogue_id']}" if part.get("role") == "case" and part.get("case_catalogue_id")
+             else f"variant:{part['variant_id']}")
+            for part in linked_parts
+            if part.get("listing_id") and part.get("source_url")
+            and (part.get("variant_id") or part.get("case_catalogue_id"))
+        }
         if not parent:
             blockers.append("No active parent Playbook")
         elif missing_roles:
@@ -226,11 +216,9 @@ async def readiness_index(db):
                 blockers.append("Build definition changed since review")
             missing = set(policy.required_part_keys) - covered
             if missing:
-                blockers.append(f"{len(missing)} products need current supplier evidence")
+                blockers.append(f"{len(missing)} component listings are not linked")
             if policy.market is not None and not _recent(policy.market.observed_at, now, timedelta(days=30)):
                 blockers.append("Sold-market comparison is stale")
-        if not capacities and not missing_roles:
-            blockers.append("Current workshop evidence is missing or full")
         items.append({"cell_id": definition["id"], "name": definition["name"],
             "segment": definition["segment"], "tier": definition["tier"],
             "playbook_id": parent.id if parent else None, "policy_version": policy.version if policy else None,
@@ -242,7 +230,7 @@ async def readiness_index(db):
             "state": "needs_setup" if not policy else "needs_evidence" if blockers else "ready_for_assessment",
             "blockers": blockers, "policy_errors": errors})
     return {"items": items, "observed_at": now.isoformat(),
-            "note": "Ready for assessment does not mean approved or enabled for sale."}
+            "note": "Listing presence establishes availability here; the audit reports photo, model, compatibility, price and pace checks separately."}
 
 
 def _captured_url_belongs_to_listing(captured_url, listing, observation):

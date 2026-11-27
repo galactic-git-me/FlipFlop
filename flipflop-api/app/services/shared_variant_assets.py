@@ -45,8 +45,14 @@ def approved_model_photos(variant) -> list[str]:
     return media_urls(images)
 
 
-async def final_assets_by_variant(db, variants: list[CatalogueVariant]) -> dict[int, Component3DAsset]:
-    """Return approved family models; cases retain exact listing/photo matching."""
+async def final_assets_by_variant(db, variants: list[CatalogueVariant], *,
+        allow_pending_review: bool = False) -> dict[int, Component3DAsset]:
+    """Return approved family models; cases retain exact listing/photo matching.
+
+    Playbook proposal review may inspect a pending catalogue variant so it can
+    verify its approved model before proposal approval activates that variant.
+    Public catalogue callers keep the default active-only behavior.
+    """
     if not variants:
         return {}
     # Family lookup needs identity only. Loading complete listings once per
@@ -80,9 +86,10 @@ async def final_assets_by_variant(db, variants: list[CatalogueVariant]) -> dict[
         if key and not key[1].endswith("_unclassified"):
             by_key.setdefault(key, []).append(asset)
     result = {}
+    allowed_statuses = {"active", "pending_review"} if allow_pending_review else {"active"}
     for variant in variants:
         key = keys.get(variant.id)
-        if variant.status != "active" or not key:
+        if variant.status not in allowed_statuses or not key:
             continue
         candidates = by_key.get(key, [])
         if key[0] == "case":

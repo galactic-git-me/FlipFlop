@@ -1,6 +1,6 @@
 import CommercialReviewWorkspace from '@/components/playbooks/CommercialReviewWorkspace';
 
-const reviewAreas = ['builds', 'suppliers', 'compatibility', 'software', 'workshop', 'configurations'] as const;
+const reviewAreas = ['builds', 'suppliers', 'compatibility', 'software', 'audit', 'configurations'] as const;
 
 export default async function CommercialReadinessPage({
   searchParams,
