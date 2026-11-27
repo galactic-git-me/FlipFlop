@@ -8,6 +8,8 @@
 
 **Customer delivery choice, owner instruction 27 October 2026:** the customer selects Fast Track, Standard or Flexible pace. The Playbook retains a sourcing option for every required component under each pace and prices the complete compatible build from those choices. Fast Track and Standard require supplier arrival plus workshop and courier time to meet their promises. Flexible has no delivery deadline or promised delivery date; supplier arrival estimates remain internal planning evidence. Missing eligible component sources make that pace unavailable with the exact gap shown. This supersedes the Standard-only MVP restriction and any fixed Flexible delivery ceiling. Hardware requirements, compatibility, source freshness, condition and profit rules apply to every pace.
 
+Standard remains the catalogue's base offer. An unavailable Fast Track or Flexible source option keeps its reason visible without blocking an otherwise verified Standard offer. Publication enables only the reviewed available paces, and checkout rejects disabled paces. The existing whole-proposal budget gates below still apply.
+
 **Owner-approved product direction, 22 October 2026:** the target matrix is customer use case ×
 capability tier. Essential, Enhanced and Advanced are common column levels; each cell explains its
 benefit using a use-case-specific name and measurable workload criteria. Customer budget is a filter,
