@@ -736,5 +736,23 @@
     "reason": "no_exact_official_pdf",
     "component": "ASUS ProArt X870E-Creator WiFi AMD AM5 ATX Content Creator Motherboard | PCIe\u00ae 5.0 x16, 16+2+2 power stages, DDR5, dual USB4\u00ae",
     "retry_after": "2026-12-27T11:20:03.831934"
+  },
+  "b7237e863f7d1fd242194ff15564b810a4d13f7708593e8e995293bf3e9df0fa": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "NZXT H9 Flow RGB+ - Dual-Chamber ATX PC Case - Black",
+    "retry_after": "2026-12-27T18:54:09.074925"
+  },
+  "70ee347fcd4c095cc6c044598bbbd746a0e921a1caa31b29a7478daacb13e4e2": {
+    "status": "not_found",
+    "reason": "manufacturer_domain_unknown",
+    "component": "CiT F3 Gaming PC Case \u2013 Micro-ATX Computer Case with Mesh Front & Tempered Glass Side Panels - 3 x 120mm ARGB Fans Included -",
+    "retry_after": "2026-12-27T18:54:09.074925"
+  },
+  "0d75962e481e1c8e49265332b1dfabd6f539f58df9e80c44c4c6c0abcc74f17a": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "CORSAIR 3500X LX-R RGB iCUE LINK Panoramic Mid-Tower PC Case \u2013 3x Pre-Installed LX120-R RGB Fans, Includes iCUE LINK System H",
+    "retry_after": "2026-12-27T18:54:09.074925"
   }
 }
