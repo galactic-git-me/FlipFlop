@@ -67,8 +67,19 @@ Write-Host "[DEV] Commit $ExpectedCommit is present at origin/dev. Preparing the
 if (-not (Test-Path -LiteralPath $runtime)) {
     Invoke-Git @('worktree', 'add', '--detach', $runtime, $ExpectedCommit) | Write-Host
 } else {
-    $registered = Invoke-Git @('worktree', 'list', '--porcelain')
-    if ($registered -notmatch [regex]::Escape("worktree $runtime")) { throw "Runtime path exists but is not a registered worktree; refusing to modify it: $runtime" }
+    $registeredWorktrees = Invoke-Git @('worktree', 'list', '--porcelain')
+    $runtimeFullPath = [System.IO.Path]::GetFullPath($runtime).TrimEnd([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar)
+    $runtimeIsRegistered = $false
+    foreach ($line in ($registeredWorktrees -split "`r?`n")) {
+        if (-not $line.StartsWith('worktree ', [StringComparison]::Ordinal)) { continue }
+        $registeredPath = $line.Substring('worktree '.Length)
+        $registeredFullPath = [System.IO.Path]::GetFullPath($registeredPath).TrimEnd([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar)
+        if ([string]::Equals($registeredFullPath, $runtimeFullPath, [StringComparison]::OrdinalIgnoreCase)) {
+            $runtimeIsRegistered = $true
+            break
+        }
+    }
+    if (-not $runtimeIsRegistered) { throw "Runtime path exists but is not a registered worktree; refusing to modify it: $runtime" }
     if (-not [string]::IsNullOrWhiteSpace((Invoke-Git @('status', '--porcelain', '--untracked-files=all') $runtime))) {
         throw "DEV runtime worktree has local changes; preserving them and refusing deployment: $runtime"
     }
