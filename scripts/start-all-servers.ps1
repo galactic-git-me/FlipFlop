@@ -119,8 +119,10 @@ function Assert-DevCheckout {
     & git -C $projectRoot fetch --quiet origin dev:refs/remotes/origin/dev
     if ($LASTEXITCODE -ne 0) { throw 'Could not fetch origin/dev; refusing stale or offline DEV startup.' }
 
-    $head = (& git -C $projectRoot rev-parse HEAD 2>$null).Trim()
-    $remoteDev = (& git -C $projectRoot rev-parse origin/dev 2>$null).Trim()
+    $head = [string](& git -C $projectRoot rev-parse HEAD 2>$null)
+    $head = $head.Trim()
+    $remoteDev = [string](& git -C $projectRoot rev-parse origin/dev 2>$null)
+    $remoteDev = $remoteDev.Trim()
     if ($LASTEXITCODE -ne 0 -or $head -ne $remoteDev) {
         throw "Local dev ($head) is not exactly origin/dev ($remoteDev). Update local dev and retry. No services or ports were changed."
     }
@@ -131,19 +133,23 @@ function Assert-DevCheckout {
 }
 
 function Assert-DefaultBranchCheckout([string]$Path, [string]$Label) {
-    $defaultRef = (& git -C $Path symbolic-ref --quiet refs/remotes/origin/HEAD 2>$null).Trim()
+    $defaultRef = [string](& git -C $Path symbolic-ref --quiet refs/remotes/origin/HEAD 2>$null)
+    $defaultRef = $defaultRef.Trim()
     if ($LASTEXITCODE -ne 0 -or $defaultRef -notmatch '^refs/remotes/origin/(.+)$') {
         throw "Could not determine $Label's origin default branch; refusing to start mixed-source DEV."
     }
     $defaultBranch = $Matches[1]
-    $branch = (& git -C $Path branch --show-current 2>$null).Trim()
+    $branch = [string](& git -C $Path branch --show-current 2>$null)
+    $branch = $branch.Trim()
     if ($LASTEXITCODE -ne 0 -or $branch -ne $defaultBranch) {
         throw "$Label must use its origin default branch '$defaultBranch' for DEV. Current branch: $(if ($branch) { $branch } else { 'detached HEAD' }). No services or ports were changed."
     }
     & git -C $Path fetch --quiet origin "${defaultBranch}:refs/remotes/origin/${defaultBranch}"
     if ($LASTEXITCODE -ne 0) { throw "Could not refresh $Label origin/$defaultBranch; refusing stale DEV startup." }
-    $head = (& git -C $Path rev-parse HEAD 2>$null).Trim()
-    $remoteHead = (& git -C $Path rev-parse "origin/$defaultBranch" 2>$null).Trim()
+    $head = [string](& git -C $Path rev-parse HEAD 2>$null)
+    $head = $head.Trim()
+    $remoteHead = [string](& git -C $Path rev-parse "origin/$defaultBranch" 2>$null)
+    $remoteHead = $remoteHead.Trim()
     if ($LASTEXITCODE -ne 0 -or $head -ne $remoteHead) {
         throw "$Label is not exactly synchronized with origin/$defaultBranch. Update it and retry. No services or ports were changed."
     }
@@ -328,7 +334,8 @@ Assert-DevelopmentPrerequisites
 $sourceBranch = [string](& git -C $projectRoot branch --show-current 2>$null)
 $sourceBranch = $sourceBranch.Trim()
 $sourceBranch = if ([string]::IsNullOrWhiteSpace($sourceBranch) -and $AllowDetachedDev) { 'dev' } else { $sourceBranch }
-$sourceCommit = (& git -C $projectRoot rev-parse HEAD 2>$null).Trim()
+$sourceCommit = [string](& git -C $projectRoot rev-parse HEAD 2>$null)
+$sourceCommit = $sourceCommit.Trim()
 if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($sourceCommit)) {
     throw 'Could not determine the validated source commit for this DEV checkout.'
 }
