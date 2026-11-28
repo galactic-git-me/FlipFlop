@@ -80,11 +80,33 @@ if (-not (Test-Path -LiteralPath $runtime)) {
         }
     }
     if (-not $runtimeIsRegistered) { throw "Runtime path exists but is not a registered worktree; refusing to modify it: $runtime" }
-    if (-not [string]::IsNullOrWhiteSpace((Invoke-Git @('status', '--porcelain', '--untracked-files=all') $runtime))) {
+    $runtimeStatePath = 'flipflop-api/data/component-manual-discovery.json'
+    $runtimeStatus = Invoke-Git @('status', '--porcelain', '--untracked-files=all') $runtime
+    $unexpectedRuntimeChanges = @()
+    $hasGeneratedRuntimeState = $false
+    foreach ($entry in ($runtimeStatus -split "`r?`n")) {
+        if ([string]::IsNullOrWhiteSpace($entry)) { continue }
+        if ($entry.Length -lt 4) { $unexpectedRuntimeChanges += $entry; continue }
+        $changeCode = $entry.Substring(0, 2)
+        $changePath = $entry.Substring(3).Trim('"')
+        if ($changePath -ceq $runtimeStatePath -and $changeCode -ceq ' M') {
+            $hasGeneratedRuntimeState = $true
+            continue
+        }
+        $unexpectedRuntimeChanges += $entry
+    }
+    if ($unexpectedRuntimeChanges.Count -gt 0) {
         throw "DEV runtime worktree has local changes; preserving them and refusing deployment: $runtime"
     }
     if (-not [string]::IsNullOrWhiteSpace((Invoke-Git @('branch', '--show-current') $runtime))) { throw 'DEV runtime worktree must remain detached.' }
     $runtimeHead = Invoke-Git @('rev-parse', 'HEAD') $runtime
+    if ($hasGeneratedRuntimeState) {
+        $currentStateBlob = Invoke-Git @('rev-parse', "HEAD:$runtimeStatePath") $runtime
+        $targetStateBlob = Invoke-Git @('rev-parse', "$($ExpectedCommit):$runtimeStatePath") $runtime
+        if ($currentStateBlob -cne $targetStateBlob) {
+            throw "DEV runtime cache '$runtimeStatePath' has local changes and the target commit changes its source blob; preserving the cache and refusing deployment."
+        }
+    }
     & git -C $runtime merge-base --is-ancestor $runtimeHead $ExpectedCommit
     if ($LASTEXITCODE -ne 0) { throw "Runtime worktree cannot fast-forward from $runtimeHead to $ExpectedCommit." }
     if ($runtimeHead -cne $ExpectedCommit) { Invoke-Git @('checkout', '--detach', $ExpectedCommit) $runtime | Write-Host }

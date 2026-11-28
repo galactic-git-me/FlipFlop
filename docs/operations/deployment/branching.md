@@ -37,12 +37,17 @@ Pull requests for this repository. Without this secret the automation safely
 skips and leaves PRs available for manual merge.
 
 Local DEV runs from the reusable detached `FlipFlop-dev-runtime` worktree beside
-the primary checkout. The reserved DEV ports may be started only from a clean
-runtime worktree whose HEAD exactly matches freshly fetched `origin/dev`.
-`scripts/start-all-servers.ps1` checks this before touching ports, the Ollama
-gateway, or service processes and fails closed for feature branches, dirty
-worktrees, fetch failures, and stale commits. The primary developer checkout is
-not advanced or required to be clean by automated DEV deployment.
+the primary checkout. The reserved DEV ports may be started only from the
+runtime worktree whose HEAD exactly matches freshly fetched `origin/dev`, with
+no local code changes. The API may append runtime cache entries to
+`flipflop-api/data/component-manual-discovery.json`; deployment preserves this
+specific file only while the target commit retains the same tracked blob. All
+other dirty paths, or a source change to that file, block deployment.
+`scripts/deploy-development.ps1` enforces that worktree-state rule before it
+updates source or starts services. `scripts/start-all-servers.ps1` verifies the
+branch, fetched source identity, and expected commit before touching ports, the
+Ollama gateway, or service processes. The primary developer checkout is not
+advanced or required to be clean by automated DEV deployment.
 When the storefront is included, it must also be a clean checkout exactly
 matching its remote default branch. Feature work must use an isolated preview
 environment; it must never claim the shared DEV ports. The API
