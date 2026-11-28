@@ -754,5 +754,23 @@
     "reason": "no_exact_official_pdf",
     "component": "CORSAIR 3500X LX-R RGB iCUE LINK Panoramic Mid-Tower PC Case \u2013 3x Pre-Installed LX120-R RGB Fans, Includes iCUE LINK System H",
     "retry_after": "2026-12-27T18:54:09.074925"
+  },
+  "3ec5d77f59ef55a9e44e3d931c599c729f11222bf133ca9a1fb4d0132cefa389": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "Sapphire technology Pulse AMD Radeon RX 9060 XT Gaming OC, 16GB Dual HDMI-DP",
+    "retry_after": "2026-12-27T19:46:50.287459"
+  },
+  "56cb0e5a18a000bcbcb086f3b415a8f060ebac462f81c337f0146ff52bba39c7": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ASUS ROG Crosshair X870E Hero, AMD ATX motherboard, 18+2+2 power stages, DDR5 slots, PCIe 5.0 with full support for next-gen",
+    "retry_after": "2026-12-27T19:46:50.287459"
+  },
+  "a2b6f2f8229f6a9a187825030473746fc476b84c656a917bdd194e4c5fe5bb98": {
+    "status": "not_found",
+    "reason": "no_exact_official_pdf",
+    "component": "ASUS PRIME X870-P WIFI AMD ATX motherboard, 14+2+1(80A) power stages,PCIe 5.0 x16 slot with full support for next-gen graphic",
+    "retry_after": "2026-12-27T19:46:50.287459"
   }
 }
