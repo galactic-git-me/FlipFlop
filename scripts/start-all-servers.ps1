@@ -417,7 +417,7 @@ if ($GemRadarStandalone) {
 }
 
 if (-not $NoAdmin) {
-    $command = "set `"NODE_ENV=development`" && set `"BACKEND_URL=$apiUrl`" && set `"NEXT_PUBLIC_API_URL=$apiUrl`" && set `"NEXT_PUBLIC_FLIPFLOP_ENV=development`" && set `"EBAY_OPS_BACKEND_URL=$apiUrl`" && set `"GEMRADAR_URL=$apiUrl`" && set `"NEXT_PUBLIC_OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"NEXT_PUBLIC_OLLAMA_MODEL=$ollamaModel`" && npm.cmd run dev -- -p 4312 -H 127.0.0.1"
+    $command = "set `"NODE_ENV=development`" && set `"BACKEND_URL=$apiUrl`" && set `"NEXT_PUBLIC_API_URL=$apiUrl`" && set `"NEXT_PUBLIC_FLIPFLOP_ENV=development`" && set `"EBAY_OPS_BACKEND_URL=$apiUrl`" && set `"GEMRADAR_URL=$apiUrl`" && set `"NEXT_PUBLIC_OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"NEXT_PUBLIC_OLLAMA_MODEL=$ollamaModel`" && npm.cmd run dev -- --webpack -p 4312 -H 127.0.0.1"
     $servers += Start-DevelopmentServer -Name 'admin' -WorkingDirectory (Join-Path $projectRoot 'flipflop-admin') -Command $command -Port 4312 -Color Green
 }
 
