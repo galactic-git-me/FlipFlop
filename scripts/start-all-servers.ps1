@@ -8,10 +8,43 @@ param(
     [switch]$GemRadarStandalone,
     [switch]$NoOllamaGateway,
     [switch]$BuildExtension,
+    [switch]$AllowDetachedDev,
     [switch]$CheckOnly
 )
 
 $ErrorActionPreference = 'Stop'
+
+function Write-Host {
+    [CmdletBinding()]
+    param(
+        [Parameter(Position = 0, ValueFromPipeline = $true)]
+        [AllowNull()]
+        [object]$Object,
+        [ConsoleColor]$ForegroundColor,
+        [ConsoleColor]$BackgroundColor,
+        [switch]$NoNewline,
+        [object]$Separator = ' '
+    )
+    process {
+        $lines = ([string]$Object -split "`r?`n")
+        foreach ($line in $lines) {
+            $parameters = @{
+                Object = "[$(Get-Date -Format 'yyyy-MM-ddTHH:mm:ss.fffK')] $line"
+                NoNewline = $NoNewline
+                Separator = $Separator
+            }
+            if ($PSBoundParameters.ContainsKey('ForegroundColor')) { $parameters.ForegroundColor = $ForegroundColor }
+            if ($PSBoundParameters.ContainsKey('BackgroundColor')) { $parameters.BackgroundColor = $BackgroundColor }
+            Microsoft.PowerShell.Utility\Write-Host @parameters
+        }
+    }
+}
+
+trap {
+    Write-Host "[ERROR] $($_.Exception.Message)" -ForegroundColor Red
+    exit 1
+}
+
 $projectRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $storefrontRoot = Join-Path (Split-Path -Parent $projectRoot) 'FlipFlop.shop'
 $logsDir = Join-Path $projectRoot 'logs'
@@ -76,15 +109,10 @@ function Assert-DevelopmentPrerequisites {
 
 function Assert-DevCheckout {
     $branch = (& git -C $projectRoot branch --show-current 2>$null).Trim()
-    if ($LASTEXITCODE -ne 0 -or $branch -ne 'dev') {
+    $detachedDev = $AllowDetachedDev -and $LASTEXITCODE -eq 0 -and [string]::IsNullOrWhiteSpace($branch)
+    if ($LASTEXITCODE -ne 0 -or ($branch -ne 'dev' -and -not $detachedDev)) {
         $displayBranch = if ($branch) { $branch } else { 'detached HEAD' }
         throw "DEV startup is restricted to the dev branch. Current branch: $displayBranch. Use an isolated preview environment for feature work. No services or ports were changed."
-    }
-
-    $changes = @(& git -C $projectRoot status --porcelain 2>$null)
-    if ($LASTEXITCODE -ne 0) { throw 'Could not verify DEV worktree cleanliness; refusing startup.' }
-    if ($changes.Count -gt 0) {
-        throw 'DEV startup requires a clean worktree. Merge changes through a dev pull request, then retry. No services or ports were changed.'
     }
 
     & git -C $projectRoot fetch --quiet origin dev:refs/remotes/origin/dev
@@ -94,6 +122,10 @@ function Assert-DevCheckout {
     $remoteDev = (& git -C $projectRoot rev-parse origin/dev 2>$null).Trim()
     if ($LASTEXITCODE -ne 0 -or $head -ne $remoteDev) {
         throw "Local dev ($head) is not exactly origin/dev ($remoteDev). Update local dev and retry. No services or ports were changed."
+    }
+    $expectedCommit = [Environment]::GetEnvironmentVariable('FLIPFLOP_EXPECTED_SOURCE_COMMIT')
+    if (-not [string]::IsNullOrWhiteSpace($expectedCommit) -and $head -ne $expectedCommit) {
+        throw "DEV source ($head) does not match expected commit ($expectedCommit). No services or ports were changed."
     }
 }
 
@@ -106,10 +138,6 @@ function Assert-DefaultBranchCheckout([string]$Path, [string]$Label) {
     $branch = (& git -C $Path branch --show-current 2>$null).Trim()
     if ($LASTEXITCODE -ne 0 -or $branch -ne $defaultBranch) {
         throw "$Label must use its origin default branch '$defaultBranch' for DEV. Current branch: $(if ($branch) { $branch } else { 'detached HEAD' }). No services or ports were changed."
-    }
-    $changes = @(& git -C $Path status --porcelain 2>$null)
-    if ($LASTEXITCODE -ne 0 -or $changes.Count -gt 0) {
-        throw "$Label must have a clean worktree before DEV startup. No services or ports were changed."
     }
     & git -C $Path fetch --quiet origin "${defaultBranch}:refs/remotes/origin/${defaultBranch}"
     if ($LASTEXITCODE -ne 0) { throw "Could not refresh $Label origin/$defaultBranch; refusing stale DEV startup." }
@@ -297,16 +325,20 @@ Assert-DevCheckout
 if (-not $NoFrontend) { Assert-DefaultBranchCheckout -Path $storefrontRoot -Label 'FlipFlop.shop storefront' }
 Assert-DevelopmentPrerequisites
 $sourceBranch = (& git -C $projectRoot branch --show-current 2>$null).Trim()
+$sourceBranch = if ([string]::IsNullOrWhiteSpace($sourceBranch) -and $AllowDetachedDev) { 'dev' } else { $sourceBranch }
 $sourceCommit = (& git -C $projectRoot rev-parse HEAD 2>$null).Trim()
 if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($sourceCommit)) {
     throw 'Could not determine the validated source commit for this DEV checkout.'
 }
+$sourceChanges = @(& git -C $projectRoot status --porcelain 2>$null)
+if ($LASTEXITCODE -ne 0) { throw 'Could not determine whether the DEV source checkout has local changes.' }
+$sourceDirty = if ($sourceChanges.Count -gt 0) { 'true' } else { 'false' }
 $env:FLIPFLOP_SOURCE_COMMIT = $sourceCommit
 $env:FLIPFLOP_SOURCE_BRANCH = $sourceBranch
-$env:FLIPFLOP_SOURCE_DIRTY = 'false'
+$env:FLIPFLOP_SOURCE_DIRTY = $sourceDirty
 $env:NEXT_PUBLIC_SOURCE_COMMIT = $sourceCommit
 $env:NEXT_PUBLIC_SOURCE_BRANCH = $sourceBranch
-$env:NEXT_PUBLIC_SOURCE_DIRTY = 'false'
+$env:NEXT_PUBLIC_SOURCE_DIRTY = $sourceDirty
 
 if ($CheckOnly) {
     Write-Host '[OK] Development launcher syntax and prerequisites are valid.' -ForegroundColor Green
@@ -368,7 +400,8 @@ $env:OLLAMA_BASE_URL = $ollamaBaseUrl
 $env:OLLAMA_MODEL = $ollamaModel
 Warm-OllamaModel -BaseUrl $ollamaBaseUrl -Model $ollamaModel
 
-Write-Host "[*] Starting source $($env:FLIPFLOP_SOURCE_BRANCH)@$sourceCommit (clean DEV source)" -ForegroundColor Cyan
+$sourceState = if ($sourceDirty -eq 'true') { 'dirty local DEV source' } else { 'clean DEV source' }
+Write-Host "[*] Starting source $($env:FLIPFLOP_SOURCE_BRANCH)@$sourceCommit ($sourceState)" -ForegroundColor Cyan
 
 $servers = @()
 $apiUrl = 'http://127.0.0.1:4311'
@@ -412,9 +445,11 @@ foreach ($server in $servers) {
 Write-Host "[INFO] DEV uses production marketplace reads, sandbox eBay listing writes, and Ollama gateway $ollamaBaseUrl (second priority: after production, before other apps)." -ForegroundColor Yellow
 Write-Host '[INFO] Press Ctrl+C to stop the development servers started here.' -ForegroundColor Gray
 
-$serverListeningState = @{}
+$serverFailureCounts = @{}
+$serverReportedDown = @{}
 foreach ($server in $servers) {
-    $serverListeningState[$server.Name] = Test-ListeningPort $server.Port
+    $serverFailureCounts[$server.Name] = 0
+    $serverReportedDown[$server.Name] = $false
 }
 
 try {
@@ -422,15 +457,23 @@ try {
         Start-Sleep -Seconds 5
         foreach ($server in $servers) {
             $isListening = Test-ListeningPort $server.Port
-            $wasListening = $serverListeningState[$server.Name]
 
-            if (-not $isListening -and $wasListening) {
-                Write-Host "[WARN] $($server.Name) is not listening; see $($server.LogFile)" -ForegroundColor Yellow
-            } elseif ($isListening -and -not $wasListening) {
-                Write-Host "[RUNNING] $($server.Name) is listening again at http://127.0.0.1:$($server.Port)" -ForegroundColor $server.Color
+            if ($isListening) {
+                $serverFailureCounts[$server.Name] = 0
+                if ($serverReportedDown[$server.Name]) {
+                    Write-Host "[RUNNING] $($server.Name) is listening again at http://127.0.0.1:$($server.Port)" -ForegroundColor $server.Color
+                    $serverReportedDown[$server.Name] = $false
+                }
+            } else {
+                $serverFailureCounts[$server.Name]++
+                # Transient reloads and host load can miss one or two loopback
+                # probes. Report an outage only after three consecutive misses
+                # across monitoring intervals (about 15 seconds).
+                if (-not $serverReportedDown[$server.Name] -and $serverFailureCounts[$server.Name] -ge 3) {
+                    Write-Host "[WARN] $($server.Name) has not accepted loopback connections for about 15 seconds; see $($server.LogFile)" -ForegroundColor Yellow
+                    $serverReportedDown[$server.Name] = $true
+                }
             }
-
-            $serverListeningState[$server.Name] = $isListening
         }
     }
 } finally {

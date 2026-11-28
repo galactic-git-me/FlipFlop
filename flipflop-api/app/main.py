@@ -916,7 +916,10 @@ def _source_metadata() -> dict[str, str | bool]:
             return result.stdout.strip()
 
         metadata["source_commit"] = git("rev-parse", "HEAD")
-        metadata["source_branch"] = git("symbolic-ref", "--short", "-q", "HEAD", check=False) or "detached"
+        metadata["source_branch"] = (
+            git("symbolic-ref", "--short", "-q", "HEAD", check=False)
+            or os.getenv("FLIPFLOP_SOURCE_BRANCH", "detached")
+        )
         metadata["source_dirty"] = bool(git("status", "--porcelain"))
     except (OSError, subprocess.SubprocessError):
         # Preserve launch-time metadata if Git is unavailable during reload.

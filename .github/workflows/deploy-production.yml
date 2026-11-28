@@ -1,6 +1,8 @@
 name: Deploy production to Andromeda
 
 on:
+  push:
+    tags: ['v*.*.*']
   workflow_dispatch:
     inputs:
       tag:
@@ -53,25 +55,29 @@ jobs:
           fetch-depth: 0
           ref: ${{ inputs.tag || github.ref }}
       - name: Require explicit confirmation
-        if: inputs.confirm != 'DEPLOY-PRODUCTION'
+        if: github.event_name == 'workflow_dispatch' && inputs.confirm != 'DEPLOY-PRODUCTION'
         run: |
-          echo "Production deployment requires confirmation value DEPLOY-PRODUCTION."
+          echo "[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Production deployment requires confirmation value DEPLOY-PRODUCTION."
           exit 1
+      - name: Report LIVE deployment request
+        run: echo "::notice::[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Starting LIVE release verification for tag '${{ inputs.tag || github.ref_name }}'. Production changes occur only after all release gates pass."
       - name: Verify release tag is on main
         id: release
         working-directory: .
         env:
-          RELEASE_TAG: ${{ inputs.tag }}
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
         run: |
+          echo "[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Verifying LIVE tag $RELEASE_TAG against main and current DEV source."
           git fetch --force --tags origin main:refs/remotes/origin/main dev:refs/remotes/origin/dev
           test -n "$RELEASE_TAG"
           sha="$(git rev-parse "$RELEASE_TAG^{commit}")"
           git merge-base --is-ancestor "$RELEASE_TAG" origin/main || {
-            echo "Release tag $RELEASE_TAG is not reachable from origin/main." >&2
+            echo "[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Release tag $RELEASE_TAG is not reachable from origin/main." >&2
             exit 1
           }
           bash scripts/verify-dev-source-parity.sh origin/dev "$RELEASE_TAG"
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "::notice::[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] LIVE release source verified: tag $RELEASE_TAG resolves to commit $sha and matches current DEV source."
       - name: Require a production pull request with passing DEV parity
         id: dev_promotion
         uses: actions/github-script@v7
@@ -86,7 +92,7 @@ jobs:
             });
             const promotion = prs.find((pr) => pr.merged_at && pr.base.ref === 'main');
             if (!promotion) {
-              core.setFailed('Production deployment requires a commit merged through a production pull request.');
+              core.setFailed(`[${new Date().toISOString()}] Production deployment requires a commit merged through a production pull request.`);
               return;
             }
             const { data: checks } = await github.rest.checks.listForRef({
@@ -102,7 +108,7 @@ jobs:
               check.name === 'checks' && check.conclusion === 'success' && check.app.slug === 'github-actions'
             );
             if (!passedGate) {
-              core.setFailed('Production deployment requires a passing DEV-source parity and repository checks run.');
+              core.setFailed(`[${new Date().toISOString()}] Production deployment requires a passing DEV-source parity and repository checks run.`);
             }
       - name: Require DEV-tested database schema
         env:
@@ -134,11 +140,20 @@ jobs:
       - name: Build release admin bundle
         working-directory: flipflop-admin
         run: npm ci && npm run build
+      - name: Report release verification result
+        if: success()
+        working-directory: .
+        run: echo "::notice::[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] LIVE release verification and required builds passed for ${{ steps.release.outputs.sha }}."
 
   deploy:
     needs: verify-release
     runs-on: ubuntu-latest
     environment: production
+    permissions:
+      contents: read
+      pull-requests: read
+      checks: read
+      issues: write
     env:
       EXTENSION_DISPATCH_TOKEN: ${{ secrets.FLIPFLOP_EXTENSION_DISPATCH_TOKEN }}
     steps:
@@ -160,7 +175,7 @@ jobs:
           ANDROMEDA_PORT: ${{ secrets.ANDROMEDA_PORT }}
         run: |
           test -n "$GOOGLE_MERCHANT_SERVICE_ACCOUNT_JSON" || {
-            echo "Missing GOOGLE_MERCHANT_SERVICE_ACCOUNT_JSON production environment secret." >&2
+            echo "[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Missing GOOGLE_MERCHANT_SERVICE_ACCOUNT_JSON production environment secret." >&2
             exit 1
           }
           printf '%s' "$GOOGLE_MERCHANT_SERVICE_ACCOUNT_JSON" | ssh -i ~/.ssh/andromeda \
@@ -175,7 +190,7 @@ jobs:
           ANDROMEDA_PORT: ${{ secrets.ANDROMEDA_PORT }}
         run: |
           test "${#CROSS_LISTING_WORKER_KEY}" -ge 48 || {
-            echo "Missing or invalid CROSS_LISTING_WORKER_KEY production environment secret." >&2
+            echo "[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Missing or invalid CROSS_LISTING_WORKER_KEY production environment secret." >&2
             exit 1
           }
           printf 'CROSS_LISTING_WORKER_KEY=%s\n' "$CROSS_LISTING_WORKER_KEY" | \
@@ -194,21 +209,67 @@ jobs:
             "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
             rotate-production-secret-key
       - name: Deploy tagged Andromeda services
+        id: live-deploy
         env:
           ANDROMEDA_HOST: ${{ secrets.ANDROMEDA_HOST }}
           ANDROMEDA_USER: ${{ secrets.ANDROMEDA_USER }}
           ANDROMEDA_PORT: ${{ secrets.ANDROMEDA_PORT }}
         run: |
+          echo "[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Starting LIVE deployment of verified main source ${{ needs.verify-release.outputs.release_sha }} to Andromeda."
           ssh -i ~/.ssh/andromeda \
             -p "${ANDROMEDA_PORT:-22}" \
             "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
             "/home/mac/CODING/FlipFlop-production/deploy/deploy-andromeda.sh '${{ needs.verify-release.outputs.release_sha }}'"
+          echo "::notice::[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] LIVE deployment command completed for commit ${{ needs.verify-release.outputs.release_sha }}; the remote script verifies API, storefront, and worker health."
+      - name: Label the merged LIVE promotion pull request
+        if: steps.live-deploy.outcome == 'success'
+        uses: actions/github-script@v7
+        env:
+          RELEASE_SHA: ${{ needs.verify-release.outputs.release_sha }}
+        with:
+          script: |
+            const timestamp = () => new Date().toISOString();
+            const warning = (message) => core.warning(`[${timestamp()}] ${message}`);
+            const notice = (message) => core.notice(`[${timestamp()}] ${message}`);
+            const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              ...context.repo,
+              commit_sha: process.env.RELEASE_SHA,
+            });
+            const livePr = prs.find((pr) => pr.merged_at && pr.base.ref === 'main');
+            if (!livePr) {
+              warning(`LIVE deployed ${process.env.RELEASE_SHA}, but GitHub did not return its merged main pull request for labeling.`);
+              return;
+            }
+            const labelName = 'deployed-live';
+            const labels = await github.paginate(github.rest.issues.listLabelsForRepo, {
+              ...context.repo,
+              per_page: 100,
+            });
+            if (!labels.some((label) => label.name === labelName)) {
+              try {
+                await github.rest.issues.createLabel({
+                  ...context.repo,
+                  name: labelName,
+                  color: '0E8A16',
+                  description: 'This change has been deployed and verified on LIVE.',
+                });
+              } catch (error) {
+                if (error.status !== 422) throw error;
+              }
+            }
+            await github.rest.issues.addLabels({
+              ...context.repo,
+              issue_number: livePr.number,
+              labels: [labelName],
+            });
+            notice(`Labeled LIVE PR #${livePr.number} as ${labelName}.`);
       - name: Build DEV and LIVE extensions
         if: env.EXTENSION_DISPATCH_TOKEN != ''
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.FLIPFLOP_EXTENSION_DISPATCH_TOKEN }}
           script: |
+            core.notice(`[${new Date().toISOString()}] Dispatching DEV and LIVE extension builds for ${{ needs.verify-release.outputs.release_sha }}.`);
             await github.rest.repos.createDispatchEvent({
               owner: 'galactic-git-me',
               repo: 'FlipFlopXtension',
@@ -218,3 +279,4 @@ jobs:
                 source_sha: '${{ needs.verify-release.outputs.release_sha }}'
               }
             });
+            core.notice(`[${new Date().toISOString()}] Extension build dispatch accepted for ${{ needs.verify-release.outputs.release_sha }}.`);

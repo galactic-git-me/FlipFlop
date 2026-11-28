@@ -24,7 +24,10 @@ export async function GET() {
   if (process.env.NODE_ENV === "development") {
     try {
       source.source_commit = gitValue(["rev-parse", "HEAD"]);
-      source.source_branch = gitValue(["symbolic-ref", "--short", "-q", "HEAD"]) || "detached";
+      source.source_branch =
+        gitValue(["symbolic-ref", "--short", "-q", "HEAD"]) ||
+        process.env.NEXT_PUBLIC_SOURCE_BRANCH ||
+        "detached";
       source.source_dirty = Boolean(gitValue(["status", "--porcelain"]));
     } catch {
       // Use the build stamp if Git is temporarily unavailable.

@@ -1,0 +1,36 @@
+name: Report merged branch commits
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [dev, main]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  report-merge:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report merged commit
+        env:
+          BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
+          HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          timestamp() { date -u +'%Y-%m-%dT%H:%M:%SZ'; }
+          log() { printf '[%s] %s\n' "$(timestamp)" "$*"; }
+          log "PR #${PR_NUMBER} merged into ${BASE_BRANCH}: ${PR_TITLE}"
+          log "Source branch: ${HEAD_BRANCH}"
+          log "Source commit: ${HEAD_SHA}"
+          log "GitHub merge commit pushed to ${BASE_BRANCH}: ${MERGE_SHA}"
+          if [[ "$BASE_BRANCH" == "dev" ]]; then
+            log "DEV validation will run against pushed commit ${MERGE_SHA}."
+          elif [[ "$BASE_BRANCH" == "main" ]]; then
+            log "Main promotion merged; validated release tagging and LIVE deployment will follow the required checks."
+          fi

@@ -12,35 +12,39 @@ FlipFlop has two runtime environments, not three:
    into `dev`. GitHub requires pull requests and the `checks` status on both
    `dev` and `main`; force pushes and branch deletion are disabled. Keep the
    branch current with its base before merging.
-2. Wait for the DEV validation workflow and pull-request checks to pass. Merge
-   the change into `dev`.
-3. Run the DEV application from that exact `dev` commit and verify the affected
-   user journey against DEV data and services. The launcher starts reserved
-   DEV ports only from a clean local `dev` exactly matching freshly fetched
-   `origin/dev`; feature branches, dirty worktrees, fetch failures, and stale
-   commits fail before any service or port is changed. When the storefront is
-   included, it must also be clean and exactly match its remote default branch.
-   Feature work requires an isolated preview environment. The API health
-   response and admin header expose running source commits, refresh them during
-   hot reload, and flag mismatches.
-4. Open a production pull request whose complete tracked source tree matches
-   the validated DEV tree. CI rejects application, migration, configuration,
-   or data differences from DEV while ignoring generated build and local tool
-   artifacts. Merge only after the DEV runtime check is recorded.
-5. Create a version tag on that DEV-to-main merge commit, for example
-   `v1.0.0`. Release checks require the tag to be on `main`, its tracked source
-   tree to match freshly fetched `origin/dev`, and its commit to be associated
-   with the merged production pull request and its successful DEV-parity CI
-   run.
-6. Run **Actions → Deploy production**, enter the tag, and type
-   `DEPLOY-PRODUCTION`. The deploy workflow reruns API checks and builds the
-   admin bundle before connecting to production. The deployment stamps the
-   release commit into API and admin builds and verifies the live API reports
-   that exact commit before it reports success.
+2. Wait for pull-request checks to pass. GitHub auto-merges the change into
+   `dev` after its required checks succeed.
+3. The `Validate development` workflow runs its API checks and admin build. On
+   success for a push to `dev`, the repository-scoped Windows runner deploys
+   that exact commit to the DEV host using a reusable detached runtime
+   worktree; the primary developer checkout is left untouched. It requires a
+   clean/current storefront checkout, starts the DEV API/admin/storefront, then
+   verifies the API and admin source SHA and storefront health. Manual workflow
+   dispatch validates without deploying.
+   Feature work still requires an isolated preview environment.
+4. After DEV runtime verification, automation opens or updates a promotion PR
+   from `dev` to `main` and queues auto-merge. The main PR's required `checks`
+   job waits for the `DEV deployment` check on that exact head SHA, then verifies
+   source parity and runs repository checks. This prevents a newer, not-yet-
+   deployed DEV commit from being promoted by an older open PR.
+5. When the promotion PR merges, automation tags that exact merge commit with
+   the next `vMAJOR.MINOR.PATCH` version. The tag starts release checks and the
+   LIVE deployment workflow. Release and deployment checks verify that the tag
+   is on `main`, matches current `origin/dev`, and is associated with the
+   merged, passing promotion PR.
+6. LIVE deployment verifies the tagged source, reruns release checks, builds
+   the admin bundle, deploys to Andromeda and verifies the running API source
+   SHA and dependent service health. It labels the merged PR `deployed-live`.
+   The GitHub `production` environment is the manual-approval point to enable
+   when the app launches. Until required reviewers are configured, a verified
+   release tag deploys automatically. Manual **Actions → Deploy production**
+   remains available for recovery and still requires typing
+   `DEPLOY-PRODUCTION`.
 
-Production is never deployed merely because code was pushed to `main`.
-The DEV runtime check happens before promotion; CI build success alone is not
-evidence that the live DEV journey was exercised. GitHub branch protection on
+Production is never deployed merely because code was pushed to `main`; a tag
+created from a DEV-verified promotion PR is required. The DEV runtime check
+happens before promotion; CI build success alone is not evidence that the live
+DEV journey was exercised. GitHub branch protection on
 `main` requires pull requests and the `checks` status check, including for
 administrators, so a direct production push cannot bypass this path.
 
