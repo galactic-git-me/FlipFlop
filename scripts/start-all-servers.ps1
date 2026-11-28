@@ -108,7 +108,8 @@ function Assert-DevelopmentPrerequisites {
 }
 
 function Assert-DevCheckout {
-    $branch = (& git -C $projectRoot branch --show-current 2>$null).Trim()
+    $branch = [string](& git -C $projectRoot branch --show-current 2>$null)
+    $branch = $branch.Trim()
     $detachedDev = $AllowDetachedDev -and $LASTEXITCODE -eq 0 -and [string]::IsNullOrWhiteSpace($branch)
     if ($LASTEXITCODE -ne 0 -or ($branch -ne 'dev' -and -not $detachedDev)) {
         $displayBranch = if ($branch) { $branch } else { 'detached HEAD' }
@@ -324,7 +325,8 @@ function Start-DevelopmentServer {
 Assert-DevCheckout
 if (-not $NoFrontend) { Assert-DefaultBranchCheckout -Path $storefrontRoot -Label 'FlipFlop.shop storefront' }
 Assert-DevelopmentPrerequisites
-$sourceBranch = (& git -C $projectRoot branch --show-current 2>$null).Trim()
+$sourceBranch = [string](& git -C $projectRoot branch --show-current 2>$null)
+$sourceBranch = $sourceBranch.Trim()
 $sourceBranch = if ([string]::IsNullOrWhiteSpace($sourceBranch) -and $AllowDetachedDev) { 'dev' } else { $sourceBranch }
 $sourceCommit = (& git -C $projectRoot rev-parse HEAD 2>$null).Trim()
 if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($sourceCommit)) {
