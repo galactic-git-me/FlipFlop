@@ -24,7 +24,12 @@ jobs:
         with:
           github-token: ${{ env.FLIPFLOP_DEV_MERGE_TOKEN }}
           script: |
+            const timestamp = () => new Date().toISOString();
+            const notice = (message) => core.notice(`[${timestamp()}] ${message}`);
             const pullRequestNumber = context.payload.pull_request.number;
+            const sourceBranch = context.payload.pull_request.head.ref;
+            const sourceSha = context.payload.pull_request.head.sha;
+            notice(`DEV merge requested: PR #${pullRequestNumber}, ${sourceBranch} @ ${sourceSha}.`);
             let pullRequest;
             for (let attempt = 0; attempt < 5; attempt += 1) {
               const response = await github.rest.pulls.get({
@@ -37,32 +42,21 @@ jobs:
             }
 
             if (pullRequest.mergeable_state === 'dirty' || pullRequest.mergeable === false) {
-              core.notice('Auto-merge is waiting for this PR conflict to be resolved.');
+              notice(`DEV merge pending: PR #${pullRequestNumber} has conflicts; resolve them and update the PR.`);
               return;
             }
             if (pullRequest.mergeable_state === 'behind') {
-              core.notice('Auto-merge is waiting for this PR branch to be updated with the latest DEV.');
+              notice(`DEV merge pending: PR #${pullRequestNumber} must be updated with the latest dev branch.`);
               return;
             }
             if (pullRequest.mergeable === null) {
-              core.notice('GitHub has not computed mergeability yet. Push a new commit or reopen the PR to retry.');
+              notice(`DEV merge pending: GitHub has not computed mergeability for PR #${pullRequestNumber}; retry after updating or reopening it.`);
               return;
             }
 
             const pullRequestId = context.payload.pull_request.node_id;
-            if (pullRequest.mergeable_state === 'clean') {
-              await github.graphql(
-                `mutation($pullRequestId: ID!, $headSha: GitObjectID!) {
-                  mergePullRequest(input: {
-                    pullRequestId: $pullRequestId,
-                    mergeMethod: MERGE,
-                    expectedHeadOid: $headSha
-                  }) {
-                    pullRequest { number mergedAt }
-                  }
-                }`,
-                { pullRequestId, headSha: pullRequest.head.sha },
-              );
+            if (pullRequest.auto_merge) {
+              notice(`DEV auto-merge is already queued for PR #${pullRequestNumber}; GitHub will merge it after required checks pass.`);
               return;
             }
 
@@ -77,7 +71,8 @@ jobs:
               }`,
               { pullRequestId },
             );
+            notice(`DEV auto-merge queued for PR #${pullRequestNumber} at ${pullRequest.head.sha}; GitHub will merge it after required checks pass.`);
 
       - name: Explain missing merge token
         if: env.FLIPFLOP_DEV_MERGE_TOKEN == ''
-        run: echo "::notice::Set the FLIPFLOP_DEV_MERGE_TOKEN repository secret to enable DEV auto-merge with post-merge workflows."
+        run: echo "::warning::[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] DEV auto-merge was not queued because FLIPFLOP_DEV_MERGE_TOKEN is missing. No GitHub merge was attempted."

@@ -57,6 +57,7 @@ jobs:
           INPUT_TAG: ${{ inputs.tag }}
           PUSH_TAG: ${{ github.ref_name }}
         run: |
+          echo "[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] LIVE release checks received tag input/push '$INPUT_TAG' / '$PUSH_TAG'."
           tag="${INPUT_TAG:-$PUSH_TAG}"
           test -n "$tag"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
@@ -65,10 +66,11 @@ jobs:
         env:
           RELEASE_TAG: ${{ steps.release.outputs.tag }}
         run: |
+          echo "[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Verifying LIVE tag $RELEASE_TAG is on main and matches current DEV source."
           git fetch --force --tags origin main:refs/remotes/origin/main dev:refs/remotes/origin/dev
           git rev-parse "$RELEASE_TAG^{commit}" >/dev/null
           git merge-base --is-ancestor "$RELEASE_TAG" origin/main || {
-            echo "Release tag is not reachable from origin/main." >&2
+            echo "[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Release tag is not reachable from origin/main." >&2
             exit 1
           }
           bash scripts/verify-dev-source-parity.sh origin/dev "$RELEASE_TAG"
@@ -81,6 +83,7 @@ jobs:
           RELEASE_SHA: ${{ steps.tag_check.outputs.sha }}
         with:
           script: |
+            const timestamp = () => new Date().toISOString();
             const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -88,7 +91,7 @@ jobs:
             });
             const promotion = prs.find((pr) => pr.merged_at && pr.base.ref === 'main');
             if (!promotion) {
-              core.setFailed('Release commit must be merged through a production pull request.');
+              core.setFailed(`[${timestamp()}] Release commit must be merged through a production pull request.`);
               return;
             }
             const { data: checks } = await github.rest.checks.listForRef({
@@ -104,8 +107,11 @@ jobs:
               check.name === 'checks' && check.conclusion === 'success' && check.app.slug === 'github-actions'
             );
             if (!passedGate) {
-              core.setFailed('Release commit lacks a passing DEV-source parity and repository checks run.');
+              core.setFailed(`[${timestamp()}] Release commit lacks a passing DEV-source parity and repository checks run.`);
             }
       - name: Run repository checks
         shell: bash
-        run: bash scripts/ci.sh
+        run: |
+          echo "[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Running release repository checks."
+          bash scripts/ci.sh
+          echo "[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] LIVE release repository checks passed for ${{ steps.tag_check.outputs.sha }}."

@@ -10,7 +10,7 @@ permissions:
 
 concurrency:
   group: flipflop-development
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build-and-test:
@@ -35,6 +35,12 @@ jobs:
       EBAY_TOKEN_ENCRYPTION_KEY: ci-only-ebay-token-encryption-test-key
     steps:
       - uses: actions/checkout@v5
+      - name: Report DEV commit under validation
+        run: |
+          timestamp="[$(date -u +'%Y-%m-%dT%H:%M:%SZ')]"
+          echo "::notice title=DEV merge received::$timestamp GitHub pushed dev commit $GITHUB_SHA (ref: $GITHUB_REF)."
+          echo "::notice::$timestamp Starting DEV validation for commit $GITHUB_SHA."
+          echo "$timestamp A successful validation is followed by exact-commit deployment to the DEV host."
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
@@ -49,3 +55,197 @@ jobs:
       - name: Build development admin bundle
         working-directory: flipflop-admin
         run: npm ci && npm run build
+      - name: Report DEV validation result
+        if: success()
+        run: echo "::notice::[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] DEV validation and admin build passed for commit $GITHUB_SHA."
+
+  deploy-dev:
+    needs: build-and-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+    runs-on: [self-hosted, Windows, flipflop-coding-cleanup]
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      checks: write
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.sha }}
+      - name: Start DEV deployment check
+        id: deployment-check
+        uses: actions/github-script@v7
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        with:
+          script: |
+            const check = await github.rest.checks.create({
+              ...context.repo,
+              name: 'DEV deployment',
+              head_sha: process.env.SOURCE_SHA,
+              status: 'in_progress',
+              output: {
+                title: 'Deploying validated commit to DEV',
+                summary: `The DEV host is starting source ${process.env.SOURCE_SHA}.`,
+              },
+            });
+            core.setOutput('check_run_id', String(check.data.id));
+      - name: Deploy validated commit to DEV and verify runtime source
+        id: deploy
+        shell: pwsh
+        env:
+          FLIPFLOP_WORKTREE_REPO: ${{ vars.FLIPFLOP_WORKTREE_REPO }}
+          EXPECTED_COMMIT: ${{ github.sha }}
+        run: |
+          Write-Host "[$(Get-Date -Format 'yyyy-MM-ddTHH:mm:ss.fffK')] [DEV] Deploying validated commit $env:EXPECTED_COMMIT to the Prometheus DEV host."
+          & ./scripts/deploy-development.ps1 -ExpectedCommit $env:EXPECTED_COMMIT -RepositoryRoot $env:FLIPFLOP_WORKTREE_REPO
+          if ($LASTEXITCODE -ne 0) { throw "DEV deployment failed with exit code $LASTEXITCODE." }
+      - name: Label the merged DEV pull request
+        if: steps.deploy.outcome == 'success'
+        uses: actions/github-script@v7
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        with:
+          script: |
+            const timestamp = () => new Date().toISOString();
+            const notice = (message) => core.notice(`[${timestamp()}] ${message}`);
+            const warning = (message) => core.warning(`[${timestamp()}] ${message}`);
+            const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              ...context.repo,
+              commit_sha: process.env.SOURCE_SHA,
+            });
+            const mergedDevPr = prs.find((pr) => pr.merged_at && pr.base.ref === 'dev');
+            if (!mergedDevPr) {
+              warning(`DEV is running ${process.env.SOURCE_SHA}, but GitHub did not return its merged DEV pull request for labeling.`);
+              return;
+            }
+            const labelName = 'deployed-dev';
+            const { data: labels } = await github.rest.issues.listLabelsForRepo({
+              ...context.repo,
+              per_page: 100,
+            });
+            if (!labels.some((label) => label.name === labelName)) {
+              try {
+                await github.rest.issues.createLabel({
+                  ...context.repo,
+                  name: labelName,
+                  color: '1D76DB',
+                  description: 'This change has been deployed and verified on DEV.',
+                });
+              } catch (error) {
+                if (error.status !== 422) throw error;
+              }
+            }
+            await github.rest.issues.addLabels({
+              ...context.repo,
+              issue_number: mergedDevPr.number,
+              labels: [labelName],
+            });
+            notice(`Labeled DEV PR #${mergedDevPr.number} as ${labelName}.`);
+      - name: Complete DEV deployment check
+        if: always() && steps.deployment-check.outputs.check_run_id != ''
+        uses: actions/github-script@v7
+        env:
+          CHECK_RUN_ID: ${{ steps.deployment-check.outputs.check_run_id }}
+          DEPLOY_OUTCOME: ${{ steps.deploy.outcome }}
+          SOURCE_SHA: ${{ github.sha }}
+        with:
+          script: |
+            const timestamp = () => new Date().toISOString();
+            const succeeded = process.env.DEPLOY_OUTCOME === 'success';
+            await github.rest.checks.update({
+              ...context.repo,
+              check_run_id: Number(process.env.CHECK_RUN_ID),
+              status: 'completed',
+              conclusion: succeeded ? 'success' : 'failure',
+              output: {
+                title: succeeded ? 'DEV deployment verified' : 'DEV deployment failed',
+                summary: succeeded
+                  ? `The DEV API and admin report ${process.env.SOURCE_SHA}; the storefront responded successfully.`
+                  : `The DEV runtime did not verify source ${process.env.SOURCE_SHA}. Review this workflow's deployment logs.`,
+              },
+            });
+            if (succeeded) core.notice(`[${timestamp()}] DEV deployment check passed for ${process.env.SOURCE_SHA}.`);
+            else core.error(`[${timestamp()}] DEV deployment check failed for ${process.env.SOURCE_SHA}.`);
+
+  promote-live:
+    needs: deploy-dev
+    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Open or update the DEV-to-main promotion PR and queue auto-merge
+        uses: actions/github-script@v7
+        env:
+          FLIPFLOP_DEV_MERGE_TOKEN: ${{ secrets.FLIPFLOP_DEV_MERGE_TOKEN }}
+          DEPLOYED_SHA: ${{ github.sha }}
+        with:
+          github-token: ${{ secrets.FLIPFLOP_DEV_MERGE_TOKEN }}
+          script: |
+            const timestamp = () => new Date().toISOString();
+            const notice = (message) => core.notice(`[${timestamp()}] ${message}`);
+            if (!process.env.FLIPFLOP_DEV_MERGE_TOKEN) {
+              core.setFailed(`[${timestamp()}] FLIPFLOP_DEV_MERGE_TOKEN is required to open and auto-merge the LIVE promotion PR.`);
+              return;
+            }
+            const expectedSha = process.env.DEPLOYED_SHA;
+            const { data: devRef } = await github.rest.git.getRef({ ...context.repo, ref: 'heads/dev' });
+            if (devRef.object.sha !== expectedSha) {
+              notice(`Skipping stale promotion request: DEV deployed ${expectedSha}, current dev is ${devRef.object.sha}.`);
+              return;
+            }
+            const { data: openPrs } = await github.rest.pulls.list({
+              ...context.repo,
+              state: 'open',
+              base: 'main',
+              head: `${context.repo.owner}:dev`,
+              per_page: 100,
+            });
+            let pr = openPrs[0];
+            if (!pr) {
+              const created = await github.rest.pulls.create({
+                ...context.repo,
+                head: 'dev',
+                base: 'main',
+                draft: false,
+                title: `Promote verified DEV ${expectedSha.slice(0, 12)} to LIVE`,
+                body: [
+                  'Automated promotion of the exact source commit that passed DEV validation and runtime deployment.',
+                  '',
+                  `DEV source: \`${expectedSha}\``,
+                  '',
+                  'The required checks verify DEV-source parity and the exact-SHA DEV runtime deployment before this PR can merge.',
+                ].join('\n'),
+              });
+              pr = created.data;
+              notice(`Created LIVE promotion PR #${pr.number} for DEV commit ${expectedSha}.`);
+            } else {
+              notice(`Found existing LIVE promotion PR #${pr.number}.`);
+            }
+            if (pr.head.sha !== expectedSha) {
+              notice(`Promotion PR #${pr.number} currently points to ${pr.head.sha}; its checks and auto-merge will wait for the verified DEV head.`);
+              return;
+            }
+            if (pr.draft) {
+              core.setFailed(`[${timestamp()}] Promotion PR #${pr.number} is a draft; refusing to queue it for LIVE.`);
+              return;
+            }
+            if (pr.auto_merge) {
+              notice(`LIVE auto-merge is already queued for PR #${pr.number}; required checks must pass first.`);
+              return;
+            }
+            await github.graphql(
+              `mutation($pullRequestId: ID!) {
+                enablePullRequestAutoMerge(input: {
+                  pullRequestId: $pullRequestId,
+                  mergeMethod: MERGE
+                }) {
+                  pullRequest { number }
+                }
+              }`,
+              { pullRequestId: pr.node_id },
+            );
+            notice(`Queued LIVE promotion PR #${pr.number}; parity, exact DEV deployment, and required CI checks must pass before merge.`);

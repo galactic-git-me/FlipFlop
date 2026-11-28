@@ -10,6 +10,13 @@ BRANCH="${FLIPFLOP_DEPLOY_BRANCH:-main}"
 TARGET_SHA="${1:-}"
 LOCK_FILE="${FLIPFLOP_DEPLOY_LOCK:-/tmp/flipflop-production-deploy.lock}"
 
+timestamp_output() {
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    printf '[%s] %s\n' "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" "$line"
+  done
+}
+exec > >(timestamp_output) 2>&1
+
 log() {
   printf '[flipflop-deploy] %s\n' "$*"
 }
@@ -45,6 +52,7 @@ fi
 export FLIPFLOP_SOURCE_COMMIT="$(git rev-parse "$TARGET_SHA^{commit}")"
 export FLIPFLOP_SOURCE_BRANCH="$BRANCH"
 export FLIPFLOP_SOURCE_DIRTY=false
+log "LIVE deployment received main source commit $FLIPFLOP_SOURCE_COMMIT; starting guarded release deployment."
 
 CURRENT_SHA="$(git rev-parse HEAD)"
 MERGE_BASE="$(git merge-base "$CURRENT_SHA" "$TARGET_SHA" || true)"
